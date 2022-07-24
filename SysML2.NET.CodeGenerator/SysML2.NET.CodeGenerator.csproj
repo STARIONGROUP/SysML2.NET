@@ -15,8 +15,17 @@
 	  <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\SysML.ecore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SysML.ecore" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="DotLiquid" Version="2.2.656" />
+		<PackageReference Include="ECoreNetto" Version="1.1.0" />
 	</ItemGroup>
 
 </Project>

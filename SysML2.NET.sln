@@ -5,9 +5,11 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET", "SysML2.NET\SysML2.NET.csproj", "{51685CCB-3C25-4616-8687-10A1A9BB4A66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.CodeGenerator", "SysML2.NET.CodeGenerator\SysML2.NET.CodeGenerator.csproj", "{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.CodeGenerator", "SysML2.NET.CodeGenerator\SysML2.NET.CodeGenerator.csproj", "{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ACF2E7D6-C673-420D-88DC-3D7D5D283AD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.CodeGenerator.Tests", "SysML2.NET.CodeGenerator.Tests\SysML2.NET.CodeGenerator.Tests.csproj", "{F7DCD458-E07C-42D5-8247-3A55202C90B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7DCD458-E07C-42D5-8247-3A55202C90B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7DCD458-E07C-42D5-8247-3A55202C90B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7DCD458-E07C-42D5-8247-3A55202C90B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7DCD458-E07C-42D5-8247-3A55202C90B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
