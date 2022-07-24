@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET", "SysML2.NET\SysML2.NET.csproj", "{51685CCB-3C25-4616-8687-10A1A9BB4A66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.CodeGenerator", "SysML2.NET.CodeGenerator\SysML2.NET.CodeGenerator.csproj", "{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ACF2E7D6-C673-420D-88DC-3D7D5D283AD6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51685CCB-3C25-4616-8687-10A1A9BB4A66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51685CCB-3C25-4616-8687-10A1A9BB4A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51685CCB-3C25-4616-8687-10A1A9BB4A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51685CCB-3C25-4616-8687-10A1A9BB4A66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4526BF2D-49D6-459F-BEDA-C98F3024D9D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9CA2605-BCA9-4E01-99D9-992F3267DA9E}
+	EndGlobalSection
+EndGlobal
