@@ -20,12 +20,9 @@
 
 namespace SysML2.NET.CodeGenerator.Extensions
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Xml;
-    
+
     using ECoreNetto;
 
     using HtmlAgilityPack;
@@ -103,9 +100,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             if (annotation.Details.TryGetValue("documentation", out var documentation))
             {
-                
-
-                var unwantedTags = new List<string> { "p", "code", "em" };
+                var unwantedTags = new List<string> { "p", "code", "em", "tt" };
 
                 var result = documentation.RemoveUnwantedHtmlTags(unwantedTags).ReplaceLineEndings("");
                 
