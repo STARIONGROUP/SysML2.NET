@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="Class1.cs" company="RHEA System S.A.">
+// <copyright file="DataModelLoaderTestFixture.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -20,19 +20,32 @@
 
 namespace SysML2.NET.CodeGenerator.Tests
 {
+    using System.Linq;
+
+    using ECoreNetto;
+
     using NUnit.Framework;
 
-    public class Tests
-    {
-        [SetUp]
-        public void Setup()
-        {
-        }
+    using SysML2.NET.CodeGenerator;
 
+    /// <summary>
+    /// Suite of tests for the <see cref="DataModelLoader"/> class.
+    /// </summary>
+    [TestFixture]
+    public class DataModelLoaderTestFixture
+    {
         [Test]
-        public void Test1()
+        public void Verify_that_the_expected_SysML2_model_is_returned()
         {
-            Assert.Pass();
+            var ePacakge = DataModelLoader.Load();
+            
+            Assert.That(ePacakge, Is.Not.Null);
+            
+            var classes = ePacakge.EClassifiers.OfType<EClass>();
+            
+            var rootClass = classes.Single(x => !x.ESuperTypes.Any());
+
+            Assert.That(rootClass.Name, Is.EqualTo("Element"));
         }
     }
 }

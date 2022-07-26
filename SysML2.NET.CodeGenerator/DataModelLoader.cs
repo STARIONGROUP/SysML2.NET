@@ -1,0 +1,57 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="DataModelLoader.cs" company="RHEA System S.A.">
+//
+//   Copyright 2022 RHEA System S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.CodeGenerator
+{
+    using System;
+    using System.IO;
+    using System.Reflection;
+
+    using ECoreNetto;
+    using ECoreNetto.Resource;
+
+    /// <summary>
+    /// The purpose of the <see cref="DataModelLoader"/> is to load the SysML data-model
+    /// from the ecore file
+    /// </summary>
+    public static class DataModelLoader
+    {
+        /// <summary>
+        /// Load the data model and return the root <see cref="EPackage"/>
+        /// </summary>
+        /// <returns>
+        /// the root <see cref="EPackage"/>
+        /// </returns>
+        public static EPackage Load()
+        {
+            string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string ecoreFileName = Path.Combine(assemblyFolder, "datamodel", "SysML.ecore");
+
+            var uri = new Uri(ecoreFileName);
+
+            var resourceSet = new ResourceSet();
+            var resource = resourceSet.CreateResource(uri);
+            
+            var root = resource.Load(null);
+
+            return root;
+        }
+    }
+}

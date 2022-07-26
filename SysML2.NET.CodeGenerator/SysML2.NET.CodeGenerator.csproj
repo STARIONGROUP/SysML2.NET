@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+	  <TargetFramework>net6.0</TargetFramework>
 	  <Version>0.1.0</Version>
 	  <Description>A Library to generate SysML v2 code.</Description>
 	  <PackageId>SysML2.NET</PackageId>
@@ -11,21 +11,33 @@
 	  <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
 	  <RepositoryType>Git</RepositoryType>
 	  <Authors>Sam Gerene</Authors>
+	  <ImplicitUsings>false</ImplicitUsings>
+	  <Nullable>disable</Nullable>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <IsPackable>false</IsPackable>
+	  <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\SysML.ecore" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\SysML.ecore" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ECoreNetto" Version="2.1.0" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
+		<PackageReference Include="RazorLight" Version="2.1.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.2.0 " />
+	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DotLiquid" Version="2.2.656" />
-		<PackageReference Include="ECoreNetto" Version="1.1.0" />
+	  <None Update="datamodel\SysML.ecore">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="datamodel\types.ecore">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Templates\dto-interface-template.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Templates\enum-template.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

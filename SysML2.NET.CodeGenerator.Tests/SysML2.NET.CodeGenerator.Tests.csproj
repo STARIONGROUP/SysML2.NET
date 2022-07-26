@@ -13,7 +13,22 @@
 		<ImplicitUsings>false</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<IsPackable>false</IsPackable>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Expected\AutoGenEnum\VisibilityKind.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Generators\DtoGeneratorTestFixture.cs~RF3f3dd308.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Expected\AutoGenEnum\VisibilityKind.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
@@ -30,6 +45,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\SysML2.NET.CodeGenerator\SysML2.NET.CodeGenerator.csproj" />
 	</ItemGroup>
 
 </Project>

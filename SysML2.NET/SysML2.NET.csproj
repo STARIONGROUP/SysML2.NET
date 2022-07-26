@@ -23,4 +23,10 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="AutoGenDto\" />
+	  <Folder Include="AutoGenEnum\" />
+	  <Folder Include="AutGenPoco\" />
+	</ItemGroup>
+
 </Project>
