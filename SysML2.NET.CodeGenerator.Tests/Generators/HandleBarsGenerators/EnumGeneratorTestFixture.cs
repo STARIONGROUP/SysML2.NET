@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoGeneratorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="EnumHandlebarGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -18,20 +18,22 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.CodeGenerator.Tests.Generators
+namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
     using System.IO;
-    using System.Threading.Tasks;
+
     using ECoreNetto;
+
     using NUnit.Framework;
-    using SysML2.NET.CodeGenerator.Generators;
+
+    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
     [TestFixture]
-    public class DtoGeneratorTestFixture
+    public class EnumGeneratorTestFixture
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private DtoGenerator dtoGenerator;
+        private EnumGenerator enumGenerator;
 
         private EPackage rootPackage;
 
@@ -40,17 +42,17 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            this.dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenDto");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenEnum");
 
-            this.rootPackage = DataModelLoader.Load();
+            rootPackage = DataModelLoader.Load();
 
-            this.dtoGenerator = new DtoGenerator();
+            enumGenerator = new EnumGenerator();
         }
 
         [Test]
-        public void verify_dto_are_generated()
+        public void verify_enum_are_generated()
         {
-            Assert.That(async () => await this.dtoGenerator.Generate(this.rootPackage, this.dtoDirectoryInfo),
+            Assert.That(async () => await enumGenerator.Generate(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
     }

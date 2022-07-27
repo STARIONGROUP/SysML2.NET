@@ -30,7 +30,7 @@ namespace SysML2.NET
 	<gen>/// <summary>
 	@foreach (var docline in @Model.QueryDocumentation())
 	{
-	<code>/// @docline</code> 
+	<gen>/// @docline</gen> 
 	}
 	/// </summary></gen>
 	public enum @Model.Name
@@ -40,7 +40,7 @@ namespace SysML2.NET
 			<gen>/// <summary>
 			@foreach (var docline in @enumLiteration.QueryDocumentation())
 			{
-			<code>/// @docline</code> 
+			<gen>/// @docline</gen> 
 			}
 			/// </summary></gen>
 			<gen>@enumLiteration.Name.CapitalizeFirstLetter() = @enumLiteration.Value,

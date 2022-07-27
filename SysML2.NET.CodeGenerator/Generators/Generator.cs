@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="EnumHandlebarGenerator.cs" company="RHEA System S.A.">
+// <copyright file="Generator.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -21,56 +21,39 @@
 namespace SysML2.NET.CodeGenerator.Generators
 {
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
 
     using ECoreNetto;
 
-    using HandlebarsDotNet;
-    using HandlebarsDotNet.Helpers;
-
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Formatting;
-
-    using SysML2.NET.CodeGenerator.Extensions;
-    using SysML2.NET.CodeGenerator.HandleBarHelpers;
-
+    
     /// <summary>
-    /// A handlebars based enum code generator
+    /// Abstract class from which all generators derive
     /// </summary>
-    public class EnumHandlebarGenerator
+    public abstract class Generator
     {
-        private string template;
-
-        private IHandlebars handlebars;
-
-        private HandlebarsTemplate<object, object> enumTemplate;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnumHandlebarGenerator"/> class.
+        /// Initializes a new instance of the <see cref="Generator"/> class.
         /// </summary>
-        public EnumHandlebarGenerator()
+        protected Generator()
         {
-            this.handlebars = Handlebars.CreateSharedEnvironment();
-            this.handlebars.RegisteredDocumentationHelper();
-            HandlebarsHelpers.Register(this.handlebars);
-            
-            string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var templatePath = Path.Combine(assemblyFolder, "Templates", "enum-template.hbs");
-
-            this.template = File.ReadAllText(templatePath);
-
-            this.enumTemplate = this.handlebars.Compile(this.template);
+            var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            this.TemplateFolderPath = Path.Combine(assemblyFolder, "Templates");
         }
 
         /// <summary>
-        /// Generates the <see cref="EEnum"/> instances
-        /// that are in the provided <see cref="EPackage"/>
+        /// Gets the path where the template are stored
+        /// </summary>
+        public string TemplateFolderPath { get; private set; }
+
+        /// <summary>
+        /// Generates code specific to the concrete implementation
         /// </summary>
         /// <param name="package">
-        /// the <see cref="EPackage"/> that contains the <see cref="EEnum"/> to generate
+        /// the <see cref="EPackage"/> that contains the Ecore data to generate from
         /// </param>
         /// <param name="outputDirectory">
         /// The target <see cref="DirectoryInfo"/>
@@ -78,19 +61,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task Generate(EPackage package, DirectoryInfo outputDirectory)
-        {
-            foreach (var eEnum in package.EClassifiers.OfType<EEnum>())
-            {
-                var generatedEnum = this.enumTemplate(eEnum);
-                
-                generatedEnum = this.CodeCleanup(generatedEnum);
-
-                var fileName = $"{eEnum.Name.CapitalizeFirstLetter()}.cs";
-
-                await this.Write(generatedEnum, outputDirectory, fileName);
-            }
-        }
+        public abstract Task Generate(EPackage package, DirectoryInfo outputDirectory);
 
         /// <summary>
         /// perform code cleanup
@@ -101,7 +72,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// <returns>
         /// cleaned up code
         /// </returns>
-        public string CodeCleanup(string generatedCode)
+        protected virtual string CodeCleanup(string generatedCode)
         {
             generatedCode = generatedCode.Replace("&nbsp;", " ");
             var workspace = new AdhocWorkspace();
@@ -128,7 +99,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task Write(string generatedCode, DirectoryInfo outputDirectory, string fileName)
+        protected async Task Write(string generatedCode, DirectoryInfo outputDirectory, string fileName)
         {
             var filePath = Path.Combine(outputDirectory.FullName, fileName);
 

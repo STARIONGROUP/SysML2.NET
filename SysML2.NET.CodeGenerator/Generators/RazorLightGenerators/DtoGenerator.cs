@@ -18,22 +18,22 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.CodeGenerator.Generators
+namespace SysML2.NET.CodeGenerator.Generators.RazorLightGenerators
 {
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
     using ECoreNetto;
-    
+
     using RazorLight;
-    
+
     using SysML2.NET.CodeGenerator.Extensions;
-    
+
     /// <summary>
     /// The DTO Generator
     /// </summary>
-    public class DtoGenerator : BaseGenerator
+    public class DtoGenerator : RazorLightGenerator
     {
         /// <summary>
         /// Generates the Data Transfer Objects (DTO) for the <see cref="EClass"/> instances
@@ -50,7 +50,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// </returns>
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
-            await this.GenerateInterfaces(package, outputDirectory);
+            await GenerateInterfaces(package, outputDirectory);
         }
 
         /// <summary>
@@ -70,13 +70,13 @@ namespace SysML2.NET.CodeGenerator.Generators
         {
             foreach (var eClass in package.EClassifiers.OfType<EClass>())
             {
-                var generatedInterface = await this.Engine.CompileRenderAsync("dto-interface-template.cshtml", eClass);
+                var generatedInterface = await Engine.CompileRenderAsync("dto-interface-template.cshtml", eClass);
 
-                generatedInterface = this.CodeCleanup(generatedInterface);
-                
+                generatedInterface = CodeCleanup(generatedInterface);
+
                 var fileName = $"I{eClass.Name.CapitalizeFirstLetter()}.cs";
 
-                await this.Write(generatedInterface, outputDirectory, fileName);
+                await Write(generatedInterface, outputDirectory, fileName);
             }
         }
     }

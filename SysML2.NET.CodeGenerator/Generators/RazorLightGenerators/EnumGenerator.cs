@@ -18,22 +18,20 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.CodeGenerator.Generators
+namespace SysML2.NET.CodeGenerator.Generators.RazorLightGenerators
 {
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
     using ECoreNetto;
-
-    using RazorLight;
-
+    
     using SysML2.NET.CodeGenerator.Extensions;
 
     /// <summary>
     /// The Enum Generator
     /// </summary>
-    public class EnumGenerator : BaseGenerator
+    public class EnumGenerator : RazorLightGenerator
     {
         /// <summary>
         /// Generates the <see cref="EEnum"/> instances
@@ -52,14 +50,13 @@ namespace SysML2.NET.CodeGenerator.Generators
         {
             foreach (var eEnum in package.EClassifiers.OfType<EEnum>())
             {
-                var generatedEnum = await this.Engine.CompileRenderAsync("enum-template.cshtml", eEnum);
-                generatedEnum = generatedEnum.Replace("<code>", "").Replace("</code>", "");
+                var generatedEnum = await Engine.CompileRenderAsync("enum-template.cshtml", eEnum);
 
                 generatedEnum = this.CodeCleanup(generatedEnum);
-                
+
                 var fileName = $"{eEnum.Name.CapitalizeFirstLetter()}.cs";
-                
-                await this.Write(generatedEnum, outputDirectory, fileName);
+
+                await Write(generatedEnum, outputDirectory, fileName);
             }
         }
     }

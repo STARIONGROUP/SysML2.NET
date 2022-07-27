@@ -33,7 +33,7 @@ namespace SysML2.NET.DTO
 	<gen>/// @docline</gen> 
 	}
 	/// </summary>
-	public @if(Model.Abstract){<code>abstract</code>} interface @Model.Name.Prefix("I")
+	public @if(Model.Abstract){<gen>abstract</gen>} interface @Model.Name.Prefix("I")
 	{
 		@foreach (var structuralFeature in @Model.EStructuralFeatures)
 		{

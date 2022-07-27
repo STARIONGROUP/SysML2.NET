@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="EnumGeneratorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="DtoGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -18,21 +18,19 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.CodeGenerator.Tests.Generators
+namespace SysML2.NET.CodeGenerator.Tests.Generators.RazorLightGenerators
 {
     using System.IO;
-    using System.Threading.Tasks;
     using ECoreNetto;
     using NUnit.Framework;
-    using SysML2.NET.CodeGenerator.Generators;
+    using SysML2.NET.CodeGenerator.Generators.RazorLightGenerators;
 
     [TestFixture]
-
-    public class EnumGeneratorTestFixture
+    public class DtoGeneratorTestFixture
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private EnumGenerator enumGenerator;
+        private DtoGenerator dtoGenerator;
 
         private EPackage rootPackage;
 
@@ -41,17 +39,17 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            this.dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenEnum");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenDto");
 
-            this.rootPackage = DataModelLoader.Load();
+            rootPackage = DataModelLoader.Load();
 
-            this.enumGenerator = new EnumGenerator();
+            dtoGenerator = new DtoGenerator();
         }
 
         [Test]
-        public void verify_enum_are_generated()
+        public void verify_dto_are_generated()
         {
-            Assert.That(async () => await this.enumGenerator.Generate(this.rootPackage, this.dtoDirectoryInfo),
+            Assert.That(async () => await dtoGenerator.Generate(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
     }

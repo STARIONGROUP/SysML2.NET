@@ -25,7 +25,7 @@ namespace SysML2.NET
 	{
         {{#each this.ELiterals as | enumerationLiteral |}}
         {{ #documentation enumerationLiteral }}
-        {{ String.PascalCase enumerationLiteral.Name }},
+        {{ String.PascalCase enumerationLiteral.Name }} = {{ enumerationLiteral.Value }},
         
         {{/each}}
 	}

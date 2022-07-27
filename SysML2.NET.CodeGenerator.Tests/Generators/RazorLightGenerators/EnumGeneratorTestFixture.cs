@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="EnumHandlebarGeneratorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="EnumGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -18,25 +18,20 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.CodeGenerator.Tests.Generators
+namespace SysML2.NET.CodeGenerator.Tests.Generators.RazorLightGenerators
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     using System.IO;
     using ECoreNetto;
     using NUnit.Framework;
-    using SysML2.NET.CodeGenerator.Generators;
+    using SysML2.NET.CodeGenerator.Generators.RazorLightGenerators;
 
     [TestFixture]
-    public class EnumHandlebarGeneratorTestFixture
+
+    public class EnumGeneratorTestFixture
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private EnumHandlebarGenerator enumGenerator;
+        private EnumGenerator enumGenerator;
 
         private EPackage rootPackage;
 
@@ -45,17 +40,17 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            this.dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenEnum");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenEnum");
 
-            this.rootPackage = DataModelLoader.Load();
+            rootPackage = DataModelLoader.Load();
 
-            this.enumGenerator = new EnumHandlebarGenerator();
+            enumGenerator = new EnumGenerator();
         }
 
         [Test]
         public void verify_enum_are_generated()
         {
-            Assert.That(async () => await this.enumGenerator.Generate(this.rootPackage, this.dtoDirectoryInfo),
+            Assert.That(async () => await enumGenerator.Generate(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
     }
