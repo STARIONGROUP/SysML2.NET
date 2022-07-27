@@ -18,6 +18,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace SysML2.NET.CodeGenerator
 {
     using System;
@@ -50,8 +52,34 @@ namespace SysML2.NET.CodeGenerator
             var resource = resourceSet.CreateResource(uri);
             
             var root = resource.Load(null);
+         
+            SortElementsByName(root);
 
             return root;
+        }
+
+        /// <summary>
+        /// Sort the contained classes, structural features and operations in alphabetical order.
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> who's content needs to be sorted
+        /// </param>
+        public static void SortElementsByName(EPackage package)
+        {
+            var classifiers = package.EClassifiers.OrderBy(x => x.Name).ToList();
+            package.EClassifiers.Clear();
+            package.EClassifiers.AddRange(classifiers);
+
+            foreach (var eClassifier in classifiers.OfType<EClass>())
+            {
+                var eStructuralFeatures = eClassifier.EStructuralFeatures.OrderBy(x => x.Name).ToList();
+                eClassifier.EStructuralFeatures.Clear();
+                eClassifier.EStructuralFeatures.AddRange(eStructuralFeatures);
+
+                var eOperations = eClassifier.EOperations.OrderBy(x => x.Name).ToList();
+                eClassifier.EOperations.Clear();
+                eClassifier.EOperations.AddRange(eOperations);
+            }
         }
     }
 }

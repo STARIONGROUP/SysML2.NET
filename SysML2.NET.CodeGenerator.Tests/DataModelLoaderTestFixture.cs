@@ -18,6 +18,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace SysML2.NET.CodeGenerator.Tests
 {
     using System.Linq;
@@ -46,6 +48,11 @@ namespace SysML2.NET.CodeGenerator.Tests
             var rootClass = classes.Single(x => !x.ESuperTypes.Any());
 
             Assert.That(rootClass.Name, Is.EqualTo("Element"));
+
+            foreach (var eClass in classes)
+            {
+                Console.WriteLine(eClass.Name);
+            }
         }
     }
 }
