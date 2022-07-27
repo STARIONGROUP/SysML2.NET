@@ -20,6 +20,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="ECoreNetto" Version="2.1.0" />
+		<PackageReference Include="Handlebars.Net" Version="2.1.2" />
+		<PackageReference Include="Handlebars.Net.Helpers" Version="2.3.5" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
 		<PackageReference Include="RazorLight" Version="2.1.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.2.0 " />
@@ -36,6 +38,9 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Templates\enum-template.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Templates\enum-template.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
