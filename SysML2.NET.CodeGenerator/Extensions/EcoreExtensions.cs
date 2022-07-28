@@ -45,7 +45,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             return namedElements.OrderBy(x => x.Name).ToList();
         }
-
+        
         /// <summary>
         /// Queries whether the <see cref="EStructuralFeature"/> is an <see cref="EAttribute"/> or not
         /// </summary>

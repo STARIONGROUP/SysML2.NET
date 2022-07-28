@@ -22,18 +22,10 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
 
     using ECoreNetto;
-
-    using HandlebarsDotNet;
-    using HandlebarsDotNet.Helpers;
-
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.Formatting;
-
+    
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
@@ -70,12 +62,18 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
                 await Write(generatedEnum, outputDirectory, fileName);
             }
         }
-        
+
+        /// <summary>
+        /// Register the custom helpers
+        /// </summary>
         protected override void RegisterHelpers()
         {
             this.Handlebars.RegisteredDocumentationHelper();
         }
 
+        /// <summary>
+        /// Register the code templates
+        /// </summary>
         protected override void RegisterTemplates()
         {
             this.RegisterTemplate("enum-template");

@@ -20,11 +20,11 @@
 
 namespace SysML2.NET
 {
-    {{ #documentation this }}
+    {{ #Documentation this }}
 	public enum {{ this.Name }}
 	{
         {{#each this.ELiterals as | enumerationLiteral |}}
-        {{ #documentation enumerationLiteral }}
+        {{ #Documentation enumerationLiteral }}
         {{ String.PascalCase enumerationLiteral.Name }} = {{ enumerationLiteral.Value }},
         
         {{/each}}

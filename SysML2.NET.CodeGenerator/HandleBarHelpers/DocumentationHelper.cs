@@ -37,14 +37,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// Registers the <see cref="DocumentationHelper"/>
         /// </summary>
         /// <param name="handlebars">
-        /// The <see cref="IHandlebars"/> context wwith which the helper needs to be registered
+        /// The <see cref="IHandlebars"/> context with which the helper needs to be registered
         /// </param>
         public static void RegisteredDocumentationHelper(this IHandlebars handlebars)
         {
-            handlebars.RegisterHelper("documentation", (writer, context, parameters) =>
+            handlebars.RegisterHelper("Documentation", (writer, context, parameters) =>
             {
                 if (!(context.Value is EModelElement eModelElement))
-                    throw new ArgumentException("supposed to be DateTime");
+                    throw new ArgumentException("supposed to be EModelElement");
 
                 writer.WriteSafeString($"/// <summary>{Environment.NewLine}");
                 foreach (var line in eModelElement.QueryDocumentation())

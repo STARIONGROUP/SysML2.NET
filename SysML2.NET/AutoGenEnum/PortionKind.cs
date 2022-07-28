@@ -21,18 +21,18 @@
 namespace SysML2.NET
 {
     /// <summary>
-    /// PortionKind is an enumeration of the possible special kinds of Occurrence portions that can be 
-    /// represented by an OccurrenceUsage. 
+    /// PortionKind is an enumeration of the possible special kinds of Occurrence portions that can be
+    /// represented by an OccurrenceUsage.
     /// </summary>
     public enum PortionKind
     {
         /// <summary>
-        /// A time slice of an Occurrence (a portion over time). 
+        /// A time slice of an Occurrence (a portion over time).
         /// </summary>
         Timeslice = 0,
 
         /// <summary>
-        /// A snapshot of an Occurrence (a time slice with zero duration). 
+        /// A snapshot of an Occurrence (a time slice with zero duration).
         /// </summary>
         Snapshot = 1,
 

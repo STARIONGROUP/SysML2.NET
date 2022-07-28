@@ -21,29 +21,29 @@
 namespace SysML2.NET
 {
     /// <summary>
-    /// VisibilityKind is an enumeration whose literals specify the visibility of a Membership of an Element 
-    /// in a Namespace outside of that Namespace. Note that &quot;visibility&quot; specifically restricts 
-    /// whether an Element in a Namespace may be referenced by name from outside the Namespace and only 
-    /// otherwise restricts access to an Element as provided by specific constraints in the abstract syntax 
-    /// (e.g., preventing the import or inheritance of private Elements). 
+    /// VisibilityKind is an enumeration whose literals specify the visibility of a Membership of an Element
+    /// in a Namespace outside of that Namespace. Note that &quot;visibility&quot; specifically restricts
+    /// whether an Element in a Namespace may be referenced by name from outside the Namespace and only
+    /// otherwise restricts access to an Element as provided by specific constraints in the abstract syntax
+    /// (e.g., preventing the import or inheritance of private Elements).
     /// </summary>
     public enum VisibilityKind
     {
         /// <summary>
-        /// Indicates a Membership is not visible outside its owning Namespace. 
+        /// Indicates a Membership is not visible outside its owning Namespace.
         /// </summary>
         Private = 0,
 
         /// <summary>
-        /// An intermediate level of visibility between public and private. By default, it is equivalent to 
-        /// private for the purposes of normal access to and import of Elements from a Namespace. However, other 
-        /// Relationships may be specified to include Memberships with protected visibility in the list of 
-        /// memberships for a Namespace (e.g., Generalization). 
+        /// An intermediate level of visibility between public and private. By default, it is equivalent to
+        /// private for the purposes of normal access to and import of Elements from a Namespace. However, other
+        /// Relationships may be specified to include Memberships with protected visibility in the list of
+        /// memberships for a Namespace (e.g., Generalization).
         /// </summary>
         Protected = 1,
 
         /// <summary>
-        /// Indicates that a Membership is publicly visible outside its owning Namespace. 
+        /// Indicates that a Membership is publicly visible outside its owning Namespace.
         /// </summary>
         Public = 2,
 

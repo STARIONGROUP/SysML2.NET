@@ -21,23 +21,23 @@
 namespace SysML2.NET
 {
     /// <summary>
-    /// A TransitionActionKind indicates whether the <tt>transitionFeature</tt> of a 
-    /// TransitionFeatureMembership is a trigger, guard or effect. 
+    /// A TransitionActionKind indicates whether the transitionFeature of a TransitionFeatureMembership is a
+    /// trigger, guard or effect.
     /// </summary>
     public enum TransitionFeatureKind
     {
         /// <summary>
-        /// Indicates that a member Transfer of a TransitionUsage represents a trigger. 
+        /// Indicates that a member Transfer of a TransitionUsage represents a trigger.
         /// </summary>
         Trigger = 0,
 
         /// <summary>
-        /// Indicates that a member Expression of a TransitionUsage represents a guard. 
+        /// Indicates that a member Expression of a TransitionUsage represents a guard.
         /// </summary>
         Guard = 1,
 
         /// <summary>
-        /// Indicates that a member Step of a TransitionUsage represents an effect. 
+        /// Indicates that a member Step of a TransitionUsage represents an effect.
         /// </summary>
         Effect = 2,
 

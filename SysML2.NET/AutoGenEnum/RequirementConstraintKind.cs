@@ -21,20 +21,20 @@
 namespace SysML2.NET
 {
     /// <summary>
-    /// A RequirementConstraintKind indicates whether a ConstraintUsage is an assumption or a requirement in 
-    /// a RequirementDefinition or RequirementUsage. 
+    /// A RequirementConstraintKind indicates whether a ConstraintUsage is an assumption or a requirement in
+    /// a RequirementDefinition or RequirementUsage.
     /// </summary>
     public enum RequirementConstraintKind
     {
         /// <summary>
-        /// Indicates that a member ConstraintUsage of a RequirementDefinition or RequirementUsage represents an 
-        /// assumption. 
+        /// Indicates that a member ConstraintUsage of a RequirementDefinition or RequirementUsage represents an
+        /// assumption.
         /// </summary>
         Assumption = 0,
 
         /// <summary>
-        /// Indicates that a member ConstraintUsage of a RequirementDefinition or RequirementUsage represents an 
-        /// requirement. 
+        /// Indicates that a member ConstraintUsage of a RequirementDefinition or RequirementUsage represents an
+        /// requirement.
         /// </summary>
         Requirement = 1,
 
