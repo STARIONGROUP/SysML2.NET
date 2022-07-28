@@ -18,14 +18,23 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace SysML2.NET.DTO
 {
     using System;
     using System.Collections.Generic;
 
     {{ #Documentation this }}
-	public partial {{#if this.Abstract}}abstract {{/if}}class {{ this.Name }} : I{{ this.Name }}
+	public {{#if this.Abstract}}abstract {{/if}}partial class {{ this.Name }} : I{{ this.Name }}
 	{
+        /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        public Guid Id { get; set; }
+
         {{#each this.AllEStructuralFeatures as | structuralFeature |}}
         {{#unless structuralFeature.Derived }}
         {{#unless structuralFeature.Transient }}
@@ -37,3 +46,7 @@ namespace SysML2.NET.DTO
         {{/each}}
 	}
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

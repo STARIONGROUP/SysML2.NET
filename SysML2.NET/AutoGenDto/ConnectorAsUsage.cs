@@ -18,6 +18,10 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace SysML2.NET.DTO
 {
     using System;
@@ -28,8 +32,13 @@ namespace SysML2.NET.DTO
     /// in a SysML model, but it is the base class for the concrete classes BindingConnectorAsUsage,
     /// SuccessionAsUsage and ConnectionUsage.
     /// </summary>
-    public partial abstract class ConnectorAsUsage : IConnectorAsUsage
+    public abstract partial class ConnectorAsUsage : IConnectorAsUsage
     {
+        /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
         /// must be VariantMemberships.
@@ -160,3 +169,7 @@ namespace SysML2.NET.DTO
 
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

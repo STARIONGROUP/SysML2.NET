@@ -18,6 +18,10 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace SysML2.NET.DTO
 {
     using System;
@@ -32,6 +36,11 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class AttributeDefinition : IAttributeDefinition
     {
+        /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
         /// Definition must be VariantMemberships.
@@ -90,3 +99,7 @@ namespace SysML2.NET.DTO
 
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

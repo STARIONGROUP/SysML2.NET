@@ -18,6 +18,10 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace SysML2.NET.DTO
 {
     using System;
@@ -31,6 +35,11 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class TransitionFeatureMembership : ITransitionFeatureMembership
     {
+        /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Whether this TransitionFeatureMembership is for a trigger, guard or effect.
         /// </summary>
@@ -118,3 +127,7 @@ namespace SysML2.NET.DTO
 
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

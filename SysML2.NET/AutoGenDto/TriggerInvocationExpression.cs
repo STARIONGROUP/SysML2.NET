@@ -18,6 +18,10 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace SysML2.NET.DTO
 {
     using System;
@@ -29,6 +33,11 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class TriggerInvocationExpression : ITriggerInvocationExpression
     {
+        /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Indicates which of the Functions from the Kernel Triggers package is to be invoked by this
         /// TriggerInvocationExpression.
@@ -136,3 +145,7 @@ namespace SysML2.NET.DTO
 
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

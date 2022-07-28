@@ -47,8 +47,7 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
 
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Element");
-
-            // AliasIds 
+            
             writer.WriteStartArray("aliasIds");
             foreach (var aliasId in element.AliasIds)
             {
@@ -56,15 +55,12 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
             }
             writer.WriteEndArray();
 
-            // ElementId
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(element.ElementId);
 
-            // Name
             writer.WritePropertyName("name");
             writer.WriteStringValue(element.Name);
 
-            // OwnedRelationship
             writer.WriteStartArray("ownedRelationship");
             foreach (var ownedRelationship in element.OwnedRelationship)
             {
@@ -72,7 +68,6 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
             }
             writer.WriteEndArray();
             
-            // OwningRelationship
             writer.WritePropertyName("owningRelationship");
             if (element.OwningRelationship.HasValue)
             {
@@ -83,7 +78,6 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
                 writer.WriteNullValue();
             }
 
-            // ShortName
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(element.ShortName);
 

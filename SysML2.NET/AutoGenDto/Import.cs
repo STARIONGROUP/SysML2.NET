@@ -18,6 +18,10 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
 namespace SysML2.NET.DTO
 {
     using System;
@@ -38,6 +42,11 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class Import : IImport
     {
+        /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// The effectiveMemberName of the Membership of the importedNamspace to be imported. If not given, all
         /// public Memberships of the importedNamespace are imported.
@@ -117,3 +126,7 @@ namespace SysML2.NET.DTO
 
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

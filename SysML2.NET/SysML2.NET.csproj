@@ -27,6 +27,8 @@
 	  <Folder Include="AutoGenDto\" />
 	  <Folder Include="AutoGenEnum\" />
 	  <Folder Include="AutGenPoco\" />
+	  <Folder Include="Dto\" />
+	  <Folder Include="Poco\" />
 	</ItemGroup>
 
 </Project>
