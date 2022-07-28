@@ -18,13 +18,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.CodeGenerator.Tests", "SysML2.NET.CodeGenerator.Tests\SysML2.NET.CodeGenerator.Tests.csproj", "{F7DCD458-E07C-42D5-8247-3A55202C90B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.CodeGenerator.Tests", "SysML2.NET.CodeGenerator.Tests\SysML2.NET.CodeGenerator.Tests.csproj", "{F7DCD458-E07C-42D5-8247-3A55202C90B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{90160DB2-B862-48C8-97E5-70AC1D3E1C8F}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		.github\workflows\CodeQuality.yml = .github\workflows\CodeQuality.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer", "SysML2.NET.Serializer\SysML2.NET.Serializer.csproj", "{E7307EB9-F42E-46CC-96F4-D0FECAFFD429}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{F7DCD458-E07C-42D5-8247-3A55202C90B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7DCD458-E07C-42D5-8247-3A55202C90B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7DCD458-E07C-42D5-8247-3A55202C90B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7307EB9-F42E-46CC-96F4-D0FECAFFD429}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7307EB9-F42E-46CC-96F4-D0FECAFFD429}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7307EB9-F42E-46CC-96F4-D0FECAFFD429}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7307EB9-F42E-46CC-96F4-D0FECAFFD429}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
