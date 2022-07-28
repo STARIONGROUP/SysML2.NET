@@ -54,7 +54,7 @@ namespace SysML2.NET.DTO
     /// invertingFeatureInverting.featureInverseownedFeatureChaining =
     /// ownedRelationship->selectByKind(FeatureChaining)
     /// </summary>
-    public interface IFeature : IType
+    public partial interface IFeature : IType
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

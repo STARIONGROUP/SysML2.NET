@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// Systems model library, if it is not owned by a VerificationCaseDefinition or VerificationCaseUsage,
     /// or the VerificationCaseUsage subVerificationCases inherited from its owner, otherwise.
     /// </summary>
-    public class VerificationCaseUsage : ICaseUsage
+    public partial class VerificationCaseUsage : IVerificationCaseUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

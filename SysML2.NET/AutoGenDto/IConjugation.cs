@@ -33,7 +33,7 @@ namespace SysML2.NET.DTO
     /// change.A Type may participate as a conjugatedType in at most one Conjugation relationship, and such
     /// a Type may not also be the specific Type in any Generalization relationship.
     /// </summary>
-    public interface IConjugation : IRelationship
+    public partial interface IConjugation : IRelationship
     {
         /// <summary>
         /// </summary>

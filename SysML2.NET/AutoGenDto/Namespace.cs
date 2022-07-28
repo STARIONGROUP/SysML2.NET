@@ -38,7 +38,7 @@ namespace SysML2.NET.DTO
     /// importedMemberships(Set{})ownedImport = ownedRelationship->selectByKind(Import)ownedMembership =
     /// ownedRelationship->selectByKind(Membership)
     /// </summary>
-    public class Namespace : IElement
+    public partial class Namespace : INamespace
     {
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.

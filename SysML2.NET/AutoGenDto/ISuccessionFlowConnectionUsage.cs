@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// A SuccessionFlowConnectionUsage is a FlowConnectionUsage that is also a SuccessionItemFlow.
     /// </summary>
-    public interface ISuccessionFlowConnectionUsage : IFlowConnectionUsage, ISuccessionItemFlow
+    public partial interface ISuccessionFlowConnectionUsage : IFlowConnectionUsage, ISuccessionItemFlow
     {
     }
 }

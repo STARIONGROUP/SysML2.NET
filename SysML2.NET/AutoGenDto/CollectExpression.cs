@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A CollectExpression is an OperatorExpression whoise operator is "collect", which resolves to the
     /// library Function ControlFunctions::collect.
     /// </summary>
-    public class CollectExpression : IOperatorExpression
+    public partial class CollectExpression : ICollectExpression
     {
         /// <summary>
         /// An operator symbol that names a corresponding Function from one of the standard Function packages

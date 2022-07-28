@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// as the performedAction.If the ExhibitStateUsage is owned by a PartDefinition or PartUsage, then it
     /// also subsets the StateUsage Part::exhibitedStates from the Systems model library.
     /// </summary>
-    public class ExhibitStateUsage : IStateUsage, IPerformActionUsage
+    public partial class ExhibitStateUsage : IExhibitStateUsage
     {
         /// <summary>
         /// Whether the nestedStates of this StateDefinition are to all be performed in parallel. If true, none

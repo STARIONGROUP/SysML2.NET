@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// in a SysML model, but it is the base class for the concrete classes BindingConnectorAsUsage,
     /// SuccessionAsUsage and ConnectionUsage.
     /// </summary>
-    public interface IConnectorAsUsage : IUsage, IConnector
+    public partial interface IConnectorAsUsage : IUsage, IConnector
     {
     }
 }

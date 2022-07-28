@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// is a Function whose result is a Boolean true or false value. These are typically used to test
     /// logical statements about modeled objects.
     /// </summary>
-    public interface IPredicate : IFunction
+    public partial interface IPredicate : IFunction
     {
     }
 }

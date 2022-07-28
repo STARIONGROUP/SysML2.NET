@@ -35,7 +35,7 @@ namespace SysML2.NET.DTO
     /// ownedRelationship->selectByKind(Annotation)->    select(a | a.annotatedElement =
     /// self)effectiveName()
     /// </summary>
-    public interface IElement
+    public partial interface IElement
     {
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.

@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// typed by the base Predicate BooleanEvaluation. As a result, a BooleanExpression must always be typed
     /// by BooleanEvaluation or a subclass of BooleanEvaluation.
     /// </summary>
-    public class BooleanExpression : IExpression
+    public partial class BooleanExpression : IBooleanExpression
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

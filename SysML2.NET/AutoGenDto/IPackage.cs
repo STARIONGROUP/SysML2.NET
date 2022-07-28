@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// filterConditions.ownedMembership->forAll(visibility <>
     /// VisibilityKind::protected)ownedImport->forAll(visibility <> VisibilityKind::protected)
     /// </summary>
-    public interface IPackage : INamespace
+    public partial interface IPackage : INamespace
     {
     }
 }

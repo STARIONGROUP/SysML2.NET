@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A TriggerInvocationExpression is an InvocationExpression that invokes one of the trigger Functions
     /// from the Kernel Triggers package, as indicated by its kind.
     /// </summary>
-    public interface ITriggerInvocationExpression : IInvocationExpression
+    public partial interface ITriggerInvocationExpression : IInvocationExpression
     {
         /// <summary>
         /// Indicates which of the Functions from the Kernel Triggers package is to be invoked by this

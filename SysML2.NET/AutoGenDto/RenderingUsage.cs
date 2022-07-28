@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// view to produce a physical view artifact.A RenderingUsage must subset, directly or indirectly, the
     /// base RenderingUsage renderings from the Systems model library.
     /// </summary>
-    public class RenderingUsage : IPartUsage
+    public partial class RenderingUsage : IRenderingUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

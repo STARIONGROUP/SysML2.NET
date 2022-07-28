@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// within a system.A PartDefinition must subclass, directly or indirectly, the base PartDefinition Part
     /// from the Systems model library.
     /// </summary>
-    public interface IPartDefinition : IItemDefinition
+    public partial interface IPartDefinition : IItemDefinition
     {
     }
 }

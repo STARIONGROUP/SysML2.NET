@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// time. A Succession must be typed by the Association HappensBefore from the Kernel Model Library (or
     /// a specialization of it).
     /// </summary>
-    public interface ISuccession : IConnector
+    public partial interface ISuccession : IConnector
     {
     }
 }

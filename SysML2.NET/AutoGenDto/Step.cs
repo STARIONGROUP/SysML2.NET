@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// of behavioral descriptions. Steps can be related in time and serve as sources and targets for object
     /// transfers.
     /// </summary>
-    public class Step : IFeature
+    public partial class Step : IStep
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// Structure are also allowed, to permit use of Structures from the Kernel Library.An ItemUsage must
     /// subset, directly or indirectly, the base ItemUsage items from the Systems model library.
     /// </summary>
-    public interface IItemUsage : IOccurrenceUsage
+    public partial interface IItemUsage : IOccurrenceUsage
     {
     }
 }

@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// to also be instances of the general Type (i.e., the set of instances of the specific Type is a
     /// subset of those of the general Type, which might be the same set).not specific.isConjugated
     /// </summary>
-    public class Specialization : IRelationship
+    public partial class Specialization : ISpecialization
     {
         /// <summary>
         /// </summary>

@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A PortioningFeature is a Feature that is a redefinition of one of the Features timeSliceOf or
     /// snapshotOf of the portionOfLife of each of the types of its portioningUsage.
     /// </summary>
-    public interface IPortioningFeature : IFeature
+    public partial interface IPortioningFeature : IFeature
     {
     }
 }

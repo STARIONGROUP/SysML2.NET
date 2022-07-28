@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// RequirementDefinition or RequirementUsage. The ownedConstraint of a FramedConcernMembership must be
     /// a ConcernUsage.
     /// </summary>
-    public interface IFramedConcernMembership : IRequirementConstraintMembership
+    public partial interface IFramedConcernMembership : IRequirementConstraintMembership
     {
     }
 }

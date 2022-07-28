@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// reference without distinguishing if the thing referenced is an attribute value, item, action, etc.
     /// All features of a ReferenceUsage must also have isComposite = false.
     /// </summary>
-    public interface IReferenceUsage : IUsage
+    public partial interface IReferenceUsage : IUsage
     {
     }
 }

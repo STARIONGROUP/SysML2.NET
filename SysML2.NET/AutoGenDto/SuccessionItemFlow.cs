@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// start.Must be typed by M1 TransferBefore or one of its
     /// specializations.<br>association-&gt;is=OrSpecializationOf(TransferBefore) }
     /// </summary>
-    public class SuccessionItemFlow : IItemFlow, ISuccession
+    public partial class SuccessionItemFlow : ISuccessionItemFlow
     {
         /// <summary>
         /// Whether or not the Connector should be considered to have a direction from source to target.

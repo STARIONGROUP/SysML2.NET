@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A ViewpointUsage is a usage of a ViewpointDefinition.A ViewpointUsage must subset, directly or
     /// indirectly, the base ViewpointUsage viewpoints from the Systems model library.
     /// </summary>
-    public interface IViewpointUsage : IRequirementUsage
+    public partial interface IViewpointUsage : IRequirementUsage
     {
     }
 }

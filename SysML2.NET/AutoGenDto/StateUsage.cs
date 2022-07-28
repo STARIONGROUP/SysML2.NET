@@ -35,7 +35,7 @@ namespace SysML2.NET.DTO
     /// ->    selectByKind(StateDefinition).isParallel->    forAll(p | p = isParallel) andgeneral ->   
     /// selectByKind(StateUsage).isParallel->    forAll(p | p = isParallel)
     /// </summary>
-    public class StateUsage : IActionUsage
+    public partial class StateUsage : IStateUsage
     {
         /// <summary>
         /// Whether the nestedStates of this StateDefinition are to all be performed in parallel. If true, none

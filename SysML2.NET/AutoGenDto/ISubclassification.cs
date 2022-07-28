@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// Subclassification is Specialization in which both the specific and general Types are Classifiers.
     /// This means all instances of the specific Classifier are also instances of the general Classifier.
     /// </summary>
-    public interface ISubclassification : ISpecialization
+    public partial interface ISubclassification : ISpecialization
     {
         /// <summary>
         /// </summary>

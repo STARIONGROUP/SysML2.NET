@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// of its itemsArgument Expression via a Transfer that becomes and incomingTransfer of the Occurrence
     /// given by the result of its receiverArgument Expression.
     /// </summary>
-    public class SendActionUsage : IActionUsage
+    public partial class SendActionUsage : ISendActionUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

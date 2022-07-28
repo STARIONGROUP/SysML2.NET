@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// to define how the model content is presented.A ViewDefinition must subclass, directly or indirectly,
     /// the base ViewDefinition View from the Systems model library.
     /// </summary>
-    public interface IViewDefinition : IPartDefinition
+    public partial interface IViewDefinition : IPartDefinition
     {
     }
 }

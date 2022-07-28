@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// must subclass, directly or indirectly, the base AttributeDefinition AttributeValue from the Systems
     /// model library.
     /// </summary>
-    public class AttributeDefinition : IDefinition, IDataType
+    public partial class AttributeDefinition : IAttributeDefinition
     {
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the

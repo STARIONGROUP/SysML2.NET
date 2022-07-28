@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// While an Object is not itself behavioral, it may be involved in and acted on by Behaviors, and it
     /// may be the performer of some of them.allSupertypes()->includes(Kernel Library::Object)
     /// </summary>
-    public class Structure : IClass
+    public partial class Structure : IStructure
     {
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized

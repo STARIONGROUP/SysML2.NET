@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// Expression. A general Namespace does not define any specific filtering behavior, but such behavior
     /// may be defined for various specialized kinds of Namespaces.condition.isModelLevelEvaluable
     /// </summary>
-    public interface IElementFilterMembership : IOwningMembership
+    public partial interface IElementFilterMembership : IOwningMembership
     {
     }
 }

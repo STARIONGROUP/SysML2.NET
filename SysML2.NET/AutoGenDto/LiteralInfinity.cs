@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// It must have an owned result parameter whose type is Positive.An Expression that provides a value
     /// without a given bound as a result.
     /// </summary>
-    public class LiteralInfinity : ILiteralExpression
+    public partial class LiteralInfinity : ILiteralInfinity
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// FeatureChaining is a Relationship that makes its target Feature one of the chainingFeatures of its
     /// owning Feature.
     /// </summary>
-    public class FeatureChaining : IRelationship
+    public partial class FeatureChaining : IFeatureChaining
     {
         /// <summary>
         /// </summary>

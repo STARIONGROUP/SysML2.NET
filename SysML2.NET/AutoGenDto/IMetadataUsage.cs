@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// the Kernel Library.A MetadataUsage must subset, directly or indirectly, the base MetadataUsage
     /// metadataItems from the Systems model library.
     /// </summary>
-    public interface IMetadataUsage : IItemUsage, IMetadataFeature
+    public partial interface IMetadataUsage : IItemUsage, IMetadataFeature
     {
     }
 }

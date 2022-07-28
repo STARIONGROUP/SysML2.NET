@@ -38,9 +38,15 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
         /// </param>
-        public static void Serialize(Element element, Utf8JsonWriter writer)
+        public static void Serialize(IElement element, Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
+
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(element.Id);
+
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Element");
 
             // AliasIds 
             writer.WriteStartArray("aliasIds");

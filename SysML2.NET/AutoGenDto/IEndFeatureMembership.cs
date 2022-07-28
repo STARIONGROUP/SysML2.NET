@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// EndFeatureMembership is a FeatureMembership that requires its memberFeature be owned and have isEnd
     /// = true.ownedMemberFeature.isEnd
     /// </summary>
-    public interface IEndFeatureMembership : IFeatureMembership
+    public partial interface IEndFeatureMembership : IFeatureMembership
     {
     }
 }

@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// in a SysML model, but it is the base class for the concrete classes BindingConnectorAsUsage,
     /// SuccessionAsUsage and ConnectionUsage.
     /// </summary>
-    public abstract class ConnectorAsUsage : IUsage, IConnector
+    public partial abstract class ConnectorAsUsage : IConnectorAsUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

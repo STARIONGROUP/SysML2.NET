@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// allSupertypes()->includes(Kernel Library::LinkObject)
     /// </summary>
-    public interface IAssociationStructure : IAssociation, IStructure
+    public partial interface IAssociationStructure : IAssociation, IStructure
     {
     }
 }

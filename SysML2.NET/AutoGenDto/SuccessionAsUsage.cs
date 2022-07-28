@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// A SuccessionAsUsage is both a ConnectorAsUsage and a Succession.
     /// </summary>
-    public class SuccessionAsUsage : IConnectorAsUsage, ISuccession
+    public partial class SuccessionAsUsage : ISuccessionAsUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

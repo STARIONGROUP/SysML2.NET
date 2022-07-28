@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// FeatureMembership is an OwningMembership for a Feature in a Type that is also a TypeFeaturing
     /// Relationship between the Feature and the Type.
     /// </summary>
-    public class FeatureMembership : IOwningMembership, ITypeFeaturing
+    public partial class FeatureMembership : IFeatureMembership
     {
         /// <summary>
         /// </summary>

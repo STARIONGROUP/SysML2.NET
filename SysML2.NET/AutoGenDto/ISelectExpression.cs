@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A CollectExpression is an OperatorExpression whoise operator is "select", which resolves to the
     /// library Function ControlFunctions::select.
     /// </summary>
-    public interface ISelectExpression : IOperatorExpression
+    public partial interface ISelectExpression : IOperatorExpression
     {
     }
 }

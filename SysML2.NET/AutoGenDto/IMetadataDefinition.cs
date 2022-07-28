@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// subclassofy, directly or indirectly, the base MetadataDefinition MetadataItem from the Systems model
     /// library.
     /// </summary>
-    public interface IMetadataDefinition : IItemDefinition, IMetaclass
+    public partial interface IMetadataDefinition : IItemDefinition, IMetaclass
     {
     }
 }

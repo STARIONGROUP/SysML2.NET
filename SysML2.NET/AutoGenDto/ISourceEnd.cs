@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public interface ISourceEnd : IFeature
+    public partial interface ISourceEnd : IFeature
     {
     }
 }

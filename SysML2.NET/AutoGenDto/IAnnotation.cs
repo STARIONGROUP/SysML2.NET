@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// An Annotation is a Relationship between an AnnotatingElement and the Element that is annotated by
     /// that AnnotatingElement.
     /// </summary>
-    public interface IAnnotation : IRelationship
+    public partial interface IAnnotation : IRelationship
     {
         /// <summary>
         /// </summary>

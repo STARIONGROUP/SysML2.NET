@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// entry, do and exit actions of the StateDefinition.ownedGeneralization.general->   
     /// selectByKind(StateDefinition).isParallel->    forAll(p | p = isParallel)
     /// </summary>
-    public class StateDefinition : IActionDefinition
+    public partial class StateDefinition : IStateDefinition
     {
         /// <summary>
         /// Whether the ownedStates of this StateDefinition are to all be performed in parallel. If true, none

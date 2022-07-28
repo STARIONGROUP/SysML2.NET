@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// list of enumeratedValues. An EnumerationDefinition must subclass, directly or indirectly, the base
     /// EnumerationDefinition EnumerationValue from the Systems model library.
     /// </summary>
-    public class EnumerationDefinition : IAttributeDefinition
+    public partial class EnumerationDefinition : IEnumerationDefinition
     {
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the

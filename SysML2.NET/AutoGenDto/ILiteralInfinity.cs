@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// It must have an owned result parameter whose type is Positive.An Expression that provides a value
     /// without a given bound as a result.
     /// </summary>
-    public interface ILiteralInfinity : ILiteralExpression
+    public partial interface ILiteralInfinity : ILiteralExpression
     {
     }
 }

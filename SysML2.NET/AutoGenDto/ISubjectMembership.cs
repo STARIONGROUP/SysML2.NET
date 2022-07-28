@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// subject Parameter for its owningType. The owningType of a SubjectMembership must be a
     /// CaseDefinition, CaseUsage, RequirementDefinition or RequirementUsage.
     /// </summary>
-    public interface ISubjectMembership : IParameterMembership
+    public partial interface ISubjectMembership : IParameterMembership
     {
     }
 }

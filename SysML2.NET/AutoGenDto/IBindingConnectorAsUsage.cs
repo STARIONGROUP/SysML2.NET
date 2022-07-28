@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// A BindingConnectorAsUsage is both a BindingConnector and a ConnectorAsUsage.
     /// </summary>
-    public interface IBindingConnectorAsUsage : IConnectorAsUsage, IBindingConnector
+    public partial interface IBindingConnectorAsUsage : IConnectorAsUsage, IBindingConnector
     {
     }
 }

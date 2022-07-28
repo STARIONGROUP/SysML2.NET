@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// features must have isComposite = false.An AttributeUsage must subset, directly or indirectly, the
     /// base AttributeUsage attributeValues from the Systems model library.
     /// </summary>
-    public class AttributeUsage : IUsage
+    public partial class AttributeUsage : IAttributeUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public interface ITargetEnd : IFeature
+    public partial interface ITargetEnd : IFeature
     {
     }
 }

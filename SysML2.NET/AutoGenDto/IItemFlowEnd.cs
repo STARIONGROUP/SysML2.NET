@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public interface IItemFlowEnd : IFeature
+    public partial interface IItemFlowEnd : IFeature
     {
     }
 }

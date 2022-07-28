@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// and it can specialize the rendering specified by its definition.A ViewUsage must subset, directly or
     /// indirectly, the base ViewUsage views from the Systems model library.
     /// </summary>
-    public interface IViewUsage : IPartUsage
+    public partial interface IViewUsage : IPartUsage
     {
     }
 }

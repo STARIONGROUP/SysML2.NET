@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// result.A LiteralInteger must be typed by a specialization of Evaluation with no input parameters and
     /// a single Integer value as its result.
     /// </summary>
-    public class LiteralInteger : ILiteralExpression
+    public partial class LiteralInteger : ILiteralInteger
     {
         /// <summary>
         /// The Integer value that is the result of evaluating this Expression.The Integer value that is the

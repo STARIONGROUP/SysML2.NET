@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// model view (e.g., symbols, style, layout, etc.).A RenderingDefinition must subclass, directly or
     /// indirectly, the base RenderingDefinition Rendering from the Systems model library.
     /// </summary>
-    public class RenderingDefinition : IPartDefinition
+    public partial class RenderingDefinition : IRenderingDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

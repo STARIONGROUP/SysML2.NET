@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// RequirementDefinition must subclass, directly or indirectly, the base RequirementDefinition
     /// RequirementCheck from the Systems model library.
     /// </summary>
-    public interface IRequirementDefinition : IConstraintDefinition
+    public partial interface IRequirementDefinition : IConstraintDefinition
     {
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementDefinition (used, e.g., to link it to

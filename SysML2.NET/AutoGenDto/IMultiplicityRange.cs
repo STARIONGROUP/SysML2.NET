@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// unbounded value *, then the specified range includes all natural numbers greater than or equal to
     /// the lowerBound value.bound->forAll(b | b.featuringType = self.featuringType)
     /// </summary>
-    public interface IMultiplicityRange : IMultiplicity
+    public partial interface IMultiplicityRange : IMultiplicity
     {
     }
 }

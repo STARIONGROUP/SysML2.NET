@@ -36,7 +36,7 @@ namespace SysML2.NET.DTO
     /// DataTypes are intended to represent data or mathematical objects which is where the equivalence
     /// based on matched values is appropriate.allSupertypes()->includes(Kernel Library::DataValue)
     /// </summary>
-    public class DataType : IClassifier
+    public partial class DataType : IDataType
     {
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized

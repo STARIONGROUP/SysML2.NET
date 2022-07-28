@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// describe changes in objects over time. Behaviors can be decomposed into steps and be characterized
     /// by parameters.allSupertypes()->includes(Kernel Library::Performance)
     /// </summary>
-    public interface IBehavior : IClass
+    public partial interface IBehavior : IClass
     {
     }
 }

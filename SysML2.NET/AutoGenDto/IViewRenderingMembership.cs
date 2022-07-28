@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A ViewRenderingMembership is a FeatureMembership that identifies the viewRendering of a View. The
     /// ownedMemberFeature of a RequirementConstraintMembership must be a RenderingUsage.
     /// </summary>
-    public interface IViewRenderingMembership : IFeatureMembership
+    public partial interface IViewRenderingMembership : IFeatureMembership
     {
     }
 }

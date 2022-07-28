@@ -38,7 +38,7 @@ namespace SysML2.NET.DTO
     /// andvalueConnector.relatedFeature->includes(value.result) andvalueConnector.featuringType =
     /// featureWithValue.featuringType
     /// </summary>
-    public class FeatureValue : IOwningMembership
+    public partial class FeatureValue : IFeatureValue
     {
         /// <summary>
         /// </summary>

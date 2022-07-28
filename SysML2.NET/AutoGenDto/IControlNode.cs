@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// ControlNode must have source multiplicity of 1..1. All incoming Succession must have target
     /// multiplicity of 1..1.
     /// </summary>
-    public interface IControlNode : IActionUsage
+    public partial interface IControlNode : IActionUsage
     {
     }
 }

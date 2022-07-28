@@ -24,7 +24,7 @@ namespace SysML2.NET.DTO
     using System.Collections.Generic;
 
     {{ #Documentation this }}
-	public {{#if this.Abstract}}abstract {{/if}}class {{ this.Name }} {{ #Generalization.Interfaces this }}
+	public partial {{#if this.Abstract}}abstract {{/if}}class {{ this.Name }} : I{{ this.Name }}
 	{
         {{#each this.AllEStructuralFeatures as | structuralFeature |}}
         {{#unless structuralFeature.Derived }}

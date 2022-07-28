@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// must subclass, directly or indirectly, the base ConnectionDefinition Connection from the Systems
     /// model library.
     /// </summary>
-    public interface IConnectionDefinition : IPartDefinition, IAssociationStructure
+    public partial interface IConnectionDefinition : IPartDefinition, IAssociationStructure
     {
     }
 }

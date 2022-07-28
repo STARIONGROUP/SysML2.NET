@@ -41,7 +41,7 @@ namespace SysML2.NET.DTO
     /// inheritedMembership->selectByKind(FeatureMembership))disjointType =
     /// disjoiningTypeDisjoining.disjoiningTypedirectedFeature = feature->select(direction <> null)
     /// </summary>
-    public interface IType : INamespace
+    public partial interface IType : INamespace
     {
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized

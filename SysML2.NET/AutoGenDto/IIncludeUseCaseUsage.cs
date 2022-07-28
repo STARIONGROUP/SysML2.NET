@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// the IncludeUseCaseUsage is owned by a UseCaseDefinition or UseCaseUsage, then it also subsets the
     /// UseCaseUsage UseCase::includedUseCases from the Systems model library.
     /// </summary>
-    public interface IIncludeUseCaseUsage : IUseCaseUsage, IPerformActionUsage
+    public partial interface IIncludeUseCaseUsage : IUseCaseUsage, IPerformActionUsage
     {
     }
 }

@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// DecisionNode must subset, directly or indirectly, the ActionUsage Action::decisions, implying that
     /// it is typed by DecisionAction from the Systems model library (or a subtype of it).
     /// </summary>
-    public class DecisionNode : IControlNode
+    public partial class DecisionNode : IDecisionNode
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

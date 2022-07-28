@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// NullExpression must be typed by a NullEvaluation which results in an empty
     /// value.isModelLevelEvaluable = true
     /// </summary>
-    public class NullExpression : IExpression
+    public partial class NullExpression : INullExpression
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

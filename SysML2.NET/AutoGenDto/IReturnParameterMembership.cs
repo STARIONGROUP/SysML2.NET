@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A ReturnParameterMembership is a ParameterMembership that indicates that the memberParameter is the
     /// result parameter of a Function or Expression. The direction of the memberParameter must be out.
     /// </summary>
-    public interface IReturnParameterMembership : IParameterMembership
+    public partial interface IReturnParameterMembership : IParameterMembership
     {
     }
 }

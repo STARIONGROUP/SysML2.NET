@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// ifArgument Expression is true. It may also optionally specify a elseAction ActionUsage that is
     /// performed if the result of the ifArgument is false.
     /// </summary>
-    public class IfActionUsage : IActionUsage
+    public partial class IfActionUsage : IIfActionUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

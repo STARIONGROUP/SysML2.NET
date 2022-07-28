@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// ActionUsage Action::joins, implying that it is typed by JoinAction from the Systems model library
     /// (or a subtype of it).
     /// </summary>
-    public class JoinNode : IControlNode
+    public partial class JoinNode : IJoinNode
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// that have behaviors that impact one another.Interactions are Behaviors that also provide context for
     /// multiple objects that have behaviors that impact one another.
     /// </summary>
-    public class Interaction : IAssociation, IBehavior
+    public partial class Interaction : IInteraction
     {
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized

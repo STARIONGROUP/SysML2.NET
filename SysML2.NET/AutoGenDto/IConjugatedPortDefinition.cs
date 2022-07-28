@@ -33,7 +33,7 @@ namespace SysML2.NET.DTO
     /// originalPortDefinition, with the character ~ prepended.originalPortDefinition =
     /// ownedPortConjugator.originalPortDefinitionconjugatedPortDefinition = null
     /// </summary>
-    public interface IConjugatedPortDefinition : IPortDefinition
+    public partial interface IConjugatedPortDefinition : IPortDefinition
     {
     }
 }

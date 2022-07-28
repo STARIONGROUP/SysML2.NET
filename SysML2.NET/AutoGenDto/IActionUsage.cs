@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// the Systems model library. if it is a feature of an ActionDefinition or ActionUsage, then it must
     /// subset, directly or indirectly, the ActionUsage Action::subactions.
     /// </summary>
-    public interface IActionUsage : IOccurrenceUsage, IStep
+    public partial interface IActionUsage : IOccurrenceUsage, IStep
     {
     }
 }

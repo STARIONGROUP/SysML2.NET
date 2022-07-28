@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// ownedMember->select(oclIsKindOf(ConjugatedPortDefinition))ownedUsage->    select(not
     /// oclIsKindOf(PortUsage))->    forAll(not isComposite)
     /// </summary>
-    public class PortDefinition : IOccurrenceDefinition, IStructure
+    public partial class PortDefinition : IPortDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

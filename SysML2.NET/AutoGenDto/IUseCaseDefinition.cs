@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// result that is of value for one or more of the actors.A UseCaseDefinition must subclass, directly or
     /// indirectly, the base UseCaseDefinition UseCase from the Systems model library.
     /// </summary>
-    public interface IUseCaseDefinition : ICaseDefinition
+    public partial interface IUseCaseDefinition : ICaseDefinition
     {
     }
 }

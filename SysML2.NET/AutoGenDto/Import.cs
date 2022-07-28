@@ -36,7 +36,7 @@ namespace SysML2.NET.DTO
     /// is a Namespace, then visible Memberships are also recursively imported from that Namespace and its
     /// owned sub-Namespaces.
     /// </summary>
-    public class Import : IRelationship
+    public partial class Import : IImport
     {
         /// <summary>
         /// The effectiveMemberName of the Membership of the importedNamspace to be imported. If not given, all

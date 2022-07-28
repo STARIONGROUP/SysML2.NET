@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// as the performedAction.If the ExhibitStateUsage is owned by a PartDefinition or PartUsage, then it
     /// also subsets the StateUsage Part::exhibitedStates from the Systems model library.
     /// </summary>
-    public interface IExhibitStateUsage : IStateUsage, IPerformActionUsage
+    public partial interface IExhibitStateUsage : IStateUsage, IPerformActionUsage
     {
     }
 }

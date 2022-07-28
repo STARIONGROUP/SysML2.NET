@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// become outputs on the ConjugatedPortDefinition and output flows of the original PortDefinition
     /// become inputs on the ConjugatedPortDefinition.
     /// </summary>
-    public interface IPortConjugation : IConjugation
+    public partial interface IPortConjugation : IConjugation
     {
         /// <summary>
         /// </summary>

@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// subclassofy, directly or indirectly, the base MetadataDefinition MetadataItem from the Systems model
     /// library.
     /// </summary>
-    public class MetadataDefinition : IItemDefinition, IMetaclass
+    public partial class MetadataDefinition : IMetadataDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

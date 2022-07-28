@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// must subclass, directly or indirectly, the base ConnectionDefinition Connection from the Systems
     /// model library.
     /// </summary>
-    public class ConnectionDefinition : IPartDefinition, IAssociationStructure
+    public partial class ConnectionDefinition : IConnectionDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

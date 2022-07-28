@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// memberNames of a Membership are effectively aliases within the membershipOwningNamespace for an
     /// Element with a separate OwningMembership in the same or a different Namespace.
     /// </summary>
-    public class Membership : IRelationship
+    public partial class Membership : IMembership
     {
         /// <summary>
         /// </summary>

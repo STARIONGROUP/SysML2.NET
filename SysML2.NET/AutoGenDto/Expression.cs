@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
     /// as the results of other Expressions in the tree.
     /// </summary>
-    public class Expression : IStep
+    public partial class Expression : IExpression
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

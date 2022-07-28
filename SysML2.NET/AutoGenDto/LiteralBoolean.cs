@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// result.A LiteralBoolean must be typed by a specialization of Evaluation with no input parameters and
     /// a single Boolean value as its result.
     /// </summary>
-    public class LiteralBoolean : ILiteralExpression
+    public partial class LiteralBoolean : ILiteralBoolean
     {
         /// <summary>
         /// The Boolean value that is the result of evaluating this Expression.The Boolean value that is the

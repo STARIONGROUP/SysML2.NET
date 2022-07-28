@@ -38,7 +38,7 @@ namespace SysML2.NET.DTO
     /// meta-associations directly between non-relationship Elements must be derived from underlying reified
     /// Relationships.
     /// </summary>
-    public interface IRelationship : IElement
+    public partial interface IRelationship : IElement
     {
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.

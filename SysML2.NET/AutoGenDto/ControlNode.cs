@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// ControlNode must have source multiplicity of 1..1. All incoming Succession must have target
     /// multiplicity of 1..1.
     /// </summary>
-    public abstract class ControlNode : IActionUsage
+    public partial abstract class ControlNode : IControlNode
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

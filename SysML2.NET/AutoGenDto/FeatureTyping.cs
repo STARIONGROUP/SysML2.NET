@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// interpreted as sequences ending in things (in the modeled universe) that are instances of the
     /// Classifier.
     /// </summary>
-    public class FeatureTyping : ISpecialization
+    public partial class FeatureTyping : IFeatureTyping
     {
         /// <summary>
         /// </summary>

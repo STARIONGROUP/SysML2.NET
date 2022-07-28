@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// as a result.A LiteralString must be typed by a specialization of Evaluation with no input parameters
     /// and a single String value as its result.
     /// </summary>
-    public class LiteralString : ILiteralExpression
+    public partial class LiteralString : ILiteralString
     {
         /// <summary>
         /// The String value that is the result of evaluating this Expression.The String value that is the

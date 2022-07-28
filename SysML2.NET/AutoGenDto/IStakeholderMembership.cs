@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// parameter, which specifies a role played by an entity with Concerns framed by the parametered
     /// requirement.
     /// </summary>
-    public interface IStakeholderMembership : IParameterMembership
+    public partial interface IStakeholderMembership : IParameterMembership
     {
     }
 }

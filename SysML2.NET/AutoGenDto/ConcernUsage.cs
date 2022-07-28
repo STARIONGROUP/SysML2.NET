@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// ConcernUsage is an ownedFeature of a StakeholderDefinition or StakeholderUsage, then the
     /// ConcernUsage shall have an ownedStakeholder feature that is bound to the self feature of its owner.
     /// </summary>
-    public class ConcernUsage : IRequirementUsage
+    public partial class ConcernUsage : IConcernUsage
     {
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementUsage (used, e.g., to link it to an

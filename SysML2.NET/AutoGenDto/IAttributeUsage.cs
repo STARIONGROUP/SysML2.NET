@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// features must have isComposite = false.An AttributeUsage must subset, directly or indirectly, the
     /// base AttributeUsage attributeValues from the Systems model library.
     /// </summary>
-    public interface IAttributeUsage : IUsage
+    public partial interface IAttributeUsage : IUsage
     {
     }
 }

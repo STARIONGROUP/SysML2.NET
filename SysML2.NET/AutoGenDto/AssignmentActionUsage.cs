@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// referent Feature, relative to the target given by the result of the targetArgument Expression,
     /// should be set to the result of the valueExpression.
     /// </summary>
-    public class AssignmentActionUsage : IActionUsage
+    public partial class AssignmentActionUsage : IAssignmentActionUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

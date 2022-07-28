@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public class ItemFlowFeature : IFeature
+    public partial class ItemFlowFeature : IItemFlowFeature
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

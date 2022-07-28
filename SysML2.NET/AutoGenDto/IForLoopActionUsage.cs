@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// as the result of the seqArgument Expression. The bodyAction must have one input parameter, which
     /// receives a value from the sequence on each iteration.
     /// </summary>
-    public interface IForLoopActionUsage : ILoopActionUsage
+    public partial interface IForLoopActionUsage : ILoopActionUsage
     {
     }
 }

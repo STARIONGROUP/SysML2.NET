@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public class SourceEnd : IFeature
+    public partial class SourceEnd : ISourceEnd
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

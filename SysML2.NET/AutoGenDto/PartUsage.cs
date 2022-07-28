@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// of the types of the PartUsage must be a PartDefinition.A PartUsage must subset, directly or
     /// indirectly, the base PartUsage parts from the Systems model library.
     /// </summary>
-    public class PartUsage : IItemUsage
+    public partial class PartUsage : IPartUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// the base CaseUsage cases from the Systems model library. If it is owned by a CaseDefinition or
     /// CaseUsage, it must subset the CaseUsage Cases::subcases.
     /// </summary>
-    public class CaseUsage : ICalculationUsage
+    public partial class CaseUsage : ICaseUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

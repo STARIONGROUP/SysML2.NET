@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// a system through specific ports.An InterfaceUsage must subset, directly or indirectly, the base
     /// InterfaceUsage interfaces from the Systems model libary.
     /// </summary>
-    public interface IInterfaceUsage : IConnectionUsage
+    public partial interface IInterfaceUsage : IConnectionUsage
     {
     }
 }

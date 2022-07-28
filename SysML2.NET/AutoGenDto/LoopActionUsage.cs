@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// repeatedly. Its subclasses WhileLoopActionUsage and ForLoopActionUsage provide different ways to
     /// determine how many times the bodyAction should be performed.
     /// </summary>
-    public abstract class LoopActionUsage : IActionUsage
+    public partial abstract class LoopActionUsage : ILoopActionUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

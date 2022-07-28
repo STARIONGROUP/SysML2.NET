@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// RequirementUsage is false. The satisfied RequirementUsage is related to the SatisfyRequirementUsage
     /// by a Subsetting relationship.
     /// </summary>
-    public interface ISatisfyRequirementUsage : IRequirementUsage, IAssertConstraintUsage
+    public partial interface ISatisfyRequirementUsage : IRequirementUsage, IAssertConstraintUsage
     {
     }
 }

@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// single OccurrenceDefinition, and has a multiplicity of 0..1. This constrains the
     /// OccurrenceDefinition to have at most one instance that is a complete Life.
     /// </summary>
-    public interface ILifeClass : IClass
+    public partial interface ILifeClass : IClass
     {
     }
 }

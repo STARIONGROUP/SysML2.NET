@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// Occurrence, then it also subsets the suboccurrence property of that Occurrence (as defined in the
     /// library model for Part).
     /// </summary>
-    public class EventOccurrenceUsage : IOccurrenceUsage
+    public partial class EventOccurrenceUsage : IEventOccurrenceUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

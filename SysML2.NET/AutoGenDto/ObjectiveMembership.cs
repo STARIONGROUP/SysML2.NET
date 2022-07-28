@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// the objective RequirementUsage for its owningType. The owningType of an ObjectiveMembership must be
     /// a CaseDefinition or CaseUsage.
     /// </summary>
-    public class ObjectiveMembership : IFeatureMembership
+    public partial class ObjectiveMembership : IObjectiveMembership
     {
         /// <summary>
         /// </summary>

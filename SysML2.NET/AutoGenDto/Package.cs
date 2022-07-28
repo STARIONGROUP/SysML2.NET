@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// filterConditions.ownedMembership->forAll(visibility <>
     /// VisibilityKind::protected)ownedImport->forAll(visibility <> VisibilityKind::protected)
     /// </summary>
-    public class Package : INamespace
+    public partial class Package : IPackage
     {
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.

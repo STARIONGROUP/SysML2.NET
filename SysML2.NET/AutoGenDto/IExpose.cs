@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// Elements are to be included in a view. Visibility is always ignored for an Expose (i.e., isImportAll
     /// = true).isImportAll
     /// </summary>
-    public interface IExpose : IImport
+    public partial interface IExpose : IImport
     {
     }
 }

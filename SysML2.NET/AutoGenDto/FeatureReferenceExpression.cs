@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// members allowed for a FeatureReferenceExpression are the referent, the result and the
     /// BindingConnector between them.
     /// </summary>
-    public class FeatureReferenceExpression : IExpression
+    public partial class FeatureReferenceExpression : IFeatureReferenceExpression
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

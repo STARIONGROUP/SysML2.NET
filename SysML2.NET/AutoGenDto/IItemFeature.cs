@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public interface IItemFeature : IFeature
+    public partial interface IItemFeature : IFeature
     {
     }
 }

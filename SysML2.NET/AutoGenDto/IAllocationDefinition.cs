@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// allocation mapping.An AllocationDefinition must subclass, directly or indirectly, the base
     /// AllocationDefinition Allocation from the Systems model library.
     /// </summary>
-    public interface IAllocationDefinition : IConnectionDefinition
+    public partial interface IAllocationDefinition : IConnectionDefinition
     {
     }
 }

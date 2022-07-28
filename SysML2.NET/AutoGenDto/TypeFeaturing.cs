@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// sequences that are classified by the featureOfType must have a prefix subsequence that is classified
     /// by the featuringType.
     /// </summary>
-    public class TypeFeaturing : IRelationship
+    public partial class TypeFeaturing : ITypeFeaturing
     {
         /// <summary>
         /// </summary>

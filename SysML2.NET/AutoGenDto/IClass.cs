@@ -34,7 +34,7 @@ namespace SysML2.NET.DTO
     /// construction of models representing real world things which can be separate entities even if all
     /// measurable properties are the same.allSupertypes()->includes(Kernel Library::Occurrence)
     /// </summary>
-    public interface IClass : IClassifier
+    public partial interface IClass : IClassifier
     {
     }
 }

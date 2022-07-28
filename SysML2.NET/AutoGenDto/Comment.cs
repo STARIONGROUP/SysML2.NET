@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// A Comment is an AnnotatingElement whose body in some way describes its annotatedElements.
     /// </summary>
-    public class Comment : IAnnotatingElement
+    public partial class Comment : IComment
     {
         /// <summary>
         /// The annotation text for the Comment.

@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// BinaryLinkObject).A ConnectionUsage must subset the base ConnectionUsage connections from the
     /// Systems model library.
     /// </summary>
-    public class ConnectionUsage : IConnectorAsUsage, IPartUsage
+    public partial class ConnectionUsage : IConnectionUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

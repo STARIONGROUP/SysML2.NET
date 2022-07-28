@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// not a composite feature, or the CalculationUsage subcalculations inherited from its owner, if it is
     /// a composite feature.
     /// </summary>
-    public class CalculationUsage : IActionUsage, IExpression
+    public partial class CalculationUsage : ICalculationUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

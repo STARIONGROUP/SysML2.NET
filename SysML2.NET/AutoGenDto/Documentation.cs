@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// Documentation is a Comment that specifically documents a documentedElement, which must be its owner.
     /// </summary>
-    public class Documentation : IComment
+    public partial class Documentation : IDocumentation
     {
         /// <summary>
         /// The annotation text for the Comment.

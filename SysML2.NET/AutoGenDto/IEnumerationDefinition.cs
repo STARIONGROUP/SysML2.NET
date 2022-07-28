@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// list of enumeratedValues. An EnumerationDefinition must subclass, directly or indirectly, the base
     /// EnumerationDefinition EnumerationValue from the Systems model library.
     /// </summary>
-    public interface IEnumerationDefinition : IAttributeDefinition
+    public partial interface IEnumerationDefinition : IAttributeDefinition
     {
     }
 }

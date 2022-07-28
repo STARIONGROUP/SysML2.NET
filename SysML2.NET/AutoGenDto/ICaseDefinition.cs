@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// producing a result that meets an objective.A CaseDefinition must subclass, directly or indirectly,
     /// the base CaseDefinition Case from the Systems model library.
     /// </summary>
-    public interface ICaseDefinition : ICalculationDefinition
+    public partial interface ICaseDefinition : ICalculationDefinition
     {
     }
 }

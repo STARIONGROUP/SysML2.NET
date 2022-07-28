@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// FeatureChainExpression must be its single argument Expression and its targetFeature. Its only other
     /// members shall be those necessary to complete it as an InvocationExpression.
     /// </summary>
-    public class FeatureChainExpression : IOperatorExpression
+    public partial class FeatureChainExpression : IFeatureChainExpression
     {
         /// <summary>
         /// An operator symbol that names a corresponding Function from one of the standard Function packages

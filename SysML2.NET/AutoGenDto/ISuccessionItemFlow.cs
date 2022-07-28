@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// start.Must be typed by M1 TransferBefore or one of its
     /// specializations.<br>association-&gt;is=OrSpecializationOf(TransferBefore) }
     /// </summary>
-    public interface ISuccessionItemFlow : IItemFlow, ISuccession
+    public partial interface ISuccessionItemFlow : IItemFlow, ISuccession
     {
     }
 }

@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// must subclass, directly or indirectly, the base AttributeDefinition AttributeValue from the Systems
     /// model library.
     /// </summary>
-    public interface IAttributeDefinition : IDefinition, IDataType
+    public partial interface IAttributeDefinition : IDefinition, IDataType
     {
     }
 }

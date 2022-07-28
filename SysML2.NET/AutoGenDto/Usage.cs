@@ -37,7 +37,7 @@ namespace SysML2.NET.DTO
     /// variantMembership->isEmpty()isVariation implies variantMembership = ownedMembershipisReference = not
     /// isComposite
     /// </summary>
-    public class Usage : IFeature
+    public partial class Usage : IUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

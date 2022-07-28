@@ -36,7 +36,7 @@ namespace SysML2.NET.DTO
     /// feature->select(isEnd)association->forAll(a |    a.associationEnd->forAll(ae |       
     /// connectorEnd->one(ce |             ce.ownedRedefinition.redefinedFeature->includes(ae))))
     /// </summary>
-    public class Connector : IFeature, IRelationship
+    public partial class Connector : IConnector
     {
         /// <summary>
         /// Whether or not the Connector should be considered to have a direction from source to target.

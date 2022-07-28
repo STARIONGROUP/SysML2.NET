@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// StateDefinition or StateUsage. The ownedMemberFeature of a StateSubactionMembership must be an
     /// ActionUsage.
     /// </summary>
-    public interface IStateSubactionMembership : IFeatureMembership
+    public partial interface IStateSubactionMembership : IFeatureMembership
     {
         /// <summary>
         /// Whether this StateSubactionMembership is for an entry, do or exit ActionUsage.

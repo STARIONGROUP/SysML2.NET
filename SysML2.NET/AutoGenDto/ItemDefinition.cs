@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// ItemDefinition must subclass, directly or indirectly, the base ItemDefinition Item from the Systems
     /// model library.
     /// </summary>
-    public class ItemDefinition : IOccurrenceDefinition, IStructure
+    public partial class ItemDefinition : IItemDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

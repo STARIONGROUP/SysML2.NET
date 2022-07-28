@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// AnalysisCaseDefinition must subclass, directly or indirectly, the base AnalysisCaseDefinition
     /// AnalysisCase from the Systems model library.
     /// </summary>
-    public interface IAnalysisCaseDefinition : ICaseDefinition
+    public partial interface IAnalysisCaseDefinition : ICaseDefinition
     {
     }
 }

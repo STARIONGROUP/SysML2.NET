@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// and any feature bindings must be model-level evaluable.A MetadataFeature must subset, directly or
     /// indirectly, the base MetadataFeature metadata from the Kernel Library.
     /// </summary>
-    public interface IMetadataFeature : IFeature, IAnnotatingElement
+    public partial interface IMetadataFeature : IFeature, IAnnotatingElement
     {
     }
 }

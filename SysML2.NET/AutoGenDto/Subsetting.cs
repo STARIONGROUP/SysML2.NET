@@ -34,7 +34,7 @@ namespace SysML2.NET.DTO
     /// subsettingFeature (if it is not already in that namespace), requiring the names of the
     /// subsettingFeature and subsettedFeature to be different.
     /// </summary>
-    public class Subsetting : ISpecialization
+    public partial class Subsetting : ISubsetting
     {
         /// <summary>
         /// </summary>

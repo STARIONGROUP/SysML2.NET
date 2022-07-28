@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// NullExpression must be typed by a NullEvaluation which results in an empty
     /// value.isModelLevelEvaluable = true
     /// </summary>
-    public interface INullExpression : IExpression
+    public partial interface INullExpression : IExpression
     {
     }
 }

@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// the case against its requirements.A VerificationCaseDefinition must subclass, directly or
     /// indirectly, the base VerificationCaseDefinition VerificationCase from the Systems model library.
     /// </summary>
-    public class VerificationCaseDefinition : ICaseDefinition
+    public partial class VerificationCaseDefinition : IVerificationCaseDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// producing a result that meets an objective.A CaseDefinition must subclass, directly or indirectly,
     /// the base CaseDefinition Case from the Systems model library.
     /// </summary>
-    public class CaseDefinition : ICalculationDefinition
+    public partial class CaseDefinition : ICaseDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// A SuccessionAsUsage is both a ConnectorAsUsage and a Succession.
     /// </summary>
-    public interface ISuccessionAsUsage : IConnectorAsUsage, ISuccession
+    public partial interface ISuccessionAsUsage : IConnectorAsUsage, ISuccession
     {
     }
 }

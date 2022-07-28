@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// library, if it is not owned by an AnalysisCaseDefinition or AnalysisCaseUsage, or the
     /// AnalysisCaseUsage subAnalysisCases inherited from its owner, otherwise.
     /// </summary>
-    public class AnalysisCaseUsage : ICaseUsage
+    public partial class AnalysisCaseUsage : IAnalysisCaseUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

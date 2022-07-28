@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// other than accept, then the payloadParameter must be bound to a payloadArgument that is an
     /// InvocationExpression whose function is determined by the triggerKind.
     /// </summary>
-    public interface IAcceptActionUsage : IActionUsage
+    public partial interface IAcceptActionUsage : IActionUsage
     {
     }
 }

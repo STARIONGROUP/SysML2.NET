@@ -35,7 +35,7 @@ namespace SysML2.NET.DTO
     /// portioningFeature <> null and    portionKind = portioningFeature.portionKind and   
     /// occurrenceDefinition.asSet() = portioningFeature.type.asSet()endif
     /// </summary>
-    public interface IOccurrenceUsage : IUsage
+    public partial interface IOccurrenceUsage : IUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

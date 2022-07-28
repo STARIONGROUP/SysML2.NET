@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// PartDefinition or PartUsage, then it also subsets the ActionUsage Part::performedAction from the
     /// Systems model library.
     /// </summary>
-    public interface IPerformActionUsage : IActionUsage, IEventOccurrenceUsage
+    public partial interface IPerformActionUsage : IActionUsage, IEventOccurrenceUsage
     {
     }
 }

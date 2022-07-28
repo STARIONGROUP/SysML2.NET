@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A Metaclass is a Structure used to type MetadataFeatures. It must subclassify, directly or
     /// indirectly, the base type Metadata from the Kernel Library.
     /// </summary>
-    public interface IMetaclass : IStructure
+    public partial interface IMetaclass : IStructure
     {
     }
 }

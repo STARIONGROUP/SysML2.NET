@@ -37,7 +37,7 @@ namespace SysML2.NET.DTO
     /// ownedMembershipvariant = variantMembership.ownedVariantUsagevariantMembership =
     /// ownedMembership->selectByKind(VariantMembership)not isVariation implies variantMembership->isEmpty()
     /// </summary>
-    public interface IDefinition : IClassifier
+    public partial interface IDefinition : IClassifier
     {
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the

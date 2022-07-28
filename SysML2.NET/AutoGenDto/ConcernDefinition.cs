@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// ConcernDefinition ConcernCheck from the Systems model library. The ownedStakeholder features of a
     /// ConcernDefinition shall all subset the ConcernCheck::concernedStakeholders feature.
     /// </summary>
-    public class ConcernDefinition : IRequirementDefinition
+    public partial class ConcernDefinition : IConcernDefinition
     {
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementDefinition (used, e.g., to link it to

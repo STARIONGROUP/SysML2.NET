@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// related to some of its ownedFeatures using TransitionFeatureMembership Relationships, corresponding
     /// to the triggers, guards and effects of the TransitionUsage.
     /// </summary>
-    public class TransitionUsage : IActionUsage
+    public partial class TransitionUsage : ITransitionUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

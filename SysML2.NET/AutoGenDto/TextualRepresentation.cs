@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// artifical language, in which case the body is expected to be a formal, machine-parsable
     /// representation.
     /// </summary>
-    public class TextualRepresentation : IAnnotatingElement
+    public partial class TextualRepresentation : ITextualRepresentation
     {
         /// <summary>
         /// The annotation text for the Comment.

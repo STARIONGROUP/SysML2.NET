@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// A BindingConnectorAsUsage is both a BindingConnector and a ConnectorAsUsage.
     /// </summary>
-    public class BindingConnectorAsUsage : IConnectorAsUsage, IBindingConnector
+    public partial class BindingConnectorAsUsage : IBindingConnectorAsUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

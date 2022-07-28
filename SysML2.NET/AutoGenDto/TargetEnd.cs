@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public class TargetEnd : IFeature
+    public partial class TargetEnd : ITargetEnd
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

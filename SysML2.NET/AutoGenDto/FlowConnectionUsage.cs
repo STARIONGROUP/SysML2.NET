@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// A FlowConnectionUsage is a ConnectionUsage that is also an ItemFlow.
     /// </summary>
-    public class FlowConnectionUsage : IConnectionUsage, IItemFlow
+    public partial class FlowConnectionUsage : IFlowConnectionUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

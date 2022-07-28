@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// Part) must subset, directly or indirectly, the base ConstraintUsage constraintChecks from the
     /// Systems model library.
     /// </summary>
-    public interface IConstraintUsage : IOccurrenceUsage, IBooleanExpression
+    public partial interface IConstraintUsage : IOccurrenceUsage, IBooleanExpression
     {
     }
 }

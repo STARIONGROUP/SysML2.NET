@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// feature to the target feature.An AllocationUsage must subset, directly or indirectly, the base
     /// AllocatopnUsage allocations from the Systems model library.
     /// </summary>
-    public class AllocationUsage : IConnectionUsage
+    public partial class AllocationUsage : IAllocationUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

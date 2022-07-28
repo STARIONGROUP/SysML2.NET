@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// person's children.  A person identified as a parent of another will identify that other as one of
     /// their children.
     /// </summary>
-    public class FeatureInverting : IRelationship
+    public partial class FeatureInverting : IFeatureInverting
     {
         /// <summary>
         /// </summary>

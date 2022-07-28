@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// CalculationDefinition must subclass, directly or indirectly, the base CalculationDefinition
     /// Calculation from the Systems model library.
     /// </summary>
-    public class CalculationDefinition : IActionDefinition, IFunction
+    public partial class CalculationDefinition : ICalculationDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

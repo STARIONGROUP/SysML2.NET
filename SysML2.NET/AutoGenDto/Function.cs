@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// performance of a calculation that produces the values of its result parameter. This calculation may
     /// be decomposed into Expressions that are steps of the Function.
     /// </summary>
-    public class Function : IBehavior
+    public partial class Function : IFunction
     {
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized

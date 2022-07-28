@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// more specifically be a Transfer, while for a guard it must be an Expression with a result type of
     /// Boolean.
     /// </summary>
-    public interface ITransitionFeatureMembership : IFeatureMembership
+    public partial interface ITransitionFeatureMembership : IFeatureMembership
     {
         /// <summary>
         /// Whether this TransitionFeatureMembership is for a trigger, guard or effect.

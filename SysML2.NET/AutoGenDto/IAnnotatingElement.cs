@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// Relationship.annotatedElement =  if annotation->notEmpty() then annotation.annotatedElement else
     /// owningNamespace endif
     /// </summary>
-    public interface IAnnotatingElement : IElement
+    public partial interface IAnnotatingElement : IElement
     {
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements.

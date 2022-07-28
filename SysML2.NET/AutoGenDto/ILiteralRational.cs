@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// LiteralReal must be typed by a specialization of Evaluation with no input parameters and a single
     /// Real value as its result.
     /// </summary>
-    public interface ILiteralRational : ILiteralExpression
+    public partial interface ILiteralRational : ILiteralExpression
     {
         /// <summary>
         /// The value whose rational approximation is the result of evaluating this Expression.The Real value

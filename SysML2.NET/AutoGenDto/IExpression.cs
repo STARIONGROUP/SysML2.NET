@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
     /// as the results of other Expressions in the tree.
     /// </summary>
-    public interface IExpression : IStep
+    public partial interface IExpression : IStep
     {
     }
 }

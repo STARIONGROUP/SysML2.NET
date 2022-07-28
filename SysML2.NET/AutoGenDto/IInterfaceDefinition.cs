@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// interface between elements that interact through such ports.An InterfaceDefinition must subclass,
     /// directly or indirectly, the base InterfaceDefinition Interface from the Systems model library.
     /// </summary>
-    public interface IInterfaceDefinition : IConnectionDefinition
+    public partial interface IInterfaceDefinition : IConnectionDefinition
     {
     }
 }

@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// Part) must subset, directly or indirectly, the base ConstraintUsage constraintChecks from the
     /// Systems model library.
     /// </summary>
-    public class ConstraintUsage : IOccurrenceUsage, IBooleanExpression
+    public partial class ConstraintUsage : IConstraintUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

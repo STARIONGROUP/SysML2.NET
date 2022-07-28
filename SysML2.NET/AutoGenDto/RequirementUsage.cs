@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A RequirementUsage is a Usage of a RequirementDefinition.A RequirementUsage must subset, directly or
     /// indirectly, the base RequirementUsage requirementChecks from the Systems model library.
     /// </summary>
-    public class RequirementUsage : IConstraintUsage
+    public partial class RequirementUsage : IRequirementUsage
     {
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementUsage (used, e.g., to link it to an

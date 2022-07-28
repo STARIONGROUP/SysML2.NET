@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// represents a variant in the context of that variation. The membershipOwningNamespace for the
     /// VariantMembership must be either a Definition or a Usage with isVariation = true.
     /// </summary>
-    public class VariantMembership : IOwningMembership
+    public partial class VariantMembership : IVariantMembership
     {
         /// <summary>
         /// </summary>

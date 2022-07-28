@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// directly or indirectly, the base ConstraintDefinition ConstraintCheck from the Systems model
     /// library.
     /// </summary>
-    public interface IConstraintDefinition : IOccurrenceDefinition, IPredicate
+    public partial interface IConstraintDefinition : IOccurrenceDefinition, IPredicate
     {
     }
 }

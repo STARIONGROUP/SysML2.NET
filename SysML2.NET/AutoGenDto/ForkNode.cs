@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// Action::forks, implying that it is typed by ForkAction from the Systems model library (or a subtype
     /// of it).
     /// </summary>
-    public class ForkNode : IControlNode
+    public partial class ForkNode : IForkNode
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

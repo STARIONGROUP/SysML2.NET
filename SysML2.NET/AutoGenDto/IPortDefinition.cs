@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// ownedMember->select(oclIsKindOf(ConjugatedPortDefinition))ownedUsage->    select(not
     /// oclIsKindOf(PortUsage))->    forAll(not isComposite)
     /// </summary>
-    public interface IPortDefinition : IOccurrenceDefinition, IStructure
+    public partial interface IPortDefinition : IOccurrenceDefinition, IStructure
     {
     }
 }

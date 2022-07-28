@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// of a RequirementDefinition or RequirementUsage. The ownedMemberFeature of a
     /// RequirementConstraintMembership must be a ConstraintUsage.
     /// </summary>
-    public interface IRequirementConstraintMembership : IFeatureMembership
+    public partial interface IRequirementConstraintMembership : IFeatureMembership
     {
         /// <summary>
         /// Whether the RequirementConstraintMembership is for an assumed or required ConstraintUsage.

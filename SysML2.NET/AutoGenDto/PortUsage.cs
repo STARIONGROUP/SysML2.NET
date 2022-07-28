@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// PortUsage ports from the Systems model library.nestedUsage->    select(not oclIsKindOf(PortUsage))->
     ///    forAll(not isComposite)
     /// </summary>
-    public class PortUsage : IOccurrenceUsage
+    public partial class PortUsage : IPortUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

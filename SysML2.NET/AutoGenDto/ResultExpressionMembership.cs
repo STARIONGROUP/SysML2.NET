@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// Expression must contain a BindingConnector between the result parameter of the ownedResultExpression
     /// and the result parameter of the Function or Expression.
     /// </summary>
-    public class ResultExpressionMembership : IFeatureMembership
+    public partial class ResultExpressionMembership : IResultExpressionMembership
     {
         /// <summary>
         /// </summary>

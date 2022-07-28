@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// argument.isModelLevelEvaluable =     argument->forAll(isModelLevelEvaluable) and    
     /// function.isModelLevelEvaluable
     /// </summary>
-    public interface IInvocationExpression : IExpression
+    public partial interface IInvocationExpression : IExpression
     {
     }
 }

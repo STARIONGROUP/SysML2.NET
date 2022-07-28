@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// system or part of a system.An ActionDefinition must subclass, directly or indirectly, the base
     /// ActionDefinition Action from the Systems model library.
     /// </summary>
-    public interface IActionDefinition : IOccurrenceDefinition, IBehavior
+    public partial interface IActionDefinition : IOccurrenceDefinition, IBehavior
     {
     }
 }

@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public class ItemFeature : IFeature
+    public partial class ItemFeature : IItemFeature
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

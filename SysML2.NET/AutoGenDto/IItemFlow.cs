@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// ItemFlows can take non-zero time to complete.An ItemFlow must be typed by the Interaction Transfer
     /// from the Kernel library, or a specialization of it.
     /// </summary>
-    public interface IItemFlow : IConnector, IStep
+    public partial interface IItemFlow : IConnector, IStep
     {
     }
 }

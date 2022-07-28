@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// Expression is evaluated before each (possible) performance of the bodyClause, and the untilArgument
     /// Expression is evaluated after each performance of the bodyClause.
     /// </summary>
-    public class WhileLoopActionUsage : ILoopActionUsage
+    public partial class WhileLoopActionUsage : IWhileLoopActionUsage
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

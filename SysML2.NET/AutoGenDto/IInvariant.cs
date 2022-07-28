@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// isNegated = true, then the Invariant must subset, directly or indirectly, the BooleanExpression
     /// falseEvaluations from the Kernel library, meaning that the result is asserted to be false.
     /// </summary>
-    public interface IInvariant : IBooleanExpression
+    public partial interface IInvariant : IBooleanExpression
     {
         /// <summary>
         /// Whether this Invariant is asserted to be false rather than true.

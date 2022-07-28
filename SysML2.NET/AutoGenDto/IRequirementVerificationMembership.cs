@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A RequirementVerificationMembership is a RequirementConstraintMembership used in the objective of a
     /// VerificationCase to identify a Requirement that is verified by the VerificationCase.
     /// </summary>
-    public interface IRequirementVerificationMembership : IRequirementConstraintMembership
+    public partial interface IRequirementVerificationMembership : IRequirementConstraintMembership
     {
     }
 }

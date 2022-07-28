@@ -26,7 +26,7 @@ namespace SysML2.NET.DTO
     /// <summary>
     /// allSupertypes()->includes(Kernel Library::LinkObject)
     /// </summary>
-    public class AssociationStructure : IAssociation, IStructure
+    public partial class AssociationStructure : IAssociationStructure
     {
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized

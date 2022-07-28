@@ -38,7 +38,7 @@ namespace SysML2.NET.DTO
     /// importedMemberships(Set{})ownedImport = ownedRelationship->selectByKind(Import)ownedMembership =
     /// ownedRelationship->selectByKind(Membership)
     /// </summary>
-    public interface INamespace : IElement
+    public partial interface INamespace : IElement
     {
     }
 }

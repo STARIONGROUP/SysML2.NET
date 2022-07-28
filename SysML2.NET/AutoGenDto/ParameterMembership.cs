@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// is always owned, and must have a direction. A ParameterMembership must be owned by a Behavior or a
     /// Step.
     /// </summary>
-    public class ParameterMembership : IFeatureMembership
+    public partial class ParameterMembership : IParameterMembership
     {
         /// <summary>
         /// </summary>

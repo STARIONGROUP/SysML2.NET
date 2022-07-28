@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// the library model for Part), otherwise it subsets constraintChecks, as required for a regular
     /// ConstraintUsage.
     /// </summary>
-    public interface IAssertConstraintUsage : IConstraintUsage, IInvariant
+    public partial interface IAssertConstraintUsage : IConstraintUsage, IInvariant
     {
     }
 }

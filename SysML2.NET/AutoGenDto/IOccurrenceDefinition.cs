@@ -35,7 +35,7 @@ namespace SysML2.NET.DTO
     /// the base Class Occurrence from the Kernel model library.if not isIndividual then lifeClass =
     /// nullelse    lifeClass <> null and    lifeClass.allSupertypes()->includes(self)endif
     /// </summary>
-    public interface IOccurrenceDefinition : IDefinition, IClass
+    public partial interface IOccurrenceDefinition : IDefinition, IClass
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

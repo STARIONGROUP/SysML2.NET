@@ -32,7 +32,7 @@ namespace SysML2.NET.DTO
     /// Library::Link)oclIsKindOf(Structure) =
     /// oclIsKindOf(AssociationStructure)allSupertypes()->includes(Kernel Library::Link)
     /// </summary>
-    public class Association : IClassifier, IRelationship
+    public partial class Association : IAssociation
     {
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized

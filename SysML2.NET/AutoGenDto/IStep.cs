@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// of behavioral descriptions. Steps can be related in time and serve as sources and targets for object
     /// transfers.
     /// </summary>
-    public interface IStep : IFeature
+    public partial interface IStep : IFeature
     {
     }
 }

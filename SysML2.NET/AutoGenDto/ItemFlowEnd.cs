@@ -25,7 +25,7 @@ namespace SysML2.NET.DTO
 
     /// <summary>
     /// </summary>
-    public class ItemFlowEnd : IFeature
+    public partial class ItemFlowEnd : IItemFlowEnd
     {
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).

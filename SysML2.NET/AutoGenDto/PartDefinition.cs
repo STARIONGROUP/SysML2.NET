@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// within a system.A PartDefinition must subclass, directly or indirectly, the base PartDefinition Part
     /// from the Systems model library.
     /// </summary>
-    public class PartDefinition : IItemDefinition
+    public partial class PartDefinition : IPartDefinition
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent single individual.

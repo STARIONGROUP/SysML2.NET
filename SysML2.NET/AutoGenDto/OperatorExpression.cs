@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// An OperatorExpression is an InvocationExpression whose function is determined by resolving its
     /// operator in the context of one of the standard Function packages from the Kernel Model Library.
     /// </summary>
-    public class OperatorExpression : IInvocationExpression
+    public partial class OperatorExpression : IOperatorExpression
     {
         /// <summary>
         /// An operator symbol that names a corresponding Function from one of the standard Function packages

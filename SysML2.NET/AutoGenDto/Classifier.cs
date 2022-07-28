@@ -33,7 +33,7 @@ namespace SysML2.NET.DTO
     /// sequences).ownedSuperclassing = ownedGeneralization->intersection(superclassing)multiplicity <> null
     /// implies multiplicity.featuringType->isEmpty()
     /// </summary>
-    public class Classifier : IType
+    public partial class Classifier : IClassifier
     {
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized

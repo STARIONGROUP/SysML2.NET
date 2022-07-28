@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// EnumerationUsage must subset, directly or indirectly, the base EnumerationUsage enumerationValues
     /// from the Systems model library.
     /// </summary>
-    public interface IEnumerationUsage : IAttributeUsage
+    public partial interface IEnumerationUsage : IAttributeUsage
     {
     }
 }

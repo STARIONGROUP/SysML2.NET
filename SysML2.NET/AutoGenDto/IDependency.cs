@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
     /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
     /// </summary>
-    public interface IDependency : IRelationship
+    public partial interface IDependency : IRelationship
     {
         /// <summary>
         /// </summary>

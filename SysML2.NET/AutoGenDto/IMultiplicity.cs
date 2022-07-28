@@ -36,7 +36,7 @@ namespace SysML2.NET.DTO
     /// be Anything.  If the typeWithMultiplicity is a Feature,  the Multiplicity shall have the same domain
     /// as the typeWithMultiplicity.
     /// </summary>
-    public interface IMultiplicity : IFeature
+    public partial interface IMultiplicity : IFeature
     {
     }
 }

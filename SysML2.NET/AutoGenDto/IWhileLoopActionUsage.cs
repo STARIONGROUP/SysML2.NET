@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// Expression is evaluated before each (possible) performance of the bodyClause, and the untilArgument
     /// Expression is evaluated after each performance of the bodyClause.
     /// </summary>
-    public interface IWhileLoopActionUsage : ILoopActionUsage
+    public partial interface IWhileLoopActionUsage : ILoopActionUsage
     {
     }
 }

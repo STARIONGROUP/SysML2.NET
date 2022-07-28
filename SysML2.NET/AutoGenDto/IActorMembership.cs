@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// An ActorMembership is a ParameterMembership that identifies a PartUsage as an actor parameter, which
     /// specifies a role played by an entity external in interaction with the parametered element.
     /// </summary>
-    public interface IActorMembership : IParameterMembership
+    public partial interface IActorMembership : IParameterMembership
     {
     }
 }

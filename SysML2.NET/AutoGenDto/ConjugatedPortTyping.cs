@@ -31,7 +31,7 @@ namespace SysML2.NET.DTO
     /// portDefinition being a third relatedElement, in addition to type and typedFeature from
     /// FeatureTyping.conjugatedPortDefinition = portDefinition.conjugatedPortDefinition
     /// </summary>
-    public class ConjugatedPortTyping : IFeatureTyping
+    public partial class ConjugatedPortTyping : IConjugatedPortTyping
     {
         /// <summary>
         /// </summary>

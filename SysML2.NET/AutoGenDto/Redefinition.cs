@@ -38,7 +38,7 @@ namespace SysML2.NET.DTO
     /// redefiningFeature. This enables the redefiningFeature to have the same name as the
     /// redefinedFeature if desired.
     /// </summary>
-    public class Redefinition : ISubsetting
+    public partial class Redefinition : IRedefinition
     {
         /// <summary>
         /// </summary>

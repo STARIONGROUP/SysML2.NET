@@ -28,7 +28,7 @@ namespace SysML2.NET.DTO
     /// ownedMemberElementM becomes an ownedMember of the membershipOwningNamespace.ownedMemberName =
     /// ownedMemberElement.effectiveNameownedMemberShortName = ownedMemberElement.shortName
     /// </summary>
-    public interface IOwningMembership : IMembership
+    public partial interface IOwningMembership : IMembership
     {
     }
 }

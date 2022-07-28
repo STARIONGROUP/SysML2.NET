@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// value as a result.A LiteralExpression must be typed by a specialization of Evaluation with no input
     /// parameters and a single value as its result.isModelLevelEvaluable = true
     /// </summary>
-    public interface ILiteralExpression : IExpression
+    public partial interface ILiteralExpression : IExpression
     {
     }
 }

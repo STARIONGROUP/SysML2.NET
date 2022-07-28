@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// reference without distinguishing if the thing referenced is an attribute value, item, action, etc.
     /// All features of a ReferenceUsage must also have isComposite = false.
     /// </summary>
-    public class ReferenceUsage : IUsage
+    public partial class ReferenceUsage : IReferenceUsage
     {
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage

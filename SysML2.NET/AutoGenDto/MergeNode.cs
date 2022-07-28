@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     /// subset, directly or indirectly, the ActionUsage Action::merges, implying that it is typed by
     /// MergeAction from the Systems model library (or a subtype of it).
     /// </summary>
-    public class MergeNode : IControlNode
+    public partial class MergeNode : IMergeNode
     {
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

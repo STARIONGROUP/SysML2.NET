@@ -29,7 +29,7 @@ namespace SysML2.NET.DTO
     /// for mammals is disjoint from a Classifier for minerals, and a Feature for people&#39;s parents is
     /// disjoint from a Feature for their children. 
     /// </summary>
-    public interface IDisjoining : IRelationship
+    public partial interface IDisjoining : IRelationship
     {
         /// <summary>
         /// </summary>

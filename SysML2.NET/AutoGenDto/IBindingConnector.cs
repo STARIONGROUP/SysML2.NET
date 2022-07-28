@@ -27,7 +27,7 @@ namespace SysML2.NET.DTO
     /// A Binding Connector is a binary Connector that requires its relatedFeatures to identify the
     /// same things (have the same values).
     /// </summary>
-    public interface IBindingConnector : IConnector
+    public partial interface IBindingConnector : IConnector
     {
     }
 }
