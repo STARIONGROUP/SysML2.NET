@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 	  <Compile Remove="Expected\AutoGenEnum\VisibilityKind.cs" />
+	  <Compile Remove="Expected\AutoGenSerializer\ElementSerializer.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,6 +27,9 @@
 
 	<ItemGroup>
 	  <Content Include="Expected\AutoGenEnum\VisibilityKind.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Expected\AutoGenSerializer\ElementSerializer.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>

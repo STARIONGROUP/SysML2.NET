@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="ElementSerializer.cs" company="RHEA System S.A.">
+// <copyright file="{{this.Name}}Serializer.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
 //
@@ -18,17 +18,22 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.AutoGenBuilder
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer
 {
     using System.Text.Json;
 
     using SysML2.NET.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ElementSerializer"/> is to build <see cref="JObject"/> and a <see cref="AnnouncementOfOpportunity"/> object
+    /// The purpose of the <see cref="{{ this.Name }}"/> is to provide serialization
+    /// and deserialization capabilities
     /// </summary>
-    internal static class ElementSerializer
-    {
+	internal static class {{ this.Name }}Serializer
+	{
         /// <summary>
         /// Serializes an instance of <see cref="Element"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
@@ -41,7 +46,7 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        public static void Serialize(IElement element, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        public static void Serialize(I{{ this.Name }} {{ String.CamelCase this.Name }}, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
             writer.WriteStartObject();
 
@@ -50,41 +55,28 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
 
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Element");
-            
-            writer.WriteStartArray("aliasIds");
-            foreach (var aliasId in element.AliasIds)
-            {
-                writer.WriteStringValue(aliasId);
-            }
-            writer.WriteEndArray();
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(element.ElementId);
+        {{#each this.AllEStructuralFeatures as | structuralFeature |}}
+        {{#unless structuralFeature.Derived }}
+        {{#unless structuralFeature.Transient }}
+        
+        {{#if structuralFeature.}}
+        {{/if}}
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(element.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var ownedRelationship in element.OwnedRelationship)
-            {
-                writer.WriteStringValue(ownedRelationship);
-            }
-            writer.WriteEndArray();
-            
-            writer.WritePropertyName("owningRelationship");
-            if (element.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(element.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
+        public {{#DTO.TypeName structuralFeature }} {{ String.PascalCase structuralFeature.Name }} { get; set; }
 
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(element.ShortName);
+        {{/unless}}
+        {{/unless}}
+        {{/each}}
 
             writer.WriteEndObject();
         }
-    }
+
+        
+	}
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

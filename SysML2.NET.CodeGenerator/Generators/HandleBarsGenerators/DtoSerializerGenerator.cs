@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoGenerator.cs" company="RHEA System S.A.">
+// <copyright file="DtoSerializerGenerator.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -33,11 +33,11 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     /// <summary>
     /// A Handlebars based DTO code generator
     /// </summary>
-    public class DtoGenerator : HandleBarsGenerator
+    public class DtoSerializerGenerator : HandleBarsGenerator
     {
         /// <summary>
-        /// Generates the <see cref="EClass"/> instances
-        /// that are in the provided <see cref="EPackage"/>
+        /// Generates the <see cref="EClass"/> static serializers
+        /// for each <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
         /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
@@ -50,42 +50,25 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
-            await this.GenerateInterfaces(package, outputDirectory);
-            await this.GenerateClasses(package, outputDirectory);
+            await this.GenerateSerializers(package, outputDirectory);
         }
 
-        public async Task GenerateInterfaces(EPackage package, DirectoryInfo outputDirectory)
+        public async Task GenerateSerializers(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-interface-template"];
+            var template = this.Templates["dto-serializer-template"];
 
             foreach (var eClass in package.EClassifiers.OfType<EClass>())
             {
-                var generatedInterface = template(eClass);
+                var generatedSerializer = template(eClass);
 
-                generatedInterface = CodeCleanup(generatedInterface);
+                generatedSerializer = CodeCleanup(generatedSerializer);
 
-                var fileName = $"I{eClass.Name.CapitalizeFirstLetter()}.cs";
+                var fileName = $"{eClass.Name.CapitalizeFirstLetter()}Serializer.cs";
 
-                await Write(generatedInterface, outputDirectory, fileName);
+                await Write(generatedSerializer, outputDirectory, fileName);
             }
         }
-
-        public async Task GenerateClasses(EPackage package, DirectoryInfo outputDirectory)
-        {
-            var template = this.Templates["dto-class-template"];
-
-            foreach (var eClass in package.EClassifiers.OfType<EClass>())
-            {
-                var generatedInterface = template(eClass);
-
-                generatedInterface = CodeCleanup(generatedInterface);
-
-                var fileName = $"{eClass.Name.CapitalizeFirstLetter()}.cs";
-
-                await Write(generatedInterface, outputDirectory, fileName);
-            }
-        }
-
+        
         /// <summary>
         /// Register the custom helpers
         /// </summary>
@@ -101,8 +84,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("dto-interface-template");
-            this.RegisterTemplate("dto-class-template");
+            this.RegisterTemplate("dto-serializer-template");
         }
     }
 }
