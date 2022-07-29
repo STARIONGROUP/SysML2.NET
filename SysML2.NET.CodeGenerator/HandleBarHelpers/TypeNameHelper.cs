@@ -35,7 +35,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <summary>
         /// A mapping of the known SysML value types to C# types
         /// </summary>
-        public static Dictionary<string, string> TypeMapping = new Dictionary<string, string>
+        public static readonly Dictionary<string, string> TypeMapping = new Dictionary<string, string>
         {
             {"Boolean", "bool"},
             {"Integer", "int"},

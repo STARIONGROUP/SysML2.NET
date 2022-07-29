@@ -99,7 +99,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        protected async Task Write(string generatedCode, DirectoryInfo outputDirectory, string fileName)
+        protected static async Task Write(string generatedCode, DirectoryInfo outputDirectory, string fileName)
         {
             var filePath = Path.Combine(outputDirectory.FullName, fileName);
 
