@@ -1,0 +1,152 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="JoinNodeSerializer.cs" company="RHEA System S.A.">
+//
+// Copyright 2022 RHEA System S.A.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer
+{
+    using System.Text.Json;
+
+    using SysML2.NET.DTO;
+
+    /// <summary>
+    /// The purpose of the <see cref="JoinNodeSerializer"/> is to provide serialization
+    /// and deserialization capabilities
+    /// </summary>
+    internal static class JoinNodeSerializer
+    {
+        /// <summary>
+        /// Serializes an instance of <see cref="IJoinNode"/> using an <see cref="Utf8JsonWriter"/>
+        /// </summary>
+        /// <param name="joinNode">
+        /// The <see cref="IJoinNode"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// enumeration specifying what kind of serialization shall be used
+        /// </param>
+        public static void Serialize(IJoinNode iJoinNode, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        {
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iJoinNode.Id);
+
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("JoinNode");
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iJoinNode.IsIndividual);
+
+            writer.WritePropertyName("portionKind");
+            if (iJoinNode.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iJoinNode.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iJoinNode.IsVariation);
+
+            writer.WritePropertyName("direction");
+            if (iJoinNode.Direction.HasValue)
+            {
+                writer.WriteStringValue(iJoinNode.Direction.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("isComposite");
+            writer.WriteBooleanValue(iJoinNode.IsComposite);
+
+            writer.WritePropertyName("isDerived");
+            writer.WriteBooleanValue(iJoinNode.IsDerived);
+
+            writer.WritePropertyName("isEnd");
+            writer.WriteBooleanValue(iJoinNode.IsEnd);
+
+            writer.WritePropertyName("isOrdered");
+            writer.WriteBooleanValue(iJoinNode.IsOrdered);
+
+            writer.WritePropertyName("isPortion");
+            writer.WriteBooleanValue(iJoinNode.IsPortion);
+
+            writer.WritePropertyName("isReadOnly");
+            writer.WriteBooleanValue(iJoinNode.IsReadOnly);
+
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iJoinNode.IsUnique);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iJoinNode.IsAbstract);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iJoinNode.IsSufficient);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iJoinNode.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iJoinNode.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iJoinNode.Name);
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iJoinNode.OwnedRelationship)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("owningRelationship");
+            if (iJoinNode.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iJoinNode.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iJoinNode.ShortName);
+
+            writer.WriteEndObject();
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

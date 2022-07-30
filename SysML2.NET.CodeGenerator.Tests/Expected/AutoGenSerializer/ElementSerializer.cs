@@ -29,7 +29,8 @@ namespace SysML2.NET.Serializer
     using SysML2.NET.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ElementSerializer"/> is to build <see cref="JObject"/> and a <see cref="AnnouncementOfOpportunity"/> object
+    /// The purpose of the <see cref="ElementSerializer"/> is to provide serialization
+    /// and deserialization capabilities
     /// </summary>
     internal static class ElementSerializer
     {
@@ -45,40 +46,40 @@ namespace SysML2.NET.Serializer
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        public static void Serialize(IElement element, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        public static void Serialize(IElement iElement, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
             writer.WriteStartObject();
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(element.Id);
+            writer.WriteStringValue(iElement.Id);
 
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Element");
-            
+
             writer.WriteStartArray("aliasIds");
-            foreach (var aliasId in element.AliasIds)
+            foreach (var item in iElement.AliasIds)
             {
-                writer.WriteStringValue(aliasId);
+                writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("elementId");
-            writer.WriteStringValue(element.ElementId);
+            writer.WriteStringValue(iElement.ElementId);
 
             writer.WritePropertyName("name");
-            writer.WriteStringValue(element.Name);
+            writer.WriteStringValue(iElement.Name);
 
             writer.WriteStartArray("ownedRelationship");
-            foreach (var ownedRelationship in element.OwnedRelationship)
+            foreach (var item in iElement.OwnedRelationship)
             {
-                writer.WriteStringValue(ownedRelationship);
+                writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-            
+
             writer.WritePropertyName("owningRelationship");
-            if (element.OwningRelationship.HasValue)
+            if (iElement.OwningRelationship.HasValue)
             {
-                writer.WriteStringValue(element.OwningRelationship.Value);
+                writer.WriteStringValue(iElement.OwningRelationship.Value);
             }
             else
             {
@@ -86,7 +87,7 @@ namespace SysML2.NET.Serializer
             }
 
             writer.WritePropertyName("shortName");
-            writer.WriteStringValue(element.ShortName);
+            writer.WriteStringValue(iElement.ShortName);
 
             writer.WriteEndObject();
         }

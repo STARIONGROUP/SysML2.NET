@@ -18,6 +18,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using HandlebarsDotNet.Features;
+
 namespace SysML2.NET.CodeGenerator.Extensions
 {
     using System.Collections.Generic;
@@ -33,6 +35,122 @@ namespace SysML2.NET.CodeGenerator.Extensions
     public static class EcoreExtensions
     {
         /// <summary>
+        /// A mapping of the known SysML value types to C# types
+        /// </summary>
+        public static readonly Dictionary<string, string> TypeMapping = new Dictionary<string, string>
+        {
+            {"Boolean", "bool"},
+            {"Integer", "int"},
+            {"Real", "double"},
+            {"UnlimitedNatural", "int"},
+            {"String", "string"},
+            {"EDouble", "double"}
+        };
+
+        /// <summary>
+        /// Queries the type-name of the <see cref="EStructuralFeature"/>
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// The subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// the name of the type
+        /// </returns>
+        public static string QueryTypeName(this EStructuralFeature eStructuralFeature)
+        {
+            var typeName = "";
+
+            if (eStructuralFeature is EAttribute eAttribute)
+            {
+                if (eAttribute.EType is EEnum)
+                {
+                    typeName = eAttribute.EType.Name;
+                }
+                else if (!TypeMapping.TryGetValue(eAttribute.EType.Name, out typeName))
+                {
+                    throw new KeyNotFoundException($"the {eAttribute.Name}.{eAttribute.EType.Name} is not a registered Type");
+                }
+            }
+            else if (eStructuralFeature is EReference eReference)
+            {
+                typeName = eReference.EType.Name;
+            }
+
+            return typeName;
+        }
+
+        /// <summary>
+        /// Queries whether the type of the <see cref="EStructuralFeature"/> is an <see cref="EEnum"/>
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// The subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true of the type is a <see cref="EEnum"/>, false if not
+        /// </returns>
+        public static bool QueryIsEnum(this EStructuralFeature eStructuralFeature)
+        {
+            if (eStructuralFeature is EAttribute eAttribute)
+            {
+                if (eAttribute.EType is EEnum)
+                {
+                    return true;
+                }
+            }
+        
+            return false;
+        }
+
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature"/> Type maps to a C# bool
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// the subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true if it maps, false if not
+        /// </returns>
+        public static bool QueryIsBool(this EStructuralFeature eStructuralFeature)
+        {
+            return eStructuralFeature.QueryTypeName() == "bool";
+        }
+
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature"/> Type maps to a C# int or double
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// the subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true if it maps, false if not
+        /// </returns>
+        public static bool QueryIsNumeric(this EStructuralFeature eStructuralFeature)
+        {
+            var typeName = eStructuralFeature.QueryTypeName();
+            
+            if (typeName == "int" || typeName == "double")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature"/> Type maps to a C# string
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// the subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true if it maps, false if not
+        /// </returns>
+        public static bool QueryIsString(this EStructuralFeature eStructuralFeature)
+        {
+            return eStructuralFeature.QueryTypeName() == "string";
+        }
+
+        /// <summary>
         /// returns the <see cref="ENamedElement"/> ordered by Name.
         /// </summary>
         /// <param name="namedElements">
@@ -45,7 +163,50 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             return namedElements.OrderBy(x => x.Name).ToList();
         }
-        
+
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature"/> is Enumerable
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// The subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true if <see cref="EStructuralFeature.UpperBound"/> = -1 or > 1, false if not
+        /// </returns>
+        public static bool QueryIsEnumerable(this EStructuralFeature eStructuralFeature)
+        {
+            return eStructuralFeature.UpperBound is -1 or > 1;
+        }
+
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature"/> is nullable
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// The subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true if <see cref="EStructuralFeature.LowerBound"/> = 0, false if not
+        /// </returns>
+        public static bool QueryIsNullable(this EStructuralFeature eStructuralFeature)
+        {
+            if (eStructuralFeature.QueryTypeName() == "string")
+            {
+                return false;
+            }
+
+            return eStructuralFeature.LowerBound == 0 && !eStructuralFeature.QueryIsEnumerable();
+        }
+
+        public static bool QueryIsScalar(this EStructuralFeature eStructuralFeature)
+        {
+            if (eStructuralFeature.QueryTypeName() == "string" && eStructuralFeature.UpperBound == 1)
+            {
+                return true;
+            }
+
+            return eStructuralFeature.LowerBound == 1 && eStructuralFeature.UpperBound == 1;
+        }
+
         /// <summary>
         /// Queries whether the <see cref="EStructuralFeature"/> is an <see cref="EAttribute"/> or not
         /// </summary>
@@ -55,7 +216,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <returns>
         /// true when the <paramref name="structuralFeature"/> is an instance of <see cref="EAttribute"/>, false if not.
         /// </returns>
-        public static bool QueryIsAttribute(EStructuralFeature structuralFeature)
+        public static bool QueryIsAttribute(this EStructuralFeature structuralFeature)
         {
             if (structuralFeature is EAttribute)
             {
@@ -74,7 +235,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <returns>
         /// true when the <paramref name="structuralFeature"/> is an instance of <see cref="EReference"/>, false if not.
         /// </returns>
-        public static bool QueryIsReference(EStructuralFeature structuralFeature)
+        public static bool QueryIsReference(this EStructuralFeature structuralFeature)
         {
             if (structuralFeature is EReference)
             {

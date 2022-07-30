@@ -18,6 +18,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace SysML2.NET.CodeGenerator.Extensions
 {
     using System;
@@ -44,7 +46,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 throw new ArgumentException("string can't be empty!");
             }
 
-            return input.First().ToString().ToUpper() + input.Substring(1);
+            return string.Concat(input.First().ToString().ToUpper(), input.AsSpan(1));
         }
 
         /// <summary>
@@ -56,14 +58,14 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <returns>
         /// Returns a string
         /// </returns>
-        public static string LowerCaseFirstLetter(string input)
+        public static string LowerCaseFirstLetter(this string input)
         {
             if (string.IsNullOrEmpty(input))
             {
                 throw new ArgumentException("string can't be empty!");
             }
 
-            return input.First().ToString().ToLower() + input.Substring(1);
+            return string.Concat(input.First().ToString().ToLower(), input.AsSpan(1));
         }
 
         /// <summary>

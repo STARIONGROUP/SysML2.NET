@@ -19,6 +19,7 @@
 	<ItemGroup>
 	  <Compile Remove="Expected\AutoGenEnum\VisibilityKind.cs" />
 	  <Compile Remove="Expected\AutoGenSerializer\ElementSerializer.cs" />
+	  <Compile Remove="Expected\AutoGenSerializer\TriggerInvocationExpressionSerializer.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -30,6 +31,9 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="Expected\AutoGenSerializer\ElementSerializer.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Expected\AutoGenSerializer\TriggerInvocationExpressionSerializer.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>

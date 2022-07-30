@@ -77,6 +77,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
             this.Handlebars.RegisteredDocumentationHelper();
             this.Handlebars.RegisterTypeNameHelper();
             this.Handlebars.RegisterGeneralizationHelper();
+            this.Handlebars.RegisterStructuralFeatureHelper();
+            this.Handlebars.RegisterStringHelper();
         }
 
         /// <summary>

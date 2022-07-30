@@ -1,0 +1,111 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="UseCaseDefinitionSerializer.cs" company="RHEA System S.A.">
+//
+// Copyright 2022 RHEA System S.A.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer
+{
+    using System.Text.Json;
+
+    using SysML2.NET.DTO;
+
+    /// <summary>
+    /// The purpose of the <see cref="UseCaseDefinitionSerializer"/> is to provide serialization
+    /// and deserialization capabilities
+    /// </summary>
+    internal static class UseCaseDefinitionSerializer
+    {
+        /// <summary>
+        /// Serializes an instance of <see cref="IUseCaseDefinition"/> using an <see cref="Utf8JsonWriter"/>
+        /// </summary>
+        /// <param name="useCaseDefinition">
+        /// The <see cref="IUseCaseDefinition"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// enumeration specifying what kind of serialization shall be used
+        /// </param>
+        public static void Serialize(IUseCaseDefinition iUseCaseDefinition, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        {
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iUseCaseDefinition.Id);
+
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("UseCaseDefinition");
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iUseCaseDefinition.IsIndividual);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iUseCaseDefinition.IsVariation);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iUseCaseDefinition.IsAbstract);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iUseCaseDefinition.IsSufficient);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iUseCaseDefinition.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iUseCaseDefinition.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iUseCaseDefinition.Name);
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iUseCaseDefinition.OwnedRelationship)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("owningRelationship");
+            if (iUseCaseDefinition.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iUseCaseDefinition.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iUseCaseDefinition.ShortName);
+
+            writer.WriteEndObject();
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

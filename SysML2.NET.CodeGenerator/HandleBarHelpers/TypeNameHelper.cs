@@ -26,57 +26,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using ECoreNetto;
 
     using HandlebarsDotNet;
-    
+
+    using SysML2.NET.CodeGenerator.Extensions;
+
     /// <summary>
     /// A block helper that prints the name of the type of a <see cref="EStructuralFeature"/>
     /// </summary>
     public static class TypeNameHelper
     {
-        /// <summary>
-        /// A mapping of the known SysML value types to C# types
-        /// </summary>
-        public static readonly Dictionary<string, string> TypeMapping = new Dictionary<string, string>
-        {
-            {"Boolean", "bool"},
-            {"Integer", "int"},
-            {"Real", "double"},
-            {"UnlimitedNatural", "int"},
-            {"String", "string"},
-            {"EDouble", "double"}
-        };
-
-        /// <summary>
-        /// Queries the type-name of the <see cref="EStructuralFeature"/>
-        /// </summary>
-        /// <param name="eStructuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// the name of the type
-        /// </returns>
-        public static string QueryTypeName(EStructuralFeature eStructuralFeature)
-        {
-            var typeName = "";
-
-            if (eStructuralFeature is EAttribute eAttribute)
-            {
-                if (eAttribute.EType is EEnum)
-                {
-                    typeName = eAttribute.EType.Name;
-                }
-                else if (!TypeMapping.TryGetValue(eAttribute.EType.Name, out typeName))
-                {
-                    throw new KeyNotFoundException($"the {eAttribute.Name}.{eAttribute.EType.Name} is not a registered Type");
-                }
-            }
-            else if (eStructuralFeature is EReference eReference)
-            {
-                typeName = eReference.EType.Name;
-            }
-
-            return typeName;
-        }
-
         /// <summary>
         /// Registers the <see cref="TypeNameHelper"/>
         /// </summary>
@@ -90,11 +47,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (!(context.Value is EStructuralFeature eStructuralFeature))
                     throw new ArgumentException("supposed to be EStructuralFeature");
 
-                var typeName = QueryTypeName(eStructuralFeature);
+                var typeName = eStructuralFeature.QueryTypeName();
 
-                var nullable = eStructuralFeature.LowerBound == 0;
+                var nullable = eStructuralFeature.QueryIsNullable();
 
-                var enumerable = eStructuralFeature.UpperBound is -1 or > 1;
+                var enumerable = eStructuralFeature.QueryIsEnumerable();
 
                 if (eStructuralFeature is EAttribute)
                 {
@@ -133,11 +90,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (!(context.Value is EStructuralFeature eStructuralFeature))
                     throw new ArgumentException("supposed to be EStructuralFeature");
 
-                var typeName = QueryTypeName(eStructuralFeature);
+                var typeName = eStructuralFeature.QueryTypeName();
 
-                var nullable = eStructuralFeature.LowerBound == 0;
+                var nullable = eStructuralFeature.QueryIsNullable();
 
-                var enumerable = eStructuralFeature.UpperBound is -1 or > 1;
+                var enumerable = eStructuralFeature.QueryIsEnumerable();
 
                 if (eStructuralFeature is EAttribute)
                 {

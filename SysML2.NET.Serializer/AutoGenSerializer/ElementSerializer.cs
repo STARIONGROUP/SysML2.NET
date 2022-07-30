@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="ElementSerializer.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
@@ -18,22 +18,27 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.AutoGenBuilder
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer
 {
     using System.Text.Json;
 
     using SysML2.NET.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ElementSerializer"/> is to build <see cref="JObject"/> and a <see cref="AnnouncementOfOpportunity"/> object
+    /// The purpose of the <see cref="ElementSerializer"/> is to provide serialization
+    /// and deserialization capabilities
     /// </summary>
     internal static class ElementSerializer
     {
         /// <summary>
-        /// Serializes an instance of <see cref="Element"/> using an <see cref="Utf8JsonWriter"/>
+        /// Serializes an instance of <see cref="IElement"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
         /// <param name="element">
-        /// The <see cref="Element"/> to serialize
+        /// The <see cref="IElement"/> to serialize
         /// </param>
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
@@ -41,40 +46,40 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        public static void Serialize(IElement element, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        public static void Serialize(IElement iElement, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
             writer.WriteStartObject();
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(element.Id);
+            writer.WriteStringValue(iElement.Id);
 
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Element");
-            
+
             writer.WriteStartArray("aliasIds");
-            foreach (var aliasId in element.AliasIds)
+            foreach (var item in iElement.AliasIds)
             {
-                writer.WriteStringValue(aliasId);
+                writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("elementId");
-            writer.WriteStringValue(element.ElementId);
+            writer.WriteStringValue(iElement.ElementId);
 
             writer.WritePropertyName("name");
-            writer.WriteStringValue(element.Name);
+            writer.WriteStringValue(iElement.Name);
 
             writer.WriteStartArray("ownedRelationship");
-            foreach (var ownedRelationship in element.OwnedRelationship)
+            foreach (var item in iElement.OwnedRelationship)
             {
-                writer.WriteStringValue(ownedRelationship);
+                writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-            
+
             writer.WritePropertyName("owningRelationship");
-            if (element.OwningRelationship.HasValue)
+            if (iElement.OwningRelationship.HasValue)
             {
-                writer.WriteStringValue(element.OwningRelationship.Value);
+                writer.WriteStringValue(iElement.OwningRelationship.Value);
             }
             else
             {
@@ -82,9 +87,13 @@ namespace SysML2.NET.Serializer.AutoGenBuilder
             }
 
             writer.WritePropertyName("shortName");
-            writer.WriteStringValue(element.ShortName);
+            writer.WriteStringValue(iElement.ShortName);
 
             writer.WriteEndObject();
         }
     }
 }
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

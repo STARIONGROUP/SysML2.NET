@@ -29,16 +29,16 @@ namespace SysML2.NET.Serializer
     using SysML2.NET.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="{{ this.Name }}"/> is to provide serialization
+    /// The purpose of the <see cref="{{ this.Name }}Serializer"/> is to provide serialization
     /// and deserialization capabilities
     /// </summary>
-	internal static class {{ this.Name }}Serializer
-	{
+    internal static class {{ this.Name }}Serializer
+    {
         /// <summary>
-        /// Serializes an instance of <see cref="Element"/> using an <see cref="Utf8JsonWriter"/>
+        /// Serializes an instance of <see cref="I{{ this.Name }}"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
-        /// <param name="element">
-        /// The <see cref="Element"/> to serialize
+        /// <param name="{{String.LowerCaseFirstLetter this.Name }}">
+        /// The <see cref="I{{ this.Name }}"/> to serialize
         /// </param>
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
@@ -46,35 +46,75 @@ namespace SysML2.NET.Serializer
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        public static void Serialize(I{{ this.Name }} {{ String.CamelCase this.Name }}, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        public static void Serialize(I{{ this.Name }} i{{this.Name }}, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
             writer.WriteStartObject();
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(element.Id);
+            writer.WriteStringValue(i{{this.Name }}.Id);
 
             writer.WritePropertyName("@type");
-            writer.WriteStringValue("Element");
+            writer.WriteStringValue("{{ this.Name }}");
 
-        {{#each this.AllEStructuralFeatures as | structuralFeature |}}
-        {{#unless structuralFeature.Derived }}
-        {{#unless structuralFeature.Transient }}
-        
-        {{#if structuralFeature.}}
-        {{/if}}
+            {{#with this as | EClass |}}
+            {{#each EClass.AllEStructuralFeatures as | structuralFeature |}}
+            {{#unless structuralFeature.Derived }}
+                {{#unless structuralFeature.Transient }}
+                    {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}
+                        writer.WriteStartArray("{{String.LowerCaseFirstLetter structuralFeature.Name }}");
+                        foreach (var item in i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name}})
+                        {
+                            {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
+                                writer.WriteBooleanValue(item);
+                            {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
+                                writer.WriteNumberValue(item);
+                            {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
+                                writer.WriteStringValue(item).ToString().ToUpper());
+                            {{else}}
+                                writer.WriteStringValue(item);
+                            {{/if}}
+                        }
+                        writer.WriteEndArray();
 
+                    {{ else if (StructuralFeature.QueryIsNullable structuralFeature)}}
+                        writer.WritePropertyName("{{ String.LowerCaseFirstLetter structuralFeature.Name }}");
+                        if (i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.HasValue)
+                        {
+                            {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
+                                writer.WriteBooleanValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
+                            {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
+                                writer.WriteNumberValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
+                            {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
+                                writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value.ToString().ToUpper());
+                            {{else}}
+                                writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
+                            {{/if}}
+                        }
+                        else
+                        {
+                            writer.WriteNullValue();
+                        }
 
-        public {{#DTO.TypeName structuralFeature }} {{ String.PascalCase structuralFeature.Name }} { get; set; }
+                    {{ else if (StructuralFeature.QueryIsScalar structuralFeature)}}
+                        writer.WritePropertyName("{{ String.LowerCaseFirstLetter structuralFeature.Name }}");
+                        {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
+                            writer.WriteBooleanValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                        {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
+                            writer.WriteNumberValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                        {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.ToString().ToUpper());
+                        {{else}}
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                        {{/if}}
 
-        {{/unless}}
-        {{/unless}}
-        {{/each}}
-
+                    {{/if}}
+                {{/unless}}
+            {{/unless}}
+            {{/each}}
+            {{/with}}
             writer.WriteEndObject();
         }
-
-        
-	}
+    }
 }
 
 // ------------------------------------------------------------------------------------------------
