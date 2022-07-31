@@ -26,9 +26,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\CodeQuality.yml = .github\workflows\CodeQuality.yml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.Serializer.Json", "SysML2.NET.Serializer\SysML2.NET.Serializer.Json.csproj", "{E7307EB9-F42E-46CC-96F4-D0FECAFFD429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.Serializer.Json", "SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj", "{E7307EB9-F42E-46CC-96F4-D0FECAFFD429}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.Json.Tests", "SysML2.NET.Serializer.Tests\SysML2.NET.Serializer.Json.Tests.csproj", "{D4A2FAAA-65A4-4C2A-93CD-083B744C6706}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.Json.Tests", "SysML2.NET.Serializer.Json.Tests\SysML2.NET.Serializer.Json.Tests.csproj", "{D4A2FAAA-65A4-4C2A-93CD-083B744C6706}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
