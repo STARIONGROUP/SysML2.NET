@@ -22,8 +22,9 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer
+namespace SysML2.NET.Serializer.Json
 {
+    using System;
     using System.Text.Json;
 
     using SysML2.NET.DTO;
@@ -37,7 +38,7 @@ namespace SysML2.NET.Serializer
         /// <summary>
         /// Serializes an instance of <see cref="IForLoopActionUsage"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
-        /// <param name="forLoopActionUsage">
+        /// <param name="obj">
         /// The <see cref="IForLoopActionUsage"/> to serialize
         /// </param>
         /// <param name="writer">
@@ -46,8 +47,13 @@ namespace SysML2.NET.Serializer
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        public static void Serialize(IForLoopActionUsage iForLoopActionUsage, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
+            if (!(obj is IForLoopActionUsage iForLoopActionUsage))
+            {
+                throw new ArgumentException("The object shall be an IForLoopActionUsage", nameof(obj));
+            }
+
             writer.WriteStartObject();
 
             writer.WritePropertyName("@id");

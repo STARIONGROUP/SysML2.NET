@@ -51,6 +51,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
             await this.GenerateSerializers(package, outputDirectory);
+            await this.GenerateSerializationProvider(package, outputDirectory);
         }
 
         public async Task GenerateSerializers(EPackage package, DirectoryInfo outputDirectory)
@@ -68,7 +69,22 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
                 await Write(generatedSerializer, outputDirectory, fileName);
             }
         }
-        
+
+        public async Task GenerateSerializationProvider(EPackage package, DirectoryInfo outputDirectory)
+        {
+            var template = this.Templates["dto-serialization-provider-template"];
+
+            var eClasses = package.EClassifiers.OfType<EClass>().OrderBy(x => x.Name).ToList();
+            
+            var generatedSerializationProvider = template(eClasses);
+
+            generatedSerializationProvider = CodeCleanup(generatedSerializationProvider);
+
+            var fileName = "SerializationProvider.cs";
+
+            await Write(generatedSerializationProvider, outputDirectory, fileName);
+        }
+
         /// <summary>
         /// Register the custom helpers
         /// </summary>
@@ -87,6 +103,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         protected override void RegisterTemplates()
         {
             this.RegisterTemplate("dto-serializer-template");
+            this.RegisterTemplate("dto-serialization-provider-template");
         }
     }
 }

@@ -55,5 +55,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
             Assert.That(async () => await dtoSerializerGenerator.GenerateSerializers(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
+
+        [Test]
+        public void verify_SerializationProvider_is_generated()
+        {
+            Assert.That(async () => await dtoSerializerGenerator.GenerateSerializationProvider(rootPackage, dtoDirectoryInfo),
+                Throws.Nothing);
+        }
     }
 }
