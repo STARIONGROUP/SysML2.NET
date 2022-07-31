@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.Serializer.Json
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text.Json;
@@ -31,11 +30,26 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Serializer.Json.AutoGenSerializer;
 
     /// <summary>
-    /// The purpose of the <see cref="Serializer"/> is to write an <see cref="IEnumerable{T}"/> of
-    /// <see cref="Element"/> as JSON to a <see cref="Stream"/>
+    /// The purpose of the <see cref="Serializer"/> is to write an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
+    /// as JSON to a <see cref="Stream"/>
     /// </summary>
     public class Serializer : ISerializer
     {
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IElement}"/> as JSON to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="elements">
+        /// The <see cref="IEnumerable{IElement}"/> that shall be serialized
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="stream">
+        /// The target <see cref="Stream"/>
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
         public void Serialize(IEnumerable<IElement> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
@@ -55,46 +69,88 @@ namespace SysML2.NET.Serializer.Json
             }
         }
 
+        /// <summary>
+        /// Serialize an <see cref="IElement"/> as JSON to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="element">
+        /// The <see cref="IElement"/> that shall be serialized
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="stream">
+        /// The target <see cref="Stream"/>
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
         public void Serialize(IElement element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
         {
-            throw new NotImplementedException();
-
-            //using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
-            //{
-            //    element.Serialize(writer, serializationModeKind);
-            //    writer.Flush();
-            //}
+            using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
+            {
+                var serializationAction = SerializationProvider.Provide(element.GetType());
+                serializationAction(element, writer, serializationModeKind);
+                writer.Flush();
+            }
         }
 
+        /// <summary>
+        /// Asynchronously serialize an <see cref="IEnumerable{IElement}"/> as JSON to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="elements">
+        /// The <see cref="IEnumerable{IElement}"/> that shall be serialized
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="stream">
+        /// The target <see cref="Stream"/>
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
         public async Task SerializeAsync(IEnumerable<IElement> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
+            {
+                writer.WriteStartArray();
 
-            //using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
-            //{
-            //    writer.WriteStartArray();
+                foreach (var element in elements)
+                {
+                    var serializationAction = SerializationProvider.Provide(element.GetType());
+                    serializationAction(element, writer, serializationModeKind);
+                    await writer.FlushAsync(cancellationToken);
+                }
 
-            //    foreach (var element in elements)
-            //    {
-            //        element.Serialize(writer, serializationModeKind);
-            //        await writer.FlushAsync(cancellationToken);
-            //    }
+                writer.WriteEndArray();
 
-            //    writer.WriteEndArray();
-
-            //    await writer.FlushAsync(cancellationToken);
-            //}
+                await writer.FlushAsync(cancellationToken);
+            }
         }
 
+        /// <summary>
+        /// Asynchronously serialize an <see cref="IElement"/> as JSON to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="element">
+        /// The <see cref="IElement"/> that shall be serialized
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="stream">
+        /// The target <see cref="Stream"/>
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
         public async Task SerializeAsync(IElement element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-
-            //using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
-            //{
-            //    element.Serialize(writer, serializationModeKind);
-            //    await writer.FlushAsync(cancellationToken);
-            //}
+            using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
+            {
+                var serializationAction = SerializationProvider.Provide(element.GetType());
+                serializationAction(element, writer, serializationModeKind);
+                await writer.FlushAsync(cancellationToken);
+            }
         }
     }
 }

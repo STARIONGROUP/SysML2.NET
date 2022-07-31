@@ -12,7 +12,7 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
-		<Authors>Sam Gerene</Authors>
+		<Authors>Sam Gerené</Authors>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
 			[Initial] Release

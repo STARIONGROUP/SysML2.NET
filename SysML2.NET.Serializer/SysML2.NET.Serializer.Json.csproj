@@ -1,15 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Version>0.1.0</Version>
+		<Description>A .NET implementation of the OMG SysML v2 JSON serializer.</Description>
+		<PackageId>SysML2.NET.Serializer.Json</PackageId>
+		<Company>RHEA System S.A.</Company>
+		<Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+		<RepositoryType>Git</RepositoryType>
+		<Authors>Sam Gerené</Authors>
+		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+		<PackageReleaseNotes>
+			[Initial] Release
+		</PackageReleaseNotes>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="6.0.5" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Text.Json" Version="6.0.5" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="AutoGenSerializer\" />
+	</ItemGroup>
 
 </Project>

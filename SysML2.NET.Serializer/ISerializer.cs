@@ -28,14 +28,78 @@ namespace SysML2.NET.Serializer.Json
 
     using SysML2.NET.DTO;
 
+    /// <summary>
+    /// The purpose of the <see cref="ISerializer"/> is to write an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
+    /// as JSON to a <see cref="Stream"/>
+    /// </summary>
     public interface ISerializer
     {
+        /// <summary>
+        /// Serialize an <see cref="IEnumerable{IElement}"/> as JSON to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="elements">
+        /// The <see cref="IEnumerable{IElement}"/> that shall be serialized
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="stream">
+        /// The target <see cref="Stream"/>
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
         void Serialize(IEnumerable<IElement> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions);
 
+        /// <summary>
+        /// Serialize an <see cref="IElement"/> as JSON to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="element">
+        /// The <see cref="IElement"/> that shall be serialized
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="stream">
+        /// The target <see cref="Stream"/>
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
         void Serialize(IElement element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions);
 
+        /// <summary>
+        /// Asynchronously serialize an <see cref="IEnumerable{IElement}"/> as JSON to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="elements">
+        /// The <see cref="IEnumerable{IElement}"/> that shall be serialized
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="stream">
+        /// The target <see cref="Stream"/>
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
         Task SerializeAsync(IEnumerable<IElement> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Asynchronously serialize an <see cref="IElement"/> as JSON to a target <see cref="Stream"/>
+        /// </summary>
+        /// <param name="element">
+        /// The <see cref="IElement"/> that shall be serialized
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="stream">
+        /// The target <see cref="Stream"/>
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
         Task SerializeAsync(IElement element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
     }
 }
