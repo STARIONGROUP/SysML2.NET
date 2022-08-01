@@ -57,17 +57,17 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("{{ this.Name }}DeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement typeProperty))
+            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the {{ this.Name }}DeSerializer cannot be used to deserialize this JsonElement");
             }
-            
-            if (typeProperty.GetString() != "{{ this.Name }}")
+
+            if (@type.GetString() != "{{ this.Name }}")
             {
-                throw new InvalidOperationException($"The {{ this.Name }}DeSerializer can only be used to deserialize objects of type {{ this.Name }}, a {typeProperty.GetString()} was provided");
+                throw new InvalidOperationException($"The {{ this.Name }}DeSerializer can only be used to deserialize objects of type I{{ this.Name }}, a {@type.GetString()} was provided");
             }
 
-            var {{ String.LowerCaseFirstLetter this.Name }}Instance = new DTO.{{ this.Name }}();
+            var dtoInstance = new DTO.{{ this.Name }}();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
@@ -78,7 +78,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    {{ String.LowerCaseFirstLetter this.Name }}Instance.Id = Guid.Parse(propertyValue);
+                    dtoInstance.Id = Guid.Parse(propertyValue);
                 }
             }
 
@@ -86,13 +86,95 @@ namespace SysML2.NET.Serializer.Json
             {{#each EClass.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
             {{#unless structuralFeature.Derived }}
                 {{#unless structuralFeature.Transient }}
-                    
+                    if (jsonElement.TryGetProperty("{{ structuralFeature.Name }}", out JsonElement {{ structuralFeature.Name }}Property))
+                    {
+                        {{#if (StructuralFeature.QueryIsReference structuralFeature)}}
+                            {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}
+                                foreach (var arrayItem in {{ structuralFeature.Name }}Property.EnumerateArray())
+                                {
+                                    if (arrayItem.TryGetProperty("@id", out JsonElement {{ structuralFeature.Name }}IdProperty))
+                                    {
+                                        var propertyValue = {{ structuralFeature.Name }}IdProperty.GetString();
+                                        if (propertyValue != null)
+                                        {
+                                            dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Add(Guid.Parse(propertyValue));
+                                        }
+                                    }
+                                }
+                            {{ else }}
+                                if ({{ structuralFeature.Name }}Property.TryGetProperty("@id", out JsonElement {{ structuralFeature.Name }}IdProperty))
+                                {
+                                    var propertyValue = {{ structuralFeature.Name }}IdProperty.GetString();
+                                    if (propertyValue != null)
+                                    {
+                                        dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = Guid.Parse(propertyValue);
+                                    }
+                                }
+                            {{/if}}
+                        {{else if (StructuralFeature.QueryIsAttribute structuralFeature)}}
+                            {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}
+                                foreach (var arrayItem in {{ structuralFeature.Name }}Property.EnumerateArray())
+                                {
+                                    {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
+                                        var propertyValue = arrayItem.GetBoolean();
+                                        if (propertyValue != null)
+                                        {
+                                            dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Add(propertyValue);
+                                        }
+                                    {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
+                                        {{#if (StructuralFeature.QueryIsInteger structuralFeature) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Add(arrayItem.GetInt32());
+                                        {{else if (StructuralFeature.QueryIsDouble structuralFeature) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Add(arrayItem.GetDouble());
+                                        {{ else }}
+                                            throw new NotImplementedException("{{EClass.Name}}.{{structuralFeature.Name}} is not yet supported");
+                                        {{/if}}
+                                    {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
+                                         throw new NotImplementedException("{{EClass.Name}}.{{structuralFeature.Name}} is not yet supported");
+                                    {{else}}
+                                        var propertyValue = arrayItem.GetString();
+                                        if (propertyValue != null)
+                                        {
+                                            dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Add(propertyValue);
+                                        }
+                                    {{/if}}
+                                }
+                            {{ else if (StructuralFeature.QueryIsScalar structuralFeature)}}
+                                {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
+                                        dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.Name }}Property.GetBoolean();
+                                {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
+                                    {{#if (StructuralFeature.QueryIsInteger structuralFeature) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.Name }}Property.GetInt32();
+                                    {{else if (StructuralFeature.QueryIsDouble structuralFeature) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.Name }}Property.GetDouble();
+                                    {{ else }}
+                                            throw new NotImplementedException("{{EClass.Name}}.{{structuralFeature.Name}} is not yet supported");
+                                    {{/if}}
+                                {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
+                                         throw new NotImplementedException("{{EClass.Name}}.{{structuralFeature.Name}} is not yet supported");
+                                {{else}}
+                                    var propertyValue = {{structuralFeature.Name }}Property.GetString();
+                                    if (propertyValue != null)
+                                    {
+                                        dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = propertyValue;
+                                    }
+                                {{/if}}
+                            {{ else }}
+                                throw new NotImplementedException("{{EClass.Name}}.{{structuralFeature.Name}} is not yet supported");
+                            {{/if}}
+                        {{/if}}
+                    }
+                    else
+                    {
+                        logger.LogDebug($"the {{ structuralFeature.Name }} Json property was not found in the {{ EClass.Name }}: { dtoInstance.Id }");
+                    }
+
                 {{/unless}}
             {{/unless}}
             {{/each}}
             {{/with}}
 
-            return {{ String.LowerCaseFirstLetter this.Name }}Instance;
+            return dtoInstance;
         }
     }
 }

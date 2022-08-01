@@ -57,17 +57,17 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("BindingConnectorAsUsageDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement typeProperty))
+            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the BindingConnectorAsUsageDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (typeProperty.GetString() != "BindingConnectorAsUsage")
+            if (@type.GetString() != "BindingConnectorAsUsage")
             {
-                throw new InvalidOperationException($"The BindingConnectorAsUsageDeSerializer can only be used to deserialize objects of type BindingConnectorAsUsage, a {typeProperty.GetString()} was provided");
+                throw new InvalidOperationException($"The BindingConnectorAsUsageDeSerializer can only be used to deserialize objects of type IBindingConnectorAsUsage, a {@type.GetString()} was provided");
             }
 
-            var bindingConnectorAsUsageInstance = new DTO.BindingConnectorAsUsage();
+            var dtoInstance = new DTO.BindingConnectorAsUsage();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
@@ -78,34 +78,283 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    bindingConnectorAsUsageInstance.Id = Guid.Parse(propertyValue);
+                    dtoInstance.Id = Guid.Parse(propertyValue);
                 }
             }
 
+            if (jsonElement.TryGetProperty("aliasIds", out JsonElement aliasIdsProperty))
+            {
+                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
+                {
+                    var propertyValue = arrayItem.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.AliasIds.Add(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the aliasIds Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("direction", out JsonElement directionProperty))
+            {
+                throw new NotImplementedException("BindingConnectorAsUsage.direction is not yet supported");
+            }
+            else
+            {
+                logger.LogDebug($"the direction Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
+            {
+                var propertyValue = elementIdProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ElementId = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the elementId Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isAbstract", out JsonElement isAbstractProperty))
+            {
+                dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isAbstract Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isComposite", out JsonElement isCompositeProperty))
+            {
+                dtoInstance.IsComposite = isCompositeProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isComposite Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isDerived", out JsonElement isDerivedProperty))
+            {
+                dtoInstance.IsDerived = isDerivedProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isDerived Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isDirected", out JsonElement isDirectedProperty))
+            {
+                dtoInstance.IsDirected = isDirectedProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isDirected Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isEnd", out JsonElement isEndProperty))
+            {
+                dtoInstance.IsEnd = isEndProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isEnd Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isOrdered", out JsonElement isOrderedProperty))
+            {
+                dtoInstance.IsOrdered = isOrderedProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isOrdered Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isPortion", out JsonElement isPortionProperty))
+            {
+                dtoInstance.IsPortion = isPortionProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isPortion Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isReadOnly", out JsonElement isReadOnlyProperty))
+            {
+                dtoInstance.IsReadOnly = isReadOnlyProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isReadOnly Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isSufficient", out JsonElement isSufficientProperty))
+            {
+                dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isSufficient Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isUnique", out JsonElement isUniqueProperty))
+            {
+                dtoInstance.IsUnique = isUniqueProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isUnique Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isVariation", out JsonElement isVariationProperty))
+            {
+                dtoInstance.IsVariation = isVariationProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isVariation Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            {
+                var propertyValue = nameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Name = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelatedElement", out JsonElement ownedRelatedElementProperty))
+            {
+                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelatedElementIdProperty))
+                    {
+                        var propertyValue = ownedRelatedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the ownedRelatedElement Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
+            {
+                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelationshipIdProperty))
+                    {
+                        var propertyValue = ownedRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the ownedRelationship Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
+            {
+                if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                {
+                    var propertyValue = owningRelatedElementIdProperty.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the owningRelatedElement Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
+            {
+                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                {
+                    var propertyValue = owningRelationshipIdProperty.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the owningRelationship Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
+            {
+                var propertyValue = shortNameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ShortName = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the shortName Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("source", out JsonElement sourceProperty))
+            {
+                foreach (var arrayItem in sourceProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement sourceIdProperty))
+                    {
+                        var propertyValue = sourceIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the source Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("target", out JsonElement targetProperty))
+            {
+                foreach (var arrayItem in targetProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement targetIdProperty))
+                    {
+                        var propertyValue = targetIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the target Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            return bindingConnectorAsUsageInstance;
+            return dtoInstance;
         }
     }
 }

@@ -57,17 +57,17 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("MetaclassDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement typeProperty))
+            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the MetaclassDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (typeProperty.GetString() != "Metaclass")
+            if (@type.GetString() != "Metaclass")
             {
-                throw new InvalidOperationException($"The MetaclassDeSerializer can only be used to deserialize objects of type Metaclass, a {typeProperty.GetString()} was provided");
+                throw new InvalidOperationException($"The MetaclassDeSerializer can only be used to deserialize objects of type IMetaclass, a {@type.GetString()} was provided");
             }
 
-            var metaclassInstance = new DTO.Metaclass();
+            var dtoInstance = new DTO.Metaclass();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
@@ -78,20 +78,120 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    metaclassInstance.Id = Guid.Parse(propertyValue);
+                    dtoInstance.Id = Guid.Parse(propertyValue);
                 }
             }
 
+            if (jsonElement.TryGetProperty("aliasIds", out JsonElement aliasIdsProperty))
+            {
+                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
+                {
+                    var propertyValue = arrayItem.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.AliasIds.Add(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the aliasIds Json property was not found in the Metaclass: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
+            {
+                var propertyValue = elementIdProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ElementId = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the elementId Json property was not found in the Metaclass: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isAbstract", out JsonElement isAbstractProperty))
+            {
+                dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isAbstract Json property was not found in the Metaclass: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isSufficient", out JsonElement isSufficientProperty))
+            {
+                dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isSufficient Json property was not found in the Metaclass: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            {
+                var propertyValue = nameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Name = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the Metaclass: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
+            {
+                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelationshipIdProperty))
+                    {
+                        var propertyValue = ownedRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the ownedRelationship Json property was not found in the Metaclass: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
+            {
+                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                {
+                    var propertyValue = owningRelationshipIdProperty.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the owningRelationship Json property was not found in the Metaclass: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
+            {
+                var propertyValue = shortNameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ShortName = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the shortName Json property was not found in the Metaclass: {dtoInstance.Id}");
+            }
 
 
-
-
-
-
-
-
-
-            return metaclassInstance;
+            return dtoInstance;
         }
     }
 }

@@ -57,17 +57,17 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("DependencyDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement typeProperty))
+            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the DependencyDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (typeProperty.GetString() != "Dependency")
+            if (@type.GetString() != "Dependency")
             {
-                throw new InvalidOperationException($"The DependencyDeSerializer can only be used to deserialize objects of type Dependency, a {typeProperty.GetString()} was provided");
+                throw new InvalidOperationException($"The DependencyDeSerializer can only be used to deserialize objects of type IDependency, a {@type.GetString()} was provided");
             }
 
-            var dependencyInstance = new DTO.Dependency();
+            var dtoInstance = new DTO.Dependency();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
@@ -78,24 +78,213 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    dependencyInstance.Id = Guid.Parse(propertyValue);
+                    dtoInstance.Id = Guid.Parse(propertyValue);
                 }
             }
 
+            if (jsonElement.TryGetProperty("aliasIds", out JsonElement aliasIdsProperty))
+            {
+                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
+                {
+                    var propertyValue = arrayItem.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.AliasIds.Add(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the aliasIds Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("client", out JsonElement clientProperty))
+            {
+                foreach (var arrayItem in clientProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement clientIdProperty))
+                    {
+                        var propertyValue = clientIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Client.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the client Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
+            {
+                var propertyValue = elementIdProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ElementId = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the elementId Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            {
+                var propertyValue = nameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Name = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelatedElement", out JsonElement ownedRelatedElementProperty))
+            {
+                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelatedElementIdProperty))
+                    {
+                        var propertyValue = ownedRelatedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the ownedRelatedElement Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
+            {
+                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelationshipIdProperty))
+                    {
+                        var propertyValue = ownedRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the ownedRelationship Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
+            {
+                if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                {
+                    var propertyValue = owningRelatedElementIdProperty.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the owningRelatedElement Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
+            {
+                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                {
+                    var propertyValue = owningRelationshipIdProperty.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the owningRelationship Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
+            {
+                var propertyValue = shortNameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ShortName = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the shortName Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("source", out JsonElement sourceProperty))
+            {
+                foreach (var arrayItem in sourceProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement sourceIdProperty))
+                    {
+                        var propertyValue = sourceIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the source Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("supplier", out JsonElement supplierProperty))
+            {
+                foreach (var arrayItem in supplierProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement supplierIdProperty))
+                    {
+                        var propertyValue = supplierIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Supplier.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the supplier Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("target", out JsonElement targetProperty))
+            {
+                foreach (var arrayItem in targetProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement targetIdProperty))
+                    {
+                        var propertyValue = targetIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the target Json property was not found in the Dependency: {dtoInstance.Id}");
+            }
 
 
-
-
-
-
-
-
-
-
-
-
-
-            return dependencyInstance;
+            return dtoInstance;
         }
     }
 }

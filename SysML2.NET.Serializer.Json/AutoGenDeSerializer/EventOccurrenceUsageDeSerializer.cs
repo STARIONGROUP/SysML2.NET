@@ -57,17 +57,17 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("EventOccurrenceUsageDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement typeProperty))
+            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the EventOccurrenceUsageDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (typeProperty.GetString() != "EventOccurrenceUsage")
+            if (@type.GetString() != "EventOccurrenceUsage")
             {
-                throw new InvalidOperationException($"The EventOccurrenceUsageDeSerializer can only be used to deserialize objects of type EventOccurrenceUsage, a {typeProperty.GetString()} was provided");
+                throw new InvalidOperationException($"The EventOccurrenceUsageDeSerializer can only be used to deserialize objects of type IEventOccurrenceUsage, a {@type.GetString()} was provided");
             }
 
-            var eventOccurrenceUsageInstance = new DTO.EventOccurrenceUsage();
+            var dtoInstance = new DTO.EventOccurrenceUsage();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
@@ -78,31 +78,219 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    eventOccurrenceUsageInstance.Id = Guid.Parse(propertyValue);
+                    dtoInstance.Id = Guid.Parse(propertyValue);
                 }
             }
 
+            if (jsonElement.TryGetProperty("aliasIds", out JsonElement aliasIdsProperty))
+            {
+                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
+                {
+                    var propertyValue = arrayItem.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.AliasIds.Add(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the aliasIds Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("direction", out JsonElement directionProperty))
+            {
+                throw new NotImplementedException("EventOccurrenceUsage.direction is not yet supported");
+            }
+            else
+            {
+                logger.LogDebug($"the direction Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
+            {
+                var propertyValue = elementIdProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ElementId = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the elementId Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isAbstract", out JsonElement isAbstractProperty))
+            {
+                dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isAbstract Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isComposite", out JsonElement isCompositeProperty))
+            {
+                dtoInstance.IsComposite = isCompositeProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isComposite Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isDerived", out JsonElement isDerivedProperty))
+            {
+                dtoInstance.IsDerived = isDerivedProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isDerived Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isEnd", out JsonElement isEndProperty))
+            {
+                dtoInstance.IsEnd = isEndProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isEnd Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isIndividual", out JsonElement isIndividualProperty))
+            {
+                dtoInstance.IsIndividual = isIndividualProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isIndividual Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isOrdered", out JsonElement isOrderedProperty))
+            {
+                dtoInstance.IsOrdered = isOrderedProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isOrdered Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isPortion", out JsonElement isPortionProperty))
+            {
+                dtoInstance.IsPortion = isPortionProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isPortion Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isReadOnly", out JsonElement isReadOnlyProperty))
+            {
+                dtoInstance.IsReadOnly = isReadOnlyProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isReadOnly Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isSufficient", out JsonElement isSufficientProperty))
+            {
+                dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isSufficient Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isUnique", out JsonElement isUniqueProperty))
+            {
+                dtoInstance.IsUnique = isUniqueProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isUnique Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isVariation", out JsonElement isVariationProperty))
+            {
+                dtoInstance.IsVariation = isVariationProperty.GetBoolean();
+            }
+            else
+            {
+                logger.LogDebug($"the isVariation Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            {
+                var propertyValue = nameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Name = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
+            {
+                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelationshipIdProperty))
+                    {
+                        var propertyValue = ownedRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the ownedRelationship Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
+            {
+                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                {
+                    var propertyValue = owningRelationshipIdProperty.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the owningRelationship Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("portionKind", out JsonElement portionKindProperty))
+            {
+                throw new NotImplementedException("EventOccurrenceUsage.portionKind is not yet supported");
+            }
+            else
+            {
+                logger.LogDebug($"the portionKind Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
+            {
+                var propertyValue = shortNameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ShortName = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the shortName Json property was not found in the EventOccurrenceUsage: {dtoInstance.Id}");
+            }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            return eventOccurrenceUsageInstance;
+            return dtoInstance;
         }
     }
 }

@@ -57,17 +57,17 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("TextualRepresentationDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement typeProperty))
+            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the TextualRepresentationDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (typeProperty.GetString() != "TextualRepresentation")
+            if (@type.GetString() != "TextualRepresentation")
             {
-                throw new InvalidOperationException($"The TextualRepresentationDeSerializer can only be used to deserialize objects of type TextualRepresentation, a {typeProperty.GetString()} was provided");
+                throw new InvalidOperationException($"The TextualRepresentationDeSerializer can only be used to deserialize objects of type ITextualRepresentation, a {@type.GetString()} was provided");
             }
 
-            var textualRepresentationInstance = new DTO.TextualRepresentation();
+            var dtoInstance = new DTO.TextualRepresentation();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
@@ -78,21 +78,147 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    textualRepresentationInstance.Id = Guid.Parse(propertyValue);
+                    dtoInstance.Id = Guid.Parse(propertyValue);
                 }
             }
 
+            if (jsonElement.TryGetProperty("aliasIds", out JsonElement aliasIdsProperty))
+            {
+                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
+                {
+                    var propertyValue = arrayItem.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.AliasIds.Add(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the aliasIds Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("annotation", out JsonElement annotationProperty))
+            {
+                foreach (var arrayItem in annotationProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement annotationIdProperty))
+                    {
+                        var propertyValue = annotationIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Annotation.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the annotation Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("body", out JsonElement bodyProperty))
+            {
+                var propertyValue = bodyProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Body = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the body Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
+            {
+                var propertyValue = elementIdProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ElementId = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the elementId Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("language", out JsonElement languageProperty))
+            {
+                var propertyValue = languageProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Language = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the language Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            {
+                var propertyValue = nameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Name = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
+            {
+                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelationshipIdProperty))
+                    {
+                        var propertyValue = ownedRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the ownedRelationship Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
+            {
+                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                {
+                    var propertyValue = owningRelationshipIdProperty.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the owningRelationship Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
+            {
+                var propertyValue = shortNameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.ShortName = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the shortName Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
 
 
-
-
-
-
-
-
-
-
-            return textualRepresentationInstance;
+            return dtoInstance;
         }
     }
 }

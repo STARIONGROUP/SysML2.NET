@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoDeSerializerGenerator.cs" company="RHEA System S.A.">
+// <copyright file="DtoSerializerGenerator.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -33,7 +33,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     /// <summary>
     /// A Handlebars based DTO code generator
     /// </summary>
-    public class DtoDeSerializerGenerator : HandleBarsGenerator
+    public class DtoSerializerGenerator : HandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> static serializers
@@ -50,13 +50,25 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
-            await this.GenerateDeSerializers(package, outputDirectory);
-            await this.GenerateDeSerializationProvider(package, outputDirectory);
+            await this.GenerateSerializers(package, outputDirectory);
+            await this.GenerateSerializationProvider(package, outputDirectory);
         }
 
-        public async Task GenerateDeSerializers(EPackage package, DirectoryInfo outputDirectory)
+        /// <summary>
+        /// Generates the Serializer classes for each <see cref="EClass"/> in the provided <see cref="EPackage"/>
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> that contains the classes that need to be generated
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo"/>
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task GenerateSerializers(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-deserializer-template"];
+            var template = this.Templates["dto-serializer-template"];
 
             foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
             {
@@ -64,25 +76,37 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
                 generatedSerializer = CodeCleanup(generatedSerializer);
 
-                var fileName = $"{eClass.Name.CapitalizeFirstLetter()}DeSerializer.cs";
+                var fileName = $"{eClass.Name.CapitalizeFirstLetter()}Serializer.cs";
 
                 await Write(generatedSerializer, outputDirectory, fileName);
             }
         }
 
-        public async Task GenerateDeSerializationProvider(EPackage package, DirectoryInfo outputDirectory)
+        /// <summary>
+        /// Generates the SerializationProvider class
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> that contains the classes that need to be generated
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo"/>
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task GenerateSerializationProvider(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-deserialization-provider-template"];
+            var template = this.Templates["dto-serialization-provider-template"];
 
-            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract) .OrderBy(x => x.Name).ToList();
-            
-            var generatedDeSerializationProvider = template(eClasses);
+            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList().ToList();
 
-            generatedDeSerializationProvider = CodeCleanup(generatedDeSerializationProvider);
+            var generatedSerializationProvider = template(eClasses);
 
-            var fileName = "DeSerializationProvider.cs";
+            generatedSerializationProvider = CodeCleanup(generatedSerializationProvider);
 
-            await Write(generatedDeSerializationProvider, outputDirectory, fileName);
+            var fileName = "SerializationProvider.cs";
+
+            await Write(generatedSerializationProvider, outputDirectory, fileName);
         }
 
         /// <summary>
@@ -102,8 +126,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("dto-deserializer-template");
-            this.RegisterTemplate("dto-deserialization-provider-template");
+            this.RegisterTemplate("dto-serializer-template");
+            this.RegisterTemplate("dto-serialization-provider-template");
         }
     }
 }

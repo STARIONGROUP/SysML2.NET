@@ -187,6 +187,30 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
             });
 
+            handlebars.RegisterHelper("StructuralFeature.QueryIsInteger", (context, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#StructuralFeature.QueryIsInteger}} helper must have exactly one argument");
+                }
+
+                var eStructuralFeature = arguments.Single() as EStructuralFeature;
+
+                return eStructuralFeature.QueryTypeName() == "int";
+            });
+
+            handlebars.RegisterHelper("StructuralFeature.QueryIsDouble", (context, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#StructuralFeature.QueryIsDouble}} helper must have exactly one argument");
+                }
+
+                var eStructuralFeature = arguments.Single() as EStructuralFeature;
+
+                return eStructuralFeature.QueryTypeName() == "double";
+            });
+
             handlebars.RegisterHelper("StructuralFeature.QueryIsString", (context, arguments) =>
             {
                 if (arguments.Length != 1)
