@@ -56,30 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iConcernUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ConcernUsage");
 
-            writer.WritePropertyName("reqId");
-            writer.WriteStringValue(iConcernUsage.ReqId);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iConcernUsage.Id);
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iConcernUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iConcernUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iConcernUsage.AliasIds)
             {
-                writer.WriteStringValue(iConcernUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iConcernUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iConcernUsage.Direction.HasValue)
@@ -91,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iConcernUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iConcernUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iConcernUsage.IsComposite);
 
@@ -99,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iConcernUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iConcernUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iConcernUsage.IsOrdered);
@@ -109,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iConcernUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iConcernUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iConcernUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iConcernUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iConcernUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iConcernUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iConcernUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iConcernUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iConcernUsage.Name);
@@ -147,6 +134,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("portionKind");
+            if (iConcernUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iConcernUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("reqId");
+            writer.WriteStringValue(iConcernUsage.ReqId);
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iConcernUsage.ShortName);

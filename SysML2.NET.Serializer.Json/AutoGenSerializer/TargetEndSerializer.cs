@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("TargetEnd");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iTargetEnd.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("TargetEnd");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iTargetEnd.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iTargetEnd.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iTargetEnd.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iTargetEnd.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iTargetEnd.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iTargetEnd.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iTargetEnd.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iTargetEnd.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iTargetEnd.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iTargetEnd.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iTargetEnd.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iTargetEnd.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iTargetEnd.Name);

@@ -56,17 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iType.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Type");
 
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iType.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iType.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iType.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iType.AliasIds)
@@ -77,6 +71,12 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iType.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iType.IsAbstract);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iType.IsSufficient);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iType.Name);

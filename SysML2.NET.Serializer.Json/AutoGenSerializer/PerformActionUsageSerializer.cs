@@ -56,27 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iPerformActionUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("PerformActionUsage");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iPerformActionUsage.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iPerformActionUsage.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iPerformActionUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iPerformActionUsage.AliasIds)
             {
-                writer.WriteStringValue(iPerformActionUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iPerformActionUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iPerformActionUsage.Direction.HasValue)
@@ -88,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iPerformActionUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iPerformActionUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iPerformActionUsage.IsComposite);
 
@@ -96,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iPerformActionUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iPerformActionUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iPerformActionUsage.IsOrdered);
@@ -106,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iPerformActionUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iPerformActionUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iPerformActionUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iPerformActionUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iPerformActionUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iPerformActionUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iPerformActionUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iPerformActionUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iPerformActionUsage.Name);
@@ -139,6 +129,16 @@ namespace SysML2.NET.Serializer.Json
             if (iPerformActionUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iPerformActionUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iPerformActionUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iPerformActionUsage.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

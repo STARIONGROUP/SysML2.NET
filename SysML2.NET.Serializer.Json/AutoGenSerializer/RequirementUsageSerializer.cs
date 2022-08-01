@@ -56,30 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iRequirementUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("RequirementUsage");
 
-            writer.WritePropertyName("reqId");
-            writer.WriteStringValue(iRequirementUsage.ReqId);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iRequirementUsage.Id);
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iRequirementUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iRequirementUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iRequirementUsage.AliasIds)
             {
-                writer.WriteStringValue(iRequirementUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iRequirementUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iRequirementUsage.Direction.HasValue)
@@ -91,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iRequirementUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iRequirementUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iRequirementUsage.IsComposite);
 
@@ -99,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iRequirementUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iRequirementUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iRequirementUsage.IsOrdered);
@@ -109,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iRequirementUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iRequirementUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iRequirementUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iRequirementUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iRequirementUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iRequirementUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iRequirementUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iRequirementUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iRequirementUsage.Name);
@@ -147,6 +134,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("portionKind");
+            if (iRequirementUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iRequirementUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("reqId");
+            writer.WriteStringValue(iRequirementUsage.ReqId);
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iRequirementUsage.ShortName);

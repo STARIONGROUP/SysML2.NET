@@ -56,11 +56,21 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("FeatureValue");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iFeatureValue.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("FeatureValue");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iFeatureValue.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iFeatureValue.ElementId);
 
             writer.WritePropertyName("featureWithValue");
             writer.WriteStringValue(iFeatureValue.FeatureWithValue);
@@ -80,11 +90,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iFeatureValue.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iFeatureValue.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iFeatureValue.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFeatureValue.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iFeatureValue.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -100,6 +117,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iFeatureValue.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iFeatureValue.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iFeatureValue.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iFeatureValue.Source)
             {
@@ -114,38 +144,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iFeatureValue.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFeatureValue.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iFeatureValue.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iFeatureValue.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iFeatureValue.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iFeatureValue.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFeatureValue.ShortName);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iFeatureValue.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

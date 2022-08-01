@@ -56,26 +56,37 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iFeatureTyping.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("FeatureTyping");
 
-            writer.WritePropertyName("type");
-            writer.WriteStringValue(iFeatureTyping.Type);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iFeatureTyping.Id);
 
-            writer.WritePropertyName("typedFeature");
-            writer.WriteStringValue(iFeatureTyping.TypedFeature);
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iFeatureTyping.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iFeatureTyping.ElementId);
 
             writer.WritePropertyName("general");
             writer.WriteStringValue(iFeatureTyping.General);
 
-            writer.WritePropertyName("specific");
-            writer.WriteStringValue(iFeatureTyping.Specific);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iFeatureTyping.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFeatureTyping.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iFeatureTyping.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,40 +102,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source");
-            foreach (var item in iFeatureTyping.Source)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target");
-            foreach (var item in iFeatureTyping.Target)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iFeatureTyping.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFeatureTyping.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iFeatureTyping.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iFeatureTyping.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
             writer.WritePropertyName("owningRelationship");
             if (iFeatureTyping.OwningRelationship.HasValue)
             {
@@ -137,6 +114,29 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iFeatureTyping.ShortName);
+
+            writer.WriteStartArray("source");
+            foreach (var item in iFeatureTyping.Source)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("specific");
+            writer.WriteStringValue(iFeatureTyping.Specific);
+
+            writer.WriteStartArray("target");
+            foreach (var item in iFeatureTyping.Target)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("type");
+            writer.WriteStringValue(iFeatureTyping.Type);
+
+            writer.WritePropertyName("typedFeature");
+            writer.WriteStringValue(iFeatureTyping.TypedFeature);
 
             writer.WriteEndObject();
         }

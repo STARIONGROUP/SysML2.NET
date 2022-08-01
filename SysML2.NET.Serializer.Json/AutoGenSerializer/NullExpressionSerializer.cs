@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("NullExpression");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iNullExpression.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("NullExpression");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iNullExpression.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iNullExpression.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iNullExpression.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iNullExpression.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iNullExpression.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iNullExpression.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iNullExpression.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iNullExpression.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iNullExpression.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iNullExpression.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iNullExpression.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iNullExpression.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iNullExpression.Name);

@@ -42,14 +42,9 @@ namespace SysML2.NET.DTO
         public Guid Id { get; set; }
 
         /// <summary>
-        /// The annotation text for the Comment.
+        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
-        public string Body { get; set; }
-
-        /// <summary>
-        /// The natural or artifical language in which the body text is written.
-        /// </summary>
-        public string Language { get; set; }
+        public List<string> AliasIds { get; set; }
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements.
@@ -57,15 +52,20 @@ namespace SysML2.NET.DTO
         public List<Guid> Annotation { get; set; }
 
         /// <summary>
-        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
+        /// The annotation text for the Comment.
         /// </summary>
-        public List<string> AliasIds { get; set; }
+        public string Body { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
         public string ElementId { get; set; }
+
+        /// <summary>
+        /// The natural or artifical language in which the body text is written.
+        /// </summary>
+        public string Language { get; set; }
 
         /// <summary>
         /// The primary name of this Element.

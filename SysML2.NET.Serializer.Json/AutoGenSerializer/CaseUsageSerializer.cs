@@ -56,27 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iCaseUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("CaseUsage");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iCaseUsage.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iCaseUsage.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iCaseUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iCaseUsage.AliasIds)
             {
-                writer.WriteStringValue(iCaseUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iCaseUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iCaseUsage.Direction.HasValue)
@@ -88,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iCaseUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iCaseUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iCaseUsage.IsComposite);
 
@@ -96,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iCaseUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iCaseUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iCaseUsage.IsOrdered);
@@ -106,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iCaseUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iCaseUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iCaseUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iCaseUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iCaseUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iCaseUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iCaseUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iCaseUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iCaseUsage.Name);
@@ -139,6 +129,16 @@ namespace SysML2.NET.Serializer.Json
             if (iCaseUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iCaseUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iCaseUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iCaseUsage.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

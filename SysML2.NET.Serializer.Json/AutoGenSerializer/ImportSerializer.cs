@@ -56,11 +56,21 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Import");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iImport.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Import");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iImport.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iImport.ElementId);
 
             writer.WritePropertyName("importedMemberName");
             writer.WriteStringValue(iImport.ImportedMemberName);
@@ -74,11 +84,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isRecursive");
             writer.WriteBooleanValue(iImport.IsRecursive);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iImport.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iImport.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iImport.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iImport.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -94,6 +111,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iImport.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iImport.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iImport.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iImport.Source)
             {
@@ -108,38 +138,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iImport.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iImport.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iImport.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iImport.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iImport.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iImport.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iImport.ShortName);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iImport.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

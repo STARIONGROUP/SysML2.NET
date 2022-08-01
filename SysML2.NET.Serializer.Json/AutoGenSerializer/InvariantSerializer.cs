@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iInvariant.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Invariant");
 
-            writer.WritePropertyName("isNegated");
-            writer.WriteBooleanValue(iInvariant.IsNegated);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iInvariant.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iInvariant.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iInvariant.Direction.HasValue)
@@ -75,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iInvariant.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iInvariant.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iInvariant.IsComposite);
 
@@ -83,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iInvariant.IsEnd);
+
+            writer.WritePropertyName("isNegated");
+            writer.WriteBooleanValue(iInvariant.IsNegated);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iInvariant.IsOrdered);
@@ -93,24 +106,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iInvariant.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iInvariant.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iInvariant.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iInvariant.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iInvariant.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iInvariant.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iInvariant.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iInvariant.Name);

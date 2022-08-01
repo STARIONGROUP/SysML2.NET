@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Step");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iStep.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Step");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iStep.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iStep.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iStep.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iStep.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iStep.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iStep.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iStep.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iStep.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iStep.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iStep.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iStep.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iStep.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iStep.Name);

@@ -56,27 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iAcceptActionUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("AcceptActionUsage");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iAcceptActionUsage.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iAcceptActionUsage.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iAcceptActionUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iAcceptActionUsage.AliasIds)
             {
-                writer.WriteStringValue(iAcceptActionUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iAcceptActionUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iAcceptActionUsage.Direction.HasValue)
@@ -88,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iAcceptActionUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iAcceptActionUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iAcceptActionUsage.IsComposite);
 
@@ -96,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iAcceptActionUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iAcceptActionUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iAcceptActionUsage.IsOrdered);
@@ -106,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iAcceptActionUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iAcceptActionUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iAcceptActionUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iAcceptActionUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iAcceptActionUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iAcceptActionUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iAcceptActionUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iAcceptActionUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iAcceptActionUsage.Name);
@@ -139,6 +129,16 @@ namespace SysML2.NET.Serializer.Json
             if (iAcceptActionUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iAcceptActionUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iAcceptActionUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iAcceptActionUsage.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

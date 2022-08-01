@@ -56,14 +56,14 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(i{{this.Name }}.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("{{ this.Name }}");
 
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(i{{this.Name }}.Id);
+
             {{#with this as | EClass |}}
-            {{#each EClass.AllEStructuralFeatures as | structuralFeature |}}
+            {{#each EClass.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
             {{#unless structuralFeature.Derived }}
                 {{#unless structuralFeature.Transient }}
                     {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}

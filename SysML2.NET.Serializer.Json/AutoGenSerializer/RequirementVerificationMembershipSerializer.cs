@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("RequirementVerificationMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iRequirementVerificationMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("RequirementVerificationMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iRequirementVerificationMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iRequirementVerificationMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iRequirementVerificationMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iRequirementVerificationMembership.FeaturingType);
 
             writer.WritePropertyName("kind");
             writer.WriteStringValue(iRequirementVerificationMembership.Kind.ToString().ToUpper());
@@ -74,11 +90,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iRequirementVerificationMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iRequirementVerificationMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iRequirementVerificationMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iRequirementVerificationMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iRequirementVerificationMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -94,6 +117,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iRequirementVerificationMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iRequirementVerificationMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iRequirementVerificationMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iRequirementVerificationMembership.Source)
             {
@@ -108,44 +144,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iRequirementVerificationMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iRequirementVerificationMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iRequirementVerificationMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iRequirementVerificationMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iRequirementVerificationMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iRequirementVerificationMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iRequirementVerificationMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iRequirementVerificationMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iRequirementVerificationMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iRequirementVerificationMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

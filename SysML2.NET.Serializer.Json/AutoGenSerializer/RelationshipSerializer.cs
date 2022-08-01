@@ -56,14 +56,34 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iRelationship.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Relationship");
 
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iRelationship.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iRelationship.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iRelationship.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iRelationship.Name);
+
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iRelationship.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iRelationship.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -79,6 +99,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iRelationship.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iRelationship.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iRelationship.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iRelationship.Source)
             {
@@ -92,39 +125,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iRelationship.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iRelationship.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iRelationship.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iRelationship.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iRelationship.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iRelationship.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iRelationship.ShortName);
 
             writer.WriteEndObject();
         }

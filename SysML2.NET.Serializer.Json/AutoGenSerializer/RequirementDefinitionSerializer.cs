@@ -56,26 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iRequirementDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("RequirementDefinition");
 
-            writer.WritePropertyName("reqId");
-            writer.WriteStringValue(iRequirementDefinition.ReqId);
-
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iRequirementDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iRequirementDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iRequirementDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iRequirementDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iRequirementDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iRequirementDefinition.AliasIds)
@@ -86,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iRequirementDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iRequirementDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iRequirementDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iRequirementDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iRequirementDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iRequirementDefinition.Name);
@@ -106,6 +103,9 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("reqId");
+            writer.WriteStringValue(iRequirementDefinition.ReqId);
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iRequirementDefinition.ShortName);

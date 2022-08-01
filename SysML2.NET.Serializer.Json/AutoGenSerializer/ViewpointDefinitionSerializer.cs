@@ -56,26 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iViewpointDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ViewpointDefinition");
 
-            writer.WritePropertyName("reqId");
-            writer.WriteStringValue(iViewpointDefinition.ReqId);
-
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iViewpointDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iViewpointDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iViewpointDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iViewpointDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iViewpointDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iViewpointDefinition.AliasIds)
@@ -86,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iViewpointDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iViewpointDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iViewpointDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iViewpointDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iViewpointDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iViewpointDefinition.Name);
@@ -106,6 +103,9 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("reqId");
+            writer.WriteStringValue(iViewpointDefinition.ReqId);
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iViewpointDefinition.ShortName);

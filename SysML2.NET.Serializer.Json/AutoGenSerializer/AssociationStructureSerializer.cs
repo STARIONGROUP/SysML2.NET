@@ -56,17 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iAssociationStructure.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("AssociationStructure");
 
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iAssociationStructure.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iAssociationStructure.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iAssociationStructure.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iAssociationStructure.AliasIds)
@@ -78,31 +72,24 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iAssociationStructure.ElementId);
 
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iAssociationStructure.IsAbstract);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iAssociationStructure.IsSufficient);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iAssociationStructure.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iAssociationStructure.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iAssociationStructure.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iAssociationStructure.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iAssociationStructure.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iAssociationStructure.ShortName);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iAssociationStructure.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iAssociationStructure.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -117,6 +104,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iAssociationStructure.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iAssociationStructure.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iAssociationStructure.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iAssociationStructure.Source)

@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Dependency");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iDependency.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Dependency");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iDependency.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WriteStartArray("client");
             foreach (var item in iDependency.Client)
@@ -69,15 +76,21 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("supplier");
-            foreach (var item in iDependency.Supplier)
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iDependency.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iDependency.Name);
+
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iDependency.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iDependency.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iDependency.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -93,40 +106,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source");
-            foreach (var item in iDependency.Source)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target");
-            foreach (var item in iDependency.Target)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iDependency.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iDependency.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iDependency.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iDependency.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
             writer.WritePropertyName("owningRelationship");
             if (iDependency.OwningRelationship.HasValue)
             {
@@ -139,6 +118,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iDependency.ShortName);
+
+            writer.WriteStartArray("source");
+            foreach (var item in iDependency.Source)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("supplier");
+            foreach (var item in iDependency.Supplier)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target");
+            foreach (var item in iDependency.Target)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }

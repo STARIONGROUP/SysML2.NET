@@ -56,20 +56,37 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Disjoining");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iDisjoining.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Disjoining");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iDisjoining.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("disjoiningType");
             writer.WriteStringValue(iDisjoining.DisjoiningType);
 
-            writer.WritePropertyName("typeDisjoined");
-            writer.WriteStringValue(iDisjoining.TypeDisjoined);
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iDisjoining.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iDisjoining.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iDisjoining.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iDisjoining.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -85,6 +102,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iDisjoining.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iDisjoining.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iDisjoining.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iDisjoining.Source)
             {
@@ -99,38 +129,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iDisjoining.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iDisjoining.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iDisjoining.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iDisjoining.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iDisjoining.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iDisjoining.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iDisjoining.ShortName);
+            writer.WritePropertyName("typeDisjoined");
+            writer.WriteStringValue(iDisjoining.TypeDisjoined);
 
             writer.WriteEndObject();
         }

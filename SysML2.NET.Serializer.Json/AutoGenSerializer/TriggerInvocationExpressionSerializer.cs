@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iTriggerInvocationExpression.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("TriggerInvocationExpression");
 
-            writer.WritePropertyName("kind");
-            writer.WriteStringValue(iTriggerInvocationExpression.Kind.ToString().ToUpper());
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iTriggerInvocationExpression.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iTriggerInvocationExpression.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iTriggerInvocationExpression.Direction.HasValue)
@@ -74,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iTriggerInvocationExpression.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iTriggerInvocationExpression.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iTriggerInvocationExpression.IsComposite);
@@ -93,24 +103,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iTriggerInvocationExpression.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iTriggerInvocationExpression.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iTriggerInvocationExpression.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iTriggerInvocationExpression.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iTriggerInvocationExpression.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iTriggerInvocationExpression.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iTriggerInvocationExpression.ElementId);
+            writer.WritePropertyName("kind");
+            writer.WriteStringValue(iTriggerInvocationExpression.Kind.ToString().ToUpper());
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iTriggerInvocationExpression.Name);

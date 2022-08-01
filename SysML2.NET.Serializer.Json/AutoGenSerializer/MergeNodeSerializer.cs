@@ -56,27 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iMergeNode.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("MergeNode");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iMergeNode.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iMergeNode.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iMergeNode.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iMergeNode.AliasIds)
             {
-                writer.WriteStringValue(iMergeNode.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iMergeNode.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iMergeNode.Direction.HasValue)
@@ -88,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iMergeNode.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iMergeNode.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iMergeNode.IsComposite);
 
@@ -96,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iMergeNode.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iMergeNode.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iMergeNode.IsOrdered);
@@ -106,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iMergeNode.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iMergeNode.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iMergeNode.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iMergeNode.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iMergeNode.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iMergeNode.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iMergeNode.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iMergeNode.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iMergeNode.Name);
@@ -139,6 +129,16 @@ namespace SysML2.NET.Serializer.Json
             if (iMergeNode.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iMergeNode.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iMergeNode.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iMergeNode.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

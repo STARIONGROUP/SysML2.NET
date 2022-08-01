@@ -56,27 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iAnalysisCaseUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("AnalysisCaseUsage");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iAnalysisCaseUsage.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iAnalysisCaseUsage.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iAnalysisCaseUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iAnalysisCaseUsage.AliasIds)
             {
-                writer.WriteStringValue(iAnalysisCaseUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iAnalysisCaseUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iAnalysisCaseUsage.Direction.HasValue)
@@ -88,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iAnalysisCaseUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iAnalysisCaseUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsComposite);
 
@@ -96,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iAnalysisCaseUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsOrdered);
@@ -106,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iAnalysisCaseUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iAnalysisCaseUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iAnalysisCaseUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iAnalysisCaseUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iAnalysisCaseUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iAnalysisCaseUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iAnalysisCaseUsage.Name);
@@ -139,6 +129,16 @@ namespace SysML2.NET.Serializer.Json
             if (iAnalysisCaseUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iAnalysisCaseUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iAnalysisCaseUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iAnalysisCaseUsage.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

@@ -56,24 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iTextualRepresentation.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("TextualRepresentation");
 
-            writer.WritePropertyName("body");
-            writer.WriteStringValue(iTextualRepresentation.Body);
-
-            writer.WritePropertyName("language");
-            writer.WriteStringValue(iTextualRepresentation.Language);
-
-            writer.WriteStartArray("annotation");
-            foreach (var item in iTextualRepresentation.Annotation)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iTextualRepresentation.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iTextualRepresentation.AliasIds)
@@ -82,8 +69,21 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WriteStartArray("annotation");
+            foreach (var item in iTextualRepresentation.Annotation)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("body");
+            writer.WriteStringValue(iTextualRepresentation.Body);
+
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iTextualRepresentation.ElementId);
+
+            writer.WritePropertyName("language");
+            writer.WriteStringValue(iTextualRepresentation.Language);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iTextualRepresentation.Name);

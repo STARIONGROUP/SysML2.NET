@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iItemFlow.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ItemFlow");
 
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iItemFlow.IsDirected);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iItemFlow.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iItemFlow.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iItemFlow.Direction.HasValue)
@@ -75,11 +79,20 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iItemFlow.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iItemFlow.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iItemFlow.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iItemFlow.IsDerived);
+
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iItemFlow.IsDirected);
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iItemFlow.IsEnd);
@@ -93,50 +106,24 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iItemFlow.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iItemFlow.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iItemFlow.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iItemFlow.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iItemFlow.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iItemFlow.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iItemFlow.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iItemFlow.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iItemFlow.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iItemFlow.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iItemFlow.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iItemFlow.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iItemFlow.ShortName);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iItemFlow.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iItemFlow.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -151,6 +138,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iItemFlow.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iItemFlow.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iItemFlow.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iItemFlow.Source)

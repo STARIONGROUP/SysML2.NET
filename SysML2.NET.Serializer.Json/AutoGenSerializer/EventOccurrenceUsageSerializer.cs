@@ -56,27 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iEventOccurrenceUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("EventOccurrenceUsage");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iEventOccurrenceUsage.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iEventOccurrenceUsage.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iEventOccurrenceUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iEventOccurrenceUsage.AliasIds)
             {
-                writer.WriteStringValue(iEventOccurrenceUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iEventOccurrenceUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iEventOccurrenceUsage.Direction.HasValue)
@@ -88,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iEventOccurrenceUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iEventOccurrenceUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsComposite);
 
@@ -96,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iEventOccurrenceUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsOrdered);
@@ -106,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iEventOccurrenceUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iEventOccurrenceUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iEventOccurrenceUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iEventOccurrenceUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iEventOccurrenceUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iEventOccurrenceUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iEventOccurrenceUsage.Name);
@@ -139,6 +129,16 @@ namespace SysML2.NET.Serializer.Json
             if (iEventOccurrenceUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iEventOccurrenceUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iEventOccurrenceUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iEventOccurrenceUsage.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

@@ -56,27 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iVerificationCaseUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("VerificationCaseUsage");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iVerificationCaseUsage.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iVerificationCaseUsage.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iVerificationCaseUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iVerificationCaseUsage.AliasIds)
             {
-                writer.WriteStringValue(iVerificationCaseUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iVerificationCaseUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iVerificationCaseUsage.Direction.HasValue)
@@ -88,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iVerificationCaseUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iVerificationCaseUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iVerificationCaseUsage.IsComposite);
 
@@ -96,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iVerificationCaseUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iVerificationCaseUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iVerificationCaseUsage.IsOrdered);
@@ -106,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iVerificationCaseUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iVerificationCaseUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iVerificationCaseUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iVerificationCaseUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iVerificationCaseUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iVerificationCaseUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iVerificationCaseUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iVerificationCaseUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iVerificationCaseUsage.Name);
@@ -139,6 +129,16 @@ namespace SysML2.NET.Serializer.Json
             if (iVerificationCaseUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iVerificationCaseUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iVerificationCaseUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iVerificationCaseUsage.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

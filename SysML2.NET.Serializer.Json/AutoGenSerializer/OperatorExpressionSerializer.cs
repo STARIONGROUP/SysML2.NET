@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iOperatorExpression.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("OperatorExpression");
 
-            writer.WritePropertyName("operator");
-            writer.WriteStringValue(iOperatorExpression.Operator);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iOperatorExpression.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iOperatorExpression.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iOperatorExpression.Direction.HasValue)
@@ -74,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iOperatorExpression.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iOperatorExpression.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iOperatorExpression.IsComposite);
@@ -93,27 +103,17 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iOperatorExpression.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iOperatorExpression.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iOperatorExpression.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iOperatorExpression.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iOperatorExpression.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iOperatorExpression.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iOperatorExpression.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iOperatorExpression.Name);
+
+            writer.WritePropertyName("operator");
+            writer.WriteStringValue(iOperatorExpression.Operator);
 
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iOperatorExpression.OwnedRelationship)

@@ -56,11 +56,21 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("FeatureInverting");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iFeatureInverting.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("FeatureInverting");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iFeatureInverting.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iFeatureInverting.ElementId);
 
             writer.WritePropertyName("featureInverted");
             writer.WriteStringValue(iFeatureInverting.FeatureInverted);
@@ -68,8 +78,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("invertingFeature");
             writer.WriteStringValue(iFeatureInverting.InvertingFeature);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iFeatureInverting.Name);
+
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFeatureInverting.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iFeatureInverting.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -85,6 +105,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iFeatureInverting.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iFeatureInverting.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iFeatureInverting.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iFeatureInverting.Source)
             {
@@ -98,39 +131,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iFeatureInverting.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFeatureInverting.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iFeatureInverting.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iFeatureInverting.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iFeatureInverting.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iFeatureInverting.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFeatureInverting.ShortName);
 
             writer.WriteEndObject();
         }

@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("ItemFlowFeature");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iItemFlowFeature.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ItemFlowFeature");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iItemFlowFeature.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iItemFlowFeature.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iItemFlowFeature.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iItemFlowFeature.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iItemFlowFeature.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iItemFlowFeature.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iItemFlowFeature.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iItemFlowFeature.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iItemFlowFeature.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iItemFlowFeature.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iItemFlowFeature.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iItemFlowFeature.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iItemFlowFeature.Name);

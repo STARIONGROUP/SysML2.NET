@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iViewDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ViewDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iViewDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iViewDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iViewDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iViewDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iViewDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iViewDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iViewDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iViewDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iViewDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iViewDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iViewDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iViewDefinition.Name);

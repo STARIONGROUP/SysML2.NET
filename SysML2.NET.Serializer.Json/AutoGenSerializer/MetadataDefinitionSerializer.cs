@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iMetadataDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("MetadataDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iMetadataDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iMetadataDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iMetadataDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iMetadataDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iMetadataDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iMetadataDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iMetadataDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iMetadataDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iMetadataDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iMetadataDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iMetadataDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iMetadataDefinition.Name);

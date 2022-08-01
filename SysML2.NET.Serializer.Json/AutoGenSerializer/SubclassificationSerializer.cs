@@ -56,26 +56,37 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iSubclassification.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Subclassification");
 
-            writer.WritePropertyName("subclassifier");
-            writer.WriteStringValue(iSubclassification.Subclassifier);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iSubclassification.Id);
 
-            writer.WritePropertyName("superclassifier");
-            writer.WriteStringValue(iSubclassification.Superclassifier);
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSubclassification.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSubclassification.ElementId);
 
             writer.WritePropertyName("general");
             writer.WriteStringValue(iSubclassification.General);
 
-            writer.WritePropertyName("specific");
-            writer.WriteStringValue(iSubclassification.Specific);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iSubclassification.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iSubclassification.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iSubclassification.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,40 +102,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source");
-            foreach (var item in iSubclassification.Source)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target");
-            foreach (var item in iSubclassification.Target)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSubclassification.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSubclassification.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iSubclassification.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iSubclassification.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
             writer.WritePropertyName("owningRelationship");
             if (iSubclassification.OwningRelationship.HasValue)
             {
@@ -137,6 +114,29 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iSubclassification.ShortName);
+
+            writer.WriteStartArray("source");
+            foreach (var item in iSubclassification.Source)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("specific");
+            writer.WriteStringValue(iSubclassification.Specific);
+
+            writer.WritePropertyName("subclassifier");
+            writer.WriteStringValue(iSubclassification.Subclassifier);
+
+            writer.WritePropertyName("superclassifier");
+            writer.WriteStringValue(iSubclassification.Superclassifier);
+
+            writer.WriteStartArray("target");
+            foreach (var item in iSubclassification.Target)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }

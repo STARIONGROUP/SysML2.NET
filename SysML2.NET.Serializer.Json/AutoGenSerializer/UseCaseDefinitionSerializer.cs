@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iUseCaseDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("UseCaseDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iUseCaseDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iUseCaseDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iUseCaseDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iUseCaseDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iUseCaseDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iUseCaseDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iUseCaseDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iUseCaseDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iUseCaseDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iUseCaseDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iUseCaseDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iUseCaseDefinition.Name);

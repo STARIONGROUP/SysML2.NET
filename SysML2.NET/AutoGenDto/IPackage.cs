@@ -36,6 +36,40 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial interface IPackage : INamespace
     {
+        /// <summary>
+        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
+        /// </summary>
+        List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
+        /// not change during the lifetime of the Element.
+        /// </summary>
+        string ElementId { get; set; }
+
+        /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        string Name { get; set; }
+
+        /// <summary>
+        /// The Relationships for which this Element is the owningRelatedElement.
+        /// </summary>
+        List<Guid> OwnedRelationship { get; set; }
+
+        /// <summary>
+        /// The Relationship for which this Element is an ownedRelatedElement, if any.
+        /// </summary>
+        Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context. 
+        /// </summary>
+        string ShortName { get; set; }
+
     }
 }
 

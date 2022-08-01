@@ -38,16 +38,9 @@ namespace SysML2.NET.DTO
         public Guid Id { get; set; }
 
         /// <summary>
-        /// The annotation text for the Comment.
+        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
-        public string Body { get; set; }
-
-        /// <summary>
-        /// Identification of the language of the body text and, optionally, the region and/or encoding. The
-        /// format shall be a POSIX locale conformant to ISO/IEC 15897, with the format
-        /// [language[_territory][.codeset][@modifier]].
-        /// </summary>
-        public string Locale { get; set; }
+        public List<string> AliasIds { get; set; }
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements.
@@ -55,15 +48,22 @@ namespace SysML2.NET.DTO
         public List<Guid> Annotation { get; set; }
 
         /// <summary>
-        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
+        /// The annotation text for the Comment.
         /// </summary>
-        public List<string> AliasIds { get; set; }
+        public string Body { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
         public string ElementId { get; set; }
+
+        /// <summary>
+        /// Identification of the language of the body text and, optionally, the region and/or encoding. The
+        /// format shall be a POSIX locale conformant to ISO/IEC 15897, with the format
+        /// [language[_territory][.codeset][@modifier]].
+        /// </summary>
+        public string Locale { get; set; }
 
         /// <summary>
         /// The primary name of this Element.

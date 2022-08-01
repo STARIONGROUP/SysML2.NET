@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iConstraintDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ConstraintDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iConstraintDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iConstraintDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iConstraintDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iConstraintDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iConstraintDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iConstraintDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iConstraintDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iConstraintDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iConstraintDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iConstraintDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iConstraintDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iConstraintDefinition.Name);

@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iSelectExpression.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("SelectExpression");
 
-            writer.WritePropertyName("operator");
-            writer.WriteStringValue(iSelectExpression.Operator);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iSelectExpression.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSelectExpression.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iSelectExpression.Direction.HasValue)
@@ -74,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSelectExpression.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iSelectExpression.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iSelectExpression.IsComposite);
@@ -93,27 +103,17 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iSelectExpression.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iSelectExpression.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iSelectExpression.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iSelectExpression.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSelectExpression.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSelectExpression.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iSelectExpression.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iSelectExpression.Name);
+
+            writer.WritePropertyName("operator");
+            writer.WriteStringValue(iSelectExpression.Operator);
 
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iSelectExpression.OwnedRelationship)

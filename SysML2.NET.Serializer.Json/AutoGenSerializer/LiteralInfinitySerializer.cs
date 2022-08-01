@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("LiteralInfinity");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iLiteralInfinity.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("LiteralInfinity");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iLiteralInfinity.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iLiteralInfinity.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iLiteralInfinity.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iLiteralInfinity.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iLiteralInfinity.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iLiteralInfinity.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iLiteralInfinity.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iLiteralInfinity.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iLiteralInfinity.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iLiteralInfinity.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iLiteralInfinity.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iLiteralInfinity.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iLiteralInfinity.Name);

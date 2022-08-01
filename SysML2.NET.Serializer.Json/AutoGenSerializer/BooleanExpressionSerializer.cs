@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("BooleanExpression");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iBooleanExpression.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("BooleanExpression");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iBooleanExpression.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iBooleanExpression.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iBooleanExpression.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iBooleanExpression.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iBooleanExpression.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iBooleanExpression.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iBooleanExpression.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iBooleanExpression.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iBooleanExpression.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iBooleanExpression.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iBooleanExpression.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iBooleanExpression.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iBooleanExpression.Name);

@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iBindingConnectorAsUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("BindingConnectorAsUsage");
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsVariation);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iBindingConnectorAsUsage.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iBindingConnectorAsUsage.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iBindingConnectorAsUsage.Direction.HasValue)
@@ -75,11 +79,20 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iBindingConnectorAsUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsDerived);
+
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsDirected);
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsEnd);
@@ -93,53 +106,27 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iBindingConnectorAsUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iBindingConnectorAsUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iBindingConnectorAsUsage.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iBindingConnectorAsUsage.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iBindingConnectorAsUsage.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iBindingConnectorAsUsage.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iBindingConnectorAsUsage.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iBindingConnectorAsUsage.ShortName);
-
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsDirected);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iBindingConnectorAsUsage.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iBindingConnectorAsUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -154,6 +141,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iBindingConnectorAsUsage.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iBindingConnectorAsUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iBindingConnectorAsUsage.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iBindingConnectorAsUsage.Source)

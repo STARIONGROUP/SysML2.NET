@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("StateSubactionMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iStateSubactionMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("StateSubactionMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iStateSubactionMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iStateSubactionMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iStateSubactionMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iStateSubactionMembership.FeaturingType);
 
             writer.WritePropertyName("kind");
             writer.WriteStringValue(iStateSubactionMembership.Kind.ToString().ToUpper());
@@ -74,11 +90,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iStateSubactionMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iStateSubactionMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iStateSubactionMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iStateSubactionMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iStateSubactionMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -94,6 +117,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iStateSubactionMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iStateSubactionMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iStateSubactionMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iStateSubactionMembership.Source)
             {
@@ -108,44 +144,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iStateSubactionMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iStateSubactionMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iStateSubactionMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iStateSubactionMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iStateSubactionMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iStateSubactionMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iStateSubactionMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iStateSubactionMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iStateSubactionMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iStateSubactionMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

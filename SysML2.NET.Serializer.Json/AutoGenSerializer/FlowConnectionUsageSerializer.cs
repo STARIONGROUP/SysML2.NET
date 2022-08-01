@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iFlowConnectionUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("FlowConnectionUsage");
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iFlowConnectionUsage.IsVariation);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iFlowConnectionUsage.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iFlowConnectionUsage.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iFlowConnectionUsage.Direction.HasValue)
@@ -75,14 +79,26 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iFlowConnectionUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iFlowConnectionUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iFlowConnectionUsage.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iFlowConnectionUsage.IsDerived);
 
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iFlowConnectionUsage.IsDirected);
+
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iFlowConnectionUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iFlowConnectionUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iFlowConnectionUsage.IsOrdered);
@@ -93,53 +109,27 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iFlowConnectionUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iFlowConnectionUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iFlowConnectionUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iFlowConnectionUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iFlowConnectionUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iFlowConnectionUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFlowConnectionUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iFlowConnectionUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iFlowConnectionUsage.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iFlowConnectionUsage.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iFlowConnectionUsage.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iFlowConnectionUsage.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iFlowConnectionUsage.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFlowConnectionUsage.ShortName);
-
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iFlowConnectionUsage.IsDirected);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iFlowConnectionUsage.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iFlowConnectionUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -155,6 +145,29 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iFlowConnectionUsage.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iFlowConnectionUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iFlowConnectionUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iFlowConnectionUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iFlowConnectionUsage.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iFlowConnectionUsage.Source)
             {
@@ -168,19 +181,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iFlowConnectionUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iFlowConnectionUsage.PortionKind.HasValue)
-            {
-                writer.WriteStringValue(iFlowConnectionUsage.PortionKind.Value.ToString().ToUpper());
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
 
             writer.WriteEndObject();
         }

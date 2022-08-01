@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("StakeholderMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iStakeholderMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("StakeholderMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iStakeholderMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iStakeholderMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iStakeholderMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iStakeholderMembership.FeaturingType);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iStakeholderMembership.MemberElement);
@@ -71,11 +87,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iStakeholderMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iStakeholderMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iStakeholderMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iStakeholderMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iStakeholderMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,6 +114,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iStakeholderMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iStakeholderMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iStakeholderMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iStakeholderMembership.Source)
             {
@@ -105,44 +141,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iStakeholderMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iStakeholderMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iStakeholderMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iStakeholderMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iStakeholderMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iStakeholderMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iStakeholderMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iStakeholderMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iStakeholderMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iStakeholderMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

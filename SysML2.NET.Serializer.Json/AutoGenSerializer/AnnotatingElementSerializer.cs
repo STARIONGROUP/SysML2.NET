@@ -56,21 +56,21 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iAnnotatingElement.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("AnnotatingElement");
 
-            writer.WriteStartArray("annotation");
-            foreach (var item in iAnnotatingElement.Annotation)
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iAnnotatingElement.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iAnnotatingElement.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iAnnotatingElement.AliasIds)
+            writer.WriteStartArray("annotation");
+            foreach (var item in iAnnotatingElement.Annotation)
             {
                 writer.WriteStringValue(item);
             }

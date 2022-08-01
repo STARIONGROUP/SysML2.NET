@@ -42,10 +42,15 @@ namespace SysML2.NET.DTO
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
-        /// Definition must be VariantMemberships.
+        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
-        public bool IsVariation { get; set; }
+        public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
+        /// not change during the lifetime of the Element.
+        /// </summary>
+        public string ElementId { get; set; }
 
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized
@@ -64,15 +69,10 @@ namespace SysML2.NET.DTO
         public bool IsSufficient { get; set; }
 
         /// <summary>
-        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
+        /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
+        /// Definition must be VariantMemberships.
         /// </summary>
-        public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
-        /// not change during the lifetime of the Element.
-        /// </summary>
-        public string ElementId { get; set; }
+        public bool IsVariation { get; set; }
 
         /// <summary>
         /// The primary name of this Element.

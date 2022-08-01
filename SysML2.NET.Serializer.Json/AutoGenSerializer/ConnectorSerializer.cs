@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iConnector.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Connector");
 
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iConnector.IsDirected);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iConnector.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iConnector.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iConnector.Direction.HasValue)
@@ -75,11 +79,20 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iConnector.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iConnector.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iConnector.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iConnector.IsDerived);
+
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iConnector.IsDirected);
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iConnector.IsEnd);
@@ -93,50 +106,24 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iConnector.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iConnector.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iConnector.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iConnector.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iConnector.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iConnector.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iConnector.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iConnector.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iConnector.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iConnector.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iConnector.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iConnector.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iConnector.ShortName);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iConnector.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iConnector.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -151,6 +138,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iConnector.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iConnector.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iConnector.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iConnector.Source)

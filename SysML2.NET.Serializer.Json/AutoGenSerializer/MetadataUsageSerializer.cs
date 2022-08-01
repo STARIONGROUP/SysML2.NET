@@ -56,27 +56,25 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iMetadataUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("MetadataUsage");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iMetadataUsage.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iMetadataUsage.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iMetadataUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iMetadataUsage.AliasIds)
             {
-                writer.WriteStringValue(iMetadataUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
+            writer.WriteEndArray();
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iMetadataUsage.IsVariation);
+            writer.WriteStartArray("annotation");
+            foreach (var item in iMetadataUsage.Annotation)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iMetadataUsage.Direction.HasValue)
@@ -88,6 +86,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iMetadataUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iMetadataUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iMetadataUsage.IsComposite);
 
@@ -96,6 +100,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iMetadataUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iMetadataUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iMetadataUsage.IsOrdered);
@@ -106,24 +113,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iMetadataUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iMetadataUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iMetadataUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iMetadataUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iMetadataUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iMetadataUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iMetadataUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iMetadataUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iMetadataUsage.Name);
@@ -145,15 +142,18 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("portionKind");
+            if (iMetadataUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iMetadataUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iMetadataUsage.ShortName);
-
-            writer.WriteStartArray("annotation");
-            foreach (var item in iMetadataUsage.Annotation)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }

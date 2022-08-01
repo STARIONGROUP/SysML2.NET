@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iSuccessionFlowConnectionUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("SuccessionFlowConnectionUsage");
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsVariation);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iSuccessionFlowConnectionUsage.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSuccessionFlowConnectionUsage.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iSuccessionFlowConnectionUsage.Direction.HasValue)
@@ -75,14 +79,26 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSuccessionFlowConnectionUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsDerived);
 
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsDirected);
+
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsOrdered);
@@ -93,53 +109,27 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSuccessionFlowConnectionUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSuccessionFlowConnectionUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iSuccessionFlowConnectionUsage.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iSuccessionFlowConnectionUsage.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iSuccessionFlowConnectionUsage.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iSuccessionFlowConnectionUsage.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iSuccessionFlowConnectionUsage.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iSuccessionFlowConnectionUsage.ShortName);
-
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsDirected);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iSuccessionFlowConnectionUsage.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iSuccessionFlowConnectionUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -155,6 +145,29 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iSuccessionFlowConnectionUsage.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iSuccessionFlowConnectionUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iSuccessionFlowConnectionUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iSuccessionFlowConnectionUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iSuccessionFlowConnectionUsage.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iSuccessionFlowConnectionUsage.Source)
             {
@@ -168,19 +181,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iSuccessionFlowConnectionUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iSuccessionFlowConnectionUsage.PortionKind.HasValue)
-            {
-                writer.WriteStringValue(iSuccessionFlowConnectionUsage.PortionKind.Value.ToString().ToUpper());
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
 
             writer.WriteEndObject();
         }

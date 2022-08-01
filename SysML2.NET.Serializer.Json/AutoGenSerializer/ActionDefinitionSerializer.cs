@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iActionDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ActionDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iActionDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iActionDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iActionDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iActionDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iActionDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iActionDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iActionDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iActionDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iActionDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iActionDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iActionDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iActionDefinition.Name);

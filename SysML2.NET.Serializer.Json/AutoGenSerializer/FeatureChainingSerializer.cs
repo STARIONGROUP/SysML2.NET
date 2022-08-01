@@ -56,17 +56,37 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("FeatureChaining");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iFeatureChaining.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("FeatureChaining");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iFeatureChaining.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("chainingFeature");
             writer.WriteStringValue(iFeatureChaining.ChainingFeature);
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iFeatureChaining.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iFeatureChaining.Name);
+
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFeatureChaining.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iFeatureChaining.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -82,6 +102,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iFeatureChaining.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iFeatureChaining.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iFeatureChaining.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iFeatureChaining.Source)
             {
@@ -95,39 +128,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iFeatureChaining.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFeatureChaining.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iFeatureChaining.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iFeatureChaining.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iFeatureChaining.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iFeatureChaining.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFeatureChaining.ShortName);
 
             writer.WriteEndObject();
         }

@@ -45,6 +45,17 @@ namespace SysML2.NET.DTO
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
+        /// </summary>
+        public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
+        /// not change during the lifetime of the Element.
+        /// </summary>
+        public string ElementId { get; set; }
+
+        /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized
         /// Types.
         /// </summary>
@@ -59,17 +70,6 @@ namespace SysML2.NET.DTO
         /// classify all four-wheeled things.)
         /// </summary>
         public bool IsSufficient { get; set; }
-
-        /// <summary>
-        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
-        /// </summary>
-        public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
-        /// not change during the lifetime of the Element.
-        /// </summary>
-        public string ElementId { get; set; }
 
         /// <summary>
         /// The primary name of this Element.

@@ -41,6 +41,17 @@ namespace SysML2.NET.DTO
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
+        /// </summary>
+        public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
+        /// not change during the lifetime of the Element.
+        /// </summary>
+        public string ElementId { get; set; }
+
+        /// <summary>
         /// </summary>
         public Guid MemberElement { get; set; }
 
@@ -55,10 +66,9 @@ namespace SysML2.NET.DTO
         public string MemberShortName { get; set; }
 
         /// <summary>
-        /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly
-        /// visible outside that Namespace.
+        /// The primary name of this Element.
         /// </summary>
-        public VisibilityKind Visibility { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -66,38 +76,14 @@ namespace SysML2.NET.DTO
         public List<Guid> OwnedRelatedElement { get; set; }
 
         /// <summary>
-        /// The relatedElement of this Relationship that owns the Relationship, if any.
-        /// </summary>
-        public Guid? OwningRelatedElement { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public List<Guid> Source { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public List<Guid> Target { get; set; }
-
-        /// <summary>
-        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
-        /// </summary>
-        public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
-        /// not change during the lifetime of the Element.
-        /// </summary>
-        public string ElementId { get; set; }
-
-        /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
+
+        /// <summary>
+        /// The relatedElement of this Relationship that owns the Relationship, if any.
+        /// </summary>
+        public Guid? OwningRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
@@ -111,6 +97,20 @@ namespace SysML2.NET.DTO
         /// model or relative to some other context. 
         /// </summary>
         public string ShortName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public List<Guid> Source { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public List<Guid> Target { get; set; }
+
+        /// <summary>
+        /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly
+        /// visible outside that Namespace.
+        /// </summary>
+        public VisibilityKind Visibility { get; set; }
 
     }
 }

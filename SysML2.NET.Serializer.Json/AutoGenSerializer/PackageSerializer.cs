@@ -56,11 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iPackage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Package");
+
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iPackage.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iPackage.AliasIds)

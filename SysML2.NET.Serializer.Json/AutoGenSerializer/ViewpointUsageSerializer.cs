@@ -56,30 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iViewpointUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ViewpointUsage");
 
-            writer.WritePropertyName("reqId");
-            writer.WriteStringValue(iViewpointUsage.ReqId);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iViewpointUsage.Id);
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iViewpointUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iViewpointUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iViewpointUsage.AliasIds)
             {
-                writer.WriteStringValue(iViewpointUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iViewpointUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iViewpointUsage.Direction.HasValue)
@@ -91,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iViewpointUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iViewpointUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iViewpointUsage.IsComposite);
 
@@ -99,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iViewpointUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iViewpointUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iViewpointUsage.IsOrdered);
@@ -109,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iViewpointUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iViewpointUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iViewpointUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iViewpointUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iViewpointUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iViewpointUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iViewpointUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iViewpointUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iViewpointUsage.Name);
@@ -147,6 +134,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("portionKind");
+            if (iViewpointUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iViewpointUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("reqId");
+            writer.WriteStringValue(iViewpointUsage.ReqId);
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iViewpointUsage.ShortName);

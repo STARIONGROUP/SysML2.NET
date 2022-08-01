@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("ResultExpressionMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iResultExpressionMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ResultExpressionMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iResultExpressionMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iResultExpressionMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iResultExpressionMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iResultExpressionMembership.FeaturingType);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iResultExpressionMembership.MemberElement);
@@ -71,11 +87,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iResultExpressionMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iResultExpressionMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iResultExpressionMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iResultExpressionMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iResultExpressionMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,6 +114,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iResultExpressionMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iResultExpressionMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iResultExpressionMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iResultExpressionMembership.Source)
             {
@@ -105,44 +141,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iResultExpressionMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iResultExpressionMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iResultExpressionMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iResultExpressionMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iResultExpressionMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iResultExpressionMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iResultExpressionMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iResultExpressionMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iResultExpressionMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iResultExpressionMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

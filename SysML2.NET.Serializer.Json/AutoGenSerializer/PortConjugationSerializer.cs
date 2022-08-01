@@ -56,23 +56,43 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iPortConjugation.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("PortConjugation");
 
-            writer.WritePropertyName("originalPortDefinition");
-            writer.WriteStringValue(iPortConjugation.OriginalPortDefinition);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iPortConjugation.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iPortConjugation.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("conjugatedType");
             writer.WriteStringValue(iPortConjugation.ConjugatedType);
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iPortConjugation.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iPortConjugation.Name);
+
+            writer.WritePropertyName("originalPortDefinition");
+            writer.WriteStringValue(iPortConjugation.OriginalPortDefinition);
 
             writer.WritePropertyName("originalType");
             writer.WriteStringValue(iPortConjugation.OriginalType);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iPortConjugation.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iPortConjugation.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -88,6 +108,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iPortConjugation.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iPortConjugation.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iPortConjugation.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iPortConjugation.Source)
             {
@@ -101,39 +134,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iPortConjugation.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iPortConjugation.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iPortConjugation.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iPortConjugation.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iPortConjugation.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iPortConjugation.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iPortConjugation.ShortName);
 
             writer.WriteEndObject();
         }

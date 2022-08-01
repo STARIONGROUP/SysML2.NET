@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("ReturnParameterMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iReturnParameterMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ReturnParameterMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iReturnParameterMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iReturnParameterMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iReturnParameterMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iReturnParameterMembership.FeaturingType);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iReturnParameterMembership.MemberElement);
@@ -71,11 +87,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iReturnParameterMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iReturnParameterMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iReturnParameterMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iReturnParameterMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iReturnParameterMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,6 +114,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iReturnParameterMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iReturnParameterMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iReturnParameterMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iReturnParameterMembership.Source)
             {
@@ -105,44 +141,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iReturnParameterMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iReturnParameterMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iReturnParameterMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iReturnParameterMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iReturnParameterMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iReturnParameterMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iReturnParameterMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iReturnParameterMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iReturnParameterMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iReturnParameterMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

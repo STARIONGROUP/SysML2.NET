@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("ItemFeature");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iItemFeature.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ItemFeature");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iItemFeature.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iItemFeature.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iItemFeature.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iItemFeature.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iItemFeature.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iItemFeature.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iItemFeature.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iItemFeature.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iItemFeature.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iItemFeature.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iItemFeature.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iItemFeature.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iItemFeature.Name);

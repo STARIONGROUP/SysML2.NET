@@ -41,14 +41,14 @@ namespace SysML2.NET.DTO
         public Guid Id { get; set; }
 
         /// <summary>
-        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
-        /// </summary>
-        public List<Guid> Annotation { get; set; }
-
-        /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
+        /// </summary>
+        public List<Guid> Annotation { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must

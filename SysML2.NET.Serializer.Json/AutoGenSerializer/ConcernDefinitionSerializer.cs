@@ -56,26 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iConcernDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ConcernDefinition");
 
-            writer.WritePropertyName("reqId");
-            writer.WriteStringValue(iConcernDefinition.ReqId);
-
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iConcernDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iConcernDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iConcernDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iConcernDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iConcernDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iConcernDefinition.AliasIds)
@@ -86,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iConcernDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iConcernDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iConcernDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iConcernDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iConcernDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iConcernDefinition.Name);
@@ -106,6 +103,9 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("reqId");
+            writer.WriteStringValue(iConcernDefinition.ReqId);
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iConcernDefinition.ShortName);

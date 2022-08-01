@@ -56,20 +56,37 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Specialization");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iSpecialization.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Specialization");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSpecialization.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSpecialization.ElementId);
 
             writer.WritePropertyName("general");
             writer.WriteStringValue(iSpecialization.General);
 
-            writer.WritePropertyName("specific");
-            writer.WriteStringValue(iSpecialization.Specific);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iSpecialization.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iSpecialization.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iSpecialization.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -85,40 +102,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source");
-            foreach (var item in iSpecialization.Source)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target");
-            foreach (var item in iSpecialization.Target)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSpecialization.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSpecialization.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iSpecialization.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iSpecialization.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
             writer.WritePropertyName("owningRelationship");
             if (iSpecialization.OwningRelationship.HasValue)
             {
@@ -131,6 +114,23 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iSpecialization.ShortName);
+
+            writer.WriteStartArray("source");
+            foreach (var item in iSpecialization.Source)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("specific");
+            writer.WriteStringValue(iSpecialization.Specific);
+
+            writer.WriteStartArray("target");
+            foreach (var item in iSpecialization.Target)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }

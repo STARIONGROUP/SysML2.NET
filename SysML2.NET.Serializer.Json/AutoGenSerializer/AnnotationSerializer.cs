@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Annotation");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iAnnotation.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Annotation");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iAnnotation.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("annotatedElement");
             writer.WriteStringValue(iAnnotation.AnnotatedElement);
@@ -68,8 +75,21 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("annotatingElement");
             writer.WriteStringValue(iAnnotation.AnnotatingElement);
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iAnnotation.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iAnnotation.Name);
+
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iAnnotation.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iAnnotation.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -85,6 +105,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iAnnotation.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iAnnotation.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iAnnotation.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iAnnotation.Source)
             {
@@ -98,39 +131,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iAnnotation.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iAnnotation.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iAnnotation.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iAnnotation.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iAnnotation.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iAnnotation.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iAnnotation.ShortName);
 
             writer.WriteEndObject();
         }

@@ -56,24 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iDocumentation.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Documentation");
 
-            writer.WritePropertyName("body");
-            writer.WriteStringValue(iDocumentation.Body);
-
-            writer.WritePropertyName("locale");
-            writer.WriteStringValue(iDocumentation.Locale);
-
-            writer.WriteStartArray("annotation");
-            foreach (var item in iDocumentation.Annotation)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iDocumentation.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iDocumentation.AliasIds)
@@ -82,8 +69,21 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WriteStartArray("annotation");
+            foreach (var item in iDocumentation.Annotation)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("body");
+            writer.WriteStringValue(iDocumentation.Body);
+
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iDocumentation.ElementId);
+
+            writer.WritePropertyName("locale");
+            writer.WriteStringValue(iDocumentation.Locale);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iDocumentation.Name);

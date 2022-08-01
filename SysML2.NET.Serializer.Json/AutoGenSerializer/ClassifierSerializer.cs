@@ -56,17 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iClassifier.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Classifier");
 
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iClassifier.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iClassifier.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iClassifier.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iClassifier.AliasIds)
@@ -77,6 +71,12 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iClassifier.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iClassifier.IsAbstract);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iClassifier.IsSufficient);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iClassifier.Name);

@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("PortioningFeature");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iPortioningFeature.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("PortioningFeature");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iPortioningFeature.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iPortioningFeature.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iPortioningFeature.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iPortioningFeature.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iPortioningFeature.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iPortioningFeature.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iPortioningFeature.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iPortioningFeature.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iPortioningFeature.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iPortioningFeature.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iPortioningFeature.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iPortioningFeature.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iPortioningFeature.Name);

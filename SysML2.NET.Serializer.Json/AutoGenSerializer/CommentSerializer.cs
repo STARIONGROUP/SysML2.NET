@@ -56,24 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iComment.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Comment");
 
-            writer.WritePropertyName("body");
-            writer.WriteStringValue(iComment.Body);
-
-            writer.WritePropertyName("locale");
-            writer.WriteStringValue(iComment.Locale);
-
-            writer.WriteStartArray("annotation");
-            foreach (var item in iComment.Annotation)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iComment.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iComment.AliasIds)
@@ -82,8 +69,21 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WriteStartArray("annotation");
+            foreach (var item in iComment.Annotation)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("body");
+            writer.WriteStringValue(iComment.Body);
+
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iComment.ElementId);
+
+            writer.WritePropertyName("locale");
+            writer.WriteStringValue(iComment.Locale);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iComment.Name);

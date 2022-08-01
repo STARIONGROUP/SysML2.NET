@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("TransitionFeatureMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iTransitionFeatureMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("TransitionFeatureMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iTransitionFeatureMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iTransitionFeatureMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iTransitionFeatureMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iTransitionFeatureMembership.FeaturingType);
 
             writer.WritePropertyName("kind");
             writer.WriteStringValue(iTransitionFeatureMembership.Kind.ToString().ToUpper());
@@ -74,11 +90,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iTransitionFeatureMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iTransitionFeatureMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iTransitionFeatureMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iTransitionFeatureMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iTransitionFeatureMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -94,6 +117,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iTransitionFeatureMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iTransitionFeatureMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iTransitionFeatureMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iTransitionFeatureMembership.Source)
             {
@@ -108,44 +144,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iTransitionFeatureMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iTransitionFeatureMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iTransitionFeatureMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iTransitionFeatureMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iTransitionFeatureMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iTransitionFeatureMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iTransitionFeatureMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iTransitionFeatureMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iTransitionFeatureMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iTransitionFeatureMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

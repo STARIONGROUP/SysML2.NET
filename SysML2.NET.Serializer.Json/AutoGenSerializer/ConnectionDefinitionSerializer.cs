@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iConnectionDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ConnectionDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iConnectionDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iConnectionDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iConnectionDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iConnectionDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iConnectionDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iConnectionDefinition.AliasIds)
@@ -84,31 +72,30 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iConnectionDefinition.ElementId);
 
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iConnectionDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iConnectionDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iConnectionDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iConnectionDefinition.IsVariation);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iConnectionDefinition.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iConnectionDefinition.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iConnectionDefinition.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iConnectionDefinition.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iConnectionDefinition.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iConnectionDefinition.ShortName);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iConnectionDefinition.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iConnectionDefinition.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -123,6 +110,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iConnectionDefinition.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iConnectionDefinition.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iConnectionDefinition.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iConnectionDefinition.Source)

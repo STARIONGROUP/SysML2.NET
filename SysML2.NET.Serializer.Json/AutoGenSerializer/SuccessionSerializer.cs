@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iSuccession.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Succession");
 
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iSuccession.IsDirected);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iSuccession.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSuccession.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iSuccession.Direction.HasValue)
@@ -75,11 +79,20 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSuccession.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iSuccession.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iSuccession.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iSuccession.IsDerived);
+
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iSuccession.IsDirected);
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iSuccession.IsEnd);
@@ -93,50 +106,24 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iSuccession.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iSuccession.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iSuccession.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iSuccession.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSuccession.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSuccession.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iSuccession.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iSuccession.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iSuccession.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iSuccession.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iSuccession.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iSuccession.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iSuccession.ShortName);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iSuccession.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iSuccession.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -151,6 +138,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iSuccession.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iSuccession.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iSuccession.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iSuccession.Source)

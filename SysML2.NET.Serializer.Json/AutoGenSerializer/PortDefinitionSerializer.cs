@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iPortDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("PortDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iPortDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iPortDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iPortDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iPortDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iPortDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iPortDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iPortDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iPortDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iPortDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iPortDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iPortDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iPortDefinition.Name);

@@ -56,29 +56,37 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iConjugatedPortTyping.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ConjugatedPortTyping");
 
-            writer.WritePropertyName("portDefinition");
-            writer.WriteStringValue(iConjugatedPortTyping.PortDefinition);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iConjugatedPortTyping.Id);
 
-            writer.WritePropertyName("type");
-            writer.WriteStringValue(iConjugatedPortTyping.Type);
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iConjugatedPortTyping.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
-            writer.WritePropertyName("typedFeature");
-            writer.WriteStringValue(iConjugatedPortTyping.TypedFeature);
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iConjugatedPortTyping.ElementId);
 
             writer.WritePropertyName("general");
             writer.WriteStringValue(iConjugatedPortTyping.General);
 
-            writer.WritePropertyName("specific");
-            writer.WriteStringValue(iConjugatedPortTyping.Specific);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iConjugatedPortTyping.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iConjugatedPortTyping.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iConjugatedPortTyping.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -94,40 +102,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source");
-            foreach (var item in iConjugatedPortTyping.Source)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target");
-            foreach (var item in iConjugatedPortTyping.Target)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iConjugatedPortTyping.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iConjugatedPortTyping.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iConjugatedPortTyping.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iConjugatedPortTyping.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
             writer.WritePropertyName("owningRelationship");
             if (iConjugatedPortTyping.OwningRelationship.HasValue)
             {
@@ -138,8 +112,34 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("portDefinition");
+            writer.WriteStringValue(iConjugatedPortTyping.PortDefinition);
+
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iConjugatedPortTyping.ShortName);
+
+            writer.WriteStartArray("source");
+            foreach (var item in iConjugatedPortTyping.Source)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("specific");
+            writer.WriteStringValue(iConjugatedPortTyping.Specific);
+
+            writer.WriteStartArray("target");
+            foreach (var item in iConjugatedPortTyping.Target)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("type");
+            writer.WriteStringValue(iConjugatedPortTyping.Type);
+
+            writer.WritePropertyName("typedFeature");
+            writer.WriteStringValue(iConjugatedPortTyping.TypedFeature);
 
             writer.WriteEndObject();
         }

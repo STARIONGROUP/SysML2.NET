@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iSuccessionAsUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("SuccessionAsUsage");
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iSuccessionAsUsage.IsVariation);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iSuccessionAsUsage.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSuccessionAsUsage.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iSuccessionAsUsage.Direction.HasValue)
@@ -75,11 +79,20 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSuccessionAsUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iSuccessionAsUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iSuccessionAsUsage.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iSuccessionAsUsage.IsDerived);
+
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iSuccessionAsUsage.IsDirected);
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iSuccessionAsUsage.IsEnd);
@@ -93,53 +106,27 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iSuccessionAsUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iSuccessionAsUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iSuccessionAsUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iSuccessionAsUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSuccessionAsUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iSuccessionAsUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSuccessionAsUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iSuccessionAsUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iSuccessionAsUsage.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iSuccessionAsUsage.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iSuccessionAsUsage.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iSuccessionAsUsage.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iSuccessionAsUsage.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iSuccessionAsUsage.ShortName);
-
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iSuccessionAsUsage.IsDirected);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iSuccessionAsUsage.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iSuccessionAsUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -154,6 +141,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iSuccessionAsUsage.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iSuccessionAsUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iSuccessionAsUsage.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iSuccessionAsUsage.Source)

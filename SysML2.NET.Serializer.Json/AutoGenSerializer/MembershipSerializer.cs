@@ -56,11 +56,21 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Membership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Membership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iMembership.ElementId);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iMembership.MemberElement);
@@ -71,11 +81,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,6 +108,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iMembership.Source)
             {
@@ -105,38 +135,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iMembership.ShortName);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

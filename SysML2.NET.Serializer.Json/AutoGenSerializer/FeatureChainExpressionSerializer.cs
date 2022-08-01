@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iFeatureChainExpression.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("FeatureChainExpression");
 
-            writer.WritePropertyName("operator");
-            writer.WriteStringValue(iFeatureChainExpression.Operator);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iFeatureChainExpression.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iFeatureChainExpression.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iFeatureChainExpression.Direction.HasValue)
@@ -74,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iFeatureChainExpression.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iFeatureChainExpression.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iFeatureChainExpression.IsComposite);
@@ -93,27 +103,17 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iFeatureChainExpression.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iFeatureChainExpression.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iFeatureChainExpression.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iFeatureChainExpression.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iFeatureChainExpression.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFeatureChainExpression.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iFeatureChainExpression.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iFeatureChainExpression.Name);
+
+            writer.WritePropertyName("operator");
+            writer.WriteStringValue(iFeatureChainExpression.Operator);
 
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iFeatureChainExpression.OwnedRelationship)

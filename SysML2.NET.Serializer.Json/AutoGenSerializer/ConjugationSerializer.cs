@@ -56,20 +56,40 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iConjugation.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Conjugation");
 
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iConjugation.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iConjugation.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
             writer.WritePropertyName("conjugatedType");
             writer.WriteStringValue(iConjugation.ConjugatedType);
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iConjugation.ElementId);
+
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iConjugation.Name);
 
             writer.WritePropertyName("originalType");
             writer.WriteStringValue(iConjugation.OriginalType);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iConjugation.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iConjugation.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -85,6 +105,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iConjugation.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iConjugation.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iConjugation.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iConjugation.Source)
             {
@@ -98,39 +131,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iConjugation.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iConjugation.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iConjugation.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iConjugation.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iConjugation.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iConjugation.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iConjugation.ShortName);
 
             writer.WriteEndObject();
         }

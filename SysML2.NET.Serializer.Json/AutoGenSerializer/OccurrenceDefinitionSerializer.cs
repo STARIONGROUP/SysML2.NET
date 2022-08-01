@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iOccurrenceDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("OccurrenceDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iOccurrenceDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iOccurrenceDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iOccurrenceDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iOccurrenceDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iOccurrenceDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iOccurrenceDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iOccurrenceDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iOccurrenceDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iOccurrenceDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iOccurrenceDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iOccurrenceDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iOccurrenceDefinition.Name);

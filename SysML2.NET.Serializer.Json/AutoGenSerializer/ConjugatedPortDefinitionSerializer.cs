@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iConjugatedPortDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ConjugatedPortDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iConjugatedPortDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iConjugatedPortDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iConjugatedPortDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iConjugatedPortDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iConjugatedPortDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iConjugatedPortDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iConjugatedPortDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iConjugatedPortDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iConjugatedPortDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iConjugatedPortDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iConjugatedPortDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iConjugatedPortDefinition.Name);

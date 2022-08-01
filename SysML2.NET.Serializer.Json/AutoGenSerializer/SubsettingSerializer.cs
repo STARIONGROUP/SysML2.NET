@@ -56,26 +56,37 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iSubsetting.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Subsetting");
 
-            writer.WritePropertyName("subsettedFeature");
-            writer.WriteStringValue(iSubsetting.SubsettedFeature);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iSubsetting.Id);
 
-            writer.WritePropertyName("subsettingFeature");
-            writer.WriteStringValue(iSubsetting.SubsettingFeature);
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSubsetting.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSubsetting.ElementId);
 
             writer.WritePropertyName("general");
             writer.WriteStringValue(iSubsetting.General);
 
-            writer.WritePropertyName("specific");
-            writer.WriteStringValue(iSubsetting.Specific);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iSubsetting.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iSubsetting.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iSubsetting.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,40 +102,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source");
-            foreach (var item in iSubsetting.Source)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target");
-            foreach (var item in iSubsetting.Target)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSubsetting.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSubsetting.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iSubsetting.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iSubsetting.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
             writer.WritePropertyName("owningRelationship");
             if (iSubsetting.OwningRelationship.HasValue)
             {
@@ -137,6 +114,29 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iSubsetting.ShortName);
+
+            writer.WriteStartArray("source");
+            foreach (var item in iSubsetting.Source)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("specific");
+            writer.WriteStringValue(iSubsetting.Specific);
+
+            writer.WritePropertyName("subsettedFeature");
+            writer.WriteStringValue(iSubsetting.SubsettedFeature);
+
+            writer.WritePropertyName("subsettingFeature");
+            writer.WriteStringValue(iSubsetting.SubsettingFeature);
+
+            writer.WriteStartArray("target");
+            foreach (var item in iSubsetting.Target)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }

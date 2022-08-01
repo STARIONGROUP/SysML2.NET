@@ -56,11 +56,25 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("MetadataFeature");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iMetadataFeature.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("MetadataFeature");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iMetadataFeature.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("annotation");
+            foreach (var item in iMetadataFeature.Annotation)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iMetadataFeature.Direction.HasValue)
@@ -71,6 +85,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iMetadataFeature.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iMetadataFeature.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iMetadataFeature.IsComposite);
@@ -90,24 +110,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iMetadataFeature.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iMetadataFeature.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iMetadataFeature.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iMetadataFeature.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iMetadataFeature.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iMetadataFeature.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iMetadataFeature.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iMetadataFeature.Name);
@@ -131,13 +138,6 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iMetadataFeature.ShortName);
-
-            writer.WriteStartArray("annotation");
-            foreach (var item in iMetadataFeature.Annotation)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }

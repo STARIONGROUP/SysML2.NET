@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iRenderingDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("RenderingDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iRenderingDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iRenderingDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iRenderingDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iRenderingDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iRenderingDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iRenderingDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iRenderingDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iRenderingDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iRenderingDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iRenderingDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iRenderingDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iRenderingDefinition.Name);

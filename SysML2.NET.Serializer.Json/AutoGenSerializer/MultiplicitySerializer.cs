@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Multiplicity");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iMultiplicity.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Multiplicity");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iMultiplicity.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iMultiplicity.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iMultiplicity.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iMultiplicity.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iMultiplicity.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iMultiplicity.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iMultiplicity.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iMultiplicity.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iMultiplicity.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iMultiplicity.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iMultiplicity.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iMultiplicity.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iMultiplicity.Name);

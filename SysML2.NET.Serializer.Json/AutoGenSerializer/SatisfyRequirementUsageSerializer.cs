@@ -56,30 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iSatisfyRequirementUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("SatisfyRequirementUsage");
 
-            writer.WritePropertyName("reqId");
-            writer.WriteStringValue(iSatisfyRequirementUsage.ReqId);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iSatisfyRequirementUsage.Id);
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iSatisfyRequirementUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSatisfyRequirementUsage.AliasIds)
             {
-                writer.WriteStringValue(iSatisfyRequirementUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iSatisfyRequirementUsage.Direction.HasValue)
@@ -91,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSatisfyRequirementUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsComposite);
 
@@ -99,6 +93,12 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsIndividual);
+
+            writer.WritePropertyName("isNegated");
+            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsNegated);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsOrdered);
@@ -109,24 +109,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSatisfyRequirementUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSatisfyRequirementUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iSatisfyRequirementUsage.Name);
@@ -148,11 +138,21 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("portionKind");
+            if (iSatisfyRequirementUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iSatisfyRequirementUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("reqId");
+            writer.WriteStringValue(iSatisfyRequirementUsage.ReqId);
+
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iSatisfyRequirementUsage.ShortName);
-
-            writer.WritePropertyName("isNegated");
-            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsNegated);
 
             writer.WriteEndObject();
         }

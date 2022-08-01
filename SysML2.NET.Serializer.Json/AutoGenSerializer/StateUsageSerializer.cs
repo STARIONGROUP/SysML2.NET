@@ -56,30 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iStateUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("StateUsage");
 
-            writer.WritePropertyName("isParallel");
-            writer.WriteBooleanValue(iStateUsage.IsParallel);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iStateUsage.Id);
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iStateUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iStateUsage.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iStateUsage.AliasIds)
             {
-                writer.WriteStringValue(iStateUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iStateUsage.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iStateUsage.Direction.HasValue)
@@ -91,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iStateUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iStateUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iStateUsage.IsComposite);
 
@@ -100,8 +94,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iStateUsage.IsEnd);
 
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iStateUsage.IsIndividual);
+
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iStateUsage.IsOrdered);
+
+            writer.WritePropertyName("isParallel");
+            writer.WriteBooleanValue(iStateUsage.IsParallel);
 
             writer.WritePropertyName("isPortion");
             writer.WriteBooleanValue(iStateUsage.IsPortion);
@@ -109,24 +109,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iStateUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iStateUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iStateUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iStateUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iStateUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iStateUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iStateUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iStateUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iStateUsage.Name);
@@ -142,6 +132,16 @@ namespace SysML2.NET.Serializer.Json
             if (iStateUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iStateUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iStateUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iStateUsage.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

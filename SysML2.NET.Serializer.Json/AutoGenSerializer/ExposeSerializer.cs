@@ -56,11 +56,21 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("Expose");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iExpose.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Expose");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iExpose.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iExpose.ElementId);
 
             writer.WritePropertyName("importedMemberName");
             writer.WriteStringValue(iExpose.ImportedMemberName);
@@ -74,11 +84,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isRecursive");
             writer.WriteBooleanValue(iExpose.IsRecursive);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iExpose.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iExpose.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iExpose.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iExpose.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -94,6 +111,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iExpose.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iExpose.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iExpose.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iExpose.Source)
             {
@@ -108,38 +138,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iExpose.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iExpose.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iExpose.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iExpose.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iExpose.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iExpose.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iExpose.ShortName);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iExpose.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

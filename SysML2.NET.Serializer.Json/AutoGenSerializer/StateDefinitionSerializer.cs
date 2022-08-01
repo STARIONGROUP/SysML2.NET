@@ -56,26 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iStateDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("StateDefinition");
 
-            writer.WritePropertyName("isParallel");
-            writer.WriteBooleanValue(iStateDefinition.IsParallel);
-
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iStateDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iStateDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iStateDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iStateDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iStateDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iStateDefinition.AliasIds)
@@ -86,6 +71,21 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iStateDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iStateDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iStateDefinition.IsIndividual);
+
+            writer.WritePropertyName("isParallel");
+            writer.WriteBooleanValue(iStateDefinition.IsParallel);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iStateDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iStateDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iStateDefinition.Name);

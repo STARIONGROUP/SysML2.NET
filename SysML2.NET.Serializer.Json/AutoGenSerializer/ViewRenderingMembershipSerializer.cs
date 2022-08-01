@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("ViewRenderingMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iViewRenderingMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ViewRenderingMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iViewRenderingMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iViewRenderingMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iViewRenderingMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iViewRenderingMembership.FeaturingType);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iViewRenderingMembership.MemberElement);
@@ -71,11 +87,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iViewRenderingMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iViewRenderingMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iViewRenderingMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iViewRenderingMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iViewRenderingMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,6 +114,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iViewRenderingMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iViewRenderingMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iViewRenderingMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iViewRenderingMembership.Source)
             {
@@ -105,44 +141,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iViewRenderingMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iViewRenderingMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iViewRenderingMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iViewRenderingMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iViewRenderingMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iViewRenderingMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iViewRenderingMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iViewRenderingMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iViewRenderingMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iViewRenderingMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

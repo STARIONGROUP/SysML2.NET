@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iAllocationUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("AllocationUsage");
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iAllocationUsage.IsVariation);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iAllocationUsage.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iAllocationUsage.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iAllocationUsage.Direction.HasValue)
@@ -75,14 +79,26 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iAllocationUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iAllocationUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iAllocationUsage.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iAllocationUsage.IsDerived);
 
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iAllocationUsage.IsDirected);
+
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iAllocationUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iAllocationUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iAllocationUsage.IsOrdered);
@@ -93,53 +109,27 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iAllocationUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iAllocationUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iAllocationUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iAllocationUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iAllocationUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iAllocationUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iAllocationUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iAllocationUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iAllocationUsage.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iAllocationUsage.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iAllocationUsage.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iAllocationUsage.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iAllocationUsage.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iAllocationUsage.ShortName);
-
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iAllocationUsage.IsDirected);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iAllocationUsage.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iAllocationUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -155,6 +145,29 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iAllocationUsage.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iAllocationUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iAllocationUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iAllocationUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iAllocationUsage.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iAllocationUsage.Source)
             {
@@ -168,19 +181,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iAllocationUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iAllocationUsage.PortionKind.HasValue)
-            {
-                writer.WriteStringValue(iAllocationUsage.PortionKind.Value.ToString().ToUpper());
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
 
             writer.WriteEndObject();
         }

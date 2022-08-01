@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iInterfaceUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("InterfaceUsage");
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iInterfaceUsage.IsVariation);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iInterfaceUsage.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iInterfaceUsage.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iInterfaceUsage.Direction.HasValue)
@@ -75,14 +79,26 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iInterfaceUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iInterfaceUsage.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iInterfaceUsage.IsComposite);
 
             writer.WritePropertyName("isDerived");
             writer.WriteBooleanValue(iInterfaceUsage.IsDerived);
 
+            writer.WritePropertyName("isDirected");
+            writer.WriteBooleanValue(iInterfaceUsage.IsDirected);
+
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iInterfaceUsage.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iInterfaceUsage.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iInterfaceUsage.IsOrdered);
@@ -93,53 +109,27 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iInterfaceUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iInterfaceUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iInterfaceUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iInterfaceUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iInterfaceUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iInterfaceUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iInterfaceUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iInterfaceUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iInterfaceUsage.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iInterfaceUsage.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iInterfaceUsage.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iInterfaceUsage.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iInterfaceUsage.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iInterfaceUsage.ShortName);
-
-            writer.WritePropertyName("isDirected");
-            writer.WriteBooleanValue(iInterfaceUsage.IsDirected);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iInterfaceUsage.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iInterfaceUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -155,6 +145,29 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iInterfaceUsage.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iInterfaceUsage.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iInterfaceUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iInterfaceUsage.PortionKind.Value.ToString().ToUpper());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iInterfaceUsage.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iInterfaceUsage.Source)
             {
@@ -168,19 +181,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iInterfaceUsage.IsIndividual);
-
-            writer.WritePropertyName("portionKind");
-            if (iInterfaceUsage.PortionKind.HasValue)
-            {
-                writer.WriteStringValue(iInterfaceUsage.PortionKind.Value.ToString().ToUpper());
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
 
             writer.WriteEndObject();
         }

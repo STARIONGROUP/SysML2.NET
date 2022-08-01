@@ -56,11 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("FeatureReferenceExpression");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iFeatureReferenceExpression.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("FeatureReferenceExpression");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iFeatureReferenceExpression.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iFeatureReferenceExpression.Direction.HasValue)
@@ -71,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iFeatureReferenceExpression.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iFeatureReferenceExpression.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iFeatureReferenceExpression.IsComposite);
@@ -90,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iFeatureReferenceExpression.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iFeatureReferenceExpression.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iFeatureReferenceExpression.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iFeatureReferenceExpression.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iFeatureReferenceExpression.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFeatureReferenceExpression.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iFeatureReferenceExpression.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iFeatureReferenceExpression.Name);

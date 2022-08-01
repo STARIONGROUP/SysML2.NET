@@ -56,20 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iEnumerationDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("EnumerationDefinition");
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iEnumerationDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iEnumerationDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iEnumerationDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iEnumerationDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iEnumerationDefinition.AliasIds)
@@ -80,6 +71,15 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iEnumerationDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iEnumerationDefinition.IsAbstract);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iEnumerationDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iEnumerationDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iEnumerationDefinition.Name);

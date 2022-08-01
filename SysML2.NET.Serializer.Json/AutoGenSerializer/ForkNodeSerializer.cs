@@ -56,27 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iForkNode.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ForkNode");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iForkNode.IsIndividual);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iForkNode.Id);
 
-            writer.WritePropertyName("portionKind");
-            if (iForkNode.PortionKind.HasValue)
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iForkNode.AliasIds)
             {
-                writer.WriteStringValue(iForkNode.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(item);
             }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iForkNode.IsVariation);
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iForkNode.Direction.HasValue)
@@ -88,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iForkNode.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iForkNode.IsAbstract);
+
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iForkNode.IsComposite);
 
@@ -96,6 +93,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iForkNode.IsEnd);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iForkNode.IsIndividual);
 
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iForkNode.IsOrdered);
@@ -106,24 +106,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iForkNode.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iForkNode.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iForkNode.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iForkNode.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iForkNode.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iForkNode.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iForkNode.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iForkNode.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iForkNode.Name);
@@ -139,6 +129,16 @@ namespace SysML2.NET.Serializer.Json
             if (iForkNode.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iForkNode.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("portionKind");
+            if (iForkNode.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iForkNode.PortionKind.Value.ToString().ToUpper());
             }
             else
             {

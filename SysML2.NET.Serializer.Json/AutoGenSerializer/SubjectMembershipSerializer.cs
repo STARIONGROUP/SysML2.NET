@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("SubjectMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iSubjectMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("SubjectMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iSubjectMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iSubjectMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iSubjectMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iSubjectMembership.FeaturingType);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iSubjectMembership.MemberElement);
@@ -71,11 +87,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iSubjectMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iSubjectMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iSubjectMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iSubjectMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iSubjectMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,6 +114,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iSubjectMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iSubjectMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iSubjectMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iSubjectMembership.Source)
             {
@@ -105,44 +141,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iSubjectMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iSubjectMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iSubjectMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iSubjectMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iSubjectMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iSubjectMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iSubjectMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iSubjectMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iSubjectMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iSubjectMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

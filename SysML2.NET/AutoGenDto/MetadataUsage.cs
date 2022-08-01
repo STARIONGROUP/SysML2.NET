@@ -42,27 +42,31 @@ namespace SysML2.NET.DTO
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)
-        /// represented by its individualDefinition.
+        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
-        public bool IsIndividual { get; set; }
+        public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// The kind of portion of the instances of the occurrenceDefinition represented by this
-        /// OccurrenceUsage, if it is so restricted.
+        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
         /// </summary>
-        public PortionKind? PortionKind { get; set; }
-
-        /// <summary>
-        /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
-        /// must be VariantMemberships.
-        /// </summary>
-        public bool IsVariation { get; set; }
+        public List<Guid> Annotation { get; set; }
 
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         public FeatureDirectionKind? Direction { get; set; }
+
+        /// <summary>
+        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
+        /// not change during the lifetime of the Element.
+        /// </summary>
+        public string ElementId { get; set; }
+
+        /// <summary>
+        /// Indicates whether instances of this Type must also be instances of at least one of its specialized
+        /// Types.
+        /// </summary>
+        public bool IsAbstract { get; set; }
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
@@ -88,6 +92,12 @@ namespace SysML2.NET.DTO
         public bool IsEnd { get; set; }
 
         /// <summary>
+        /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)
+        /// represented by its individualDefinition.
+        /// </summary>
+        public bool IsIndividual { get; set; }
+
+        /// <summary>
         /// Whether an order exists for the values of this Feature or not.
         /// </summary>
         public bool IsOrdered { get; set; }
@@ -104,17 +114,6 @@ namespace SysML2.NET.DTO
         public bool IsReadOnly { get; set; }
 
         /// <summary>
-        /// Whether or not values for this Feature must have no duplicates or not.
-        /// </summary>
-        public bool IsUnique { get; set; }
-
-        /// <summary>
-        /// Indicates whether instances of this Type must also be instances of at least one of its specialized
-        /// Types.
-        /// </summary>
-        public bool IsAbstract { get; set; }
-
-        /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
@@ -125,15 +124,15 @@ namespace SysML2.NET.DTO
         public bool IsSufficient { get; set; }
 
         /// <summary>
-        /// Various alternative identifiers for this Element. Generally, these will be set by tools.
+        /// Whether or not values for this Feature must have no duplicates or not.
         /// </summary>
-        public List<string> AliasIds { get; set; }
+        public bool IsUnique { get; set; }
 
         /// <summary>
-        /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
-        /// not change during the lifetime of the Element.
+        /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
+        /// must be VariantMemberships.
         /// </summary>
-        public string ElementId { get; set; }
+        public bool IsVariation { get; set; }
 
         /// <summary>
         /// The primary name of this Element.
@@ -151,17 +150,18 @@ namespace SysML2.NET.DTO
         public Guid? OwningRelationship { get; set; }
 
         /// <summary>
+        /// The kind of portion of the instances of the occurrenceDefinition represented by this
+        /// OccurrenceUsage, if it is so restricted.
+        /// </summary>
+        public PortionKind? PortionKind { get; set; }
+
+        /// <summary>
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
         /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
         /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
         /// model or relative to some other context. 
         /// </summary>
         public string ShortName { get; set; }
-
-        /// <summary>
-        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
-        /// </summary>
-        public List<Guid> Annotation { get; set; }
 
     }
 }

@@ -56,11 +56,21 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("ElementFilterMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iElementFilterMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ElementFilterMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iElementFilterMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iElementFilterMembership.ElementId);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iElementFilterMembership.MemberElement);
@@ -71,11 +81,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iElementFilterMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iElementFilterMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iElementFilterMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iElementFilterMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iElementFilterMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -91,6 +108,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iElementFilterMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iElementFilterMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iElementFilterMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iElementFilterMembership.Source)
             {
@@ -105,38 +135,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iElementFilterMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iElementFilterMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iElementFilterMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iElementFilterMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iElementFilterMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iElementFilterMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iElementFilterMembership.ShortName);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iElementFilterMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

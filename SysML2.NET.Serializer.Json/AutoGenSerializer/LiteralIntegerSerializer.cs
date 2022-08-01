@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iLiteralInteger.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("LiteralInteger");
 
-            writer.WritePropertyName("value");
-            writer.WriteNumberValue(iLiteralInteger.Value);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iLiteralInteger.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iLiteralInteger.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iLiteralInteger.Direction.HasValue)
@@ -74,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iLiteralInteger.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iLiteralInteger.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iLiteralInteger.IsComposite);
@@ -93,24 +103,11 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iLiteralInteger.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iLiteralInteger.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iLiteralInteger.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iLiteralInteger.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iLiteralInteger.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iLiteralInteger.ElementId);
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iLiteralInteger.IsUnique);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iLiteralInteger.Name);
@@ -134,6 +131,9 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iLiteralInteger.ShortName);
+
+            writer.WritePropertyName("value");
+            writer.WriteNumberValue(iLiteralInteger.Value);
 
             writer.WriteEndObject();
         }

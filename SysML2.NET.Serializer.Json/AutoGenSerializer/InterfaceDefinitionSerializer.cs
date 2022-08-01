@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iInterfaceDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("InterfaceDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iInterfaceDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iInterfaceDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iInterfaceDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iInterfaceDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iInterfaceDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iInterfaceDefinition.AliasIds)
@@ -84,31 +72,30 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iInterfaceDefinition.ElementId);
 
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iInterfaceDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iInterfaceDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iInterfaceDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iInterfaceDefinition.IsVariation);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iInterfaceDefinition.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iInterfaceDefinition.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iInterfaceDefinition.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iInterfaceDefinition.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iInterfaceDefinition.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iInterfaceDefinition.ShortName);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iInterfaceDefinition.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iInterfaceDefinition.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -123,6 +110,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iInterfaceDefinition.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iInterfaceDefinition.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iInterfaceDefinition.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iInterfaceDefinition.Source)

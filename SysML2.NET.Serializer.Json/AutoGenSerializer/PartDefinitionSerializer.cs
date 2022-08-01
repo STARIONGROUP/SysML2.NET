@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iPartDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("PartDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iPartDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iPartDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iPartDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iPartDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iPartDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iPartDefinition.AliasIds)
@@ -83,6 +71,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iPartDefinition.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iPartDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iPartDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iPartDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iPartDefinition.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iPartDefinition.Name);

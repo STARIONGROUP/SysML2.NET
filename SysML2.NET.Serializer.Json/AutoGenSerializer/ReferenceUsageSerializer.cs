@@ -56,14 +56,18 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iReferenceUsage.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("ReferenceUsage");
 
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iReferenceUsage.IsVariation);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iReferenceUsage.Id);
+
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iReferenceUsage.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
             if (iReferenceUsage.Direction.HasValue)
@@ -74,6 +78,12 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iReferenceUsage.ElementId);
+
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iReferenceUsage.IsAbstract);
 
             writer.WritePropertyName("isComposite");
             writer.WriteBooleanValue(iReferenceUsage.IsComposite);
@@ -93,24 +103,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isReadOnly");
             writer.WriteBooleanValue(iReferenceUsage.IsReadOnly);
 
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iReferenceUsage.IsUnique);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iReferenceUsage.IsAbstract);
-
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iReferenceUsage.IsSufficient);
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iReferenceUsage.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WritePropertyName("isUnique");
+            writer.WriteBooleanValue(iReferenceUsage.IsUnique);
 
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iReferenceUsage.ElementId);
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iReferenceUsage.IsVariation);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iReferenceUsage.Name);

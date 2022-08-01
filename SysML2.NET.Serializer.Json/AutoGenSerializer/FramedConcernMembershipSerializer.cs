@@ -56,11 +56,27 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
+            writer.WritePropertyName("@type");
+            writer.WriteStringValue("FramedConcernMembership");
+
             writer.WritePropertyName("@id");
             writer.WriteStringValue(iFramedConcernMembership.Id);
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("FramedConcernMembership");
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iFramedConcernMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iFramedConcernMembership.ElementId);
+
+            writer.WritePropertyName("featureOfType");
+            writer.WriteStringValue(iFramedConcernMembership.FeatureOfType);
+
+            writer.WritePropertyName("featuringType");
+            writer.WriteStringValue(iFramedConcernMembership.FeaturingType);
 
             writer.WritePropertyName("kind");
             writer.WriteStringValue(iFramedConcernMembership.Kind.ToString().ToUpper());
@@ -74,11 +90,18 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iFramedConcernMembership.MemberShortName);
 
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iFramedConcernMembership.Visibility.ToString().ToUpper());
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iFramedConcernMembership.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFramedConcernMembership.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iFramedConcernMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -94,6 +117,19 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningRelationship");
+            if (iFramedConcernMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iFramedConcernMembership.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iFramedConcernMembership.ShortName);
+
             writer.WriteStartArray("source");
             foreach (var item in iFramedConcernMembership.Source)
             {
@@ -108,44 +144,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iFramedConcernMembership.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFramedConcernMembership.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iFramedConcernMembership.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iFramedConcernMembership.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("owningRelationship");
-            if (iFramedConcernMembership.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iFramedConcernMembership.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFramedConcernMembership.ShortName);
-
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iFramedConcernMembership.FeatureOfType);
-
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iFramedConcernMembership.FeaturingType);
+            writer.WritePropertyName("visibility");
+            writer.WriteStringValue(iFramedConcernMembership.Visibility.ToString().ToUpper());
 
             writer.WriteEndObject();
         }

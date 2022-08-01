@@ -56,23 +56,11 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iAllocationDefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("AllocationDefinition");
 
-            writer.WritePropertyName("isIndividual");
-            writer.WriteBooleanValue(iAllocationDefinition.IsIndividual);
-
-            writer.WritePropertyName("isVariation");
-            writer.WriteBooleanValue(iAllocationDefinition.IsVariation);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iAllocationDefinition.IsAbstract);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iAllocationDefinition.IsSufficient);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iAllocationDefinition.Id);
 
             writer.WriteStartArray("aliasIds");
             foreach (var item in iAllocationDefinition.AliasIds)
@@ -84,31 +72,30 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iAllocationDefinition.ElementId);
 
+            writer.WritePropertyName("isAbstract");
+            writer.WriteBooleanValue(iAllocationDefinition.IsAbstract);
+
+            writer.WritePropertyName("isIndividual");
+            writer.WriteBooleanValue(iAllocationDefinition.IsIndividual);
+
+            writer.WritePropertyName("isSufficient");
+            writer.WriteBooleanValue(iAllocationDefinition.IsSufficient);
+
+            writer.WritePropertyName("isVariation");
+            writer.WriteBooleanValue(iAllocationDefinition.IsVariation);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iAllocationDefinition.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iAllocationDefinition.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iAllocationDefinition.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iAllocationDefinition.OwningRelationship.HasValue)
-            {
-                writer.WriteStringValue(iAllocationDefinition.OwningRelationship.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iAllocationDefinition.ShortName);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iAllocationDefinition.OwnedRelatedElement)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iAllocationDefinition.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -123,6 +110,19 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iAllocationDefinition.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iAllocationDefinition.OwningRelationship.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iAllocationDefinition.ShortName);
 
             writer.WriteStartArray("source");
             foreach (var item in iAllocationDefinition.Source)

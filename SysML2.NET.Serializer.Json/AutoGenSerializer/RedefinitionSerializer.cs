@@ -56,32 +56,37 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@id");
-            writer.WriteStringValue(iRedefinition.Id);
-
             writer.WritePropertyName("@type");
             writer.WriteStringValue("Redefinition");
 
-            writer.WritePropertyName("redefinedFeature");
-            writer.WriteStringValue(iRedefinition.RedefinedFeature);
+            writer.WritePropertyName("@id");
+            writer.WriteStringValue(iRedefinition.Id);
 
-            writer.WritePropertyName("redefiningFeature");
-            writer.WriteStringValue(iRedefinition.RedefiningFeature);
+            writer.WriteStartArray("aliasIds");
+            foreach (var item in iRedefinition.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
-            writer.WritePropertyName("subsettedFeature");
-            writer.WriteStringValue(iRedefinition.SubsettedFeature);
-
-            writer.WritePropertyName("subsettingFeature");
-            writer.WriteStringValue(iRedefinition.SubsettingFeature);
+            writer.WritePropertyName("elementId");
+            writer.WriteStringValue(iRedefinition.ElementId);
 
             writer.WritePropertyName("general");
             writer.WriteStringValue(iRedefinition.General);
 
-            writer.WritePropertyName("specific");
-            writer.WriteStringValue(iRedefinition.Specific);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iRedefinition.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iRedefinition.OwnedRelatedElement)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iRedefinition.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
@@ -97,40 +102,6 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source");
-            foreach (var item in iRedefinition.Source)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target");
-            foreach (var item in iRedefinition.Target)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("aliasIds");
-            foreach (var item in iRedefinition.AliasIds)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iRedefinition.ElementId);
-
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iRedefinition.Name);
-
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iRedefinition.OwnedRelationship)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
             writer.WritePropertyName("owningRelationship");
             if (iRedefinition.OwningRelationship.HasValue)
             {
@@ -141,8 +112,37 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("redefinedFeature");
+            writer.WriteStringValue(iRedefinition.RedefinedFeature);
+
+            writer.WritePropertyName("redefiningFeature");
+            writer.WriteStringValue(iRedefinition.RedefiningFeature);
+
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iRedefinition.ShortName);
+
+            writer.WriteStartArray("source");
+            foreach (var item in iRedefinition.Source)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("specific");
+            writer.WriteStringValue(iRedefinition.Specific);
+
+            writer.WritePropertyName("subsettedFeature");
+            writer.WriteStringValue(iRedefinition.SubsettedFeature);
+
+            writer.WritePropertyName("subsettingFeature");
+            writer.WriteStringValue(iRedefinition.SubsettingFeature);
+
+            writer.WriteStartArray("target");
+            foreach (var item in iRedefinition.Target)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
