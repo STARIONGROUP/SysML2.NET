@@ -35,6 +35,12 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class Function : IFunction
     {
+        public Function()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

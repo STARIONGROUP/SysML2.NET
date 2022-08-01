@@ -42,6 +42,12 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class DataType : IDataType
     {
+        public DataType()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

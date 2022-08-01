@@ -35,6 +35,12 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class ConstraintDefinition : IConstraintDefinition
     {
+        public ConstraintDefinition()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

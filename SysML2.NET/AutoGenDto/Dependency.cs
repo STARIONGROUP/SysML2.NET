@@ -35,6 +35,17 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class Dependency : IDependency
     {
+        public Dependency()
+        {
+            this.AliasIds = new List<string>();
+            this.Client = new List<Guid>();
+            this.OwnedRelatedElement = new List<Guid>();
+            this.OwnedRelationship = new List<Guid>();
+            this.Source = new List<Guid>();
+            this.Supplier = new List<Guid>();
+            this.Target = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

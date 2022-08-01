@@ -30,7 +30,7 @@ namespace SysML2.NET.DTO
     {{ #Documentation this }}
 	public partial interface I{{ this.Name }} {{ #Generalization.Interfaces this }}
 	{
-        {{#each this.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
+        {{#each this.EStructuralFeaturesOrderByName as | structuralFeature |}}
         {{#unless structuralFeature.Derived }}
         {{#unless structuralFeature.Transient }}
         {{ #Documentation structuralFeature }}

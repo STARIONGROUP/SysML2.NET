@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json.AutoGenSerializer
+namespace SysML2.NET.Serializer.Json
 {
     using System;
     using System.Collections.Generic;

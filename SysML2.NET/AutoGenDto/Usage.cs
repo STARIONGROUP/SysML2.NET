@@ -43,6 +43,12 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class Usage : IUsage
     {
+        public Usage()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

@@ -30,6 +30,19 @@ namespace SysML2.NET.DTO
     {{ #Documentation this }}
 	public {{#if this.Abstract}}abstract {{/if}}partial class {{ this.Name }} : I{{ this.Name }}
 	{
+        {{#if this.Abstract}}protected {{else}}public{{/if}} {{ this.Name }}()
+        {
+            {{#each this.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
+            {{#unless structuralFeature.Derived }}
+                {{#unless structuralFeature.Transient }}
+                    {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}
+                        this.{{ String.PascalCase structuralFeature.Name }} = new {{#DTO.TypeName structuralFeature }}();
+                    {{/if}}
+                {{/unless}}
+            {{/unless}}
+            {{/each}}
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

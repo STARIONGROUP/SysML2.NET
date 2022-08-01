@@ -38,6 +38,15 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class Association : IAssociation
     {
+        public Association()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelatedElement = new List<Guid>();
+            this.OwnedRelationship = new List<Guid>();
+            this.Source = new List<Guid>();
+            this.Target = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

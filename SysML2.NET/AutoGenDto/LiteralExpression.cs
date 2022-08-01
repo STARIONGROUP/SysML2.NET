@@ -36,6 +36,12 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class LiteralExpression : ILiteralExpression
     {
+        public LiteralExpression()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

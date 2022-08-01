@@ -36,6 +36,12 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class ConcernUsage : IConcernUsage
     {
+        public ConcernUsage()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

@@ -35,6 +35,12 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class ViewUsage : IViewUsage
     {
+        public ViewUsage()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

@@ -35,6 +35,12 @@ namespace SysML2.NET.DTO
     /// </summary>
     public abstract partial class LoopActionUsage : ILoopActionUsage
     {
+        protected LoopActionUsage()
+        {
+            this.AliasIds = new List<string>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

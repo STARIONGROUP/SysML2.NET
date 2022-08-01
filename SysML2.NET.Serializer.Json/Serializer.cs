@@ -27,8 +27,7 @@ namespace SysML2.NET.Serializer.Json
     using System.Threading.Tasks;
 
     using SysML2.NET.DTO;
-    using SysML2.NET.Serializer.Json.AutoGenSerializer;
-
+    
     /// <summary>
     /// The purpose of the <see cref="Serializer"/> is to write an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
     /// as JSON to a <see cref="Stream"/>

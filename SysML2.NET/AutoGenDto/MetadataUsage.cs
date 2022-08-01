@@ -36,6 +36,13 @@ namespace SysML2.NET.DTO
     /// </summary>
     public partial class MetadataUsage : IMetadataUsage
     {
+        public MetadataUsage()
+        {
+            this.AliasIds = new List<string>();
+            this.Annotation = new List<Guid>();
+            this.OwnedRelationship = new List<Guid>();
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
