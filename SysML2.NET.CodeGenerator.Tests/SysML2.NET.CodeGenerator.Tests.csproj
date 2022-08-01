@@ -17,6 +17,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Expected\AutoGenDeSerializer\PartDefinitionDeSerializer.cs" />
 	  <Compile Remove="Expected\AutoGenEnum\VisibilityKind.cs" />
 	  <Compile Remove="Expected\AutoGenSerializer\ElementSerializer.cs" />
 	  <Compile Remove="Expected\AutoGenSerializer\TriggerInvocationExpressionSerializer.cs" />
@@ -27,6 +28,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Expected\AutoGenDeSerializer\PartDefinitionDeSerializer.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="Expected\AutoGenEnum\VisibilityKind.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>

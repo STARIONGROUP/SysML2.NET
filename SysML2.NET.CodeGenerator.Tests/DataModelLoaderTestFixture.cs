@@ -18,10 +18,9 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace SysML2.NET.CodeGenerator.Tests
 {
+    using System;
     using System.Linq;
 
     using ECoreNetto;

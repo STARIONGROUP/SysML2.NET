@@ -34,15 +34,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Data\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Data\projects.29845a29-b25b-4bab-b8cc-f46a021b7f5a.commitsec39c63a-fdaa-4a47-98a5-8e8f56b3a986.elements.json">
+	  <None Update="Data\projects.29845a29-b25b-4bab-b8cc-f46a021b7f5a.commits.ec39c63a-fdaa-4a47-98a5-8e8f56b3a986.elements.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
