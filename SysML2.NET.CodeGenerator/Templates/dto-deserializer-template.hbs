@@ -1,0 +1,102 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="{{this.Name}}DeSerializer.cs" company="RHEA System S.A.">
+//
+//   Copyright 2022 RHEA System S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.Json
+{
+    using System;
+    using System.Text.Json;
+
+    using SysML2.NET.DTO;
+
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
+    /// <summary>
+    /// The purpose of the <see cref="{{ this.Name }}DeSerializer"/> is to provide deserialization capabilities
+    /// for the <see cref="I{{ this.Name }}"/> interface
+    /// </summary>
+    internal static class {{ this.Name }}DeSerializer
+    {
+        /// <summary>
+        /// Deserializes an instance of <see cref="I{{ this.Name }}"/> from the provided <see cref="JsonElement"/>
+        /// </summary>
+        /// <param name="jsonElement">
+        /// The <see cref="JsonElement"/> that contains the <see cref="I{{ this.Name }}"/> json object
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// enumeration specifying what kind of serialization shall be used
+        /// </param>
+        /// <param name="loggerFactory">
+        /// The <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="I{{ this.Name }}"/>
+        /// </returns>
+        internal static I{{ this.Name }} DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        {
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("{{ this.Name }}DeSerializer");
+
+            if (!jsonElement.TryGetProperty("@type", out JsonElement typeProperty))
+            {
+                throw new InvalidOperationException("The @type property is not available, the {{ this.Name }}DeSerializer cannot be used to deserialize this JsonElement");
+            }
+            
+            if (typeProperty.GetString() != "{{ this.Name }}")
+            {
+                throw new InvalidOperationException($"The {{ this.Name }}DeSerializer can only be used to deserialize objects of type {{ this.Name }}, a {typeProperty.GetString()} was provided");
+            }
+
+            var {{ String.LowerCaseFirstLetter this.Name }}Instance = new DTO.{{ this.Name }}();
+
+            if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
+            {
+                var propertyValue = idProperty.GetString();
+                if (propertyValue == null)
+                {
+                    throw new JsonException("The @id property is not present, the {{ this.Name }} cannot be deserialized");
+                }
+                else
+                {
+                    {{ String.LowerCaseFirstLetter this.Name }}Instance.Id = Guid.Parse(propertyValue);
+                }
+            }
+
+            {{#with this as | EClass |}}
+            {{#each EClass.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
+            {{#unless structuralFeature.Derived }}
+                {{#unless structuralFeature.Transient }}
+                    
+                {{/unless}}
+            {{/unless}}
+            {{/each}}
+            {{/with}}
+
+            return {{ String.LowerCaseFirstLetter this.Name }}Instance;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

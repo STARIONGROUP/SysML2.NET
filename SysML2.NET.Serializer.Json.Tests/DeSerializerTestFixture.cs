@@ -53,6 +53,8 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 var elements = this.deSerializer.DeSerialize(stream, serializationModeKind);
 
+                Assert.That(elements.Count(), Is.EqualTo(100));
+
                 Assert.That(elements.OfType<IPartDefinition>().Count(), Is.EqualTo(4));
 
                 var partDefinition = elements.OfType<IPartDefinition>().Single(x => x.Id == Guid.Parse("07bd19e6-4587-4bdf-b274-1bbdb4b17707"));

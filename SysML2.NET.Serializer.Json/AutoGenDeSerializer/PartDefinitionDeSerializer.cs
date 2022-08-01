@@ -55,7 +55,7 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static IPartDefinition DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
         {
-            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("IPartDefinition.DeSerialize");
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("PartDefinitionDeSerializer.DeSerialize");
 
             if (!jsonElement.TryGetProperty("@type", out JsonElement typeProperty))
             {
