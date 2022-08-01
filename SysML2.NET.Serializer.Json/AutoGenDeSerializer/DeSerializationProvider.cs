@@ -28,17 +28,20 @@ namespace SysML2.NET.Serializer.Json
     using System.Collections.Generic;
     using System.Text.Json;
 
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
     using SysML2.NET.DTO;
 
     internal static class DeSerializationProvider
     {
-        private static readonly Dictionary<string, Func<JsonElement, SerializationModeKind, IElement>>
-            DeSerializerActionMap = new Dictionary<string, Func<JsonElement, SerializationModeKind, IElement>>
+        private static readonly Dictionary<string, Func<JsonElement, SerializationModeKind, ILoggerFactory, IElement>>
+            DeSerializerActionMap = new Dictionary<string, Func<JsonElement, SerializationModeKind, ILoggerFactory, IElement>>
             {
                 { "PartDefinition", PartDefinitionDeSerializer.DeSerialize },
             };
 
-        internal static Func<JsonElement, SerializationModeKind, IElement> Provide(string typeName)
+        internal static Func<JsonElement, SerializationModeKind, ILoggerFactory, IElement> Provide(string typeName)
         {
             if (!DeSerializerActionMap.TryGetValue(typeName, out var func))
             {
