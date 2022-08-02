@@ -59,18 +59,15 @@ namespace SysML2.NET.Serializer.Json.Tests
 
                 var partDefinition = elements.OfType<IPartDefinition>().Single(x => x.Id == Guid.Parse("07bd19e6-4587-4bdf-b274-1bbdb4b17707"));
 
+                Assert.That(partDefinition.AliasIds, Is.Empty);
                 Assert.That(partDefinition.ElementId, Is.EqualTo("07bd19e6-4587-4bdf-b274-1bbdb4b17707"));
                 Assert.That(partDefinition.IsAbstract, Is.False);
                 Assert.That(partDefinition.IsIndividual, Is.False);
                 Assert.That(partDefinition.IsSufficient, Is.False);
                 Assert.That(partDefinition.IsVariation, Is.False);
                 Assert.That(partDefinition.Name, Is.EqualTo("AutomaticClutch"));
-                
-                Assert.That(partDefinition.OwnedRelationship, 
-                    Is.EquivalentTo(new List<Guid> { Guid.Parse("d53e1d54-913d-43c1-aa11-e40f87420a5c") }));
-
+                Assert.That(partDefinition.OwnedRelationship, Is.EquivalentTo(new List<Guid> { Guid.Parse("d53e1d54-913d-43c1-aa11-e40f87420a5c") }));
                 Assert.That(partDefinition.OwningRelationship, Is.EqualTo(Guid.Parse("11322389-ecab-42e0-8730-9802f2032d75")));
-
                 Assert.That(partDefinition.ShortName, Is.Null);
             }
         }
