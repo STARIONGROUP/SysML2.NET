@@ -50,10 +50,10 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
-            await this.GenerateDeSerializers(package, outputDirectory);
+            await this.GenerateDtoDeSerializers(package, outputDirectory);
             await this.GenerateDeSerializationProvider(package, outputDirectory);
         }
-
+        
         /// <summary>
         /// Generates the DeSerializer classes for each <see cref="EClass"/> in the provided <see cref="EPackage"/>
         /// </summary>
@@ -66,19 +66,19 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task GenerateDeSerializers(EPackage package, DirectoryInfo outputDirectory)
+        public async Task GenerateDtoDeSerializers(EPackage package, DirectoryInfo outputDirectory)
         {
             var template = this.Templates["dto-deserializer-template"];
 
             foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
             {
-                var generatedSerializer = template(eClass);
+                var generatedDeSerializer = template(eClass);
 
-                generatedSerializer = CodeCleanup(generatedSerializer);
+                generatedDeSerializer = CodeCleanup(generatedDeSerializer);
 
                 var fileName = $"{eClass.Name.CapitalizeFirstLetter()}DeSerializer.cs";
 
-                await Write(generatedSerializer, outputDirectory, fileName);
+                await Write(generatedDeSerializer, outputDirectory, fileName);
             }
         }
 

@@ -52,7 +52,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         [Test]
         public void verify_dto_deserializers_are_generated()
         {
-            Assert.That(async () => await dtoDeSerializerGenerator.GenerateDeSerializers(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await dtoDeSerializerGenerator.GenerateDtoDeSerializers(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
 
