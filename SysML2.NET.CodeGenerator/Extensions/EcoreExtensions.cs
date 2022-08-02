@@ -37,7 +37,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <summary>
         /// A mapping of the known SysML value types to C# types
         /// </summary>
-        public static readonly Dictionary<string, string> TypeMapping = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> TypeMapping = new Dictionary<string, string>
         {
             {"Boolean", "bool"},
             {"Integer", "int"},
@@ -92,10 +92,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             if (eStructuralFeature is EAttribute eAttribute)
             {
-                if (eAttribute.EType is EEnum)
-                {
-                    return true;
-                }
+                return eAttribute.EType is EEnum;
             }
         
             return false;

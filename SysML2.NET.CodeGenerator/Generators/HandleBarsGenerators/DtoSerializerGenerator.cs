@@ -98,7 +98,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         {
             var template = this.Templates["dto-serialization-provider-template"];
 
-            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList().ToList();
+            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
 
             var generatedSerializationProvider = template(eClasses);
 

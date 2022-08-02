@@ -21,6 +21,7 @@
 namespace SysML2.NET.Serializer.Json
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Text.Json;
     
@@ -72,15 +73,17 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         public IEnumerable<IElement> DeSerialize(Stream stream, SerializationModeKind serializationModeKind)
         {
+            var sw = Stopwatch.StartNew();
+
             var result = new List<IElement>();
 
-            using (JsonDocument document = JsonDocument.Parse(stream))
+            using (var document = JsonDocument.Parse(stream))
             {
-                JsonElement root = document.RootElement;
+                var root = document.RootElement;
 
-                foreach (JsonElement jsonElement in root.EnumerateArray())
+                foreach (var jsonElement in root.EnumerateArray())
                 {
-                    if (jsonElement.TryGetProperty("@type", out JsonElement typeElement))
+                    if (jsonElement.TryGetProperty("@type", out var typeElement))
                     {
                         var typeName = typeElement.GetString();
                         
@@ -90,6 +93,8 @@ namespace SysML2.NET.Serializer.Json
                     }
                 }
             }
+
+            this.logger.LogInformation($"stream deserialized in {sw.ElapsedMilliseconds} [ms]");
 
             return result;
         }
