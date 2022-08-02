@@ -100,12 +100,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("annotatedElement", out JsonElement annotatedElementProperty))
             {
-                if (annotatedElementProperty.TryGetProperty("@id", out JsonElement annotatedElementIdProperty))
+                if (annotatedElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = annotatedElementIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.AnnotatedElement = Guid.Empty;
+                    logger.LogDebug($"the Annotation.AnnotatedElement property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (annotatedElementProperty.TryGetProperty("@id", out JsonElement annotatedElementIdProperty))
                     {
-                        dtoInstance.AnnotatedElement = Guid.Parse(propertyValue);
+                        var propertyValue = annotatedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.AnnotatedElement = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -116,12 +124,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("annotatingElement", out JsonElement annotatingElementProperty))
             {
-                if (annotatingElementProperty.TryGetProperty("@id", out JsonElement annotatingElementIdProperty))
+                if (annotatingElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = annotatingElementIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.AnnotatingElement = Guid.Empty;
+                    logger.LogDebug($"the Annotation.AnnotatingElement property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (annotatingElementProperty.TryGetProperty("@id", out JsonElement annotatingElementIdProperty))
                     {
-                        dtoInstance.AnnotatingElement = Guid.Parse(propertyValue);
+                        var propertyValue = annotatingElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.AnnotatingElement = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -196,12 +212,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
             {
-                if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelatedElementIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelatedElement = null;
+                }
+                else
+                {
+                    if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
                     {
-                        dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelatedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -212,12 +235,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
             {
-                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelationshipIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
                     {
-                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }

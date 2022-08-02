@@ -113,12 +113,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("featureOfType", out JsonElement featureOfTypeProperty))
             {
-                if (featureOfTypeProperty.TryGetProperty("@id", out JsonElement featureOfTypeIdProperty))
+                if (featureOfTypeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = featureOfTypeIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.FeatureOfType = Guid.Empty;
+                    logger.LogDebug($"the RequirementVerificationMembership.FeatureOfType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (featureOfTypeProperty.TryGetProperty("@id", out JsonElement featureOfTypeIdProperty))
                     {
-                        dtoInstance.FeatureOfType = Guid.Parse(propertyValue);
+                        var propertyValue = featureOfTypeIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.FeatureOfType = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -129,12 +137,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("featuringType", out JsonElement featuringTypeProperty))
             {
-                if (featuringTypeProperty.TryGetProperty("@id", out JsonElement featuringTypeIdProperty))
+                if (featuringTypeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = featuringTypeIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.FeaturingType = Guid.Empty;
+                    logger.LogDebug($"the RequirementVerificationMembership.FeaturingType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (featuringTypeProperty.TryGetProperty("@id", out JsonElement featuringTypeIdProperty))
                     {
-                        dtoInstance.FeaturingType = Guid.Parse(propertyValue);
+                        var propertyValue = featuringTypeIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.FeaturingType = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -145,7 +161,7 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("kind", out JsonElement kindProperty))
             {
-                throw new NotImplementedException("RequirementVerificationMembership.kind is not yet supported");
+                dtoInstance.Kind = RequirementConstraintKindDeSerializer.Deserialize(kindProperty.GetString());
             }
             else
             {
@@ -154,12 +170,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("memberElement", out JsonElement memberElementProperty))
             {
-                if (memberElementProperty.TryGetProperty("@id", out JsonElement memberElementIdProperty))
+                if (memberElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = memberElementIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.MemberElement = Guid.Empty;
+                    logger.LogDebug($"the RequirementVerificationMembership.MemberElement property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (memberElementProperty.TryGetProperty("@id", out JsonElement memberElementIdProperty))
                     {
-                        dtoInstance.MemberElement = Guid.Parse(propertyValue);
+                        var propertyValue = memberElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.MemberElement = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -247,12 +271,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
             {
-                if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelatedElementIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelatedElement = null;
+                }
+                else
+                {
+                    if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
                     {
-                        dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelatedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -263,12 +294,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
             {
-                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelationshipIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
                     {
-                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -330,7 +368,7 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("visibility", out JsonElement visibilityProperty))
             {
-                throw new NotImplementedException("RequirementVerificationMembership.visibility is not yet supported");
+                dtoInstance.Visibility = VisibilityKindDeSerializer.Deserialize(visibilityProperty.GetString());
             }
             else
             {

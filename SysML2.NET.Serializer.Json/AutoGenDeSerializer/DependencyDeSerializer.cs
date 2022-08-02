@@ -183,12 +183,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
             {
-                if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelatedElementIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelatedElement = null;
+                }
+                else
+                {
+                    if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
                     {
-                        dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelatedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -199,12 +206,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
             {
-                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelationshipIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
                     {
-                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }

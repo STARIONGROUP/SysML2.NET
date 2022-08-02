@@ -100,12 +100,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("disjoiningType", out JsonElement disjoiningTypeProperty))
             {
-                if (disjoiningTypeProperty.TryGetProperty("@id", out JsonElement disjoiningTypeIdProperty))
+                if (disjoiningTypeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = disjoiningTypeIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.DisjoiningType = Guid.Empty;
+                    logger.LogDebug($"the Disjoining.DisjoiningType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (disjoiningTypeProperty.TryGetProperty("@id", out JsonElement disjoiningTypeIdProperty))
                     {
-                        dtoInstance.DisjoiningType = Guid.Parse(propertyValue);
+                        var propertyValue = disjoiningTypeIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.DisjoiningType = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -180,12 +188,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
             {
-                if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelatedElementIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelatedElement = null;
+                }
+                else
+                {
+                    if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
                     {
-                        dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelatedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -196,12 +211,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
             {
-                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelationshipIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
                     {
-                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -263,12 +285,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("typeDisjoined", out JsonElement typeDisjoinedProperty))
             {
-                if (typeDisjoinedProperty.TryGetProperty("@id", out JsonElement typeDisjoinedIdProperty))
+                if (typeDisjoinedProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = typeDisjoinedIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.TypeDisjoined = Guid.Empty;
+                    logger.LogDebug($"the Disjoining.TypeDisjoined property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (typeDisjoinedProperty.TryGetProperty("@id", out JsonElement typeDisjoinedIdProperty))
                     {
-                        dtoInstance.TypeDisjoined = Guid.Parse(propertyValue);
+                        var propertyValue = typeDisjoinedIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.TypeDisjoined = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }

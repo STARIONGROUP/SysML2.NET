@@ -25,14 +25,14 @@
 namespace SysML2.NET
 {
     {{ #Documentation this }}
-	public enum {{ this.Name }}
-	{
+    public enum {{ this.Name }}
+    {
         {{#each this.ELiterals as | enumerationLiteral |}}
         {{ #Documentation enumerationLiteral }}
         {{ String.PascalCase enumerationLiteral.Name }} = {{ enumerationLiteral.Value }},
-        
+
         {{/each}}
-	}
+    }
 }
 
 // ------------------------------------------------------------------------------------------------

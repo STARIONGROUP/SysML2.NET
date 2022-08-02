@@ -119,7 +119,7 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("direction", out JsonElement directionProperty))
             {
-                throw new NotImplementedException("MetadataUsage.direction is not yet supported");
+                dtoInstance.Direction = FeatureDirectionKindDeSerializer.DeserializeNullable(directionProperty.GetString());
             }
             else
             {
@@ -272,12 +272,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
             {
-                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelationshipIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
                     {
-                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -288,7 +295,7 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("portionKind", out JsonElement portionKindProperty))
             {
-                throw new NotImplementedException("MetadataUsage.portionKind is not yet supported");
+                dtoInstance.PortionKind = PortionKindDeSerializer.DeserializeNullable(portionKindProperty.GetString());
             }
             else
             {

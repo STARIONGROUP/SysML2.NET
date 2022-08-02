@@ -163,7 +163,7 @@ namespace SysML2.NET.Serializer.Json
                                         new NotImplementedException("nullable - {{EClass.Name}}.{{structuralFeature.Name}} is not yet supported");
                                     {{/if}}
                                 {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
-                                    dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = ({{DTO.TypeName structuralFeature }})Enum.Parse(typeof({{DTO.TypeName structuralFeature }}), {{structuralFeature.Name }}Property.GetString());
+                                    dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.EType.Name }}DeSerializer.DeserializeNullable({{ structuralFeature.Name }}Property.GetString());
                                 {{else}}
                                     dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.Name }}Property.GetString();
                                 {{/if}}
@@ -179,7 +179,7 @@ namespace SysML2.NET.Serializer.Json
                                         new NotImplementedException("Scalar - {{EClass.Name}}.{{structuralFeature.Name}} is not yet supported");
                                     {{/if}}
                                 {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
-                                    dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = ({{DTO.TypeName structuralFeature }})Enum.Parse(typeof({{DTO.TypeName structuralFeature }}), {{structuralFeature.Name }}Property.GetString());
+                                    dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.EType.Name }}DeSerializer.Deserialize({{ structuralFeature.Name }}Property.GetString());
                                 {{else}}
                                     var propertyValue = {{structuralFeature.Name }}Property.GetString();
                                     if (propertyValue != null)

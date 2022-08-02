@@ -113,12 +113,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("general", out JsonElement generalProperty))
             {
-                if (generalProperty.TryGetProperty("@id", out JsonElement generalIdProperty))
+                if (generalProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = generalIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.General = Guid.Empty;
+                    logger.LogDebug($"the FeatureTyping.General property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (generalProperty.TryGetProperty("@id", out JsonElement generalIdProperty))
                     {
-                        dtoInstance.General = Guid.Parse(propertyValue);
+                        var propertyValue = generalIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.General = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -180,12 +188,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
             {
-                if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelatedElementIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelatedElement = null;
+                }
+                else
+                {
+                    if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
                     {
-                        dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelatedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -196,12 +211,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
             {
-                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelationshipIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
                     {
-                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -244,12 +266,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("specific", out JsonElement specificProperty))
             {
-                if (specificProperty.TryGetProperty("@id", out JsonElement specificIdProperty))
+                if (specificProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = specificIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.Specific = Guid.Empty;
+                    logger.LogDebug($"the FeatureTyping.Specific property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (specificProperty.TryGetProperty("@id", out JsonElement specificIdProperty))
                     {
-                        dtoInstance.Specific = Guid.Parse(propertyValue);
+                        var propertyValue = specificIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Specific = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -279,12 +309,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("type", out JsonElement typeProperty))
             {
-                if (typeProperty.TryGetProperty("@id", out JsonElement typeIdProperty))
+                if (typeProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = typeIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.Type = Guid.Empty;
+                    logger.LogDebug($"the FeatureTyping.Type property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (typeProperty.TryGetProperty("@id", out JsonElement typeIdProperty))
                     {
-                        dtoInstance.Type = Guid.Parse(propertyValue);
+                        var propertyValue = typeIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Type = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
@@ -295,12 +333,20 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("typedFeature", out JsonElement typedFeatureProperty))
             {
-                if (typedFeatureProperty.TryGetProperty("@id", out JsonElement typedFeatureIdProperty))
+                if (typedFeatureProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = typedFeatureIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.TypedFeature = Guid.Empty;
+                    logger.LogDebug($"the FeatureTyping.TypedFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (typedFeatureProperty.TryGetProperty("@id", out JsonElement typedFeatureIdProperty))
                     {
-                        dtoInstance.TypedFeature = Guid.Parse(propertyValue);
+                        var propertyValue = typedFeatureIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.TypedFeature = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }

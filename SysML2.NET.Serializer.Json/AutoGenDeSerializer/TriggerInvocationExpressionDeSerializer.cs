@@ -100,7 +100,7 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("direction", out JsonElement directionProperty))
             {
-                throw new NotImplementedException("TriggerInvocationExpression.direction is not yet supported");
+                dtoInstance.Direction = FeatureDirectionKindDeSerializer.DeserializeNullable(directionProperty.GetString());
             }
             else
             {
@@ -203,7 +203,7 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("kind", out JsonElement kindProperty))
             {
-                throw new NotImplementedException("TriggerInvocationExpression.kind is not yet supported");
+                dtoInstance.Kind = TriggerKindDeSerializer.Deserialize(kindProperty.GetString());
             }
             else
             {
@@ -244,12 +244,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
             {
-                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelationshipIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
                     {
-                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
