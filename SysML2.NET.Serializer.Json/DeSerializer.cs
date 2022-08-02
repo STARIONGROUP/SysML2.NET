@@ -24,7 +24,9 @@ namespace SysML2.NET.Serializer.Json
     using System.Diagnostics;
     using System.IO;
     using System.Text.Json;
-    
+    using System.Threading;
+    using System.Threading.Tasks;
+
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
@@ -87,6 +89,51 @@ namespace SysML2.NET.Serializer.Json
                     {
                         var typeName = typeElement.GetString();
                         
+                        var func = DeSerializationProvider.Provide(typeName);
+                        var partDefinition = func(jsonElement, serializationModeKind, this.loggerFactory);
+                        result.Add(partDefinition);
+                    }
+                }
+            }
+
+            this.logger.LogInformation($"stream deserialized in {sw.ElapsedMilliseconds} [ms]");
+
+            return result;
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IElement}"/>
+        /// </summary>
+        /// <param name="stream">
+        /// the JSON input stream
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> used to cancel the operation
+        /// </param>
+        /// <returns>
+        /// an <see cref="IEnumerable{IElement}"/>
+        /// </returns>
+        public async Task<IEnumerable<IElement>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, CancellationToken cancellationToken)
+        {
+            var sw = Stopwatch.StartNew();
+
+            var result = new List<IElement>();
+
+            var jsonDocumentOptions = default(JsonDocumentOptions);
+
+            using (var document = await JsonDocument.ParseAsync(stream, jsonDocumentOptions, cancellationToken))
+            {
+                var root = document.RootElement;
+
+                foreach (var jsonElement in root.EnumerateArray())
+                {
+                    if (jsonElement.TryGetProperty("@type", out var typeElement))
+                    {
+                        var typeName = typeElement.GetString();
+
                         var func = DeSerializationProvider.Provide(typeName);
                         var partDefinition = func(jsonElement, serializationModeKind, this.loggerFactory);
                         result.Add(partDefinition);

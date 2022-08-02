@@ -108,6 +108,9 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> used to cancel the operation
+        /// </param>
         public async Task SerializeAsync(IEnumerable<IElement> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
@@ -141,6 +144,9 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         public async Task SerializeAsync(IElement element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {

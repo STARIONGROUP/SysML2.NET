@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="Serializer.cs" company="RHEA System S.A.">
+// <copyright file="SerializerTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -32,7 +32,7 @@ namespace SysML2.NET.Serializer.Json.Tests
     using SysML2.NET.DTO;
 
     [TestFixture]
-    public class Tests
+    public class SerializerTestFixture
     {
         private ISerializer serializer;
 

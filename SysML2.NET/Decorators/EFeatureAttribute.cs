@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="PropertyAttribute.cs" company="RHEA System S.A.">
+// <copyright file="EFeatureAttribute.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
 //

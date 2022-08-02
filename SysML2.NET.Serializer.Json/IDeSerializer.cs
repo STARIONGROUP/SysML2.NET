@@ -22,7 +22,9 @@ namespace SysML2.NET.Serializer.Json
 {
     using System.Collections.Generic;
     using System.IO;
-    
+    using System.Threading;
+    using System.Threading.Tasks;
+
     using SysML2.NET.DTO;
 
     /// <summary>
@@ -44,5 +46,22 @@ namespace SysML2.NET.Serializer.Json
         /// an <see cref="IEnumerable{IElement}"/>
         /// </returns>
         IEnumerable<IElement> DeSerialize(Stream stream, SerializationModeKind serializationModeKind);
+
+        /// <summary>
+        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IElement}"/>
+        /// </summary>
+        /// <param name="stream">
+        /// the JSON input stream
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> used to cancel the operation
+        /// </param>
+        /// <returns>
+        /// an <see cref="IEnumerable{IElement}"/>
+        /// </returns>
+        Task<IEnumerable<IElement>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, CancellationToken cancellationToken);
     }
 }
