@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IElement.cs" company="RHEA System S.A.">
+// <copyright file="ProjectUsage.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -18,18 +18,24 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.DTO
+namespace SysML2.NET.API.POCO
 {
     using System;
 
     /// <summary>
-    /// Hand-Coded supplements for the generated <see cref="IElement"/> interface
+    /// a realization of <see cref="IData"/> that represents the use of a <see cref="Project"/> in the context of another
+    /// <see cref="Project"/>.
     /// </summary>
-    public partial interface IElement
+    public class ProjectUsage : IData
     {
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
-        Guid Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reference to the <see cref="Commit"/> of the <see cref="Project"/> being used.
+        /// </summary>
+        public Commit UsedProjectCommit { get; set; }
     }
 }

@@ -21,6 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="API\DTO\" />
 	  <Folder Include="AutoGenDto\" />
 	  <Folder Include="AutoGenEnum\" />
 	  <Folder Include="AutGenPoco\" />

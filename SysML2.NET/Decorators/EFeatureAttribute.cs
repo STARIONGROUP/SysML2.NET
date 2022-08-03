@@ -9,7 +9,7 @@
 //
 // http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
+// Unless isRequired by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
@@ -32,26 +32,26 @@ namespace SysML2.NET.Decorators
         /// <summary>
         /// Initializes a new instance of the <see cref="EFeatureAttribute"/>
         /// </summary>
-        /// <param name="changeable">
-        /// a value indicating whether this feature is Changeable.
+        /// <param name="isChangeable">
+        /// a value indicating whether this feature is IsChangeable.
         /// </param>
-        /// <param name="volatile">
-        /// a value indicating whether this feature is Volatile.
+        /// <param name="isVolatile">
+        /// a value indicating whether this feature is IsVolatile.
         /// </param>
-        /// <param name="transient">
-        /// a value indicating whether this feature is Transient.
+        /// <param name="isTransient">
+        /// a value indicating whether this feature is IsTransient.
         /// </param>
-        /// <param name="unsettable">
+        /// <param name="isUnsettable">
         /// a value indicating whether this feature is un-settable.
         /// </param>
-        /// <param name="derived">
-        /// a value indicating whether this feature is derived.
+        /// <param name="isDerived">
+        /// a value indicating whether this feature is isDerived.
         /// </param>
-        /// <param name="ordered">
-        /// a value indicating whether this feature is ordered.
+        /// <param name="isOrdered">
+        /// a value indicating whether this feature is isOrdered.
         /// </param>
-        /// <param name="unique">
-        /// a value indicating whether this feature is unique.
+        /// <param name="isUnique">
+        /// a value indicating whether this feature is isUnique.
         /// </param>
         /// <param name="lowerBound">
         /// the lower bound of the feature.
@@ -59,73 +59,93 @@ namespace SysML2.NET.Decorators
         /// <param name="upperBound">
         /// the upper bound of the feature.
         /// </param>
-        /// <param name="many">
-        /// a value indicating whether this feature is many.
+        /// <param name="isMany">
+        /// a value indicating whether this feature is isMany.
         /// </param>
-        /// <param name="required">
-        /// a value indicating whether this feature is required.
+        /// <param name="isRequired">
+        /// a value indicating whether this feature is isRequired.
         /// </param>
         /// <param name="isContainment">
         /// a value indicating whether this feature is a member of a containment relationship.
         /// </param>
-        public EFeatureAttribute(bool changeable, bool @volatile, bool transient, bool unsettable, bool derived, bool ordered, bool unique, int lowerBound, int upperBound, bool many, bool required, bool isContainment)
+        public EFeatureAttribute(bool isChangeable = true, bool isVolatile = false, bool isTransient = false, bool isUnsettable = false, bool isDerived = false, bool isOrdered = true, bool isUnique = true, int lowerBound = 0, int upperBound = 1, bool isMany = false, bool isRequired = false, bool isContainment = false)
         {
-            this.Changeable = changeable;
-            this.Volatile = @volatile;
-            this.Transient = transient;
-            this.Unsettable = unsettable;
-            this.Derived = derived;
-            this.Ordered = ordered;
-            this.Unique = unique;
+            this.IsChangeable = isChangeable;
+            this.IsVolatile = isVolatile;
+            this.IsTransient = isTransient;
+            this.IsUnsettable = isUnsettable;
+            this.IsDerived = isDerived;
+            this.IsOrdered = isOrdered;
+            this.IsUnique = isUnique;
             this.LowerBound = lowerBound;
             this.UpperBound = upperBound;
-            this.Many = many;
-            this.Required = required;
+            this.IsMany = isMany;
+            this.IsRequired = isRequired;
             this.IsContainment = isContainment;
         }
+
+        /// <summary>
+        /// Gets or sets the name of the <see cref="EFeatureAttribute"/>
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the <see cref="Type"/> of the <see cref="EFeatureAttribute"/>
+        /// </summary>
+        public string Type { get; set; }
         
         /// <summary>
-        /// Gets a value indicating whether this feature is changeable.
+        /// Gets or sets a value indicating whether this is a reference and therefore not an attribute
+        /// </summary>
+        public bool IsReferemce { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this is an attribute and therefore not a reference
+        /// </summary>
+        public bool IsAttribute { get; set; }
+        
+        /// <summary>
+        /// Gets a value indicating whether this feature is isChangeable.
         /// </summary>
         /// <remarks>
-        /// A feature that is not changeable will not include a
+        /// A feature that is not isChangeable will not include a
         /// generated set method, and the reflective eSet()
         /// method will throw an exception if you try to set it.
         /// Declaring one end of a bi-directional relationship to
-        /// be not changeable is a good way to force clients to
+        /// be not isChangeable is a good way to force clients to
         /// always set the reference from the other end, but still
         /// provide convenient navigation methods from either end.
         /// Declaring one-way references or attributes to be not
-        /// changeable usually implies that the feature will be set or
+        /// isChangeable usually implies that the feature will be set or
         /// changed by some other(user-written) code
         /// </remarks>
-        public bool Changeable { get; private set; }
+        public bool IsChangeable { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether this feature is Volatile.
+        /// Gets a value indicating whether this feature is IsVolatile.
         /// </summary>
         /// <remarks>
-        /// A feature that is declared volatile is generated without
+        /// A feature that is declared isVolatile is generated without
         /// storage fields and with empty implementation method
-        /// bodies, which you are required to complete.Volatile
-        /// is commonly used for a feature whose value is derived
+        /// bodies, which you are isRequired to complete.IsVolatile
+        /// is commonly used for a feature whose value is isDerived
         /// from some other feature, or for a feature that is to be
         /// implemented by hand using a different storage and
         /// implementation pattern.
         /// </remarks>
-        public bool Volatile { get; private set; }
+        public bool IsVolatile { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether this feature is Transient.
+        /// Gets a value indicating whether this feature is IsTransient.
         /// </summary>
         /// <remarks>
-        /// Transient features are used to declare (modeled) data
+        /// IsTransient features are used to declare (modeled) data
         /// whose lifetime never spans application invocations and
         /// therefore doesn't need to be persisted. The (default XMI)
         /// serializer will not save features that are declared to be
-        /// transient.
+        /// isTransient.
         /// </remarks>
-        public bool Transient { get; private set; }
+        public bool IsTransient { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this feature can be unset.
@@ -133,31 +153,31 @@ namespace SysML2.NET.Decorators
         /// <remarks>
         /// When true, the value space for this feature includes the state of being unset.
         /// </remarks>
-        public bool Unsettable { get; private set; }
+        public bool IsUnsettable { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether this feature is Derived.
+        /// Gets a value indicating whether this feature is IsDerived.
         /// </summary>
         /// <remarks>
-        /// The value of a derived feature is computed from other
+        /// The value of a isDerived feature is computed from other
         /// features, so it doesn't represent any additional object
         /// state.Framework classes, such as EcoreUtil.Copier,
         /// that copy model objects will not attempt to copy such
         /// features.The generated code is unaffected by the value
-        /// of the derived flag.Derived features are typically also
-        /// marked volatile and transient
+        /// of the isDerived flag.IsDerived features are typically also
+        /// marked isVolatile and isTransient
         /// </remarks>
-        public bool Derived { get; private set; }
+        public bool IsDerived { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether this is ordered
+        /// Gets a value indicating whether this is isOrdered
         /// </summary>
-        public bool Ordered { get; private set; }
+        public bool IsOrdered { get; private set; }
         
         /// <summary>
-        /// Gets a value indicating whether this is unique
+        /// Gets a value indicating whether this is isUnique
         /// </summary>
-        public bool Unique { get; private set; }
+        public bool IsUnique { get; private set; }
 
         /// <summary>
         /// Gets the lower bound
@@ -170,14 +190,14 @@ namespace SysML2.NET.Decorators
         public int UpperBound { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether this is many
+        /// Gets a value indicating whether this is isMany
         /// </summary>
-        public bool Many { get; private set; }
+        public bool IsMany { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether this is required
+        /// Gets a value indicating whether this is isRequired
         /// </summary>
-        public bool Required { get; private set; }
+        public bool IsRequired { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this feature is a member of a containment relationship
