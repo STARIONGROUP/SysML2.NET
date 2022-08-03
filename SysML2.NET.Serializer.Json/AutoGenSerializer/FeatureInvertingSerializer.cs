@@ -27,7 +27,8 @@ namespace SysML2.NET.Serializer.Json
     using System;
     using System.Text.Json;
 
-    using SysML2.NET.DTO;
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="FeatureInvertingSerializer"/> is to provide serialization

@@ -22,6 +22,8 @@ namespace SysML2.NET.API.POCO
 {
     using System;
 
+    using SysML2.NET.Common;
+
     /// <summary>
     /// a realization of <see cref="IData"/> that represents the use of a <see cref="Project"/> in the context of another
     /// <see cref="Project"/>.

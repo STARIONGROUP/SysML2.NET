@@ -26,6 +26,8 @@ namespace SysML2.NET.Serializer.Json
 {
     using System;
 
+    using SysML2.NET.Core;
+
     /// <summary>
     /// The purpose of the <see cref="VisibilityKindDeSerializer"/> is to provide deserialization capabilities
     /// for the <see cref="VisibilityKind"/> Enum

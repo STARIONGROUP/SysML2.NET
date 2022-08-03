@@ -33,27 +33,27 @@ namespace SysML2.NET.Serializer.Json
     /// </summary>
     internal static class SerializationProvider
     {
-        private static readonly Dictionary<Type, Action<object, Utf8JsonWriter, SerializationModeKind>> SerializerActionMap = new Dictionary<Type, Action<object, Utf8JsonWriter, SerializationModeKind>>
+        private static readonly Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind>> SerializerActionMap = new Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind>>
         {
             {{#each this as | eClass |}}
-            { typeof(DTO.{{ eClass.Name }}), {{ eClass.Name }}Serializer.Serialize },
+            { typeof(Core.DTO.{{ eClass.Name }}), {{ eClass.Name }}Serializer.Serialize },
             {{/each}}
         };
 
         /// <summary>
         /// Provides the delegate <see cref="Action{object, Utf8JsonWriter, SerializationModeKind}"/> for the
-        /// <see cref="Type"/> that is to be serialized
+        /// <see cref="System.Type"/> that is to be serialized
         /// </summary>
         /// <param name="type">
-        /// The subject <see cref="Type"/> that is to be serialized
+        /// The subject <see cref="System.Type"/> that is to be serialized
         /// </param>
         /// <returns>
         /// A Delegate of <see cref="Action{object, Utf8JsonWriter, SerializationModeKind}"/>
         /// </returns>
         /// <exception cref="NotSupportedException">
-        /// Thrown when the <see cref="Type"/> is not supported.
+        /// Thrown when the <see cref="System.Type"/> is not supported.
         /// </exception>
-        internal static Action<object, Utf8JsonWriter, SerializationModeKind> Provide(Type type)
+        internal static Action<object, Utf8JsonWriter, SerializationModeKind> Provide(System.Type type)
         {
             if (!SerializerActionMap.TryGetValue(type, out var action))
             {

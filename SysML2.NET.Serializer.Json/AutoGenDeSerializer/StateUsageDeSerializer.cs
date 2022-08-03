@@ -27,10 +27,11 @@ namespace SysML2.NET.Serializer.Json
     using System;
     using System.Text.Json;
 
-    using SysML2.NET.DTO;
-
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
+
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="StateUsageDeSerializer"/> is to provide deserialization capabilities
@@ -67,7 +68,7 @@ namespace SysML2.NET.Serializer.Json
                 throw new InvalidOperationException($"The StateUsageDeSerializer can only be used to deserialize objects of type IStateUsage, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new DTO.StateUsage();
+            var dtoInstance = new Core.DTO.StateUsage();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {

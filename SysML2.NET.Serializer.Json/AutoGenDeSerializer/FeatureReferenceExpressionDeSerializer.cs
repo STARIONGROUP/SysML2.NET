@@ -27,10 +27,11 @@ namespace SysML2.NET.Serializer.Json
     using System;
     using System.Text.Json;
 
-    using SysML2.NET.DTO;
-
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
+
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="FeatureReferenceExpressionDeSerializer"/> is to provide deserialization capabilities
@@ -67,7 +68,7 @@ namespace SysML2.NET.Serializer.Json
                 throw new InvalidOperationException($"The FeatureReferenceExpressionDeSerializer can only be used to deserialize objects of type IFeatureReferenceExpression, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new DTO.FeatureReferenceExpression();
+            var dtoInstance = new Core.DTO.FeatureReferenceExpression();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {

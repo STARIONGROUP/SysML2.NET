@@ -25,16 +25,16 @@ namespace SysML2.NET.Serializer.Json
     using System.Threading;
     using System.Threading.Tasks;
 
-    using SysML2.NET.DTO;
+    using SysML2.NET.Common;
 
     /// <summary>
     /// The purpose of the <see cref="IDeSerializer"/> is to deserialize a JSON <see cref="Stream"/> to
-    /// an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
+    /// an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>
     /// </summary>
     public interface IDeSerializer
     {
         /// <summary>
-        /// Deserializes the JSON stream to an <see cref="IEnumerable{IElement}"/>
+        /// Deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
         /// </summary>
         /// <param name="stream">
         /// the JSON input stream
@@ -43,12 +43,12 @@ namespace SysML2.NET.Serializer.Json
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{IElement}"/>
+        /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        IEnumerable<IElement> DeSerialize(Stream stream, SerializationModeKind serializationModeKind);
+        IEnumerable<IData> DeSerialize(Stream stream, SerializationModeKind serializationModeKind);
 
         /// <summary>
-        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IElement}"/>
+        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
         /// </summary>
         /// <param name="stream">
         /// the JSON input stream
@@ -60,8 +60,8 @@ namespace SysML2.NET.Serializer.Json
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{IElement}"/>
+        /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        Task<IEnumerable<IElement>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, CancellationToken cancellationToken);
+        Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, CancellationToken cancellationToken);
     }
 }

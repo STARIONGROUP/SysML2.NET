@@ -30,11 +30,12 @@ namespace SysML2.NET.Serializer.Json
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.DTO;
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="DeSerializer"/> is to deserialize a JSON <see cref="Stream"/> to
-    /// an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
+    /// an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>
     /// </summary>
     public class DeSerializer : IDeSerializer
     {
@@ -62,7 +63,7 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
-        /// Deserializes the JSON stream to an <see cref="IEnumerable{IElement}"/>
+        /// Deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
         /// </summary>
         /// <param name="stream">
         /// the JSON input stream
@@ -71,13 +72,13 @@ namespace SysML2.NET.Serializer.Json
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{IElement}"/>
+        /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        public IEnumerable<IElement> DeSerialize(Stream stream, SerializationModeKind serializationModeKind)
+        public IEnumerable<IData> DeSerialize(Stream stream, SerializationModeKind serializationModeKind)
         {
             var sw = Stopwatch.StartNew();
 
-            var result = new List<IElement>();
+            var result = new List<IData>();
 
             using (var document = JsonDocument.Parse(stream))
             {
@@ -90,8 +91,8 @@ namespace SysML2.NET.Serializer.Json
                         var typeName = typeElement.GetString();
                         
                         var func = DeSerializationProvider.Provide(typeName);
-                        var partDefinition = func(jsonElement, serializationModeKind, this.loggerFactory);
-                        result.Add(partDefinition);
+                        var dataItem = func(jsonElement, serializationModeKind, this.loggerFactory);
+                        result.Add(dataItem);
                     }
                 }
             }
@@ -102,7 +103,7 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
-        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IElement}"/>
+        /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
         /// </summary>
         /// <param name="stream">
         /// the JSON input stream
@@ -114,13 +115,13 @@ namespace SysML2.NET.Serializer.Json
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{IElement}"/>
+        /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        public async Task<IEnumerable<IElement>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, CancellationToken cancellationToken)
+        public async Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
-            var result = new List<IElement>();
+            var result = new List<IData>();
 
             var jsonDocumentOptions = default(JsonDocumentOptions);
 
@@ -135,8 +136,8 @@ namespace SysML2.NET.Serializer.Json
                         var typeName = typeElement.GetString();
 
                         var func = DeSerializationProvider.Provide(typeName);
-                        var partDefinition = func(jsonElement, serializationModeKind, this.loggerFactory);
-                        result.Add(partDefinition);
+                        var dataItem = func(jsonElement, serializationModeKind, this.loggerFactory);
+                        result.Add(dataItem);
                     }
                 }
             }

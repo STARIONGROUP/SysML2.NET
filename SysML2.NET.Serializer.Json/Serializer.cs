@@ -26,8 +26,9 @@ namespace SysML2.NET.Serializer.Json
     using System.Threading;
     using System.Threading.Tasks;
 
-    using SysML2.NET.DTO;
-    
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO;
+
     /// <summary>
     /// The purpose of the <see cref="Serializer"/> is to write an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
     /// as JSON to a <see cref="Stream"/>
@@ -49,7 +50,7 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        public void Serialize(IEnumerable<IElement> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void Serialize(IEnumerable<IData> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
@@ -83,7 +84,7 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        public void Serialize(IElement element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void Serialize(IData element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
@@ -111,7 +112,7 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public async Task SerializeAsync(IEnumerable<IElement> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeAsync(IEnumerable<IData> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
@@ -148,7 +149,7 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public async Task SerializeAsync(IElement element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeAsync(IData element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {

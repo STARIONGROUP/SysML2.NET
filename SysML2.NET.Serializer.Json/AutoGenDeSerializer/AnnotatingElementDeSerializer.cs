@@ -27,10 +27,11 @@ namespace SysML2.NET.Serializer.Json
     using System;
     using System.Text.Json;
 
-    using SysML2.NET.DTO;
-
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
+
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="AnnotatingElementDeSerializer"/> is to provide deserialization capabilities
@@ -67,7 +68,7 @@ namespace SysML2.NET.Serializer.Json
                 throw new InvalidOperationException($"The AnnotatingElementDeSerializer can only be used to deserialize objects of type IAnnotatingElement, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new DTO.AnnotatingElement();
+            var dtoInstance = new Core.DTO.AnnotatingElement();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {

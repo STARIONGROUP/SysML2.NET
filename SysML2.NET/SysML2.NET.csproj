@@ -22,11 +22,10 @@
 
 	<ItemGroup>
 	  <Folder Include="API\DTO\" />
-	  <Folder Include="AutoGenDto\" />
-	  <Folder Include="AutoGenEnum\" />
-	  <Folder Include="AutGenPoco\" />
-	  <Folder Include="Dto\" />
-	  <Folder Include="Poco\" />
+	  <Folder Include="Core\AutoGenDto\" />
+	  <Folder Include="Core\AutoGenEnum\" />
+	  <Folder Include="Core\AutGenPoco\" />
+	  <Folder Include="Core\Poco\" />
 	</ItemGroup>
 
 </Project>
