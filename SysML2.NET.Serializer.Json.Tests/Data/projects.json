@@ -1,0 +1,317 @@
+[
+	{
+		"@id": "110da323-e552-4a46-ad02-c89d37d5a5ce",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "cca1c0d6-0342-4fe7-98c1-a375d58af3a4"
+		},
+		"description": null,
+		"name": "12b-Allocation Thu Jul 21 12:56:03 EDT 2022"
+	},
+	{
+		"@id": "11623c00-f2f7-426c-938c-a98d533dbfc2",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "e766b690-ced3-470d-8d9b-b77b26514e3e"
+		},
+		"description": null,
+		"name": "3a-Function-based Behavior-2 Thu Jul 21 12:51:17 EDT 2022"
+	},
+	{
+		"@id": "15283e1a-d010-403b-b09b-990fcc08c579",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "68ce2ce1-efad-4f54-a2e1-2d4208247733"
+		},
+		"description": null,
+		"name": "13b-Safety and Security Features Element Group-1 Thu Jul 21 12:56:42 EDT 2022"
+	},
+	{
+		"@id": "1d7152a1-b223-48fa-82ee-45b839a029c1",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "2a482645-7b41-4389-a970-51e055797b19"
+		},
+		"description": null,
+		"name": "11a-View-Viewpoint Thu Jul 21 12:55:17 EDT 2022"
+	},
+	{
+		"@id": "2196f252-f8b0-4434-bafb-e99ff0ad3275",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "1213088a-f462-4891-acad-baf7f82de61a"
+		},
+		"description": null,
+		"name": "12a-Dependency Thu Jul 21 12:55:50 EDT 2022"
+	},
+	{
+		"@id": "289f0bcf-1fb9-425a-b576-e438f94b9bfc",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "837f7302-635b-4d0e-9708-d34d94a6c503"
+		},
+		"description": null,
+		"name": "3a-Function-based Behavior-5 Thu Jul 21 12:51:35 EDT 2022"
+	},
+	{
+		"@id": "28a9f026-3506-4063-bdc4-198e523b4c14",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "8e731056-a365-48fa-8132-b3fe22fc8b7f"
+		},
+		"description": null,
+		"name": "14c-Language Extensions Thu Jul 21 12:57:57 EDT 2022"
+	},
+	{
+		"@id": "29845a29-b25b-4bab-b8cc-f46a021b7f5a",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "cf0f15a4-51de-472f-a78e-0102c53a8c38"
+		},
+		"description": null,
+		"name": "7b-Variant Configurations Thu Jul 21 12:53:14 EDT 2022"
+	},
+	{
+		"@id": "2f6544ca-86d6-4b45-be80-6d542308704a",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "fc92c4e6-165f-4c07-978d-30308ba77a55"
+		},
+		"description": null,
+		"name": "sfriedenthal_SoS Sat Jul 23 13:42:59 UTC 2022"
+	},
+	{
+		"@id": "368fd146-50af-4e11-bcd6-6737e271470a",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "eabf5ddd-5030-4ce6-bf37-93710010706e"
+		},
+		"description": null,
+		"name": "17b-Sequence-Modeling Thu Jul 21 12:59:27 EDT 2022"
+	},
+	{
+		"@id": "442bbfbb-815e-4ec5-b1b3-fde397fa861d",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "ddd58842-81fe-4037-a410-85f7601680af"
+		},
+		"description": null,
+		"name": "10b-Trade-off Among Alternative Configurations Thu Jul 21 12:54:15 EDT 2022"
+	},
+	{
+		"@id": "5c8e5138-7573-4e49-ac80-082511eca2c5",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "f4f77432-1f0e-4d2a-a596-abce95acb971"
+		},
+		"description": null,
+		"name": "18-Use Case Thu Jul 21 12:59:42 EDT 2022"
+	},
+	{
+		"@id": "5e96c27b-18f2-49e3-b2a8-2b28b7a55db9",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "8480e261-9154-4e9e-9806-866946820a1f"
+		},
+		"description": null,
+		"name": "3a-Function-based Behavior-1 Thu Jul 21 12:50:59 EDT 2022"
+	},
+	{
+		"@id": "6216f8cb-3d5f-46f6-a696-b2e404dc3219",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "1855cd42-693a-4834-bbbb-b7e60aebc259"
+		},
+		"description": null,
+		"name": "5-State-based Behavior-1 Thu Jul 21 12:52:10 EDT 2022"
+	},
+	{
+		"@id": "64ec977a-7cf7-4f6a-9347-4bfdc2cc9895",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "da83824c-abd2-4bca-9c33-11017511820c"
+		},
+		"description": null,
+		"name": "13b-Safety and Security Features Element Group-2 Thu Jul 21 12:57:03 EDT 2022"
+	},
+	{
+		"@id": "6e9e75b6-0c8b-4ab0-aca8-a35b2684f6b7",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "548929f3-db8a-48ec-bb60-67fecb6227e6"
+		},
+		"description": null,
+		"name": "4a-Functional Allocation Thu Jul 21 12:51:51 EDT 2022"
+	},
+	{
+		"@id": "7408e595-e9d4-4502-b56d-0a207c022e61",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "d971abec-26b8-4557-9074-e7c2f32d30cd"
+		},
+		"description": null,
+		"name": "1c-Parts Tree Redefinition Thu Jul 21 12:50:04 EDT 2022"
+	},
+	{
+		"@id": "7e31715b-652d-461f-b0e3-57997b009373",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "a261df37-2168-4eb5-a8dc-cff9f70be465"
+		},
+		"description": null,
+		"name": "17a-Sequence-Modeling Thu Jul 21 12:59:12 EDT 2022"
+	},
+	{
+		"@id": "82961e71-c75a-4d9d-adff-ef491fa8f5f3",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "b541c0f3-0b12-4073-a769-f58ec94ea3c3"
+		},
+		"description": "Spacecraft project with multiple commits, branches, and tags",
+		"name": "Spacecraft project with branches and tags - 2022-07-21 13:51:18.826380"
+	},
+	{
+		"@id": "8597ad76-2ef4-4d20-8d40-ad84712f3831",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "743f5990-18a2-4084-aad1-ea19f01c455e"
+		},
+		"description": null,
+		"name": "13a-Model Containment Thu Jul 21 12:56:16 EDT 2022"
+	},
+	{
+		"@id": "871d1fe1-e390-4833-9227-d5c05836fc22",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "57e75fa4-c357-428c-b026-6b242ff7083e"
+		},
+		"description": null,
+		"name": "13b-Safety and Security Features Element Group Thu Jul 21 12:56:29 EDT 2022"
+	},
+	{
+		"@id": "abeda0f3-251b-40f6-bb6f-68fd09a9b75a",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "a1f092dd-10a4-479b-8c61-26cffcad688e"
+		},
+		"description": null,
+		"name": "9-Verification-simplified Thu Jul 21 12:53:57 EDT 2022"
+	},
+	{
+		"@id": "b005618e-c4be-4f93-aaf0-018b740c0bdf",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "3a965676-73be-4fb9-bc74-b24e071f0fab"
+		},
+		"description": null,
+		"name": "15_19-Materials with Properties Thu Jul 21 12:58:54 EDT 2022"
+	},
+	{
+		"@id": "bb1979f0-48fb-42e2-a1f5-540d7d9b1bbf",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "4ec0dd12-8186-4748-a29d-2a8a2069cbfe"
+		},
+		"description": null,
+		"name": "8-Requirements Thu Jul 21 12:53:36 EDT 2022"
+	},
+	{
+		"@id": "bef58996-8b2e-40af-9c18-167b56a3ceaa",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "050d1c11-cc39-4e05-94ee-ca828a3bdb2a"
+		},
+		"description": null,
+		"name": "2a-Parts Interconnection Thu Jul 21 12:50:33 EDT 2022"
+	},
+	{
+		"@id": "bf31e71b-d8a0-4613-97c6-5e33e3db04f5",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "ade1d8e5-a238-4cd7-b632-5cd887c9bbe0"
+		},
+		"description": "Spacecraft project with multiple commits, branches, and tags",
+		"name": "Spacecraft project with branches and tags - 2022-07-25 12:06:56.439934"
+	},
+	{
+		"@id": "bfbcdf8f-0408-40cd-9b70-f4213b4755a3",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "4f3f2192-66b5-475d-b261-51e76f9890b9"
+		},
+		"description": null,
+		"name": "10c-Fuel Economy Analysis Thu Jul 21 12:54:33 EDT 2022"
+	},
+	{
+		"@id": "c447383d-eb07-4b2e-ac8e-aaaafefb6397",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "f3ee9a52-c3d5-4b80-be93-e483f99a1530"
+		},
+		"description": null,
+		"name": "14a-Language Extensions Thu Jul 21 12:57:31 EDT 2022"
+	},
+	{
+		"@id": "cd690598-10ef-49a0-99b7-bcceaeae2ad0",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "69c80301-2aac-4e39-b7fe-20d029d89749"
+		},
+		"description": null,
+		"name": "15_05-Unification of Expression and Constraint Definition Thu Jul 21 12:58:22 EDT 2022"
+	},
+	{
+		"@id": "d2421ab5-48fd-41ba-b920-20f99660fbff",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "8f00d199-ab4b-4ddf-8611-ec38a374ed10"
+		},
+		"description": null,
+		"name": "10d-Dynamics Analysis Thu Jul 21 12:54:55 EDT 2022"
+	},
+	{
+		"@id": "d3da6a1d-4f4f-4181-abcd-463431bb9cf6",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "00b4d2cd-06b3-47d1-aa4e-c674c02abee6"
+		},
+		"description": null,
+		"name": "15_10-Primitive Data Types Thu Jul 21 12:58:39 EDT 2022"
+	},
+	{
+		"@id": "da1b31dc-5a86-4c64-9793-67bcb86e5a48",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "37e60104-5398-4a32-963f-236977464fea"
+		},
+		"description": null,
+		"name": "14b-Language Extensions Thu Jul 21 12:57:43 EDT 2022"
+	},
+	{
+		"@id": "df9da7c0-97e7-4545-8a14-03a2a01fa99f",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "cb6d222c-6e05-4f27-8583-b6244f4bd6fb"
+		},
+		"description": null,
+		"name": "5-State-based Behavior-1a Thu Jul 21 12:52:33 EDT 2022"
+	},
+	{
+		"@id": "e4a38d1f-b480-48ce-9efe-38643b2f453e",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "43328fb8-9b99-4b38-9dbf-bc52094889c6"
+		},
+		"description": null,
+		"name": "11b-Safety and Security Feature Views Thu Jul 21 12:55:33 EDT 2022"
+	},
+	{
+		"@id": "fd56a9a3-516e-4e7a-82b8-6fd8fd843907",
+		"@type": "Project",
+		"defaultBranch": {
+			"@id": "5ee70dab-4267-44e1-a73f-d5f0f66aaf17"
+		},
+		"description": null,
+		"name": "6-Individual and Snapshots Thu Jul 21 12:52:55 EDT 2022"
+	}
+]

@@ -18,8 +18,10 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.API.DTO
 {
+    using System;
+
     using SysML2.NET.Common;
 
     /// <summary>
@@ -32,15 +34,15 @@ namespace SysML2.NET.API.POCO
         /// <summary>
         /// Gets or sets the <see cref="Project"/> <see cref="Commit"/> at which the wrapped data (payload) was created, modified, or deleted.
         /// </summary>
-        public Commit Commit { get; set; }
+        public Guid Commit { get; set; }
 
         /// <summary>
-        /// Gets or sets a reference to corresponding the <see cref="DataIdentity"/>
+        /// Gets or sets the contained <see cref="DataIdentity"/>
         /// </summary>
         public DataIdentity Identity { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="IData"/> payload
+        /// Gets or sets the <see cref="IData"/> that is the payload
         /// </summary>
         public IData Payload { get; set; }
     }

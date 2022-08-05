@@ -23,11 +23,13 @@ namespace SysML2.NET.API
     using System;
     using System.Collections.Generic;
 
+    using SysML2.NET.Common;
+
     /// <summary>
     /// A Record represents any data that is consumed (input) or produced (output) by the Systems Modeling API
     /// and Services.A Record is an abstract concept from which other concrete concepts inherit.
     /// </summary>
-    public abstract class Record
+    public abstract class Record : IData
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Record"/> class.

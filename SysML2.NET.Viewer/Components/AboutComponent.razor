@@ -15,7 +15,7 @@ limitations under the License.
 ------------------------------------------------------------------------------->
 
 @using System.Reflection
-@using SysML2.NET.DTO;
+@using SysML2.NET.Common;
 
 @inject DialogService DialogService
 @inject HttpClient HttpClient;
@@ -94,7 +94,7 @@ limitations under the License.
             InformationalVersion;
 
 
-        var assemblyVersion = typeof(IElement).Assembly.GetName().Version;
+        var assemblyVersion = typeof(IData).Assembly.GetName().Version;
         this.sysML2NetVersion = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Revision}";
         
         license = await HttpClient.GetStringAsync("https://raw.githubusercontent.com/RHEAGROUP/SysML2.NET/development/LICENSE");

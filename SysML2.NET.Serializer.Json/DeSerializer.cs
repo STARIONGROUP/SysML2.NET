@@ -20,9 +20,11 @@
 
 namespace SysML2.NET.Serializer.Json
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Runtime.Serialization;
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
@@ -32,6 +34,7 @@ namespace SysML2.NET.Serializer.Json
 
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO;
+    using SysML2.NET.Serializer.Json.API;
 
     /// <summary>
     /// The purpose of the <see cref="DeSerializer"/> is to deserialize a JSON <see cref="Stream"/> to
@@ -71,10 +74,13 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="serializationTargetKind">
+        /// The <see cref="SerializationTargetKind"/> to use
+        /// </param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        public IEnumerable<IData> DeSerialize(Stream stream, SerializationModeKind serializationModeKind)
+        public IEnumerable<IData> DeSerialize(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind)
         {
             var sw = Stopwatch.StartNew();
 
@@ -84,24 +90,24 @@ namespace SysML2.NET.Serializer.Json
             {
                 var root = document.RootElement;
 
-                foreach (var jsonElement in root.EnumerateArray())
+                switch (root.ValueKind)
                 {
-                    if (jsonElement.TryGetProperty("@type", out var typeElement))
-                    {
-                        var typeName = typeElement.GetString();
-                        
-                        var func = DeSerializationProvider.Provide(typeName);
-                        var dataItem = func(jsonElement, serializationModeKind, this.loggerFactory);
-                        result.Add(dataItem);
-                    }
+                    case JsonValueKind.Object:
+                        result.Add(this.DeserializeObject(root, serializationModeKind, serializationTargetKind));
+                        break;
+                    case JsonValueKind.Array:
+                        result.AddRange(this.DeserializeArray(root, serializationModeKind, serializationTargetKind));
+                        break;
+                    default:
+                        throw new SerializationException();
                 }
             }
 
-            this.logger.LogInformation($"stream deserialized in {sw.ElapsedMilliseconds} [ms]");
+            this.logger.LogInformation("stream deserialized in {ElapsedTime} [ms]", sw.ElapsedMilliseconds);
 
             return result;
         }
-
+        
         /// <summary>
         /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
         /// </summary>
@@ -111,13 +117,16 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="serializationTargetKind">
+        /// The <see cref="SerializationTargetKind"/> to use
+        /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        public async Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, CancellationToken cancellationToken)
+        public async Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
@@ -129,20 +138,102 @@ namespace SysML2.NET.Serializer.Json
             {
                 var root = document.RootElement;
 
-                foreach (var jsonElement in root.EnumerateArray())
+                switch (root.ValueKind)
                 {
-                    if (jsonElement.TryGetProperty("@type", out var typeElement))
-                    {
-                        var typeName = typeElement.GetString();
-
-                        var func = DeSerializationProvider.Provide(typeName);
-                        var dataItem = func(jsonElement, serializationModeKind, this.loggerFactory);
-                        result.Add(dataItem);
-                    }
+                    case JsonValueKind.Object:
+                        result.Add(this.DeserializeObject(root, serializationModeKind, serializationTargetKind));
+                        break;
+                    case JsonValueKind.Array:
+                        result.AddRange(this.DeserializeArray(root, serializationModeKind, serializationTargetKind));
+                        break;
+                    default:
+                        throw new SerializationException();
                 }
             }
 
-            this.logger.LogInformation($"stream deserialized in {sw.ElapsedMilliseconds} [ms]");
+            this.logger.LogInformation($"stream deserialized asynchronously in {sw.ElapsedMilliseconds} [ms]");
+
+            return result;
+        }
+
+        /// <summary>
+        /// Deserializes an <see cref="JsonElement"/> of type <see cref="JsonValueKind.Object"/> to an <see cref="IData"/> object
+        /// </summary>
+        /// <param name="jsonObject">
+        /// the subject <see cref="JsonElement"/>
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="serializationTargetKind">
+        /// The <see cref="SerializationTargetKind"/> to use
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="IData"/>
+        /// </returns>
+        private IData DeserializeObject(JsonElement jsonObject, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind)
+        {
+            if (jsonObject.ValueKind != JsonValueKind.Object)
+            {
+                throw new ArgumentException($"The {nameof(jsonObject)} must be of type JsonValueKind.Object", nameof(jsonObject));
+            }
+
+            if (jsonObject.TryGetProperty("@type", out var typeElement))
+            {
+                var typeName = typeElement.GetString();
+
+                Func<JsonElement, SerializationModeKind, ILoggerFactory, IData> func;
+
+                if (serializationTargetKind == SerializationTargetKind.RESTAPI)
+                {
+                    try
+                    {
+                        func = ApiDeSerializationProvider.Provide(typeName);
+                        return func(jsonObject, serializationModeKind, this.loggerFactory);
+                    }
+                    catch (NotSupportedException)
+                    {
+                        func = DeSerializationProvider.Provide(typeName);
+                        return func(jsonObject, serializationModeKind, this.loggerFactory);
+                    }
+                }
+
+                func = DeSerializationProvider.Provide(typeName);
+                return func(jsonObject, serializationModeKind, this.loggerFactory);
+            }
+
+            throw new SerializationException("The @type Json property is not available, the DeSerializer cannot be used to deserialize this JsonElement");
+        }
+
+        /// <summary>
+        /// Deserializes an <see cref="JsonElement"/> of type <see cref="JsonValueKind.Array"/> to an <see cref="IEnumerable{IData}"/> object
+        /// </summary>
+        /// <param name="jsonArray">
+        /// the subject <see cref="JsonElement"/>
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="serializationTargetKind">
+        /// The <see cref="SerializationTargetKind"/> to use
+        /// </param>
+        /// <returns>
+        /// an <see cref="IEnumerable{IData}"/>
+        /// </returns>
+        private IEnumerable<IData> DeserializeArray(JsonElement jsonArray, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind)
+        {
+            if (jsonArray.ValueKind != JsonValueKind.Array)
+            {
+                throw new ArgumentException($"The {nameof(jsonArray)} must be of type JsonValueKind.Array", nameof(jsonArray));
+            }
+
+            var result = new List<IData>();
+
+            foreach (var jsonElement in jsonArray.EnumerateArray())
+            {
+                var dataItem = this.DeserializeObject(jsonElement, serializationModeKind, serializationTargetKind);
+                result.Add(dataItem);
+            }
 
             return result;
         }

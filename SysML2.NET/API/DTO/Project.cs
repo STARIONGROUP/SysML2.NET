@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DataVersion.cs" company="RHEA System S.A.">
+// <copyright file="Record.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -18,30 +18,36 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.API.DTO
 {
-    using SysML2.NET.Common;
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.API;
 
     /// <summary>
-    /// A subclass of <see cref="Record"/> that represents <see cref="IData"/> at a specific version in its lifecycle.
-    /// A <see cref="DataVersion"/> record is associated with only one (1) <see cref="DataIdentity"/> record. <see cref="DataVersion"/>
-    /// serves as a wrapper for <see cref="IData"/> (payload) in the context of a <see cref="Commit"/> in a <see cref="Project"/>.
+    /// A subclass of <see cref="Record"/> that represents a container for other <see cref="Record"/>s and
+    /// an entry point for version management and data navigation
     /// </summary>
-    public class DataVersion : Record
+    public class Project : Record
     {
         /// <summary>
-        /// Gets or sets the <see cref="Project"/> <see cref="Commit"/> at which the wrapped data (payload) was created, modified, or deleted.
+        /// Gets or sets the human readable name
         /// </summary>
-        public Commit Commit { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a reference to corresponding the <see cref="DataIdentity"/>
+        /// Gets the set of <see cref="DataIdentity"/> records corresponding to the <see cref="IData"/>
+        /// contained in the <see cref="Project"/>
         /// </summary>
-        public DataIdentity Identity { get; set; }
-
+        /// <remarks>
+        /// this is a derived attribute
+        /// </remarks>
+        public IEnumerable<Guid> IdentifiedData => throw new NotImplementedException();
+        
         /// <summary>
-        /// Gets or sets the <see cref="IData"/> payload
+        /// Gets or sets the default <see cref="Branch"/> in the <see cref="Project"/> which is a subset of <see cref="Branch"/>
         /// </summary>
-        public IData Payload { get; set; }
+        public Guid DefaultBranch { get; set; }
     }
 }

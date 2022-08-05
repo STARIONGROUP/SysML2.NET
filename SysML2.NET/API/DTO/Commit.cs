@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.API.DTO
 {
     using System;
     using System.Collections.Generic;
@@ -47,7 +47,6 @@ namespace SysML2.NET.API.POCO
         public Commit()
         {
             this.Change = new List<DataVersion>();
-            this.VersionedData = new List<DataVersion>();
         }
 
         /// <summary>
@@ -58,22 +57,17 @@ namespace SysML2.NET.API.POCO
         /// <summary>
         /// Gets or sets the <see cref="Project"/> that owns the <see cref="Commit"/>.
         /// </summary>
-        public Project OwningProject { get; set; }
+        public Guid OwningProject { get; set; }
 
         /// <summary>
         /// Gets or sets the sets the set of immediately preceding <see cref="Commit"/>s
         /// </summary>
-        public Commit PreviousCommit { get; set; }
+        public Guid? PreviousCommit { get; set; }
 
         /// <summary>
         /// Gets or sets the the set of <see cref="DataVersion"/> records representing <see cref="IData"/> that is
         /// created, updated, or deleted in the <see cref="Commit"/>
         /// </summary>
         public List<DataVersion> Change { get; set; }
-
-        /// <summary>
-        /// Gets or sets the set of cumulative <see cref="DataVersion"/> records in a <see cref="Project"/> at the <see cref="Commit"/>
-        /// </summary>
-        public List<DataVersion> VersionedData { get; set; }
     }
 }
