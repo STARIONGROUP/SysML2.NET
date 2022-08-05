@@ -4,7 +4,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<Version>0.2.0</Version>
+		<Version>0.3.0</Version>
 		<Description>A .NET implementation of the OMG SysML v2 specification.</Description>
 		<PackageId>SysML2.NET</PackageId>
 		<Company>RHEA System S.A.</Company>
@@ -14,6 +14,9 @@
 		<RepositoryType>Git</RepositoryType>
 		<Authors>Sam Gerené</Authors>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+		<PackageReleaseNotes>
+			[Add] REST API classes
+		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
