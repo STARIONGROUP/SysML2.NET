@@ -38,6 +38,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.branches.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.commits.931978a2-e117-4408-96f4-02b861ddbedd.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

@@ -190,13 +190,33 @@ namespace SysML2.NET.Serializer.Json.Tests
 
                 Assert.That(data.Count(), Is.EqualTo(2));
 
-                var firstCommit = data.OfType<Tag>().Single(x => x.Id == Guid.Parse("4f502263-e15d-4ee9-a8c0-64fbb7f53070"));
-                Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("82961e71-c75a-4d9d-adff-ef491fa8f5f3")));
-                Assert.That(firstCommit.Name, Is.EqualTo("Spacecraft Internal Release 0.1"));
-                Assert.That(firstCommit.Description, Is.Null);
-                Assert.That(firstCommit.ReferencedCommit, Is.EqualTo(Guid.Parse("6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493")));
-                Assert.That(firstCommit.TaggedCommit, Is.EqualTo(Guid.Parse("6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493")));
-                Assert.That(firstCommit.TimeStamp, Is.EqualTo(DateTime.Parse("2022-07-21T13:51:20.942973-04:00")));
+                var tag = data.OfType<Tag>().Single(x => x.Id == Guid.Parse("4f502263-e15d-4ee9-a8c0-64fbb7f53070"));
+                Assert.That(tag.OwningProject, Is.EqualTo(Guid.Parse("82961e71-c75a-4d9d-adff-ef491fa8f5f3")));
+                Assert.That(tag.Name, Is.EqualTo("Spacecraft Internal Release 0.1"));
+                Assert.That(tag.Description, Is.Null);
+                Assert.That(tag.ReferencedCommit, Is.EqualTo(Guid.Parse("6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493")));
+                Assert.That(tag.TaggedCommit, Is.EqualTo(Guid.Parse("6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493")));
+                Assert.That(tag.TimeStamp, Is.EqualTo(DateTime.Parse("2022-07-21T13:51:20.942973-04:00")));
+            }
+        }
+
+        [Test]
+        public void Verify_that_particular_project_and_branches_from_restapi_json_can_be_deserialized()
+        {
+            var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.branches.json");
+            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            {
+                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI);
+
+                Assert.That(data.Count(), Is.EqualTo(2));
+
+                var branch = data.OfType<Branch>().Single(x => x.Id == Guid.Parse("b541c0f3-0b12-4073-a769-f58ec94ea3c3"));
+                Assert.That(branch.OwningProject, Is.EqualTo(Guid.Parse("82961e71-c75a-4d9d-adff-ef491fa8f5f3")));
+                Assert.That(branch.Name, Is.EqualTo("main"));
+                Assert.That(branch.Description, Is.Null);
+                Assert.That(branch.ReferencedCommit, Is.EqualTo(Guid.Parse("6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493")));
+                Assert.That(branch.Head, Is.EqualTo(Guid.Parse("6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493")));
+                Assert.That(branch.TimeStamp, Is.EqualTo(DateTime.Parse("2022-07-21T13:51:18.886889-04:00")));
             }
         }
     }

@@ -40,14 +40,29 @@ namespace SysML2.NET.API.DTO
         public DateTime DeletionTimestamp { get; set; }
 
         /// <summary>
+        /// Gets or sets the <see cref="DateTime"/>
+        /// </summary>
+        public DateTime TimeStamp { get; set; }
+
+        /// <summary>
         /// Gets or sets the commit to which the branch is currently pointing. It represents the latest state of the
         /// <see cref="Project"/> on the given branch
         /// </summary>
         public Guid Head { get; set; }
 
         /// <summary>
+        /// Gets a human readable name for the <see cref="Branch"/>
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets <see cref="Project"/> that owns the given <see cref="Branch"/>
         /// </summary>
         public Guid OwningProject { get; set; }
+
+        /// <summary>
+        /// Gets or sets a reference to the referenced <see cref="Commit"/>
+        /// </summary>
+        public Guid ReferencedCommit { get; set; }
     }
 }
