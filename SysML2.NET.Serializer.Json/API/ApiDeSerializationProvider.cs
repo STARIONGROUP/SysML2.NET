@@ -41,9 +41,10 @@ namespace SysML2.NET.Serializer.Json.API
             DeSerializerActionMap =
                 new Dictionary<string, Func<JsonElement, SerializationModeKind, ILoggerFactory, IData>>
                 {
-                    { "Project", ProjectDeSerializer.DeSerialize },
                     { "Commit", CommitDeSerializer.DeSerialize },
                     { "DataIdentity", DataIdentityDeSerializer.DeSerialize },
+                    { "Project", ProjectDeSerializer.DeSerialize },
+                    { "Tag", TagDeserializer.DeSerialize}
                 };
     
         /// <summary>

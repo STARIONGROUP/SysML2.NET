@@ -1,0 +1,32 @@
+[
+	{
+		"@id": "30415060-083f-442d-a9a5-1063f7f6359f",
+		"@type": "Tag",
+		"name": "Spacecraft Internal Release 0.2 build 1",
+		"owningProject": {
+			"@id": "82961e71-c75a-4d9d-adff-ef491fa8f5f3"
+		},
+		"referencedCommit": {
+			"@id": "931978a2-e117-4408-96f4-02b861ddbedd"
+		},
+		"taggedCommit": {
+			"@id": "931978a2-e117-4408-96f4-02b861ddbedd"
+		},
+		"timestamp": "2022-07-21T13:51:21.877972-04:00"
+	},
+	{
+		"@id": "4f502263-e15d-4ee9-a8c0-64fbb7f53070",
+		"@type": "Tag",
+		"name": "Spacecraft Internal Release 0.1",
+		"owningProject": {
+			"@id": "82961e71-c75a-4d9d-adff-ef491fa8f5f3"
+		},
+		"referencedCommit": {
+			"@id": "6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493"
+		},
+		"taggedCommit": {
+			"@id": "6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493"
+		},
+		"timestamp": "2022-07-21T13:51:20.942973-04:00"
+	}
+]

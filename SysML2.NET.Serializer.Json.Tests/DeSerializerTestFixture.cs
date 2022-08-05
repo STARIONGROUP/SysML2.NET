@@ -179,5 +179,25 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Assert.That(commit.TimeStamp, Is.EqualTo(DateTime.Parse("2022-07-21T13:51:21.167494-04:00")));
             }
         }
+
+        [Test]
+        public void Verify_that_particular_project_and_tags_from_restapi_json_can_be_deserialized()
+        {
+            var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.tags.json");
+            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            {
+                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI);
+
+                Assert.That(data.Count(), Is.EqualTo(2));
+
+                var firstCommit = data.OfType<Tag>().Single(x => x.Id == Guid.Parse("4f502263-e15d-4ee9-a8c0-64fbb7f53070"));
+                Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("82961e71-c75a-4d9d-adff-ef491fa8f5f3")));
+                Assert.That(firstCommit.Name, Is.EqualTo("Spacecraft Internal Release 0.1"));
+                Assert.That(firstCommit.Description, Is.Null);
+                Assert.That(firstCommit.ReferencedCommit, Is.EqualTo(Guid.Parse("6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493")));
+                Assert.That(firstCommit.TaggedCommit, Is.EqualTo(Guid.Parse("6bad3e3d-854d-4ed9-92ed-5ba7ec7f5493")));
+                Assert.That(firstCommit.TimeStamp, Is.EqualTo(DateTime.Parse("2022-07-21T13:51:20.942973-04:00")));
+            }
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="CommitDeSerializer.cs" company="RHEA System S.A.">
+// <copyright file="TagDeserializer.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -29,16 +29,16 @@ namespace SysML2.NET.Serializer.Json.API
     using SysML2.NET.API.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="CommitDeSerializer"/> is to provide deserialization capabilities
-    /// for the <see cref="Commit"/> class
+    /// The purpose of the <see cref="TagDeserializer"/> is to provide deserialization capabilities
+    /// for the <see cref="Tag"/> class
     /// </summary>
-    internal static class CommitDeSerializer
+    internal static class TagDeserializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="Commit"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="Tag"/> from the provided <see cref="JsonElement"/>
         /// </summary>
         /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="Commit"/> json object
+        /// The <see cref="JsonElement"/> that contains the <see cref="Tag"/> json object
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -47,48 +47,35 @@ namespace SysML2.NET.Serializer.Json.API
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Project"/>
+        /// an instance of <see cref="Tag"/>
         /// </returns>
-        internal static Commit DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static Tag DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
         {
-            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("CommitDeSerializer");
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("TagDeserializer");
 
             if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
-                throw new InvalidOperationException("The @type property is not available, the CommitDeSerializer cannot be used to deserialize this JsonElement");
+                throw new InvalidOperationException("The @type property is not available, the TagDeserializer cannot be used to deserialize this JsonElement");
             }
 
-            if (@type.GetString() != "Commit")
+            if (@type.GetString() != "Tag")
             {
-                throw new InvalidOperationException($"The CommitDeSerializer can only be used to deserialize objects of type Commit, a {@type.GetString()} was provided");
+                throw new InvalidOperationException($"The TagDeserializer can only be used to deserialize objects of type Tag, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new SysML2.NET.API.DTO.Commit();
+            var dtoInstance = new SysML2.NET.API.DTO.Tag();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
                 {
-                    throw new JsonException("The @id property is not present, the Commit cannot be deserialized");
+                    throw new JsonException("The @id property is not present, the Tag cannot be deserialized");
                 }
-                
+
                 dtoInstance.Id = Guid.Parse(propertyValue);
             }
-
-            if (jsonElement.TryGetProperty("change", out JsonElement changeProperty))
-            {
-                foreach (var versionItem in changeProperty.EnumerateArray())
-                {
-                    var dataVersion = DataVersionDeSerializer.DeSerialize(versionItem, serializationModeKind, loggerFactory);
-                    dtoInstance.Change.Add(dataVersion);
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the change Json property was not found in the Commit: {dtoInstance.Id}");
-            }
-
+            
             if (jsonElement.TryGetProperty("description", out JsonElement descriptionProperty))
             {
                 var propertyValue = descriptionProperty.GetString();
@@ -100,6 +87,19 @@ namespace SysML2.NET.Serializer.Json.API
             else
             {
                 logger.LogDebug($"the name Json property was not found in the Commit: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            {
+                var propertyValue = nameProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Name = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("owningProject", out JsonElement owningProjectProperty))
@@ -122,30 +122,39 @@ namespace SysML2.NET.Serializer.Json.API
             }
             else
             {
-                logger.LogDebug($"the owningProject Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug($"the owningProject Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("previousCommit", out JsonElement previousCommitProjectProperty))
+            if (jsonElement.TryGetProperty("referencedCommit", out JsonElement referencedCommitProperty))
             {
-                if (previousCommitProjectProperty.ValueKind == JsonValueKind.Null)
+                if (referencedCommitProperty.TryGetProperty("@id", out JsonElement referencedCommitIdProperty))
                 {
-                    dtoInstance.PreviousCommit = null;
-                }
-                else
-                {
-                    if (previousCommitProjectProperty.TryGetProperty("@id", out JsonElement previousCommitPropertyIdProperty))
+                    var propertyValue = referencedCommitIdProperty.GetString();
+                    if (propertyValue != null)
                     {
-                        var propertyValue = previousCommitPropertyIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.PreviousCommit = Guid.Parse(propertyValue);
-                        }
+                        dtoInstance.ReferencedCommit = Guid.Parse(propertyValue);
                     }
                 }
             }
             else
             {
-                logger.LogDebug($"the previousCommit Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug($"the referencedCommit Json property was not found in the Tag: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("taggedCommit", out JsonElement taggedCommitProperty))
+            {
+                if (taggedCommitProperty.TryGetProperty("@id", out JsonElement taggedCommitPropertyIdProperty))
+                {
+                    var propertyValue = taggedCommitPropertyIdProperty.GetString();
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.TaggedCommit = Guid.Parse(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the taggedCommit Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("timestamp", out JsonElement timestampProjectProperty))
@@ -154,7 +163,7 @@ namespace SysML2.NET.Serializer.Json.API
             }
             else
             {
-                logger.LogDebug($"the timestamp Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug($"the timestamp Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
             return dtoInstance;
