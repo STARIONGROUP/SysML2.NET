@@ -18,8 +18,6 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using HandlebarsDotNet.Features;
-
 namespace SysML2.NET.CodeGenerator.Extensions
 {
     using System.Collections.Generic;
@@ -352,7 +350,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 }
             }
 
-            yield return line;
+            yield return line.Trim();
         }
     }
 }
