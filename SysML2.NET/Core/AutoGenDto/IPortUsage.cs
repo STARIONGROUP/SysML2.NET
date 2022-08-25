@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.DTO
     /// PortDefinition, a PartUsage or another PortUsage.  Any nestedUsages of a PortUsage, other than
     /// nested PortUsages, must not be composite.A PortUsage must subset, directly or indirectly, the
     /// PortUsage ports from the Systems model library.nestedUsage->    select(not oclIsKindOf(PortUsage))->
-    ///    forAll(not isComposite)
+    /// forAll(not isComposite)
     /// </summary>
     public partial interface IPortUsage : IOccurrenceUsage
     {

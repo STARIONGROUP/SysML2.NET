@@ -155,6 +155,7 @@ namespace SysML2.NET.Serializer.Json
             { "PortioningFeature", PortioningFeatureDeSerializer.DeSerialize },
             { "PortUsage", PortUsageDeSerializer.DeSerialize },
             { "Predicate", PredicateDeSerializer.DeSerialize },
+            { "PrefixComment", PrefixCommentDeSerializer.DeSerialize },
             { "Redefinition", RedefinitionDeSerializer.DeSerialize },
             { "ReferenceUsage", ReferenceUsageDeSerializer.DeSerialize },
             { "Relationship", RelationshipDeSerializer.DeSerialize },

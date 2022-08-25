@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="PartDefinition.cs" company="RHEA System S.A.">
+// <copyright file="PrefixComment.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,16 +30,13 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A PartDefinition is a ItemDefinition of a Class of systems or parts of systems. Note that all parts
-    /// may be considered items for certain purposes, but not all items are parts that can perform actions
-    /// within a system.A PartDefinition must subclass, directly or indirectly, the base PartDefinition Part
-    /// from the Systems model library.
     /// </summary>
-    public partial class PartDefinition : IPartDefinition
+    public partial class PrefixComment : IPrefixComment
     {
-        public PartDefinition()
+        public PrefixComment()
         {
             this.AliasIds = new List<string>();
+            this.Annotation = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
         }
 
@@ -54,37 +51,27 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
+        /// </summary>
+        public List<Guid> Annotation { get; set; }
+
+        /// <summary>
+        /// The annotation text for the Comment.
+        /// </summary>
+        public string Body { get; set; }
+
+        /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
         public string ElementId { get; set; }
 
         /// <summary>
-        /// Indicates whether instances of this Type must also be instances of at least one of its specialized
-        /// Types.
+        /// Identification of the language of the body text and, optionally, the region and/or encoding. The
+        /// format shall be a POSIX locale conformant to ISO/IEC 15897, with the format
+        /// [language[_territory][.codeset][@modifier]].
         /// </summary>
-        public bool IsAbstract { get; set; }
-
-        /// <summary>
-        /// Whether this OccurrenceDefinition is constrained to represent single individual.
-        /// </summary>
-        public bool IsIndividual { get; set; }
-
-        /// <summary>
-        /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
-        /// classify all four-wheeled things.)
-        /// </summary>
-        public bool IsSufficient { get; set; }
-
-        /// <summary>
-        /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
-        /// Definition must be VariantMemberships.
-        /// </summary>
-        public bool IsVariation { get; set; }
+        public string Locale { get; set; }
 
         /// <summary>
         /// The primary name of this Element.

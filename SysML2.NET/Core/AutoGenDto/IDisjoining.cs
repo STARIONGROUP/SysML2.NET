@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.DTO
     /// A Disjoining is a Relationship between Types asserted to have interpretations that are not shared
     /// (disjoint) between them, identified as typeDisjoined and disjoiningType. For example, a Classifier
     /// for mammals is disjoint from a Classifier for minerals, and a Feature for people&#39;s parents is
-    /// disjoint from a Feature for their children. 
+    /// disjoint from a Feature for their children.
     /// </summary>
     public partial interface IDisjoining : IRelationship
     {

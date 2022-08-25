@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="FeatureValueSerializer.cs" company="RHEA System S.A.">
+// <copyright file="PrefixCommentSerializer.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
 //
@@ -31,16 +31,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="FeatureValueSerializer"/> is to provide serialization
+    /// The purpose of the <see cref="PrefixCommentSerializer"/> is to provide serialization
     /// and deserialization capabilities
     /// </summary>
-    internal static class FeatureValueSerializer
+    internal static class PrefixCommentSerializer
     {
         /// <summary>
-        /// Serializes an instance of <see cref="IFeatureValue"/> using an <see cref="Utf8JsonWriter"/>
+        /// Serializes an instance of <see cref="IPrefixComment"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
         /// <param name="obj">
-        /// The <see cref="IFeatureValue"/> to serialize
+        /// The <see cref="IPrefixComment"/> to serialize
         /// </param>
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
@@ -50,75 +50,56 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IFeatureValue iFeatureValue))
+            if (!(obj is IPrefixComment iPrefixComment))
             {
-                throw new ArgumentException("The object shall be an IFeatureValue", nameof(obj));
+                throw new ArgumentException("The object shall be an IPrefixComment", nameof(obj));
             }
 
             writer.WriteStartObject();
 
             writer.WritePropertyName("@type");
-            writer.WriteStringValue("FeatureValue");
+            writer.WriteStringValue("PrefixComment");
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(iFeatureValue.Id);
+            writer.WriteStringValue(iPrefixComment.Id);
 
             writer.WriteStartArray("aliasIds");
-            foreach (var item in iFeatureValue.AliasIds)
+            foreach (var item in iPrefixComment.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
+
+            writer.WriteStartArray("annotation");
+            foreach (var item in iPrefixComment.Annotation)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("body");
+            writer.WriteStringValue(iPrefixComment.Body);
 
             writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iFeatureValue.ElementId);
+            writer.WriteStringValue(iPrefixComment.ElementId);
 
-            writer.WritePropertyName("isDefault");
-            writer.WriteBooleanValue(iFeatureValue.IsDefault);
-
-            writer.WritePropertyName("isInitial");
-            writer.WriteBooleanValue(iFeatureValue.IsInitial);
-
-            writer.WritePropertyName("memberElement");
-            writer.WriteStringValue(iFeatureValue.MemberElement);
-
-            writer.WritePropertyName("memberName");
-            writer.WriteStringValue(iFeatureValue.MemberName);
-
-            writer.WritePropertyName("memberShortName");
-            writer.WriteStringValue(iFeatureValue.MemberShortName);
+            writer.WritePropertyName("locale");
+            writer.WriteStringValue(iPrefixComment.Locale);
 
             writer.WritePropertyName("name");
-            writer.WriteStringValue(iFeatureValue.Name);
-
-            writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iFeatureValue.OwnedRelatedElement)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
+            writer.WriteStringValue(iPrefixComment.Name);
 
             writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iFeatureValue.OwnedRelationship)
+            foreach (var item in iPrefixComment.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
-            if (iFeatureValue.OwningRelatedElement.HasValue)
-            {
-                writer.WriteStringValue(iFeatureValue.OwningRelatedElement.Value);
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("owningRelationship");
-            if (iFeatureValue.OwningRelationship.HasValue)
+            if (iPrefixComment.OwningRelationship.HasValue)
             {
-                writer.WriteStringValue(iFeatureValue.OwningRelationship.Value);
+                writer.WriteStringValue(iPrefixComment.OwningRelationship.Value);
             }
             else
             {
@@ -126,24 +107,7 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFeatureValue.ShortName);
-
-            writer.WriteStartArray("source");
-            foreach (var item in iFeatureValue.Source)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target");
-            foreach (var item in iFeatureValue.Target)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iFeatureValue.Visibility.ToString().ToUpper());
+            writer.WriteStringValue(iPrefixComment.ShortName);
 
             writer.WriteEndObject();
         }

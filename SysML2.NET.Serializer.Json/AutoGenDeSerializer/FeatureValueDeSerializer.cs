@@ -112,30 +112,6 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the elementId Json property was not found in the FeatureValue: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("featureWithValue", out JsonElement featureWithValueProperty))
-            {
-                if (featureWithValueProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.FeatureWithValue = Guid.Empty;
-                    logger.LogDebug($"the FeatureValue.FeatureWithValue property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (featureWithValueProperty.TryGetProperty("@id", out JsonElement featureWithValueIdProperty))
-                    {
-                        var propertyValue = featureWithValueIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.FeatureWithValue = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the featureWithValue Json property was not found in the FeatureValue: {dtoInstance.Id}");
-            }
-
             if (jsonElement.TryGetProperty("isDefault", out JsonElement isDefaultProperty))
             {
                 dtoInstance.IsDefault = isDefaultProperty.GetBoolean();

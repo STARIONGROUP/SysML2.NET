@@ -47,10 +47,6 @@ namespace SysML2.NET.Core.DTO
     public partial interface IFeatureValue : IOwningMembership
     {
         /// <summary>
-        /// </summary>
-        Guid FeatureWithValue { get; set; }
-
-        /// <summary>
         /// Whether this FeatureValue is a concrete specification of the bound of initial value of the
         /// featureWithValue, or just a default value that may be overridden.
         /// </summary>

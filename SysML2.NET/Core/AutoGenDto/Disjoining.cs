@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.DTO
     /// A Disjoining is a Relationship between Types asserted to have interpretations that are not shared
     /// (disjoint) between them, identified as typeDisjoined and disjoiningType. For example, a Classifier
     /// for mammals is disjoint from a Classifier for minerals, and a Feature for people&#39;s parents is
-    /// disjoint from a Feature for their children. 
+    /// disjoint from a Feature for their children.
     /// </summary>
     public partial class Disjoining : IDisjoining
     {
@@ -95,7 +95,7 @@ namespace SysML2.NET.Core.DTO
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
         /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
         /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context. 
+        /// model or relative to some other context.
         /// </summary>
         public string ShortName { get; set; }
 

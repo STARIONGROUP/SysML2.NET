@@ -148,6 +148,7 @@ namespace SysML2.NET.Serializer.Json
             { typeof(Core.DTO.PortioningFeature), PortioningFeatureSerializer.Serialize },
             { typeof(Core.DTO.PortUsage), PortUsageSerializer.Serialize },
             { typeof(Core.DTO.Predicate), PredicateSerializer.Serialize },
+            { typeof(Core.DTO.PrefixComment), PrefixCommentSerializer.Serialize },
             { typeof(Core.DTO.Redefinition), RedefinitionSerializer.Serialize },
             { typeof(Core.DTO.ReferenceUsage), ReferenceUsageSerializer.Serialize },
             { typeof(Core.DTO.Relationship), RelationshipSerializer.Serialize },

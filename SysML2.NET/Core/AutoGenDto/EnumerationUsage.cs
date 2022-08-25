@@ -148,7 +148,7 @@ namespace SysML2.NET.Core.DTO
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
         /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
         /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context. 
+        /// model or relative to some other context.
         /// </summary>
         public string ShortName { get; set; }
 

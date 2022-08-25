@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="TriggerKind.cs" company="RHEA System S.A.">
+// <copyright file="IPrefixComment.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -22,31 +22,17 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core
+namespace SysML2.NET.Core.DTO
 {
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.Core;
+
     /// <summary>
-    /// TriggerKind enumerates the kinds of triggers that can be represented by TriggerInvocationExpression.
     /// </summary>
-    public enum TriggerKind
+    public partial interface IPrefixComment : IComment
     {
-        /// <summary>
-        /// Indicates a change trigger, corresponding to the TriggerWhen Function from the Triggers library
-        /// model.
-        /// </summary>
-        When = 0,
-
-        /// <summary>
-        /// Indicates an absolute time trigger, corresponding to the TriggerAt Function from the Triggers
-        /// library model.
-        /// </summary>
-        At = 1,
-
-        /// <summary>
-        /// Indicates a relative time trigger, corresponding to the TriggerAfter Function from the Triggers
-        /// library model.
-        /// </summary>
-        After = 2,
-
     }
 }
 

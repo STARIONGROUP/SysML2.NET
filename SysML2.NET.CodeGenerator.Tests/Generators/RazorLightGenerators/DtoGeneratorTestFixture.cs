@@ -49,6 +49,8 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.RazorLightGenerators
         [Test]
         public void verify_dto_are_generated()
         {
+            Assert.Ignore();
+
             Assert.That(async () => await dtoGenerator.Generate(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }

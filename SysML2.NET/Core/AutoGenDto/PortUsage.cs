@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.DTO
     /// PortDefinition, a PartUsage or another PortUsage.  Any nestedUsages of a PortUsage, other than
     /// nested PortUsages, must not be composite.A PortUsage must subset, directly or indirectly, the
     /// PortUsage ports from the Systems model library.nestedUsage->    select(not oclIsKindOf(PortUsage))->
-    ///    forAll(not isComposite)
+    /// forAll(not isComposite)
     /// </summary>
     public partial class PortUsage : IPortUsage
     {
@@ -162,7 +162,7 @@ namespace SysML2.NET.Core.DTO
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
         /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
         /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context. 
+        /// model or relative to some other context.
         /// </summary>
         public string ShortName { get; set; }
 
