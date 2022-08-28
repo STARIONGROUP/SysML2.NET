@@ -22,14 +22,16 @@
 		<PackageReference Include="BlazorStrap" Version="5.0.106" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
 		<PackageReference Include="Serilog.Sinks.BrowserConsole" Version="1.0.0" />
+		<PackageReference Include="ReactiveUI" Version="18.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
+	  <Folder Include="Services\" />
 	  <Folder Include="wwwroot\images\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\SySML2.NET.REST\SySML2.NET.REST.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

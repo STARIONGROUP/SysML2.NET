@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
 	  <Company>RHEA System S.A.</Company>
 	  <Authors>Sam Gerene</Authors>
-	  <Description>Nunit test suite for the SysML2.NET.Serializer</Description>
+	  <Description>Nunit test suite for the SysML2.NET.REST project</Description>
 	  <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
 	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	  <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
@@ -33,31 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.branches.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.commits.931978a2-e117-4408-96f4-02b861ddbedd.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.commits.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Data\projects.29845a29-b25b-4bab-b8cc-f46a021b7f5a.commits.ec39c63a-fdaa-4a47-98a5-8e8f56b3a986.elements.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.tags.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Data\projects.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+	  <ProjectReference Include="..\SySML2.NET.REST\SySML2.NET.REST.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,57 @@
+﻿<!------------------------------------------------------------------------------
+	Copyright 2022 RHEA System S.A.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+------------------------------------------------------------------------------->
+
+<!-- 
+<EditForm Model="this.ViewModel.Authentication" OnValidSubmit="this.ViewModel.ExecuteLogin">
+	<DataAnnotationsValidator/>
+	
+	<div class="input-group row m-top-10px">
+		<label for="username" class="text-align-start">Username:</label>
+		<InputText id="username" class="form-control" @bind-Value="this.ViewModel.Authentication.UserName"/>
+	</div>
+	
+	<div class="input-group row m-top-10px">
+		<label for="password" class="text-align-start">Password:</label>
+		<InputText id="password" type="password" class="form-control" @bind-Value="this.ViewModel.Authentication.Password"/>
+	</div>
+	
+	<ValidationSummary/>
+	
+	@if (this.ViewModel.AuthenticationStatus == AuthenticationStatus.Fail)
+	{
+		<div class="input-group row m-top-10px">
+			<label class="text-danger">@this.ViewModel.ErrorMessage</label>
+		</div>
+	}
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+			@switch (this.ViewModel.AuthenticationStatus)
+			{
+				case AuthenticationStatus.None:
+					<button id="connectbtn" type="submit" class="btn btn-connect m-top-10px">Connect</button>            
+					break;
+				case AuthenticationStatus.Authenticating:
+					<button id="connectbtn" type="submit" class="btn btn-connect m-top-10px" disabled>Connecting</button>            
+					break;
+				case AuthenticationStatus.Fail:
+					<button id="connectbtn" type="submit" class="btn btn-connect m-top-10px">Retry</button>            
+					break;
+			}
+		</div>
+	</div>
+</EditForm>
+-->
