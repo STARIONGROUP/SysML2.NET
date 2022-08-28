@@ -105,7 +105,7 @@ namespace SySML2.NET.REST
                 var projects = await this.RequestProjects(null, null, cancellationToken);
                 return projects;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 this.baseUri = null;
                 throw;

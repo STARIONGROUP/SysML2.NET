@@ -40,7 +40,7 @@ namespace SySML2.NET.REST
         /// <summary>
         /// Dependency injected <see cref="IRestClient"/> used to perform HTTP requests
         /// </summary>
-        private IRestClient restClient;
+        private readonly IRestClient restClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Session"/> class
@@ -66,9 +66,17 @@ namespace SySML2.NET.REST
         /// </param>
         public async Task Open(string username, string password, string uri, CancellationToken cancellationToken)
         {
-            await this.restClient.Open(username, password, uri, cancellationToken);
-            
-            this.baseUri = uri;
+            try
+            {
+                this.baseUri = uri;
+
+                await this.restClient.Open(username, password, this.baseUri, cancellationToken);
+            }
+            catch (Exception)
+            {
+                this.baseUri = null;
+                throw;
+            }
         }
 
         /// <summary>
