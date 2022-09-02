@@ -63,6 +63,8 @@ namespace SysML2.NET.Serializer.Json.API
                 throw new InvalidOperationException($"The DataIdentityDeSerializer only be used to deserialize objects of type DataIdentity, a {@type.GetString()} was provided");
             }
 
+            logger.Log(LogLevel.Trace, "start deserialization: DataIdentity");
+
             var dtoInstance = new SysML2.NET.API.DTO.DataIdentity();
             
             if (jsonElement.TryGetProperty("@id", out JsonElement idPropertyVersionItem))
@@ -75,6 +77,8 @@ namespace SysML2.NET.Serializer.Json.API
 
                 dtoInstance.Id = Guid.Parse(idPropertyVersionItemValue);
             }
+
+            logger.Log(LogLevel.Trace, "finish deserialization: DataIdentity");
 
             return dtoInstance;
         }

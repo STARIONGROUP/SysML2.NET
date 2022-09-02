@@ -63,6 +63,8 @@ namespace SysML2.NET.Serializer.Json.API
                 throw new InvalidOperationException($"The ProjectDeSerializer can only be used to deserialize objects of type Project, a {@type.GetString()} was provided");
             }
 
+            logger.Log(LogLevel.Trace, "start deserialization: Project");
+
             var dtoInstance = new SysML2.NET.API.DTO.Project();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
@@ -142,6 +144,8 @@ namespace SysML2.NET.Serializer.Json.API
             {
                 logger.LogDebug($"the name Json property was not found in the Project: {dtoInstance.Id}");
             }
+
+            logger.Log(LogLevel.Trace, "finish deserialization: Project");
 
             return dtoInstance;
         }

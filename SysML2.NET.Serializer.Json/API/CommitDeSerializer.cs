@@ -63,6 +63,8 @@ namespace SysML2.NET.Serializer.Json.API
                 throw new InvalidOperationException($"The CommitDeSerializer can only be used to deserialize objects of type Commit, a {@type.GetString()} was provided");
             }
 
+            logger.Log(LogLevel.Trace, "start deserialization: Commit");
+
             var dtoInstance = new SysML2.NET.API.DTO.Commit();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
@@ -156,6 +158,8 @@ namespace SysML2.NET.Serializer.Json.API
             {
                 logger.LogDebug($"the timestamp Json property was not found in the Commit: {dtoInstance.Id}");
             }
+
+            logger.Log(LogLevel.Trace, "finish deserialization: Commit");
 
             return dtoInstance;
         }

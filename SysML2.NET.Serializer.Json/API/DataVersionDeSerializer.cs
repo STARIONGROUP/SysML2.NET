@@ -52,7 +52,9 @@ namespace SysML2.NET.Serializer.Json.API
         internal static DataVersion DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("DataVersionDeSerializer");
-            
+
+            logger.Log(LogLevel.Trace, "start deserialization: DataVersion");
+
             var dtoInstance = new SysML2.NET.API.DTO.DataVersion();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idPropertyVersionItem))
@@ -89,6 +91,8 @@ namespace SysML2.NET.Serializer.Json.API
             {
                 logger.LogDebug($"the payload Json property was not found in the DataVersion: {dtoInstance.Id}");
             }
+
+            logger.Log(LogLevel.Trace, "finish deserialization: DataVersion");
 
             return dtoInstance;
         }

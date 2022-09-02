@@ -63,6 +63,8 @@ namespace SysML2.NET.Serializer.Json.API
                 throw new InvalidOperationException($"The TagDeserializer can only be used to deserialize objects of type Tag, a {@type.GetString()} was provided");
             }
 
+            logger.Log(LogLevel.Trace, "start deserialization: Tag");
+
             var dtoInstance = new SysML2.NET.API.DTO.Tag();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
@@ -165,6 +167,8 @@ namespace SysML2.NET.Serializer.Json.API
             {
                 logger.LogDebug($"the timestamp Json property was not found in the Tag: {dtoInstance.Id}");
             }
+
+            logger.Log(LogLevel.Trace, "finish deserialization: Tag");
 
             return dtoInstance;
         }

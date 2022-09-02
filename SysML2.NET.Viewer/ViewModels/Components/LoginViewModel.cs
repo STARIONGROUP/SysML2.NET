@@ -46,7 +46,7 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         /// <summary>
         /// The (dependency) injected <see cref="IRestClient"/>
         /// </summary>
-        private IRestClient restClient;
+        private readonly IRestClient restClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginViewModel"/>
