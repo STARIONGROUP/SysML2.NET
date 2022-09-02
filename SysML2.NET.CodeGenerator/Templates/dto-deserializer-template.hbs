@@ -170,7 +170,10 @@ namespace SysML2.NET.Serializer.Json
                                 {{/if}}
                             {{ else if (StructuralFeature.QueryIsScalar structuralFeature) }}
                                 {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
-                                    dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.Name }}Property.GetBoolean();
+                                    if ({{ structuralFeature.Name }}Property.ValueKind != JsonValueKind.Null)
+                                    {
+                                        dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.Name }}Property.GetBoolean();
+                                    }
                                 {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
                                     {{#if (StructuralFeature.QueryIsInteger structuralFeature) }}
                                         dtoInstance.{{String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.Name }}Property.GetInt32();

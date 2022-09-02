@@ -49,10 +49,13 @@ namespace SysML2.NET.Core.DTO
         public FeatureValue()
         {
             this.AliasIds = new List<string>();
+            this.IsDefault = false;
+            this.IsInitial = false;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
             this.Target = new List<Guid>();
+            this.Visibility = VisibilityKind.Public;
         }
 
         /// <summary>

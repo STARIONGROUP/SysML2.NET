@@ -39,6 +39,10 @@ namespace SysML2.NET.Core.DTO
                 {{#unless structuralFeature.Transient }}
                     {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}
                         this.{{ String.PascalCase structuralFeature.Name }} = new {{#DTO.TypeName structuralFeature }}();
+                    {{else}}
+                        {{#if (StructuralFeature.QueryHasDefaultValue structuralFeature)}}
+                            this.{{ String.PascalCase structuralFeature.Name }} = {{#StructuralFeature.DefaultValue structuralFeature }};
+                        {{/if}}
                     {{/if}}
                 {{/unless}}
             {{/unless}}

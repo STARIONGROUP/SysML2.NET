@@ -26,7 +26,10 @@ namespace SySML2.NET.REST
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Threading;
-    
+
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
     using SysML2.NET.API;
     using SysML2.NET.API.DTO;
     using SysML2.NET.Common;
@@ -60,6 +63,11 @@ namespace SySML2.NET.REST
         private string baseUri;
 
         /// <summary>
+        /// The <see cref="ILogger"/> used to log
+        /// </summary>
+        private readonly ILogger<RestClient> logger;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Session"/> class
         /// </summary>
         /// <param name="httpClient">
@@ -71,11 +79,16 @@ namespace SySML2.NET.REST
         /// <param name="serializer">
         /// Dependency injected <see cref="ISerializer"/> used to serialize to JSON
         /// </param>
-        public RestClient(HttpClient httpClient, IDeSerializer deserializer, ISerializer serializer)
+        /// /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public RestClient(HttpClient httpClient, IDeSerializer deserializer, ISerializer serializer, ILoggerFactory loggerFactory = null)
         {
             this.httpClient = httpClient;
             this.deserializer = deserializer;
             this.serializer = serializer;
+
+            this.logger = loggerFactory == null ? NullLogger<RestClient>.Instance : loggerFactory.CreateLogger<RestClient>();
         }
 
         /// <summary>
@@ -296,7 +309,7 @@ namespace SySML2.NET.REST
         /// <returns>
         /// A list of <see cref="Element"/>s that are contained by the specified <see cref="Project"/> and <see cref="Commit"/>, or a single <see cref="Element"/> if so requested
         /// </returns>
-        public async Task<IEnumerable<Element>> RequestElements(Guid project, Guid commit, Guid? element, QueryParameters queryParameters, CancellationToken cancellationToken)
+        public async Task<IEnumerable<IElement>> RequestElements(Guid project, Guid commit, Guid? element, QueryParameters queryParameters, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(this.baseUri))
             {
@@ -318,10 +331,10 @@ namespace SySML2.NET.REST
 
             if (data != null && data.Any())
             {
-                return data.OfType<Element>();
+                return data.OfType<IElement>();
             }
 
-            return Enumerable.Empty<Element>();
+            return Enumerable.Empty<IElement>();
             
         }
 
@@ -343,7 +356,7 @@ namespace SySML2.NET.REST
         /// <returns>
         /// A list of <see cref="Element"/>s that are contained by the specified <see cref="Project"/> and <see cref="Commit"/>, or a single <see cref="Element"/> if so requested
         /// </returns>
-        public async Task<IEnumerable<Element>> RequestRootElements(Guid project, Guid commit, QueryParameters queryParameters, CancellationToken cancellationToken)
+        public async Task<IEnumerable<IElement>> RequestRootElements(Guid project, Guid commit, QueryParameters queryParameters, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(this.baseUri))
             {
@@ -364,10 +377,10 @@ namespace SySML2.NET.REST
             var data = await this.RequestData(requestUri, cancellationToken);
             if (data != null && data.Any())
             {
-                return data.OfType<Element>();
+                return data.OfType<IElement>();
             }
 
-            return Enumerable.Empty<Element>();
+            return Enumerable.Empty<IElement>();
         }
 
         /// <summary>
@@ -382,12 +395,14 @@ namespace SySML2.NET.REST
         /// <returns></returns>
         private async Task<IEnumerable<IData>> RequestData(Uri requestUri, CancellationToken cancellationToken)
         {
+            this.logger.LogDebug("request data from: {0}", requestUri);
+
             var requestMessage = new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
                 RequestUri = requestUri,
             };
-
+            
             var response = await this.httpClient.SendAsync(requestMessage, cancellationToken);
 
             using var stream = await response.Content.ReadAsStreamAsync();

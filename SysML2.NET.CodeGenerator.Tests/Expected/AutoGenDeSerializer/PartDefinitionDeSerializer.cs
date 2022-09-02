@@ -27,10 +27,11 @@ namespace SysML2.NET.Serializer.Json
     using System;
     using System.Text.Json;
 
-    using SysML2.NET.DTO;
-
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
+
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="PartDefinitionDeSerializer"/> is to provide deserialization capabilities
@@ -67,7 +68,7 @@ namespace SysML2.NET.Serializer.Json
                 throw new InvalidOperationException($"The PartDefinitionDeSerializer can only be used to deserialize objects of type IPartDefinition, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new DTO.PartDefinition();
+            var dtoInstance = new Core.DTO.PartDefinition();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
@@ -113,7 +114,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isAbstract", out JsonElement isAbstractProperty))
             {
-                dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                if (isAbstractProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                }
             }
             else
             {
@@ -122,7 +126,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isIndividual", out JsonElement isIndividualProperty))
             {
-                dtoInstance.IsIndividual = isIndividualProperty.GetBoolean();
+                if (isIndividualProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsIndividual = isIndividualProperty.GetBoolean();
+                }
             }
             else
             {
@@ -131,7 +138,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isSufficient", out JsonElement isSufficientProperty))
             {
-                dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+                if (isSufficientProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+                }
             }
             else
             {
@@ -140,7 +150,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isVariation", out JsonElement isVariationProperty))
             {
-                dtoInstance.IsVariation = isVariationProperty.GetBoolean();
+                if (isVariationProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsVariation = isVariationProperty.GetBoolean();
+                }
             }
             else
             {
@@ -181,12 +194,19 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
             {
-                if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = owningRelationshipIdProperty.GetString();
-                    if (propertyValue != null)
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
                     {
-                        dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }

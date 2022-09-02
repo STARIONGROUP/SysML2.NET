@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
         public RenderingDefinition()
         {
             this.AliasIds = new List<string>();
+            this.IsAbstract = false;
+            this.IsIndividual = false;
+            this.IsSufficient = false;
             this.OwnedRelationship = new List<Guid>();
         }
 

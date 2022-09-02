@@ -121,11 +121,7 @@ namespace SySML2.NET.REST.Tests
             var commits = await this.restClient.RequestCommits(this.projectId, null, null, this.cancellationTokenSource.Token);
 
             Assert.That(commits, Is.Not.Empty);
-
-            Assert.Warn("deserializer is too strict for the pilot implementation response");
-
-            return;
-
+            
             commits = await this.restClient.RequestCommits(this.projectId, this.commitId, null, this.cancellationTokenSource.Token);
 
             var commit = commits.Single();
@@ -155,14 +151,10 @@ namespace SySML2.NET.REST.Tests
         public async Task Verify_that_elements_in_a_project_commit_can_be_requested()
         {
             Assert.DoesNotThrowAsync(async () => await this.restClient.Open("john", "doe", this.baseUri, this.cancellationTokenSource.Token));
-
-            Assert.Warn("deserializer is too strict for the pilot implementation response");
-
-            return;
-
+            
             var elements = await this.restClient.RequestElements(this.projectId, this.commitId, null,null, this.cancellationTokenSource.Token);
 
-            Assert.That(elements, Is.Not.Empty);
+            Assert.That(elements.ToList(), Is.Not.Empty);
 
             elements = await this.restClient.RequestElements(this.projectId, this.commitId, this.elementId, null, this.cancellationTokenSource.Token);
 

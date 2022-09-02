@@ -43,6 +43,7 @@ namespace SysML2.NET.Core.DTO
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
             this.Target = new List<Guid>();
+            this.Visibility = VisibilityKind.Public;
         }
 
         /// <summary>

@@ -43,6 +43,9 @@ namespace SysML2.NET.Core.DTO
         public AllocationDefinition()
         {
             this.AliasIds = new List<string>();
+            this.IsAbstract = false;
+            this.IsIndividual = false;
+            this.IsSufficient = false;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();

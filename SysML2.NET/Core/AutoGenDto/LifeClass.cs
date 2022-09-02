@@ -39,6 +39,8 @@ namespace SysML2.NET.Core.DTO
         public LifeClass()
         {
             this.AliasIds = new List<string>();
+            this.IsAbstract = false;
+            this.IsSufficient = false;
             this.OwnedRelationship = new List<Guid>();
         }
 

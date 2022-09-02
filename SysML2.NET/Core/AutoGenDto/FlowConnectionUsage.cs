@@ -37,6 +37,17 @@ namespace SysML2.NET.Core.DTO
         public FlowConnectionUsage()
         {
             this.AliasIds = new List<string>();
+            this.IsAbstract = false;
+            this.IsComposite = false;
+            this.IsDerived = false;
+            this.IsDirected = false;
+            this.IsEnd = false;
+            this.IsIndividual = false;
+            this.IsOrdered = false;
+            this.IsPortion = false;
+            this.IsReadOnly = false;
+            this.IsSufficient = false;
+            this.IsUnique = true;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();

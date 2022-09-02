@@ -151,7 +151,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isImportAll", out JsonElement isImportAllProperty))
             {
-                dtoInstance.IsImportAll = isImportAllProperty.GetBoolean();
+                if (isImportAllProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImportAll = isImportAllProperty.GetBoolean();
+                }
             }
             else
             {
@@ -160,7 +163,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isRecursive", out JsonElement isRecursiveProperty))
             {
-                dtoInstance.IsRecursive = isRecursiveProperty.GetBoolean();
+                if (isRecursiveProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsRecursive = isRecursiveProperty.GetBoolean();
+                }
             }
             else
             {

@@ -114,7 +114,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isAbstract", out JsonElement isAbstractProperty))
             {
-                dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                if (isAbstractProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                }
             }
             else
             {
@@ -123,7 +126,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isSufficient", out JsonElement isSufficientProperty))
             {
-                dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+                if (isSufficientProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+                }
             }
             else
             {

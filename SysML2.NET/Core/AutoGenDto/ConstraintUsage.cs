@@ -42,6 +42,16 @@ namespace SysML2.NET.Core.DTO
         public ConstraintUsage()
         {
             this.AliasIds = new List<string>();
+            this.IsAbstract = false;
+            this.IsComposite = false;
+            this.IsDerived = false;
+            this.IsEnd = false;
+            this.IsIndividual = false;
+            this.IsOrdered = false;
+            this.IsPortion = false;
+            this.IsReadOnly = false;
+            this.IsSufficient = false;
+            this.IsUnique = true;
             this.OwnedRelationship = new List<Guid>();
         }
 

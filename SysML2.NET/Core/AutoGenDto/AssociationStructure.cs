@@ -37,6 +37,8 @@ namespace SysML2.NET.Core.DTO
         public AssociationStructure()
         {
             this.AliasIds = new List<string>();
+            this.IsAbstract = false;
+            this.IsSufficient = false;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();

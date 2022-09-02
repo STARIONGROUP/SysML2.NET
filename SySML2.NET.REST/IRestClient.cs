@@ -152,7 +152,7 @@ namespace SySML2.NET.REST
         /// <returns>
         /// A list of <see cref="Element"/>s that are contained by the specified <see cref="Project"/> and <see cref="Commit"/>, or a single <see cref="Element"/> if so requested
         /// </returns>
-        Task<IEnumerable<Element>> RequestElements(Guid project, Guid commit, Guid? element, QueryParameters queryParameters, CancellationToken cancellationToken);
+        Task<IEnumerable<IElement>> RequestElements(Guid project, Guid commit, Guid? element, QueryParameters queryParameters, CancellationToken cancellationToken);
 
         /// <summary>
         /// Requests the root <see cref="Element"/>s in a <see cref="Commit"/> of a <see cref="Project"/> from the SysML2 model server REST API
@@ -172,6 +172,6 @@ namespace SySML2.NET.REST
         /// <returns>
         /// A list of <see cref="Element"/>s that are contained by the specified <see cref="Project"/> and <see cref="Commit"/>, or a single <see cref="Element"/> if so requested
         /// </returns>
-        Task<IEnumerable<Element>> RequestRootElements(Guid project, Guid commit, QueryParameters queryParameters, CancellationToken cancellationToken);
+        Task<IEnumerable<IElement>> RequestRootElements(Guid project, Guid commit, QueryParameters queryParameters, CancellationToken cancellationToken);
     }
 }

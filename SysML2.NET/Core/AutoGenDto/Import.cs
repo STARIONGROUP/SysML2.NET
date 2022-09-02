@@ -47,10 +47,13 @@ namespace SysML2.NET.Core.DTO
         public Import()
         {
             this.AliasIds = new List<string>();
+            this.IsImportAll = false;
+            this.IsRecursive = false;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
             this.Target = new List<Guid>();
+            this.Visibility = VisibilityKind.Public;
         }
 
         /// <summary>

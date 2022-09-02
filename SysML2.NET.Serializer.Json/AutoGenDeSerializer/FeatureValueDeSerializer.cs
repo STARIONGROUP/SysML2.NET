@@ -114,7 +114,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isDefault", out JsonElement isDefaultProperty))
             {
-                dtoInstance.IsDefault = isDefaultProperty.GetBoolean();
+                if (isDefaultProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsDefault = isDefaultProperty.GetBoolean();
+                }
             }
             else
             {
@@ -123,7 +126,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isInitial", out JsonElement isInitialProperty))
             {
-                dtoInstance.IsInitial = isInitialProperty.GetBoolean();
+                if (isInitialProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsInitial = isInitialProperty.GetBoolean();
+                }
             }
             else
             {

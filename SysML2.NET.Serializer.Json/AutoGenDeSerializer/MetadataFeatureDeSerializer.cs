@@ -142,7 +142,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isAbstract", out JsonElement isAbstractProperty))
             {
-                dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                if (isAbstractProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                }
             }
             else
             {
@@ -151,7 +154,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isComposite", out JsonElement isCompositeProperty))
             {
-                dtoInstance.IsComposite = isCompositeProperty.GetBoolean();
+                if (isCompositeProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsComposite = isCompositeProperty.GetBoolean();
+                }
             }
             else
             {
@@ -160,7 +166,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isDerived", out JsonElement isDerivedProperty))
             {
-                dtoInstance.IsDerived = isDerivedProperty.GetBoolean();
+                if (isDerivedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsDerived = isDerivedProperty.GetBoolean();
+                }
             }
             else
             {
@@ -169,7 +178,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isEnd", out JsonElement isEndProperty))
             {
-                dtoInstance.IsEnd = isEndProperty.GetBoolean();
+                if (isEndProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsEnd = isEndProperty.GetBoolean();
+                }
             }
             else
             {
@@ -178,7 +190,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isOrdered", out JsonElement isOrderedProperty))
             {
-                dtoInstance.IsOrdered = isOrderedProperty.GetBoolean();
+                if (isOrderedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsOrdered = isOrderedProperty.GetBoolean();
+                }
             }
             else
             {
@@ -187,7 +202,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isPortion", out JsonElement isPortionProperty))
             {
-                dtoInstance.IsPortion = isPortionProperty.GetBoolean();
+                if (isPortionProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsPortion = isPortionProperty.GetBoolean();
+                }
             }
             else
             {
@@ -196,7 +214,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isReadOnly", out JsonElement isReadOnlyProperty))
             {
-                dtoInstance.IsReadOnly = isReadOnlyProperty.GetBoolean();
+                if (isReadOnlyProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsReadOnly = isReadOnlyProperty.GetBoolean();
+                }
             }
             else
             {
@@ -205,7 +226,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isSufficient", out JsonElement isSufficientProperty))
             {
-                dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+                if (isSufficientProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+                }
             }
             else
             {
@@ -214,7 +238,10 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("isUnique", out JsonElement isUniqueProperty))
             {
-                dtoInstance.IsUnique = isUniqueProperty.GetBoolean();
+                if (isUniqueProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsUnique = isUniqueProperty.GetBoolean();
+                }
             }
             else
             {

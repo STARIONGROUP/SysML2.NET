@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 {
+    using System;
     using System.Linq;
 
     using ECoreNetto;
@@ -325,6 +326,28 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     options.Template(output, context);
                 }
+            });
+
+            handlebars.RegisterHelper("StructuralFeature.QueryHasDefaultValue", (context, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#StructuralFeature.QueryHasDefaultValue}} helper must have exactly one argument");
+                }
+
+                var eStructuralFeature = arguments.Single() as EStructuralFeature;
+
+                return eStructuralFeature.QueryHasDefaultValue();
+            });
+
+            handlebars.RegisterHelper("StructuralFeature.DefaultValue", (writer, context, parameters) =>
+            {
+                if (!(context.Value is EStructuralFeature eStructuralFeature))
+                    throw new ArgumentException("supposed to be EStructuralFeature");
+
+                var defaultValue = eStructuralFeature.QueryDefaultValue();
+
+                writer.WriteSafeString($"{defaultValue}");
             });
         }
     }

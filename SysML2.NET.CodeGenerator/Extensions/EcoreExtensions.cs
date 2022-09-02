@@ -18,6 +18,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace SysML2.NET.CodeGenerator.Extensions
 {
     using System.Collections.Generic;
@@ -192,6 +194,15 @@ namespace SysML2.NET.CodeGenerator.Extensions
             return eStructuralFeature.LowerBound == 0 && !eStructuralFeature.QueryIsEnumerable();
         }
 
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature"/> is a scalar
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// The subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true if <see cref="ETypedElement.LowerBound"/> and <see cref="EStructuralFeature.UpperBound"/> = 1, false if not
+        /// </returns>
         public static bool QueryIsScalar(this EStructuralFeature eStructuralFeature)
         {
             if (eStructuralFeature.QueryTypeName() == "string" && eStructuralFeature.UpperBound == 1)
@@ -238,6 +249,44 @@ namespace SysML2.NET.CodeGenerator.Extensions
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature"/> is has a default value
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// The subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true when the <see cref="EStructuralFeature.DefaultValueLiteral"/> contains a value
+        /// </returns>
+        public static bool QueryHasDefaultValue(this EStructuralFeature eStructuralFeature)
+        {
+            return !string.IsNullOrEmpty(eStructuralFeature.DefaultValueLiteral);
+        }
+
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature"/> is has a default value
+        /// </summary>
+        /// <param name="eStructuralFeature">
+        /// The subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true when the <see cref="EStructuralFeature.DefaultValueLiteral"/> contains a value
+        /// </returns>
+        public static string QueryDefaultValue(this EStructuralFeature eStructuralFeature)
+        {
+            if (eStructuralFeature is EAttribute eAttribute)
+            {
+                if (string.IsNullOrEmpty(eStructuralFeature.DefaultValueLiteral))
+                {
+                    throw new InvalidOperationException("the structural feature does not have a default value");
+                }
+
+                return eAttribute.EType is EEnum ? $"{eStructuralFeature.QueryTypeName()}.{eStructuralFeature.DefaultValueLiteral.CapitalizeFirstLetter()}" : eStructuralFeature.DefaultValueLiteral;
+            }
+
+            throw new NotSupportedException("");
         }
 
         /// <summary>
