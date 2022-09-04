@@ -24,9 +24,12 @@ namespace SysML2.NET.Viewer.ViewModels.Components
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Components;
+
     using ReactiveUI;
 
     using SySML2.NET.REST;
+    using SysML2.NET.Viewer.Services.Authentication;
 
     /// <summary>
     /// The <see cref="LoginViewModel"/>
@@ -34,9 +37,24 @@ namespace SysML2.NET.Viewer.ViewModels.Components
     public class LoginViewModel : ReactiveObject, ILoginViewModel
     {
         /// <summary>
-        /// Backing field for <see cref="ErrorMessage" />
+        /// Backing field for <see cref="ErrorMessage" /> property
         /// </summary>
         private string errorMessage;
+
+        /// <summary>
+        /// Backing field for <see cref="UserName" /> property
+        /// </summary>
+        private string userName;
+
+        /// <summary>
+        /// Backing field for <see cref="Password" /> property
+        /// </summary>
+        private string password;
+
+        /// <summary>
+        /// Backing field for <see cref="Url" /> property
+        /// </summary>
+        private string url;
 
         /// <summary>
         /// Backing field for <see cref="AuthenticationStatusKind" />
@@ -44,19 +62,37 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         private AuthenticationStatusKind authenticationStatusKind;
 
         /// <summary>
-        /// The (dependency) injected <see cref="IRestClient"/>
+        /// The (dependency) injected <see cref="IAuthenticationService"/>
         /// </summary>
-        private readonly IRestClient restClient;
+        private readonly IAuthenticationService authenticationService;
+
+        /// <summary>
+        /// The (dependency) injected <see cref="NavigationManager"/>
+        /// </summary>
+        private readonly NavigationManager navigationManager;
+
+        /// <summary>
+        /// The <see cref="CancellationTokenSource"/> used to cancel asynchronous tasks.
+        /// </summary>
+        private CancellationTokenSource cancellationTokenSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginViewModel"/>
         /// </summary>
-        /// <param name="restClient">
-        /// The (dependency) injected <see cref="IRestClient"/>
+        /// <param name="authenticationService">
+        /// The (dependency) injected <see cref="IAuthenticationService"/>
         /// </param>
-        public LoginViewModel(IRestClient restClient)
+        /// <param name="navigationManager">
+        /// The (dependency) injected <see cref="NavigationManager"/>
+        /// </param>
+        public LoginViewModel(IAuthenticationService authenticationService, NavigationManager navigationManager)
         {
-            this.restClient = restClient;
+            this.UserName = "John Doe";
+            this.Password = "secret";
+            this.Url = "http://sysml2-sst.intercax.com:9000";
+            
+            this.authenticationService = authenticationService;
+            this.navigationManager = navigationManager;
         }
 
         /// <summary>
@@ -78,7 +114,34 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         }
 
         /// <summary>
-        /// logs in to the model server
+        /// Gets or sets the username used to connect to the SysML V2 Model server with
+        /// </summary>
+        public string UserName
+        {
+            get => this.userName;
+            set => this.RaiseAndSetIfChanged(ref this.userName, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the password used to connect to the SysML V2 Model server with
+        /// </summary>
+        public string Password
+        {
+            get => this.password;
+            set => this.RaiseAndSetIfChanged(ref this.password, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the URl of the SysML V2 model server to connect to
+        /// </summary>
+        public string Url
+        {
+            get => this.url;
+            set => this.RaiseAndSetIfChanged(ref this.url, value);
+        }
+
+        /// <summary>
+        /// logs in to the SysML2 Model Server
         /// </summary>
         /// <returns>
         /// An awaitable <see cref="Task" />
@@ -87,20 +150,27 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         {
             this.AuthenticationStatusKind = AuthenticationStatusKind.Authenticating;
             this.ErrorMessage = string.Empty;
-
-            var uri = "http://sysml2-sst.intercax.com:9000";
-            var cts = new CancellationTokenSource();
-
+            
             try
             {
-                await this.restClient.Open(null, null, uri, cts.Token);
-                this.AuthenticationStatusKind = AuthenticationStatusKind.Success;
+                this.cancellationTokenSource = new CancellationTokenSource();
+
+                this.AuthenticationStatusKind = await this.authenticationService.Login(this.UserName, this.Password, this.Url, this.cancellationTokenSource.Token);
             }
             catch (Exception e)
             {
+                this.cancellationTokenSource.Dispose();
                 this.AuthenticationStatusKind = AuthenticationStatusKind.Fail;
                 this.ErrorMessage = e.Message;
             }
+        }
+
+        /// <summary>
+        /// cancels the login operation
+        /// </summary>
+        public void ExecuteCancelLogin()
+        {
+            this.cancellationTokenSource?.Cancel();
         }
     }
 }

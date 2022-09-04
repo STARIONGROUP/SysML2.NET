@@ -4,7 +4,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<Version>0.3.0</Version>
+		<Version>0.4.0</Version>
 		<Description>A .NET implementation of the OMG SysML v2 specification.</Description>
 		<PackageId>SysML2.NET</PackageId>
 		<Company>RHEA System S.A.</Company>
@@ -28,6 +28,10 @@
 	  <Folder Include="Core\AutoGenEnum\" />
 	  <Folder Include="Core\AutGenPoco\" />
 	  <Folder Include="Core\Poco\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\SysML2.NET.Viewer\Components\DataAnnotationsValidator.razor" Link="DataAnnotationsValidator.razor" />
 	</ItemGroup>
 
 </Project>

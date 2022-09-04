@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.Viewer.ViewModels.Components
 {
+    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
 
     using SySML2.NET.REST;
@@ -40,11 +41,34 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         string ErrorMessage { get; set; }
 
         /// <summary>
-        /// logs in to the model server
+        /// Gets or sets the username used to connect to the SysML V2 Model server with
+        /// </summary>
+        [Required]
+        string UserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password used to connect to the SysML V2 Model server with
+        /// </summary>
+        [Required]
+        string Password { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URl of the SysML V2 model server to connect to
+        /// </summary>
+        [Required]
+        string Url { get; set; }
+
+        /// <summary>
+        /// logs in to the SysML2 Model Server
         /// </summary>
         /// <returns>
         /// An awaitable <see cref="Task" />
         /// </returns>
         Task ExecuteLogin();
+
+        /// <summary>
+        /// cancels the login operation
+        /// </summary>
+        void ExecuteCancelLogin();
     }
 }

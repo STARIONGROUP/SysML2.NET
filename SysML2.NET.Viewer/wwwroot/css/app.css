@@ -62,3 +62,17 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.text-align-start {
+    text-align: start;
+}
+
+.m-top-10px {
+    margin-top: 10px;
+}
+
+.btn-connect {
+    color: white;
+    background-color: #008bd2;
+    border-color: rgb(44 62 80);
+}

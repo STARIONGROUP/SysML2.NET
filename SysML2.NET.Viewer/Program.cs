@@ -20,11 +20,14 @@
 
 namespace SysML2.NET.Viewer
 {
+    using System.Linq;
     using System.Net.Http;
+    using System.Reflection;
     using System.Threading.Tasks;
-    
+    using Blazored.SessionStorage;
     using BlazorStrap;
 
+    using Microsoft.AspNetCore.Components.Authorization;
     using Microsoft.AspNetCore.Components.Web;
     using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -34,6 +37,10 @@ namespace SysML2.NET.Viewer
 
     using Serilog;
     using Serilog.Events;
+    
+    using SySML2.NET.REST;
+    using SysML2.NET.Serializer.Json;
+    using SysML2.NET.Viewer.Services.Authentication;
 
     /// <summary>
     /// The purpose of the <see cref="Program"/> class is to provide the
@@ -63,17 +70,59 @@ namespace SysML2.NET.Viewer
 
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
+            
+            AddServices(builder);
+            AddViewModels(builder);
+            
+            await builder.Build().RunAsync();
+        }
 
-            builder.Services.AddScoped(sp => new HttpClient());
+        /// <summary>
+        /// Register all services into the <see cref="WebAssemblyHostBuilder.Services" />
+        /// </summary>
+        /// <param name="builder">The <see cref="WebAssemblyHostBuilder" /></param>
+        private static void AddServices(WebAssemblyHostBuilder builder)
+        {
+            builder.Services.AddBlazoredSessionStorage();
+            builder.Services.AddAuthorizationCore();
 
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();
             builder.Services.AddScoped<TooltipService>();
             builder.Services.AddScoped<ContextMenuService>();
-            
+
             builder.Services.AddBlazorStrap();
 
-            await builder.Build().RunAsync();
+            builder.Services.AddScoped(sp => new HttpClient());
+            
+            builder.Services.AddScoped<AuthenticationStateProvider, AnonymousAuthenticationStateProvider>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IRestClient, RestClient>();
+            builder.Services.AddScoped<IDeSerializer, DeSerializer>();
+            builder.Services.AddScoped<ISerializer, Serializer>();
+        }
+
+        /// <summary>
+        /// Register all ViewModels into the <see cref="WebAssemblyHostBuilder" />
+        /// </summary>
+        /// <param name="builder">The <see cref="WebAssemblyHostBuilder" /></param>
+        private static void AddViewModels(WebAssemblyHostBuilder builder)
+        {
+            var viewModelInterfaces = Assembly.GetCallingAssembly().GetExportedTypes()
+                .Where(x => x.IsInterface && x.Name.EndsWith("ViewModel")).ToList();
+
+            foreach (var viewModelInterface in viewModelInterfaces)
+            {
+                var viewModel = Assembly.GetCallingAssembly().GetExportedTypes()
+                    .FirstOrDefault(x => x.IsClass
+                                         && x.Name == viewModelInterface.Name.Remove(0, 1)
+                                         && x.GetInterface(viewModelInterface.Name) == viewModelInterface);
+
+                if (viewModel != null)
+                {
+                    builder.Services.AddTransient(viewModelInterface, viewModel);
+                }
+            }
         }
     }
 }

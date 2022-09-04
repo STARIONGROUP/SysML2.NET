@@ -118,7 +118,7 @@ namespace SySML2.NET.REST
                 var projects = await this.RequestProjects(null, null, cancellationToken);
                 return projects;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 this.baseUri = null;
                 throw;
@@ -403,7 +403,9 @@ namespace SySML2.NET.REST
                 RequestUri = requestUri,
             };
             
-            var response = await this.httpClient.SendAsync(requestMessage, cancellationToken);
+            using var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+            response.EnsureSuccessStatusCode();
 
             using var stream = await response.Content.ReadAsStreamAsync();
 

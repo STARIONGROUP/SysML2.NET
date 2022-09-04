@@ -14,28 +14,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ------------------------------------------------------------------------------->
 
-@page "/"
-@page "/index"
-
-@using SysML2.NET.Viewer.Components
-
-<div class="row text-align-start align-items-center justify-content-md-center">
-	<div style="width: 70%">
-		<AuthorizeView>
-			<Authorized>
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col p-0 col-10">
-							@context.User.Identity?.Name 
-						</div>
-					</div>
-				</div>
-			</Authorized>
-			<NotAuthorized>
-				<div class="container">
-					<LoginComponent/>
-				</div>
-			</NotAuthorized>
-		</AuthorizeView>
-	</div>
-</div>
+<input type="submit" @onclick="this.ViewModel.ExecuteLogout" value="Logout" />
