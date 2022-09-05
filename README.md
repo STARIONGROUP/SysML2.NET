@@ -1,6 +1,6 @@
 # SysML2.NET
 
-SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release)
+SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release). SysML2.NET is an SDK that provides a number of libraries as well as a reference implementation in the form a web-application.
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
@@ -16,9 +16,15 @@ SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://gi
 
 ## Installation
 
-The package is available on Nuget at https://www.nuget.org/packages/SysML2.NET/
+The packages are available on Nuget at:
 
-[![NuGet Badge](https://buildstats.info/nuget/SysML2.NET)](https://buildstats.info/nuget/SysML2.NET)
+project                    | Nuget
+-------------------------- | ------------
+SysML2.NET                 | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET)](https://buildstats.info/nuget/SysML2.NET)
+SysML2.NET.Serializer.Json | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.Serializer.Json)](https://buildstats.info/nuget/SysML2.NET.Serializer.Json)
+SysML2.NET.REST            | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.REST)](https://buildstats.info/nuget/SysML2.NET.REST)
+
+The reference web-application is available on [docker-hub](https://hub.docker.com/r/rheagroup/sysml2.net.viewer)
 
 ## Build Status
 
@@ -31,7 +37,7 @@ Development | ![Build Status](https://github.com/RHEAGROUP/SysML2.NET/actions/wo
 
 # License
 
-The SysML2.NET libraries are provided to the community under the Apache License 2.0. The solution contains files that contain information about the SysML2 metamodel which are distributed with the [GNU Lesser General Public License (LGPL) v3.0](https://opensource.org/licenses/LGPL-3.0).
+The SysML2.NET libraries and reference web-application are provided to the community under the Apache License 2.0. The solution contains files that contain information about the SysML2 metamodel which are distributed with the [GNU Lesser General Public License (LGPL) v3.0](https://opensource.org/licenses/LGPL-3.0).
 
 # Contributions
 
