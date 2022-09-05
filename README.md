@@ -24,7 +24,7 @@ SysML2.NET                 | [![NuGet Badge](https://buildstats.info/nuget/SysML
 SysML2.NET.Serializer.Json | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.Serializer.Json)](https://buildstats.info/nuget/SysML2.NET.Serializer.Json)
 SysML2.NET.REST            | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.REST)](https://buildstats.info/nuget/SysML2.NET.REST)
 
-The reference web-application is available on [docker-hub](https://hub.docker.com/r/rheagroup/sysml2.net.viewer)
+The reference web-application is available on [docker-hub](https://hub.docker.com/r/rheagroup/sysml2.net.viewer). A demo-version is hosted at http://viewer.sysml2.net.
 
 ## Build Status
 
