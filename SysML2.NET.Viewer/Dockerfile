@@ -5,6 +5,7 @@ WORKDIR /src
 COPY Nuget.Config .
 COPY SysML2.NET SysML2.NET
 COPY SysML2.NET.Serializer.Json SysML2.NET.Serializer.Json
+COPY SySML2.NET.REST SySML2.NET.REST
 COPY SysML2.NET.Viewer SysML2.NET.Viewer
 RUN dotnet restore --configfile Nuget.Config SysML2.NET.Viewer
 RUN dotnet build SysML2.NET.Viewer -c Release -o /app/build
