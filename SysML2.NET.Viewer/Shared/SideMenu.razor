@@ -14,13 +14,11 @@
   limitations under the License.
 ------------------------------------------------------------------------------->
 
-@using System.Collections.Generic
-
 <RadzenPanelMenu>
 	<RadzenPanelMenuItem Text="Home" Icon="home" Path="/"></RadzenPanelMenuItem>
-    
+	<AuthorizeView>
+		<Authorized>
+			<RadzenPanelMenuItem Text="Project" Icon="flare" Path="/projects"></RadzenPanelMenuItem>
+		</Authorized>
+	</AuthorizeView>
 </RadzenPanelMenu>
-
-@code {
-    
-}

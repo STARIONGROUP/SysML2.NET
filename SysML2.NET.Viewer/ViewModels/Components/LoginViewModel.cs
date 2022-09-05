@@ -156,6 +156,8 @@ namespace SysML2.NET.Viewer.ViewModels.Components
                 this.cancellationTokenSource = new CancellationTokenSource();
 
                 this.AuthenticationStatusKind = await this.authenticationService.Login(this.UserName, this.Password, this.Url, this.cancellationTokenSource.Token);
+
+                this.navigationManager.NavigateTo("/projects");
             }
             catch (Exception e)
             {
