@@ -95,6 +95,9 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iPortUsage.IsEnd);
 
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iPortUsage.IsImpliedIncluded);
+
             writer.WritePropertyName("isIndividual");
             writer.WriteBooleanValue(iPortUsage.IsIndividual);
 

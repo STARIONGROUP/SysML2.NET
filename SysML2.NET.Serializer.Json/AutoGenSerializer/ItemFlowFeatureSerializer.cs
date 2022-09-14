@@ -95,6 +95,9 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iItemFlowFeature.IsEnd);
 
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iItemFlowFeature.IsImpliedIncluded);
+
             writer.WritePropertyName("isOrdered");
             writer.WriteBooleanValue(iItemFlowFeature.IsOrdered);
 

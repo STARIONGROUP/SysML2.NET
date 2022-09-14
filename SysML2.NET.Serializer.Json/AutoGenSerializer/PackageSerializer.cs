@@ -73,6 +73,9 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iPackage.ElementId);
 
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iPackage.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iPackage.Name);
 

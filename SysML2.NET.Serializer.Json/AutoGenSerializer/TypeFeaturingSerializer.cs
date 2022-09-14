@@ -73,11 +73,20 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iTypeFeaturing.ElementId);
 
+            writer.WritePropertyName("feature");
+            writer.WriteStringValue(iTypeFeaturing.Feature);
+
             writer.WritePropertyName("featureOfType");
             writer.WriteStringValue(iTypeFeaturing.FeatureOfType);
 
             writer.WritePropertyName("featuringType");
             writer.WriteStringValue(iTypeFeaturing.FeaturingType);
+
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iTypeFeaturing.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iTypeFeaturing.IsImpliedIncluded);
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iTypeFeaturing.Name);
@@ -132,6 +141,9 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
+
+            writer.WritePropertyName("type");
+            writer.WriteStringValue(iTypeFeaturing.Type);
 
             writer.WriteEndObject();
         }

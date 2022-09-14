@@ -30,11 +30,11 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An ExhibitStateUsage is a StateUsage that represents the exhibiting of a StateUsage. The StateUsage
-    /// to be exhibited (which may be the ExhibitStateUsage itself) is related to the ExhibitStateUsage by a
-    /// Subsetting Relationship. An ExhibitStateUsage is also a PerformActionUsage, with its exhibitedState
-    /// as the performedAction.If the ExhibitStateUsage is owned by a PartDefinition or PartUsage, then it
-    /// also subsets the StateUsage Part::exhibitedStates from the Systems model library.
+    /// An ExhibitStateUsage is a StateUsage that represents the exhibiting of a StateUsage. Unless it is
+    /// the StateUsage itself, the StateUsage to be exhibited is related to the ExhibitStateUsage by a
+    /// ReferenceSubsetting Relationship. An ExhibitStateUsage is also a PerformActionUsage, with its
+    /// exhibitedState as the performedAction.If the ExhibitStateUsage is owned by a PartDefinition or
+    /// PartUsage, then it also subsets the StateUsage Part::exhibitedStates from the Systems model library.
     /// </summary>
     public partial interface IExhibitStateUsage : IStateUsage, IPerformActionUsage
     {

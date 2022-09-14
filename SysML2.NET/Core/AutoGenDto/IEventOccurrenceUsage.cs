@@ -31,11 +31,13 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A EventOccurrenceUsage is an OccurrenceUsage that represents another OccurrenceUsage occurring as a
-    /// suboccurrence of the containing occurrence of the EventOccurrenceUsage. The referenced
-    /// OccurrenceUsage performed (which may be the EventOccurrenceUsage itself) is related to the
-    /// EventOccurrenceUsage by a Subsetting relationship.If the EventOccurrenceUsage is owned by an
-    /// Occurrence, then it also subsets the suboccurrence property of that Occurrence (as defined in the
-    /// library model for Part).
+    /// suboccurrence of the containing occurrence of the EventOccurrenceUsage. Unless it is ithe
+    /// EventOccurrenceUsage itself, the referenced OccurrenceUsage performed is related to the
+    /// EventOccurrenceUsage by a ReferenceSubsetting relationship.If the EventOccurrenceUsage is owned by
+    /// an OccurrenceDefinition or OccurrenceUsage, then it also subsets the timeEnclosedOccurrences
+    /// property of the Class Occurrence from the Kernel Semantic Library model Occurrences.eventOccurrence
+    /// =    if ownedReferenceSubsetting = null then self    else
+    /// ownedReferenceSubsetting.referencedFeature.oclAsType(OccurrenceUsage)    endif
     /// </summary>
     public partial interface IEventOccurrenceUsage : IOccurrenceUsage
     {

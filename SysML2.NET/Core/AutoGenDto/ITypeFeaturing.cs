@@ -30,12 +30,10 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A TypeFeaturing is a Relationship between a Type and a Feature that is featured by that Type. Every
-    /// instance in the domain of the featureOfType must be classified by the featuringType. This means that
-    /// sequences that are classified by the featureOfType must have a prefix subsequence that is classified
-    /// by the featuringType.
+    /// A TypeFeaturing is a Featuring Relationship in which the featureOfType is the source and the
+    /// featuringType is the target. A TypeFeaturing may be owned by its featureOfType.
     /// </summary>
-    public partial interface ITypeFeaturing : IRelationship
+    public partial interface ITypeFeaturing : IFeaturing
     {
         /// <summary>
         /// </summary>

@@ -76,6 +76,9 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isAbstract");
             writer.WriteBooleanValue(iViewDefinition.IsAbstract);
 
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iViewDefinition.IsImpliedIncluded);
+
             writer.WritePropertyName("isIndividual");
             writer.WriteBooleanValue(iViewDefinition.IsIndividual);
 

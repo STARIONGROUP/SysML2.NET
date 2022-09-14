@@ -30,7 +30,7 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A CollectExpression is an OperatorExpression whoise operator is "select", which resolves to the
+    /// A SelectExpression is an OperatorExpression whose operator is "select", which resolves to the
     /// library Function ControlFunctions::select.
     /// </summary>
     public partial class SelectExpression : ISelectExpression
@@ -42,6 +42,7 @@ namespace SysML2.NET.Core.DTO
             this.IsComposite = false;
             this.IsDerived = false;
             this.IsEnd = false;
+            this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
             this.IsReadOnly = false;
@@ -99,6 +100,15 @@ namespace SysML2.NET.Core.DTO
         /// other n-1 end Features are held fixed.
         /// </summary>
         public bool IsEnd { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.

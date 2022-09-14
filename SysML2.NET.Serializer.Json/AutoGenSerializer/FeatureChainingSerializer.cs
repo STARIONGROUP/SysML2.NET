@@ -76,6 +76,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iFeatureChaining.ElementId);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iFeatureChaining.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iFeatureChaining.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iFeatureChaining.Name);
 

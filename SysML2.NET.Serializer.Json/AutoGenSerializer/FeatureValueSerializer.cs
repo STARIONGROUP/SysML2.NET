@@ -76,6 +76,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isDefault");
             writer.WriteBooleanValue(iFeatureValue.IsDefault);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iFeatureValue.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iFeatureValue.IsImpliedIncluded);
+
             writer.WritePropertyName("isInitial");
             writer.WriteBooleanValue(iFeatureValue.IsInitial);
 

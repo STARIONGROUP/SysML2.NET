@@ -76,6 +76,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iPortConjugation.ElementId);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iPortConjugation.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iPortConjugation.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iPortConjugation.Name);
 

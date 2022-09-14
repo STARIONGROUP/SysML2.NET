@@ -73,6 +73,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iMembership.ElementId);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iMembership.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iMembership.IsImpliedIncluded);
+
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iMembership.MemberElement);
 

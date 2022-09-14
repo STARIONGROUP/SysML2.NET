@@ -76,6 +76,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("general");
             writer.WriteStringValue(iFeatureTyping.General);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iFeatureTyping.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iFeatureTyping.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iFeatureTyping.Name);
 

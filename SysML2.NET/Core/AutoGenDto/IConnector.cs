@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.DTO
     /// is used (domain of the Connector). Associations restrict what kinds of things might be linked. The
     /// Connector further restricts these links to between values of two Features on instances of
     /// its domain.relatedFeature =
-    /// connectorEnd.ownedSubsetting.subsettedFeaturerelatedFeature->forAll(f |     if
+    /// connectorEnd.ownedReferenceSubsetting.subsettedFeaturerelatedFeature->forAll(f |     if
     /// featuringType->isEmpty() then f.isFeaturedWithin(null)    else featuringType->exists(t |
     /// f.isFeaturedWithin(t))    endif)sourceFeature =     if relatedFeature->size() = 2 then
     /// relatedFeature->at(1)     else null     endiftargetFeature =    if sourceFeature = null then
@@ -45,7 +45,8 @@ namespace SysML2.NET.Core.DTO
     public partial interface IConnector : IFeature, IRelationship
     {
         /// <summary>
-        /// Whether or not the Connector should be considered to have a direction from source to target.
+        /// For a binary Connector, whether or not the Connector should be considered to have a direction from
+        /// source to target.
         /// </summary>
         bool IsDirected { get; set; }
 

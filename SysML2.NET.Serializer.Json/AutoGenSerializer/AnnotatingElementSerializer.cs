@@ -80,6 +80,9 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iAnnotatingElement.ElementId);
 
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iAnnotatingElement.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iAnnotatingElement.Name);
 

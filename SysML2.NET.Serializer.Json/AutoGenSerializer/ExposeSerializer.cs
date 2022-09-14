@@ -79,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("importedNamespace");
             writer.WriteStringValue(iExpose.ImportedNamespace);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iExpose.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iExpose.IsImpliedIncluded);
+
             writer.WritePropertyName("isImportAll");
             writer.WriteBooleanValue(iExpose.IsImportAll);
 

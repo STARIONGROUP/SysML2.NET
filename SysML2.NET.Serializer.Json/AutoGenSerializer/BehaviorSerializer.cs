@@ -76,6 +76,9 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isAbstract");
             writer.WriteBooleanValue(iBehavior.IsAbstract);
 
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iBehavior.IsImpliedIncluded);
+
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iBehavior.IsSufficient);
 

@@ -124,6 +124,18 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isAbstract Json property was not found in the VerificationCaseDefinition: {dtoInstance.Id}");
             }
 
+            if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
+            {
+                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the VerificationCaseDefinition: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("isIndividual", out JsonElement isIndividualProperty))
             {
                 if (isIndividualProperty.ValueKind != JsonValueKind.Null)

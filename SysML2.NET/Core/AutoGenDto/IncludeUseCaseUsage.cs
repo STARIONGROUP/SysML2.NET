@@ -31,8 +31,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An IncludeUseCaseUsage is a UseCaseUsage that represents the inclusion of a UseCaseUsage by a
-    /// UseCaseDefinition or UseCaseUsage. The UseCaseUsage to be included (which may be the
-    /// IncludeUseCaseUsage itself) is related to the includedUseCase by a Subsetting Relationship. An
+    /// UseCaseDefinition or UseCaseUsage. Unless it is the IncludeUseCaseUsage itself, the UseCaseUsage to
+    /// be included is related to the includedUseCase by a ReferenceSubsetting Relationship. An
     /// IncludeUseCaseUsage is also a PerformActionUsage, with its includedUseCase as the performedAction.If
     /// the IncludeUseCaseUsage is owned by a UseCaseDefinition or UseCaseUsage, then it also subsets the
     /// UseCaseUsage UseCase::includedUseCases from the Systems model library.
@@ -46,6 +46,7 @@ namespace SysML2.NET.Core.DTO
             this.IsComposite = false;
             this.IsDerived = false;
             this.IsEnd = false;
+            this.IsImpliedIncluded = false;
             this.IsIndividual = false;
             this.IsOrdered = false;
             this.IsPortion = false;
@@ -104,6 +105,15 @@ namespace SysML2.NET.Core.DTO
         /// other n-1 end Features are held fixed.
         /// </summary>
         public bool IsEnd { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

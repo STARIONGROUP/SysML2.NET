@@ -83,6 +83,9 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iComment.ElementId);
 
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iComment.IsImpliedIncluded);
+
             writer.WritePropertyName("locale");
             writer.WriteStringValue(iComment.Locale);
 

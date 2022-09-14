@@ -73,11 +73,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iSubjectMembership.ElementId);
 
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iSubjectMembership.FeatureOfType);
+            writer.WritePropertyName("feature");
+            writer.WriteStringValue(iSubjectMembership.Feature);
 
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iSubjectMembership.FeaturingType);
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iSubjectMembership.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iSubjectMembership.IsImpliedIncluded);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iSubjectMembership.MemberElement);
@@ -141,6 +144,9 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
+
+            writer.WritePropertyName("type");
+            writer.WriteStringValue(iSubjectMembership.Type);
 
             writer.WritePropertyName("visibility");
             writer.WriteStringValue(iSubjectMembership.Visibility.ToString().ToUpper());

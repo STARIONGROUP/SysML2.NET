@@ -30,11 +30,12 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A PerformActionUsage is an ActionUsage that represents the performance of an ActionUsage. The
-    /// ActionUsage to be performed (which may be the PerformActionUsage itself) is related to the
-    /// PerformActionUsage by a Subsetting relationship.If the PerformActionUsage is owned by a
-    /// PartDefinition or PartUsage, then it also subsets the ActionUsage Part::performedAction from the
-    /// Systems model library.
+    /// A PerformActionUsage is an ActionUsage that represents the performance of an ActionUsage. Unless it
+    /// is the PerformActionUsage itself, the ActionUsage to be performed is related to the
+    /// PerformActionUsage by a ReferenceSubsetting relationship. A PerformActionUsage is also an
+    /// EventOccurrenceUsage, with its performedAction as the eventOccurrence.If the PerformActionUsage is
+    /// owned by a PartDefinition or PartUsage, then it also subsets the ActionUsage Part::performedAction
+    /// from the Systems model library.
     /// </summary>
     public partial interface IPerformActionUsage : IActionUsage, IEventOccurrenceUsage
     {

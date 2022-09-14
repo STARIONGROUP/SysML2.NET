@@ -36,10 +36,10 @@ namespace SysML2.NET.Core.DTO
     /// Library.An OccurrenceUsage must subset, directly or indirectly, the base Feature occurrences from
     /// the Kernel model library.let individualDefinitions : Sequence(OccurrenceDefinition) =    
     /// occurrenceDefinition->        selectByKind(OccurrenceDefinition)->        select(isIndividual) inif
-    /// individualDefinitions->isEmpty() then nullelse individualDefinitions->at(1) endifisIndividual
-    /// implies individualDefinition <> nullif portionKind = null then portioningFeature = nullelse    
-    /// portioningFeature <> null and    portionKind = portioningFeature.portionKind and   
-    /// occurrenceDefinition.asSet() = portioningFeature.type.asSet()endif
+    /// individualDefinitions->isEmpty() then nullelse individualDefinitions->at(1) endifif portionKind =
+    /// null then portioningFeature = nullelse     portioningFeature <> null and    portionKind =
+    /// portioningFeature.portionKind and    occurrenceDefinition.asSet() =
+    /// portioningFeature.type.asSet()endifisIndividual implies individualDefinition <> null
     /// </summary>
     public partial interface IOccurrenceUsage : IUsage
     {

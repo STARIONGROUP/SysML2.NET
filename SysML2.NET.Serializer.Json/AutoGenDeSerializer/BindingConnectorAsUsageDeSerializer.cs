@@ -181,6 +181,30 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isEnd Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
             }
 
+            if (jsonElement.TryGetProperty("isImplied", out JsonElement isImpliedProperty))
+            {
+                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isImplied Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
+            {
+                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the BindingConnectorAsUsage: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("isOrdered", out JsonElement isOrderedProperty))
             {
                 if (isOrderedProperty.ValueKind != JsonValueKind.Null)

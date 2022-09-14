@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A Type is a Namespace that is the most general kind of Element supporting the semantics of
     /// classification. A Type may be a Classifier or a Feature, defining conditions on what is classified
-    /// by the Type (see also the description of isSufficient).ownedGeneralization =
-    /// ownedRelationship->selectByKind(Generalization)->    select(g | g.special = self)    multiplicity =
+    /// by the Type (see also the description of isSufficient).ownedSpecialization =
+    /// ownedRelationship->selectByKind(Specialization)->    select(g | g.special = self)    multiplicity =
     /// feature->select(oclIsKindOf(Multiplicity))ownedFeatureMembership =
     /// ownedRelationship->selectByKind(FeatureMembership)let ownedConjugators: Sequence(Conjugator) =    
     /// ownedRelationship->selectByKind(Conjugation) in    ownedConjugators->size() = 1 and   
@@ -41,11 +41,14 @@ namespace SysML2.NET.Core.DTO
     /// conjugator.originalType.input    else         feature->select(direction = out or direction = inout) 
     ///   endifinput =     if isConjugated then         conjugator.originalType.output    else        
     /// feature->select(direction = _'in' or direction = inout)    endifinheritedMembership =
-    /// inheritedMemberships(Set{})feature = featureMembership.ownedMemberFeatureownedFeature =
-    /// ownedFeatureMembership.ownedMemberFeatureallSupertypes()->includes(Kernel
-    /// Library::Anything)featureMembership = ownedMembership->union(   
-    /// inheritedMembership->selectByKind(FeatureMembership))disjointType =
-    /// disjoiningTypeDisjoining.disjoiningTypedirectedFeature = feature->select(direction <> null)
+    /// inheritedMemberships(Set{})ownedFeature =
+    /// ownedFeatureMembership.ownedMemberFeatureintersectingType->excludes(self)differencingType =
+    /// ownedDifferencing.differencingTypeallSupertypes()->includes(Kernel Library::Anything)disjointType =
+    /// disjoiningTypeDisjoining.disjoiningTypeintersectingType =
+    /// ownedIntersecting.intersectingTypeunioningType = ownedUnioning.unioningTypedirectedFeature =
+    /// feature->select(direction <> null)differencingType->excludes(self)featureMembership =
+    /// ownedMembership->union(    inheritedMembership->selectByKind(FeatureMembership))feature =
+    /// featureMembership.ownedMemberFeatureunioningType->excludes(self)
     /// </summary>
     public partial interface IType : INamespace
     {

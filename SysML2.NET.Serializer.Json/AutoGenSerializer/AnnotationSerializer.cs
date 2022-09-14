@@ -79,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iAnnotation.ElementId);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iAnnotation.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iAnnotation.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iAnnotation.Name);
 

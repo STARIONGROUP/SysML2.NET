@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An ItemFlow is a Step that represents the transfer of objects or values from one Feature to another.
     /// ItemFlows can take non-zero time to complete.An ItemFlow must be typed by the Interaction Transfer
-    /// from the Kernel library, or a specialization of it.
+    /// from the Kernel Semantic Library, or a specialization of it.
     /// </summary>
     public partial interface IItemFlow : IConnector, IStep
     {

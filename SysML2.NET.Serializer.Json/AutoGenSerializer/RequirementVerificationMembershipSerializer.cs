@@ -73,11 +73,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iRequirementVerificationMembership.ElementId);
 
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iRequirementVerificationMembership.FeatureOfType);
+            writer.WritePropertyName("feature");
+            writer.WriteStringValue(iRequirementVerificationMembership.Feature);
 
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iRequirementVerificationMembership.FeaturingType);
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iRequirementVerificationMembership.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iRequirementVerificationMembership.IsImpliedIncluded);
 
             writer.WritePropertyName("kind");
             writer.WriteStringValue(iRequirementVerificationMembership.Kind.ToString().ToUpper());
@@ -144,6 +147,9 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
+
+            writer.WritePropertyName("type");
+            writer.WriteStringValue(iRequirementVerificationMembership.Type);
 
             writer.WritePropertyName("visibility");
             writer.WriteStringValue(iRequirementVerificationMembership.Visibility.ToString().ToUpper());

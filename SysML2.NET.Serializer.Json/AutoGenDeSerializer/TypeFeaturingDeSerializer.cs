@@ -112,6 +112,30 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the elementId Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
             }
 
+            if (jsonElement.TryGetProperty("feature", out JsonElement featureProperty))
+            {
+                if (featureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Feature = Guid.Empty;
+                    logger.LogDebug($"the TypeFeaturing.Feature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (featureProperty.TryGetProperty("@id", out JsonElement featureIdProperty))
+                    {
+                        var propertyValue = featureIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Feature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the feature Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("featureOfType", out JsonElement featureOfTypeProperty))
             {
                 if (featureOfTypeProperty.ValueKind == JsonValueKind.Null)
@@ -158,6 +182,30 @@ namespace SysML2.NET.Serializer.Json
             else
             {
                 logger.LogDebug($"the featuringType Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isImplied", out JsonElement isImpliedProperty))
+            {
+                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isImplied Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
+            {
+                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
@@ -306,6 +354,30 @@ namespace SysML2.NET.Serializer.Json
             else
             {
                 logger.LogDebug($"the target Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("type", out JsonElement typeProperty))
+            {
+                if (typeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Type = Guid.Empty;
+                    logger.LogDebug($"the TypeFeaturing.Type property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (typeProperty.TryGetProperty("@id", out JsonElement typeIdProperty))
+                    {
+                        var propertyValue = typeIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Type = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the type Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
             }
 
 

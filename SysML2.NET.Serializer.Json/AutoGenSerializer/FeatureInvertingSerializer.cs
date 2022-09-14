@@ -79,6 +79,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("invertingFeature");
             writer.WriteStringValue(iFeatureInverting.InvertingFeature);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iFeatureInverting.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iFeatureInverting.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iFeatureInverting.Name);
 

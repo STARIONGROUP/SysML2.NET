@@ -73,11 +73,14 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iReturnParameterMembership.ElementId);
 
-            writer.WritePropertyName("featureOfType");
-            writer.WriteStringValue(iReturnParameterMembership.FeatureOfType);
+            writer.WritePropertyName("feature");
+            writer.WriteStringValue(iReturnParameterMembership.Feature);
 
-            writer.WritePropertyName("featuringType");
-            writer.WriteStringValue(iReturnParameterMembership.FeaturingType);
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iReturnParameterMembership.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iReturnParameterMembership.IsImpliedIncluded);
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iReturnParameterMembership.MemberElement);
@@ -141,6 +144,9 @@ namespace SysML2.NET.Serializer.Json
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
+
+            writer.WritePropertyName("type");
+            writer.WriteStringValue(iReturnParameterMembership.Type);
 
             writer.WritePropertyName("visibility");
             writer.WriteStringValue(iReturnParameterMembership.Visibility.ToString().ToUpper());

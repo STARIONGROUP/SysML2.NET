@@ -30,7 +30,7 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An BooleanExpression is a Boolean-valued Expression whose type is a Predicate. It represents a
+    /// A BooleanExpression is a Boolean-valued Expression whose type is a Predicate. It represents a
     /// logical condition resulting from the evaluation of the Predicate.A BooleanExpression must subset,
     /// directly or indirectly, the Expression booleanEvaluations from the Base model library, which is
     /// typed by the base Predicate BooleanEvaluation. As a result, a BooleanExpression must always be typed
@@ -45,6 +45,7 @@ namespace SysML2.NET.Core.DTO
             this.IsComposite = false;
             this.IsDerived = false;
             this.IsEnd = false;
+            this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
             this.IsReadOnly = false;
@@ -102,6 +103,15 @@ namespace SysML2.NET.Core.DTO
         /// other n-1 end Features are held fixed.
         /// </summary>
         public bool IsEnd { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.

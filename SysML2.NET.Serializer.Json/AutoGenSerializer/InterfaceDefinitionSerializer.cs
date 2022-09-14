@@ -76,6 +76,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isAbstract");
             writer.WriteBooleanValue(iInterfaceDefinition.IsAbstract);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iInterfaceDefinition.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iInterfaceDefinition.IsImpliedIncluded);
+
             writer.WritePropertyName("isIndividual");
             writer.WriteBooleanValue(iInterfaceDefinition.IsIndividual);
 

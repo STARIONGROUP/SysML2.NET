@@ -98,6 +98,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iAllocationUsage.IsEnd);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iAllocationUsage.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iAllocationUsage.IsImpliedIncluded);
+
             writer.WritePropertyName("isIndividual");
             writer.WriteBooleanValue(iAllocationUsage.IsIndividual);
 

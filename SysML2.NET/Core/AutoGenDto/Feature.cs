@@ -52,13 +52,13 @@ namespace SysML2.NET.Core.DTO
     /// ownedGeneralization->selectByKind(FeatureTyping)isEnd = owningFeatureMembership <> null and
     /// owningFeatureMembership.oclIsKindOf(EndFeatureMembership)multiplicity <> null implies
     /// multiplicity.featuringType = featuringType
-    /// allSupertypes()->includes(KernelLibrary::things)chainingfeatureChainings->notEmpty() implies
+    /// allSupertypes()->includes(KernelLibrary::things)chainingFeatures->size() <> 1invertedFeature =
+    /// invertedFeatureInverting.featureInvertedchainingFeature =
+    /// ownedFeatureChaining.chainingFeatureownedFeatureChaining =
+    /// ownedRelationship->selectByKind(FeatureChaining)chainingfeatureChainings->notEmpty() implies
     /// (owningFeatureMembership <> null implies
-    /// owningFeatureMembership.isDerived)chainingFeatures->excludes(self)invertedFeature =
-    /// invertedFeatureInverting.featureInvertedchainingFeatures->size() <> 1chainingFeature =
-    /// ownedFeatureChaining.chainingFeatureinverseFeature =
-    /// invertingFeatureInverting.featureInverseownedFeatureChaining =
-    /// ownedRelationship->selectByKind(FeatureChaining)
+    /// owningFeatureMembership.isDerived)chainingFeatures->excludes(self)inverseFeature =
+    /// invertingFeatureInverting.featureInverse
     /// </summary>
     public partial class Feature : IFeature
     {
@@ -69,6 +69,7 @@ namespace SysML2.NET.Core.DTO
             this.IsComposite = false;
             this.IsDerived = false;
             this.IsEnd = false;
+            this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
             this.IsReadOnly = false;
@@ -126,6 +127,15 @@ namespace SysML2.NET.Core.DTO
         /// other n-1 end Features are held fixed.
         /// </summary>
         public bool IsEnd { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.

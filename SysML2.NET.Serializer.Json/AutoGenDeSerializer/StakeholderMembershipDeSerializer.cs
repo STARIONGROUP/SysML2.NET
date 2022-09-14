@@ -112,52 +112,52 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the elementId Json property was not found in the StakeholderMembership: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("featureOfType", out JsonElement featureOfTypeProperty))
+            if (jsonElement.TryGetProperty("feature", out JsonElement featureProperty))
             {
-                if (featureOfTypeProperty.ValueKind == JsonValueKind.Null)
+                if (featureProperty.ValueKind == JsonValueKind.Null)
                 {
-                    dtoInstance.FeatureOfType = Guid.Empty;
-                    logger.LogDebug($"the StakeholderMembership.FeatureOfType property was not found in the Json. The value is set to Guid.Empty");
+                    dtoInstance.Feature = Guid.Empty;
+                    logger.LogDebug($"the StakeholderMembership.Feature property was not found in the Json. The value is set to Guid.Empty");
                 }
                 else
                 {
-                    if (featureOfTypeProperty.TryGetProperty("@id", out JsonElement featureOfTypeIdProperty))
+                    if (featureProperty.TryGetProperty("@id", out JsonElement featureIdProperty))
                     {
-                        var propertyValue = featureOfTypeIdProperty.GetString();
+                        var propertyValue = featureIdProperty.GetString();
                         if (propertyValue != null)
                         {
-                            dtoInstance.FeatureOfType = Guid.Parse(propertyValue);
+                            dtoInstance.Feature = Guid.Parse(propertyValue);
                         }
                     }
                 }
             }
             else
             {
-                logger.LogDebug($"the featureOfType Json property was not found in the StakeholderMembership: {dtoInstance.Id}");
+                logger.LogDebug($"the feature Json property was not found in the StakeholderMembership: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("featuringType", out JsonElement featuringTypeProperty))
+            if (jsonElement.TryGetProperty("isImplied", out JsonElement isImpliedProperty))
             {
-                if (featuringTypeProperty.ValueKind == JsonValueKind.Null)
+                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
                 {
-                    dtoInstance.FeaturingType = Guid.Empty;
-                    logger.LogDebug($"the StakeholderMembership.FeaturingType property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (featuringTypeProperty.TryGetProperty("@id", out JsonElement featuringTypeIdProperty))
-                    {
-                        var propertyValue = featuringTypeIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.FeaturingType = Guid.Parse(propertyValue);
-                        }
-                    }
+                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
                 }
             }
             else
             {
-                logger.LogDebug($"the featuringType Json property was not found in the StakeholderMembership: {dtoInstance.Id}");
+                logger.LogDebug($"the isImplied Json property was not found in the StakeholderMembership: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
+            {
+                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the StakeholderMembership: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("memberElement", out JsonElement memberElementProperty))
@@ -356,6 +356,30 @@ namespace SysML2.NET.Serializer.Json
             else
             {
                 logger.LogDebug($"the target Json property was not found in the StakeholderMembership: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("type", out JsonElement typeProperty))
+            {
+                if (typeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Type = Guid.Empty;
+                    logger.LogDebug($"the StakeholderMembership.Type property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (typeProperty.TryGetProperty("@id", out JsonElement typeIdProperty))
+                    {
+                        var propertyValue = typeIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Type = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the type Json property was not found in the StakeholderMembership: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("visibility", out JsonElement visibilityProperty))

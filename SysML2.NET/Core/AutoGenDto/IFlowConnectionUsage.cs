@@ -30,9 +30,10 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A FlowConnectionUsage is a ConnectionUsage that is also an ItemFlow.
+    /// A FlowConnectionUsage is a ConnectionUsage that is also an ItemFlow.A FlowConnectionUsage must
+    /// subset the base FlowConnectionUsage flowConnections from the Systems model library.
     /// </summary>
-    public partial interface IFlowConnectionUsage : IConnectionUsage, IItemFlow
+    public partial interface IFlowConnectionUsage : IConnectionUsage, IActionUsage, IItemFlow
     {
     }
 }

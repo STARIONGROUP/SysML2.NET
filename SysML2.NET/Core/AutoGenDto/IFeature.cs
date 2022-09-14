@@ -52,13 +52,13 @@ namespace SysML2.NET.Core.DTO
     /// ownedGeneralization->selectByKind(FeatureTyping)isEnd = owningFeatureMembership <> null and
     /// owningFeatureMembership.oclIsKindOf(EndFeatureMembership)multiplicity <> null implies
     /// multiplicity.featuringType = featuringType
-    /// allSupertypes()->includes(KernelLibrary::things)chainingfeatureChainings->notEmpty() implies
+    /// allSupertypes()->includes(KernelLibrary::things)chainingFeatures->size() <> 1invertedFeature =
+    /// invertedFeatureInverting.featureInvertedchainingFeature =
+    /// ownedFeatureChaining.chainingFeatureownedFeatureChaining =
+    /// ownedRelationship->selectByKind(FeatureChaining)chainingfeatureChainings->notEmpty() implies
     /// (owningFeatureMembership <> null implies
-    /// owningFeatureMembership.isDerived)chainingFeatures->excludes(self)invertedFeature =
-    /// invertedFeatureInverting.featureInvertedchainingFeatures->size() <> 1chainingFeature =
-    /// ownedFeatureChaining.chainingFeatureinverseFeature =
-    /// invertingFeatureInverting.featureInverseownedFeatureChaining =
-    /// ownedRelationship->selectByKind(FeatureChaining)
+    /// owningFeatureMembership.isDerived)chainingFeatures->excludes(self)inverseFeature =
+    /// invertingFeatureInverting.featureInverse
     /// </summary>
     public partial interface IFeature : IType
     {

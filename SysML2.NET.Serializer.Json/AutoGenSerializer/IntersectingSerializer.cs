@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="PrefixCommentSerializer.cs" company="RHEA System S.A.">
+// <copyright file="IntersectingSerializer.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
 //
@@ -31,16 +31,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="PrefixCommentSerializer"/> is to provide serialization
+    /// The purpose of the <see cref="IntersectingSerializer"/> is to provide serialization
     /// and deserialization capabilities
     /// </summary>
-    internal static class PrefixCommentSerializer
+    internal static class IntersectingSerializer
     {
         /// <summary>
-        /// Serializes an instance of <see cref="IPrefixComment"/> using an <see cref="Utf8JsonWriter"/>
+        /// Serializes an instance of <see cref="IIntersecting"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
         /// <param name="obj">
-        /// The <see cref="IPrefixComment"/> to serialize
+        /// The <see cref="IIntersecting"/> to serialize
         /// </param>
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
@@ -50,56 +50,69 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IPrefixComment iPrefixComment))
+            if (!(obj is IIntersecting iIntersecting))
             {
-                throw new ArgumentException("The object shall be an IPrefixComment", nameof(obj));
+                throw new ArgumentException("The object shall be an IIntersecting", nameof(obj));
             }
 
             writer.WriteStartObject();
 
             writer.WritePropertyName("@type");
-            writer.WriteStringValue("PrefixComment");
+            writer.WriteStringValue("Intersecting");
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(iPrefixComment.Id);
+            writer.WriteStringValue(iIntersecting.Id);
 
             writer.WriteStartArray("aliasIds");
-            foreach (var item in iPrefixComment.AliasIds)
+            foreach (var item in iIntersecting.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-
-            writer.WriteStartArray("annotation");
-            foreach (var item in iPrefixComment.Annotation)
-            {
-                writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("body");
-            writer.WriteStringValue(iPrefixComment.Body);
 
             writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iPrefixComment.ElementId);
+            writer.WriteStringValue(iIntersecting.ElementId);
 
-            writer.WritePropertyName("locale");
-            writer.WriteStringValue(iPrefixComment.Locale);
+            writer.WritePropertyName("intersectingType");
+            writer.WriteStringValue(iIntersecting.IntersectingType);
+
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iIntersecting.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iIntersecting.IsImpliedIncluded);
 
             writer.WritePropertyName("name");
-            writer.WriteStringValue(iPrefixComment.Name);
+            writer.WriteStringValue(iIntersecting.Name);
 
-            writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iPrefixComment.OwnedRelationship)
+            writer.WriteStartArray("ownedRelatedElement");
+            foreach (var item in iIntersecting.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
-            if (iPrefixComment.OwningRelationship.HasValue)
+            writer.WriteStartArray("ownedRelationship");
+            foreach (var item in iIntersecting.OwnedRelationship)
             {
-                writer.WriteStringValue(iPrefixComment.OwningRelationship.Value);
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("owningRelatedElement");
+            if (iIntersecting.OwningRelatedElement.HasValue)
+            {
+                writer.WriteStringValue(iIntersecting.OwningRelatedElement.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelationship");
+            if (iIntersecting.OwningRelationship.HasValue)
+            {
+                writer.WriteStringValue(iIntersecting.OwningRelationship.Value);
             }
             else
             {
@@ -107,7 +120,21 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iPrefixComment.ShortName);
+            writer.WriteStringValue(iIntersecting.ShortName);
+
+            writer.WriteStartArray("source");
+            foreach (var item in iIntersecting.Source)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target");
+            foreach (var item in iIntersecting.Target)
+            {
+                writer.WriteStringValue(item);
+            }
+            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }

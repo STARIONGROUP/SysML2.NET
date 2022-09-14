@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="IPrefixComment.cs" company="RHEA System S.A.">
+// <copyright file="IDifferencing.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,9 +30,15 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// Differencing is a Relationship that makes its differencingType one of the differencingTypes of its
+    /// typeDifferenced.
     /// </summary>
-    public partial interface IPrefixComment : IComment
+    public partial interface IDifferencing : IRelationship
     {
+        /// <summary>
+        /// </summary>
+        Guid DifferencingType { get; set; }
+
     }
 }
 

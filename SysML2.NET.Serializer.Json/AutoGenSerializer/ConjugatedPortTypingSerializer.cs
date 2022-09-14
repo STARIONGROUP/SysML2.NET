@@ -76,6 +76,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("general");
             writer.WriteStringValue(iConjugatedPortTyping.General);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iConjugatedPortTyping.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iConjugatedPortTyping.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iConjugatedPortTyping.Name);
 

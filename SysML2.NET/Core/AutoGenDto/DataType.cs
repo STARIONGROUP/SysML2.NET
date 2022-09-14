@@ -32,15 +32,15 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A DataType is a Classifier of things (in the universe) that can only be distinguished by how they
     /// are related to other things (via Features). This means multiple things classified by the same
-    /// DataType<ul>	<li>Cannot be distinguished when they are related to other things in exactly the
-    /// same way, even when they are intended to be about the same thing.</li>	<li>Can be
-    /// distinguished when they are related to other things in different ways, even when they are
-    /// intended to be about the same thing.</li></ul>DataTypes serve to subdivide Classifiers into two
-    /// kinds of objects: those that have some definition beyond their property values and those that are
-    /// defined entirely by their values. DataTypes are the second kind. If two objects classified by
-    /// DataType have identical property values, they are understood to be in fact the same object.
-    /// DataTypes are intended to represent data or mathematical objects which is where the equivalence
-    /// based on matched values is appropriate.allSupertypes()->includes(Kernel Library::DataValue)
+    /// DataType<ul>	<li>Cannot be distinguished when they are related to other things in exactly the same
+    /// way, even when they are intended to be about different things.</li>	<li>Can be distinguished when
+    /// they are related to other things in different ways, even when they are intended to be about the same
+    /// thing.</li></ul>DataTypes serve to subdivide Classifiers into two kinds of objects: those that have
+    /// some definition beyond their property values and those that are defined entirely by their values.
+    /// DataTypes are the second kind. If two objects classified by DataType have identical property values,
+    /// they are understood to be in fact the same object. DataTypes are intended to represent data or
+    /// mathematical objects which is where the equivalence based on matched values is
+    /// appropriate.allSupertypes()->includes(Kernel Library::DataValue)
     /// </summary>
     public partial class DataType : IDataType
     {
@@ -48,6 +48,7 @@ namespace SysML2.NET.Core.DTO
         {
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
+            this.IsImpliedIncluded = false;
             this.IsSufficient = false;
             this.OwnedRelationship = new List<Guid>();
         }
@@ -73,6 +74,15 @@ namespace SysML2.NET.Core.DTO
         /// Types.
         /// </summary>
         public bool IsAbstract { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the

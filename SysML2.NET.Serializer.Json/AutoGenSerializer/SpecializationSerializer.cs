@@ -76,6 +76,12 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("general");
             writer.WriteStringValue(iSpecialization.General);
 
+            writer.WritePropertyName("isImplied");
+            writer.WriteBooleanValue(iSpecialization.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iSpecialization.IsImpliedIncluded);
+
             writer.WritePropertyName("name");
             writer.WriteStringValue(iSpecialization.Name);
 

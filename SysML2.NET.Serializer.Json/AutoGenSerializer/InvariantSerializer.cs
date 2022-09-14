@@ -95,6 +95,9 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isEnd");
             writer.WriteBooleanValue(iInvariant.IsEnd);
 
+            writer.WritePropertyName("isImpliedIncluded");
+            writer.WriteBooleanValue(iInvariant.IsImpliedIncluded);
+
             writer.WritePropertyName("isNegated");
             writer.WriteBooleanValue(iInvariant.IsNegated);
 

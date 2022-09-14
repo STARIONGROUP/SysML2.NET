@@ -30,11 +30,12 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A PerformActionUsage is an ActionUsage that represents the performance of an ActionUsage. The
-    /// ActionUsage to be performed (which may be the PerformActionUsage itself) is related to the
-    /// PerformActionUsage by a Subsetting relationship.If the PerformActionUsage is owned by a
-    /// PartDefinition or PartUsage, then it also subsets the ActionUsage Part::performedAction from the
-    /// Systems model library.
+    /// A PerformActionUsage is an ActionUsage that represents the performance of an ActionUsage. Unless it
+    /// is the PerformActionUsage itself, the ActionUsage to be performed is related to the
+    /// PerformActionUsage by a ReferenceSubsetting relationship. A PerformActionUsage is also an
+    /// EventOccurrenceUsage, with its performedAction as the eventOccurrence.If the PerformActionUsage is
+    /// owned by a PartDefinition or PartUsage, then it also subsets the ActionUsage Part::performedAction
+    /// from the Systems model library.
     /// </summary>
     public partial class PerformActionUsage : IPerformActionUsage
     {
@@ -45,6 +46,7 @@ namespace SysML2.NET.Core.DTO
             this.IsComposite = false;
             this.IsDerived = false;
             this.IsEnd = false;
+            this.IsImpliedIncluded = false;
             this.IsIndividual = false;
             this.IsOrdered = false;
             this.IsPortion = false;
@@ -103,6 +105,15 @@ namespace SysML2.NET.Core.DTO
         /// other n-1 end Features are held fixed.
         /// </summary>
         public bool IsEnd { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

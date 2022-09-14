@@ -30,11 +30,11 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An ExhibitStateUsage is a StateUsage that represents the exhibiting of a StateUsage. The StateUsage
-    /// to be exhibited (which may be the ExhibitStateUsage itself) is related to the ExhibitStateUsage by a
-    /// Subsetting Relationship. An ExhibitStateUsage is also a PerformActionUsage, with its exhibitedState
-    /// as the performedAction.If the ExhibitStateUsage is owned by a PartDefinition or PartUsage, then it
-    /// also subsets the StateUsage Part::exhibitedStates from the Systems model library.
+    /// An ExhibitStateUsage is a StateUsage that represents the exhibiting of a StateUsage. Unless it is
+    /// the StateUsage itself, the StateUsage to be exhibited is related to the ExhibitStateUsage by a
+    /// ReferenceSubsetting Relationship. An ExhibitStateUsage is also a PerformActionUsage, with its
+    /// exhibitedState as the performedAction.If the ExhibitStateUsage is owned by a PartDefinition or
+    /// PartUsage, then it also subsets the StateUsage Part::exhibitedStates from the Systems model library.
     /// </summary>
     public partial class ExhibitStateUsage : IExhibitStateUsage
     {
@@ -45,6 +45,7 @@ namespace SysML2.NET.Core.DTO
             this.IsComposite = false;
             this.IsDerived = false;
             this.IsEnd = false;
+            this.IsImpliedIncluded = false;
             this.IsIndividual = false;
             this.IsOrdered = false;
             this.IsParallel = false;
@@ -104,6 +105,15 @@ namespace SysML2.NET.Core.DTO
         /// other n-1 end Features are held fixed.
         /// </summary>
         public bool IsEnd { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

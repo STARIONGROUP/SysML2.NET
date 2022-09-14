@@ -144,6 +144,18 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the elementId Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
             }
 
+            if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
+            {
+                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("language", out JsonElement languageProperty))
             {
                 var propertyValue = languageProperty.GetString();

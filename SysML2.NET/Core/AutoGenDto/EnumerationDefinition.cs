@@ -40,6 +40,7 @@ namespace SysML2.NET.Core.DTO
         {
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
+            this.IsImpliedIncluded = false;
             this.IsSufficient = false;
             this.OwnedRelationship = new List<Guid>();
         }
@@ -65,6 +66,15 @@ namespace SysML2.NET.Core.DTO
         /// Types.
         /// </summary>
         public bool IsAbstract { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the

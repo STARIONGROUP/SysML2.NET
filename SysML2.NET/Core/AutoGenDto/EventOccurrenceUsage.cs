@@ -31,11 +31,13 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A EventOccurrenceUsage is an OccurrenceUsage that represents another OccurrenceUsage occurring as a
-    /// suboccurrence of the containing occurrence of the EventOccurrenceUsage. The referenced
-    /// OccurrenceUsage performed (which may be the EventOccurrenceUsage itself) is related to the
-    /// EventOccurrenceUsage by a Subsetting relationship.If the EventOccurrenceUsage is owned by an
-    /// Occurrence, then it also subsets the suboccurrence property of that Occurrence (as defined in the
-    /// library model for Part).
+    /// suboccurrence of the containing occurrence of the EventOccurrenceUsage. Unless it is ithe
+    /// EventOccurrenceUsage itself, the referenced OccurrenceUsage performed is related to the
+    /// EventOccurrenceUsage by a ReferenceSubsetting relationship.If the EventOccurrenceUsage is owned by
+    /// an OccurrenceDefinition or OccurrenceUsage, then it also subsets the timeEnclosedOccurrences
+    /// property of the Class Occurrence from the Kernel Semantic Library model Occurrences.eventOccurrence
+    /// =    if ownedReferenceSubsetting = null then self    else
+    /// ownedReferenceSubsetting.referencedFeature.oclAsType(OccurrenceUsage)    endif
     /// </summary>
     public partial class EventOccurrenceUsage : IEventOccurrenceUsage
     {
@@ -46,6 +48,7 @@ namespace SysML2.NET.Core.DTO
             this.IsComposite = false;
             this.IsDerived = false;
             this.IsEnd = false;
+            this.IsImpliedIncluded = false;
             this.IsIndividual = false;
             this.IsOrdered = false;
             this.IsPortion = false;
@@ -104,6 +107,15 @@ namespace SysML2.NET.Core.DTO
         /// other n-1 end Features are held fixed.
         /// </summary>
         public bool IsEnd { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)

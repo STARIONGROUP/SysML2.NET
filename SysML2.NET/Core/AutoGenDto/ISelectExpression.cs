@@ -30,7 +30,7 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A CollectExpression is an OperatorExpression whoise operator is "select", which resolves to the
+    /// A SelectExpression is an OperatorExpression whose operator is "select", which resolves to the
     /// library Function ControlFunctions::select.
     /// </summary>
     public partial interface ISelectExpression : IOperatorExpression

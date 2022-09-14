@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.DTO
     /// null then null    else owningNamespace.qualifiedName + '::' + escapedName()    endif endif
     /// endifdocumentation = ownedElement->selectByKind(Documentation)ownedAnnotation =
     /// ownedRelationship->selectByKind(Annotation)->    select(a | a.annotatedElement =
-    /// self)effectiveName()
+    /// self)effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncluded
     /// </summary>
     public partial interface IElement
     {
@@ -53,6 +53,15 @@ namespace SysML2.NET.Core.DTO
         /// not change during the lifetime of the Element.
         /// </summary>
         string ElementId { get; set; }
+
+        /// <summary>
+        /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
+        /// Element. This property may be true, even if there are not actually any ownedRelationships with
+        /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
+        /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
+        /// all required implied Relationships must be included, or none of them.
+        /// </summary>
+        bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// The primary name of this Element.
