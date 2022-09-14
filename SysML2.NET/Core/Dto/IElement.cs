@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Interface1.cs" company="RHEA System S.A.">
+// <copyright file="IElement.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 

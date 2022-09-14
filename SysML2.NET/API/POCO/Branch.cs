@@ -23,8 +23,8 @@ namespace SysML2.NET.API.POCO
     using System;
 
     /// <summary>
-    /// A <see cref="Branch"/> is a type of CommitReference. A <see cref="Branch"/> is a pointer to a <see cref="Commit"/> (Branch.head).
-    /// The <see cref="Commit"/> history of a <see cref="Project"/> on a given branch can be computed by recursively navigating
+    /// A <see cref="Branch"/> is a type of <see cref="CommitReference"/>. A <see cref="Branch"/> is a pointer to a <see cref="Commit"/> (Branch.head).
+    /// The <see cref="Commit"/> history of a <see cref="Project"/> on a given <see cref="Branch"/> can be computed by recursively navigating
     /// <see cref="Commit.PreviousCommit"/>, starting from the head <see cref="Commit"/> of the <see cref="Branch"/> (Branch.head)
     /// </summary>
     public class Branch : CommitReference

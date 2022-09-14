@@ -30,8 +30,4 @@
 	  <Folder Include="Core\Poco\" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Include="..\SysML2.NET.Viewer\Components\DataAnnotationsValidator.razor" Link="DataAnnotationsValidator.razor" />
-	</ItemGroup>
-
 </Project>

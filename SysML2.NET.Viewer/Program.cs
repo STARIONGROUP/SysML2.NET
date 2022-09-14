@@ -41,6 +41,7 @@ namespace SysML2.NET.Viewer
     using SySML2.NET.REST;
     using SysML2.NET.Serializer.Json;
     using SysML2.NET.Viewer.Services.Authentication;
+    using SysML2.NET.Viewer.Services.CommitHistory;
 
     /// <summary>
     /// The purpose of the <see cref="Program"/> class is to provide the
@@ -100,6 +101,8 @@ namespace SysML2.NET.Viewer
             builder.Services.AddScoped<IRestClient, RestClient>();
             builder.Services.AddScoped<IDeSerializer, DeSerializer>();
             builder.Services.AddScoped<ISerializer, Serializer>();
+
+            builder.Services.AddScoped<ICommitHistoryService, CommitHistoryService>();
         }
 
         /// <summary>

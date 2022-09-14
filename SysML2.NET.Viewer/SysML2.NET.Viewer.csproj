@@ -28,6 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Services\CommitHistory\" />
 	  <Folder Include="ViewModels\Pages\" />
 	  <Folder Include="wwwroot\images\" />
 	</ItemGroup>

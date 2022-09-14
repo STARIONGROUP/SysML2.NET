@@ -39,7 +39,7 @@ namespace SysML2.NET.Viewer.Pages
     public partial class Projects
     {
         /// <summary>
-        /// The <see cref="projects"/>s that are loaded from the SysML2 model server
+        /// The <see cref="Project"/>s that are loaded from the SysML2 model server
         /// </summary>
         private IEnumerable<Project> projects;
 

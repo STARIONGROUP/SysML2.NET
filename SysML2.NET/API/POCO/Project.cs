@@ -36,6 +36,7 @@ namespace SysML2.NET.API.POCO
         /// </summary>
         public Project()
         {
+            this.Branch = new List<Branch>();
             this.Commit = new List<Commit>();
             this.CommitReference = new List<CommitReference>();
             this.Tag = new List<Tag>();
