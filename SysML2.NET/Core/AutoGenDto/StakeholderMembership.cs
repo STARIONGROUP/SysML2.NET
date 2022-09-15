@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class StakeholderMembership : IStakeholderMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StakeholderMembership"/> class.
+        /// </summary>
         public StakeholderMembership()
         {
             this.AliasIds = new List<string>();

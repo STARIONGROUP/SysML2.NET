@@ -32,6 +32,9 @@ namespace SysML2.NET.Core.DTO
     {{ #Documentation this }}
     public {{#if this.Abstract}}abstract {{/if}}partial class {{ this.Name }} : I{{ this.Name }}
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="{{ this.Name }}"/> class.
+        /// </summary>
         {{#if this.Abstract}}protected {{else}}public{{/if}} {{ this.Name }}()
         {
             {{#each this.AllEStructuralFeaturesOrderByName as | structuralFeature |}}

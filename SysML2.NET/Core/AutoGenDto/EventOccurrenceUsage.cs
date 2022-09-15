@@ -41,6 +41,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class EventOccurrenceUsage : IEventOccurrenceUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventOccurrenceUsage"/> class.
+        /// </summary>
         public EventOccurrenceUsage()
         {
             this.AliasIds = new List<string>();

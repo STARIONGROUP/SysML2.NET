@@ -34,6 +34,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Documentation : IDocumentation
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Documentation"/> class.
+        /// </summary>
         public Documentation()
         {
             this.AliasIds = new List<string>();

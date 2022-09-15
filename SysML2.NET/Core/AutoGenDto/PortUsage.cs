@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class PortUsage : IPortUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PortUsage"/> class.
+        /// </summary>
         public PortUsage()
         {
             this.AliasIds = new List<string>();

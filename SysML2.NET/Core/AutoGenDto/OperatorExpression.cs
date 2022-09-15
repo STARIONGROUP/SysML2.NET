@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class OperatorExpression : IOperatorExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OperatorExpression"/> class.
+        /// </summary>
         public OperatorExpression()
         {
             this.AliasIds = new List<string>();

@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Succession : ISuccession
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Succession"/> class.
+        /// </summary>
         public Succession()
         {
             this.AliasIds = new List<string>();

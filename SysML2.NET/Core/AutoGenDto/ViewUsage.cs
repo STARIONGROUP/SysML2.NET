@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ViewUsage : IViewUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewUsage"/> class.
+        /// </summary>
         public ViewUsage()
         {
             this.AliasIds = new List<string>();

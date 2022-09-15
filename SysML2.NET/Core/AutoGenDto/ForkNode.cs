@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ForkNode : IForkNode
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ForkNode"/> class.
+        /// </summary>
         public ForkNode()
         {
             this.AliasIds = new List<string>();

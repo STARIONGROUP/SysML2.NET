@@ -40,6 +40,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Association : IAssociation
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Association"/> class.
+        /// </summary>
         public Association()
         {
             this.AliasIds = new List<string>();

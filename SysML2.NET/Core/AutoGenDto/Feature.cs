@@ -62,6 +62,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Feature : IFeature
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Feature"/> class.
+        /// </summary>
         public Feature()
         {
             this.AliasIds = new List<string>();

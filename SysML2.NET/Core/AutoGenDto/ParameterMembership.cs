@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ParameterMembership : IParameterMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterMembership"/> class.
+        /// </summary>
         public ParameterMembership()
         {
             this.AliasIds = new List<string>();

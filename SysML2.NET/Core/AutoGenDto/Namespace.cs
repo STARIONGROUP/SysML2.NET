@@ -46,6 +46,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Namespace : INamespace
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Namespace"/> class.
+        /// </summary>
         public Namespace()
         {
             this.AliasIds = new List<string>();

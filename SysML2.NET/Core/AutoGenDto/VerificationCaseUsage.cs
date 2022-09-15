@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class VerificationCaseUsage : IVerificationCaseUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VerificationCaseUsage"/> class.
+        /// </summary>
         public VerificationCaseUsage()
         {
             this.AliasIds = new List<string>();

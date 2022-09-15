@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class InvocationExpression : IInvocationExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvocationExpression"/> class.
+        /// </summary>
         public InvocationExpression()
         {
             this.AliasIds = new List<string>();

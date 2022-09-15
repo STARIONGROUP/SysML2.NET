@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class MetadataUsage : IMetadataUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetadataUsage"/> class.
+        /// </summary>
         public MetadataUsage()
         {
             this.AliasIds = new List<string>();

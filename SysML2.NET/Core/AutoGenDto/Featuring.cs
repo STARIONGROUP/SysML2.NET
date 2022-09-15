@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public abstract partial class Featuring : IFeaturing
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Featuring"/> class.
+        /// </summary>
         protected Featuring()
         {
             this.AliasIds = new List<string>();

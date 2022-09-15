@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class RequirementDefinition : IRequirementDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequirementDefinition"/> class.
+        /// </summary>
         public RequirementDefinition()
         {
             this.AliasIds = new List<string>();

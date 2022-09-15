@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ConnectionDefinition : IConnectionDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionDefinition"/> class.
+        /// </summary>
         public ConnectionDefinition()
         {
             this.AliasIds = new List<string>();

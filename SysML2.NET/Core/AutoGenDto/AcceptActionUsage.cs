@@ -40,6 +40,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class AcceptActionUsage : IAcceptActionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AcceptActionUsage"/> class.
+        /// </summary>
         public AcceptActionUsage()
         {
             this.AliasIds = new List<string>();

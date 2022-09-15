@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class NullExpression : INullExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NullExpression"/> class.
+        /// </summary>
         public NullExpression()
         {
             this.AliasIds = new List<string>();

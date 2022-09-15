@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Structure : IStructure
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Structure"/> class.
+        /// </summary>
         public Structure()
         {
             this.AliasIds = new List<string>();

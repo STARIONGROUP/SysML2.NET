@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ConcernUsage : IConcernUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConcernUsage"/> class.
+        /// </summary>
         public ConcernUsage()
         {
             this.AliasIds = new List<string>();

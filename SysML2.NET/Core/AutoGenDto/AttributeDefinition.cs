@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class AttributeDefinition : IAttributeDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AttributeDefinition"/> class.
+        /// </summary>
         public AttributeDefinition()
         {
             this.AliasIds = new List<string>();

@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class OwningMembership : IOwningMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OwningMembership"/> class.
+        /// </summary>
         public OwningMembership()
         {
             this.AliasIds = new List<string>();

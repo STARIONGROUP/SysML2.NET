@@ -33,6 +33,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ItemFlowEnd : IItemFlowEnd
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemFlowEnd"/> class.
+        /// </summary>
         public ItemFlowEnd()
         {
             this.AliasIds = new List<string>();

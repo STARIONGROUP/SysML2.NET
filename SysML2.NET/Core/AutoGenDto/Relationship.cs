@@ -46,6 +46,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Relationship : IRelationship
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Relationship"/> class.
+        /// </summary>
         public Relationship()
         {
             this.AliasIds = new List<string>();

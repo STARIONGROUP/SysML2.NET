@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class TypeFeaturing : ITypeFeaturing
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeFeaturing"/> class.
+        /// </summary>
         public TypeFeaturing()
         {
             this.AliasIds = new List<string>();

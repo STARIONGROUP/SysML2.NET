@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Function : IFunction
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Function"/> class.
+        /// </summary>
         public Function()
         {
             this.AliasIds = new List<string>();

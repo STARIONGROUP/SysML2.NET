@@ -33,6 +33,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class TargetEnd : ITargetEnd
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TargetEnd"/> class.
+        /// </summary>
         public TargetEnd()
         {
             this.AliasIds = new List<string>();

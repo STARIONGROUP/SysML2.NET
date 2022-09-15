@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Expose : IExpose
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Expose"/> class.
+        /// </summary>
         public Expose()
         {
             this.AliasIds = new List<string>();

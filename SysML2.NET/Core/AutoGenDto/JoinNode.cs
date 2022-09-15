@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class JoinNode : IJoinNode
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JoinNode"/> class.
+        /// </summary>
         public JoinNode()
         {
             this.AliasIds = new List<string>();

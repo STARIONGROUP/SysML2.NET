@@ -43,6 +43,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class OccurrenceUsage : IOccurrenceUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OccurrenceUsage"/> class.
+        /// </summary>
         public OccurrenceUsage()
         {
             this.AliasIds = new List<string>();

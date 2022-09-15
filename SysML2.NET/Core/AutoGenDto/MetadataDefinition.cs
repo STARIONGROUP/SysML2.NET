@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class MetadataDefinition : IMetadataDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetadataDefinition"/> class.
+        /// </summary>
         public MetadataDefinition()
         {
             this.AliasIds = new List<string>();

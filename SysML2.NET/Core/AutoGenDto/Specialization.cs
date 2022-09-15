@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Specialization : ISpecialization
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Specialization"/> class.
+        /// </summary>
         public Specialization()
         {
             this.AliasIds = new List<string>();

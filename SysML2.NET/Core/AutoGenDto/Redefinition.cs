@@ -46,6 +46,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Redefinition : IRedefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Redefinition"/> class.
+        /// </summary>
         public Redefinition()
         {
             this.AliasIds = new List<string>();

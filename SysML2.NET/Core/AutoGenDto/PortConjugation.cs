@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class PortConjugation : IPortConjugation
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PortConjugation"/> class.
+        /// </summary>
         public PortConjugation()
         {
             this.AliasIds = new List<string>();

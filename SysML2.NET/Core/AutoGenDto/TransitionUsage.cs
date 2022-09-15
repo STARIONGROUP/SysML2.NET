@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class TransitionUsage : ITransitionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransitionUsage"/> class.
+        /// </summary>
         public TransitionUsage()
         {
             this.AliasIds = new List<string>();

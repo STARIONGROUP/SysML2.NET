@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Intersecting : IIntersecting
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Intersecting"/> class.
+        /// </summary>
         public Intersecting()
         {
             this.AliasIds = new List<string>();

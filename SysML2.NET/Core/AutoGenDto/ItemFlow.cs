@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ItemFlow : IItemFlow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemFlow"/> class.
+        /// </summary>
         public ItemFlow()
         {
             this.AliasIds = new List<string>();

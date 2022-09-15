@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class CollectExpression : ICollectExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectExpression"/> class.
+        /// </summary>
         public CollectExpression()
         {
             this.AliasIds = new List<string>();

@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class MultiplicityRange : IMultiplicityRange
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiplicityRange"/> class.
+        /// </summary>
         public MultiplicityRange()
         {
             this.AliasIds = new List<string>();

@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class RenderingUsage : IRenderingUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenderingUsage"/> class.
+        /// </summary>
         public RenderingUsage()
         {
             this.AliasIds = new List<string>();

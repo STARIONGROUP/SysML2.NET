@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ConjugatedPortTyping : IConjugatedPortTyping
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConjugatedPortTyping"/> class.
+        /// </summary>
         public ConjugatedPortTyping()
         {
             this.AliasIds = new List<string>();

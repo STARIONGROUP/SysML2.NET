@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class PerformActionUsage : IPerformActionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PerformActionUsage"/> class.
+        /// </summary>
         public PerformActionUsage()
         {
             this.AliasIds = new List<string>();

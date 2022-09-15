@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class FeatureChainExpression : IFeatureChainExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FeatureChainExpression"/> class.
+        /// </summary>
         public FeatureChainExpression()
         {
             this.AliasIds = new List<string>();

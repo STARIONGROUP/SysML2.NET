@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class SendActionUsage : ISendActionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SendActionUsage"/> class.
+        /// </summary>
         public SendActionUsage()
         {
             this.AliasIds = new List<string>();

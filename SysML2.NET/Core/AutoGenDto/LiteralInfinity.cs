@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class LiteralInfinity : ILiteralInfinity
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LiteralInfinity"/> class.
+        /// </summary>
         public LiteralInfinity()
         {
             this.AliasIds = new List<string>();

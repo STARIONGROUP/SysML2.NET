@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class PartDefinition : IPartDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PartDefinition"/> class.
+        /// </summary>
         public PartDefinition()
         {
             this.AliasIds = new List<string>();

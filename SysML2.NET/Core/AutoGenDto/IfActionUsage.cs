@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class IfActionUsage : IIfActionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IfActionUsage"/> class.
+        /// </summary>
         public IfActionUsage()
         {
             this.AliasIds = new List<string>();

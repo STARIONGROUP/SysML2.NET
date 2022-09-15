@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ViewpointDefinition : IViewpointDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewpointDefinition"/> class.
+        /// </summary>
         public ViewpointDefinition()
         {
             this.AliasIds = new List<string>();

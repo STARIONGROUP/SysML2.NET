@@ -40,6 +40,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class SuccessionItemFlow : ISuccessionItemFlow
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SuccessionItemFlow"/> class.
+        /// </summary>
         public SuccessionItemFlow()
         {
             this.AliasIds = new List<string>();

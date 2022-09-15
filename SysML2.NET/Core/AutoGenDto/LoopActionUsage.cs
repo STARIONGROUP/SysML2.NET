@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public abstract partial class LoopActionUsage : ILoopActionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoopActionUsage"/> class.
+        /// </summary>
         protected LoopActionUsage()
         {
             this.AliasIds = new List<string>();

@@ -33,6 +33,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class SourceEnd : ISourceEnd
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SourceEnd"/> class.
+        /// </summary>
         public SourceEnd()
         {
             this.AliasIds = new List<string>();

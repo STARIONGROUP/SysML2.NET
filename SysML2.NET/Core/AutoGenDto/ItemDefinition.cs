@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ItemDefinition : IItemDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemDefinition"/> class.
+        /// </summary>
         public ItemDefinition()
         {
             this.AliasIds = new List<string>();

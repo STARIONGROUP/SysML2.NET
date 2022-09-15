@@ -44,6 +44,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Multiplicity : IMultiplicity
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Multiplicity"/> class.
+        /// </summary>
         public Multiplicity()
         {
             this.AliasIds = new List<string>();

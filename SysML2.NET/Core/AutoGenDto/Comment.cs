@@ -34,6 +34,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Comment : IComment
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Comment"/> class.
+        /// </summary>
         public Comment()
         {
             this.AliasIds = new List<string>();

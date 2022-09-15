@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class IncludeUseCaseUsage : IIncludeUseCaseUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncludeUseCaseUsage"/> class.
+        /// </summary>
         public IncludeUseCaseUsage()
         {
             this.AliasIds = new List<string>();

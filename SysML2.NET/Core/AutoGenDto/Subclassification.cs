@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Subclassification : ISubclassification
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Subclassification"/> class.
+        /// </summary>
         public Subclassification()
         {
             this.AliasIds = new List<string>();

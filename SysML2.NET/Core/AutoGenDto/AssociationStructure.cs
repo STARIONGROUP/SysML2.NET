@@ -34,6 +34,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class AssociationStructure : IAssociationStructure
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssociationStructure"/> class.
+        /// </summary>
         public AssociationStructure()
         {
             this.AliasIds = new List<string>();

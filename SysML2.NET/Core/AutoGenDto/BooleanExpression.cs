@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class BooleanExpression : IBooleanExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BooleanExpression"/> class.
+        /// </summary>
         public BooleanExpression()
         {
             this.AliasIds = new List<string>();

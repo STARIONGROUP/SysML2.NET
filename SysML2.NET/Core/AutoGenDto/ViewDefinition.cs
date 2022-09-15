@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ViewDefinition : IViewDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewDefinition"/> class.
+        /// </summary>
         public ViewDefinition()
         {
             this.AliasIds = new List<string>();

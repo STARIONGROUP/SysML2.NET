@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class FramedConcernMembership : IFramedConcernMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FramedConcernMembership"/> class.
+        /// </summary>
         public FramedConcernMembership()
         {
             this.AliasIds = new List<string>();

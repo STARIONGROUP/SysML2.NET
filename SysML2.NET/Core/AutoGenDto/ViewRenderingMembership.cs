@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ViewRenderingMembership : IViewRenderingMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewRenderingMembership"/> class.
+        /// </summary>
         public ViewRenderingMembership()
         {
             this.AliasIds = new List<string>();

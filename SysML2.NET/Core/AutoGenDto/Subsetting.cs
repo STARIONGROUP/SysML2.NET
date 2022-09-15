@@ -42,6 +42,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Subsetting : ISubsetting
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Subsetting"/> class.
+        /// </summary>
         public Subsetting()
         {
             this.AliasIds = new List<string>();

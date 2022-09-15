@@ -60,6 +60,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class TextualRepresentation : ITextualRepresentation
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextualRepresentation"/> class.
+        /// </summary>
         public TextualRepresentation()
         {
             this.AliasIds = new List<string>();

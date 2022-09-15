@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ObjectiveMembership : IObjectiveMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObjectiveMembership"/> class.
+        /// </summary>
         public ObjectiveMembership()
         {
             this.AliasIds = new List<string>();

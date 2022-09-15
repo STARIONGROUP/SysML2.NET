@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ConstraintUsage : IConstraintUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConstraintUsage"/> class.
+        /// </summary>
         public ConstraintUsage()
         {
             this.AliasIds = new List<string>();

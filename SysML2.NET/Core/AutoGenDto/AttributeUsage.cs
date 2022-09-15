@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class AttributeUsage : IAttributeUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AttributeUsage"/> class.
+        /// </summary>
         public AttributeUsage()
         {
             this.AliasIds = new List<string>();

@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Disjoining : IDisjoining
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Disjoining"/> class.
+        /// </summary>
         public Disjoining()
         {
             this.AliasIds = new List<string>();

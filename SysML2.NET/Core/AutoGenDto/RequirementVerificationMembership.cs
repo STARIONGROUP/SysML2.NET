@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class RequirementVerificationMembership : IRequirementVerificationMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequirementVerificationMembership"/> class.
+        /// </summary>
         public RequirementVerificationMembership()
         {
             this.AliasIds = new List<string>();

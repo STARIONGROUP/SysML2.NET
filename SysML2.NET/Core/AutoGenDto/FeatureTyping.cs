@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class FeatureTyping : IFeatureTyping
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FeatureTyping"/> class.
+        /// </summary>
         public FeatureTyping()
         {
             this.AliasIds = new List<string>();

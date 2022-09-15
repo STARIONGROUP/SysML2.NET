@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class MetadataFeature : IMetadataFeature
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetadataFeature"/> class.
+        /// </summary>
         public MetadataFeature()
         {
             this.AliasIds = new List<string>();

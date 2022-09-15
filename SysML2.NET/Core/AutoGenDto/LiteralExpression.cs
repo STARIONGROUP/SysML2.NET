@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class LiteralExpression : ILiteralExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LiteralExpression"/> class.
+        /// </summary>
         public LiteralExpression()
         {
             this.AliasIds = new List<string>();

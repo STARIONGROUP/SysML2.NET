@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class PortDefinition : IPortDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PortDefinition"/> class.
+        /// </summary>
         public PortDefinition()
         {
             this.AliasIds = new List<string>();

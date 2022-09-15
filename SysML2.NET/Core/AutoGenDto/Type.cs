@@ -52,6 +52,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Type : IType
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Type"/> class.
+        /// </summary>
         public Type()
         {
             this.AliasIds = new List<string>();

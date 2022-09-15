@@ -40,6 +40,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public abstract partial class ControlNode : IControlNode
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ControlNode"/> class.
+        /// </summary>
         protected ControlNode()
         {
             this.AliasIds = new List<string>();

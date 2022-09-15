@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class RequirementConstraintMembership : IRequirementConstraintMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequirementConstraintMembership"/> class.
+        /// </summary>
         public RequirementConstraintMembership()
         {
             this.AliasIds = new List<string>();

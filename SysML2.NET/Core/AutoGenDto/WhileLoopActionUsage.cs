@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class WhileLoopActionUsage : IWhileLoopActionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WhileLoopActionUsage"/> class.
+        /// </summary>
         public WhileLoopActionUsage()
         {
             this.AliasIds = new List<string>();

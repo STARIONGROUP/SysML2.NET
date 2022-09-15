@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class FeatureReferenceExpression : IFeatureReferenceExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FeatureReferenceExpression"/> class.
+        /// </summary>
         public FeatureReferenceExpression()
         {
             this.AliasIds = new List<string>();

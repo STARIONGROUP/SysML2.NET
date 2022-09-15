@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class FeatureMembership : IFeatureMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FeatureMembership"/> class.
+        /// </summary>
         public FeatureMembership()
         {
             this.AliasIds = new List<string>();

@@ -44,6 +44,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class DataType : IDataType
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataType"/> class.
+        /// </summary>
         public DataType()
         {
             this.AliasIds = new List<string>();

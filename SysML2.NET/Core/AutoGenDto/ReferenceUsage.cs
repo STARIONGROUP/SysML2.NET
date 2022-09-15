@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ReferenceUsage : IReferenceUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReferenceUsage"/> class.
+        /// </summary>
         public ReferenceUsage()
         {
             this.AliasIds = new List<string>();

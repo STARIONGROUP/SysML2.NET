@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class EnumerationDefinition : IEnumerationDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnumerationDefinition"/> class.
+        /// </summary>
         public EnumerationDefinition()
         {
             this.AliasIds = new List<string>();

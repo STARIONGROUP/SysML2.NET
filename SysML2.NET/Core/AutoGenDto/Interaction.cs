@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Interaction : IInteraction
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Interaction"/> class.
+        /// </summary>
         public Interaction()
         {
             this.AliasIds = new List<string>();

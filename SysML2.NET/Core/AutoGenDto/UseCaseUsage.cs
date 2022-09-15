@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class UseCaseUsage : IUseCaseUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UseCaseUsage"/> class.
+        /// </summary>
         public UseCaseUsage()
         {
             this.AliasIds = new List<string>();

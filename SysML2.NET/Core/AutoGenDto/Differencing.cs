@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Differencing : IDifferencing
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Differencing"/> class.
+        /// </summary>
         public Differencing()
         {
             this.AliasIds = new List<string>();

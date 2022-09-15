@@ -42,6 +42,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Class : IClass
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Class"/> class.
+        /// </summary>
         public Class()
         {
             this.AliasIds = new List<string>();

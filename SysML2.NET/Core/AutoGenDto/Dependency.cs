@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Dependency : IDependency
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Dependency"/> class.
+        /// </summary>
         public Dependency()
         {
             this.AliasIds = new List<string>();

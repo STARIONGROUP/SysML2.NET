@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class AnnotatingElement : IAnnotatingElement
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnnotatingElement"/> class.
+        /// </summary>
         public AnnotatingElement()
         {
             this.AliasIds = new List<string>();

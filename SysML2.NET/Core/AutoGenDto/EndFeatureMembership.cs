@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class EndFeatureMembership : IEndFeatureMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EndFeatureMembership"/> class.
+        /// </summary>
         public EndFeatureMembership()
         {
             this.AliasIds = new List<string>();

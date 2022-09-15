@@ -41,6 +41,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Classifier : IClassifier
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Classifier"/> class.
+        /// </summary>
         public Classifier()
         {
             this.AliasIds = new List<string>();

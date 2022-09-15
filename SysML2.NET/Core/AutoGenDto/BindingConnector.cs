@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class BindingConnector : IBindingConnector
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindingConnector"/> class.
+        /// </summary>
         public BindingConnector()
         {
             this.AliasIds = new List<string>();

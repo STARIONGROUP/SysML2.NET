@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ElementFilterMembership : IElementFilterMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElementFilterMembership"/> class.
+        /// </summary>
         public ElementFilterMembership()
         {
             this.AliasIds = new List<string>();

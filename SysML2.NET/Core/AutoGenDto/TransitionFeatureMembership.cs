@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class TransitionFeatureMembership : ITransitionFeatureMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransitionFeatureMembership"/> class.
+        /// </summary>
         public TransitionFeatureMembership()
         {
             this.AliasIds = new List<string>();

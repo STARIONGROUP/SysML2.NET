@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Step : IStep
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Step"/> class.
+        /// </summary>
         public Step()
         {
             this.AliasIds = new List<string>();

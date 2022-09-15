@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class AnalysisCaseUsage : IAnalysisCaseUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalysisCaseUsage"/> class.
+        /// </summary>
         public AnalysisCaseUsage()
         {
             this.AliasIds = new List<string>();

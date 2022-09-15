@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ForLoopActionUsage : IForLoopActionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ForLoopActionUsage"/> class.
+        /// </summary>
         public ForLoopActionUsage()
         {
             this.AliasIds = new List<string>();

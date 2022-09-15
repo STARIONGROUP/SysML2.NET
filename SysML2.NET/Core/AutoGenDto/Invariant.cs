@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Invariant : IInvariant
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Invariant"/> class.
+        /// </summary>
         public Invariant()
         {
             this.AliasIds = new List<string>();

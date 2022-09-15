@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class LiteralInteger : ILiteralInteger
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LiteralInteger"/> class.
+        /// </summary>
         public LiteralInteger()
         {
             this.AliasIds = new List<string>();

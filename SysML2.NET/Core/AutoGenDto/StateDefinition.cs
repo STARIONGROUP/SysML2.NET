@@ -39,6 +39,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class StateDefinition : IStateDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StateDefinition"/> class.
+        /// </summary>
         public StateDefinition()
         {
             this.AliasIds = new List<string>();

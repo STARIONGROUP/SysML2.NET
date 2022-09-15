@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class RenderingDefinition : IRenderingDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenderingDefinition"/> class.
+        /// </summary>
         public RenderingDefinition()
         {
             this.AliasIds = new List<string>();

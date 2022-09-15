@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class PortioningFeature : IPortioningFeature
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PortioningFeature"/> class.
+        /// </summary>
         public PortioningFeature()
         {
             this.AliasIds = new List<string>();

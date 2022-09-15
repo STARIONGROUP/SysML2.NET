@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Predicate : IPredicate
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Predicate"/> class.
+        /// </summary>
         public Predicate()
         {
             this.AliasIds = new List<string>();

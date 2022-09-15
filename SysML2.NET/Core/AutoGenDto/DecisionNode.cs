@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class DecisionNode : IDecisionNode
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DecisionNode"/> class.
+        /// </summary>
         public DecisionNode()
         {
             this.AliasIds = new List<string>();

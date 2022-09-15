@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class VariantMembership : IVariantMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariantMembership"/> class.
+        /// </summary>
         public VariantMembership()
         {
             this.AliasIds = new List<string>();

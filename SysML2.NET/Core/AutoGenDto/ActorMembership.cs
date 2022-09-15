@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ActorMembership : IActorMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActorMembership"/> class.
+        /// </summary>
         public ActorMembership()
         {
             this.AliasIds = new List<string>();

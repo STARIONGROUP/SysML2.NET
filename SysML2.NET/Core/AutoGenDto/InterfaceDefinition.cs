@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class InterfaceDefinition : IInterfaceDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InterfaceDefinition"/> class.
+        /// </summary>
         public InterfaceDefinition()
         {
             this.AliasIds = new List<string>();

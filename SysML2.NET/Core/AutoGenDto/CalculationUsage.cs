@@ -40,6 +40,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class CalculationUsage : ICalculationUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculationUsage"/> class.
+        /// </summary>
         public CalculationUsage()
         {
             this.AliasIds = new List<string>();

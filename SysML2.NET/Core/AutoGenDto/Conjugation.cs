@@ -41,6 +41,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Conjugation : IConjugation
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Conjugation"/> class.
+        /// </summary>
         public Conjugation()
         {
             this.AliasIds = new List<string>();

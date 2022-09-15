@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ItemUsage : IItemUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemUsage"/> class.
+        /// </summary>
         public ItemUsage()
         {
             this.AliasIds = new List<string>();

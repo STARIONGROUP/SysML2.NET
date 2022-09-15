@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Behavior : IBehavior
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Behavior"/> class.
+        /// </summary>
         public Behavior()
         {
             this.AliasIds = new List<string>();

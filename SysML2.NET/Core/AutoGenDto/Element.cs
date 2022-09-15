@@ -43,6 +43,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Element : IElement
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Element"/> class.
+        /// </summary>
         public Element()
         {
             this.AliasIds = new List<string>();

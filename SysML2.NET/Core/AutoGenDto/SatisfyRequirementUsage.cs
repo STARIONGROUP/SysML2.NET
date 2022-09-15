@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class SatisfyRequirementUsage : ISatisfyRequirementUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SatisfyRequirementUsage"/> class.
+        /// </summary>
         public SatisfyRequirementUsage()
         {
             this.AliasIds = new List<string>();

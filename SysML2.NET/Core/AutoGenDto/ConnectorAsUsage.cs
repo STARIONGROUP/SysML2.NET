@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public abstract partial class ConnectorAsUsage : IConnectorAsUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectorAsUsage"/> class.
+        /// </summary>
         protected ConnectorAsUsage()
         {
             this.AliasIds = new List<string>();

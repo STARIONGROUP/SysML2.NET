@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class LiteralRational : ILiteralRational
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LiteralRational"/> class.
+        /// </summary>
         public LiteralRational()
         {
             this.AliasIds = new List<string>();

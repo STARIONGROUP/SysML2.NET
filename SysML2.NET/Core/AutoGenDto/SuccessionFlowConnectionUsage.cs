@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class SuccessionFlowConnectionUsage : ISuccessionFlowConnectionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SuccessionFlowConnectionUsage"/> class.
+        /// </summary>
         public SuccessionFlowConnectionUsage()
         {
             this.AliasIds = new List<string>();

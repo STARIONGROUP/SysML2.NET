@@ -38,6 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class MergeNode : IMergeNode
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MergeNode"/> class.
+        /// </summary>
         public MergeNode()
         {
             this.AliasIds = new List<string>();

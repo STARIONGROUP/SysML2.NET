@@ -36,6 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class CalculationDefinition : ICalculationDefinition
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculationDefinition"/> class.
+        /// </summary>
         public CalculationDefinition()
         {
             this.AliasIds = new List<string>();

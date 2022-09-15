@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class LiteralString : ILiteralString
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LiteralString"/> class.
+        /// </summary>
         public LiteralString()
         {
             this.AliasIds = new List<string>();

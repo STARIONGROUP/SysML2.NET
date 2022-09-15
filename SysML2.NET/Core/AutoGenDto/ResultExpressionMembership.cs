@@ -37,6 +37,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ResultExpressionMembership : IResultExpressionMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResultExpressionMembership"/> class.
+        /// </summary>
         public ResultExpressionMembership()
         {
             this.AliasIds = new List<string>();

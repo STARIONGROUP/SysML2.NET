@@ -43,6 +43,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class StateUsage : IStateUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StateUsage"/> class.
+        /// </summary>
         public StateUsage()
         {
             this.AliasIds = new List<string>();

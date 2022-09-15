@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class TriggerInvocationExpression : ITriggerInvocationExpression
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TriggerInvocationExpression"/> class.
+        /// </summary>
         public TriggerInvocationExpression()
         {
             this.AliasIds = new List<string>();

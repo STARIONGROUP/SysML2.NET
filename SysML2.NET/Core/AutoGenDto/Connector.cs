@@ -44,6 +44,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Connector : IConnector
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Connector"/> class.
+        /// </summary>
         public Connector()
         {
             this.AliasIds = new List<string>();

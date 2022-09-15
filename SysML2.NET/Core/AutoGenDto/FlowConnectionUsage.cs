@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class FlowConnectionUsage : IFlowConnectionUsage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FlowConnectionUsage"/> class.
+        /// </summary>
         public FlowConnectionUsage()
         {
             this.AliasIds = new List<string>();

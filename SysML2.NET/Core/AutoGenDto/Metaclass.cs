@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Metaclass : IMetaclass
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Metaclass"/> class.
+        /// </summary>
         public Metaclass()
         {
             this.AliasIds = new List<string>();

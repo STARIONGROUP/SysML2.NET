@@ -40,6 +40,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Membership : IMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Membership"/> class.
+        /// </summary>
         public Membership()
         {
             this.AliasIds = new List<string>();

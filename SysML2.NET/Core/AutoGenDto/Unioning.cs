@@ -34,6 +34,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class Unioning : IUnioning
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Unioning"/> class.
+        /// </summary>
         public Unioning()
         {
             this.AliasIds = new List<string>();

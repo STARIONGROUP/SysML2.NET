@@ -35,6 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// </summary>
     public partial class ReturnParameterMembership : IReturnParameterMembership
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReturnParameterMembership"/> class.
+        /// </summary>
         public ReturnParameterMembership()
         {
             this.AliasIds = new List<string>();
