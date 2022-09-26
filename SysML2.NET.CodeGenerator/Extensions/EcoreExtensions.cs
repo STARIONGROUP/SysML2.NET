@@ -18,10 +18,9 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace SysML2.NET.CodeGenerator.Extensions
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -244,6 +243,25 @@ namespace SysML2.NET.CodeGenerator.Extensions
         public static bool QueryIsReference(this EStructuralFeature structuralFeature)
         {
             if (structuralFeature is EReference)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Queries whether the <see cref="EStructuralFeature.Name"/> is equal to the name of the containing <see cref="EClass"/>
+        /// </summary>
+        /// <param name="structuralFeature">
+        /// The subject <see cref="EStructuralFeature"/>
+        /// </param>
+        /// <returns>
+        /// true when the <paramref name="structuralFeature"/> name equals the name of the containing <see cref="EClass"/>, false if not.
+        /// </returns>
+        public static bool QueryStructuralFeatureNameEqualsEnclosingType(this EStructuralFeature structuralFeature, EClass @class)
+        {
+            if (structuralFeature.Name.ToLower() == @class.Name.ToLower())
             {
                 return true;
             }

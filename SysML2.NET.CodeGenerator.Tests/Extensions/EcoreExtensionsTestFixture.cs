@@ -60,5 +60,17 @@
                 }
             }, Throws.Nothing);
         }
+
+        [Test]
+        public void Verify_QueryStructuralFeatureNameEqualsEnclosingType_returns_expected_results()
+        {
+            var conjugatedPortDefinition = this.ePackage.EClassifiers.OfType<EClass>().Single(x => x.Name == "ConjugatedPortDefinition") ;
+
+            var features = conjugatedPortDefinition.AllEStructuralFeatures.ToList();
+
+            var feature = features.Single(x => x.Name == "conjugatedPortDefinition");
+
+            Assert.That(feature.QueryStructuralFeatureNameEqualsEnclosingType(conjugatedPortDefinition), Is.True);
+        }
     }
 }

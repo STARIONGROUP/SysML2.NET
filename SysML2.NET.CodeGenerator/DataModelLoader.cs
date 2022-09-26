@@ -18,12 +18,11 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using System.Linq;
-
 namespace SysML2.NET.CodeGenerator
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
 
     using ECoreNetto;

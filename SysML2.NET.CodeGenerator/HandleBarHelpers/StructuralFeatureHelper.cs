@@ -34,7 +34,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     /// </summary>
     public static class StructuralFeatureHelper
     {
-
         /// <summary>
         /// Registers the <see cref="StructuralFeatureHelper"/>
         /// </summary>
@@ -299,6 +298,37 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
             });
 
+            handlebars.RegisterHelper("StructuralFeature.QueryStructuralFeatureNameEqualsEnclosingType", (context, arguments) =>
+            {
+                if (arguments.Length != 2)
+                {
+                    throw new HandlebarsException("{{#StructuralFeature.QueryStructuralFeatureNameEqualsEnclosingType}} helper must have exactly two arguments");
+                }
+                
+                var eStructuralFeature = arguments[0] as EStructuralFeature;
+                var eClass = arguments[1] as EClass;
+                
+                return eStructuralFeature.QueryStructuralFeatureNameEqualsEnclosingType(eClass);
+            });
+
+            handlebars.RegisterHelper("StructuralFeature.NameEqualsEnclosingType", (output, options, context, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#StructuralFeature.NameEqualsEnclosingType}} helper must have exactly two arguments");
+                }
+
+                var eStructuralFeature = arguments.Single() as EStructuralFeature;
+                var eClass = arguments.Last() as EClass;
+
+                var nameEqualsEnclosingType = eStructuralFeature.QueryStructuralFeatureNameEqualsEnclosingType(eClass);
+
+                if (nameEqualsEnclosingType)
+                {
+                    options.Template(output, context);
+                }
+            });
+            
             handlebars.RegisterHelper("StructuralFeature.QueryIsEnum", (context, arguments) =>
             {
                 if (arguments.Length != 1)
