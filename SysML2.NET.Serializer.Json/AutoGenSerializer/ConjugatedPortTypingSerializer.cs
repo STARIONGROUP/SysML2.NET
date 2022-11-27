@@ -70,6 +70,9 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("conjugatedPortDefinition");
+            writer.WriteStringValue(iConjugatedPortTyping.ConjugatedPortDefinition);
+
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iConjugatedPortTyping.ElementId);
 
@@ -118,9 +121,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-
-            writer.WritePropertyName("portDefinition");
-            writer.WriteStringValue(iConjugatedPortTyping.PortDefinition);
 
             writer.WritePropertyName("shortName");
             writer.WriteStringValue(iConjugatedPortTyping.ShortName);

@@ -52,11 +52,6 @@ namespace SysML2.NET.Core.POCO
         List<ItemFlowEnd> QueryItemFlowEnd();
 
         /// <summary>
-        /// Queries the derived property ItemFlowFeature
-        /// </summary>
-        List<ItemFlowFeature> QueryItemFlowFeature();
-
-        /// <summary>
         /// Queries the derived property ItemType
         /// </summary>
         List<Classifier> QueryItemType();

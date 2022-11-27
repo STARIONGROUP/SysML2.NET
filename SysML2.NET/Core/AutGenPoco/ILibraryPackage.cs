@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="ISourceEnd.cs" company="RHEA System S.A.">
+// <copyright file="ILibraryPackage.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.POCO
 {
     using System;
     using System.Collections.Generic;
@@ -30,9 +30,18 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// A LibraryPackage is a Package that is the container for a model library. A LibraryPackage is itself
+    /// a library Element as are all Elements that are directly or indirectly contained in it.
     /// </summary>
-    public partial interface ISourceEnd : IFeature
+    public partial interface ILibraryPackage : IPackage
     {
+        /// <summary>
+        /// Whether this LibraryPackage contains a standard library model. This should only be set to true for
+        /// LibraryPackage in the standard Kernel Libraries or in normative model libraries for a language built
+        /// on KerML.
+        /// </summary>
+        bool IsStandard { get; set; }
+
     }
 }
 

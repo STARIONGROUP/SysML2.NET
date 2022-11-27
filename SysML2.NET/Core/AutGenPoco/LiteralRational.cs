@@ -30,10 +30,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A LiteralRational is a LiteralExpression that provides a Rational value as a result. It must have an
-    /// owned result parameter whose type is Rational.An Expression that provides a Real value as a result.A
-    /// LiteralReal must be typed by a specialization of Evaluation with no input parameters and a single
-    /// Real value as its result.
+    /// A LiteralRational is a LiteralExpression that provides a Rational value as a result. Its result
+    /// parameter must have the type Rational.
     /// </summary>
     public partial class LiteralRational : ILiteralRational
     {
@@ -258,6 +256,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsModelLevelEvaluable

@@ -124,6 +124,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsImportAll { get; set; }
 
         /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
+
+        /// <summary>
         /// Whether to recursively import Memberships from visible, owned sub-namespaces.
         /// </summary>
         public bool IsRecursive { get; set; }

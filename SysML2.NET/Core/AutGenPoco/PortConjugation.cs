@@ -112,6 +112,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
+
+        /// <summary>
         /// The primary name of this Element.
         /// </summary>
         public string Name { get; set; }

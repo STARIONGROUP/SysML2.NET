@@ -30,12 +30,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A ConjugatedPortTyping is a FeatureTyping in which the type is derived as the
-    /// conjugatedPortDefinition of a given PortDefinition. A ConjugatedPortTyping allows a PortUsage to by
-    /// related directly to a PortDefinition, but to be effectively typed by the conjugation of the
-    /// referenced PortDefinition.Note that ConjugatedPortTyping is a ternary Relationship, with
-    /// portDefinition being a third relatedElement, in addition to type and typedFeature from
-    /// FeatureTyping.conjugatedPortDefinition = portDefinition.conjugatedPortDefinition
+    /// A ConjugatedPortTyping is a FeatureTyping whose type is a ConjugatedPortDefinition. (This
+    /// relationship is intended to be an abstract syntax marker for a special surface notation for
+    /// conjugated typing of ports.)conjugatedPortDefinition = portDefinition.conjugatedPortDefinition
     /// </summary>
     public partial class ConjugatedPortTyping : IConjugatedPortTyping
     {
@@ -64,12 +61,8 @@ namespace SysML2.NET.Core.POCO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// Queries the derived property ConjugatedPortDefinition
         /// </summary>
-        public ConjugatedPortDefinition QueryConjugatedPortDefinition()
-        {
-            throw new NotImplementedException("Derived property ConjugatedPortDefinition not yet supported");
-        }
+        public ConjugatedPortDefinition ConjugatedPortDefinition { get; set; }
 
         /// <summary>
         /// Queries the derived property Documentation
@@ -111,6 +104,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// The primary name of this Element.
@@ -194,8 +195,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property PortDefinition
         /// </summary>
-        public PortDefinition PortDefinition { get; set; }
+        public PortDefinition QueryPortDefinition()
+        {
+            throw new NotImplementedException("Derived property PortDefinition not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property QualifiedName

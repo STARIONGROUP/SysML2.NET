@@ -30,6 +30,10 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// An ItemFlowEnd is a Feature that is one of the endFeatures giving the source or target of an
+    /// ItemFlow. It must have exactly one ownedFeature, which redefines Transfer::source::sourceOutput or
+    /// Transfer::target::targetInput and redefines the corresponding feature of the relatedElement for its
+    /// end.
     /// </summary>
     public partial class ItemFlowEnd : IItemFlowEnd
     {
@@ -238,6 +242,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsNonunique

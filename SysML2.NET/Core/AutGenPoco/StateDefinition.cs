@@ -234,6 +234,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsIndividual { get; set; }
 
         /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
+
+        /// <summary>
         /// Whether the ownedStates of this StateDefinition are to all be performed in parallel. If true, none
         /// of the ownedStates may have any incoming or outgoing transitions. If false, only one ownedState may
         /// be performed at a time.

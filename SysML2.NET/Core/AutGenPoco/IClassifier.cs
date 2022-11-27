@@ -36,8 +36,9 @@ namespace SysML2.NET.Core.POCO
     /// sequences of multiple things (length &gt; 1).</li></ul>Classifiers that classify relationships
     /// (sequence length &gt; 1) must also classify the things at the end of those sequences (sequence
     /// length =1).  Because of this, Classifiers specializing Features cannot classify anything (any
-    /// sequences).ownedSuperclassing = ownedGeneralization->intersection(superclassing)multiplicity <> null
-    /// implies multiplicity.featuringType->isEmpty()
+    /// sequences).ownedSubclassification =    
+    /// ownedSpecialization->selectByKind(Superclassification)multiplicity <> null implies
+    /// multiplicity.featuringType->isEmpty()
     /// </summary>
     public partial interface IClassifier : IType
     {

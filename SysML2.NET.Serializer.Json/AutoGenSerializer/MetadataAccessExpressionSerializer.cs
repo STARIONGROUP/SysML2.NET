@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="ItemFlowFeatureSerializer.cs" company="RHEA System S.A.">
+// <copyright file="MetadataAccessExpressionSerializer.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
 //
@@ -31,16 +31,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ItemFlowFeatureSerializer"/> is to provide serialization
+    /// The purpose of the <see cref="MetadataAccessExpressionSerializer"/> is to provide serialization
     /// and deserialization capabilities
     /// </summary>
-    internal static class ItemFlowFeatureSerializer
+    internal static class MetadataAccessExpressionSerializer
     {
         /// <summary>
-        /// Serializes an instance of <see cref="IItemFlowFeature"/> using an <see cref="Utf8JsonWriter"/>
+        /// Serializes an instance of <see cref="IMetadataAccessExpression"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
         /// <param name="obj">
-        /// The <see cref="IItemFlowFeature"/> to serialize
+        /// The <see cref="IMetadataAccessExpression"/> to serialize
         /// </param>
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
@@ -50,30 +50,30 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IItemFlowFeature iItemFlowFeature))
+            if (!(obj is IMetadataAccessExpression iMetadataAccessExpression))
             {
-                throw new ArgumentException("The object shall be an IItemFlowFeature", nameof(obj));
+                throw new ArgumentException("The object shall be an IMetadataAccessExpression", nameof(obj));
             }
 
             writer.WriteStartObject();
 
             writer.WritePropertyName("@type");
-            writer.WriteStringValue("ItemFlowFeature");
+            writer.WriteStringValue("MetadataAccessExpression");
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(iItemFlowFeature.Id);
+            writer.WriteStringValue(iMetadataAccessExpression.Id);
 
             writer.WriteStartArray("aliasIds");
-            foreach (var item in iItemFlowFeature.AliasIds)
+            foreach (var item in iMetadataAccessExpression.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("direction");
-            if (iItemFlowFeature.Direction.HasValue)
+            if (iMetadataAccessExpression.Direction.HasValue)
             {
-                writer.WriteStringValue(iItemFlowFeature.Direction.Value.ToString().ToUpper());
+                writer.WriteStringValue(iMetadataAccessExpression.Direction.Value.ToString().ToLower());
             }
             else
             {
@@ -81,60 +81,63 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iItemFlowFeature.ElementId);
+            writer.WriteStringValue(iMetadataAccessExpression.ElementId);
 
             writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iItemFlowFeature.IsAbstract);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsAbstract);
 
             writer.WritePropertyName("isComposite");
-            writer.WriteBooleanValue(iItemFlowFeature.IsComposite);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsComposite);
 
             writer.WritePropertyName("isDerived");
-            writer.WriteBooleanValue(iItemFlowFeature.IsDerived);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsDerived);
 
             writer.WritePropertyName("isEnd");
-            writer.WriteBooleanValue(iItemFlowFeature.IsEnd);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsEnd);
 
             writer.WritePropertyName("isImpliedIncluded");
-            writer.WriteBooleanValue(iItemFlowFeature.IsImpliedIncluded);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsImpliedIncluded);
 
             writer.WritePropertyName("isOrdered");
-            writer.WriteBooleanValue(iItemFlowFeature.IsOrdered);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsOrdered);
 
             writer.WritePropertyName("isPortion");
-            writer.WriteBooleanValue(iItemFlowFeature.IsPortion);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsPortion);
 
             writer.WritePropertyName("isReadOnly");
-            writer.WriteBooleanValue(iItemFlowFeature.IsReadOnly);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsReadOnly);
 
             writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iItemFlowFeature.IsSufficient);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsSufficient);
 
             writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iItemFlowFeature.IsUnique);
+            writer.WriteBooleanValue(iMetadataAccessExpression.IsUnique);
 
             writer.WritePropertyName("name");
-            writer.WriteStringValue(iItemFlowFeature.Name);
+            writer.WriteStringValue(iMetadataAccessExpression.Name);
 
             writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iItemFlowFeature.OwnedRelationship)
+            foreach (var item in iMetadataAccessExpression.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship");
-            if (iItemFlowFeature.OwningRelationship.HasValue)
+            if (iMetadataAccessExpression.OwningRelationship.HasValue)
             {
-                writer.WriteStringValue(iItemFlowFeature.OwningRelationship.Value);
+                writer.WriteStringValue(iMetadataAccessExpression.OwningRelationship.Value);
             }
             else
             {
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("referencedElement");
+            writer.WriteStringValue(iMetadataAccessExpression.ReferencedElement);
+
             writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iItemFlowFeature.ShortName);
+            writer.WriteStringValue(iMetadataAccessExpression.ShortName);
 
             writer.WriteEndObject();
         }

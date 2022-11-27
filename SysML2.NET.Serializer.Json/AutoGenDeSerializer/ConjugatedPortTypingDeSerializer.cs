@@ -99,6 +99,30 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the aliasIds Json property was not found in the ConjugatedPortTyping: {dtoInstance.Id}");
             }
 
+            if (jsonElement.TryGetProperty("conjugatedPortDefinition", out JsonElement conjugatedPortDefinitionProperty))
+            {
+                if (conjugatedPortDefinitionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.ConjugatedPortDefinition = Guid.Empty;
+                    logger.LogDebug($"the ConjugatedPortTyping.ConjugatedPortDefinition property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (conjugatedPortDefinitionProperty.TryGetProperty("@id", out JsonElement conjugatedPortDefinitionIdProperty))
+                    {
+                        var propertyValue = conjugatedPortDefinitionIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ConjugatedPortDefinition = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the conjugatedPortDefinition Json property was not found in the ConjugatedPortTyping: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();
@@ -255,30 +279,6 @@ namespace SysML2.NET.Serializer.Json
             else
             {
                 logger.LogDebug($"the owningRelationship Json property was not found in the ConjugatedPortTyping: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("portDefinition", out JsonElement portDefinitionProperty))
-            {
-                if (portDefinitionProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.PortDefinition = Guid.Empty;
-                    logger.LogDebug($"the ConjugatedPortTyping.PortDefinition property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (portDefinitionProperty.TryGetProperty("@id", out JsonElement portDefinitionIdProperty))
-                    {
-                        var propertyValue = portDefinitionIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.PortDefinition = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the portDefinition Json property was not found in the ConjugatedPortTyping: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))

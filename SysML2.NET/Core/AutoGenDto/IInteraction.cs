@@ -31,8 +31,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An Interaction is a Behavior that is also an Association, providing a context for multiple objects
-    /// that have behaviors that impact one another.Interactions are Behaviors that also provide context for
-    /// multiple objects that have behaviors that impact one another.
+    /// that have behaviors that impact one another.
     /// </summary>
     public partial interface IInteraction : IAssociation, IBehavior
     {

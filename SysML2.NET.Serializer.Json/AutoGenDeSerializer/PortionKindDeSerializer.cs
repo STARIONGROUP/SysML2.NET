@@ -45,6 +45,8 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static PortionKind Deserialize(string value)
         {
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "TIMESLICE":
@@ -67,14 +69,19 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static PortionKind? DeserializeNullable(string value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "TIMESLICE":
                     return PortionKind.Timeslice;
                 case "SNAPSHOT":
                     return PortionKind.Snapshot;
-                case null:
-                    return null;
                 default:
                     throw new ArgumentException($"{value} is not a valid PortionKind", nameof(value));
             }

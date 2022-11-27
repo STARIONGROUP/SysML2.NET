@@ -40,7 +40,8 @@ namespace SysML2.NET.Core.POCO
     /// DataTypes are the second kind. If two objects classified by DataType have identical property values,
     /// they are understood to be in fact the same object. DataTypes are intended to represent data or
     /// mathematical objects which is where the equivalence based on matched values is
-    /// appropriate.allSupertypes()->includes(Kernel Library::DataValue)
+    /// appropriate.allSupertypes()->includes(resolve("Base::DataValue"))ownedGeneralization.general->   
+    /// forAll(not oclIsKindOf(Class))
     /// </summary>
     public partial class DataType : IDataType
     {
@@ -190,6 +191,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the

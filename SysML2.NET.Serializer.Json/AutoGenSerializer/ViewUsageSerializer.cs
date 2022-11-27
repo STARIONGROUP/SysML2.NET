@@ -73,7 +73,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("direction");
             if (iViewUsage.Direction.HasValue)
             {
-                writer.WriteStringValue(iViewUsage.Direction.Value.ToString().ToUpper());
+                writer.WriteStringValue(iViewUsage.Direction.Value.ToString().ToLower());
             }
             else
             {
@@ -142,7 +142,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("portionKind");
             if (iViewUsage.PortionKind.HasValue)
             {
-                writer.WriteStringValue(iViewUsage.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(iViewUsage.PortionKind.Value.ToString().ToLower());
             }
             else
             {

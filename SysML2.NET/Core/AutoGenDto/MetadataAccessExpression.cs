@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="SourceEnd.cs" company="RHEA System S.A.">
+// <copyright file="MetadataAccessExpression.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,13 +30,17 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// A MetadataAccessExpression is an Expression whose result is a sequence of instances of Metaclasses
+    /// representing all the MetadataFeature annotations of the referencedElement. In addition, the sequence
+    /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
+    /// referencedElement, with values for all the abstract syntax properties of the Element.
     /// </summary>
-    public partial class SourceEnd : ISourceEnd
+    public partial class MetadataAccessExpression : IMetadataAccessExpression
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SourceEnd"/> class.
+        /// Initializes a new instance of the <see cref="MetadataAccessExpression"/> class.
         /// </summary>
-        public SourceEnd()
+        public MetadataAccessExpression()
         {
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
@@ -156,6 +160,10 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public Guid ReferencedElement { get; set; }
 
         /// <summary>
         /// An optional alternative name for the Element that is intended to be shorter or in some way more

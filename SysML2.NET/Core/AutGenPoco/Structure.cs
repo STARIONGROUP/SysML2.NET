@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A Structure is a Class of objects in the modeled universe that are primarily structural in nature.
     /// While an Object is not itself behavioral, it may be involved in and acted on by Behaviors, and it
-    /// may be the performer of some of them.allSupertypes()->includes(Kernel Library::Object)
+    /// may be the performer of some of them.allSupertypes()->includes(resolve("Objects::Object"))
     /// </summary>
     public partial class Structure : IStructure
     {
@@ -182,6 +182,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the

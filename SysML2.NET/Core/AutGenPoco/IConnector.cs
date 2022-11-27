@@ -40,7 +40,8 @@ namespace SysML2.NET.Core.POCO
     /// relatedFeature->at(1)     else null     endiftargetFeature =    if sourceFeature = null then
     /// relatedFeature    else relatedFeature->excluding(sourceFeature)    endifconnectorEnd =
     /// feature->select(isEnd)association->forAll(a |    a.associationEnd->forAll(ae |       
-    /// connectorEnd->one(ce |             ce.ownedRedefinition.redefinedFeature->includes(ae))))
+    /// connectorEnd->one(ce |             ce.ownedRedefinition.redefinedFeature->includes(ae))))not
+    /// isAbstract implies relatedFeature->size() >= 2
     /// </summary>
     public partial interface IConnector : IFeature, IRelationship
     {

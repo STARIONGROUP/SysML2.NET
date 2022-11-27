@@ -38,7 +38,9 @@ namespace SysML2.NET.Core.POCO
     /// are the first kind. Two objects that are classified by a given Class can have entirely identical
     /// descriptions and properties and still be treated as separate. Classes are intended for the
     /// construction of models representing real world things which can be separate entities even if all
-    /// measurable properties are the same.allSupertypes()->includes(Kernel Library::Occurrence)
+    /// measurable properties are the
+    /// same.allSupertypes()->includes(resolve("Occurrences::Occurrence"))ownedGeneralization.general->   
+    /// forAll(not oclIsKindOf(DataType) and            not oclIsKindOf(Association))
     /// </summary>
     public partial class Class : IClass
     {
@@ -188,6 +190,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the

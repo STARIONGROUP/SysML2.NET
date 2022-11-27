@@ -30,10 +30,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A NullExpression is an Expression that results in a null value. It must be typed by a
-    /// NullEvaluation that results in an empty value.An Expression that results in a null value.A
-    /// NullExpression must be typed by a NullEvaluation which results in an empty
-    /// value.isModelLevelEvaluable = true
+    /// A NullExpression is an Expression that results in a null value. It must be typed by a NullEvaluation
+    /// that results in an empty value.
     /// </summary>
     public partial interface INullExpression : IExpression
     {

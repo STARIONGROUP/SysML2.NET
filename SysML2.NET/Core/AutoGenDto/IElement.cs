@@ -39,7 +39,8 @@ namespace SysML2.NET.Core.DTO
     /// null then null    else owningNamespace.qualifiedName + '::' + escapedName()    endif endif
     /// endifdocumentation = ownedElement->selectByKind(Documentation)ownedAnnotation =
     /// ownedRelationship->selectByKind(Annotation)->    select(a | a.annotatedElement =
-    /// self)effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncluded
+    /// self)effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =
+    /// libraryNamespace() <>null
     /// </summary>
     public partial interface IElement
     {

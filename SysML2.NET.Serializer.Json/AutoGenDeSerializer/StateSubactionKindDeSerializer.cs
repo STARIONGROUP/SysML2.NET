@@ -45,6 +45,8 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static StateSubactionKind Deserialize(string value)
         {
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "ENTRY":
@@ -69,6 +71,13 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static StateSubactionKind? DeserializeNullable(string value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "ENTRY":
@@ -77,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
                     return StateSubactionKind.Do;
                 case "EXIT":
                     return StateSubactionKind.Exit;
-                case null:
-                    return null;
                 default:
                     throw new ArgumentException($"{value} is not a valid StateSubactionKind", nameof(value));
             }

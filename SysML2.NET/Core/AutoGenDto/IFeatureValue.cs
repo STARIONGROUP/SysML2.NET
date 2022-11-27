@@ -33,16 +33,17 @@ namespace SysML2.NET.Core.DTO
     /// A FeatureValue is a Membership that identifies a particular member Expression that provides the
     /// value of the Feature that owns the FeatureValue. The value is specified as either a bound value or
     /// an initial value, and as either a concrete or default value. A Feature can have at most one
-    /// FeatureValue.If isInitial = false, then the result of the value expression is bound to the
-    /// featureWithValue using a BindingConnector. Otherwise, the featureWithValue is initialized using a
-    /// FeatureWritePeformance.If isDefault = false, then the above semantics of the FeatureValue are
-    /// realized for the given featureWithValue. Otherwise, the semantics are realized for any individual of
-    /// the featuringType of the featureWithValue, unless another value is explicitly given for the
-    /// featureWithValue for that individual.value.featuringType =
-    /// featureWithValue.featuringTypevalueConnector.owningNamespace = featureWithValue
-    /// andvalueConnector.relatedFeature->includes(featureWithValue)
-    /// andvalueConnector.relatedFeature->includes(value.result) andvalueConnector.featuringType =
-    /// featureWithValue.featuringType
+    /// FeatureValue.The result of the value expression is bound to the featureWithValue using a
+    /// BindingConnector. If isInitial = false, then the featuringType of the BindingConnector is the same
+    /// as the featuringType of the featureWithValue. If isInitial = true, then the featuringType of the
+    /// BindingConnector is restricted to its startShot.If isDefault = false, then the above semantics of
+    /// the FeatureValue are realized for the given featureWithValue. Otherwise, the semantics are realized
+    /// for any individual of the featuringType of the featureWithValue, unless another value is explicitly
+    /// given for the featureWithValue for that individual.value.featuringType =
+    /// featureWithValue.featuringTypefeatureWithValue.ownedMember->    selectByKind(BindingConnector)->   
+    /// exists(valueConnector |        valueConnector.relatedFeature->includes(featureWithValue) and       
+    /// valueConnector.relatedFeature->includes(value.result) and        valueConnector.featuringType =
+    /// featureWithValue.featuringType)
     /// </summary>
     public partial interface IFeatureValue : IOwningMembership
     {

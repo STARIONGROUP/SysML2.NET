@@ -76,7 +76,7 @@ namespace SysML2.NET.Serializer.Json
                             {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
                                 writer.WriteNumberValue(item);
                             {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
-                                writer.WriteStringValue(item).ToString().ToUpper());
+                                writer.WriteStringValue(item).ToString().ToLower());
                             {{else}}
                                 writer.WriteStringValue(item);
                             {{/if}}
@@ -92,7 +92,7 @@ namespace SysML2.NET.Serializer.Json
                             {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
                                 writer.WriteNumberValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
                             {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
-                                writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value.ToString().ToUpper());
+                                writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value.ToString().ToLower());
                             {{else}}
                                 writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
                             {{/if}}
@@ -109,7 +109,7 @@ namespace SysML2.NET.Serializer.Json
                         {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
                             writer.WriteNumberValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
                         {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
-                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.ToString().ToUpper());
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.ToString().ToLower());
                         {{else}}
                             writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
                         {{/if}}

@@ -45,6 +45,8 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static {{this.Name}} Deserialize(string value)
         {
+            value = value.ToUpper();
+
             switch (value)
             {
                 {{#with this as | EEnum |}}
@@ -69,6 +71,13 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static {{this.Name}}? DeserializeNullable(string value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 {{#with this as | EEnum |}}
@@ -76,8 +85,6 @@ namespace SysML2.NET.Serializer.Json
                     case "{{ String.Uppercase enumerationLiteral.Name }}":
                         return {{ EEnum.Name }}.{{ String.PascalCase enumerationLiteral.Name }};
                 {{/each}}
-                case null:
-                    return null;
                 default:
                     throw new ArgumentException($"{value} is not a valid {{ EEnum.Name }}", nameof(value));
                 {{/with}}

@@ -31,12 +31,16 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An AcceptActionUsage is an ActionUsage that is typed, directly or indirectly, by the
-    /// ActionDefinition AcceptAction from the Systems model library. It specifies the acceptance of an
-    /// incomingTransfer from the Occurrence given by the result of its receiverArgument Expression. The
+    /// ActionDefinition AcceptAction from the Systems model library (unless it is owned by a
+    /// TransitionAction, in which case it is typed by AcceptMessageAction). It specifies the acceptance of
+    /// an incomingTransfer from the Occurrence given by the result of its receiverArgument Expression. (If
+    /// no receiverArgument is provided, the default is the this context of the AcceptActionUsage.) The
     /// payload of the accepted Transfer is output on its payloadParameter.Which Transfers may be accepted
     /// is determined by the typing and binding of the payloadParameter. If the triggerKind has any value
     /// other than accept, then the payloadParameter must be bound to a payloadArgument that is an
-    /// InvocationExpression whose function is determined by the triggerKind.
+    /// InvocationExpression whose function is determined by the triggerKind.receiverArgument =
+    /// argument(2)payloadArgument = argument(1)payloadParameter =  if parameter->isEmpty() then null else
+    /// parameter->at(1) endifinputParameters->size() >= 2
     /// </summary>
     public partial interface IAcceptActionUsage : IActionUsage
     {

@@ -30,12 +30,9 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A ConjugatedPortTyping is a FeatureTyping in which the type is derived as the
-    /// conjugatedPortDefinition of a given PortDefinition. A ConjugatedPortTyping allows a PortUsage to by
-    /// related directly to a PortDefinition, but to be effectively typed by the conjugation of the
-    /// referenced PortDefinition.Note that ConjugatedPortTyping is a ternary Relationship, with
-    /// portDefinition being a third relatedElement, in addition to type and typedFeature from
-    /// FeatureTyping.conjugatedPortDefinition = portDefinition.conjugatedPortDefinition
+    /// A ConjugatedPortTyping is a FeatureTyping whose type is a ConjugatedPortDefinition. (This
+    /// relationship is intended to be an abstract syntax marker for a special surface notation for
+    /// conjugated typing of ports.)conjugatedPortDefinition = portDefinition.conjugatedPortDefinition
     /// </summary>
     public partial class ConjugatedPortTyping : IConjugatedPortTyping
     {
@@ -62,6 +59,10 @@ namespace SysML2.NET.Core.DTO
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public Guid ConjugatedPortDefinition { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -112,10 +113,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Guid PortDefinition { get; set; }
 
         /// <summary>
         /// An optional alternative name for the Element that is intended to be shorter or in some way more

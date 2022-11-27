@@ -30,7 +30,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// allSupertypes()->includes(Kernel Library::LinkObject)
+    /// allSupertypes()->includes(resolve("Objects::ObjectLink"))endFeature->size() = 2 implies   
+    /// allSupertypes()->includes(resolve("Objects::BinaryLinkObject"))
     /// </summary>
     public partial class AssociationStructure : IAssociationStructure
     {
@@ -198,6 +199,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the

@@ -32,8 +32,13 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A SendActionUsage is an ActionUsage that is typed, directly or indirectly, by the ActionDefinition
     /// SendAction from the Systems model library. It specifies the sending of a payload given by the result
-    /// of its itemsArgument Expression via a Transfer that becomes and incomingTransfer of the Occurrence
-    /// given by the result of its receiverArgument Expression.
+    /// of its payloadArgument Expression via a Transfer that from whose source is given by the result of
+    /// the senderArgument Expression and whose target is given by the result of the receiverArgument. At
+    /// least one of senderArgument and receiverArgument must be provided. If no senderArgument is provided,
+    /// the default is the this context for the action. If no receiverArgument is given, then the receiver
+    /// is to be determined from outgoing connections from the sender. senderArgument <> null or
+    /// receiverArgument <> nullpayloadArgument = argument(1)senderArgument = argument(2)receiverArgument =
+    /// argument(3)inputParameters->size() >= 3
     /// </summary>
     public partial interface ISendActionUsage : IActionUsage
     {

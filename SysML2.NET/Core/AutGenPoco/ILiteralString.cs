@@ -30,10 +30,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A LiteralString  is a LiteralExpression that provides a String value as a result. It
-    /// must have an owned result parameter whose type is String.An Expression that provides a String value
-    /// as a result.A LiteralString must be typed by a specialization of Evaluation with no input parameters
-    /// and a single String value as its result.
+    /// A LiteralString is a LiteralExpression that provides a String value as a result. Its result
+    /// parameter must have the type String.
     /// </summary>
     public partial interface ILiteralString : ILiteralExpression
     {

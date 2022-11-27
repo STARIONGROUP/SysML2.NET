@@ -45,6 +45,8 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static RequirementConstraintKind Deserialize(string value)
         {
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "ASSUMPTION":
@@ -67,14 +69,19 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static RequirementConstraintKind? DeserializeNullable(string value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "ASSUMPTION":
                     return RequirementConstraintKind.Assumption;
                 case "REQUIREMENT":
                     return RequirementConstraintKind.Requirement;
-                case null:
-                    return null;
                 default:
                     throw new ArgumentException($"{value} is not a valid RequirementConstraintKind", nameof(value));
             }

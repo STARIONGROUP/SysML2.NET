@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="TargetEnd.cs" company="RHEA System S.A.">
+// <copyright file="LibraryPackage.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,25 +30,19 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// A LibraryPackage is a Package that is the container for a model library. A LibraryPackage is itself
+    /// a library Element as are all Elements that are directly or indirectly contained in it.
     /// </summary>
-    public partial class TargetEnd : ITargetEnd
+    public partial class LibraryPackage : ILibraryPackage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TargetEnd"/> class.
+        /// Initializes a new instance of the <see cref="LibraryPackage"/> class.
         /// </summary>
-        public TargetEnd()
+        public LibraryPackage()
         {
             this.AliasIds = new List<string>();
-            this.IsAbstract = false;
-            this.IsComposite = false;
-            this.IsDerived = false;
-            this.IsEnd = false;
             this.IsImpliedIncluded = false;
-            this.IsOrdered = false;
-            this.IsPortion = false;
-            this.IsReadOnly = false;
-            this.IsSufficient = false;
-            this.IsUnique = true;
+            this.IsStandard = false;
             this.OwnedRelationship = new List<Guid>();
         }
 
@@ -63,44 +57,10 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
-        /// </summary>
-        public FeatureDirectionKind? Direction { get; set; }
-
-        /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
         public string ElementId { get; set; }
-
-        /// <summary>
-        /// Indicates whether instances of this Type must also be instances of at least one of its specialized
-        /// Types.
-        /// </summary>
-        public bool IsAbstract { get; set; }
-
-        /// <summary>
-        /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
-        /// </summary>
-        public bool IsComposite { get; set; }
-
-        /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Features.
-        /// </summary>
-        public bool IsDerived { get; set; }
-
-        /// <summary>
-        /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain entity to a
-        /// single co-domain entity, whether or not a Multiplicity is given for it. If a Multiplicity is given
-        /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
-        /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
-        /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
-        /// Features constrains the cardinality of the set of values of that Feature when the values of the
-        /// other n-1 end Features are held fixed.
-        /// </summary>
-        public bool IsEnd { get; set; }
 
         /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
@@ -112,35 +72,11 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// Whether an order exists for the values of this Feature or not.
+        /// Whether this LibraryPackage contains a standard library model. This should only be set to true for
+        /// LibraryPackage in the standard Kernel Libraries or in normative model libraries for a language built
+        /// on KerML.
         /// </summary>
-        public bool IsOrdered { get; set; }
-
-        /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the
-        /// Feature&#39;s domain.
-        /// </summary>
-        public bool IsPortion { get; set; }
-
-        /// <summary>
-        /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
-        /// </summary>
-        public bool IsReadOnly { get; set; }
-
-        /// <summary>
-        /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
-        /// classify all four-wheeled things.)
-        /// </summary>
-        public bool IsSufficient { get; set; }
-
-        /// <summary>
-        /// Whether or not values for this Feature must have no duplicates or not.
-        /// </summary>
-        public bool IsUnique { get; set; }
+        public bool IsStandard { get; set; }
 
         /// <summary>
         /// The primary name of this Element.

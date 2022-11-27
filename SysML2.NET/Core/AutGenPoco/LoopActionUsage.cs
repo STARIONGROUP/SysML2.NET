@@ -299,6 +299,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsIndividual { get; set; }
 
         /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property IsNonunique
         /// </summary>
         public bool QueryIsNonunique()

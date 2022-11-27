@@ -225,6 +225,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsIndividual { get; set; }
 
         /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
+
+        /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a

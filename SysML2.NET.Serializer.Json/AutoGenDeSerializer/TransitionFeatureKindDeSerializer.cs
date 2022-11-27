@@ -45,6 +45,8 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static TransitionFeatureKind Deserialize(string value)
         {
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "TRIGGER":
@@ -69,6 +71,13 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static TransitionFeatureKind? DeserializeNullable(string value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "TRIGGER":
@@ -77,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
                     return TransitionFeatureKind.Guard;
                 case "EFFECT":
                     return TransitionFeatureKind.Effect;
-                case null:
-                    return null;
                 default:
                     throw new ArgumentException($"{value} is not a valid TransitionFeatureKind", nameof(value));
             }

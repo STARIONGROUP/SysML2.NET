@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteBooleanValue(iFramedConcernMembership.IsImpliedIncluded);
 
             writer.WritePropertyName("kind");
-            writer.WriteStringValue(iFramedConcernMembership.Kind.ToString().ToUpper());
+            writer.WriteStringValue(iFramedConcernMembership.Kind.ToString().ToLower());
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iFramedConcernMembership.MemberElement);
@@ -152,7 +152,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iFramedConcernMembership.Type);
 
             writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iFramedConcernMembership.Visibility.ToString().ToUpper());
+            writer.WriteStringValue(iFramedConcernMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();
         }

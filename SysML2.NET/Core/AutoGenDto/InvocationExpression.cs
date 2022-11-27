@@ -32,8 +32,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An InvocationExpression is an Expression each of whose input parameters are bound to the result of
     /// an owned argument Expression. Each input parameter may be bound to the result of at most one
-    /// argument.isModelLevelEvaluable =     argument->forAll(isModelLevelEvaluable) and    
-    /// function.isModelLevelEvaluable
+    /// argument.
     /// </summary>
     public partial class InvocationExpression : IInvocationExpression
     {

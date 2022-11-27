@@ -118,7 +118,7 @@ namespace SySML2.NET.REST
                 var projects = await this.RequestProjects(null, null, cancellationToken);
                 return projects;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 this.baseUri = null;
                 throw;
@@ -198,6 +198,8 @@ namespace SySML2.NET.REST
             }
 
             var requestUri = branch == null ? new Uri($"{this.baseUri}/projects/{project}/branches{queryParameters}") : new Uri($"{this.baseUri}/projects/{project}/branches/{branch}{queryParameters}");
+
+            this.logger.LogDebug(requestUri.ToString());
 
             var data = await this.RequestData(requestUri, cancellationToken);
 

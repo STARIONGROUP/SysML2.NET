@@ -73,7 +73,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("direction");
             if (iMergeNode.Direction.HasValue)
             {
-                writer.WriteStringValue(iMergeNode.Direction.Value.ToString().ToUpper());
+                writer.WriteStringValue(iMergeNode.Direction.Value.ToString().ToLower());
             }
             else
             {
@@ -142,7 +142,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("portionKind");
             if (iMergeNode.PortionKind.HasValue)
             {
-                writer.WriteStringValue(iMergeNode.PortionKind.Value.ToString().ToUpper());
+                writer.WriteStringValue(iMergeNode.PortionKind.Value.ToString().ToLower());
             }
             else
             {

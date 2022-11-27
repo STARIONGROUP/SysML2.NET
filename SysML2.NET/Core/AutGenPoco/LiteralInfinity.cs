@@ -30,9 +30,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A LiteralInfinity is a LiteralExpression that provides the positive infinity value (&quot;*&quot;).
-    /// It must have an owned result parameter whose type is Positive.An Expression that provides a value
-    /// without a given bound as a result.
+    /// A LiteralInfinity is a LiteralExpression that provides the positive infinity value (*). It's result
+    /// must have the type Positive.An Expression that provides a value without a given bound as a result.
     /// </summary>
     public partial class LiteralInfinity : ILiteralInfinity
     {
@@ -257,6 +256,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsModelLevelEvaluable

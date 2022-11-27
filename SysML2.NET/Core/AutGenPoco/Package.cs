@@ -32,9 +32,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A Package is a Namespace used to group Elements, without any instance-level semantics. It may have
     /// one or more model-level evaluable filterCondition Expressions used to filter its
-    /// importedMemberships. Any imported member must meet all of the
-    /// filterConditions.ownedMembership->forAll(visibility <>
-    /// VisibilityKind::protected)ownedImport->forAll(visibility <> VisibilityKind::protected)
+    /// importedMemberships. Any imported member must meet all of the filterConditions.
     /// </summary>
     public partial class Package : IPackage
     {
@@ -104,6 +102,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property Member

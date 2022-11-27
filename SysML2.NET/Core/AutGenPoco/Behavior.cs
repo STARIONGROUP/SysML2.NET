@@ -31,9 +31,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A Behavior coordinates occurrences of other Behaviors, as well as changes in objects. Behaviors
-    /// can be decomposed into Steps and be characterized by parameters.Behaviors provide a place to
-    /// describe changes in objects over time. Behaviors can be decomposed into steps and be characterized
-    /// by parameters.allSupertypes()->includes(Kernel Library::Performance)
+    /// can be decomposed into Steps and be characterized by
+    /// parameters.allSupertypes()->includes(resolve("Performances::Performance"))
     /// </summary>
     public partial class Behavior : IBehavior
     {
@@ -183,6 +182,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the

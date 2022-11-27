@@ -52,13 +52,13 @@ namespace SysML2.NET.Core.POCO
     /// ownedGeneralization->selectByKind(FeatureTyping)isEnd = owningFeatureMembership <> null and
     /// owningFeatureMembership.oclIsKindOf(EndFeatureMembership)multiplicity <> null implies
     /// multiplicity.featuringType = featuringType
-    /// allSupertypes()->includes(KernelLibrary::things)chainingFeatures->size() <> 1invertedFeature =
-    /// invertedFeatureInverting.featureInvertedchainingFeature =
-    /// ownedFeatureChaining.chainingFeatureownedFeatureChaining =
-    /// ownedRelationship->selectByKind(FeatureChaining)chainingfeatureChainings->notEmpty() implies
-    /// (owningFeatureMembership <> null implies
-    /// owningFeatureMembership.isDerived)chainingFeatures->excludes(self)inverseFeature =
-    /// invertingFeatureInverting.featureInverse
+    /// allSupertypes()->includes(resolve("Base::things"))chainingFeatures->excludes(self)ownedFeatureChaining
+    /// = ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
+    /// ownedFeatureChaining.chainingFeaturechainingFeatures->size() <> 1inverseFeature =
+    /// invertingFeatureInverting.featureInverseinvertedFeature =
+    /// invertedFeatureInverting.featureInvertedownedTyping.type->exists(selectByKind(Class)) implies   
+    /// allSupertypes()->includes(resolve("Occurrences::occurrences"))ownedTyping.type->exists(selectByKind(DataType))
+    /// implies    allSupertypes()->includes(resolve("Base::dataValues"))
     /// </summary>
     public partial interface IFeature : IType
     {

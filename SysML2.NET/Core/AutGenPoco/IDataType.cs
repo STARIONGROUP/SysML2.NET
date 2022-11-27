@@ -40,7 +40,8 @@ namespace SysML2.NET.Core.POCO
     /// DataTypes are the second kind. If two objects classified by DataType have identical property values,
     /// they are understood to be in fact the same object. DataTypes are intended to represent data or
     /// mathematical objects which is where the equivalence based on matched values is
-    /// appropriate.allSupertypes()->includes(Kernel Library::DataValue)
+    /// appropriate.allSupertypes()->includes(resolve("Base::DataValue"))ownedGeneralization.general->   
+    /// forAll(not oclIsKindOf(Class))
     /// </summary>
     public partial interface IDataType : IClassifier
     {

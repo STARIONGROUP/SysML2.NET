@@ -30,10 +30,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// LiteralBoolean is a LiteralExpression that provides a Boolean value as a result. It must have
-    /// an owned result parameter whose type is Boolean.An Expression that provides a Boolean value as a
-    /// result.A LiteralBoolean must be typed by a specialization of Evaluation with no input parameters and
-    /// a single Boolean value as its result.
+    /// LiteralBoolean is a LiteralExpression that provides a Boolean value as a result. Its result
+    /// parameter must have type Boolean.
     /// </summary>
     public partial interface ILiteralBoolean : ILiteralExpression
     {

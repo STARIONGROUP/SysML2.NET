@@ -30,6 +30,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// An ItemFeature is the ownedFeature of an ItemFlow that represents the payload of the transfers that
+    /// are instances of the ItemFlow. It must redefine Transfer::item.
     /// </summary>
     public partial class ItemFeature : IItemFeature
     {
@@ -238,6 +240,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsNonunique

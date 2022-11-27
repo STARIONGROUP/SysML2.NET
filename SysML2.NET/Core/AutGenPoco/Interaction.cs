@@ -31,8 +31,7 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An Interaction is a Behavior that is also an Association, providing a context for multiple objects
-    /// that have behaviors that impact one another.Interactions are Behaviors that also provide context for
-    /// multiple objects that have behaviors that impact one another.
+    /// that have behaviors that impact one another.
     /// </summary>
     public partial class Interaction : IInteraction
     {
@@ -200,6 +199,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the

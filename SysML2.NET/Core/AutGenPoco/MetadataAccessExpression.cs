@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="SourceEnd.cs" company="RHEA System S.A.">
+// <copyright file="MetadataAccessExpression.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,13 +30,17 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// A MetadataAccessExpression is an Expression whose result is a sequence of instances of Metaclasses
+    /// representing all the MetadataFeature annotations of the referencedElement. In addition, the sequence
+    /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
+    /// referencedElement, with values for all the abstract syntax properties of the Element.
     /// </summary>
-    public partial class SourceEnd : ISourceEnd
+    public partial class MetadataAccessExpression : IMetadataAccessExpression
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SourceEnd"/> class.
+        /// Initializes a new instance of the <see cref="MetadataAccessExpression"/> class.
         /// </summary>
-        public SourceEnd()
+        public MetadataAccessExpression()
         {
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
@@ -61,6 +65,14 @@ namespace SysML2.NET.Core.POCO
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// Queries the derived property Behavior
+        /// </summary>
+        public List<Behavior> QueryBehavior()
+        {
+            throw new NotImplementedException("Derived property Behavior not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property ChainingFeature
@@ -154,6 +166,14 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property Function
+        /// </summary>
+        public Function QueryFunction()
+        {
+            throw new NotImplementedException("Derived property Function not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property ImportedMembership
         /// </summary>
         public List<Membership> QueryImportedMembership()
@@ -238,6 +258,22 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property IsModelLevelEvaluable
+        /// </summary>
+        public bool QueryIsModelLevelEvaluable()
+        {
+            throw new NotImplementedException("Derived property IsModelLevelEvaluable not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsNonunique
@@ -534,11 +570,31 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property Parameter
+        /// </summary>
+        public List<Feature> QueryParameter()
+        {
+            throw new NotImplementedException("Derived property Parameter not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property QualifiedName
         /// </summary>
         public string QueryQualifiedName()
         {
             throw new NotImplementedException("Derived property QualifiedName not yet supported");
+        }
+
+        /// <summary>
+        /// </summary>
+        public Element ReferencedElement { get; set; }
+
+        /// <summary>
+        /// Queries the derived property Result
+        /// </summary>
+        public Feature QueryResult()
+        {
+            throw new NotImplementedException("Derived property Result not yet supported");
         }
 
         /// <summary>

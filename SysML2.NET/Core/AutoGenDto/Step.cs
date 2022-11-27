@@ -33,9 +33,7 @@ namespace SysML2.NET.Core.DTO
     /// A Step is a Feature that is typed by one or more Behaviors. Steps may be used by one Behavior to
     /// coordinate the performance of other Behaviors, supporting the steady refinement of behavioral
     /// descriptions. Steps can be ordered in time and can be connected using ItemFlows to specify things
-    /// flowing between their parameters.Steps are Features for Behaviors and support the steady refinement
-    /// of behavioral descriptions. Steps can be related in time and serve as sources and targets for object
-    /// transfers.
+    /// flowing between their parameters.
     /// </summary>
     public partial class Step : IStep
     {

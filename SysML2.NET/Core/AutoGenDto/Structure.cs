@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A Structure is a Class of objects in the modeled universe that are primarily structural in nature.
     /// While an Object is not itself behavioral, it may be involved in and acted on by Behaviors, and it
-    /// may be the performer of some of them.allSupertypes()->includes(Kernel Library::Object)
+    /// may be the performer of some of them.allSupertypes()->includes(resolve("Objects::Object"))
     /// </summary>
     public partial class Structure : IStructure
     {

@@ -45,6 +45,8 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static TriggerKind Deserialize(string value)
         {
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "WHEN":
@@ -69,6 +71,13 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static TriggerKind? DeserializeNullable(string value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "WHEN":
@@ -77,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
                     return TriggerKind.At;
                 case "AFTER":
                     return TriggerKind.After;
-                case null:
-                    return null;
                 default:
                     throw new ArgumentException($"{value} is not a valid TriggerKind", nameof(value));
             }

@@ -45,6 +45,8 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static VisibilityKind Deserialize(string value)
         {
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "PRIVATE":
@@ -69,6 +71,13 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static VisibilityKind? DeserializeNullable(string value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "PRIVATE":
@@ -77,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
                     return VisibilityKind.Protected;
                 case "PUBLIC":
                     return VisibilityKind.Public;
-                case null:
-                    return null;
                 default:
                     throw new ArgumentException($"{value} is not a valid VisibilityKind", nameof(value));
             }

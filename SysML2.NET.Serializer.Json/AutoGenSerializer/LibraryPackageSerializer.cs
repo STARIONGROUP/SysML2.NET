@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="TargetEndSerializer.cs" company="RHEA System S.A.">
+// <copyright file="LibraryPackageSerializer.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
 //
@@ -31,16 +31,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="TargetEndSerializer"/> is to provide serialization
+    /// The purpose of the <see cref="LibraryPackageSerializer"/> is to provide serialization
     /// and deserialization capabilities
     /// </summary>
-    internal static class TargetEndSerializer
+    internal static class LibraryPackageSerializer
     {
         /// <summary>
-        /// Serializes an instance of <see cref="ITargetEnd"/> using an <see cref="Utf8JsonWriter"/>
+        /// Serializes an instance of <see cref="ILibraryPackage"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
         /// <param name="obj">
-        /// The <see cref="ITargetEnd"/> to serialize
+        /// The <see cref="ILibraryPackage"/> to serialize
         /// </param>
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
@@ -50,83 +50,49 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is ITargetEnd iTargetEnd))
+            if (!(obj is ILibraryPackage iLibraryPackage))
             {
-                throw new ArgumentException("The object shall be an ITargetEnd", nameof(obj));
+                throw new ArgumentException("The object shall be an ILibraryPackage", nameof(obj));
             }
 
             writer.WriteStartObject();
 
             writer.WritePropertyName("@type");
-            writer.WriteStringValue("TargetEnd");
+            writer.WriteStringValue("LibraryPackage");
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(iTargetEnd.Id);
+            writer.WriteStringValue(iLibraryPackage.Id);
 
             writer.WriteStartArray("aliasIds");
-            foreach (var item in iTargetEnd.AliasIds)
+            foreach (var item in iLibraryPackage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("direction");
-            if (iTargetEnd.Direction.HasValue)
-            {
-                writer.WriteStringValue(iTargetEnd.Direction.Value.ToString().ToUpper());
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iTargetEnd.ElementId);
-
-            writer.WritePropertyName("isAbstract");
-            writer.WriteBooleanValue(iTargetEnd.IsAbstract);
-
-            writer.WritePropertyName("isComposite");
-            writer.WriteBooleanValue(iTargetEnd.IsComposite);
-
-            writer.WritePropertyName("isDerived");
-            writer.WriteBooleanValue(iTargetEnd.IsDerived);
-
-            writer.WritePropertyName("isEnd");
-            writer.WriteBooleanValue(iTargetEnd.IsEnd);
+            writer.WriteStringValue(iLibraryPackage.ElementId);
 
             writer.WritePropertyName("isImpliedIncluded");
-            writer.WriteBooleanValue(iTargetEnd.IsImpliedIncluded);
+            writer.WriteBooleanValue(iLibraryPackage.IsImpliedIncluded);
 
-            writer.WritePropertyName("isOrdered");
-            writer.WriteBooleanValue(iTargetEnd.IsOrdered);
-
-            writer.WritePropertyName("isPortion");
-            writer.WriteBooleanValue(iTargetEnd.IsPortion);
-
-            writer.WritePropertyName("isReadOnly");
-            writer.WriteBooleanValue(iTargetEnd.IsReadOnly);
-
-            writer.WritePropertyName("isSufficient");
-            writer.WriteBooleanValue(iTargetEnd.IsSufficient);
-
-            writer.WritePropertyName("isUnique");
-            writer.WriteBooleanValue(iTargetEnd.IsUnique);
+            writer.WritePropertyName("isStandard");
+            writer.WriteBooleanValue(iLibraryPackage.IsStandard);
 
             writer.WritePropertyName("name");
-            writer.WriteStringValue(iTargetEnd.Name);
+            writer.WriteStringValue(iLibraryPackage.Name);
 
             writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iTargetEnd.OwnedRelationship)
+            foreach (var item in iLibraryPackage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship");
-            if (iTargetEnd.OwningRelationship.HasValue)
+            if (iLibraryPackage.OwningRelationship.HasValue)
             {
-                writer.WriteStringValue(iTargetEnd.OwningRelationship.Value);
+                writer.WriteStringValue(iLibraryPackage.OwningRelationship.Value);
             }
             else
             {
@@ -134,7 +100,7 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iTargetEnd.ShortName);
+            writer.WriteStringValue(iLibraryPackage.ShortName);
 
             writer.WriteEndObject();
         }

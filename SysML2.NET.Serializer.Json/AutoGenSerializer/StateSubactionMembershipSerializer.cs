@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteBooleanValue(iStateSubactionMembership.IsImpliedIncluded);
 
             writer.WritePropertyName("kind");
-            writer.WriteStringValue(iStateSubactionMembership.Kind.ToString().ToUpper());
+            writer.WriteStringValue(iStateSubactionMembership.Kind.ToString().ToLower());
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iStateSubactionMembership.MemberElement);
@@ -152,7 +152,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iStateSubactionMembership.Type);
 
             writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iStateSubactionMembership.Visibility.ToString().ToUpper());
+            writer.WriteStringValue(iStateSubactionMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();
         }

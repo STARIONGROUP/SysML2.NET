@@ -80,7 +80,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("direction");
             if (iMetadataFeature.Direction.HasValue)
             {
-                writer.WriteStringValue(iMetadataFeature.Direction.Value.ToString().ToUpper());
+                writer.WriteStringValue(iMetadataFeature.Direction.Value.ToString().ToLower());
             }
             else
             {

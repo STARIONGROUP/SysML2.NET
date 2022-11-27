@@ -113,6 +113,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
+
+        /// <summary>
         /// Identification of the language of the body text and, optionally, the region and/or encoding. The
         /// format shall be a POSIX locale conformant to ISO/IEC 15897, with the format
         /// [language[_territory][.codeset][@modifier]].

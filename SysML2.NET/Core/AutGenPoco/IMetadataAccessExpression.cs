@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="IItemFlowFeature.cs" company="RHEA System S.A.">
+// <copyright file="IMetadataAccessExpression.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,9 +30,17 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// A MetadataAccessExpression is an Expression whose result is a sequence of instances of Metaclasses
+    /// representing all the MetadataFeature annotations of the referencedElement. In addition, the sequence
+    /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
+    /// referencedElement, with values for all the abstract syntax properties of the Element.
     /// </summary>
-    public partial interface IItemFlowFeature : IFeature
+    public partial interface IMetadataAccessExpression : IExpression
     {
+        /// <summary>
+        /// </summary>
+        Element ReferencedElement { get; set; }
+
     }
 }
 

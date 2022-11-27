@@ -32,8 +32,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// An InvocationExpression is an Expression each of whose input parameters are bound to the result of
     /// an owned argument Expression. Each input parameter may be bound to the result of at most one
-    /// argument.isModelLevelEvaluable =     argument->forAll(isModelLevelEvaluable) and    
-    /// function.isModelLevelEvaluable
+    /// argument.
     /// </summary>
     public partial class InvocationExpression : IInvocationExpression
     {
@@ -266,6 +265,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsModelLevelEvaluable

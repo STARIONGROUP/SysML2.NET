@@ -45,6 +45,8 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static FeatureDirectionKind Deserialize(string value)
         {
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "IN":
@@ -69,6 +71,13 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static FeatureDirectionKind? DeserializeNullable(string value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "IN":
@@ -77,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
                     return FeatureDirectionKind.Inout;
                 case "OUT":
                     return FeatureDirectionKind.Out;
-                case null:
-                    return null;
                 default:
                     throw new ArgumentException($"{value} is not a valid FeatureDirectionKind", nameof(value));
             }

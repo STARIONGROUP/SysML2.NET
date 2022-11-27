@@ -36,19 +36,18 @@ namespace SysML2.NET.Core.POCO
     /// ownedRelationship->selectByKind(Specialization)->    select(g | g.special = self)    multiplicity =
     /// feature->select(oclIsKindOf(Multiplicity))ownedFeatureMembership =
     /// ownedRelationship->selectByKind(FeatureMembership)let ownedConjugators: Sequence(Conjugator) =    
-    /// ownedRelationship->selectByKind(Conjugation) in    ownedConjugators->size() = 1 and   
-    /// ownedConjugator = ownedConjugators->at(1)output =    if isConjugated then        
-    /// conjugator.originalType.input    else         feature->select(direction = out or direction = inout) 
-    ///   endifinput =     if isConjugated then         conjugator.originalType.output    else        
-    /// feature->select(direction = _'in' or direction = inout)    endifinheritedMembership =
-    /// inheritedMemberships(Set{})ownedFeature =
-    /// ownedFeatureMembership.ownedMemberFeatureintersectingType->excludes(self)differencingType =
-    /// ownedDifferencing.differencingTypeallSupertypes()->includes(Kernel Library::Anything)disjointType =
-    /// disjoiningTypeDisjoining.disjoiningTypeintersectingType =
-    /// ownedIntersecting.intersectingTypeunioningType = ownedUnioning.unioningTypedirectedFeature =
-    /// feature->select(direction <> null)differencingType->excludes(self)featureMembership =
-    /// ownedMembership->union(    inheritedMembership->selectByKind(FeatureMembership))feature =
-    /// featureMembership.ownedMemberFeatureunioningType->excludes(self)
+    /// ownedRelationship->selectByKind(Conjugation) in    ownedConjugator =         if
+    /// ownedConjugators->isEmpty() then null         else ownedConjugators->at(1) endifoutput =    if
+    /// isConjugated then         conjugator.originalType.input    else         feature->select(direction =
+    /// out or direction = inout)    endifinput =     if isConjugated then        
+    /// conjugator.originalType.output    else         feature->select(direction = _'in' or direction =
+    /// inout)    endifinheritedMembership = inheritedMemberships(Set{})disjointType =
+    /// disjoiningTypeDisjoining.disjoiningTypeallSupertypes()->includes(resolve("Base::Anything"))directedFeature
+    /// = feature->select(direction <> null)feature = featureMembership.ownedMemberFeaturefeatureMembership
+    /// = ownedMembership->union(    inheritedMembership->selectByKind(FeatureMembership))ownedFeature =
+    /// ownedFeatureMembership.ownedMemberFeatureintersectingType->excludes(self)unioningType->excludes(self)differencingType->excludes(self)differencingType
+    /// = ownedDifferencing.differencingTypeunioningType = ownedUnioning.unioningTypeintersectingType =
+    /// ownedIntersecting.intersectingTypeownedRelationship->selectByKind(Conjugator)->size() <= 1
     /// </summary>
     public partial interface IType : INamespace
     {

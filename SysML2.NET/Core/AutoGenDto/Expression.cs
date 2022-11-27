@@ -34,7 +34,8 @@ namespace SysML2.NET.Core.DTO
     /// featuringType is a computational step within that Function. An Expression always has a single result
     /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
-    /// as the results of other Expressions in the tree.
+    /// as the results of other Expressions in the tree.isModelLevelEvaluable =
+    /// modelLevelEvaluable(Set(Element){})
     /// </summary>
     public partial class Expression : IExpression
     {

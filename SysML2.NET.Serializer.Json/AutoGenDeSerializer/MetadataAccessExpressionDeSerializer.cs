@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="TargetEndDeSerializer.cs" company="RHEA System S.A.">
+// <copyright file="MetadataAccessExpressionDeSerializer.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -34,16 +34,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="TargetEndDeSerializer"/> is to provide deserialization capabilities
-    /// for the <see cref="ITargetEnd"/> interface
+    /// The purpose of the <see cref="MetadataAccessExpressionDeSerializer"/> is to provide deserialization capabilities
+    /// for the <see cref="IMetadataAccessExpression"/> interface
     /// </summary>
-    internal static class TargetEndDeSerializer
+    internal static class MetadataAccessExpressionDeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="ITargetEnd"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="IMetadataAccessExpression"/> from the provided <see cref="JsonElement"/>
         /// </summary>
         /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="ITargetEnd"/> json object
+        /// The <see cref="JsonElement"/> that contains the <see cref="IMetadataAccessExpression"/> json object
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -52,30 +52,30 @@ namespace SysML2.NET.Serializer.Json
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
-        /// an instance of <see cref="ITargetEnd"/>
+        /// an instance of <see cref="IMetadataAccessExpression"/>
         /// </returns>
-        internal static ITargetEnd DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static IMetadataAccessExpression DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
         {
-            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("TargetEndDeSerializer");
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("MetadataAccessExpressionDeSerializer");
 
             if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
-                throw new InvalidOperationException("The @type property is not available, the TargetEndDeSerializer cannot be used to deserialize this JsonElement");
+                throw new InvalidOperationException("The @type property is not available, the MetadataAccessExpressionDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (@type.GetString() != "TargetEnd")
+            if (@type.GetString() != "MetadataAccessExpression")
             {
-                throw new InvalidOperationException($"The TargetEndDeSerializer can only be used to deserialize objects of type ITargetEnd, a {@type.GetString()} was provided");
+                throw new InvalidOperationException($"The MetadataAccessExpressionDeSerializer can only be used to deserialize objects of type IMetadataAccessExpression, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new Core.DTO.TargetEnd();
+            var dtoInstance = new Core.DTO.MetadataAccessExpression();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
                 {
-                    throw new JsonException("The @id property is not present, the TargetEnd cannot be deserialized");
+                    throw new JsonException("The @id property is not present, the MetadataAccessExpression cannot be deserialized");
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the aliasIds Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the aliasIds Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("direction", out JsonElement directionProperty))
@@ -105,7 +105,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the direction Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the direction Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
@@ -118,7 +118,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the elementId Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the elementId Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isAbstract", out JsonElement isAbstractProperty))
@@ -130,7 +130,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isAbstract Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isAbstract Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isComposite", out JsonElement isCompositeProperty))
@@ -142,7 +142,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isComposite Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isComposite Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isDerived", out JsonElement isDerivedProperty))
@@ -154,7 +154,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isDerived Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isDerived Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isEnd", out JsonElement isEndProperty))
@@ -166,7 +166,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isEnd Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isEnd Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
@@ -178,7 +178,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isImpliedIncluded Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isOrdered", out JsonElement isOrderedProperty))
@@ -190,7 +190,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isOrdered Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isOrdered Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isPortion", out JsonElement isPortionProperty))
@@ -202,7 +202,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isPortion Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isPortion Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isReadOnly", out JsonElement isReadOnlyProperty))
@@ -214,7 +214,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isReadOnly Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isReadOnly Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isSufficient", out JsonElement isSufficientProperty))
@@ -226,7 +226,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isSufficient Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isSufficient Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isUnique", out JsonElement isUniqueProperty))
@@ -238,7 +238,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isUnique Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the isUnique Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
@@ -251,7 +251,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the name Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the name Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
@@ -270,7 +270,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the ownedRelationship Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the ownedRelationship Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
@@ -293,7 +293,31 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the owningRelationship Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the owningRelationship Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("referencedElement", out JsonElement referencedElementProperty))
+            {
+                if (referencedElementProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.ReferencedElement = Guid.Empty;
+                    logger.LogDebug($"the MetadataAccessExpression.ReferencedElement property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (referencedElementProperty.TryGetProperty("@id", out JsonElement referencedElementIdProperty))
+                    {
+                        var propertyValue = referencedElementIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ReferencedElement = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the referencedElement Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
@@ -306,7 +330,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the shortName Json property was not found in the TargetEnd: {dtoInstance.Id}");
+                logger.LogDebug($"the shortName Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
 

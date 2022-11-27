@@ -149,7 +149,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iParameterMembership.Type);
 
             writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iParameterMembership.Visibility.ToString().ToUpper());
+            writer.WriteStringValue(iParameterMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();
         }

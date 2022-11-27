@@ -40,7 +40,8 @@ namespace SysML2.NET.Core.POCO
     /// relatedFeature->at(1)     else null     endiftargetFeature =    if sourceFeature = null then
     /// relatedFeature    else relatedFeature->excluding(sourceFeature)    endifconnectorEnd =
     /// feature->select(isEnd)association->forAll(a |    a.associationEnd->forAll(ae |       
-    /// connectorEnd->one(ce |             ce.ownedRedefinition.redefinedFeature->includes(ae))))
+    /// connectorEnd->one(ce |             ce.ownedRedefinition.redefinedFeature->includes(ae))))not
+    /// isAbstract implies relatedFeature->size() >= 2
     /// </summary>
     public partial class Connector : IConnector
     {
@@ -282,6 +283,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsNonunique

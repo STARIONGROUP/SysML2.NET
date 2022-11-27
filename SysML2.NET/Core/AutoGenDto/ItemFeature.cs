@@ -30,6 +30,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
+    /// An ItemFeature is the ownedFeature of an ItemFlow that represents the payload of the transfers that
+    /// are instances of the ItemFlow. It must redefine Transfer::item.
     /// </summary>
     public partial class ItemFeature : IItemFeature
     {

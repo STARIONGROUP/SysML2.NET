@@ -30,7 +30,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// allSupertypes()->includes(Kernel Library::LinkObject)
+    /// allSupertypes()->includes(resolve("Objects::ObjectLink"))endFeature->size() = 2 implies   
+    /// allSupertypes()->includes(resolve("Objects::BinaryLinkObject"))
     /// </summary>
     public partial interface IAssociationStructure : IAssociation, IStructure
     {

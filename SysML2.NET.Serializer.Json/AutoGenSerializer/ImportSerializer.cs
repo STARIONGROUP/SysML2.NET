@@ -146,7 +146,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteEndArray();
 
             writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iImport.Visibility.ToString().ToUpper());
+            writer.WriteStringValue(iImport.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();
         }

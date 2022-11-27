@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteBooleanValue(iTransitionFeatureMembership.IsImpliedIncluded);
 
             writer.WritePropertyName("kind");
-            writer.WriteStringValue(iTransitionFeatureMembership.Kind.ToString().ToUpper());
+            writer.WriteStringValue(iTransitionFeatureMembership.Kind.ToString().ToLower());
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iTransitionFeatureMembership.MemberElement);
@@ -152,7 +152,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iTransitionFeatureMembership.Type);
 
             writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iTransitionFeatureMembership.Visibility.ToString().ToUpper());
+            writer.WriteStringValue(iTransitionFeatureMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();
         }

@@ -73,7 +73,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("direction");
             if (iTriggerInvocationExpression.Direction.HasValue)
             {
-                writer.WriteStringValue(iTriggerInvocationExpression.Direction.Value.ToString().ToUpper());
+                writer.WriteStringValue(iTriggerInvocationExpression.Direction.Value.ToString().ToLower());
             }
             else
             {
@@ -114,7 +114,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteBooleanValue(iTriggerInvocationExpression.IsUnique);
 
             writer.WritePropertyName("kind");
-            writer.WriteStringValue(iTriggerInvocationExpression.Kind.ToString().ToUpper());
+            writer.WriteStringValue(iTriggerInvocationExpression.Kind.ToString().ToLower());
 
             writer.WritePropertyName("name");
             writer.WriteStringValue(iTriggerInvocationExpression.Name);

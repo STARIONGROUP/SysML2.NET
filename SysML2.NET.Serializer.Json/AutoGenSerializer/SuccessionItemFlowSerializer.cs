@@ -73,7 +73,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("direction");
             if (iSuccessionItemFlow.Direction.HasValue)
             {
-                writer.WriteStringValue(iSuccessionItemFlow.Direction.Value.ToString().ToUpper());
+                writer.WriteStringValue(iSuccessionItemFlow.Direction.Value.ToString().ToLower());
             }
             else
             {

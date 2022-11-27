@@ -30,9 +30,7 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A Predicate is a Function whose result Parameter has type Boolean and multiplicity 1..1.A Predicate
-    /// is a Function whose result is a Boolean true or false value. These are typically used to test
-    /// logical statements about modeled objects.
+    /// A Predicate is a Function whose result Parameter has type Boolean and multiplicity 1..1.
     /// </summary>
     public partial class Predicate : IPredicate
     {
@@ -190,6 +188,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsModelLevelEvaluable

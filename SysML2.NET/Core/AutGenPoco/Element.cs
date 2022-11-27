@@ -39,7 +39,8 @@ namespace SysML2.NET.Core.POCO
     /// null then null    else owningNamespace.qualifiedName + '::' + escapedName()    endif endif
     /// endifdocumentation = ownedElement->selectByKind(Documentation)ownedAnnotation =
     /// ownedRelationship->selectByKind(Annotation)->    select(a | a.annotatedElement =
-    /// self)effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncluded
+    /// self)effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =
+    /// libraryNamespace() <>null
     /// </summary>
     public partial class Element : IElement
     {
@@ -93,6 +94,14 @@ namespace SysML2.NET.Core.POCO
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// The primary name of this Element.

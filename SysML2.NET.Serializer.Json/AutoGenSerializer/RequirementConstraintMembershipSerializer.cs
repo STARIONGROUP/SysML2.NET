@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteBooleanValue(iRequirementConstraintMembership.IsImpliedIncluded);
 
             writer.WritePropertyName("kind");
-            writer.WriteStringValue(iRequirementConstraintMembership.Kind.ToString().ToUpper());
+            writer.WriteStringValue(iRequirementConstraintMembership.Kind.ToString().ToLower());
 
             writer.WritePropertyName("memberElement");
             writer.WriteStringValue(iRequirementConstraintMembership.MemberElement);
@@ -152,7 +152,7 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iRequirementConstraintMembership.Type);
 
             writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iRequirementConstraintMembership.Visibility.ToString().ToUpper());
+            writer.WriteStringValue(iRequirementConstraintMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();
         }

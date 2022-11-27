@@ -34,12 +34,13 @@ namespace SysML2.NET.Core.POCO
     /// OccurrenceDefinition, an OccurrenceUsage is a Usage of that OccurrenceDefinition within a system.
     /// However, other types of Kernel Classes are also allowed, to permit use of Classes from the Kernel
     /// Library.An OccurrenceUsage must subset, directly or indirectly, the base Feature occurrences from
-    /// the Kernel model library.let individualDefinitions : Sequence(OccurrenceDefinition) =    
-    /// occurrenceDefinition->        selectByKind(OccurrenceDefinition)->        select(isIndividual) inif
-    /// individualDefinitions->isEmpty() then nullelse individualDefinitions->at(1) endifif portionKind =
-    /// null then portioningFeature = nullelse     portioningFeature <> null and    portionKind =
-    /// portioningFeature.portionKind and    occurrenceDefinition.asSet() =
-    /// portioningFeature.type.asSet()endifisIndividual implies individualDefinition <> null
+    /// the Kernel model library.if portionKind = null then portioningFeature = nullelse    
+    /// portioningFeature <> null and    portionKind = portioningFeature.portionKind and   
+    /// occurrenceDefinition.asSet() = portioningFeature.type.asSet()endiflet individualDefinitions :
+    /// Sequence(OccurrenceDefinition) =     occurrenceDefinition->       
+    /// selectByKind(OccurrenceDefinition)->        select(isIndividual) inif
+    /// individualDefinitions->isEmpty() then nullelse individualDefinitions->at(1) endifisIndividual
+    /// implies individualDefinition <> null
     /// </summary>
     public partial class OccurrenceUsage : IOccurrenceUsage
     {
@@ -279,6 +280,14 @@ namespace SysML2.NET.Core.POCO
         /// represented by its individualDefinition.
         /// </summary>
         public bool IsIndividual { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsLibraryElement
+        /// </summary>
+        public bool QueryIsLibraryElement()
+        {
+            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property IsNonunique
