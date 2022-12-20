@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="ExposeDeSerializer.cs" company="RHEA System S.A.">
+// <copyright file="NamespaceImportDeSerializer.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -34,16 +34,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ExposeDeSerializer"/> is to provide deserialization capabilities
-    /// for the <see cref="IExpose"/> interface
+    /// The purpose of the <see cref="NamespaceImportDeSerializer"/> is to provide deserialization capabilities
+    /// for the <see cref="INamespaceImport"/> interface
     /// </summary>
-    internal static class ExposeDeSerializer
+    internal static class NamespaceImportDeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="IExpose"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="INamespaceImport"/> from the provided <see cref="JsonElement"/>
         /// </summary>
         /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IExpose"/> json object
+        /// The <see cref="JsonElement"/> that contains the <see cref="INamespaceImport"/> json object
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -52,30 +52,30 @@ namespace SysML2.NET.Serializer.Json
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IExpose"/>
+        /// an instance of <see cref="INamespaceImport"/>
         /// </returns>
-        internal static IExpose DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static INamespaceImport DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
         {
-            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ExposeDeSerializer");
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("NamespaceImportDeSerializer");
 
             if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
-                throw new InvalidOperationException("The @type property is not available, the ExposeDeSerializer cannot be used to deserialize this JsonElement");
+                throw new InvalidOperationException("The @type property is not available, the NamespaceImportDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (@type.GetString() != "Expose")
+            if (@type.GetString() != "NamespaceImport")
             {
-                throw new InvalidOperationException($"The ExposeDeSerializer can only be used to deserialize objects of type IExpose, a {@type.GetString()} was provided");
+                throw new InvalidOperationException($"The NamespaceImportDeSerializer can only be used to deserialize objects of type INamespaceImport, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new Core.DTO.Expose();
+            var dtoInstance = new Core.DTO.NamespaceImport();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
                 {
-                    throw new JsonException("The @id property is not present, the Expose cannot be deserialized");
+                    throw new JsonException("The @id property is not present, the NamespaceImport cannot be deserialized");
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the aliasIds Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the aliasIds Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
@@ -109,20 +109,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the elementId Json property was not found in the Expose: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("importedMemberName", out JsonElement importedMemberNameProperty))
-            {
-                var propertyValue = importedMemberNameProperty.GetString();
-                if (propertyValue != null)
-                {
-                    dtoInstance.ImportedMemberName = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the importedMemberName Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the elementId Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("importedNamespace", out JsonElement importedNamespaceProperty))
@@ -130,7 +117,7 @@ namespace SysML2.NET.Serializer.Json
                 if (importedNamespaceProperty.ValueKind == JsonValueKind.Null)
                 {
                     dtoInstance.ImportedNamespace = Guid.Empty;
-                    logger.LogDebug($"the Expose.ImportedNamespace property was not found in the Json. The value is set to Guid.Empty");
+                    logger.LogDebug($"the NamespaceImport.ImportedNamespace property was not found in the Json. The value is set to Guid.Empty");
                 }
                 else
                 {
@@ -146,7 +133,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the importedNamespace Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the importedNamespace Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isImplied", out JsonElement isImpliedProperty))
@@ -158,7 +145,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isImplied Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the isImplied Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
@@ -170,7 +157,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isImpliedIncluded Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isImportAll", out JsonElement isImportAllProperty))
@@ -182,7 +169,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isImportAll Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the isImportAll Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isRecursive", out JsonElement isRecursiveProperty))
@@ -194,7 +181,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isRecursive Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the isRecursive Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
@@ -207,7 +194,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the name Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the name Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("ownedRelatedElement", out JsonElement ownedRelatedElementProperty))
@@ -226,7 +213,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the ownedRelatedElement Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the ownedRelatedElement Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
@@ -245,7 +232,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the ownedRelationship Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the ownedRelationship Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
@@ -268,7 +255,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the owningRelatedElement Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the owningRelatedElement Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
@@ -291,7 +278,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the owningRelationship Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the owningRelationship Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
@@ -304,7 +291,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the shortName Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the shortName Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("source", out JsonElement sourceProperty))
@@ -323,7 +310,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the source Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the source Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("target", out JsonElement targetProperty))
@@ -342,7 +329,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the target Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the target Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("visibility", out JsonElement visibilityProperty))
@@ -351,7 +338,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the visibility Json property was not found in the Expose: {dtoInstance.Id}");
+                logger.LogDebug($"the visibility Json property was not found in the NamespaceImport: {dtoInstance.Id}");
             }
 
 

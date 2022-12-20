@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="ImportDeSerializer.cs" company="RHEA System S.A.">
+// <copyright file="MembershipExposeDeSerializer.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -34,16 +34,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ImportDeSerializer"/> is to provide deserialization capabilities
-    /// for the <see cref="IImport"/> interface
+    /// The purpose of the <see cref="MembershipExposeDeSerializer"/> is to provide deserialization capabilities
+    /// for the <see cref="IMembershipExpose"/> interface
     /// </summary>
-    internal static class ImportDeSerializer
+    internal static class MembershipExposeDeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="IImport"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="IMembershipExpose"/> from the provided <see cref="JsonElement"/>
         /// </summary>
         /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IImport"/> json object
+        /// The <see cref="JsonElement"/> that contains the <see cref="IMembershipExpose"/> json object
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -52,30 +52,30 @@ namespace SysML2.NET.Serializer.Json
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IImport"/>
+        /// an instance of <see cref="IMembershipExpose"/>
         /// </returns>
-        internal static IImport DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static IMembershipExpose DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
         {
-            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ImportDeSerializer");
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("MembershipExposeDeSerializer");
 
             if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
             {
-                throw new InvalidOperationException("The @type property is not available, the ImportDeSerializer cannot be used to deserialize this JsonElement");
+                throw new InvalidOperationException("The @type property is not available, the MembershipExposeDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (@type.GetString() != "Import")
+            if (@type.GetString() != "MembershipExpose")
             {
-                throw new InvalidOperationException($"The ImportDeSerializer can only be used to deserialize objects of type IImport, a {@type.GetString()} was provided");
+                throw new InvalidOperationException($"The MembershipExposeDeSerializer can only be used to deserialize objects of type IMembershipExpose, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new Core.DTO.Import();
+            var dtoInstance = new Core.DTO.MembershipExpose();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
                 {
-                    throw new JsonException("The @id property is not present, the Import cannot be deserialized");
+                    throw new JsonException("The @id property is not present, the MembershipExpose cannot be deserialized");
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the aliasIds Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the aliasIds Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
@@ -109,44 +109,31 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the elementId Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the elementId Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("importedMemberName", out JsonElement importedMemberNameProperty))
+            if (jsonElement.TryGetProperty("importedMembership", out JsonElement importedMembershipProperty))
             {
-                var propertyValue = importedMemberNameProperty.GetString();
-                if (propertyValue != null)
+                if (importedMembershipProperty.ValueKind == JsonValueKind.Null)
                 {
-                    dtoInstance.ImportedMemberName = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the importedMemberName Json property was not found in the Import: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("importedNamespace", out JsonElement importedNamespaceProperty))
-            {
-                if (importedNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.ImportedNamespace = Guid.Empty;
-                    logger.LogDebug($"the Import.ImportedNamespace property was not found in the Json. The value is set to Guid.Empty");
+                    dtoInstance.ImportedMembership = Guid.Empty;
+                    logger.LogDebug($"the MembershipExpose.ImportedMembership property was not found in the Json. The value is set to Guid.Empty");
                 }
                 else
                 {
-                    if (importedNamespaceProperty.TryGetProperty("@id", out JsonElement importedNamespaceIdProperty))
+                    if (importedMembershipProperty.TryGetProperty("@id", out JsonElement importedMembershipIdProperty))
                     {
-                        var propertyValue = importedNamespaceIdProperty.GetString();
+                        var propertyValue = importedMembershipIdProperty.GetString();
                         if (propertyValue != null)
                         {
-                            dtoInstance.ImportedNamespace = Guid.Parse(propertyValue);
+                            dtoInstance.ImportedMembership = Guid.Parse(propertyValue);
                         }
                     }
                 }
             }
             else
             {
-                logger.LogDebug($"the importedNamespace Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the importedMembership Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isImplied", out JsonElement isImpliedProperty))
@@ -158,7 +145,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isImplied Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the isImplied Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
@@ -170,7 +157,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isImpliedIncluded Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isImportAll", out JsonElement isImportAllProperty))
@@ -182,7 +169,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isImportAll Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the isImportAll Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isRecursive", out JsonElement isRecursiveProperty))
@@ -194,7 +181,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the isRecursive Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the isRecursive Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
@@ -207,7 +194,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the name Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the name Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("ownedRelatedElement", out JsonElement ownedRelatedElementProperty))
@@ -226,7 +213,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the ownedRelatedElement Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the ownedRelatedElement Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
@@ -245,7 +232,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the ownedRelationship Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the ownedRelationship Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
@@ -268,7 +255,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the owningRelatedElement Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the owningRelatedElement Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
@@ -291,7 +278,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the owningRelationship Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the owningRelationship Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
@@ -304,7 +291,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the shortName Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the shortName Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("source", out JsonElement sourceProperty))
@@ -323,7 +310,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the source Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the source Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("target", out JsonElement targetProperty))
@@ -342,7 +329,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the target Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the target Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("visibility", out JsonElement visibilityProperty))
@@ -351,7 +338,7 @@ namespace SysML2.NET.Serializer.Json
             }
             else
             {
-                logger.LogDebug($"the visibility Json property was not found in the Import: {dtoInstance.Id}");
+                logger.LogDebug($"the visibility Json property was not found in the MembershipExpose: {dtoInstance.Id}");
             }
 
 

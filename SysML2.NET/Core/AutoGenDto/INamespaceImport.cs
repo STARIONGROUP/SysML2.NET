@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="IExpression.cs" company="RHEA System S.A.">
+// <copyright file="INamespaceImport.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.DTO
 {
     using System;
     using System.Collections.Generic;
@@ -30,29 +30,17 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An Expression is a Step that is typed by a Function. An Expression that also has a Function as its
-    /// featuringType is a computational step within that Function. An Expression always has a single result
-    /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
-    /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
-    /// as the results of other Expressions in the tree.isModelLevelEvaluable =
-    /// modelLevelEvaluable(Set(Element){})value.featuringType = featureWithValue.featuringType
+    /// A NamespaceImport is an Import that imports Memberships from its importedNamespace into the
+    /// importOwningNamespace. If  isRecursive = false, then only the visible Memberships of the
+    /// importOwningNamespace are imported. If  isRecursive = true, then, in addition, Memberships are
+    /// recursively imported from any ownedMembers of the importedNamespace that are
+    /// Namespaces.importedElement = importedNamespace
     /// </summary>
-    public partial interface IExpression : IStep
+    public partial interface INamespaceImport : IImport
     {
         /// <summary>
-        /// Queries the derived property Function
         /// </summary>
-        Function QueryFunction();
-
-        /// <summary>
-        /// Queries the derived property IsModelLevelEvaluable
-        /// </summary>
-        bool QueryIsModelLevelEvaluable();
-
-        /// <summary>
-        /// Queries the derived property Result
-        /// </summary>
-        Feature QueryResult();
+        Guid ImportedNamespace { get; set; }
 
     }
 }

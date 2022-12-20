@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO
     /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
     /// as the results of other Expressions in the tree.isModelLevelEvaluable =
-    /// modelLevelEvaluable(Set(Element){})
+    /// modelLevelEvaluable(Set(Element){})value.featuringType = featureWithValue.featuringType
     /// </summary>
     public partial interface IExpression : IStep
     {

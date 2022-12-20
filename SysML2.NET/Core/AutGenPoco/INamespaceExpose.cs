@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="IExpression.cs" company="RHEA System S.A.">
+// <copyright file="INamespaceExpose.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,30 +30,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An Expression is a Step that is typed by a Function. An Expression that also has a Function as its
-    /// featuringType is a computational step within that Function. An Expression always has a single result
-    /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
-    /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
-    /// as the results of other Expressions in the tree.isModelLevelEvaluable =
-    /// modelLevelEvaluable(Set(Element){})value.featuringType = featureWithValue.featuringType
+    /// A NamespaceExpose is an Expose relationship that exposes a;; the Memberships of a specific
+    /// importedNamespace and, if isRecursive = true, additional Memberships recursively.
     /// </summary>
-    public partial interface IExpression : IStep
+    public partial interface INamespaceExpose : INamespaceImport, IExpose
     {
-        /// <summary>
-        /// Queries the derived property Function
-        /// </summary>
-        Function QueryFunction();
-
-        /// <summary>
-        /// Queries the derived property IsModelLevelEvaluable
-        /// </summary>
-        bool QueryIsModelLevelEvaluable();
-
-        /// <summary>
-        /// Queries the derived property Result
-        /// </summary>
-        Feature QueryResult();
-
     }
 }
 

@@ -56,9 +56,9 @@ namespace SysML2.NET.Core.POCO
     /// = ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
     /// ownedFeatureChaining.chainingFeaturechainingFeatures->size() <> 1inverseFeature =
     /// invertingFeatureInverting.featureInverseinvertedFeature =
-    /// invertedFeatureInverting.featureInvertedownedTyping.type->exists(selectByKind(Class)) implies   
-    /// allSupertypes()->includes(resolve("Occurrences::occurrences"))ownedTyping.type->exists(selectByKind(DataType))
-    /// implies    allSupertypes()->includes(resolve("Base::dataValues"))
+    /// invertedFeatureInverting.featureInvertedownedTyping.type->exists(selectByKind(DataType)) implies   
+    /// allSupertypes()->includes(resolve("Base::dataValues"))ownedTyping.type->exists(selectByKind(Class))
+    /// implies    allSupertypes()->includes(resolve("Occurrences::occurrences"))
     /// </summary>
     public partial class Feature : IFeature
     {

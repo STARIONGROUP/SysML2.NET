@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="Import.cs" company="RHEA System S.A.">
+// <copyright file="NamespaceImport.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,20 +30,18 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An Import is an Relationship between its importOwningNamespace and either a Membership (for a
-    /// MembershipImport) or another Namespace (for a NamespaceImport), which determines a set of
-    /// Memberships that become importedMemberships of the importOwningNamespace. If isImportAll = false
-    /// (the default), then only public Memberships are considered &quot;visible&quot;. If isImportAll =
-    /// true, then all Memberships are considered &quot;visible&quot;, regardless of their declared
-    /// visibility. If isRecursive = true, then visible Memberships are also recursively imported from owned
-    /// sub-Namespaces.
+    /// A NamespaceImport is an Import that imports Memberships from its importedNamespace into the
+    /// importOwningNamespace. If  isRecursive = false, then only the visible Memberships of the
+    /// importOwningNamespace are imported. If  isRecursive = true, then, in addition, Memberships are
+    /// recursively imported from any ownedMembers of the importedNamespace that are
+    /// Namespaces.importedElement = importedNamespace
     /// </summary>
-    public abstract partial class Import : IImport
+    public partial class NamespaceImport : INamespaceImport
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Import"/> class.
+        /// Initializes a new instance of the <see cref="NamespaceImport"/> class.
         /// </summary>
-        protected Import()
+        public NamespaceImport()
         {
             this.AliasIds = new List<string>();
             this.IsImplied = false;
@@ -96,6 +94,10 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property ImportedElement not yet supported");
         }
+
+        /// <summary>
+        /// </summary>
+        public Namespace ImportedNamespace { get; set; }
 
         /// <summary>
         /// Queries the derived property ImportOwningNamespace

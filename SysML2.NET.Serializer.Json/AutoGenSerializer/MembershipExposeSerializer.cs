@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="ImportSerializer.cs" company="RHEA System S.A.">
+// <copyright file="MembershipExposeSerializer.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
 //
@@ -31,16 +31,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ImportSerializer"/> is to provide serialization
+    /// The purpose of the <see cref="MembershipExposeSerializer"/> is to provide serialization
     /// and deserialization capabilities
     /// </summary>
-    internal static class ImportSerializer
+    internal static class MembershipExposeSerializer
     {
         /// <summary>
-        /// Serializes an instance of <see cref="IImport"/> using an <see cref="Utf8JsonWriter"/>
+        /// Serializes an instance of <see cref="IMembershipExpose"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
         /// <param name="obj">
-        /// The <see cref="IImport"/> to serialize
+        /// The <see cref="IMembershipExpose"/> to serialize
         /// </param>
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
@@ -50,68 +50,65 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IImport iImport))
+            if (!(obj is IMembershipExpose iMembershipExpose))
             {
-                throw new ArgumentException("The object shall be an IImport", nameof(obj));
+                throw new ArgumentException("The object shall be an IMembershipExpose", nameof(obj));
             }
 
             writer.WriteStartObject();
 
             writer.WritePropertyName("@type");
-            writer.WriteStringValue("Import");
+            writer.WriteStringValue("MembershipExpose");
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(iImport.Id);
+            writer.WriteStringValue(iMembershipExpose.Id);
 
             writer.WriteStartArray("aliasIds");
-            foreach (var item in iImport.AliasIds)
+            foreach (var item in iMembershipExpose.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iImport.ElementId);
+            writer.WriteStringValue(iMembershipExpose.ElementId);
 
-            writer.WritePropertyName("importedMemberName");
-            writer.WriteStringValue(iImport.ImportedMemberName);
-
-            writer.WritePropertyName("importedNamespace");
-            writer.WriteStringValue(iImport.ImportedNamespace);
+            writer.WritePropertyName("importedMembership");
+            writer.WriteStringValue(iMembershipExpose.ImportedMembership);
 
             writer.WritePropertyName("isImplied");
-            writer.WriteBooleanValue(iImport.IsImplied);
+            writer.WriteBooleanValue(iMembershipExpose.IsImplied);
 
             writer.WritePropertyName("isImpliedIncluded");
-            writer.WriteBooleanValue(iImport.IsImpliedIncluded);
+            writer.WriteBooleanValue(iMembershipExpose.IsImpliedIncluded);
 
             writer.WritePropertyName("isImportAll");
-            writer.WriteBooleanValue(iImport.IsImportAll);
+            writer.WriteBooleanValue(iMembershipExpose.IsImportAll);
 
             writer.WritePropertyName("isRecursive");
-            writer.WriteBooleanValue(iImport.IsRecursive);
+            writer.WriteBooleanValue(iMembershipExpose.IsRecursive);
 
             writer.WritePropertyName("name");
-            writer.WriteStringValue(iImport.Name);
+            writer.WriteStringValue(iMembershipExpose.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iImport.OwnedRelatedElement)
+            foreach (var item in iMembershipExpose.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iImport.OwnedRelationship)
+            foreach (var item in iMembershipExpose.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement");
-            if (iImport.OwningRelatedElement.HasValue)
+            if (iMembershipExpose.OwningRelatedElement.HasValue)
             {
-                writer.WriteStringValue(iImport.OwningRelatedElement.Value);
+                writer.WriteStringValue(iMembershipExpose.OwningRelatedElement.Value);
             }
             else
             {
@@ -119,9 +116,9 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WritePropertyName("owningRelationship");
-            if (iImport.OwningRelationship.HasValue)
+            if (iMembershipExpose.OwningRelationship.HasValue)
             {
-                writer.WriteStringValue(iImport.OwningRelationship.Value);
+                writer.WriteStringValue(iMembershipExpose.OwningRelationship.Value);
             }
             else
             {
@@ -129,24 +126,24 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iImport.ShortName);
+            writer.WriteStringValue(iMembershipExpose.ShortName);
 
             writer.WriteStartArray("source");
-            foreach (var item in iImport.Source)
+            foreach (var item in iMembershipExpose.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target");
-            foreach (var item in iImport.Target)
+            foreach (var item in iMembershipExpose.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iImport.Visibility.ToString().ToLower());
+            writer.WriteStringValue(iMembershipExpose.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();
         }

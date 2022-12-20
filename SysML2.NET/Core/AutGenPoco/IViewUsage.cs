@@ -33,14 +33,16 @@ namespace SysML2.NET.Core.POCO
     /// A ViewUsage is a usage of a ViewDefinition to specify the generation of a view of the members of a
     /// collection of exposedNamespaces. The ViewDefinition can satisfy more viewpoints than its definition,
     /// and it can specialize the rendering specified by its definition.A ViewUsage must subset, directly or
-    /// indirectly, the base ViewUsage views from the Systems model library.
+    /// indirectly, the base ViewUsage views from the Systems model library.exposedElement =
+    /// ownedImport->selectByKind(Expose).    importedMemberships(Set{}).memberElement->    select(elm |
+    /// includeAsExposed(elm))->    asOrderedSet()
     /// </summary>
     public partial interface IViewUsage : IPartUsage
     {
         /// <summary>
-        /// Queries the derived property ExposedNamespace
+        /// Queries the derived property ExposedElement
         /// </summary>
-        List<Namespace> QueryExposedNamespace();
+        List<Element> QueryExposedElement();
 
         /// <summary>
         /// Queries the derived property SatisfiedViewpoint
@@ -56,11 +58,6 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property ViewDefinition
         /// </summary>
         ViewDefinition QueryViewDefinition();
-
-        /// <summary>
-        /// Queries the derived property ViewedElement
-        /// </summary>
-        List<Element> QueryViewedElement();
 
         /// <summary>
         /// Queries the derived property ViewRendering

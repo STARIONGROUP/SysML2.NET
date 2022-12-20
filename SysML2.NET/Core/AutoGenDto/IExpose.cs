@@ -30,9 +30,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An Expose is an Import of a Namespace into a ViewUsage that provides a root for determining what
-    /// Elements are to be included in a view. Visibility is always ignored for an Expose (i.e., isImportAll
-    /// = true).isImportAll
+    /// An Expose is an Import of Memberships into a ViewUsage that provide the Elements to be included in a
+    /// view. Visibility is always ignored for an Expose (i.e., isImportAll = true).isImportAll
     /// </summary>
     public partial interface IExpose : IImport
     {

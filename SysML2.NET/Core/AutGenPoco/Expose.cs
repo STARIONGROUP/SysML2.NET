@@ -30,16 +30,15 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An Expose is an Import of a Namespace into a ViewUsage that provides a root for determining what
-    /// Elements are to be included in a view. Visibility is always ignored for an Expose (i.e., isImportAll
-    /// = true).isImportAll
+    /// An Expose is an Import of Memberships into a ViewUsage that provide the Elements to be included in a
+    /// view. Visibility is always ignored for an Expose (i.e., isImportAll = true).isImportAll
     /// </summary>
-    public partial class Expose : IExpose
+    public abstract partial class Expose : IExpose
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Expose"/> class.
         /// </summary>
-        public Expose()
+        protected Expose()
         {
             this.AliasIds = new List<string>();
             this.IsImplied = false;
@@ -86,14 +85,12 @@ namespace SysML2.NET.Core.POCO
         public string ElementId { get; set; }
 
         /// <summary>
-        /// The effectiveMemberName of the Membership of the importedNamspace to be imported. If not given, all
-        /// public Memberships of the importedNamespace are imported.
+        /// Queries the derived property ImportedElement
         /// </summary>
-        public string ImportedMemberName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Namespace ImportedNamespace { get; set; }
+        public Element QueryImportedElement()
+        {
+            throw new NotImplementedException("Derived property ImportedElement not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property ImportOwningNamespace
@@ -132,7 +129,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether to recursively import Memberships from visible, owned sub-namespaces.
+        /// Whether to recursively import Memberships from visible, owned sub-Namespaces.
         /// </summary>
         public bool IsRecursive { get; set; }
 

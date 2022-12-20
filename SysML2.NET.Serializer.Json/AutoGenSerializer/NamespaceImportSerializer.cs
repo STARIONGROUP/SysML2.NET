@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="ExposeSerializer.cs" company="RHEA System S.A.">
+// <copyright file="NamespaceImportSerializer.cs" company="RHEA System S.A.">
 //
 // Copyright 2022 RHEA System S.A.
 //
@@ -31,16 +31,16 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ExposeSerializer"/> is to provide serialization
+    /// The purpose of the <see cref="NamespaceImportSerializer"/> is to provide serialization
     /// and deserialization capabilities
     /// </summary>
-    internal static class ExposeSerializer
+    internal static class NamespaceImportSerializer
     {
         /// <summary>
-        /// Serializes an instance of <see cref="IExpose"/> using an <see cref="Utf8JsonWriter"/>
+        /// Serializes an instance of <see cref="INamespaceImport"/> using an <see cref="Utf8JsonWriter"/>
         /// </summary>
         /// <param name="obj">
-        /// The <see cref="IExpose"/> to serialize
+        /// The <see cref="INamespaceImport"/> to serialize
         /// </param>
         /// <param name="writer">
         /// The target <see cref="Utf8JsonWriter"/>
@@ -50,68 +50,65 @@ namespace SysML2.NET.Serializer.Json
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IExpose iExpose))
+            if (!(obj is INamespaceImport iNamespaceImport))
             {
-                throw new ArgumentException("The object shall be an IExpose", nameof(obj));
+                throw new ArgumentException("The object shall be an INamespaceImport", nameof(obj));
             }
 
             writer.WriteStartObject();
 
             writer.WritePropertyName("@type");
-            writer.WriteStringValue("Expose");
+            writer.WriteStringValue("NamespaceImport");
 
             writer.WritePropertyName("@id");
-            writer.WriteStringValue(iExpose.Id);
+            writer.WriteStringValue(iNamespaceImport.Id);
 
             writer.WriteStartArray("aliasIds");
-            foreach (var item in iExpose.AliasIds)
+            foreach (var item in iNamespaceImport.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("elementId");
-            writer.WriteStringValue(iExpose.ElementId);
-
-            writer.WritePropertyName("importedMemberName");
-            writer.WriteStringValue(iExpose.ImportedMemberName);
+            writer.WriteStringValue(iNamespaceImport.ElementId);
 
             writer.WritePropertyName("importedNamespace");
-            writer.WriteStringValue(iExpose.ImportedNamespace);
+            writer.WriteStringValue(iNamespaceImport.ImportedNamespace);
 
             writer.WritePropertyName("isImplied");
-            writer.WriteBooleanValue(iExpose.IsImplied);
+            writer.WriteBooleanValue(iNamespaceImport.IsImplied);
 
             writer.WritePropertyName("isImpliedIncluded");
-            writer.WriteBooleanValue(iExpose.IsImpliedIncluded);
+            writer.WriteBooleanValue(iNamespaceImport.IsImpliedIncluded);
 
             writer.WritePropertyName("isImportAll");
-            writer.WriteBooleanValue(iExpose.IsImportAll);
+            writer.WriteBooleanValue(iNamespaceImport.IsImportAll);
 
             writer.WritePropertyName("isRecursive");
-            writer.WriteBooleanValue(iExpose.IsRecursive);
+            writer.WriteBooleanValue(iNamespaceImport.IsRecursive);
 
             writer.WritePropertyName("name");
-            writer.WriteStringValue(iExpose.Name);
+            writer.WriteStringValue(iNamespaceImport.Name);
 
             writer.WriteStartArray("ownedRelatedElement");
-            foreach (var item in iExpose.OwnedRelatedElement)
+            foreach (var item in iNamespaceImport.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship");
-            foreach (var item in iExpose.OwnedRelationship)
+            foreach (var item in iNamespaceImport.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement");
-            if (iExpose.OwningRelatedElement.HasValue)
+            if (iNamespaceImport.OwningRelatedElement.HasValue)
             {
-                writer.WriteStringValue(iExpose.OwningRelatedElement.Value);
+                writer.WriteStringValue(iNamespaceImport.OwningRelatedElement.Value);
             }
             else
             {
@@ -119,9 +116,9 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WritePropertyName("owningRelationship");
-            if (iExpose.OwningRelationship.HasValue)
+            if (iNamespaceImport.OwningRelationship.HasValue)
             {
-                writer.WriteStringValue(iExpose.OwningRelationship.Value);
+                writer.WriteStringValue(iNamespaceImport.OwningRelationship.Value);
             }
             else
             {
@@ -129,24 +126,24 @@ namespace SysML2.NET.Serializer.Json
             }
 
             writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iExpose.ShortName);
+            writer.WriteStringValue(iNamespaceImport.ShortName);
 
             writer.WriteStartArray("source");
-            foreach (var item in iExpose.Source)
+            foreach (var item in iNamespaceImport.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target");
-            foreach (var item in iExpose.Target)
+            foreach (var item in iNamespaceImport.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("visibility");
-            writer.WriteStringValue(iExpose.Visibility.ToString().ToLower());
+            writer.WriteStringValue(iNamespaceImport.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();
         }

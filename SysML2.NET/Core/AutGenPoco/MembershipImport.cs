@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// <copyright file="Import.cs" company="RHEA System S.A.">
+// <copyright file="MembershipImport.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022 RHEA System S.A.
 //
@@ -30,20 +30,17 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An Import is an Relationship between its importOwningNamespace and either a Membership (for a
-    /// MembershipImport) or another Namespace (for a NamespaceImport), which determines a set of
-    /// Memberships that become importedMemberships of the importOwningNamespace. If isImportAll = false
-    /// (the default), then only public Memberships are considered &quot;visible&quot;. If isImportAll =
-    /// true, then all Memberships are considered &quot;visible&quot;, regardless of their declared
-    /// visibility. If isRecursive = true, then visible Memberships are also recursively imported from owned
-    /// sub-Namespaces.
+    /// A MembershipImport is an Import that imports its importedMembership into the importOwningNamespace.
+    /// If isRecursive = true and the memberElement of the importedMembership is a Namespace, then the
+    /// equivalent of a recursive NamespaceImport is also performed on that Namespace.importedElement =
+    /// importedMembership.memberElement
     /// </summary>
-    public abstract partial class Import : IImport
+    public partial class MembershipImport : IMembershipImport
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Import"/> class.
+        /// Initializes a new instance of the <see cref="MembershipImport"/> class.
         /// </summary>
-        protected Import()
+        public MembershipImport()
         {
             this.AliasIds = new List<string>();
             this.IsImplied = false;
@@ -96,6 +93,10 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property ImportedElement not yet supported");
         }
+
+        /// <summary>
+        /// </summary>
+        public Membership ImportedMembership { get; set; }
 
         /// <summary>
         /// Queries the derived property ImportOwningNamespace

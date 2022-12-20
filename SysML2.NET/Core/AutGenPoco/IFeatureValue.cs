@@ -39,9 +39,9 @@ namespace SysML2.NET.Core.POCO
     /// BindingConnector is restricted to its startShot.If isDefault = false, then the above semantics of
     /// the FeatureValue are realized for the given featureWithValue. Otherwise, the semantics are realized
     /// for any individual of the featuringType of the featureWithValue, unless another value is explicitly
-    /// given for the featureWithValue for that individual.value.featuringType =
-    /// featureWithValue.featuringTypefeatureWithValue.ownedMember->    selectByKind(BindingConnector)->   
-    /// exists(valueConnector |        valueConnector.relatedFeature->includes(featureWithValue) and       
+    /// given for the featureWithValue for that individual.featureWithValue.ownedMember->   
+    /// selectByKind(BindingConnector)->    exists(valueConnector |       
+    /// valueConnector.relatedFeature->includes(featureWithValue) and       
     /// valueConnector.relatedFeature->includes(value.result) and        valueConnector.featuringType =
     /// featureWithValue.featuringType)
     /// </summary>
