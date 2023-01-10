@@ -101,7 +101,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             var stream = new MemoryStream();
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
-            Assert.That(() => this.serializer.Serialize(partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing); ;
+            Assert.That(() => this.serializer.Serialize(partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
