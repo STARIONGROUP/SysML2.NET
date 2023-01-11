@@ -93,7 +93,7 @@ namespace SysML2.NET.Serializer.Json.API
             }
             else
             {
-                logger.LogDebug($"the timestamp Json property was not found in the Tag: {dtoInstance.Id}");
+                logger.LogDebug($"the timestamp Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("description", out JsonElement descriptionProperty))
@@ -111,18 +111,25 @@ namespace SysML2.NET.Serializer.Json.API
 
             if (jsonElement.TryGetProperty("head", out JsonElement headProperty))
             {
-                if (headProperty.TryGetProperty("@id", out JsonElement headIdProperty))
+                if (headProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = headIdProperty.GetString();
-                    if (propertyValue != null)
+                    logger.LogWarning($"the head Json property was null which should not be allowed: Branch {dtoInstance.Id}");
+                }
+                else
+                {
+                    if (headProperty.TryGetProperty("@id", out JsonElement headIdProperty))
                     {
-                        dtoInstance.Head = Guid.Parse(propertyValue);
+                        var propertyValue = headIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Head = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
             else
             {
-                logger.LogDebug($"the referencedCommit Json property was not found in the Tag: {dtoInstance.Id}");
+                logger.LogDebug($"the referencedCommit Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
@@ -163,18 +170,25 @@ namespace SysML2.NET.Serializer.Json.API
 
             if (jsonElement.TryGetProperty("referencedCommit", out JsonElement referencedCommitProperty))
             {
-                if (referencedCommitProperty.TryGetProperty("@id", out JsonElement referencedCommitIdProperty))
+                if (referencedCommitProperty.ValueKind == JsonValueKind.Null)
                 {
-                    var propertyValue = referencedCommitIdProperty.GetString();
-                    if (propertyValue != null)
+                    logger.LogWarning($"the referencedCommit Json property was null which should not be allowed: Branch {dtoInstance.Id}");
+                }
+                else
+                {
+                    if (referencedCommitProperty.TryGetProperty("@id", out JsonElement referencedCommitIdProperty))
                     {
-                        dtoInstance.ReferencedCommit = Guid.Parse(propertyValue);
+                        var propertyValue = referencedCommitIdProperty.GetString();
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ReferencedCommit = Guid.Parse(propertyValue);
+                        }
                     }
                 }
             }
             else
             {
-                logger.LogDebug($"the referencedCommit Json property was not found in the Tag: {dtoInstance.Id}");
+                logger.LogDebug($"the referencedCommit Json property was not found in the Branch: {dtoInstance.Id}");
             }
             
             if (jsonElement.TryGetProperty("timestamp", out JsonElement timestampProperty))

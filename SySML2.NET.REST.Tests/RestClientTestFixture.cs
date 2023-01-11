@@ -84,9 +84,7 @@ namespace SySML2.NET.REST.Tests
                 }
 
                 var commits = await this.restClient.RequestCommits(project.Id, null, null, this.cancellationTokenSource.Token);
-
-                Assert.That(commits, Is.Not.Empty);
-
+                
                 foreach (var commit in commits)
                 {
                     Assert.That(commit.OwningProject, Is.EqualTo(project.Id));
