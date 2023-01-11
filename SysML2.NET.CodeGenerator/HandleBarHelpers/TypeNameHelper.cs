@@ -21,9 +21,9 @@
 namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 {
     using System;
-    using System.Collections.Generic;
 
     using ECoreNetto;
+    using ECoreNetto.Extensions;
 
     using HandlebarsDotNet;
 

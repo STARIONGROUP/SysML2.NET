@@ -25,6 +25,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
     using System.Linq;
 
     using ECoreNetto;
+    using ECoreNetto.Extensions;
 
     using HtmlAgilityPack;
 
@@ -77,26 +78,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             return typeName;
         }
-
-        /// <summary>
-        /// Queries whether the type of the <see cref="EStructuralFeature"/> is an <see cref="EEnum"/>
-        /// </summary>
-        /// <param name="eStructuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// true of the type is a <see cref="EEnum"/>, false if not
-        /// </returns>
-        public static bool QueryIsEnum(this EStructuralFeature eStructuralFeature)
-        {
-            if (eStructuralFeature is EAttribute eAttribute)
-            {
-                return eAttribute.EType is EEnum;
-            }
         
-            return false;
-        }
-
         /// <summary>
         /// Queries whether the <see cref="EStructuralFeature"/> Type maps to a C# bool
         /// </summary>
@@ -159,21 +141,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             return namedElements.OrderBy(x => x.Name).ToList();
         }
-
-        /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature"/> is Enumerable
-        /// </summary>
-        /// <param name="eStructuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// true if <see cref="EStructuralFeature.UpperBound"/> = -1 or > 1, false if not
-        /// </returns>
-        public static bool QueryIsEnumerable(this EStructuralFeature eStructuralFeature)
-        {
-            return eStructuralFeature.UpperBound is -1 or > 1;
-        }
-
+        
         /// <summary>
         /// Queries whether the <see cref="EStructuralFeature"/> is nullable
         /// </summary>
@@ -211,78 +179,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             return eStructuralFeature.LowerBound == 1 && eStructuralFeature.UpperBound == 1;
         }
-
-        /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature"/> is an <see cref="EAttribute"/> or not
-        /// </summary>
-        /// <param name="structuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// true when the <paramref name="structuralFeature"/> is an instance of <see cref="EAttribute"/>, false if not.
-        /// </returns>
-        public static bool QueryIsAttribute(this EStructuralFeature structuralFeature)
-        {
-            if (structuralFeature is EAttribute)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature"/> is an <see cref="EReference"/> or not
-        /// </summary>
-        /// <param name="structuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// true when the <paramref name="structuralFeature"/> is an instance of <see cref="EReference"/>, false if not.
-        /// </returns>
-        public static bool QueryIsReference(this EStructuralFeature structuralFeature)
-        {
-            if (structuralFeature is EReference)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature.Name"/> is equal to the name of the containing <see cref="EClass"/>
-        /// </summary>
-        /// <param name="structuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// true when the <paramref name="structuralFeature"/> name equals the name of the containing <see cref="EClass"/>, false if not.
-        /// </returns>
-        public static bool QueryStructuralFeatureNameEqualsEnclosingType(this EStructuralFeature structuralFeature, EClass @class)
-        {
-            if (structuralFeature.Name.ToLower() == @class.Name.ToLower())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature"/> is has a default value
-        /// </summary>
-        /// <param name="eStructuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// true when the <see cref="EStructuralFeature.DefaultValueLiteral"/> contains a value
-        /// </returns>
-        public static bool QueryHasDefaultValue(this EStructuralFeature eStructuralFeature)
-        {
-            return !string.IsNullOrEmpty(eStructuralFeature.DefaultValueLiteral);
-        }
-
+        
         /// <summary>
         /// Queries whether the <see cref="EStructuralFeature"/> is has a default value
         /// </summary>
@@ -385,39 +282,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
             }
 
             return document.DocumentNode.InnerHtml;
-        }
-
-        /// <summary>
-        /// splits a string into multiple lines
-        /// </summary>
-        /// <param name="input">
-        /// the subject input string
-        /// </param>
-        /// <param name="maximumLineLength">
-        /// the maximum length of a line
-        /// </param>
-        /// <returns>
-        /// an <see cref="IEnumerable{string}"/>
-        /// </returns>
-        public static IEnumerable<string> SplitToLines(this string input, int maximumLineLength)
-        {
-            var words = input.Split(' ');
-            var line = words.First();
-            foreach (var word in words.Skip(1))
-            {
-                var test = $"{line} {word}";
-                if (test.Length > maximumLineLength)
-                {
-                    yield return line;
-                    line = word;
-                }
-                else
-                {
-                    line = test;
-                }
-            }
-
-            yield return line.Trim();
         }
     }
 }

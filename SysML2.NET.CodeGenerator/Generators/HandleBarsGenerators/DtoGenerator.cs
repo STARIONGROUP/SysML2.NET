@@ -91,9 +91,12 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterHelpers()
         {
+            ECoreNetto.HandleBars.StringHelper.RegisterStringHelper(this.Handlebars);
+            ECoreNetto.HandleBars.StructuralFeatureHelper.RegisterStructuralFeatureHelper(this.Handlebars);
+            ECoreNetto.HandleBars.GeneralizationHelper.RegisterGeneralizationHelper(this.Handlebars);
+
             this.Handlebars.RegisteredDocumentationHelper();
             this.Handlebars.RegisterTypeNameHelper();
-            this.Handlebars.RegisterGeneralizationHelper();
             this.Handlebars.RegisterStructuralFeatureHelper();
         }
 
