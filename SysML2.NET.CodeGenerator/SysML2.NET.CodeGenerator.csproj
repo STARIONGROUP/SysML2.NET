@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
 	  <Version>0.1.0</Version>
 	  <Description>A Library to generate SysML v2 code.</Description>
 	  <PackageId>SysML2.NET</PackageId>
