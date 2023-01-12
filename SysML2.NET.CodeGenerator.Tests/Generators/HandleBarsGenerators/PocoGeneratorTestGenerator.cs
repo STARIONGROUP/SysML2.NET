@@ -21,6 +21,7 @@
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
     using System.IO;
+    using System.Threading.Tasks;
 
     using ECoreNetto;
 
@@ -62,6 +63,26 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             Assert.That(async () => await this.pocoGenerator.GenerateClasses(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
+        }
+
+        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses))]
+        public async Task Verify_that_expected_poco_classes_are_generated_correctly(string className)
+        {
+            var generatedCode = await this.pocoGenerator.GenerateClass(rootPackage, dtoDirectoryInfo, className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutGenPoco/{className}.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
+        }
+
+        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses))]
+        public async Task Verify_that_expected_poco_interfaces_are_generated_correctly(string className)
+        {
+            var generatedCode = await this.pocoGenerator.GenerateInterface(rootPackage, dtoDirectoryInfo, className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutGenPoco/I{className}.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DtoGeneratorTestGenerator.cs" company="RHEA System S.A.">
 // 
-//   Copyright 2022 RHEA System S.A.
+//   Copyright 2022-2023 RHEA System S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
     using System.IO;
+    using System.Threading.Tasks;
 
     using ECoreNetto;
 
@@ -61,6 +62,26 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             Assert.That(async () => await dtoGenerator.GenerateClasses(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
+        }
+
+        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses))]
+        public async Task Verify_that_expected_dto_classes_are_generated_correctly(string className)
+        {
+            var generatedCode = await this.dtoGenerator.GenerateClass(rootPackage, dtoDirectoryInfo, className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDto/{className}.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
+        }
+
+        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses))]
+        public async Task Verify_that_expected_dto_interfaces_are_generated_correctly(string className)
+        {
+            var generatedCode = await this.dtoGenerator.GenerateInterface(rootPackage, dtoDirectoryInfo, className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDto/I{className}.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
         }
     }
 }

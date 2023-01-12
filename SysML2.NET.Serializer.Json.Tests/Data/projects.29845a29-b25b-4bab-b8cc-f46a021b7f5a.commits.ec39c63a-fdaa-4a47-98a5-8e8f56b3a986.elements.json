@@ -6761,57 +6761,6 @@
 		"visibility": "PUBLIC"
 	},
 	{
-		"@type": "Import",
-		"@id": "1c0a28c3-7aee-4540-a82b-07b503f7f307",
-		"aliasIds": [],
-		"documentation": [],
-		"effectiveName": null,
-		"elementId": "1c0a28c3-7aee-4540-a82b-07b503f7f307",
-		"importOwningNamespace": {
-			"@id": "aedf8577-00c0-4ddb-a5bb-5e1fb4f64ab4"
-		},
-		"importedMemberName": null,
-		"importedNamespace": {
-			"@id": "2089fa45-3126-4be9-b613-111ed29dec66"
-		},
-		"isImportAll": false,
-		"isRecursive": false,
-		"name": null,
-		"ownedAnnotation": [],
-		"ownedElement": [],
-		"ownedRelatedElement": [],
-		"ownedRelationship": [],
-		"owner": null,
-		"owningMembership": null,
-		"owningNamespace": null,
-		"owningRelatedElement": {
-			"@id": "aedf8577-00c0-4ddb-a5bb-5e1fb4f64ab4"
-		},
-		"owningRelationship": null,
-		"qualifiedName": null,
-		"relatedElement": [
-			{
-				"@id": "aedf8577-00c0-4ddb-a5bb-5e1fb4f64ab4"
-			},
-			{
-				"@id": "2089fa45-3126-4be9-b613-111ed29dec66"
-			}
-		],
-		"shortName": null,
-		"source": [
-			{
-				"@id": "aedf8577-00c0-4ddb-a5bb-5e1fb4f64ab4"
-			}
-		],
-		"target": [
-			{
-				"@id": "2089fa45-3126-4be9-b613-111ed29dec66"
-			}
-		],
-		"textualRepresentation": [],
-		"visibility": "PUBLIC"
-	},
-	{
 		"@type": "FeatureReferenceExpression",
 		"@id": "1c280a89-e399-4fba-beea-5fd9558c5552",
 		"aliasIds": [],

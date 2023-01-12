@@ -83,6 +83,35 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         }
 
         /// <summary>
+        /// Generates POCO interfaces
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo"/>
+        /// </param>
+        /// <returns>
+        /// an awaitable task
+        /// </returns>
+        public async Task<string> GenerateInterface(EPackage package, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates["poco-interface-template"];
+
+            var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
+            
+            var generatedInterface = template(eClass);
+
+            generatedInterface = CodeCleanup(generatedInterface);
+
+            var fileName = $"I{eClass.Name.CapitalizeFirstLetter()}.cs";
+
+            await Write(generatedInterface, outputDirectory, fileName);
+            
+            return generatedInterface;
+        }
+
+        /// <summary>
         /// Generates POCO classes
         /// </summary>
         /// <param name="package">
@@ -108,6 +137,35 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
                 await Write(generatedCode, outputDirectory, fileName);
             }
+        }
+
+        /// <summary>
+        /// Generates a named POCO class
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo"/>
+        /// </param>
+        /// <returns>
+        /// an awaitable task
+        /// </returns>
+        public async Task<string> GenerateClass(EPackage package, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates["poco-class-template"];
+
+            var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
+            
+            var generatedCode = template(eClass);
+
+            generatedCode = CodeCleanup(generatedCode);
+
+            var fileName = $"{eClass.Name.CapitalizeFirstLetter()}.cs";
+
+            await Write(generatedCode, outputDirectory, fileName);
+            
+            return generatedCode;
         }
 
         /// <summary>

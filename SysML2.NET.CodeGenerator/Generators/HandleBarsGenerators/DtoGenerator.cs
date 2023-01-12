@@ -70,20 +70,54 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
             }
         }
 
+        public async Task<string> GenerateInterface(EPackage package, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates["dto-interface-template"];
+
+            var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
+            
+            var generatedInterface = template(eClass);
+
+            generatedInterface = CodeCleanup(generatedInterface);
+
+            var fileName = $"I{eClass.Name.CapitalizeFirstLetter()}.cs";
+
+            await Write(generatedInterface, outputDirectory, fileName);
+            
+            return generatedInterface;
+        }
+
         public async Task GenerateClasses(EPackage package, DirectoryInfo outputDirectory)
         {
             var template = this.Templates["dto-class-template"];
 
             foreach (var eClass in package.EClassifiers.OfType<EClass>())
             {
-                var generatedInterface = template(eClass);
+                var generatedClass = template(eClass);
 
-                generatedInterface = CodeCleanup(generatedInterface);
+                generatedClass = CodeCleanup(generatedClass);
 
                 var fileName = $"{eClass.Name.CapitalizeFirstLetter()}.cs";
 
-                await Write(generatedInterface, outputDirectory, fileName);
+                await Write(generatedClass, outputDirectory, fileName);
             }
+        }
+
+        public async Task<string> GenerateClass(EPackage package, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates["dto-class-template"];
+
+            var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
+            
+            var generatedClass = template(eClass);
+
+            generatedClass = CodeCleanup(generatedClass);
+
+            var fileName = $"{eClass.Name.CapitalizeFirstLetter()}.cs";
+
+            await Write(generatedClass, outputDirectory, fileName);
+
+            return generatedClass;
         }
 
         /// <summary>

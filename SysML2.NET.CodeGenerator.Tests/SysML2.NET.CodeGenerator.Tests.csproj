@@ -16,15 +16,76 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Expected\AutGenPoco\AnnotatingElement.cs" />
+	  <Compile Remove="Expected\AutGenPoco\Annotation.cs" />
+	  <Compile Remove="Expected\AutGenPoco\Comment.cs" />
+	  <Compile Remove="Expected\AutGenPoco\Connector.cs" />
+	  <Compile Remove="Expected\AutGenPoco\Dependency.cs" />
+	  <Compile Remove="Expected\AutGenPoco\Element.cs" />
+	  <Compile Remove="Expected\AutGenPoco\Feature.cs" />
+	  <Compile Remove="Expected\AutGenPoco\IAnnotatingElement.cs" />
+	  <Compile Remove="Expected\AutGenPoco\IAnnotation.cs" />
+	  <Compile Remove="Expected\AutGenPoco\IComment.cs" />
+	  <Compile Remove="Expected\AutGenPoco\IConnector.cs" />
+	  <Compile Remove="Expected\AutGenPoco\IDependency.cs" />
+	  <Compile Remove="Expected\AutGenPoco\IElement.cs" />
+	  <Compile Remove="Expected\AutGenPoco\IFeature.cs" />
+	  <Compile Remove="Expected\AutGenPoco\IImport.cs" />
+	  <Compile Remove="Expected\AutGenPoco\ILiteralInteger.cs" />
+	  <Compile Remove="Expected\AutGenPoco\ILiteralRational.cs" />
+	  <Compile Remove="Expected\AutGenPoco\LiteralInteger.cs" />
+	  <Compile Remove="Expected\AutGenPoco\LiteralRational.cs" />
+	  <Compile Remove="Expected\AutGenPoco\NamespaceImport.cs" />
 	  <Compile Remove="Expected\AutoGenDeSerializer\FeatureDirectionKindDeserializer.cs" />
 	  <Compile Remove="Expected\AutoGenDeSerializer\PartDefinitionDeSerializer.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\AnnotatingElementDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\AnnotationDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\CommentDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\ConnectorDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\DependencyDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\ElementDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\FeatureDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\ItemFlowDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\LiteralIntegerDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\LiteralRationalDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\MultiplicityRangeDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryReader\NamespaceImportDictionaryReader.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\AcceptActionUsageWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\AnnotatingElementDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\AnnotationDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\CommentDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\ConnectorDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\DependencyDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\ElementDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\FeatureDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\ItemFlowDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\LiteralIntegerDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\LiteralRationalDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\MultiplicityRangeDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDictionaryWriter\NamespaceImportDictionaryWriter.cs" />
+	  <Compile Remove="Expected\AutoGenDto\AnnotatingElement.cs" />
+	  <Compile Remove="Expected\AutoGenDto\Annotation.cs" />
+	  <Compile Remove="Expected\AutoGenDto\Comment.cs" />
+	  <Compile Remove="Expected\AutoGenDto\Connector.cs" />
+	  <Compile Remove="Expected\AutoGenDto\Dependency.cs" />
+	  <Compile Remove="Expected\AutoGenDto\Element.cs" />
+	  <Compile Remove="Expected\AutoGenDto\Feature.cs" />
+	  <Compile Remove="Expected\AutoGenDto\IAnnotatingElement.cs" />
+	  <Compile Remove="Expected\AutoGenDto\IAnnotation.cs" />
+	  <Compile Remove="Expected\AutoGenDto\IComment.cs" />
+	  <Compile Remove="Expected\AutoGenDto\IConnector.cs" />
+	  <Compile Remove="Expected\AutoGenDto\IDependency.cs" />
+	  <Compile Remove="Expected\AutoGenDto\IElement.cs" />
+	  <Compile Remove="Expected\AutoGenDto\IFeature.cs" />
+	  <Compile Remove="Expected\AutoGenDto\IImport.cs" />
+	  <Compile Remove="Expected\AutoGenDto\ILiteralInteger.cs" />
+	  <Compile Remove="Expected\AutoGenDto\ILiteralRational.cs" />
+	  <Compile Remove="Expected\AutoGenDto\LiteralInteger.cs" />
+	  <Compile Remove="Expected\AutoGenDto\LiteralRational.cs" />
+	  <Compile Remove="Expected\AutoGenDto\NamespaceImport.cs" />
 	  <Compile Remove="Expected\AutoGenEnum\VisibilityKind.cs" />
 	  <Compile Remove="Expected\AutoGenSerializer\ElementSerializer.cs" />
 	  <Compile Remove="Expected\AutoGenSerializer\TriggerInvocationExpressionSerializer.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Generators\DtoGeneratorTestFixture.cs~RF3f3dd308.TMP" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -43,6 +104,195 @@
 	  <Content Include="Expected\AutoGenSerializer\TriggerInvocationExpressionSerializer.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Expected\AutGenPoco\AnnotatingElement.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\Annotation.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\Comment.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\Connector.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\Dependency.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\Element.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\Feature.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\IAnnotatingElement.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\IAnnotation.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\IComment.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\IConnector.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\IDependency.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\IElement.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\IFeature.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\IImport.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\ILiteralInteger.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\ILiteralRational.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\LiteralInteger.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\LiteralRational.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutGenPoco\NamespaceImport.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\AnnotatingElementDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\AnnotationDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\CommentDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\ConnectorDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\DependencyDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\ElementDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\FeatureDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\LiteralIntegerDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\LiteralRationalDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryReader\NamespaceImportDictionaryReader.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\AnnotatingElementDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\AnnotationDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\CommentDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\ConnectorDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\DependencyDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\ElementDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\FeatureDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\ItemFlowDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\LiteralIntegerDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\LiteralRationalDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\MultiplicityRangeDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDictionaryWriter\NamespaceImportDictionaryWriter.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\AnnotatingElement.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\Annotation.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\Comment.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\Connector.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\Dependency.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\Element.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\Feature.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\IAnnotatingElement.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\IAnnotation.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\IComment.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\IConnector.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\IDependency.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\IElement.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\IFeature.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\IImport.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\ILiteralInteger.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\ILiteralRational.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\LiteralInteger.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\LiteralRational.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenDto\NamespaceImport.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 	<ItemGroup>

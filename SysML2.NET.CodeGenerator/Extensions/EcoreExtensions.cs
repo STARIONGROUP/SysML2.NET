@@ -153,11 +153,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </returns>
         public static bool QueryIsNullable(this EStructuralFeature eStructuralFeature)
         {
-            if (eStructuralFeature.QueryTypeName() == "string")
-            {
-                return false;
-            }
-
             return eStructuralFeature.LowerBound == 0 && !eStructuralFeature.QueryIsEnumerable();
         }
 

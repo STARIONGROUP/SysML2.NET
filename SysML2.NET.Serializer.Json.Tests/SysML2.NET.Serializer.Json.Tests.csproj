@@ -4,8 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
 	  <Company>RHEA System S.A.</Company>
 	  <Authors>Sam Gerene</Authors>
-	  <Description>Nunit test suite for the SysML2.NET.Serializer</Description>
-	  <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+	  <Description>Nunit test suite for the SysML2.NET.Serializer.Json library</Description>
+	  <Copyright>Copyright 2022-2023 RHEA System S.A.</Copyright>
 	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	  <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
 	  <RepositoryType>Git</RepositoryType>

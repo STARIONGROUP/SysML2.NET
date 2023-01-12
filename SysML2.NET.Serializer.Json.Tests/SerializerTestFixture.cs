@@ -83,6 +83,9 @@ namespace SysML2.NET.Serializer.Json.Tests
         [Test]
         public void Verify_that_Element_can_be_serialized()
         {
+            
+            var jsonWriterOptions = new JsonWriterOptions { Indented = true };
+
             var partDefinition = new PartDefinition
             {
                 Id = Guid.NewGuid(),
@@ -96,14 +99,31 @@ namespace SysML2.NET.Serializer.Json.Tests
                 OwningRelationship = Guid.NewGuid(),
                 ShortName = "PartDefinition:ShortName"
             };
-
             
             var stream = new MemoryStream();
-            var jsonWriterOptions = new JsonWriterOptions { Indented = true };
-
             Assert.That(() => this.serializer.Serialize(partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
+            Console.WriteLine(json);
+
+            partDefinition = new PartDefinition
+            {
+                Id = Guid.NewGuid(),
+                IsIndividual = true,
+                IsVariation = false,
+                IsAbstract = false,
+                IsSufficient = false,
+                AliasIds = new List<string> (),
+                Name = null,
+                OwnedRelationship = new List<Guid> (),
+                OwningRelationship = Guid.NewGuid(),
+                ShortName = null
+            };
+
+            stream = new MemoryStream();
+            Assert.That(() => this.serializer.Serialize(partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
+
+            json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
         }
 

@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="ConjugatedPortTypingDeSerializer.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022 RHEA System S.A.
+//   Copyright 2022-2023 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -186,11 +186,7 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
             {
-                var propertyValue = nameProperty.GetString();
-                if (propertyValue != null)
-                {
-                    dtoInstance.Name = propertyValue;
-                }
+                dtoInstance.Name = nameProperty.GetString();
             }
             else
             {
@@ -283,11 +279,7 @@ namespace SysML2.NET.Serializer.Json
 
             if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
             {
-                var propertyValue = shortNameProperty.GetString();
-                if (propertyValue != null)
-                {
-                    dtoInstance.ShortName = propertyValue;
-                }
+                dtoInstance.ShortName = shortNameProperty.GetString();
             }
             else
             {

@@ -1,0 +1,72 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="DictionaryReaderProvider.cs" company="RHEA System S.A.">
+// 
+//   Copyright 2022-2023 RHEA System S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+// 
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.Dictionary
+{
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.Common;
+
+    /// <summary>
+    /// Delegate provider for the appropriate Read method to convert a Dictionary to
+    /// an instance of <see cref="IData"/>
+    /// </summary>
+    internal static class DictionaryReaderProvider
+    {
+        private static readonly Dictionary<string, Func<Dictionary<string, object>, DictionaryKind, IData>> DictionaryReaderFuncMap = new Dictionary<string, Func<Dictionary<string, object>, DictionaryKind, IData>>
+        {
+            {{#each this as | eClass |}}
+            { "{{ eClass.Name }}", {{ eClass.Name }}DictionaryReader.Read },
+            {{/each}}
+        };
+
+        /// <summary>
+        /// Provides the delegate <see cref="Func{Dictionary{String, Object}, DictionaryKind, IData}"/> for the
+        /// <see cref="System.Type"/> that is to be read
+        /// </summary>
+        /// <param name="typeName">
+        /// The subject <see cref="System.Type"/> that is to be read
+        /// </param>
+        /// <returns>
+        /// A Delegate of <see cref="Func{Dictionary{String, Object}, DictionaryKind, IData}"/>
+        /// </returns>
+        /// <exception cref="NotSupportedException">
+        /// Thrown when the <see cref="System.Type"/> is not supported.
+        /// </exception>
+        internal static Func<Dictionary<string, object>, DictionaryKind, IData> Provide(string typeName)
+        {
+            if (!DictionaryReaderFuncMap.TryGetValue(typeName, out var func))
+            {
+                throw new NotSupportedException($"The {typeName} is not supported by the DictionaryWriterProvider.");
+            }
+
+            return func;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

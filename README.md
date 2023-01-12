@@ -18,11 +18,12 @@ SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://gi
 
 The packages are available on Nuget at:
 
-project                    | Nuget
--------------------------- | ------------
-SysML2.NET                 | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET)](https://www.nuget.org/packages/SysML2.NET#readme-body-tab)
-SysML2.NET.Serializer.Json | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.Serializer.Json)](https://www.nuget.org/packages/SysML2.NET.Serializer.Json#readme-body-tab)
-SysML2.NET.REST            | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.REST)](https://www.nuget.org/packages/SysML2.NET.REST#readme-body-tab)
+project                          | Nuget
+-------------------------------- | ------------
+SysML2.NET                       | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET)](https://www.nuget.org/packages/SysML2.NET#readme-body-tab)
+SysML2.NET.Serializer.Json       | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.Serializer.Json)](https://www.nuget.org/packages/SysML2.NET.Serializer.Json#readme-body-tab)
+SysML2.NET.Serializer.Dictionary | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.Serializer.Dictionary)](https://www.nuget.org/packages/SysML2.NET.Serializer.Dictionary#readme-body-tab)
+SysML2.NET.REST                  | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.REST)](https://www.nuget.org/packages/SysML2.NET.REST#readme-body-tab)
 
 The reference web-application is available on [docker-hub](https://hub.docker.com/r/rheagroup/sysml2.net.viewer). A demo-version is hosted at http://viewer.sysml2.net.
 

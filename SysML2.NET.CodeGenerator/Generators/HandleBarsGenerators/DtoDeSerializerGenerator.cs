@@ -18,8 +18,6 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-
-
 namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
     using System.Linq;

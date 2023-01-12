@@ -54,7 +54,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE);
 
-                Assert.That(data.Count(), Is.EqualTo(100));
+                Assert.That(data.Count(), Is.EqualTo(99));
 
                 Assert.That(data.OfType<IPartDefinition>().Count(), Is.EqualTo(4));
 
@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.Json.Tests
 
                 var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, cts.Token);
 
-                Assert.That(data.Count(), Is.EqualTo(100));
+                Assert.That(data.Count(), Is.EqualTo(99));
 
                 Assert.That(data.OfType<IPartDefinition>().Count(), Is.EqualTo(4));
 
