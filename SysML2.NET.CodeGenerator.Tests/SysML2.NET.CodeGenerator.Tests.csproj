@@ -66,4 +66,8 @@
 	  <ProjectReference Include="..\SysML2.NET.CodeGenerator\SysML2.NET.CodeGenerator.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Inspector\" />
+	</ItemGroup>
+
 </Project>
