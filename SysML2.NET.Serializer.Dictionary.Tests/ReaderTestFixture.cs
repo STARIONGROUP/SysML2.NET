@@ -170,7 +170,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "annotatedElement", Guid.Parse("bb66c812-3408-4166-99d9-402b798093e1")},
                 { "annotatingElement", Guid.Parse("e6d3d799-fd33-49d1-a1c9-ceae0548de18")},
                 { "elementId", "element id" },
-                { "isImpliedIncluded", true },
+                { "isImplied", true },
                 { "isImpliedIncluded", true},
                 { "name", "the name" },
                 { "ownedRelatedElement", new List<Guid> { Guid.Parse("c18450a9-fd96-4dd6-83c4-de5e6e1bd2f7") } },
@@ -182,7 +182,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "target", new List<Guid> { Guid.Parse("38c03271-5de8-4947-93db-20993d7a9dc2") }}
             };
 
-            var annotatingElement = reader.Read(this.dictionary, DictionaryKind.Complex) as IAnnotatingElement;
+            var annotatingElement = reader.Read(this.dictionary, DictionaryKind.Complex) as IAnnotation;
 
             Assert.That(annotatingElement.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
@@ -203,7 +203,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "annotatedElement", Guid.Parse("bb66c812-3408-4166-99d9-402b798093e1")},
                 { "annotatingElement", Guid.Parse("e6d3d799-fd33-49d1-a1c9-ceae0548de18")},
                 { "elementId", "element id" },
-                { "isImpliedIncluded", true },
+                { "isImplied", true },
                 { "isImpliedIncluded", true},
                 { "name", null },
                 { "ownedRelatedElement", new List<Guid> () },
@@ -215,7 +215,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "target", new List<Guid> ()}
             };
 
-            annotatingElement = reader.Read(this.dictionary, DictionaryKind.Complex) as IAnnotatingElement;
+            annotatingElement = reader.Read(this.dictionary, DictionaryKind.Complex) as IAnnotation;
 
             Assert.That(annotatingElement.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string>()));
@@ -236,7 +236,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "annotatedElement", "bb66c812-3408-4166-99d9-402b798093e1"},
                 { "annotatingElement", "e6d3d799-fd33-49d1-a1c9-ceae0548de18"},
                 { "elementId", "element id" },
-                { "isImpliedIncluded", true },
+                { "isImplied", true },
                 { "isImpliedIncluded", true},
                 { "name", "the name" },
                 { "ownedRelatedElement", new List<string> { "c18450a9-fd96-4dd6-83c4-de5e6e1bd2f7" } },
@@ -248,7 +248,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "target", new List<string> { "38c03271-5de8-4947-93db-20993d7a9dc2" }}
             };
 
-            annotatingElement = reader.Read(this.dictionary, DictionaryKind.Simplified) as IAnnotatingElement;
+            annotatingElement = reader.Read(this.dictionary, DictionaryKind.Simplified) as IAnnotation;
 
             Assert.That(annotatingElement.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
@@ -265,23 +265,23 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             {
                 { "@type", "Annotation" },
                 { "@id", "0b192c18-afa2-44b6-8de2-86e5e6ffa09e" },
-                { "aliasIds", new List<string> { "alias_1", "alias_2" } },
+                { "aliasIds", new List<string> () },
                 { "annotatedElement", "bb66c812-3408-4166-99d9-402b798093e1"},
                 { "annotatingElement", "e6d3d799-fd33-49d1-a1c9-ceae0548de18"},
                 { "elementId", "element id" },
-                { "isImpliedIncluded", true },
+                { "isImplied", true },
                 { "isImpliedIncluded", true},
-                { "name", "the name" },
-                { "ownedRelatedElement", new List<string> { "c18450a9-fd96-4dd6-83c4-de5e6e1bd2f7" } },
-                { "ownedRelationship", new List<string> { "9006ff06-43fe-4a4e-a4bc-402e82f84dde" } },
-                { "owningRelatedElement", "df9670d5-36a7-4128-aa96-928432a80e42" },
-                { "owningRelationship", "fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9" },
-                { "shortName", "the shortName" },
-                { "source", new List<string> { "8ba10c06-4c00-4748-ae60-a724ef773e29" }},
-                { "target", new List<string> { "38c03271-5de8-4947-93db-20993d7a9dc2" }}
+                { "name", null },
+                { "ownedRelatedElement", new List<string> () },
+                { "ownedRelationship", new List<string> () },
+                { "owningRelatedElement", null},
+                { "owningRelationship", null },
+                { "shortName", null },
+                { "source", new List<string> ()},
+                { "target", new List<string> ()}
             };
 
-            annotatingElement = reader.Read(this.dictionary, DictionaryKind.Simplified) as IAnnotatingElement;
+            annotatingElement = reader.Read(this.dictionary, DictionaryKind.Simplified) as IAnnotation;
 
             Assert.That(annotatingElement.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string>()));
