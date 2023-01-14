@@ -67,7 +67,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
                 Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses))]
+        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
         public async Task Verify_that_expected_class_are_generated_correctly(string className)
         {
             var generatedCode = await this.dtoDictionaryReaderGenerator.GenerateDtoDictionaryReader(rootPackage, dtoDirectoryInfo, className);

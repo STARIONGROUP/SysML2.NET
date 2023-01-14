@@ -65,7 +65,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
                 Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses))]
+        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
         public async Task Verify_that_expected_poco_classes_are_generated_correctly(string className)
         {
             var generatedCode = await this.pocoGenerator.GenerateClass(rootPackage, dtoDirectoryInfo, className);
@@ -75,7 +75,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
             Assert.That(generatedCode, Is.EqualTo(expected));
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses))]
+        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses)), Category("Expected")]
         public async Task Verify_that_expected_poco_interfaces_are_generated_correctly(string className)
         {
             var generatedCode = await this.pocoGenerator.GenerateInterface(rootPackage, dtoDirectoryInfo, className);

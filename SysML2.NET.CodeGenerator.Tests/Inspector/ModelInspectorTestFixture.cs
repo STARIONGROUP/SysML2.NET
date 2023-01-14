@@ -50,7 +50,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
             Assert.That(() => this.modelInspector.Inspect(), Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses))]
+        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
         public void Verify_that_inspect_class_executes_as_expected(string className)
         {
             Assert.That(() => this.modelInspector.Inspect(className), Throws.Nothing);
