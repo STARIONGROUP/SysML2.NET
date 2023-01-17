@@ -94,7 +94,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedConnection
         /// </summary>
-        List<ConnectorAsUsage> QueryOwnedConnection();
+        List<IConnectorAsUsage> QueryOwnedConnection();
 
         /// <summary>
         /// Queries the derived property OwnedConstraint

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DtoGenerator.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022 RHEA System S.A.
+//   Copyright 2022-2023 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -90,8 +91,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         public async Task GenerateClasses(EPackage package, DirectoryInfo outputDirectory)
         {
             var template = this.Templates["dto-class-template"];
-
-            foreach (var eClass in package.EClassifiers.OfType<EClass>())
+            
+            foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
             {
                 var generatedClass = template(eClass);
 
@@ -108,7 +109,12 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
             var template = this.Templates["dto-class-template"];
 
             var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
-            
+
+            if (eClass.Abstract)
+            {
+                throw new InvalidOperationException("DTO should not be abstract");
+            }
+
             var generatedClass = template(eClass);
 
             generatedClass = CodeCleanup(generatedClass);

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="PocoGenerator.cs" company="RHEA System S.A.">
 // 
-//   Copyright 2022 RHEA System S.A.
+//   Copyright 2022-2023 RHEA System S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
+    using System;
 
     /// <summary>
     /// A Handlebars based POCO code generator
@@ -127,7 +128,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         {
             var template = this.Templates["poco-class-template"];
 
-            foreach (var eClass in package.EClassifiers.OfType<EClass>())
+            foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
             {
                 var generatedCode = template(eClass);
 
@@ -156,7 +157,12 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
             var template = this.Templates["poco-class-template"];
 
             var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
-            
+
+            if (eClass.Abstract)
+            {
+                throw new InvalidOperationException("POCO should not be abstract");
+            }
+
             var generatedCode = template(eClass);
 
             generatedCode = CodeCleanup(generatedCode);

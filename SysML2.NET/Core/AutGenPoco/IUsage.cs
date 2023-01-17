@@ -104,7 +104,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property NestedConnection
         /// </summary>
-        List<ConnectorAsUsage> QueryNestedConnection();
+        List<IConnectorAsUsage> QueryNestedConnection();
 
         /// <summary>
         /// Queries the derived property NestedConstraint

@@ -526,7 +526,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property NestedConnection
         /// </summary>
-        public List<ConnectorAsUsage> QueryNestedConnection()
+        public List<IConnectorAsUsage> QueryNestedConnection()
         {
             throw new NotImplementedException("Derived property NestedConnection not yet supported");
         }
@@ -782,7 +782,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedImport
         /// </summary>
-        public List<Import> QueryOwnedImport()
+        public List<IImport> QueryOwnedImport()
         {
             throw new NotImplementedException("Derived property OwnedImport not yet supported");
         }

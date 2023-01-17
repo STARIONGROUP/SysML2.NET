@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedImport
         /// </summary>
-        List<Import> QueryOwnedImport();
+        List<IImport> QueryOwnedImport();
 
         /// <summary>
         /// Queries the derived property OwnedMember

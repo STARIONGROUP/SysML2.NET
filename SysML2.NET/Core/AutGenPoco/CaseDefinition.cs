@@ -390,7 +390,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedConnection
         /// </summary>
-        public List<ConnectorAsUsage> QueryOwnedConnection()
+        public List<IConnectorAsUsage> QueryOwnedConnection()
         {
             throw new NotImplementedException("Derived property OwnedConnection not yet supported");
         }
@@ -470,7 +470,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedImport
         /// </summary>
-        public List<Import> QueryOwnedImport()
+        public List<IImport> QueryOwnedImport()
         {
             throw new NotImplementedException("Derived property OwnedImport not yet supported");
         }

@@ -428,7 +428,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedImport
         /// </summary>
-        public List<Import> QueryOwnedImport()
+        public List<IImport> QueryOwnedImport()
         {
             throw new NotImplementedException("Derived property OwnedImport not yet supported");
         }

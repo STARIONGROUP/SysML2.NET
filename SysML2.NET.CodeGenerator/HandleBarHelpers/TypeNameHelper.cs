@@ -18,6 +18,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+
 namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 {
     using System;
@@ -113,6 +115,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else if (eStructuralFeature is EReference)
                 {
+                    var @class = eStructuralFeature.QueryClass();
+                    
+                    if (@class.Abstract)
+                    {
+                        typeName = $"I{typeName}";
+                    }
+
                     if (enumerable)
                     {
                         writer.WriteSafeString($"List<{typeName}>");
