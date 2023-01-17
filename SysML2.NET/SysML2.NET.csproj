@@ -4,7 +4,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<Version>0.6.0</Version>
+		<Version>0.7.0</Version>
 		<Description>A .NET implementation of the OMG SysML v2 specification.</Description>
 		<PackageId>SysML2.NET</PackageId>
 		<Company>RHEA System S.A.</Company>
@@ -15,7 +15,7 @@
 		<Authors>Sam Gerené</Authors>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
-			[Update] SysML.ecore from source git repos - git commit 51b7d442374e2d6b06ba465d5ae6816e1c044ba0
+			[Update] SysML.ecore from source git repos - [TAG: 2022-11] (regenerate code)
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
