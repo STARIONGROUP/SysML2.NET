@@ -227,7 +227,33 @@ namespace SysML2.NET.CodeGenerator.Extensions
             return Enumerable.Empty<string>();
         }
 
-        public static string RemoveUnwantedHtmlTags(this string html, List<string> unwantedTags)
+        /// <summary>
+        /// Queries the documentation from the <see cref="EModelElement"/> and
+        /// returns it as a string
+        /// </summary>
+        /// <param name="eModelElement"></param>
+        /// <returns></returns>
+        public static string QueryRawDocumentation(this EModelElement eModelElement)
+        {
+	        var annotation = eModelElement.EAnnotations.FirstOrDefault();
+	        if (annotation == null)
+	        {
+		        return string.Empty;
+	        }
+
+	        if (annotation.Details.TryGetValue("documentation", out var documentation))
+	        {
+		        var unwantedTags = new List<string> { "p", "code", "em", "tt" };
+
+		        var result = documentation.RemoveUnwantedHtmlTags(unwantedTags).ReplaceLineEndings("");
+
+				return result;
+	        }
+
+			return string.Empty;
+		}
+
+		public static string RemoveUnwantedHtmlTags(this string html, List<string> unwantedTags)
         {
             if (string.IsNullOrEmpty(html))
             {

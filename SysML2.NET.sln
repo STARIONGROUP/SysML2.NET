@@ -42,6 +42,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.Serializer.Dicti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.Serializer.Dictionary.Tests", "SysML2.NET.Serializer.Dictionary.Tests\SysML2.NET.Serializer.Dictionary.Tests.csproj", "{102AD589-6440-4D27-84BA-BB5DB9A43B21}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "htmldocs", "htmldocs", "{3C4D5413-519A-406D-A9DB-7A63B4225DA4}"
+	ProjectSection(SolutionItems) = preProject
+		HtmlDocs\Dockerfile = HtmlDocs\Dockerfile
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +103,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{90160DB2-B862-48C8-97E5-70AC1D3E1C8F} = {ACF2E7D6-C673-420D-88DC-3D7D5D283AD6}
+		{3C4D5413-519A-406D-A9DB-7A63B4225DA4} = {ACF2E7D6-C673-420D-88DC-3D7D5D283AD6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B9CA2605-BCA9-4E01-99D9-992F3267DA9E}

@@ -32,6 +32,42 @@
 	  <None Update="datamodel\types.ecore">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\bootstrap.min.css">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\font-awesome.min.css">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.eot">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.svg">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff2">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\fonts\FontAwesome.otf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\images\rhea_logo_large_square.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\images\rhea_logo_small.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\HtmlDocs\css\rheaclassdocs.css">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Templates\dto-serializer-dictionary-reader-provider-template.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
@@ -42,6 +78,9 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Templates\dto-serializer-dictionary-writer-template.hbs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Templates\ecore-to-html-docs.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Templates\poco-interface-template.hbs">
@@ -83,6 +122,10 @@
 	  <None Update="Templates\enum-template.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Resources\HtmlDocs\" />
 	</ItemGroup>
 
 </Project>

@@ -18,8 +18,6 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-
 namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 {
     using System;

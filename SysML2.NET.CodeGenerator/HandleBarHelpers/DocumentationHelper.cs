@@ -53,6 +53,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 writer.WriteSafeString($"/// </summary>{Environment.NewLine}");
             });
-        }
+
+            handlebars.RegisterHelper("RawDocumentation", (writer, context, parameters) =>
+            {
+	            if (!(context.Value is EModelElement eModelElement))
+		            throw new ArgumentException("supposed to be EModelElement");
+                
+	            writer.WriteSafeString(eModelElement.QueryRawDocumentation());
+            });
+		}
     }
 }

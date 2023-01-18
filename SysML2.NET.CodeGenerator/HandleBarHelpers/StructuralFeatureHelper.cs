@@ -135,6 +135,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 writer.WriteSafeString($"{defaultValue}");
             });
-        }
+
+            handlebars.RegisterHelper("StructuralFeature.TypeName", (writer, context, parameters) =>
+            {
+	            if (!(context.Value is EStructuralFeature eStructuralFeature))
+		            throw new ArgumentException("supposed to be EStructuralFeature");
+
+	            var typeName = eStructuralFeature.QueryTypeName();
+
+	            writer.WriteSafeString($"{typeName}");
+            });
+		}
     }
 }
