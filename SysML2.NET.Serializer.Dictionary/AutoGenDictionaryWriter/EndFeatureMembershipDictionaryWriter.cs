@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", endFeatureMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", endFeatureMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", endFeatureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", endFeatureMembershipInstance.ElementId);
             dictionary.Add("feature", endFeatureMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", endFeatureMembershipInstance.IsImplied);
@@ -115,12 +117,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", endFeatureMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", endFeatureMembershipInstance.MemberName);
             dictionary.Add("memberShortName", endFeatureMembershipInstance.MemberShortName);
-            dictionary.Add("name", endFeatureMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", endFeatureMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", endFeatureMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", endFeatureMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", endFeatureMembershipInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", endFeatureMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", endFeatureMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", endFeatureMembershipInstance.Target)} ]");
             dictionary.Add("type", endFeatureMembershipInstance.Type.ToString());
@@ -152,6 +152,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", endFeatureMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", endFeatureMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", endFeatureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", endFeatureMembershipInstance.ElementId);
             dictionary.Add("feature", endFeatureMembershipInstance.Feature);
             dictionary.Add("isImplied", endFeatureMembershipInstance.IsImplied);
@@ -159,12 +161,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", endFeatureMembershipInstance.MemberElement);
             dictionary.Add("memberName", endFeatureMembershipInstance.MemberName);
             dictionary.Add("memberShortName", endFeatureMembershipInstance.MemberShortName);
-            dictionary.Add("name", endFeatureMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", endFeatureMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", endFeatureMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", endFeatureMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", endFeatureMembershipInstance.OwningRelationship);
-            dictionary.Add("shortName", endFeatureMembershipInstance.ShortName);
             dictionary.Add("source", endFeatureMembershipInstance.Source);
             dictionary.Add("target", endFeatureMembershipInstance.Target);
             dictionary.Add("type", endFeatureMembershipInstance.Type);

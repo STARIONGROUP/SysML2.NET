@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO
     {
         /// <summary>
         /// </summary>
-        Element MemberElement { get; set; }
+        IElement MemberElement { get; set; }
 
         /// <summary>
         /// Queries the derived property MemberElementId

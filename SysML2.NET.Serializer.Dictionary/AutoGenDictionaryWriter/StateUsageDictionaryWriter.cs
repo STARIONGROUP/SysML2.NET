@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", stateUsageInstance.AliasIds);
+            dictionary.Add("declaredName", stateUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", stateUsageInstance.DeclaredShortName);
             dictionary.Add("direction", stateUsageInstance.Direction);
             dictionary.Add("elementId", stateUsageInstance.ElementId);
             dictionary.Add("isAbstract", stateUsageInstance.IsAbstract);
@@ -123,11 +125,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", stateUsageInstance.IsSufficient);
             dictionary.Add("isUnique", stateUsageInstance.IsUnique);
             dictionary.Add("isVariation", stateUsageInstance.IsVariation);
-            dictionary.Add("name", stateUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", stateUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", stateUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", stateUsageInstance.PortionKind);
-            dictionary.Add("shortName", stateUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -155,6 +155,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", stateUsageInstance.AliasIds);
+            dictionary.Add("declaredName", stateUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", stateUsageInstance.DeclaredShortName);
             dictionary.Add("direction", stateUsageInstance.Direction);
             dictionary.Add("elementId", stateUsageInstance.ElementId);
             dictionary.Add("isAbstract", stateUsageInstance.IsAbstract);
@@ -170,11 +172,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", stateUsageInstance.IsSufficient);
             dictionary.Add("isUnique", stateUsageInstance.IsUnique);
             dictionary.Add("isVariation", stateUsageInstance.IsVariation);
-            dictionary.Add("name", stateUsageInstance.Name);
             dictionary.Add("ownedRelationship", stateUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", stateUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", stateUsageInstance.PortionKind);
-            dictionary.Add("shortName", stateUsageInstance.ShortName);
 
             return dictionary;
         }

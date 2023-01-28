@@ -116,6 +116,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid conjugatedPortDefinitionFeature = Guid.Parse(Convert.ToString(conjugatedPortDefinitionObject));
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
@@ -140,12 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
@@ -169,12 +175,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
-
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
@@ -209,16 +209,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
             conjugatedPortTypingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             conjugatedPortTypingInstance.ConjugatedPortDefinition = conjugatedPortDefinitionFeature;
+            conjugatedPortTypingInstance.DeclaredName = declaredNameFeature;
+            conjugatedPortTypingInstance.DeclaredShortName = declaredShortNameFeature;
             conjugatedPortTypingInstance.ElementId = elementIdFeature;
             conjugatedPortTypingInstance.General = generalFeature;
             conjugatedPortTypingInstance.IsImplied = isImpliedFeature;
             conjugatedPortTypingInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            conjugatedPortTypingInstance.Name = nameFeature;
             conjugatedPortTypingInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             conjugatedPortTypingInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             conjugatedPortTypingInstance.OwningRelatedElement = owningRelatedElementFeature;
             conjugatedPortTypingInstance.OwningRelationship = owningRelationshipFeature;
-            conjugatedPortTypingInstance.ShortName = shortNameFeature;
             conjugatedPortTypingInstance.Source = sourceFeature ?? new List<Guid>();
             conjugatedPortTypingInstance.Specific = specificFeature;
             conjugatedPortTypingInstance.Target = targetFeature ?? new List<Guid>();
@@ -254,6 +254,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid conjugatedPortDefinitionFeature = Guid.Parse(Convert.ToString(conjugatedPortDefinitionObject));
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
@@ -278,12 +290,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
@@ -307,12 +313,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
-
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ConjugatedPortTyping");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
@@ -347,16 +347,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
             conjugatedPortTypingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             conjugatedPortTypingInstance.ConjugatedPortDefinition = conjugatedPortDefinitionFeature;
+            conjugatedPortTypingInstance.DeclaredName = declaredNameFeature;
+            conjugatedPortTypingInstance.DeclaredShortName = declaredShortNameFeature;
             conjugatedPortTypingInstance.ElementId = elementIdFeature;
             conjugatedPortTypingInstance.General = generalFeature;
             conjugatedPortTypingInstance.IsImplied = isImpliedFeature;
             conjugatedPortTypingInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            conjugatedPortTypingInstance.Name = nameFeature;
             conjugatedPortTypingInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             conjugatedPortTypingInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             conjugatedPortTypingInstance.OwningRelatedElement = owningRelatedElementFeature;
             conjugatedPortTypingInstance.OwningRelationship = owningRelationshipFeature;
-            conjugatedPortTypingInstance.ShortName = shortNameFeature;
             conjugatedPortTypingInstance.Source = sourceFeature ?? new List<Guid>();
             conjugatedPortTypingInstance.Specific = specificFeature;
             conjugatedPortTypingInstance.Target = targetFeature ?? new List<Guid>();

@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iNamespaceExpose.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iNamespaceExpose.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iNamespaceExpose.ElementId);
 
@@ -88,8 +92,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isRecursive");
             writer.WriteBooleanValue(iNamespaceExpose.IsRecursive);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iNamespaceExpose.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iNamespaceExpose.OwnedRelatedElement)
             {
@@ -122,8 +124,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iNamespaceExpose.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iNamespaceExpose.Source)
             {

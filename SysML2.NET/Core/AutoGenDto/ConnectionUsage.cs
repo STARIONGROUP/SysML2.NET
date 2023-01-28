@@ -35,7 +35,8 @@ namespace SysML2.NET.Core.DTO
     /// connection between parts of a system. However, other kinds of kernel AssociationStructures are also
     /// allowed, to permit use of AssociationStructures from the Kernel Library (such as the default
     /// BinaryLinkObject).A ConnectionUsage must subset the base ConnectionUsage connections from the
-    /// Systems model library.
+    /// Systems model library.specializesFromLibrary("Connections::connections")ownedEndFeature->size() = 2
+    /// implies    specializesFromLibrary("Connections::binaryConnections")
     /// </summary>
     public partial class ConnectionUsage : IConnectionUsage
     {
@@ -75,6 +76,19 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         public FeatureDirectionKind? Direction { get; set; }
@@ -93,7 +107,7 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
+        /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
         public bool IsComposite { get; set; }
 
@@ -179,11 +193,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariation { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
         public List<Guid> OwnedRelatedElement { get; set; }
@@ -208,14 +217,6 @@ namespace SysML2.NET.Core.DTO
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
         public PortionKind? PortionKind { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
         /// <summary>
         /// </summary>

@@ -31,9 +31,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A LiteralInteger is a LiteralExpression that provides an Integer value as a result. Its result
-    /// parameter must have the type Integer.An Expression that provides an Integer value as a result.A
-    /// LiteralInteger must be typed by a specialization of Evaluation with no input parameters and a single
-    /// Integer value as its result.
+    /// parameter must have the type Integer.
     /// </summary>
     public partial interface ILiteralInteger : ILiteralExpression
     {

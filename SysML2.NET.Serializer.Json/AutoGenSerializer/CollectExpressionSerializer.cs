@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iCollectExpression.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iCollectExpression.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iCollectExpression.Direction.HasValue)
             {
@@ -112,8 +116,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isUnique");
             writer.WriteBooleanValue(iCollectExpression.IsUnique);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iCollectExpression.Name);
             writer.WritePropertyName("operator");
             writer.WriteStringValue(iCollectExpression.Operator);
 
@@ -133,8 +135,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iCollectExpression.ShortName);
             writer.WriteEndObject();
         }
     }

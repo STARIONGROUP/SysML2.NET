@@ -30,17 +30,23 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An AcceptActionUsage is an ActionUsage that is typed, directly or indirectly, by the
-    /// ActionDefinition AcceptAction from the Systems model library (unless it is owned by a
-    /// TransitionAction, in which case it is typed by AcceptMessageAction). It specifies the acceptance of
-    /// an incomingTransfer from the Occurrence given by the result of its receiverArgument Expression. (If
-    /// no receiverArgument is provided, the default is the this context of the AcceptActionUsage.) The
-    /// payload of the accepted Transfer is output on its payloadParameter.Which Transfers may be accepted
-    /// is determined by the typing and binding of the payloadParameter. If the triggerKind has any value
-    /// other than accept, then the payloadParameter must be bound to a payloadArgument that is an
-    /// InvocationExpression whose function is determined by the triggerKind.receiverArgument =
+    /// An AcceptActionUsage is an ActionUsage that specifies the acceptance of an incomingTransfer from the
+    /// Occurrence given by the result of its receiverArgument Expression. (If no receiverArgument is
+    /// provided, the default is the this context of the AcceptActionUsage.) The payload of the accepted
+    /// Transfer is output on its payloadParameter. Which Transfers may be accepted is determined by
+    /// conformance to the typing and (potentially) binding of the payloadParameter.receiverArgument =
     /// argument(2)payloadArgument = argument(1)payloadParameter =  if parameter->isEmpty() then null else
-    /// parameter->at(1) endifinputParameters->size() >= 2
+    /// parameter->at(1) endifinputParameters->size() >= 2not isTriggerAction() implies   
+    /// specializesFromLibrary('Actions::acceptActions')isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(ActionDefinition) or owningType.oclIsKindOf(ActionUsage)) implies   
+    /// specializesFromLibrary('Actions::Action::acceptSubactions')isTriggerAction() implies   
+    /// specializesFromLibrary('Actions::TransitionAction::accepter')payloadArgument <> null
+    /// andpayloadArgument.oclIsKindOf(TriggerInvocationExpression) implies    let invocation : Expression =
+    ///        payloadArgument.oclAsType(Expression) in    parameter->size() >= 2 and   
+    /// invocation.parameter->size() >= 2 and           
+    /// ownedFeature->selectByKind(BindingConnector)->exists(b |       
+    /// b.relatedFeatures->includes(parameter->at(2)) and       
+    /// b.relatedFeatures->includes(invocation.parameter->at(2)))
     /// </summary>
     public partial interface IAcceptActionUsage : IActionUsage
     {

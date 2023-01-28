@@ -33,9 +33,14 @@ namespace SysML2.NET.Core.DTO
     /// A PerformActionUsage is an ActionUsage that represents the performance of an ActionUsage. Unless it
     /// is the PerformActionUsage itself, the ActionUsage to be performed is related to the
     /// PerformActionUsage by a ReferenceSubsetting relationship. A PerformActionUsage is also an
-    /// EventOccurrenceUsage, with its performedAction as the eventOccurrence.If the PerformActionUsage is
-    /// owned by a PartDefinition or PartUsage, then it also subsets the ActionUsage Part::performedAction
-    /// from the Systems model library.
+    /// EventOccurrenceUsage, with its performedAction as the eventOccurrence.owningType <> null
+    /// and(owningType.oclIsKindOf(PartDefinition) or owningType.oclIsKindOf(PartUsage)) implies   
+    /// specializesFromLibrary('Parts::Part::performedActions')eventOccurrence =    if
+    /// ownedReferenceSubsetting = null then self    else if
+    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(ActionUsage) then        
+    /// ownedReferenceSubsetting.referencedFeature.oclAsType(ActionUsage)    else null    endif
+    /// endifownedReferenceSubsetting <> null implies   
+    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(ActionUsage)
     /// </summary>
     public partial interface IPerformActionUsage : IActionUsage, IEventOccurrenceUsage
     {

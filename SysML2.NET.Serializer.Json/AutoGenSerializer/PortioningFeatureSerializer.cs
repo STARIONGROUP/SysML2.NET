@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iPortioningFeature.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iPortioningFeature.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iPortioningFeature.Direction.HasValue)
             {
@@ -112,8 +116,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isUnique");
             writer.WriteBooleanValue(iPortioningFeature.IsUnique);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iPortioningFeature.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iPortioningFeature.OwnedRelationship)
             {
@@ -130,8 +132,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iPortioningFeature.ShortName);
             writer.WriteEndObject();
         }
     }

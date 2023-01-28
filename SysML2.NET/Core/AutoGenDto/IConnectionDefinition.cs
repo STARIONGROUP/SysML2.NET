@@ -33,7 +33,8 @@ namespace SysML2.NET.Core.DTO
     /// A ConnectionDefinition is a PartDefinition that is also an AssociationStructure, with two or more
     /// end features. The associationEnds of a ConnectionDefinition must be Usages.A ConnectionDefinition
     /// must subclass, directly or indirectly, the base ConnectionDefinition Connection from the Systems
-    /// model library.
+    /// model library.specializesFromLibrary("Connections::Connection")ownedEndFeature->size() = 2 implies  
+    /// specializesFromLibrary("Connections::BinaryConnections")
     /// </summary>
     public partial interface IConnectionDefinition : IPartDefinition, IAssociationStructure
     {

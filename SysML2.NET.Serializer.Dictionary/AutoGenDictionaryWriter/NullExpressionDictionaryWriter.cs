@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", nullExpressionInstance.AliasIds);
+            dictionary.Add("declaredName", nullExpressionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", nullExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", nullExpressionInstance.Direction);
             dictionary.Add("elementId", nullExpressionInstance.ElementId);
             dictionary.Add("isAbstract", nullExpressionInstance.IsAbstract);
@@ -120,10 +122,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", nullExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", nullExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", nullExpressionInstance.IsUnique);
-            dictionary.Add("name", nullExpressionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", nullExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", nullExpressionInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", nullExpressionInstance.ShortName);
 
             return dictionary;
         }
@@ -151,6 +151,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", nullExpressionInstance.AliasIds);
+            dictionary.Add("declaredName", nullExpressionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", nullExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", nullExpressionInstance.Direction);
             dictionary.Add("elementId", nullExpressionInstance.ElementId);
             dictionary.Add("isAbstract", nullExpressionInstance.IsAbstract);
@@ -163,10 +165,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", nullExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", nullExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", nullExpressionInstance.IsUnique);
-            dictionary.Add("name", nullExpressionInstance.Name);
             dictionary.Add("ownedRelationship", nullExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", nullExpressionInstance.OwningRelationship);
-            dictionary.Add("shortName", nullExpressionInstance.ShortName);
 
             return dictionary;
         }

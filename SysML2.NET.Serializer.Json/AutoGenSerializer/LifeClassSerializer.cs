@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iLifeClass.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iLifeClass.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iLifeClass.ElementId);
 
@@ -82,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iLifeClass.IsSufficient);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iLifeClass.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iLifeClass.OwnedRelationship)
             {
@@ -100,8 +102,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iLifeClass.ShortName);
             writer.WriteEndObject();
         }
     }

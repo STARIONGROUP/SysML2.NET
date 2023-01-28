@@ -122,6 +122,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string bodyFeature = Convert.ToString(bodyObject);
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
@@ -140,12 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string localeFeature = localeObject == null ? null : Convert.ToString(localeObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
@@ -158,23 +164,17 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             documentationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             documentationInstance.Annotation = annotationFeature ?? new List<Guid>();
             documentationInstance.Body = bodyFeature;
+            documentationInstance.DeclaredName = declaredNameFeature;
+            documentationInstance.DeclaredShortName = declaredShortNameFeature;
             documentationInstance.ElementId = elementIdFeature;
             documentationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             documentationInstance.Locale = localeFeature;
-            documentationInstance.Name = nameFeature;
             documentationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             documentationInstance.OwningRelationship = owningRelationshipFeature;
-            documentationInstance.ShortName = shortNameFeature;
 
             return documentationInstance;
         }
@@ -211,6 +211,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string bodyFeature = Convert.ToString(bodyObject);
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
@@ -229,12 +241,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string localeFeature = localeObject == null ? null : Convert.ToString(localeObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
@@ -247,23 +253,17 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             documentationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             documentationInstance.Annotation = annotationFeature ?? new List<Guid>();
             documentationInstance.Body = bodyFeature;
+            documentationInstance.DeclaredName = declaredNameFeature;
+            documentationInstance.DeclaredShortName = declaredShortNameFeature;
             documentationInstance.ElementId = elementIdFeature;
             documentationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             documentationInstance.Locale = localeFeature;
-            documentationInstance.Name = nameFeature;
             documentationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             documentationInstance.OwningRelationship = owningRelationshipFeature;
-            documentationInstance.ShortName = shortNameFeature;
 
             return documentationInstance;
         }

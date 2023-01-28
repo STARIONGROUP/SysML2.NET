@@ -39,11 +39,15 @@ namespace SysML2.NET.Core.POCO
     /// BindingConnector is restricted to its startShot.If isDefault = false, then the above semantics of
     /// the FeatureValue are realized for the given featureWithValue. Otherwise, the semantics are realized
     /// for any individual of the featuringType of the featureWithValue, unless another value is explicitly
-    /// given for the featureWithValue for that individual.featureWithValue.ownedMember->   
-    /// selectByKind(BindingConnector)->    exists(valueConnector |       
-    /// valueConnector.relatedFeature->includes(featureWithValue) and       
-    /// valueConnector.relatedFeature->includes(value.result) and        valueConnector.featuringType =
-    /// featureWithValue.featuringType)
+    /// given for the featureWithValue for that individual.not isDefault implies   
+    /// featureWithValue.ownedMember->        selectByKind(BindingConnector)->exists(b |           
+    /// b.relatedFeature->includes(featureWithValue) and            b.relatedFeature->includes(value.result)
+    /// and            if not isInitial then                 b.featuringType =
+    /// featureWithValue.featuringType            else                 b.featuringType->exists(t |          
+    ///          t.oclIsKindOf(Feature) and                    t.oclAsType(Feature).chainingFeature =       
+    ///                 Sequence{                            resolveGlobal("Base::things::that"),           
+    ///                 resolveGlobal("Occurrences::Occurrence::startShot")                        }        
+    /// )            endif)
     /// </summary>
     public partial interface IFeatureValue : IOwningMembership
     {

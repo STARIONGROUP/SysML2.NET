@@ -60,6 +60,19 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
@@ -93,11 +106,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
         public List<Guid> OwnedRelatedElement { get; set; }
@@ -116,14 +124,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
         /// <summary>
         /// </summary>

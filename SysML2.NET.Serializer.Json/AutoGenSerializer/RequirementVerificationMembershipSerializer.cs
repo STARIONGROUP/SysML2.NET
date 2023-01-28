@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iRequirementVerificationMembership.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iRequirementVerificationMembership.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iRequirementVerificationMembership.ElementId);
 
@@ -92,8 +96,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iRequirementVerificationMembership.MemberName);
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iRequirementVerificationMembership.MemberShortName);
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iRequirementVerificationMembership.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iRequirementVerificationMembership.OwnedRelatedElement)
             {
@@ -126,8 +128,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iRequirementVerificationMembership.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iRequirementVerificationMembership.Source)
             {

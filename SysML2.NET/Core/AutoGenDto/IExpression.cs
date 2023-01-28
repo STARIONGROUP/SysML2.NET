@@ -35,7 +35,13 @@ namespace SysML2.NET.Core.DTO
     /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
     /// as the results of other Expressions in the tree.isModelLevelEvaluable =
-    /// modelLevelEvaluable(Set(Element){})value.featuringType = featureWithValue.featuringType
+    /// modelLevelEvaluable(Set(Element){})specializesFromLibrary("Performances::evaluations")ownedMembership.selectByKind(ResultExpressionMembership)->
+    ///    forAll(mem | ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
+    /// binding.relatedFeature->includes(result) and           
+    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))owningMembership <> null and
+    /// owningMembership.oclIsKindOf(FeatureValue) implies    let featureWithValue : Feature =        
+    /// owningMembership.oclAsType(FeatureValue).featureWithValue in    featuringType =
+    /// featureWithValue.featuringType
     /// </summary>
     public partial interface IExpression : IStep
     {

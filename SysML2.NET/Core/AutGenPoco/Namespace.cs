@@ -30,16 +30,17 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A Namespace is an Element that contains other Elements, known as its members, via Membership
+    /// A Namespace is an Element that contains other Element, known as its members, via Membership
     /// Relationships with those Elements. The members of a Namespace may be owned by the Namespace, aliased
-    /// in the Namespace, or imported into the Namespace via Import Relationships with other Namespaces.A
-    /// Namespace can provide names for its members via the memberNames specified by the Memberships in the
-    /// Namespace. If a Membership specifies a memberName, then that is the name of the corresponding
-    /// memberElement relative to the Namespace. Note that the same Element may be the memberElement of
-    /// multiple Memberships in a Namespace (though it may be owned at most once), each of which may define
-    /// a separate alias for the Element relative to the Namespace.membership->forAll(m1 |
-    /// membership->forAll(m2 | m1 <> m2 implies m1.isDistinguishableFrom(m2)))member =
-    /// membership.memberElementownedMember =
+    /// in the Namespace, or imported into the Namespace via Import Relationships with other Namespace.A
+    /// Namespace can provide names for its members via the memberNames and memberShortNames specified by
+    /// the Memberships in the Namespace. If a Membership specifies a memberName and/or memberShortName,
+    /// then that those are names of the corresponding memberElement relative to the Namespace. For an
+    /// OwningMembership, the owningMemberName and owningMemberShortName are given by the Element name and
+    /// shortName. Note that the same Element may be the memberElement of multiple Memberships in a
+    /// Namespace (though it may be owned at most once), each of which may define a separate alias for the
+    /// Element relative to the Namespace.membership->forAll(m1 |     membership->forAll(m2 |         m1 <>
+    /// m2 implies m1.isDistinguishableFrom(m2)))member = membership.memberElementownedMember =
     /// ownedMembership->selectByKind(OwningMembership).ownedMemberElementimportedMembership =
     /// importedMemberships(Set{})ownedImport = ownedRelationship->selectByKind(Import)ownedMembership =
     /// ownedRelationship->selectByKind(Membership)
@@ -53,7 +54,7 @@ namespace SysML2.NET.Core.POCO
         {
             this.AliasIds = new List<string>();
             this.IsImpliedIncluded = false;
-            this.OwnedRelationship = new List<Relationship>();
+            this.OwnedRelationship = new List<IRelationship>();
         }
 
         /// <summary>
@@ -67,19 +68,24 @@ namespace SysML2.NET.Core.POCO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Queries the derived property Documentation
         /// </summary>
         public List<Documentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property EffectiveName
-        /// </summary>
-        public string QueryEffectiveName()
-        {
-            throw new NotImplementedException("Derived property EffectiveName not yet supported");
         }
 
         /// <summary>
@@ -116,7 +122,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Member
         /// </summary>
-        public List<Element> QueryMember()
+        public List<IElement> QueryMember()
         {
             throw new NotImplementedException("Derived property Member not yet supported");
         }
@@ -130,9 +136,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The primary name of this Element.
+        /// Queries the derived property Name
         /// </summary>
-        public string Name { get; set; }
+        public string QueryName()
+        {
+            throw new NotImplementedException("Derived property Name not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property OwnedAnnotation
@@ -145,7 +154,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedElement
         /// </summary>
-        public List<Element> QueryOwnedElement()
+        public List<IElement> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
@@ -161,7 +170,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedMember
         /// </summary>
-        public List<Element> QueryOwnedMember()
+        public List<IElement> QueryOwnedMember()
         {
             throw new NotImplementedException("Derived property OwnedMember not yet supported");
         }
@@ -177,12 +186,12 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
-        public List<Relationship> OwnedRelationship { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property Owner
         /// </summary>
-        public Element QueryOwner()
+        public IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
@@ -206,7 +215,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
-        public Relationship OwningRelationship { get; set; }
+        public IRelationship OwningRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property QualifiedName
@@ -217,12 +226,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
+        /// Queries the derived property ShortName
         /// </summary>
-        public string ShortName { get; set; }
+        public string QueryShortName()
+        {
+            throw new NotImplementedException("Derived property ShortName not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property TextualRepresentation

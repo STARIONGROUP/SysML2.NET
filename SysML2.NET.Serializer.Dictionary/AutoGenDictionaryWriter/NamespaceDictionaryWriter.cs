@@ -108,12 +108,12 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", namespaceInstance.AliasIds);
+            dictionary.Add("declaredName", namespaceInstance.DeclaredName);
+            dictionary.Add("declaredShortName", namespaceInstance.DeclaredShortName);
             dictionary.Add("elementId", namespaceInstance.ElementId);
             dictionary.Add("isImpliedIncluded", namespaceInstance.IsImpliedIncluded);
-            dictionary.Add("name", namespaceInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", namespaceInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", namespaceInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", namespaceInstance.ShortName);
 
             return dictionary;
         }
@@ -141,12 +141,12 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", namespaceInstance.AliasIds);
+            dictionary.Add("declaredName", namespaceInstance.DeclaredName);
+            dictionary.Add("declaredShortName", namespaceInstance.DeclaredShortName);
             dictionary.Add("elementId", namespaceInstance.ElementId);
             dictionary.Add("isImpliedIncluded", namespaceInstance.IsImpliedIncluded);
-            dictionary.Add("name", namespaceInstance.Name);
             dictionary.Add("ownedRelationship", namespaceInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", namespaceInstance.OwningRelationship);
-            dictionary.Add("shortName", namespaceInstance.ShortName);
 
             return dictionary;
         }

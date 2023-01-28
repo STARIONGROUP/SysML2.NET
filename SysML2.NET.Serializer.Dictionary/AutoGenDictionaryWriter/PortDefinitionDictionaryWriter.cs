@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", portDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", portDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", portDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", portDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", portDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", portDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", portDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", portDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", portDefinitionInstance.IsVariation);
-            dictionary.Add("name", portDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", portDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", portDefinitionInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", portDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", portDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", portDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", portDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", portDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", portDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", portDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", portDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", portDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", portDefinitionInstance.IsVariation);
-            dictionary.Add("name", portDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", portDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", portDefinitionInstance.OwningRelationship);
-            dictionary.Add("shortName", portDefinitionInstance.ShortName);
 
             return dictionary;
         }

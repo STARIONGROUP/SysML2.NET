@@ -30,10 +30,14 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An ItemUsage is a Usage whose type is a Structure. Nominally, if the type is an ItemDefinition, an
-    /// ItemUsage is a Usage of that ItemDefinition within a system. However, other types of Kernel
-    /// Structure are also allowed, to permit use of Structures from the Kernel Library.An ItemUsage must
-    /// subset, directly or indirectly, the base ItemUsage items from the Systems model library.
+    /// An ItemUsage is a ItemUsage whose definition is a Structure. Nominally, if the definition is an
+    /// ItemDefinition, an ItemUsage is a ItemUsage of that ItemDefinition within a system. However, other
+    /// kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
+    /// Libraries.An ItemUsage must specialize, directly or indirectly, the base ItemUsage items from the
+    /// Systems Model Library.itemDefinition =
+    /// occurrenceDefinition->selectByKind(ItemDefinition)specializesFromLibrary("Items::items")isComposite
+    /// and owningType <> null and(owningType.oclIsKindOf(ItemDefinition) or
+    /// owningType.oclIsKindOf(ItemUsage)) implies    specializesFromLibrary("Items::Item::subitem")
     /// </summary>
     public partial interface IItemUsage : IOccurrenceUsage
     {

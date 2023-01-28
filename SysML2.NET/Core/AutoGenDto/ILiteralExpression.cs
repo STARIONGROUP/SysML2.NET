@@ -32,9 +32,8 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A LiteralExpression is an Expression that provides a basic value as a result. It must directly or
     /// indirectly specialize the Function LiteralEvaluation from the Base model library, which has no
-    /// parameters other than its result, which is a single DataValue.An Expression that provides a basic
-    /// value as a result.A LiteralExpression must be typed by a specialization of Evaluation with no input
-    /// parameters and a single value as its result.isModelLevelEvaluable = true
+    /// parameters other than its result, which is a single DataValue.isModelLevelEvaluable =
+    /// truespecializesFromLibrary("Performances::literalEvaluations")
     /// </summary>
     public partial interface ILiteralExpression : IExpression
     {

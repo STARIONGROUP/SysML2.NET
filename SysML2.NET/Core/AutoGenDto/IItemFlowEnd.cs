@@ -31,9 +31,9 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An ItemFlowEnd is a Feature that is one of the endFeatures giving the source or target of an
-    /// ItemFlow. It must have exactly one ownedFeature, which redefines Transfer::source::sourceOutput or
-    /// Transfer::target::targetInput and redefines the corresponding feature of the relatedElement for its
-    /// end.
+    /// ItemFlow. For ItemFlows typed by FlowTransfer or its specializations, ItemFlowEnds must have exactly
+    /// one ownedFeature, which redefines Transfer::source::sourceOutput or Transfer::target::targetInput
+    /// and redefines the corresponding feature of the relatedElement for its end.
     /// </summary>
     public partial interface IItemFlowEnd : IFeature
     {

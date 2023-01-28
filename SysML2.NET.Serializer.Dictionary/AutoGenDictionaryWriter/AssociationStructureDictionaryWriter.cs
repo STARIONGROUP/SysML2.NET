@@ -108,17 +108,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", associationStructureInstance.AliasIds);
+            dictionary.Add("declaredName", associationStructureInstance.DeclaredName);
+            dictionary.Add("declaredShortName", associationStructureInstance.DeclaredShortName);
             dictionary.Add("elementId", associationStructureInstance.ElementId);
             dictionary.Add("isAbstract", associationStructureInstance.IsAbstract);
             dictionary.Add("isImplied", associationStructureInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", associationStructureInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", associationStructureInstance.IsSufficient);
-            dictionary.Add("name", associationStructureInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", associationStructureInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", associationStructureInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", associationStructureInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", associationStructureInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", associationStructureInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", associationStructureInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", associationStructureInstance.Target)} ]");
 
@@ -148,17 +148,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", associationStructureInstance.AliasIds);
+            dictionary.Add("declaredName", associationStructureInstance.DeclaredName);
+            dictionary.Add("declaredShortName", associationStructureInstance.DeclaredShortName);
             dictionary.Add("elementId", associationStructureInstance.ElementId);
             dictionary.Add("isAbstract", associationStructureInstance.IsAbstract);
             dictionary.Add("isImplied", associationStructureInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", associationStructureInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", associationStructureInstance.IsSufficient);
-            dictionary.Add("name", associationStructureInstance.Name);
             dictionary.Add("ownedRelatedElement", associationStructureInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", associationStructureInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", associationStructureInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", associationStructureInstance.OwningRelationship);
-            dictionary.Add("shortName", associationStructureInstance.ShortName);
             dictionary.Add("source", associationStructureInstance.Source);
             dictionary.Add("target", associationStructureInstance.Target);
 

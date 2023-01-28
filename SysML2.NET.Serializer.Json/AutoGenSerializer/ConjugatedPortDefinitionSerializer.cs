@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iConjugatedPortDefinition.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iConjugatedPortDefinition.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iConjugatedPortDefinition.ElementId);
 
@@ -88,8 +92,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iConjugatedPortDefinition.IsVariation);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iConjugatedPortDefinition.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iConjugatedPortDefinition.OwnedRelationship)
             {
@@ -106,8 +108,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iConjugatedPortDefinition.ShortName);
             writer.WriteEndObject();
         }
     }

@@ -32,9 +32,8 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A LiteralExpression is an Expression that provides a basic value as a result. It must directly or
     /// indirectly specialize the Function LiteralEvaluation from the Base model library, which has no
-    /// parameters other than its result, which is a single DataValue.An Expression that provides a basic
-    /// value as a result.A LiteralExpression must be typed by a specialization of Evaluation with no input
-    /// parameters and a single value as its result.isModelLevelEvaluable = true
+    /// parameters other than its result, which is a single DataValue.isModelLevelEvaluable =
+    /// truespecializesFromLibrary("Performances::literalEvaluations")
     /// </summary>
     public partial class LiteralExpression : ILiteralExpression
     {
@@ -68,6 +67,19 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         public FeatureDirectionKind? Direction { get; set; }
@@ -86,7 +98,7 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
+        /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
         public bool IsComposite { get; set; }
 
@@ -148,11 +160,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsUnique { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -161,14 +168,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

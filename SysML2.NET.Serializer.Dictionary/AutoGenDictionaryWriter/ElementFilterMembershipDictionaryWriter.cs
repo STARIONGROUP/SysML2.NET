@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", elementFilterMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", elementFilterMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", elementFilterMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", elementFilterMembershipInstance.ElementId);
             dictionary.Add("isImplied", elementFilterMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", elementFilterMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", elementFilterMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", elementFilterMembershipInstance.MemberName);
             dictionary.Add("memberShortName", elementFilterMembershipInstance.MemberShortName);
-            dictionary.Add("name", elementFilterMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", elementFilterMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", elementFilterMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", elementFilterMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", elementFilterMembershipInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", elementFilterMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", elementFilterMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", elementFilterMembershipInstance.Target)} ]");
             dictionary.Add("visibility", elementFilterMembershipInstance.Visibility);
@@ -150,18 +150,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", elementFilterMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", elementFilterMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", elementFilterMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", elementFilterMembershipInstance.ElementId);
             dictionary.Add("isImplied", elementFilterMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", elementFilterMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", elementFilterMembershipInstance.MemberElement);
             dictionary.Add("memberName", elementFilterMembershipInstance.MemberName);
             dictionary.Add("memberShortName", elementFilterMembershipInstance.MemberShortName);
-            dictionary.Add("name", elementFilterMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", elementFilterMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", elementFilterMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", elementFilterMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", elementFilterMembershipInstance.OwningRelationship);
-            dictionary.Add("shortName", elementFilterMembershipInstance.ShortName);
             dictionary.Add("source", elementFilterMembershipInstance.Source);
             dictionary.Add("target", elementFilterMembershipInstance.Target);
             dictionary.Add("visibility", elementFilterMembershipInstance.Visibility);

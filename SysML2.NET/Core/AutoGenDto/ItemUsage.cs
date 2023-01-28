@@ -30,10 +30,14 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An ItemUsage is a Usage whose type is a Structure. Nominally, if the type is an ItemDefinition, an
-    /// ItemUsage is a Usage of that ItemDefinition within a system. However, other types of Kernel
-    /// Structure are also allowed, to permit use of Structures from the Kernel Library.An ItemUsage must
-    /// subset, directly or indirectly, the base ItemUsage items from the Systems model library.
+    /// An ItemUsage is a ItemUsage whose definition is a Structure. Nominally, if the definition is an
+    /// ItemDefinition, an ItemUsage is a ItemUsage of that ItemDefinition within a system. However, other
+    /// kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
+    /// Libraries.An ItemUsage must specialize, directly or indirectly, the base ItemUsage items from the
+    /// Systems Model Library.itemDefinition =
+    /// occurrenceDefinition->selectByKind(ItemDefinition)specializesFromLibrary("Items::items")isComposite
+    /// and owningType <> null and(owningType.oclIsKindOf(ItemDefinition) or
+    /// owningType.oclIsKindOf(ItemUsage)) implies    specializesFromLibrary("Items::Item::subitem")
     /// </summary>
     public partial class ItemUsage : IItemUsage
     {
@@ -68,6 +72,19 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         public FeatureDirectionKind? Direction { get; set; }
@@ -86,7 +103,7 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
+        /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
         public bool IsComposite { get; set; }
 
@@ -160,11 +177,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariation { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -179,14 +191,6 @@ namespace SysML2.NET.Core.DTO
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
         public PortionKind? PortionKind { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

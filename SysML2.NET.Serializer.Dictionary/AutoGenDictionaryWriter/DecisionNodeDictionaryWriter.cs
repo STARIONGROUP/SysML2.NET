@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", decisionNodeInstance.AliasIds);
+            dictionary.Add("declaredName", decisionNodeInstance.DeclaredName);
+            dictionary.Add("declaredShortName", decisionNodeInstance.DeclaredShortName);
             dictionary.Add("direction", decisionNodeInstance.Direction);
             dictionary.Add("elementId", decisionNodeInstance.ElementId);
             dictionary.Add("isAbstract", decisionNodeInstance.IsAbstract);
@@ -122,11 +124,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", decisionNodeInstance.IsSufficient);
             dictionary.Add("isUnique", decisionNodeInstance.IsUnique);
             dictionary.Add("isVariation", decisionNodeInstance.IsVariation);
-            dictionary.Add("name", decisionNodeInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", decisionNodeInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", decisionNodeInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", decisionNodeInstance.PortionKind);
-            dictionary.Add("shortName", decisionNodeInstance.ShortName);
 
             return dictionary;
         }
@@ -154,6 +154,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", decisionNodeInstance.AliasIds);
+            dictionary.Add("declaredName", decisionNodeInstance.DeclaredName);
+            dictionary.Add("declaredShortName", decisionNodeInstance.DeclaredShortName);
             dictionary.Add("direction", decisionNodeInstance.Direction);
             dictionary.Add("elementId", decisionNodeInstance.ElementId);
             dictionary.Add("isAbstract", decisionNodeInstance.IsAbstract);
@@ -168,11 +170,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", decisionNodeInstance.IsSufficient);
             dictionary.Add("isUnique", decisionNodeInstance.IsUnique);
             dictionary.Add("isVariation", decisionNodeInstance.IsVariation);
-            dictionary.Add("name", decisionNodeInstance.Name);
             dictionary.Add("ownedRelationship", decisionNodeInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", decisionNodeInstance.OwningRelationship);
             dictionary.Add("portionKind", decisionNodeInstance.PortionKind);
-            dictionary.Add("shortName", decisionNodeInstance.ShortName);
 
             return dictionary;
         }

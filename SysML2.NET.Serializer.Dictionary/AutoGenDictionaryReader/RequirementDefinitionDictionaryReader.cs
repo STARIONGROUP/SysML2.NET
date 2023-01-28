@@ -110,6 +110,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
@@ -146,12 +158,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
@@ -170,25 +176,19 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string reqIdFeature = reqIdObject == null ? null : Convert.ToString(reqIdObject);
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             requirementDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            requirementDefinitionInstance.DeclaredName = declaredNameFeature;
+            requirementDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             requirementDefinitionInstance.ElementId = elementIdFeature;
             requirementDefinitionInstance.IsAbstract = isAbstractFeature;
             requirementDefinitionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             requirementDefinitionInstance.IsIndividual = isIndividualFeature;
             requirementDefinitionInstance.IsSufficient = isSufficientFeature;
             requirementDefinitionInstance.IsVariation = isVariationFeature;
-            requirementDefinitionInstance.Name = nameFeature;
             requirementDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             requirementDefinitionInstance.OwningRelationship = owningRelationshipFeature;
             requirementDefinitionInstance.ReqId = reqIdFeature;
-            requirementDefinitionInstance.ShortName = shortNameFeature;
 
             return requirementDefinitionInstance;
         }
@@ -213,6 +213,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
@@ -249,12 +261,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
@@ -273,25 +279,19 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string reqIdFeature = reqIdObject == null ? null : Convert.ToString(reqIdObject);
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a RequirementDefinition");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             requirementDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            requirementDefinitionInstance.DeclaredName = declaredNameFeature;
+            requirementDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             requirementDefinitionInstance.ElementId = elementIdFeature;
             requirementDefinitionInstance.IsAbstract = isAbstractFeature;
             requirementDefinitionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             requirementDefinitionInstance.IsIndividual = isIndividualFeature;
             requirementDefinitionInstance.IsSufficient = isSufficientFeature;
             requirementDefinitionInstance.IsVariation = isVariationFeature;
-            requirementDefinitionInstance.Name = nameFeature;
             requirementDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             requirementDefinitionInstance.OwningRelationship = owningRelationshipFeature;
             requirementDefinitionInstance.ReqId = reqIdFeature;
-            requirementDefinitionInstance.ShortName = shortNameFeature;
 
             return requirementDefinitionInstance;
         }

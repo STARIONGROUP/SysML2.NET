@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", namespaceImportInstance.AliasIds);
+            dictionary.Add("declaredName", namespaceImportInstance.DeclaredName);
+            dictionary.Add("declaredShortName", namespaceImportInstance.DeclaredShortName);
             dictionary.Add("elementId", namespaceImportInstance.ElementId);
             dictionary.Add("importedNamespace", namespaceImportInstance.ImportedNamespace.ToString());
             dictionary.Add("isImplied", namespaceImportInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", namespaceImportInstance.IsImpliedIncluded);
             dictionary.Add("isImportAll", namespaceImportInstance.IsImportAll);
             dictionary.Add("isRecursive", namespaceImportInstance.IsRecursive);
-            dictionary.Add("name", namespaceImportInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", namespaceImportInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", namespaceImportInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", namespaceImportInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", namespaceImportInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", namespaceImportInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", namespaceImportInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", namespaceImportInstance.Target)} ]");
             dictionary.Add("visibility", namespaceImportInstance.Visibility);
@@ -150,18 +150,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", namespaceImportInstance.AliasIds);
+            dictionary.Add("declaredName", namespaceImportInstance.DeclaredName);
+            dictionary.Add("declaredShortName", namespaceImportInstance.DeclaredShortName);
             dictionary.Add("elementId", namespaceImportInstance.ElementId);
             dictionary.Add("importedNamespace", namespaceImportInstance.ImportedNamespace);
             dictionary.Add("isImplied", namespaceImportInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", namespaceImportInstance.IsImpliedIncluded);
             dictionary.Add("isImportAll", namespaceImportInstance.IsImportAll);
             dictionary.Add("isRecursive", namespaceImportInstance.IsRecursive);
-            dictionary.Add("name", namespaceImportInstance.Name);
             dictionary.Add("ownedRelatedElement", namespaceImportInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", namespaceImportInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", namespaceImportInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", namespaceImportInstance.OwningRelationship);
-            dictionary.Add("shortName", namespaceImportInstance.ShortName);
             dictionary.Add("source", namespaceImportInstance.Source);
             dictionary.Add("target", namespaceImportInstance.Target);
             dictionary.Add("visibility", namespaceImportInstance.Visibility);

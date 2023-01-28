@@ -109,17 +109,17 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", portConjugationInstance.AliasIds);
             dictionary.Add("conjugatedType", portConjugationInstance.ConjugatedType.ToString());
+            dictionary.Add("declaredName", portConjugationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", portConjugationInstance.DeclaredShortName);
             dictionary.Add("elementId", portConjugationInstance.ElementId);
             dictionary.Add("isImplied", portConjugationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", portConjugationInstance.IsImpliedIncluded);
-            dictionary.Add("name", portConjugationInstance.Name);
             dictionary.Add("originalPortDefinition", portConjugationInstance.OriginalPortDefinition.ToString());
             dictionary.Add("originalType", portConjugationInstance.OriginalType.ToString());
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", portConjugationInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", portConjugationInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", portConjugationInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", portConjugationInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", portConjugationInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", portConjugationInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", portConjugationInstance.Target)} ]");
 
@@ -150,17 +150,17 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", portConjugationInstance.AliasIds);
             dictionary.Add("conjugatedType", portConjugationInstance.ConjugatedType);
+            dictionary.Add("declaredName", portConjugationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", portConjugationInstance.DeclaredShortName);
             dictionary.Add("elementId", portConjugationInstance.ElementId);
             dictionary.Add("isImplied", portConjugationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", portConjugationInstance.IsImpliedIncluded);
-            dictionary.Add("name", portConjugationInstance.Name);
             dictionary.Add("originalPortDefinition", portConjugationInstance.OriginalPortDefinition);
             dictionary.Add("originalType", portConjugationInstance.OriginalType);
             dictionary.Add("ownedRelatedElement", portConjugationInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", portConjugationInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", portConjugationInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", portConjugationInstance.OwningRelationship);
-            dictionary.Add("shortName", portConjugationInstance.ShortName);
             dictionary.Add("source", portConjugationInstance.Source);
             dictionary.Add("target", portConjugationInstance.Target);
 

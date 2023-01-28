@@ -30,8 +30,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// allSupertypes()->includes(resolve("Objects::ObjectLink"))endFeature->size() = 2 implies   
-    /// allSupertypes()->includes(resolve("Objects::BinaryLinkObject"))
+    /// specializesFromLibrary("Objects::ObjectLink")endFeature->size() = 2 implies   
+    /// specializesFromLibrary("Objects::BinaryLinkObject")
     /// </summary>
     public partial class AssociationStructure : IAssociationStructure
     {
@@ -45,10 +45,10 @@ namespace SysML2.NET.Core.POCO
             this.IsImplied = false;
             this.IsImpliedIncluded = false;
             this.IsSufficient = false;
-            this.OwnedRelatedElement = new List<Element>();
-            this.OwnedRelationship = new List<Relationship>();
-            this.Source = new List<Element>();
-            this.Target = new List<Element>();
+            this.OwnedRelatedElement = new List<IElement>();
+            this.OwnedRelationship = new List<IRelationship>();
+            this.Source = new List<IElement>();
+            this.Target = new List<IElement>();
         }
 
         /// <summary>
@@ -68,6 +68,19 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property AssociationEnd not yet supported");
         }
+
+        /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// Queries the derived property DifferencingType
@@ -91,14 +104,6 @@ namespace SysML2.NET.Core.POCO
         public List<Documentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property EffectiveName
-        /// </summary>
-        public string QueryEffectiveName()
-        {
-            throw new NotImplementedException("Derived property EffectiveName not yet supported");
         }
 
         /// <summary>
@@ -221,7 +226,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Member
         /// </summary>
-        public List<Element> QueryMember()
+        public List<IElement> QueryMember()
         {
             throw new NotImplementedException("Derived property Member not yet supported");
         }
@@ -243,9 +248,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The primary name of this Element.
+        /// Queries the derived property Name
         /// </summary>
-        public string Name { get; set; }
+        public string QueryName()
+        {
+            throw new NotImplementedException("Derived property Name not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property Output
@@ -290,7 +298,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedElement
         /// </summary>
-        public List<Element> QueryOwnedElement()
+        public List<IElement> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
@@ -338,7 +346,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedMember
         /// </summary>
-        public List<Element> QueryOwnedMember()
+        public List<IElement> QueryOwnedMember()
         {
             throw new NotImplementedException("Derived property OwnedMember not yet supported");
         }
@@ -354,12 +362,12 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
-        public List<Element> OwnedRelatedElement { get; set; }
+        public List<IElement> OwnedRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
-        public List<Relationship> OwnedRelationship { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property OwnedSpecialization
@@ -388,7 +396,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Owner
         /// </summary>
-        public Element QueryOwner()
+        public IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
@@ -412,12 +420,12 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
         /// </summary>
-        public Element OwningRelatedElement { get; set; }
+        public IElement OwningRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
-        public Relationship OwningRelationship { get; set; }
+        public IRelationship OwningRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property QualifiedName
@@ -430,7 +438,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property RelatedElement
         /// </summary>
-        public List<Element> QueryRelatedElement()
+        public List<IElement> QueryRelatedElement()
         {
             throw new NotImplementedException("Derived property RelatedElement not yet supported");
         }
@@ -444,16 +452,16 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
+        /// Queries the derived property ShortName
         /// </summary>
-        public string ShortName { get; set; }
+        public string QueryShortName()
+        {
+            throw new NotImplementedException("Derived property ShortName not yet supported");
+        }
 
         /// <summary>
         /// </summary>
-        public List<Element> Source { get; set; }
+        public List<IElement> Source { get; set; }
 
         /// <summary>
         /// Queries the derived property SourceType
@@ -465,7 +473,7 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// </summary>
-        public List<Element> Target { get; set; }
+        public List<IElement> Target { get; set; }
 
         /// <summary>
         /// Queries the derived property TargetType

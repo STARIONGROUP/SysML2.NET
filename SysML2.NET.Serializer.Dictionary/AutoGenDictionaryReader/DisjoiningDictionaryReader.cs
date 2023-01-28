@@ -110,6 +110,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("disjoiningType", out object disjoiningTypeObject))
             {
                 throw new ArgumentException("The disjoiningType property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
@@ -133,12 +145,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
-
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -164,12 +170,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
@@ -190,16 +190,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             disjoiningInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            disjoiningInstance.DeclaredName = declaredNameFeature;
+            disjoiningInstance.DeclaredShortName = declaredShortNameFeature;
             disjoiningInstance.DisjoiningType = disjoiningTypeFeature;
             disjoiningInstance.ElementId = elementIdFeature;
             disjoiningInstance.IsImplied = isImpliedFeature;
             disjoiningInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            disjoiningInstance.Name = nameFeature;
             disjoiningInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             disjoiningInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             disjoiningInstance.OwningRelatedElement = owningRelatedElementFeature;
             disjoiningInstance.OwningRelationship = owningRelationshipFeature;
-            disjoiningInstance.ShortName = shortNameFeature;
             disjoiningInstance.Source = sourceFeature ?? new List<Guid>();
             disjoiningInstance.Target = targetFeature ?? new List<Guid>();
             disjoiningInstance.TypeDisjoined = typeDisjoinedFeature;
@@ -227,6 +227,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("disjoiningType", out object disjoiningTypeObject))
             {
                 throw new ArgumentException("The disjoiningType property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
@@ -250,12 +262,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
-
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -281,12 +287,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Disjoining");
@@ -307,16 +307,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             disjoiningInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            disjoiningInstance.DeclaredName = declaredNameFeature;
+            disjoiningInstance.DeclaredShortName = declaredShortNameFeature;
             disjoiningInstance.DisjoiningType = disjoiningTypeFeature;
             disjoiningInstance.ElementId = elementIdFeature;
             disjoiningInstance.IsImplied = isImpliedFeature;
             disjoiningInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            disjoiningInstance.Name = nameFeature;
             disjoiningInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             disjoiningInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             disjoiningInstance.OwningRelatedElement = owningRelatedElementFeature;
             disjoiningInstance.OwningRelationship = owningRelationshipFeature;
-            disjoiningInstance.ShortName = shortNameFeature;
             disjoiningInstance.Source = sourceFeature ?? new List<Guid>();
             disjoiningInstance.Target = targetFeature ?? new List<Guid>();
             disjoiningInstance.TypeDisjoined = typeDisjoinedFeature;

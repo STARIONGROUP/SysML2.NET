@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", allocationDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", allocationDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", allocationDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", allocationDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", allocationDefinitionInstance.IsAbstract);
             dictionary.Add("isImplied", allocationDefinitionInstance.IsImplied);
@@ -115,12 +117,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isIndividual", allocationDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", allocationDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", allocationDefinitionInstance.IsVariation);
-            dictionary.Add("name", allocationDefinitionInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", allocationDefinitionInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", allocationDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", allocationDefinitionInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", allocationDefinitionInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", allocationDefinitionInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", allocationDefinitionInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", allocationDefinitionInstance.Target)} ]");
 
@@ -150,6 +150,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", allocationDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", allocationDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", allocationDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", allocationDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", allocationDefinitionInstance.IsAbstract);
             dictionary.Add("isImplied", allocationDefinitionInstance.IsImplied);
@@ -157,12 +159,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isIndividual", allocationDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", allocationDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", allocationDefinitionInstance.IsVariation);
-            dictionary.Add("name", allocationDefinitionInstance.Name);
             dictionary.Add("ownedRelatedElement", allocationDefinitionInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", allocationDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", allocationDefinitionInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", allocationDefinitionInstance.OwningRelationship);
-            dictionary.Add("shortName", allocationDefinitionInstance.ShortName);
             dictionary.Add("source", allocationDefinitionInstance.Source);
             dictionary.Add("target", allocationDefinitionInstance.Target);
 

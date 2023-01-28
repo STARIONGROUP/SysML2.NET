@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.POCO
     {
         /// <summary>
         /// </summary>
-        Element AnnotatedElement { get; set; }
+        IElement AnnotatedElement { get; set; }
 
         /// <summary>
         /// The AnnotatingElement that annotates the annotatedElement of this Annotation.
@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwningAnnotatedElement
         /// </summary>
-        Element QueryOwningAnnotatedElement();
+        IElement QueryOwningAnnotatedElement();
 
     }
 }

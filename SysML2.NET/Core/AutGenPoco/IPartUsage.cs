@@ -31,8 +31,11 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A PartUsage is a usage of a PartDefinition to represent a system or a part of a system. At least one
-    /// of the types of the PartUsage must be a PartDefinition.A PartUsage must subset, directly or
-    /// indirectly, the base PartUsage parts from the Systems model library.
+    /// of the itemDefinitions of the PartUsage must be a PartDefinition.A PartUsage must subset, directly
+    /// or indirectly, the base PartUsage parts from the Systems Model
+    /// Library.itemDefinition->selectByKind(PartDefinition)partDefinition->notEmpty()specializesFromLibrary("Parts::parts")isComposite
+    /// and owningType <> null and(owningType.oclIsKindOf(ItemDefinition) or
+    /// owningType.oclIsKindOf(ItemUsage)) implies    specializesFromLibrary("Items::Item::subparts")
     /// </summary>
     public partial interface IPartUsage : IItemUsage
     {

@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", featureInstance.AliasIds);
+            dictionary.Add("declaredName", featureInstance.DeclaredName);
+            dictionary.Add("declaredShortName", featureInstance.DeclaredShortName);
             dictionary.Add("direction", featureInstance.Direction);
             dictionary.Add("elementId", featureInstance.ElementId);
             dictionary.Add("isAbstract", featureInstance.IsAbstract);
@@ -120,10 +122,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", featureInstance.IsReadOnly);
             dictionary.Add("isSufficient", featureInstance.IsSufficient);
             dictionary.Add("isUnique", featureInstance.IsUnique);
-            dictionary.Add("name", featureInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", featureInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", featureInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", featureInstance.ShortName);
 
             return dictionary;
         }
@@ -151,6 +151,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", featureInstance.AliasIds);
+            dictionary.Add("declaredName", featureInstance.DeclaredName);
+            dictionary.Add("declaredShortName", featureInstance.DeclaredShortName);
             dictionary.Add("direction", featureInstance.Direction);
             dictionary.Add("elementId", featureInstance.ElementId);
             dictionary.Add("isAbstract", featureInstance.IsAbstract);
@@ -163,10 +165,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", featureInstance.IsReadOnly);
             dictionary.Add("isSufficient", featureInstance.IsSufficient);
             dictionary.Add("isUnique", featureInstance.IsUnique);
-            dictionary.Add("name", featureInstance.Name);
             dictionary.Add("ownedRelationship", featureInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", featureInstance.OwningRelationship);
-            dictionary.Add("shortName", featureInstance.ShortName);
 
             return dictionary;
         }

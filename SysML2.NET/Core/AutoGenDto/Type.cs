@@ -33,8 +33,12 @@ namespace SysML2.NET.Core.DTO
     /// A Type is a Namespace that is the most general kind of Element supporting the semantics of
     /// classification. A Type may be a Classifier or a Feature, defining conditions on what is classified
     /// by the Type (see also the description of isSufficient).ownedSpecialization =
-    /// ownedRelationship->selectByKind(Specialization)->    select(g | g.special = self)    multiplicity =
-    /// feature->select(oclIsKindOf(Multiplicity))ownedFeatureMembership =
+    /// ownedRelationship->selectByKind(Specialization)->    select(g | g.special = self)    multiplicity = 
+    ///    let ownedMultiplicities: Sequence(Multiplicity) =        ownedMember->selectByKind(Multiplicity)
+    /// in    if ownedMultiplicities->notEmpty() then         ownedMultiplicities->first()    else        
+    /// let inheritedMultiplicities: Sequence(Multiplicity) =           
+    /// ownedSpecialization.general.multiplicity in        if inheritedMultiplicities->notEmpty() then      
+    ///      inheritedMultiplicities->first()        endif    endifownedFeatureMembership =
     /// ownedRelationship->selectByKind(FeatureMembership)let ownedConjugators: Sequence(Conjugator) =    
     /// ownedRelationship->selectByKind(Conjugation) in    ownedConjugator =         if
     /// ownedConjugators->isEmpty() then null         else ownedConjugators->at(1) endifoutput =    if
@@ -42,12 +46,15 @@ namespace SysML2.NET.Core.DTO
     /// out or direction = inout)    endifinput =     if isConjugated then        
     /// conjugator.originalType.output    else         feature->select(direction = _'in' or direction =
     /// inout)    endifinheritedMembership = inheritedMemberships(Set{})disjointType =
-    /// disjoiningTypeDisjoining.disjoiningTypeallSupertypes()->includes(resolve("Base::Anything"))directedFeature
-    /// = feature->select(direction <> null)feature = featureMembership.ownedMemberFeaturefeatureMembership
-    /// = ownedMembership->union(    inheritedMembership->selectByKind(FeatureMembership))ownedFeature =
+    /// disjoiningTypeDisjoining.disjoiningTypespecializesFromLibrary("Base::Anything")directedFeature =
+    /// feature->select(direction <> null)feature = featureMembership.ownedMemberFeaturefeatureMembership =
+    /// ownedMembership->union(    inheritedMembership->selectByKind(FeatureMembership))ownedFeature =
     /// ownedFeatureMembership.ownedMemberFeatureintersectingType->excludes(self)unioningType->excludes(self)differencingType->excludes(self)differencingType
     /// = ownedDifferencing.differencingTypeunioningType = ownedUnioning.unioningTypeintersectingType =
-    /// ownedIntersecting.intersectingTypeownedRelationship->selectByKind(Conjugator)->size() <= 1
+    /// ownedIntersecting.intersectingTypeownedRelationship->selectByKind(Conjugator)->size() <=
+    /// 1ownedMember->selectByKind(Multiplicity)->size() <= 1endFeature = feature->select(isEnd)not
+    /// ownedMember->exists(oclIsType(Multiplicity)) implies   
+    /// ownedSpecialization.general.multiplicity->size() <= 1
     /// </summary>
     public partial class Type : IType
     {
@@ -72,6 +79,19 @@ namespace SysML2.NET.Core.DTO
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -105,11 +125,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsSufficient { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -118,14 +133,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

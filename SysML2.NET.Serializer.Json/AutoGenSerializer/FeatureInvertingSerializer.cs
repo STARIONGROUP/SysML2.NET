@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iFeatureInverting.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iFeatureInverting.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iFeatureInverting.ElementId);
 
@@ -85,8 +89,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iFeatureInverting.IsImpliedIncluded);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iFeatureInverting.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFeatureInverting.OwnedRelatedElement)
             {
@@ -119,8 +121,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFeatureInverting.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iFeatureInverting.Source)
             {

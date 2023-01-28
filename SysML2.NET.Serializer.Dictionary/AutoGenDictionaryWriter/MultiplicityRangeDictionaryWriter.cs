@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", multiplicityRangeInstance.AliasIds);
+            dictionary.Add("declaredName", multiplicityRangeInstance.DeclaredName);
+            dictionary.Add("declaredShortName", multiplicityRangeInstance.DeclaredShortName);
             dictionary.Add("direction", multiplicityRangeInstance.Direction);
             dictionary.Add("elementId", multiplicityRangeInstance.ElementId);
             dictionary.Add("isAbstract", multiplicityRangeInstance.IsAbstract);
@@ -120,10 +122,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", multiplicityRangeInstance.IsReadOnly);
             dictionary.Add("isSufficient", multiplicityRangeInstance.IsSufficient);
             dictionary.Add("isUnique", multiplicityRangeInstance.IsUnique);
-            dictionary.Add("name", multiplicityRangeInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", multiplicityRangeInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", multiplicityRangeInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", multiplicityRangeInstance.ShortName);
 
             return dictionary;
         }
@@ -151,6 +151,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", multiplicityRangeInstance.AliasIds);
+            dictionary.Add("declaredName", multiplicityRangeInstance.DeclaredName);
+            dictionary.Add("declaredShortName", multiplicityRangeInstance.DeclaredShortName);
             dictionary.Add("direction", multiplicityRangeInstance.Direction);
             dictionary.Add("elementId", multiplicityRangeInstance.ElementId);
             dictionary.Add("isAbstract", multiplicityRangeInstance.IsAbstract);
@@ -163,10 +165,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", multiplicityRangeInstance.IsReadOnly);
             dictionary.Add("isSufficient", multiplicityRangeInstance.IsSufficient);
             dictionary.Add("isUnique", multiplicityRangeInstance.IsUnique);
-            dictionary.Add("name", multiplicityRangeInstance.Name);
             dictionary.Add("ownedRelationship", multiplicityRangeInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", multiplicityRangeInstance.OwningRelationship);
-            dictionary.Add("shortName", multiplicityRangeInstance.ShortName);
 
             return dictionary;
         }

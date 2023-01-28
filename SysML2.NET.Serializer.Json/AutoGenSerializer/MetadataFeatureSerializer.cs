@@ -77,6 +77,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iMetadataFeature.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iMetadataFeature.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iMetadataFeature.Direction.HasValue)
             {
@@ -119,8 +123,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isUnique");
             writer.WriteBooleanValue(iMetadataFeature.IsUnique);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iMetadataFeature.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iMetadataFeature.OwnedRelationship)
             {
@@ -137,8 +139,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iMetadataFeature.ShortName);
             writer.WriteEndObject();
         }
     }

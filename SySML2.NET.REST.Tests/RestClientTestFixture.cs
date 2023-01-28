@@ -105,8 +105,6 @@ namespace SySML2.NET.REST.Tests
                     Assert.That(tag.OwningProject, Is.EqualTo(project.Id));
                 }
             }
-
-            
-        }
+	    }
     }
 }

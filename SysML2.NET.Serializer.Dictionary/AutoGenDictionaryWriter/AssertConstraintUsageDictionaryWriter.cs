@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", assertConstraintUsageInstance.AliasIds);
+            dictionary.Add("declaredName", assertConstraintUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", assertConstraintUsageInstance.DeclaredShortName);
             dictionary.Add("direction", assertConstraintUsageInstance.Direction);
             dictionary.Add("elementId", assertConstraintUsageInstance.ElementId);
             dictionary.Add("isAbstract", assertConstraintUsageInstance.IsAbstract);
@@ -123,11 +125,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", assertConstraintUsageInstance.IsSufficient);
             dictionary.Add("isUnique", assertConstraintUsageInstance.IsUnique);
             dictionary.Add("isVariation", assertConstraintUsageInstance.IsVariation);
-            dictionary.Add("name", assertConstraintUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", assertConstraintUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", assertConstraintUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", assertConstraintUsageInstance.PortionKind);
-            dictionary.Add("shortName", assertConstraintUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -155,6 +155,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", assertConstraintUsageInstance.AliasIds);
+            dictionary.Add("declaredName", assertConstraintUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", assertConstraintUsageInstance.DeclaredShortName);
             dictionary.Add("direction", assertConstraintUsageInstance.Direction);
             dictionary.Add("elementId", assertConstraintUsageInstance.ElementId);
             dictionary.Add("isAbstract", assertConstraintUsageInstance.IsAbstract);
@@ -170,11 +172,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", assertConstraintUsageInstance.IsSufficient);
             dictionary.Add("isUnique", assertConstraintUsageInstance.IsUnique);
             dictionary.Add("isVariation", assertConstraintUsageInstance.IsVariation);
-            dictionary.Add("name", assertConstraintUsageInstance.Name);
             dictionary.Add("ownedRelationship", assertConstraintUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", assertConstraintUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", assertConstraintUsageInstance.PortionKind);
-            dictionary.Add("shortName", assertConstraintUsageInstance.ShortName);
 
             return dictionary;
         }

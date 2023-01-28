@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iSubsetting.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iSubsetting.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iSubsetting.ElementId);
 
@@ -82,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iSubsetting.IsImpliedIncluded);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iSubsetting.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iSubsetting.OwnedRelatedElement)
             {
@@ -116,8 +118,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iSubsetting.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iSubsetting.Source)
             {

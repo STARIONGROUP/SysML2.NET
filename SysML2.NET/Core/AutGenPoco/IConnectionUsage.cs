@@ -35,7 +35,8 @@ namespace SysML2.NET.Core.POCO
     /// connection between parts of a system. However, other kinds of kernel AssociationStructures are also
     /// allowed, to permit use of AssociationStructures from the Kernel Library (such as the default
     /// BinaryLinkObject).A ConnectionUsage must subset the base ConnectionUsage connections from the
-    /// Systems model library.
+    /// Systems model library.specializesFromLibrary("Connections::connections")ownedEndFeature->size() = 2
+    /// implies    specializesFromLibrary("Connections::binaryConnections")
     /// </summary>
     public partial interface IConnectionUsage : IConnectorAsUsage, IPartUsage
     {

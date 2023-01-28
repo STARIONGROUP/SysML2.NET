@@ -30,16 +30,17 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A Namespace is an Element that contains other Elements, known as its members, via Membership
+    /// A Namespace is an Element that contains other Element, known as its members, via Membership
     /// Relationships with those Elements. The members of a Namespace may be owned by the Namespace, aliased
-    /// in the Namespace, or imported into the Namespace via Import Relationships with other Namespaces.A
-    /// Namespace can provide names for its members via the memberNames specified by the Memberships in the
-    /// Namespace. If a Membership specifies a memberName, then that is the name of the corresponding
-    /// memberElement relative to the Namespace. Note that the same Element may be the memberElement of
-    /// multiple Memberships in a Namespace (though it may be owned at most once), each of which may define
-    /// a separate alias for the Element relative to the Namespace.membership->forAll(m1 |
-    /// membership->forAll(m2 | m1 <> m2 implies m1.isDistinguishableFrom(m2)))member =
-    /// membership.memberElementownedMember =
+    /// in the Namespace, or imported into the Namespace via Import Relationships with other Namespace.A
+    /// Namespace can provide names for its members via the memberNames and memberShortNames specified by
+    /// the Memberships in the Namespace. If a Membership specifies a memberName and/or memberShortName,
+    /// then that those are names of the corresponding memberElement relative to the Namespace. For an
+    /// OwningMembership, the owningMemberName and owningMemberShortName are given by the Element name and
+    /// shortName. Note that the same Element may be the memberElement of multiple Memberships in a
+    /// Namespace (though it may be owned at most once), each of which may define a separate alias for the
+    /// Element relative to the Namespace.membership->forAll(m1 |     membership->forAll(m2 |         m1 <>
+    /// m2 implies m1.isDistinguishableFrom(m2)))member = membership.memberElementownedMember =
     /// ownedMembership->selectByKind(OwningMembership).ownedMemberElementimportedMembership =
     /// importedMemberships(Set{})ownedImport = ownedRelationship->selectByKind(Import)ownedMembership =
     /// ownedRelationship->selectByKind(Membership)

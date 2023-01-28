@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", variantMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", variantMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", variantMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", variantMembershipInstance.ElementId);
             dictionary.Add("isImplied", variantMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", variantMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", variantMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", variantMembershipInstance.MemberName);
             dictionary.Add("memberShortName", variantMembershipInstance.MemberShortName);
-            dictionary.Add("name", variantMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", variantMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", variantMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", variantMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", variantMembershipInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", variantMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", variantMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", variantMembershipInstance.Target)} ]");
             dictionary.Add("visibility", variantMembershipInstance.Visibility);
@@ -150,18 +150,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", variantMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", variantMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", variantMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", variantMembershipInstance.ElementId);
             dictionary.Add("isImplied", variantMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", variantMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", variantMembershipInstance.MemberElement);
             dictionary.Add("memberName", variantMembershipInstance.MemberName);
             dictionary.Add("memberShortName", variantMembershipInstance.MemberShortName);
-            dictionary.Add("name", variantMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", variantMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", variantMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", variantMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", variantMembershipInstance.OwningRelationship);
-            dictionary.Add("shortName", variantMembershipInstance.ShortName);
             dictionary.Add("source", variantMembershipInstance.Source);
             dictionary.Add("target", variantMembershipInstance.Target);
             dictionary.Add("visibility", variantMembershipInstance.Visibility);

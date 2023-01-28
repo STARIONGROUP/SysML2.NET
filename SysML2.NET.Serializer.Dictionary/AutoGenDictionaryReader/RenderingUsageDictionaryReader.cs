@@ -110,6 +110,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
@@ -194,12 +206,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
@@ -218,14 +224,10 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             PortionKind? portionKindFeature = portionKindObject == null ? null : (PortionKind?)Enum.Parse(typeof(PortionKind), Convert.ToString(portionKindObject), true);
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             renderingUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            renderingUsageInstance.DeclaredName = declaredNameFeature;
+            renderingUsageInstance.DeclaredShortName = declaredShortNameFeature;
             renderingUsageInstance.Direction = directionFeature;
             renderingUsageInstance.ElementId = elementIdFeature;
             renderingUsageInstance.IsAbstract = isAbstractFeature;
@@ -240,11 +242,9 @@ namespace SysML2.NET.Serializer.Dictionary
             renderingUsageInstance.IsSufficient = isSufficientFeature;
             renderingUsageInstance.IsUnique = isUniqueFeature;
             renderingUsageInstance.IsVariation = isVariationFeature;
-            renderingUsageInstance.Name = nameFeature;
             renderingUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             renderingUsageInstance.OwningRelationship = owningRelationshipFeature;
             renderingUsageInstance.PortionKind = portionKindFeature;
-            renderingUsageInstance.ShortName = shortNameFeature;
 
             return renderingUsageInstance;
         }
@@ -268,6 +268,18 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
+
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -353,12 +365,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
@@ -377,14 +383,10 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             PortionKind? portionKindFeature = (PortionKind?)portionKindObject;
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a RenderingUsage");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             renderingUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            renderingUsageInstance.DeclaredName = declaredNameFeature;
+            renderingUsageInstance.DeclaredShortName = declaredShortNameFeature;
             renderingUsageInstance.Direction = directionFeature;
             renderingUsageInstance.ElementId = elementIdFeature;
             renderingUsageInstance.IsAbstract = isAbstractFeature;
@@ -399,11 +401,9 @@ namespace SysML2.NET.Serializer.Dictionary
             renderingUsageInstance.IsSufficient = isSufficientFeature;
             renderingUsageInstance.IsUnique = isUniqueFeature;
             renderingUsageInstance.IsVariation = isVariationFeature;
-            renderingUsageInstance.Name = nameFeature;
             renderingUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             renderingUsageInstance.OwningRelationship = owningRelationshipFeature;
             renderingUsageInstance.PortionKind = portionKindFeature;
-            renderingUsageInstance.ShortName = shortNameFeature;
 
             return renderingUsageInstance;
         }

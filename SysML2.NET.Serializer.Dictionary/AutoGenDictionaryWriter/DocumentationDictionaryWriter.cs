@@ -110,13 +110,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("aliasIds", documentationInstance.AliasIds);
             dictionary.Add("annotation", $"[ {string.Join(",", documentationInstance.Annotation)} ]");
             dictionary.Add("body", documentationInstance.Body);
+            dictionary.Add("declaredName", documentationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", documentationInstance.DeclaredShortName);
             dictionary.Add("elementId", documentationInstance.ElementId);
             dictionary.Add("isImpliedIncluded", documentationInstance.IsImpliedIncluded);
             dictionary.Add("locale", documentationInstance.Locale);
-            dictionary.Add("name", documentationInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", documentationInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", documentationInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", documentationInstance.ShortName);
 
             return dictionary;
         }
@@ -146,13 +146,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("aliasIds", documentationInstance.AliasIds);
             dictionary.Add("annotation", documentationInstance.Annotation);
             dictionary.Add("body", documentationInstance.Body);
+            dictionary.Add("declaredName", documentationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", documentationInstance.DeclaredShortName);
             dictionary.Add("elementId", documentationInstance.ElementId);
             dictionary.Add("isImpliedIncluded", documentationInstance.IsImpliedIncluded);
             dictionary.Add("locale", documentationInstance.Locale);
-            dictionary.Add("name", documentationInstance.Name);
             dictionary.Add("ownedRelationship", documentationInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", documentationInstance.OwningRelationship);
-            dictionary.Add("shortName", documentationInstance.ShortName);
 
             return dictionary;
         }

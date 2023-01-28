@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", portioningFeatureInstance.AliasIds);
+            dictionary.Add("declaredName", portioningFeatureInstance.DeclaredName);
+            dictionary.Add("declaredShortName", portioningFeatureInstance.DeclaredShortName);
             dictionary.Add("direction", portioningFeatureInstance.Direction);
             dictionary.Add("elementId", portioningFeatureInstance.ElementId);
             dictionary.Add("isAbstract", portioningFeatureInstance.IsAbstract);
@@ -120,10 +122,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", portioningFeatureInstance.IsReadOnly);
             dictionary.Add("isSufficient", portioningFeatureInstance.IsSufficient);
             dictionary.Add("isUnique", portioningFeatureInstance.IsUnique);
-            dictionary.Add("name", portioningFeatureInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", portioningFeatureInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", portioningFeatureInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", portioningFeatureInstance.ShortName);
 
             return dictionary;
         }
@@ -151,6 +151,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", portioningFeatureInstance.AliasIds);
+            dictionary.Add("declaredName", portioningFeatureInstance.DeclaredName);
+            dictionary.Add("declaredShortName", portioningFeatureInstance.DeclaredShortName);
             dictionary.Add("direction", portioningFeatureInstance.Direction);
             dictionary.Add("elementId", portioningFeatureInstance.ElementId);
             dictionary.Add("isAbstract", portioningFeatureInstance.IsAbstract);
@@ -163,10 +165,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", portioningFeatureInstance.IsReadOnly);
             dictionary.Add("isSufficient", portioningFeatureInstance.IsSufficient);
             dictionary.Add("isUnique", portioningFeatureInstance.IsUnique);
-            dictionary.Add("name", portioningFeatureInstance.Name);
             dictionary.Add("ownedRelationship", portioningFeatureInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", portioningFeatureInstance.OwningRelationship);
-            dictionary.Add("shortName", portioningFeatureInstance.ShortName);
 
             return dictionary;
         }

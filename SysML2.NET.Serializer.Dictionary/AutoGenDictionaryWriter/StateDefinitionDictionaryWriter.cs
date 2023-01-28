@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", stateDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", stateDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", stateDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", stateDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", stateDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", stateDefinitionInstance.IsImpliedIncluded);
@@ -115,10 +117,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isParallel", stateDefinitionInstance.IsParallel);
             dictionary.Add("isSufficient", stateDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", stateDefinitionInstance.IsVariation);
-            dictionary.Add("name", stateDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", stateDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", stateDefinitionInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", stateDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -146,6 +146,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", stateDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", stateDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", stateDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", stateDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", stateDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", stateDefinitionInstance.IsImpliedIncluded);
@@ -153,10 +155,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isParallel", stateDefinitionInstance.IsParallel);
             dictionary.Add("isSufficient", stateDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", stateDefinitionInstance.IsVariation);
-            dictionary.Add("name", stateDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", stateDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", stateDefinitionInstance.OwningRelationship);
-            dictionary.Add("shortName", stateDefinitionInstance.ShortName);
 
             return dictionary;
         }

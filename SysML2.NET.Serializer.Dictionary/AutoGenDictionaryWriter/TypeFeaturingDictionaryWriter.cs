@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", typeFeaturingInstance.AliasIds);
+            dictionary.Add("declaredName", typeFeaturingInstance.DeclaredName);
+            dictionary.Add("declaredShortName", typeFeaturingInstance.DeclaredShortName);
             dictionary.Add("elementId", typeFeaturingInstance.ElementId);
             dictionary.Add("feature", typeFeaturingInstance.Feature.ToString());
             dictionary.Add("featureOfType", typeFeaturingInstance.FeatureOfType.ToString());
             dictionary.Add("featuringType", typeFeaturingInstance.FeaturingType.ToString());
             dictionary.Add("isImplied", typeFeaturingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", typeFeaturingInstance.IsImpliedIncluded);
-            dictionary.Add("name", typeFeaturingInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", typeFeaturingInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", typeFeaturingInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", typeFeaturingInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", typeFeaturingInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", typeFeaturingInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", typeFeaturingInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", typeFeaturingInstance.Target)} ]");
             dictionary.Add("type", typeFeaturingInstance.Type.ToString());
@@ -150,18 +150,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", typeFeaturingInstance.AliasIds);
+            dictionary.Add("declaredName", typeFeaturingInstance.DeclaredName);
+            dictionary.Add("declaredShortName", typeFeaturingInstance.DeclaredShortName);
             dictionary.Add("elementId", typeFeaturingInstance.ElementId);
             dictionary.Add("feature", typeFeaturingInstance.Feature);
             dictionary.Add("featureOfType", typeFeaturingInstance.FeatureOfType);
             dictionary.Add("featuringType", typeFeaturingInstance.FeaturingType);
             dictionary.Add("isImplied", typeFeaturingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", typeFeaturingInstance.IsImpliedIncluded);
-            dictionary.Add("name", typeFeaturingInstance.Name);
             dictionary.Add("ownedRelatedElement", typeFeaturingInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", typeFeaturingInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", typeFeaturingInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", typeFeaturingInstance.OwningRelationship);
-            dictionary.Add("shortName", typeFeaturingInstance.ShortName);
             dictionary.Add("source", typeFeaturingInstance.Source);
             dictionary.Add("target", typeFeaturingInstance.Target);
             dictionary.Add("type", typeFeaturingInstance.Type);

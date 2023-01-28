@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", redefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", redefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", redefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", redefinitionInstance.ElementId);
             dictionary.Add("general", redefinitionInstance.General.ToString());
             dictionary.Add("isImplied", redefinitionInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", redefinitionInstance.IsImpliedIncluded);
-            dictionary.Add("name", redefinitionInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", redefinitionInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", redefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", redefinitionInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", redefinitionInstance.OwningRelationship.ToString());
             dictionary.Add("redefinedFeature", redefinitionInstance.RedefinedFeature.ToString());
             dictionary.Add("redefiningFeature", redefinitionInstance.RedefiningFeature.ToString());
-            dictionary.Add("shortName", redefinitionInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", redefinitionInstance.Source)} ]");
             dictionary.Add("specific", redefinitionInstance.Specific.ToString());
             dictionary.Add("subsettedFeature", redefinitionInstance.SubsettedFeature.ToString());
@@ -152,18 +152,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", redefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", redefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", redefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", redefinitionInstance.ElementId);
             dictionary.Add("general", redefinitionInstance.General);
             dictionary.Add("isImplied", redefinitionInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", redefinitionInstance.IsImpliedIncluded);
-            dictionary.Add("name", redefinitionInstance.Name);
             dictionary.Add("ownedRelatedElement", redefinitionInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", redefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", redefinitionInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", redefinitionInstance.OwningRelationship);
             dictionary.Add("redefinedFeature", redefinitionInstance.RedefinedFeature);
             dictionary.Add("redefiningFeature", redefinitionInstance.RedefiningFeature);
-            dictionary.Add("shortName", redefinitionInstance.ShortName);
             dictionary.Add("source", redefinitionInstance.Source);
             dictionary.Add("specific", redefinitionInstance.Specific);
             dictionary.Add("subsettedFeature", redefinitionInstance.SubsettedFeature);

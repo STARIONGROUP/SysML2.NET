@@ -32,9 +32,9 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An AttributeDefinition is a Definition and a DataType of information about a quality or
     /// characteristic of a system or part of a system that has no independent identity other than its
-    /// value. All features of an AttributeDefinition must have isComposite = false.An AttributeDefinition
-    /// must subclass, directly or indirectly, the base AttributeDefinition AttributeValue from the Systems
-    /// model library.
+    /// value. All features of an AttributeDefinitionAttributeDefinition must be referential
+    /// (non-composite).As a DataType, an AttributeDefinition must specialize, directly or indirectly, the
+    /// base DataType Base::DataValue from the Kernel Semantic Library.feature->forAll(not isComposite)
     /// </summary>
     public partial class AttributeDefinition : IAttributeDefinition
     {
@@ -59,6 +59,19 @@ namespace SysML2.NET.Core.DTO
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -98,11 +111,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariation { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -111,14 +119,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

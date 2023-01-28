@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iFlowConnectionDefinition.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iFlowConnectionDefinition.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iFlowConnectionDefinition.ElementId);
 
@@ -91,8 +95,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iFlowConnectionDefinition.IsVariation);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iFlowConnectionDefinition.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFlowConnectionDefinition.OwnedRelatedElement)
             {
@@ -125,8 +127,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFlowConnectionDefinition.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iFlowConnectionDefinition.Source)
             {

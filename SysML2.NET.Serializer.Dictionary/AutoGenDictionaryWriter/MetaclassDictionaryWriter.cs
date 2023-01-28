@@ -108,14 +108,14 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", metaclassInstance.AliasIds);
+            dictionary.Add("declaredName", metaclassInstance.DeclaredName);
+            dictionary.Add("declaredShortName", metaclassInstance.DeclaredShortName);
             dictionary.Add("elementId", metaclassInstance.ElementId);
             dictionary.Add("isAbstract", metaclassInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", metaclassInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", metaclassInstance.IsSufficient);
-            dictionary.Add("name", metaclassInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", metaclassInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", metaclassInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", metaclassInstance.ShortName);
 
             return dictionary;
         }
@@ -143,14 +143,14 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", metaclassInstance.AliasIds);
+            dictionary.Add("declaredName", metaclassInstance.DeclaredName);
+            dictionary.Add("declaredShortName", metaclassInstance.DeclaredShortName);
             dictionary.Add("elementId", metaclassInstance.ElementId);
             dictionary.Add("isAbstract", metaclassInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", metaclassInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", metaclassInstance.IsSufficient);
-            dictionary.Add("name", metaclassInstance.Name);
             dictionary.Add("ownedRelationship", metaclassInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", metaclassInstance.OwningRelationship);
-            dictionary.Add("shortName", metaclassInstance.ShortName);
 
             return dictionary;
         }

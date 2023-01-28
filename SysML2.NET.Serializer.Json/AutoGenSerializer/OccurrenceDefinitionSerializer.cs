@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iOccurrenceDefinition.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iOccurrenceDefinition.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iOccurrenceDefinition.ElementId);
 
@@ -88,8 +92,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iOccurrenceDefinition.IsVariation);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iOccurrenceDefinition.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iOccurrenceDefinition.OwnedRelationship)
             {
@@ -106,8 +108,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iOccurrenceDefinition.ShortName);
             writer.WriteEndObject();
         }
     }

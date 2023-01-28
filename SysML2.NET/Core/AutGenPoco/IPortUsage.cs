@@ -30,10 +30,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A PortUsage is a usage of a PortDefinition. A PortUsage must be owned by a PartDefinition, a
-    /// PortDefinition, a PartUsage or another PortUsage.  Any nestedUsages of a PortUsage, other than
-    /// nested PortUsages, must not be composite.A PortUsage must subset, directly or indirectly, the
-    /// PortUsage ports from the Systems model library.nestedUsage->    select(not oclIsKindOf(PortUsage))->
+    /// A PortUsage is a usage of a PortDefinition. A PortUsage itself as well as all its nestedUsages must
+    /// be referential (non-composite).A PortUsage must specialize, directly or indirectly, the PortUsage
+    /// Ports::ports from the Systems Model Library.nestedUsage->    select(not oclIsKindOf(PortUsage))->   
     /// forAll(not isComposite)
     /// </summary>
     public partial interface IPortUsage : IOccurrenceUsage

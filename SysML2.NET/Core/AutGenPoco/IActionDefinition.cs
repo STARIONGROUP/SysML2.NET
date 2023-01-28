@@ -30,9 +30,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An ActionDefinition is a Definition that is also a Behavior that defines an action performed by a
-    /// system or part of a system.An ActionDefinition must subclass, directly or indirectly, the base
-    /// ActionDefinition Action from the Systems model library.
+    /// An ActionDefinition is a Definition that is also a Behavior that defines an Action performed by a
+    /// system or part of a system.specializesFromLibrary('Actions::Action')action =
+    /// usage->selectByKind(ActionUsage)
     /// </summary>
     public partial interface IActionDefinition : IOccurrenceDefinition, IBehavior
     {

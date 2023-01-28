@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", viewpointUsageInstance.AliasIds);
+            dictionary.Add("declaredName", viewpointUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", viewpointUsageInstance.DeclaredShortName);
             dictionary.Add("direction", viewpointUsageInstance.Direction);
             dictionary.Add("elementId", viewpointUsageInstance.ElementId);
             dictionary.Add("isAbstract", viewpointUsageInstance.IsAbstract);
@@ -122,12 +124,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", viewpointUsageInstance.IsSufficient);
             dictionary.Add("isUnique", viewpointUsageInstance.IsUnique);
             dictionary.Add("isVariation", viewpointUsageInstance.IsVariation);
-            dictionary.Add("name", viewpointUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", viewpointUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", viewpointUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", viewpointUsageInstance.PortionKind);
             dictionary.Add("reqId", viewpointUsageInstance.ReqId);
-            dictionary.Add("shortName", viewpointUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -155,6 +155,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", viewpointUsageInstance.AliasIds);
+            dictionary.Add("declaredName", viewpointUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", viewpointUsageInstance.DeclaredShortName);
             dictionary.Add("direction", viewpointUsageInstance.Direction);
             dictionary.Add("elementId", viewpointUsageInstance.ElementId);
             dictionary.Add("isAbstract", viewpointUsageInstance.IsAbstract);
@@ -169,12 +171,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", viewpointUsageInstance.IsSufficient);
             dictionary.Add("isUnique", viewpointUsageInstance.IsUnique);
             dictionary.Add("isVariation", viewpointUsageInstance.IsVariation);
-            dictionary.Add("name", viewpointUsageInstance.Name);
             dictionary.Add("ownedRelationship", viewpointUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", viewpointUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", viewpointUsageInstance.PortionKind);
             dictionary.Add("reqId", viewpointUsageInstance.ReqId);
-            dictionary.Add("shortName", viewpointUsageInstance.ShortName);
 
             return dictionary;
         }

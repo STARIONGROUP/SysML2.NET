@@ -30,17 +30,20 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An OccurrenceUsage is a Usage whose type is a Class. Nominally, if the type is an
+    /// An OccurrenceUsage is a Usage whose types are all Classes. Nominally, if a type is an
     /// OccurrenceDefinition, an OccurrenceUsage is a Usage of that OccurrenceDefinition within a system.
     /// However, other types of Kernel Classes are also allowed, to permit use of Classes from the Kernel
-    /// Library.An OccurrenceUsage must subset, directly or indirectly, the base Feature occurrences from
-    /// the Kernel model library.if portionKind = null then portioningFeature = nullelse    
-    /// portioningFeature <> null and    portionKind = portioningFeature.portionKind and   
-    /// occurrenceDefinition.asSet() = portioningFeature.type.asSet()endiflet individualDefinitions :
-    /// Sequence(OccurrenceDefinition) =     occurrenceDefinition->       
+    /// Model Libraries.An OccurrenceUsage must subset, directly or indirectly, the base Feature occurrences
+    /// from the Kernel Semantic Library.(portionKind <> null) = (portioningFeature <> null)let
+    /// individualDefinitions : Sequence(OccurrenceDefinition) =     occurrenceDefinition->       
     /// selectByKind(OccurrenceDefinition)->        select(isIndividual) inif
     /// individualDefinitions->isEmpty() then nullelse individualDefinitions->at(1) endifisIndividual
-    /// implies individualDefinition <> null
+    /// implies individualDefinition <> nulloccurrenceDefinition->select(isIndividual).size() <=
+    /// 1specializesFromLibrary("Occurrences::occurrences")isComposite andowningType <> null
+    /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(OccurrenceUsage) or
+    /// owningType.oclIsKindOf(Feature) and    owningType.oclAsType(Feature).type->       
+    /// exists(oclIsKind(Class))) implies   
+    /// specializesFromLibrary("Occurrences::Occurrence::suboccurrences")
     /// </summary>
     public partial interface IOccurrenceUsage : IUsage
     {

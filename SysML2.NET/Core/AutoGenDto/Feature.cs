@@ -49,16 +49,62 @@ namespace SysML2.NET.Core.DTO
     /// ownedRelationship->selectByKind(TypeFeaturing)->    select(tf | tf.featureOfType =
     /// self)ownedSubsetting = ownedGeneralization->selectByKind(Subsetting)isComposite =
     /// owningFeatureMembership <> null and owningFeatureMembership.isCompositeownedTyping =
-    /// ownedGeneralization->selectByKind(FeatureTyping)isEnd = owningFeatureMembership <> null and
+    /// ownedGeneralization->selectByKind(FeatureTyping)type =    if chainingFeature->notEmpty() then       
+    /// chainingFeature->last().type    else        ownedTyping.type->           
+    /// union(ownedSubsetting.subsettedFeature.type)->            asOrderedSet()    endifisEnd =
+    /// owningFeatureMembership <> null and
     /// owningFeatureMembership.oclIsKindOf(EndFeatureMembership)multiplicity <> null implies
     /// multiplicity.featuringType = featuringType
-    /// allSupertypes()->includes(resolve("Base::things"))chainingFeatures->excludes(self)ownedFeatureChaining
-    /// = ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
+    /// specializesFromLibrary("Base::things")chainingFeatures->excludes(self)ownedFeatureChaining =
+    /// ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
     /// ownedFeatureChaining.chainingFeaturechainingFeatures->size() <> 1inverseFeature =
     /// invertingFeatureInverting.featureInverseinvertedFeature =
     /// invertedFeatureInverting.featureInvertedownedTyping.type->exists(selectByKind(DataType)) implies   
-    /// allSupertypes()->includes(resolve("Base::dataValues"))ownedTyping.type->exists(selectByKind(Class))
-    /// implies    allSupertypes()->includes(resolve("Occurrences::occurrences"))
+    /// specializesFromLibary("Base::dataValues")ownedTyping.type->exists(selectByKind(Class)) implies   
+    /// specializesFromLibrary("Occurrences::occurrences")isComposite
+    /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
+    /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
+    /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
+    /// specializesFromLibrary("Occurrence::Occurrence::suboccurrences")isComposite
+    /// andownedTyping.type->includes(oclIsKindOf(Structure)) andowningType <> null
+    /// and(owningType.oclIsKindOf(Structure) or owningType.type->includes(oclIsKindOf(Structure))) implies 
+    ///   specializesFromLibrary("Occurrence::Occurrence::suboccurrences")isEnd and owningType <> null
+    /// andowningType.oclIsKindOf(Association) implies   
+    /// specializesFromLibrary("Links::Link::participants")isEnd and owningType <> null implies    let i :
+    /// Integer =         owningType.ownedFeature->select(isEnd) in   
+    /// owningType.ownedSpecialization.general->        forAll(supertype |            let ownedEndFeatures :
+    /// Sequence(Feature) =                 supertype.ownedFeature->select(isEnd) in           
+    /// ownedEndFeatures->size() >= i implies                redefines(ownedEndFeatures->at(i))owningType <>
+    /// null and(owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step)) implies    let i :
+    /// Integer =         owningType.ownedFeature->select(direction <> null) in   
+    /// owningType.ownedSpecialization.general->        forAll(supertype |            let ownedParameters :
+    /// Sequence(Feature) =                 supertype.ownedFeature->select(direction <> null) in           
+    /// ownedParameters->size() >= i implies                redefines(ownedParameters->at(i))owningType <>
+    /// null and(owningType.oclIsKindOf(LiteralExpression) or
+    /// owningType.oclIsKindOf(FeatureReferenceExpression)) implies    if
+    /// owningType.oclIsKindOf(LiteralString) then        specializesFromLibrary("ScalarValues::String")   
+    /// else if owningType.oclIsKindOf(LiteralBoolean) then       
+    /// specializesFromLibrary("ScalarValues::Boolean")    else if owningType.oclIsKindOf(LiteralInteger)
+    /// then        specializesFromLibrary("ScalarValues::Rational")    else if
+    /// owningType.oclIsKindOf(LiteralBoolean) then        specializesFromLibrary("ScalarValues::Rational") 
+    ///   else if owningType.oclIsKindOf(LiteralBoolean) then       
+    /// specializesFromLibrary("ScalarValues::Real")    else specializes(       
+    /// owningType.oclAsType(FeatureReferenceExpression).referent)    endif endif endif endif
+    /// endifowningType <> null andowningType.oclIsKindOf(ItemFlowEnd) andowningType.ownedFeature->at(1) =
+    /// self implies    let flowType : Type = owningType.owningType in    flowType <> null implies       
+    /// let i : Integer =             flowType.ownedFeature.indexOf(owningType) in        (i = 1 implies    
+    ///         redefinesFromLibrary("Transfers::Transfer::source::sourceOutput")) and        (i = 2 implies
+    ///            redefinesFromLibrary("Transfers::Transfer::source::targetInput"))                
+    /// ownedMembership->    selectByKind(FeatureValue)->    forAll(fv |
+    /// specializes(fv.value.result))owningType <> null and(owningType.oclIsKindOf(Function) and    self =
+    /// owningType.oclAsType(Function).result or owningType.oclIsKindOf(Expression) and    self =
+    /// owningType.oclAsType(Expression).result) implies    owningType.ownedSpecialization.general->       
+    /// select(oclIsKindOf(Function) or oclIsKindOf(Expression))->        forAll(supertype |           
+    /// redefines(                if superType.oclIsKindOf(Function) then                   
+    /// superType.oclAsType(Function).result                else                   
+    /// superType.oclAsType(Expression).result               
+    /// endif)ownedTyping.type->exists(selectByKind(Structure)) implies   
+    /// specializesFromLibary("Objects::objects")
     /// </summary>
     public partial class Feature : IFeature
     {
@@ -92,6 +138,19 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         public FeatureDirectionKind? Direction { get; set; }
@@ -110,7 +169,7 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
+        /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
         public bool IsComposite { get; set; }
 
@@ -172,11 +231,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsUnique { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -185,14 +239,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

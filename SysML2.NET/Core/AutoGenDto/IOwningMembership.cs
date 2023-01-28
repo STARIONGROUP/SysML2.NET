@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An OwningMembership is a Membership that owns its memberElement as a ownedRelatedElement. The
     /// ownedMemberElementM becomes an ownedMember of the membershipOwningNamespace.ownedMemberName =
-    /// ownedMemberElement.effectiveNameownedMemberShortName = ownedMemberElement.shortName
+    /// ownedMemberElement.nameownedMemberShortName = ownedMemberElement.shortName
     /// </summary>
     public partial interface IOwningMembership : IMembership
     {

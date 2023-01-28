@@ -38,9 +38,9 @@ namespace SysML2.NET.Core.POCO
     /// else if owningNamespace.owner = null then escapedName()    else if owningNamespace.qualifiedName =
     /// null then null    else owningNamespace.qualifiedName + '::' + escapedName()    endif endif
     /// endifdocumentation = ownedElement->selectByKind(Documentation)ownedAnnotation =
-    /// ownedRelationship->selectByKind(Annotation)->    select(a | a.annotatedElement =
-    /// self)effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =
-    /// libraryNamespace() <>null
+    /// ownedRelationship->selectByKind(Annotation)->    select(a | a.annotatedElement = self)name =
+    /// effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =
+    /// libraryNamespace() <>nullshortName = effectiveShortName()
     /// </summary>
     public partial interface IElement
     {
@@ -50,14 +50,22 @@ namespace SysML2.NET.Core.POCO
         List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Queries the derived property Documentation
         /// </summary>
         List<Documentation> QueryDocumentation();
-
-        /// <summary>
-        /// Queries the derived property EffectiveName
-        /// </summary>
-        string QueryEffectiveName();
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -80,9 +88,9 @@ namespace SysML2.NET.Core.POCO
         bool QueryIsLibraryElement();
 
         /// <summary>
-        /// The primary name of this Element.
+        /// Queries the derived property Name
         /// </summary>
-        string Name { get; set; }
+        string QueryName();
 
         /// <summary>
         /// Queries the derived property OwnedAnnotation
@@ -92,17 +100,17 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedElement
         /// </summary>
-        List<Element> QueryOwnedElement();
+        List<IElement> QueryOwnedElement();
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
-        List<Relationship> OwnedRelationship { get; set; }
+        List<IRelationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property Owner
         /// </summary>
-        Element QueryOwner();
+        IElement QueryOwner();
 
         /// <summary>
         /// Queries the derived property OwningMembership
@@ -117,7 +125,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
-        Relationship OwningRelationship { get; set; }
+        IRelationship OwningRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property QualifiedName
@@ -125,12 +133,9 @@ namespace SysML2.NET.Core.POCO
         string QueryQualifiedName();
 
         /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
+        /// Queries the derived property ShortName
         /// </summary>
-        string ShortName { get; set; }
+        string QueryShortName();
 
         /// <summary>
         /// Queries the derived property TextualRepresentation

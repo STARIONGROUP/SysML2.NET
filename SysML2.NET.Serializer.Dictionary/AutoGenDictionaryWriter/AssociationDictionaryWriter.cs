@@ -108,17 +108,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", associationInstance.AliasIds);
+            dictionary.Add("declaredName", associationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", associationInstance.DeclaredShortName);
             dictionary.Add("elementId", associationInstance.ElementId);
             dictionary.Add("isAbstract", associationInstance.IsAbstract);
             dictionary.Add("isImplied", associationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", associationInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", associationInstance.IsSufficient);
-            dictionary.Add("name", associationInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", associationInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", associationInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", associationInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", associationInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", associationInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", associationInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", associationInstance.Target)} ]");
 
@@ -148,17 +148,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", associationInstance.AliasIds);
+            dictionary.Add("declaredName", associationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", associationInstance.DeclaredShortName);
             dictionary.Add("elementId", associationInstance.ElementId);
             dictionary.Add("isAbstract", associationInstance.IsAbstract);
             dictionary.Add("isImplied", associationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", associationInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", associationInstance.IsSufficient);
-            dictionary.Add("name", associationInstance.Name);
             dictionary.Add("ownedRelatedElement", associationInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", associationInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", associationInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", associationInstance.OwningRelationship);
-            dictionary.Add("shortName", associationInstance.ShortName);
             dictionary.Add("source", associationInstance.Source);
             dictionary.Add("target", associationInstance.Target);
 

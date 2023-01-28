@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", literalInfinityInstance.AliasIds);
+            dictionary.Add("declaredName", literalInfinityInstance.DeclaredName);
+            dictionary.Add("declaredShortName", literalInfinityInstance.DeclaredShortName);
             dictionary.Add("direction", literalInfinityInstance.Direction);
             dictionary.Add("elementId", literalInfinityInstance.ElementId);
             dictionary.Add("isAbstract", literalInfinityInstance.IsAbstract);
@@ -120,10 +122,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", literalInfinityInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalInfinityInstance.IsSufficient);
             dictionary.Add("isUnique", literalInfinityInstance.IsUnique);
-            dictionary.Add("name", literalInfinityInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", literalInfinityInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", literalInfinityInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", literalInfinityInstance.ShortName);
 
             return dictionary;
         }
@@ -151,6 +151,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", literalInfinityInstance.AliasIds);
+            dictionary.Add("declaredName", literalInfinityInstance.DeclaredName);
+            dictionary.Add("declaredShortName", literalInfinityInstance.DeclaredShortName);
             dictionary.Add("direction", literalInfinityInstance.Direction);
             dictionary.Add("elementId", literalInfinityInstance.ElementId);
             dictionary.Add("isAbstract", literalInfinityInstance.IsAbstract);
@@ -163,10 +165,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", literalInfinityInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalInfinityInstance.IsSufficient);
             dictionary.Add("isUnique", literalInfinityInstance.IsUnique);
-            dictionary.Add("name", literalInfinityInstance.Name);
             dictionary.Add("ownedRelationship", literalInfinityInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", literalInfinityInstance.OwningRelationship);
-            dictionary.Add("shortName", literalInfinityInstance.ShortName);
 
             return dictionary;
         }

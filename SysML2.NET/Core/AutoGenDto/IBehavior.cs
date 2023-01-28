@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A Behavior coordinates occurrences of other Behaviors, as well as changes in objects. Behaviors
     /// can be decomposed into Steps and be characterized by
-    /// parameters.allSupertypes()->includes(resolve("Performances::Performance"))
+    /// parameters.specializesFromLibrary("Performances::Performance")
     /// </summary>
     public partial interface IBehavior : IClass
     {

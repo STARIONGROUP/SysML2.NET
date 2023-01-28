@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iInterfaceUsage.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iInterfaceUsage.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iInterfaceUsage.Direction.HasValue)
             {
@@ -124,8 +128,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iInterfaceUsage.IsVariation);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iInterfaceUsage.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iInterfaceUsage.OwnedRelatedElement)
             {
@@ -167,8 +169,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iInterfaceUsage.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iInterfaceUsage.Source)
             {

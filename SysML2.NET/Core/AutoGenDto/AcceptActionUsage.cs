@@ -30,17 +30,23 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An AcceptActionUsage is an ActionUsage that is typed, directly or indirectly, by the
-    /// ActionDefinition AcceptAction from the Systems model library (unless it is owned by a
-    /// TransitionAction, in which case it is typed by AcceptMessageAction). It specifies the acceptance of
-    /// an incomingTransfer from the Occurrence given by the result of its receiverArgument Expression. (If
-    /// no receiverArgument is provided, the default is the this context of the AcceptActionUsage.) The
-    /// payload of the accepted Transfer is output on its payloadParameter.Which Transfers may be accepted
-    /// is determined by the typing and binding of the payloadParameter. If the triggerKind has any value
-    /// other than accept, then the payloadParameter must be bound to a payloadArgument that is an
-    /// InvocationExpression whose function is determined by the triggerKind.receiverArgument =
+    /// An AcceptActionUsage is an ActionUsage that specifies the acceptance of an incomingTransfer from the
+    /// Occurrence given by the result of its receiverArgument Expression. (If no receiverArgument is
+    /// provided, the default is the this context of the AcceptActionUsage.) The payload of the accepted
+    /// Transfer is output on its payloadParameter. Which Transfers may be accepted is determined by
+    /// conformance to the typing and (potentially) binding of the payloadParameter.receiverArgument =
     /// argument(2)payloadArgument = argument(1)payloadParameter =  if parameter->isEmpty() then null else
-    /// parameter->at(1) endifinputParameters->size() >= 2
+    /// parameter->at(1) endifinputParameters->size() >= 2not isTriggerAction() implies   
+    /// specializesFromLibrary('Actions::acceptActions')isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(ActionDefinition) or owningType.oclIsKindOf(ActionUsage)) implies   
+    /// specializesFromLibrary('Actions::Action::acceptSubactions')isTriggerAction() implies   
+    /// specializesFromLibrary('Actions::TransitionAction::accepter')payloadArgument <> null
+    /// andpayloadArgument.oclIsKindOf(TriggerInvocationExpression) implies    let invocation : Expression =
+    ///        payloadArgument.oclAsType(Expression) in    parameter->size() >= 2 and   
+    /// invocation.parameter->size() >= 2 and           
+    /// ownedFeature->selectByKind(BindingConnector)->exists(b |       
+    /// b.relatedFeatures->includes(parameter->at(2)) and       
+    /// b.relatedFeatures->includes(invocation.parameter->at(2)))
     /// </summary>
     public partial class AcceptActionUsage : IAcceptActionUsage
     {
@@ -75,6 +81,19 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         public FeatureDirectionKind? Direction { get; set; }
@@ -93,7 +112,7 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
+        /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
         public bool IsComposite { get; set; }
 
@@ -167,11 +186,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariation { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -186,14 +200,6 @@ namespace SysML2.NET.Core.DTO
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
         public PortionKind? PortionKind { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

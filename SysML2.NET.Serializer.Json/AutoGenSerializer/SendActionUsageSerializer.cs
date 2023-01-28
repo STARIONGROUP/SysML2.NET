@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iSendActionUsage.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iSendActionUsage.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iSendActionUsage.Direction.HasValue)
             {
@@ -118,8 +122,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iSendActionUsage.IsVariation);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iSendActionUsage.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iSendActionUsage.OwnedRelationship)
             {
@@ -145,8 +147,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iSendActionUsage.ShortName);
             writer.WriteEndObject();
         }
     }

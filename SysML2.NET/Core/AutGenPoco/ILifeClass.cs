@@ -32,7 +32,9 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A LifeClass is a Class that specializes both the Base::Life Class from the Kernel Library and a
     /// single OccurrenceDefinition, and has a multiplicity of 0..1. This constrains the
-    /// OccurrenceDefinition to have at most one instance that is a complete Life.
+    /// OccurrenceDefinition to have at most one instance that is a complete Life.isSufficientmultiplicity
+    /// <> null
+    /// andmultiplicity.specializesFromLibrary("Base::zeroOrOne")specializesFromLibrary("Occurrences::Life")specializes(individualDefinition)
     /// </summary>
     public partial interface ILifeClass : IClass
     {

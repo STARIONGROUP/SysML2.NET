@@ -35,13 +35,8 @@ namespace SysML2.NET.Core.DTO
     /// DataType<ul>	<li>Cannot be distinguished when they are related to other things in exactly the same
     /// way, even when they are intended to be about different things.</li>	<li>Can be distinguished when
     /// they are related to other things in different ways, even when they are intended to be about the same
-    /// thing.</li></ul>DataTypes serve to subdivide Classifiers into two kinds of objects: those that have
-    /// some definition beyond their property values and those that are defined entirely by their values.
-    /// DataTypes are the second kind. If two objects classified by DataType have identical property values,
-    /// they are understood to be in fact the same object. DataTypes are intended to represent data or
-    /// mathematical objects which is where the equivalence based on matched values is
-    /// appropriate.allSupertypes()->includes(resolve("Base::DataValue"))ownedGeneralization.general->   
-    /// forAll(not oclIsKindOf(Class))
+    /// thing.</li></ul>specializesFromLibrary("Base::DataValue")ownedGeneralization.general->    forAll(not
+    /// oclIsKindOf(Class))
     /// </summary>
     public partial interface IDataType : IClassifier
     {

@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", disjoiningInstance.AliasIds);
+            dictionary.Add("declaredName", disjoiningInstance.DeclaredName);
+            dictionary.Add("declaredShortName", disjoiningInstance.DeclaredShortName);
             dictionary.Add("disjoiningType", disjoiningInstance.DisjoiningType.ToString());
             dictionary.Add("elementId", disjoiningInstance.ElementId);
             dictionary.Add("isImplied", disjoiningInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", disjoiningInstance.IsImpliedIncluded);
-            dictionary.Add("name", disjoiningInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", disjoiningInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", disjoiningInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", disjoiningInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", disjoiningInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", disjoiningInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", disjoiningInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", disjoiningInstance.Target)} ]");
             dictionary.Add("typeDisjoined", disjoiningInstance.TypeDisjoined.ToString());
@@ -148,16 +148,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", disjoiningInstance.AliasIds);
+            dictionary.Add("declaredName", disjoiningInstance.DeclaredName);
+            dictionary.Add("declaredShortName", disjoiningInstance.DeclaredShortName);
             dictionary.Add("disjoiningType", disjoiningInstance.DisjoiningType);
             dictionary.Add("elementId", disjoiningInstance.ElementId);
             dictionary.Add("isImplied", disjoiningInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", disjoiningInstance.IsImpliedIncluded);
-            dictionary.Add("name", disjoiningInstance.Name);
             dictionary.Add("ownedRelatedElement", disjoiningInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", disjoiningInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", disjoiningInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", disjoiningInstance.OwningRelationship);
-            dictionary.Add("shortName", disjoiningInstance.ShortName);
             dictionary.Add("source", disjoiningInstance.Source);
             dictionary.Add("target", disjoiningInstance.Target);
             dictionary.Add("typeDisjoined", disjoiningInstance.TypeDisjoined);

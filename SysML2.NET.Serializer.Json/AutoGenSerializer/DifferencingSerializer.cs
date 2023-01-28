@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iDifferencing.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iDifferencing.DeclaredShortName);
             writer.WritePropertyName("differencingType");
             writer.WriteStringValue(iDifferencing.DifferencingType);
 
@@ -82,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iDifferencing.IsImpliedIncluded);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iDifferencing.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iDifferencing.OwnedRelatedElement)
             {
@@ -116,8 +118,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iDifferencing.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iDifferencing.Source)
             {

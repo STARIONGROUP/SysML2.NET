@@ -33,7 +33,11 @@ namespace SysML2.NET.Core.POCO
     /// A Function is a Behavior that has a single out parameter that is identified as its result. Any other
     /// parameters of a Function than the result must have direction in. A Function represents the
     /// performance of a calculation that produces the values of its result parameter. This calculation may
-    /// be decomposed into Expressions that are steps of the Function.
+    /// be decomposed into Expressions that are steps of the
+    /// Function.specializesFromLibrary("Performances::Evaluation")ownedMembership.selectByKind(ResultExpressionMembership)->
+    ///    forAll(mem | ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
+    /// binding.relatedFeature->includes(result) and           
+    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))
     /// </summary>
     public partial interface IFunction : IBehavior
     {

@@ -34,7 +34,8 @@ namespace SysML2.NET.Core.POCO
     /// logical condition resulting from the evaluation of the Predicate.A BooleanExpression must subset,
     /// directly or indirectly, the Expression booleanEvaluations from the Base model library, which is
     /// typed by the base Predicate BooleanEvaluation. As a result, a BooleanExpression must always be typed
-    /// by BooleanEvaluation or a subclass of BooleanEvaluation.
+    /// by BooleanEvaluation or a subclass of
+    /// BooleanEvaluation.specializesFromLibrary("Performances::booleanEvaluations")
     /// </summary>
     public partial interface IBooleanExpression : IExpression
     {

@@ -30,16 +30,22 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A Connector is a usage of Associations, with links restricted to instances of the Type in which it
-    /// is used (domain of the Connector). Associations restrict what kinds of things might be linked. The
-    /// Connector further restricts these links to between values of two Features on instances of
-    /// its domain.relatedFeature =
+    /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
+    /// which they are used (domain of the Connector). Associations restrict what kinds of things might be
+    /// linked. The Connector further restricts these links to between values of two Features on instances
+    /// of its domain.relatedFeature =
     /// connectorEnd.ownedReferenceSubsetting.subsettedFeaturerelatedFeature->forAll(f |     if
     /// featuringType->isEmpty() then f.isFeaturedWithin(null)    else featuringType->exists(t |
     /// f.isFeaturedWithin(t))    endif)sourceFeature =     if relatedFeature->size() = 2 then
     /// relatedFeature->at(1)     else null     endiftargetFeature =    if sourceFeature = null then
     /// relatedFeature    else relatedFeature->excluding(sourceFeature)    endifconnectorEnd =
-    /// feature->select(isEnd)not isAbstract implies relatedFeature->size() >= 2
+    /// feature->select(isEnd)not isAbstract implies relatedFeature->size() >=
+    /// 2specializesFromLibrary("Links::links")connectorEnd->size() = 2 implies   
+    /// specializesFromLibrary('Links::binaryLinks')association->exists(oclIsKindOf(AssociationStructure))
+    /// implies    specializesFromLibrary("Objects::linkObjects")connectorEnds->size() = 2
+    /// andassociation->exists(oclIsKindOf(AssocationStructure)) implies   
+    /// specializesFromLibrary("Objects::binaryLinkObjects")connectorEnds->size() > 2 implies    not
+    /// specializesFromLibrary("Links::BinaryLink")
     /// </summary>
     public partial interface IConnector : IFeature, IRelationship
     {

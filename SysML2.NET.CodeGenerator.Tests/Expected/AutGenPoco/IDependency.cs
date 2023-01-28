@@ -39,11 +39,11 @@ namespace SysML2.NET.Core.POCO
     {
         /// <summary>
         /// </summary>
-        List<Element> Client { get; set; }
+        List<IElement> Client { get; set; }
 
         /// <summary>
         /// </summary>
-        List<Element> Supplier { get; set; }
+        List<IElement> Supplier { get; set; }
 
     }
 }

@@ -108,17 +108,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", requirementDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", requirementDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", requirementDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", requirementDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", requirementDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", requirementDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", requirementDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", requirementDefinitionInstance.IsVariation);
-            dictionary.Add("name", requirementDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", requirementDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", requirementDefinitionInstance.OwningRelationship.ToString());
             dictionary.Add("reqId", requirementDefinitionInstance.ReqId);
-            dictionary.Add("shortName", requirementDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -146,17 +146,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", requirementDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", requirementDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", requirementDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", requirementDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", requirementDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", requirementDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", requirementDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", requirementDefinitionInstance.IsVariation);
-            dictionary.Add("name", requirementDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", requirementDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", requirementDefinitionInstance.OwningRelationship);
             dictionary.Add("reqId", requirementDefinitionInstance.ReqId);
-            dictionary.Add("shortName", requirementDefinitionInstance.ShortName);
 
             return dictionary;
         }

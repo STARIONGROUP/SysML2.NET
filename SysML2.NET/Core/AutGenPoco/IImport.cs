@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property ImportedElement
         /// </summary>
-        Element QueryImportedElement();
+        IElement QueryImportedElement();
 
         /// <summary>
         /// Queries the derived property ImportOwningNamespace

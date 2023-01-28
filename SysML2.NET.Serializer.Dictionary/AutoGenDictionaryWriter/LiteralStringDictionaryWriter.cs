@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", literalStringInstance.AliasIds);
+            dictionary.Add("declaredName", literalStringInstance.DeclaredName);
+            dictionary.Add("declaredShortName", literalStringInstance.DeclaredShortName);
             dictionary.Add("direction", literalStringInstance.Direction);
             dictionary.Add("elementId", literalStringInstance.ElementId);
             dictionary.Add("isAbstract", literalStringInstance.IsAbstract);
@@ -120,10 +122,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", literalStringInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalStringInstance.IsSufficient);
             dictionary.Add("isUnique", literalStringInstance.IsUnique);
-            dictionary.Add("name", literalStringInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", literalStringInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", literalStringInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", literalStringInstance.ShortName);
             dictionary.Add("value", literalStringInstance.Value);
 
             return dictionary;
@@ -152,6 +152,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", literalStringInstance.AliasIds);
+            dictionary.Add("declaredName", literalStringInstance.DeclaredName);
+            dictionary.Add("declaredShortName", literalStringInstance.DeclaredShortName);
             dictionary.Add("direction", literalStringInstance.Direction);
             dictionary.Add("elementId", literalStringInstance.ElementId);
             dictionary.Add("isAbstract", literalStringInstance.IsAbstract);
@@ -164,10 +166,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", literalStringInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalStringInstance.IsSufficient);
             dictionary.Add("isUnique", literalStringInstance.IsUnique);
-            dictionary.Add("name", literalStringInstance.Name);
             dictionary.Add("ownedRelationship", literalStringInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", literalStringInstance.OwningRelationship);
-            dictionary.Add("shortName", literalStringInstance.ShortName);
             dictionary.Add("value", literalStringInstance.Value);
 
             return dictionary;

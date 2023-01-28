@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", namespaceExposeInstance.AliasIds);
+            dictionary.Add("declaredName", namespaceExposeInstance.DeclaredName);
+            dictionary.Add("declaredShortName", namespaceExposeInstance.DeclaredShortName);
             dictionary.Add("elementId", namespaceExposeInstance.ElementId);
             dictionary.Add("importedNamespace", namespaceExposeInstance.ImportedNamespace.ToString());
             dictionary.Add("isImplied", namespaceExposeInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", namespaceExposeInstance.IsImpliedIncluded);
             dictionary.Add("isImportAll", namespaceExposeInstance.IsImportAll);
             dictionary.Add("isRecursive", namespaceExposeInstance.IsRecursive);
-            dictionary.Add("name", namespaceExposeInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", namespaceExposeInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", namespaceExposeInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", namespaceExposeInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", namespaceExposeInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", namespaceExposeInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", namespaceExposeInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", namespaceExposeInstance.Target)} ]");
             dictionary.Add("visibility", namespaceExposeInstance.Visibility);
@@ -150,18 +150,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", namespaceExposeInstance.AliasIds);
+            dictionary.Add("declaredName", namespaceExposeInstance.DeclaredName);
+            dictionary.Add("declaredShortName", namespaceExposeInstance.DeclaredShortName);
             dictionary.Add("elementId", namespaceExposeInstance.ElementId);
             dictionary.Add("importedNamespace", namespaceExposeInstance.ImportedNamespace);
             dictionary.Add("isImplied", namespaceExposeInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", namespaceExposeInstance.IsImpliedIncluded);
             dictionary.Add("isImportAll", namespaceExposeInstance.IsImportAll);
             dictionary.Add("isRecursive", namespaceExposeInstance.IsRecursive);
-            dictionary.Add("name", namespaceExposeInstance.Name);
             dictionary.Add("ownedRelatedElement", namespaceExposeInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", namespaceExposeInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", namespaceExposeInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", namespaceExposeInstance.OwningRelationship);
-            dictionary.Add("shortName", namespaceExposeInstance.ShortName);
             dictionary.Add("source", namespaceExposeInstance.Source);
             dictionary.Add("target", namespaceExposeInstance.Target);
             dictionary.Add("visibility", namespaceExposeInstance.Visibility);

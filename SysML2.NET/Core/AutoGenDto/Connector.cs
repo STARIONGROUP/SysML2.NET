@@ -30,16 +30,22 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A Connector is a usage of Associations, with links restricted to instances of the Type in which it
-    /// is used (domain of the Connector). Associations restrict what kinds of things might be linked. The
-    /// Connector further restricts these links to between values of two Features on instances of
-    /// its domain.relatedFeature =
+    /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
+    /// which they are used (domain of the Connector). Associations restrict what kinds of things might be
+    /// linked. The Connector further restricts these links to between values of two Features on instances
+    /// of its domain.relatedFeature =
     /// connectorEnd.ownedReferenceSubsetting.subsettedFeaturerelatedFeature->forAll(f |     if
     /// featuringType->isEmpty() then f.isFeaturedWithin(null)    else featuringType->exists(t |
     /// f.isFeaturedWithin(t))    endif)sourceFeature =     if relatedFeature->size() = 2 then
     /// relatedFeature->at(1)     else null     endiftargetFeature =    if sourceFeature = null then
     /// relatedFeature    else relatedFeature->excluding(sourceFeature)    endifconnectorEnd =
-    /// feature->select(isEnd)not isAbstract implies relatedFeature->size() >= 2
+    /// feature->select(isEnd)not isAbstract implies relatedFeature->size() >=
+    /// 2specializesFromLibrary("Links::links")connectorEnd->size() = 2 implies   
+    /// specializesFromLibrary('Links::binaryLinks')association->exists(oclIsKindOf(AssociationStructure))
+    /// implies    specializesFromLibrary("Objects::linkObjects")connectorEnds->size() = 2
+    /// andassociation->exists(oclIsKindOf(AssocationStructure)) implies   
+    /// specializesFromLibrary("Objects::binaryLinkObjects")connectorEnds->size() > 2 implies    not
+    /// specializesFromLibrary("Links::BinaryLink")
     /// </summary>
     public partial class Connector : IConnector
     {
@@ -78,6 +84,19 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         public FeatureDirectionKind? Direction { get; set; }
@@ -96,7 +115,7 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
+        /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
         public bool IsComposite { get; set; }
 
@@ -170,11 +189,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsUnique { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
         public List<Guid> OwnedRelatedElement { get; set; }
@@ -193,14 +207,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
         /// <summary>
         /// </summary>

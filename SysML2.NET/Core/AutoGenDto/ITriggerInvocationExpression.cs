@@ -31,7 +31,9 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A TriggerInvocationExpression is an InvocationExpression that invokes one of the trigger Functions
-    /// from the Kernel Triggers package, as indicated by its kind.
+    /// from the Kernel Semantic Library Triggers package, as indicated by its kind.specializesFromLibrary( 
+    ///   if kind = TriggerKind::when then        'Triggers::TriggerWhen'    else if kind = TriggerKind::at
+    /// then        'Triggers::TriggerAt'    else         'Triggers::TriggerAfter'    endif endif)
     /// </summary>
     public partial interface ITriggerInvocationExpression : IInvocationExpression
     {

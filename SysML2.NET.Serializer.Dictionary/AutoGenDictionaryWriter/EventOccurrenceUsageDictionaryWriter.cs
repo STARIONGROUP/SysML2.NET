@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", eventOccurrenceUsageInstance.AliasIds);
+            dictionary.Add("declaredName", eventOccurrenceUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", eventOccurrenceUsageInstance.DeclaredShortName);
             dictionary.Add("direction", eventOccurrenceUsageInstance.Direction);
             dictionary.Add("elementId", eventOccurrenceUsageInstance.ElementId);
             dictionary.Add("isAbstract", eventOccurrenceUsageInstance.IsAbstract);
@@ -122,11 +124,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", eventOccurrenceUsageInstance.IsSufficient);
             dictionary.Add("isUnique", eventOccurrenceUsageInstance.IsUnique);
             dictionary.Add("isVariation", eventOccurrenceUsageInstance.IsVariation);
-            dictionary.Add("name", eventOccurrenceUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", eventOccurrenceUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", eventOccurrenceUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", eventOccurrenceUsageInstance.PortionKind);
-            dictionary.Add("shortName", eventOccurrenceUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,6 +154,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", eventOccurrenceUsageInstance.AliasIds);
+            dictionary.Add("declaredName", eventOccurrenceUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", eventOccurrenceUsageInstance.DeclaredShortName);
             dictionary.Add("direction", eventOccurrenceUsageInstance.Direction);
             dictionary.Add("elementId", eventOccurrenceUsageInstance.ElementId);
             dictionary.Add("isAbstract", eventOccurrenceUsageInstance.IsAbstract);
@@ -168,11 +170,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", eventOccurrenceUsageInstance.IsSufficient);
             dictionary.Add("isUnique", eventOccurrenceUsageInstance.IsUnique);
             dictionary.Add("isVariation", eventOccurrenceUsageInstance.IsVariation);
-            dictionary.Add("name", eventOccurrenceUsageInstance.Name);
             dictionary.Add("ownedRelationship", eventOccurrenceUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", eventOccurrenceUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", eventOccurrenceUsageInstance.PortionKind);
-            dictionary.Add("shortName", eventOccurrenceUsageInstance.ShortName);
 
             return dictionary;
         }

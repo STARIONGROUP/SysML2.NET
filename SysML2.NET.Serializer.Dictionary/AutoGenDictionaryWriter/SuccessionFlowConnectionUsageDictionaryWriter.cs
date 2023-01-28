@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", successionFlowConnectionUsageInstance.AliasIds);
+            dictionary.Add("declaredName", successionFlowConnectionUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", successionFlowConnectionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", successionFlowConnectionUsageInstance.Direction);
             dictionary.Add("elementId", successionFlowConnectionUsageInstance.ElementId);
             dictionary.Add("isAbstract", successionFlowConnectionUsageInstance.IsAbstract);
@@ -124,13 +126,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", successionFlowConnectionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", successionFlowConnectionUsageInstance.IsUnique);
             dictionary.Add("isVariation", successionFlowConnectionUsageInstance.IsVariation);
-            dictionary.Add("name", successionFlowConnectionUsageInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", successionFlowConnectionUsageInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", successionFlowConnectionUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", successionFlowConnectionUsageInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", successionFlowConnectionUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", successionFlowConnectionUsageInstance.PortionKind);
-            dictionary.Add("shortName", successionFlowConnectionUsageInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", successionFlowConnectionUsageInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", successionFlowConnectionUsageInstance.Target)} ]");
 
@@ -160,6 +160,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", successionFlowConnectionUsageInstance.AliasIds);
+            dictionary.Add("declaredName", successionFlowConnectionUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", successionFlowConnectionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", successionFlowConnectionUsageInstance.Direction);
             dictionary.Add("elementId", successionFlowConnectionUsageInstance.ElementId);
             dictionary.Add("isAbstract", successionFlowConnectionUsageInstance.IsAbstract);
@@ -176,13 +178,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", successionFlowConnectionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", successionFlowConnectionUsageInstance.IsUnique);
             dictionary.Add("isVariation", successionFlowConnectionUsageInstance.IsVariation);
-            dictionary.Add("name", successionFlowConnectionUsageInstance.Name);
             dictionary.Add("ownedRelatedElement", successionFlowConnectionUsageInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", successionFlowConnectionUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", successionFlowConnectionUsageInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", successionFlowConnectionUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", successionFlowConnectionUsageInstance.PortionKind);
-            dictionary.Add("shortName", successionFlowConnectionUsageInstance.ShortName);
             dictionary.Add("source", successionFlowConnectionUsageInstance.Source);
             dictionary.Add("target", successionFlowConnectionUsageInstance.Target);
 

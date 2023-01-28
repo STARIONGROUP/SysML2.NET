@@ -30,9 +30,9 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A CaseUsage is a Usage of a CaseDefinition.A CaseUsage must subset, directly or indirectly, either
-    /// the base CaseUsage cases from the Systems model library. If it is owned by a CaseDefinition or
-    /// CaseUsage, it must subset the CaseUsage Cases::subcases.
+    /// A CaseUsage is a Usage of a CaseDefinition.A CaseUsage must subset, directly or indirectly, the base
+    /// CaseUsage cases from the Systems model library. If it is owned by a CaseDefinition or CaseUsage, it
+    /// must subset the CaseUsage Cases::subcases.
     /// </summary>
     public partial interface ICaseUsage : ICalculationUsage
     {

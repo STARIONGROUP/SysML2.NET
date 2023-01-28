@@ -109,16 +109,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", conjugationInstance.AliasIds);
             dictionary.Add("conjugatedType", conjugationInstance.ConjugatedType.ToString());
+            dictionary.Add("declaredName", conjugationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", conjugationInstance.DeclaredShortName);
             dictionary.Add("elementId", conjugationInstance.ElementId);
             dictionary.Add("isImplied", conjugationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", conjugationInstance.IsImpliedIncluded);
-            dictionary.Add("name", conjugationInstance.Name);
             dictionary.Add("originalType", conjugationInstance.OriginalType.ToString());
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", conjugationInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", conjugationInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", conjugationInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", conjugationInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", conjugationInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", conjugationInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", conjugationInstance.Target)} ]");
 
@@ -149,16 +149,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", conjugationInstance.AliasIds);
             dictionary.Add("conjugatedType", conjugationInstance.ConjugatedType);
+            dictionary.Add("declaredName", conjugationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", conjugationInstance.DeclaredShortName);
             dictionary.Add("elementId", conjugationInstance.ElementId);
             dictionary.Add("isImplied", conjugationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", conjugationInstance.IsImpliedIncluded);
-            dictionary.Add("name", conjugationInstance.Name);
             dictionary.Add("originalType", conjugationInstance.OriginalType);
             dictionary.Add("ownedRelatedElement", conjugationInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", conjugationInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", conjugationInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", conjugationInstance.OwningRelationship);
-            dictionary.Add("shortName", conjugationInstance.ShortName);
             dictionary.Add("source", conjugationInstance.Source);
             dictionary.Add("target", conjugationInstance.Target);
 

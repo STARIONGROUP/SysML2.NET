@@ -32,7 +32,8 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// An InterfaceUsage is a Usage of an InterfaceDefinition to represent an interface connecting parts of
     /// a system through specific ports.An InterfaceUsage must subset, directly or indirectly, the base
-    /// InterfaceUsage interfaces from the Systems model libary.
+    /// InterfaceUsage interfaces from the Systems model libary.ownedEndFeature->size() = 2 implies   
+    /// specializesFromLibrary("Interfaces::binaryInterfaces")specializesFromLibrary("Interfaces::interfaces")
     /// </summary>
     public partial interface IInterfaceUsage : IConnectionUsage
     {

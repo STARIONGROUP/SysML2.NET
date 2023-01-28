@@ -109,15 +109,15 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", dependencyInstance.AliasIds);
             dictionary.Add("client", $"[ {string.Join(",", dependencyInstance.Client)} ]");
+            dictionary.Add("declaredName", dependencyInstance.DeclaredName);
+            dictionary.Add("declaredShortName", dependencyInstance.DeclaredShortName);
             dictionary.Add("elementId", dependencyInstance.ElementId);
             dictionary.Add("isImplied", dependencyInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", dependencyInstance.IsImpliedIncluded);
-            dictionary.Add("name", dependencyInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", dependencyInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", dependencyInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", dependencyInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", dependencyInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", dependencyInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", dependencyInstance.Source)} ]");
             dictionary.Add("supplier", $"[ {string.Join(",", dependencyInstance.Supplier)} ]");
             dictionary.Add("target", $"[ {string.Join(",", dependencyInstance.Target)} ]");
@@ -149,15 +149,15 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", dependencyInstance.AliasIds);
             dictionary.Add("client", dependencyInstance.Client);
+            dictionary.Add("declaredName", dependencyInstance.DeclaredName);
+            dictionary.Add("declaredShortName", dependencyInstance.DeclaredShortName);
             dictionary.Add("elementId", dependencyInstance.ElementId);
             dictionary.Add("isImplied", dependencyInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", dependencyInstance.IsImpliedIncluded);
-            dictionary.Add("name", dependencyInstance.Name);
             dictionary.Add("ownedRelatedElement", dependencyInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", dependencyInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", dependencyInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", dependencyInstance.OwningRelationship);
-            dictionary.Add("shortName", dependencyInstance.ShortName);
             dictionary.Add("source", dependencyInstance.Source);
             dictionary.Add("supplier", dependencyInstance.Supplier);
             dictionary.Add("target", dependencyInstance.Target);

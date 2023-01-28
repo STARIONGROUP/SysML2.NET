@@ -41,7 +41,9 @@ namespace SysML2.NET.Core.POCO
     /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
     /// an abstract Usage of the variation point Definition.isVariation implies variantMembership =
     /// ownedMembershipvariant = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)not isVariation implies variantMembership->isEmpty()
+    /// ownedMembership->selectByKind(VariantMembership)not isVariation implies
+    /// variantMembership->isEmpty()isVariation implies    not
+    /// ownedSpecialization.specific->exists(isVariation)
     /// </summary>
     public partial interface IDefinition : IClassifier
     {

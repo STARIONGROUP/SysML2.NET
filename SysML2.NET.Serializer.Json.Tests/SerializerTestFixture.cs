@@ -36,41 +36,53 @@ namespace SysML2.NET.Serializer.Json.Tests
     {
         private ISerializer serializer;
 
-        [SetUp]
+        private PartDefinition partDefinition;
+
+        private PartDefinition partDefinitionWithNullProperties;
+
+		[SetUp]
         public void SetUp()
         {
             this.serializer = new Serializer();
+
+            this.CreateTestData();
         }
+
+        private void CreateTestData()
+        {
+	        this.partDefinition = new PartDefinition
+	        {
+		        Id = Guid.NewGuid(),
+		        IsIndividual = true,
+		        IsVariation = false,
+		        IsAbstract = false,
+		        IsSufficient = false,
+		        AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
+		        DeclaredName = "PartDefinition:DeclaredName",
+		        OwnedRelationship = new List<Guid> { Guid.NewGuid() },
+		        OwningRelationship = Guid.NewGuid(),
+		        DeclaredShortName = "PartDefinition:DeclaredShortName"
+	        };
+
+	        this.partDefinitionWithNullProperties = new PartDefinition
+	        {
+		        Id = Guid.NewGuid(),
+		        IsIndividual = true,
+		        IsVariation = false,
+		        IsAbstract = false,
+		        IsSufficient = false,
+		        AliasIds = new List<string>(),
+		        DeclaredName = null,
+		        OwnedRelationship = new List<Guid>(),
+		        OwningRelationship = Guid.NewGuid(),
+		        DeclaredShortName = null
+	        };
+		}
 
         [Test]
         public void Verify_that_Elements_can_be_serialized()
         {
-            var element = new Element
-            {
-                Id = Guid.NewGuid(),
-                AliasIds = new List<string> { "Element:Alias_1", "Element:Alias_2" },
-                ElementId = "Element:ElementId",
-                Name = "Element:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() } ,
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "Element:ShortName"
-            };
-
-            var partDefinition = new PartDefinition
-            {
-                Id = Guid.NewGuid(),
-                IsIndividual = true,
-                IsVariation = false,
-                IsAbstract = false,
-                IsSufficient = false,
-                AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-                Name = "PartDefinition:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "PartDefinition:ShortName"
-            };
-
-            var elements = new List<IElement> { element, partDefinition };
+            var elements = new List<IElement> { this.partDefinition, this.partDefinitionWithNullProperties };
             var stream = new MemoryStream();
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
@@ -83,43 +95,14 @@ namespace SysML2.NET.Serializer.Json.Tests
         [Test]
         public void Verify_that_Element_can_be_serialized()
         {
-            
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
-
-            var partDefinition = new PartDefinition
-            {
-                Id = Guid.NewGuid(),
-                IsIndividual = true,
-                IsVariation = false,
-                IsAbstract = false,
-                IsSufficient = false,
-                AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-                Name = "PartDefinition:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "PartDefinition:ShortName"
-            };
             
             var stream = new MemoryStream();
-            Assert.That(() => this.serializer.Serialize(partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
+            Assert.That(() => this.serializer.Serialize(this.partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
-
-            partDefinition = new PartDefinition
-            {
-                Id = Guid.NewGuid(),
-                IsIndividual = true,
-                IsVariation = false,
-                IsAbstract = false,
-                IsSufficient = false,
-                AliasIds = new List<string> (),
-                Name = null,
-                OwnedRelationship = new List<Guid> (),
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = null
-            };
-
+            
             stream = new MemoryStream();
             Assert.That(() => this.serializer.Serialize(partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
 
@@ -130,32 +113,7 @@ namespace SysML2.NET.Serializer.Json.Tests
         [Test]
         public void Verify_that_Elements_can_be_serialized_async()
         {
-            var element = new Element
-            {
-                Id = Guid.NewGuid(),
-                AliasIds = new List<string> { "Element:Alias_1", "Element:Alias_2" },
-                ElementId = "Element:ElementId",
-                Name = "Element:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "Element:ShortName"
-            };
-
-            var partDefinition = new PartDefinition
-            {
-                Id = Guid.NewGuid(),
-                IsIndividual = true,
-                IsVariation = false,
-                IsAbstract = false,
-                IsSufficient = false,
-                AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-                Name = "PartDefinition:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "PartDefinition:ShortName"
-            };
-
-            var elements = new List<IElement> { element, partDefinition };
+            var elements = new List<IElement> { this.partDefinition , partDefinitionWithNullProperties };
             var stream = new MemoryStream();
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
@@ -170,26 +128,12 @@ namespace SysML2.NET.Serializer.Json.Tests
         [Test]
         public void Verify_that_Element_can_be_serialized_async()
         {
-            var partDefinition = new PartDefinition
-            {
-                Id = Guid.NewGuid(),
-                IsIndividual = true,
-                IsVariation = false,
-                IsAbstract = false,
-                IsSufficient = false,
-                AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-                Name = "PartDefinition:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "PartDefinition:ShortName"
-            };
-            
             var stream = new MemoryStream();
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
             var cts = new CancellationTokenSource();
 
-            Assert.That(async () => await this.serializer.SerializeAsync(partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions, cts.Token), Throws.Nothing); ;
+            Assert.That(async () => await this.serializer.SerializeAsync(this.partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions, cts.Token), Throws.Nothing); ;
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);

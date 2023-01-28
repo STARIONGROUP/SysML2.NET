@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iAssertConstraintUsage.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iAssertConstraintUsage.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iAssertConstraintUsage.Direction.HasValue)
             {
@@ -121,8 +125,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iAssertConstraintUsage.IsVariation);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iAssertConstraintUsage.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iAssertConstraintUsage.OwnedRelationship)
             {
@@ -148,8 +150,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iAssertConstraintUsage.ShortName);
             writer.WriteEndObject();
         }
     }

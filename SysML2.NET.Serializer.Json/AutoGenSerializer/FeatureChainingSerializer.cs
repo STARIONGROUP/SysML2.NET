@@ -73,6 +73,10 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("chainingFeature");
             writer.WriteStringValue(iFeatureChaining.ChainingFeature);
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iFeatureChaining.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iFeatureChaining.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iFeatureChaining.ElementId);
 
@@ -82,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iFeatureChaining.IsImpliedIncluded);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iFeatureChaining.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFeatureChaining.OwnedRelatedElement)
             {
@@ -116,8 +118,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iFeatureChaining.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iFeatureChaining.Source)
             {

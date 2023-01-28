@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", successionInstance.AliasIds);
+            dictionary.Add("declaredName", successionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", successionInstance.DeclaredShortName);
             dictionary.Add("direction", successionInstance.Direction);
             dictionary.Add("elementId", successionInstance.ElementId);
             dictionary.Add("isAbstract", successionInstance.IsAbstract);
@@ -122,12 +124,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", successionInstance.IsReadOnly);
             dictionary.Add("isSufficient", successionInstance.IsSufficient);
             dictionary.Add("isUnique", successionInstance.IsUnique);
-            dictionary.Add("name", successionInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", successionInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", successionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", successionInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", successionInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", successionInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", successionInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", successionInstance.Target)} ]");
 
@@ -157,6 +157,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", successionInstance.AliasIds);
+            dictionary.Add("declaredName", successionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", successionInstance.DeclaredShortName);
             dictionary.Add("direction", successionInstance.Direction);
             dictionary.Add("elementId", successionInstance.ElementId);
             dictionary.Add("isAbstract", successionInstance.IsAbstract);
@@ -171,12 +173,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", successionInstance.IsReadOnly);
             dictionary.Add("isSufficient", successionInstance.IsSufficient);
             dictionary.Add("isUnique", successionInstance.IsUnique);
-            dictionary.Add("name", successionInstance.Name);
             dictionary.Add("ownedRelatedElement", successionInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", successionInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", successionInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", successionInstance.OwningRelationship);
-            dictionary.Add("shortName", successionInstance.ShortName);
             dictionary.Add("source", successionInstance.Source);
             dictionary.Add("target", successionInstance.Target);
 

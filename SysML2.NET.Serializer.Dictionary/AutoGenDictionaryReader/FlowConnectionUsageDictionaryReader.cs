@@ -110,6 +110,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
@@ -206,12 +218,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
@@ -242,12 +248,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             PortionKind? portionKindFeature = portionKindObject == null ? null : (PortionKind?)Enum.Parse(typeof(PortionKind), Convert.ToString(portionKindObject), true);
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
@@ -262,6 +262,8 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             flowConnectionUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            flowConnectionUsageInstance.DeclaredName = declaredNameFeature;
+            flowConnectionUsageInstance.DeclaredShortName = declaredShortNameFeature;
             flowConnectionUsageInstance.Direction = directionFeature;
             flowConnectionUsageInstance.ElementId = elementIdFeature;
             flowConnectionUsageInstance.IsAbstract = isAbstractFeature;
@@ -278,13 +280,11 @@ namespace SysML2.NET.Serializer.Dictionary
             flowConnectionUsageInstance.IsSufficient = isSufficientFeature;
             flowConnectionUsageInstance.IsUnique = isUniqueFeature;
             flowConnectionUsageInstance.IsVariation = isVariationFeature;
-            flowConnectionUsageInstance.Name = nameFeature;
             flowConnectionUsageInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             flowConnectionUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             flowConnectionUsageInstance.OwningRelatedElement = owningRelatedElementFeature;
             flowConnectionUsageInstance.OwningRelationship = owningRelationshipFeature;
             flowConnectionUsageInstance.PortionKind = portionKindFeature;
-            flowConnectionUsageInstance.ShortName = shortNameFeature;
             flowConnectionUsageInstance.Source = sourceFeature ?? new List<Guid>();
             flowConnectionUsageInstance.Target = targetFeature ?? new List<Guid>();
 
@@ -310,6 +310,18 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
+
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -407,12 +419,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
@@ -443,12 +449,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             PortionKind? portionKindFeature = (PortionKind?)portionKindObject;
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a FlowConnectionUsage");
@@ -463,6 +463,8 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             flowConnectionUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            flowConnectionUsageInstance.DeclaredName = declaredNameFeature;
+            flowConnectionUsageInstance.DeclaredShortName = declaredShortNameFeature;
             flowConnectionUsageInstance.Direction = directionFeature;
             flowConnectionUsageInstance.ElementId = elementIdFeature;
             flowConnectionUsageInstance.IsAbstract = isAbstractFeature;
@@ -479,13 +481,11 @@ namespace SysML2.NET.Serializer.Dictionary
             flowConnectionUsageInstance.IsSufficient = isSufficientFeature;
             flowConnectionUsageInstance.IsUnique = isUniqueFeature;
             flowConnectionUsageInstance.IsVariation = isVariationFeature;
-            flowConnectionUsageInstance.Name = nameFeature;
             flowConnectionUsageInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             flowConnectionUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             flowConnectionUsageInstance.OwningRelatedElement = owningRelatedElementFeature;
             flowConnectionUsageInstance.OwningRelationship = owningRelationshipFeature;
             flowConnectionUsageInstance.PortionKind = portionKindFeature;
-            flowConnectionUsageInstance.ShortName = shortNameFeature;
             flowConnectionUsageInstance.Source = sourceFeature ?? new List<Guid>();
             flowConnectionUsageInstance.Target = targetFeature ?? new List<Guid>();
 

@@ -35,13 +35,8 @@ namespace SysML2.NET.Core.DTO
     /// DataType<ul>	<li>Cannot be distinguished when they are related to other things in exactly the same
     /// way, even when they are intended to be about different things.</li>	<li>Can be distinguished when
     /// they are related to other things in different ways, even when they are intended to be about the same
-    /// thing.</li></ul>DataTypes serve to subdivide Classifiers into two kinds of objects: those that have
-    /// some definition beyond their property values and those that are defined entirely by their values.
-    /// DataTypes are the second kind. If two objects classified by DataType have identical property values,
-    /// they are understood to be in fact the same object. DataTypes are intended to represent data or
-    /// mathematical objects which is where the equivalence based on matched values is
-    /// appropriate.allSupertypes()->includes(resolve("Base::DataValue"))ownedGeneralization.general->   
-    /// forAll(not oclIsKindOf(Class))
+    /// thing.</li></ul>specializesFromLibrary("Base::DataValue")ownedGeneralization.general->    forAll(not
+    /// oclIsKindOf(Class))
     /// </summary>
     public partial class DataType : IDataType
     {
@@ -66,6 +61,19 @@ namespace SysML2.NET.Core.DTO
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -99,11 +107,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsSufficient { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -112,14 +115,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

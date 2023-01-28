@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", featureValueInstance.AliasIds);
+            dictionary.Add("declaredName", featureValueInstance.DeclaredName);
+            dictionary.Add("declaredShortName", featureValueInstance.DeclaredShortName);
             dictionary.Add("elementId", featureValueInstance.ElementId);
             dictionary.Add("isDefault", featureValueInstance.IsDefault);
             dictionary.Add("isImplied", featureValueInstance.IsImplied);
@@ -116,12 +118,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", featureValueInstance.MemberElement.ToString());
             dictionary.Add("memberName", featureValueInstance.MemberName);
             dictionary.Add("memberShortName", featureValueInstance.MemberShortName);
-            dictionary.Add("name", featureValueInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", featureValueInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", featureValueInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", featureValueInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", featureValueInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", featureValueInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", featureValueInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", featureValueInstance.Target)} ]");
             dictionary.Add("visibility", featureValueInstance.Visibility);
@@ -152,6 +152,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", featureValueInstance.AliasIds);
+            dictionary.Add("declaredName", featureValueInstance.DeclaredName);
+            dictionary.Add("declaredShortName", featureValueInstance.DeclaredShortName);
             dictionary.Add("elementId", featureValueInstance.ElementId);
             dictionary.Add("isDefault", featureValueInstance.IsDefault);
             dictionary.Add("isImplied", featureValueInstance.IsImplied);
@@ -160,12 +162,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", featureValueInstance.MemberElement);
             dictionary.Add("memberName", featureValueInstance.MemberName);
             dictionary.Add("memberShortName", featureValueInstance.MemberShortName);
-            dictionary.Add("name", featureValueInstance.Name);
             dictionary.Add("ownedRelatedElement", featureValueInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", featureValueInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", featureValueInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", featureValueInstance.OwningRelationship);
-            dictionary.Add("shortName", featureValueInstance.ShortName);
             dictionary.Add("source", featureValueInstance.Source);
             dictionary.Add("target", featureValueInstance.Target);
             dictionary.Add("visibility", featureValueInstance.Visibility);

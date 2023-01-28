@@ -70,14 +70,16 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iPackage.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iPackage.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iPackage.ElementId);
 
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iPackage.IsImpliedIncluded);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iPackage.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iPackage.OwnedRelationship)
             {
@@ -94,8 +96,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iPackage.ShortName);
             writer.WriteEndObject();
         }
     }

@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iTransitionFeatureMembership.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iTransitionFeatureMembership.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iTransitionFeatureMembership.ElementId);
 
@@ -92,8 +96,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iTransitionFeatureMembership.MemberName);
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iTransitionFeatureMembership.MemberShortName);
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iTransitionFeatureMembership.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iTransitionFeatureMembership.OwnedRelatedElement)
             {
@@ -126,8 +128,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iTransitionFeatureMembership.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iTransitionFeatureMembership.Source)
             {

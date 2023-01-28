@@ -30,11 +30,12 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An ItemDefinition is an OccurrenceDefinition of the Structure of things that may be acted on by a
-    /// system or parts of a system, which do not necessarily perform actions themselves. This includes
-    /// items that can be exchanged between parts of a system, such as water or electrical signals.An
-    /// ItemDefinition must subclass, directly or indirectly, the base ItemDefinition Item from the Systems
-    /// model library.
+    /// An ItemDefinition is an OccurrenceDefinition of the Structure of things that may themselves be
+    /// systems or parts of systems, but may also be things that are acted on by a system or parts of a
+    /// system, but which do not necessarily perform actions themselves. This includes items that can be
+    /// exchanged between parts of a system, such as water or electrical signals.An ItemDefinition must
+    /// specialize, directly or indirectly, the base ItemDefinition Items::Item from the Systems Model
+    /// Library.specializesFromLibrary("Items::Item")
     /// </summary>
     public partial class ItemDefinition : IItemDefinition
     {
@@ -60,6 +61,19 @@ namespace SysML2.NET.Core.DTO
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -104,11 +118,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariation { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -117,14 +126,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

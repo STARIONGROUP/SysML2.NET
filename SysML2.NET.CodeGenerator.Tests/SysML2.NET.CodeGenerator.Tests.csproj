@@ -21,7 +21,6 @@
 	  <Compile Remove="Expected\AutGenPoco\Comment.cs" />
 	  <Compile Remove="Expected\AutGenPoco\Connector.cs" />
 	  <Compile Remove="Expected\AutGenPoco\Dependency.cs" />
-	  <Compile Remove="Expected\AutGenPoco\Element.cs" />
 	  <Compile Remove="Expected\AutGenPoco\Feature.cs" />
 	  <Compile Remove="Expected\AutGenPoco\IAnnotatingElement.cs" />
 	  <Compile Remove="Expected\AutGenPoco\IAnnotation.cs" />
@@ -43,7 +42,6 @@
 	  <Compile Remove="Expected\AutoGenDictionaryReader\CommentDictionaryReader.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryReader\ConnectorDictionaryReader.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryReader\DependencyDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\ElementDictionaryReader.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryReader\FeatureDictionaryReader.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryReader\ItemFlowDictionaryReader.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryReader\LiteralIntegerDictionaryReader.cs" />
@@ -56,19 +54,15 @@
 	  <Compile Remove="Expected\AutoGenDictionaryWriter\CommentDictionaryWriter.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryWriter\ConnectorDictionaryWriter.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryWriter\DependencyDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\ElementDictionaryWriter.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryWriter\FeatureDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\ItemFlowDictionaryWriter.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryWriter\LiteralIntegerDictionaryWriter.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryWriter\LiteralRationalDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\MultiplicityRangeDictionaryWriter.cs" />
 	  <Compile Remove="Expected\AutoGenDictionaryWriter\NamespaceImportDictionaryWriter.cs" />
 	  <Compile Remove="Expected\AutoGenDto\AnnotatingElement.cs" />
 	  <Compile Remove="Expected\AutoGenDto\Annotation.cs" />
 	  <Compile Remove="Expected\AutoGenDto\Comment.cs" />
 	  <Compile Remove="Expected\AutoGenDto\Connector.cs" />
 	  <Compile Remove="Expected\AutoGenDto\Dependency.cs" />
-	  <Compile Remove="Expected\AutoGenDto\Element.cs" />
 	  <Compile Remove="Expected\AutoGenDto\Feature.cs" />
 	  <Compile Remove="Expected\AutoGenDto\IAnnotatingElement.cs" />
 	  <Compile Remove="Expected\AutoGenDto\IAnnotation.cs" />
@@ -120,9 +114,6 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutGenPoco\Dependency.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutGenPoco\Element.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutGenPoco\Feature.cs">
@@ -182,9 +173,6 @@
 	  <None Include="Expected\AutoGenDictionaryReader\DependencyDictionaryReader.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\ElementDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
 	  <None Include="Expected\AutoGenDictionaryReader\FeatureDictionaryReader.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
@@ -212,22 +200,13 @@
 	  <None Include="Expected\AutoGenDictionaryWriter\DependencyDictionaryWriter.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\ElementDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
 	  <None Include="Expected\AutoGenDictionaryWriter\FeatureDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\ItemFlowDictionaryWriter.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutoGenDictionaryWriter\LiteralIntegerDictionaryWriter.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutoGenDictionaryWriter\LiteralRationalDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\MultiplicityRangeDictionaryWriter.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutoGenDictionaryWriter\NamespaceImportDictionaryWriter.cs">
@@ -246,9 +225,6 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutoGenDto\Dependency.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDto\Element.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutoGenDto\Feature.cs">

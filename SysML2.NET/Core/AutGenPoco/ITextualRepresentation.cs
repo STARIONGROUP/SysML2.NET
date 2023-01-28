@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property RepresentedElement
         /// </summary>
-        Element QueryRepresentedElement();
+        IElement QueryRepresentedElement();
 
     }
 }

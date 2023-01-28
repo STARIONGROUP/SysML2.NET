@@ -35,7 +35,13 @@ namespace SysML2.NET.Core.DTO
     /// TransitionUsage transitionActions, if it is not a composite feature, or the TransitionUsage
     /// subtransitions inherited from its owner, if it is a composite feature.A TransitionUsage may by
     /// related to some of its ownedFeatures using TransitionFeatureMembership Relationships, corresponding
-    /// to the triggers, guards and effects of the TransitionUsage.
+    /// to the triggers, guards and effects of the TransitionUsage.isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(ActionDefinition) or  owningType.oclIsKindOf(ActionUsage)) andnot
+    /// (owningType.oclIsKindOf(StateDefinition) or     owningType.oclIsKindOf(StateUsage)) implies   
+    /// specializesFromLibrary("Actions::Action::decisionTransitionActions")specializesFromLibrary("Actions::actions::transitionActions")isComposite
+    /// and owningType <> null and(owningType.oclIsKindOf(StateDefinition) or
+    /// owningType.oclIsKindOf(StateUsage)) implies   
+    /// specializesFromLibrary("States::State::stateTransitions")
     /// </summary>
     public partial class TransitionUsage : ITransitionUsage
     {
@@ -70,6 +76,19 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
+
+        /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         public FeatureDirectionKind? Direction { get; set; }
@@ -88,7 +107,7 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
+        /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
         public bool IsComposite { get; set; }
 
@@ -162,11 +181,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariation { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         public List<Guid> OwnedRelationship { get; set; }
@@ -181,14 +195,6 @@ namespace SysML2.NET.Core.DTO
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
         public PortionKind? PortionKind { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
     }
 }

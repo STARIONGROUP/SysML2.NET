@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iTriggerInvocationExpression.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iTriggerInvocationExpression.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iTriggerInvocationExpression.Direction.HasValue)
             {
@@ -115,8 +119,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("kind");
             writer.WriteStringValue(iTriggerInvocationExpression.Kind.ToString().ToLower());
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iTriggerInvocationExpression.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iTriggerInvocationExpression.OwnedRelationship)
             {
@@ -133,8 +135,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iTriggerInvocationExpression.ShortName);
             writer.WriteEndObject();
         }
     }

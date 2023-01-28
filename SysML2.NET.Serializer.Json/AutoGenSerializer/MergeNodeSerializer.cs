@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iMergeNode.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iMergeNode.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iMergeNode.Direction.HasValue)
             {
@@ -118,8 +122,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iMergeNode.IsVariation);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iMergeNode.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iMergeNode.OwnedRelationship)
             {
@@ -145,8 +147,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iMergeNode.ShortName);
             writer.WriteEndObject();
         }
     }

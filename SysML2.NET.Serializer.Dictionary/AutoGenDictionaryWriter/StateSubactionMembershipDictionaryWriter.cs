@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", stateSubactionMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", stateSubactionMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", stateSubactionMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", stateSubactionMembershipInstance.ElementId);
             dictionary.Add("feature", stateSubactionMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", stateSubactionMembershipInstance.IsImplied);
@@ -116,12 +118,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", stateSubactionMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", stateSubactionMembershipInstance.MemberName);
             dictionary.Add("memberShortName", stateSubactionMembershipInstance.MemberShortName);
-            dictionary.Add("name", stateSubactionMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", stateSubactionMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", stateSubactionMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", stateSubactionMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", stateSubactionMembershipInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", stateSubactionMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", stateSubactionMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", stateSubactionMembershipInstance.Target)} ]");
             dictionary.Add("type", stateSubactionMembershipInstance.Type.ToString());
@@ -153,6 +153,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", stateSubactionMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", stateSubactionMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", stateSubactionMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", stateSubactionMembershipInstance.ElementId);
             dictionary.Add("feature", stateSubactionMembershipInstance.Feature);
             dictionary.Add("isImplied", stateSubactionMembershipInstance.IsImplied);
@@ -161,12 +163,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", stateSubactionMembershipInstance.MemberElement);
             dictionary.Add("memberName", stateSubactionMembershipInstance.MemberName);
             dictionary.Add("memberShortName", stateSubactionMembershipInstance.MemberShortName);
-            dictionary.Add("name", stateSubactionMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", stateSubactionMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", stateSubactionMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", stateSubactionMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", stateSubactionMembershipInstance.OwningRelationship);
-            dictionary.Add("shortName", stateSubactionMembershipInstance.ShortName);
             dictionary.Add("source", stateSubactionMembershipInstance.Source);
             dictionary.Add("target", stateSubactionMembershipInstance.Target);
             dictionary.Add("type", stateSubactionMembershipInstance.Type);

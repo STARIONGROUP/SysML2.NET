@@ -40,7 +40,11 @@ namespace SysML2.NET.Core.POCO
     /// numbers.</li></ul>Multiplicity co-domains (in models) can be specified by Expression that might vary
     /// in their results. If the typeWithMultiplicity is a Classifier, the domain of the Multiplicity shall
     /// be Anything.  If the typeWithMultiplicity is a Feature,  the Multiplicity shall have the same domain
-    /// as the typeWithMultiplicity.
+    /// as the typeWithMultiplicity.if typeWithMultiplicity.oclIsKindOf(Feature) then    featuringType =    
+    ///     typeWithMultiplicity.oclAsType(Feature).featuringTypeelse    featuringType =
+    /// Sequence{resolveGlobal("Base::Anything"))}endifspecializesFromLibrary("Base::naturals")owningNamespace.oclIsKindOf(Type)
+    /// implies    owningNamespace.oclAsType(Type).ownedSpecialization.general.multiplicity->       
+    /// forAll(m | redefines(m))
     /// </summary>
     public partial interface IMultiplicity : IFeature
     {

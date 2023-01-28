@@ -31,7 +31,11 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A PortioningFeature is a Feature that is a redefinition of one of the Features timeSliceOf or
-    /// snapshotOf of the portionOfLife of each of the types of its portioningUsage.
+    /// snapshotOf of the occurrenceDefinitions of its portioningUsage.portionKind =
+    /// portioningUsage.portionKindtype = portioningUsage.occurrenceDefinitionif portionKind =
+    /// PortionKind::timeslice then    redefinesFromLibrary("Occurrences::Occurrence::timeSliceOf")else   
+    /// redefinesFromLibrary("Occurrences::Occurrence::snapshotOf")endifmultiplicity <> null
+    /// andmultiplicity.specializesFromLibrary("Base::exactlyOne")
     /// </summary>
     public partial interface IPortioningFeature : IFeature
     {

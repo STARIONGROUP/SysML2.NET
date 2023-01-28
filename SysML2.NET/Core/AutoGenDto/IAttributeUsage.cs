@@ -33,9 +33,10 @@ namespace SysML2.NET.Core.DTO
     /// An AttributeUsage is a Usage whose type is a DataType. Nominally, if the type is an
     /// AttributeDefinition, an AttributeUsage is a usage of a AttributeDefinition to represent the value of
     /// some system quality or characteristic. However, other kinds of kernel DataTypes are also allowed, to
-    /// permit use of DataTypes from the Kernel Library. An AttributeUsage itself as well as all its nested
-    /// features must have isComposite = false.An AttributeUsage must subset, directly or indirectly, the
-    /// base AttributeUsage attributeValues from the Systems model library.
+    /// permit use of DataTypes from the Kernel Model Libraries. An AttributeUsage itself as well as all its
+    /// nested features must be referential (non-composite).An AttributeUsage must specialize, directly or
+    /// indirectly, the base Feature Base::dataValues from the Kernel Semantic Library.feature->forAll(not
+    /// isComposite)isReferencespecializesFromLibrary("Base::dataValues")
     /// </summary>
     public partial interface IAttributeUsage : IUsage
     {

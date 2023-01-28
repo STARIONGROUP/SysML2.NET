@@ -110,6 +110,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
@@ -152,12 +164,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
@@ -170,14 +176,10 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             stateDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            stateDefinitionInstance.DeclaredName = declaredNameFeature;
+            stateDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             stateDefinitionInstance.ElementId = elementIdFeature;
             stateDefinitionInstance.IsAbstract = isAbstractFeature;
             stateDefinitionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
@@ -185,10 +187,8 @@ namespace SysML2.NET.Serializer.Dictionary
             stateDefinitionInstance.IsParallel = isParallelFeature;
             stateDefinitionInstance.IsSufficient = isSufficientFeature;
             stateDefinitionInstance.IsVariation = isVariationFeature;
-            stateDefinitionInstance.Name = nameFeature;
             stateDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             stateDefinitionInstance.OwningRelationship = owningRelationshipFeature;
-            stateDefinitionInstance.ShortName = shortNameFeature;
 
             return stateDefinitionInstance;
         }
@@ -213,6 +213,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
@@ -255,12 +267,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
@@ -273,14 +279,10 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a StateDefinition");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             stateDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            stateDefinitionInstance.DeclaredName = declaredNameFeature;
+            stateDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             stateDefinitionInstance.ElementId = elementIdFeature;
             stateDefinitionInstance.IsAbstract = isAbstractFeature;
             stateDefinitionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
@@ -288,10 +290,8 @@ namespace SysML2.NET.Serializer.Dictionary
             stateDefinitionInstance.IsParallel = isParallelFeature;
             stateDefinitionInstance.IsSufficient = isSufficientFeature;
             stateDefinitionInstance.IsVariation = isVariationFeature;
-            stateDefinitionInstance.Name = nameFeature;
             stateDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             stateDefinitionInstance.OwningRelationship = owningRelationshipFeature;
-            stateDefinitionInstance.ShortName = shortNameFeature;
 
             return stateDefinitionInstance;
         }

@@ -21,7 +21,6 @@
 namespace SysML2.NET.Serializer.Json.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -54,23 +53,23 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE);
 
-                Assert.That(data.Count(), Is.EqualTo(99));
+				Assert.That(data.Count(), Is.EqualTo(100));
 
-                Assert.That(data.OfType<IPartDefinition>().Count(), Is.EqualTo(4));
+				Assert.That(data.OfType<IFeature>().Count(), Is.EqualTo(40));
 
-                var partDefinition = data.OfType<IPartDefinition>().Single(x => x.Id == Guid.Parse("07bd19e6-4587-4bdf-b274-1bbdb4b17707"));
+				var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("0089a4a6-1abf-49c3-9806-1f0114662c13"));
 
-                Assert.That(partDefinition.AliasIds, Is.Empty);
-                Assert.That(partDefinition.ElementId, Is.EqualTo("07bd19e6-4587-4bdf-b274-1bbdb4b17707"));
-                Assert.That(partDefinition.IsAbstract, Is.False);
-                Assert.That(partDefinition.IsIndividual, Is.False);
-                Assert.That(partDefinition.IsSufficient, Is.False);
-                Assert.That(partDefinition.IsVariation, Is.False);
-                Assert.That(partDefinition.Name, Is.EqualTo("AutomaticClutch"));
-                Assert.That(partDefinition.OwnedRelationship, Is.EquivalentTo(new List<Guid> { Guid.Parse("d53e1d54-913d-43c1-aa11-e40f87420a5c") }));
-                Assert.That(partDefinition.OwningRelationship, Is.EqualTo(Guid.Parse("11322389-ecab-42e0-8730-9802f2032d75")));
-                Assert.That(partDefinition.ShortName, Is.Null);
-            }
+				Assert.That(feature.AliasIds, Is.Empty);
+				Assert.That(feature.ElementId, Is.EqualTo("0089a4a6-1abf-49c3-9806-1f0114662c13"));
+				Assert.That(feature.IsAbstract, Is.False);
+				Assert.That(feature.IsComposite, Is.False);
+				Assert.That(feature.IsSufficient, Is.False);
+				Assert.That(feature.IsEnd, Is.True);
+				Assert.That(feature.DeclaredName, Is.Null);
+				Assert.That(feature.OwnedRelationship, Is.Empty);
+				Assert.That(feature.OwningRelationship, Is.EqualTo(Guid.Parse("4344ee51-05be-49a6-be59-4f6938614cd8")));
+				Assert.That(feature.DeclaredShortName, Is.Null);
+			}
         }
 
         [Test]
@@ -83,24 +82,24 @@ namespace SysML2.NET.Serializer.Json.Tests
 
                 var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, cts.Token);
 
-                Assert.That(data.Count(), Is.EqualTo(99));
+                Assert.That(data.Count(), Is.EqualTo(100));
+                
+				Assert.That(data.OfType<IFeature>().Count(), Is.EqualTo(40));
 
-                Assert.That(data.OfType<IPartDefinition>().Count(), Is.EqualTo(4));
+				var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("0089a4a6-1abf-49c3-9806-1f0114662c13"));
 
-                var partDefinition = data.OfType<IPartDefinition>().Single(x => x.Id == Guid.Parse("07bd19e6-4587-4bdf-b274-1bbdb4b17707"));
-
-                Assert.That(partDefinition.AliasIds, Is.Empty);
-                Assert.That(partDefinition.ElementId, Is.EqualTo("07bd19e6-4587-4bdf-b274-1bbdb4b17707"));
-                Assert.That(partDefinition.IsAbstract, Is.False);
-                Assert.That(partDefinition.IsIndividual, Is.False);
-                Assert.That(partDefinition.IsSufficient, Is.False);
-                Assert.That(partDefinition.IsVariation, Is.False);
-                Assert.That(partDefinition.Name, Is.EqualTo("AutomaticClutch"));
-                Assert.That(partDefinition.OwnedRelationship, Is.EquivalentTo(new List<Guid> { Guid.Parse("d53e1d54-913d-43c1-aa11-e40f87420a5c") }));
-                Assert.That(partDefinition.OwningRelationship, Is.EqualTo(Guid.Parse("11322389-ecab-42e0-8730-9802f2032d75")));
-                Assert.That(partDefinition.ShortName, Is.Null);
-            }
-        }
+				Assert.That(feature.AliasIds, Is.Empty);
+				Assert.That(feature.ElementId, Is.EqualTo("0089a4a6-1abf-49c3-9806-1f0114662c13"));
+				Assert.That(feature.IsAbstract, Is.False);
+				Assert.That(feature.IsComposite, Is.False);
+				Assert.That(feature.IsSufficient, Is.False);
+				Assert.That(feature.IsEnd, Is.True);
+				Assert.That(feature.DeclaredName, Is.Null);
+				Assert.That(feature.OwnedRelationship, Is.Empty);
+				Assert.That(feature.OwningRelationship, Is.EqualTo(Guid.Parse("4344ee51-05be-49a6-be59-4f6938614cd8")));
+				Assert.That(feature.DeclaredShortName, Is.Null);
+			}
+		}
 
         [Test]
         public void Verify_that_projects_from_restapi_json_can_be_deserialized()

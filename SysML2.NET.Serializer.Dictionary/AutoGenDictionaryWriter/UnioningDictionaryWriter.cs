@@ -108,15 +108,15 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", unioningInstance.AliasIds);
+            dictionary.Add("declaredName", unioningInstance.DeclaredName);
+            dictionary.Add("declaredShortName", unioningInstance.DeclaredShortName);
             dictionary.Add("elementId", unioningInstance.ElementId);
             dictionary.Add("isImplied", unioningInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", unioningInstance.IsImpliedIncluded);
-            dictionary.Add("name", unioningInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", unioningInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", unioningInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", unioningInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", unioningInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", unioningInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", unioningInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", unioningInstance.Target)} ]");
             dictionary.Add("unioningType", unioningInstance.UnioningType.ToString());
@@ -147,15 +147,15 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", unioningInstance.AliasIds);
+            dictionary.Add("declaredName", unioningInstance.DeclaredName);
+            dictionary.Add("declaredShortName", unioningInstance.DeclaredShortName);
             dictionary.Add("elementId", unioningInstance.ElementId);
             dictionary.Add("isImplied", unioningInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", unioningInstance.IsImpliedIncluded);
-            dictionary.Add("name", unioningInstance.Name);
             dictionary.Add("ownedRelatedElement", unioningInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", unioningInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", unioningInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", unioningInstance.OwningRelationship);
-            dictionary.Add("shortName", unioningInstance.ShortName);
             dictionary.Add("source", unioningInstance.Source);
             dictionary.Add("target", unioningInstance.Target);
             dictionary.Add("unioningType", unioningInstance.UnioningType);

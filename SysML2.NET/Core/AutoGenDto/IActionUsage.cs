@@ -32,10 +32,12 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An ActionUsage is a Usage that is also a Step, and, so, is typed by a Behavior. Nominally, if the
     /// type is an ActionDefinition, an ActionUsage is a Usage of that ActionDefinition within a system.
-    /// However, other kinds of kernel Behaviors are also allowed, to permit use of Behaviors from the
-    /// Kernel Library.An ActionUsage must subset, directly or indirectly, the base ActionUsage actions from
-    /// the Systems model library. if it is a feature of an ActionDefinition or ActionUsage, then it must
-    /// subset, directly or indirectly, the ActionUsage Action::subactions.
+    /// However, other kinds of kernel Behaviors are also allowed, to permit use of Behavior from the Kernel
+    /// Model Libraries.specializesFromLibrary('Actions::actions')isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(ActionDefinition) or owningType.oclIsKindOf(ActionUsage)) implies   
+    /// specializesFromLibrary('Actions::Action::subactions')isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(PartDefinition) or owningType.oclIsKindOf(PartUsage)) implies   
+    /// specializesFromLibrary('Parts::Part::ownedActions')
     /// </summary>
     public partial interface IActionUsage : IOccurrenceUsage, IStep
     {

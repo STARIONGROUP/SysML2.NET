@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", portUsageInstance.AliasIds);
+            dictionary.Add("declaredName", portUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", portUsageInstance.DeclaredShortName);
             dictionary.Add("direction", portUsageInstance.Direction);
             dictionary.Add("elementId", portUsageInstance.ElementId);
             dictionary.Add("isAbstract", portUsageInstance.IsAbstract);
@@ -122,11 +124,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", portUsageInstance.IsSufficient);
             dictionary.Add("isUnique", portUsageInstance.IsUnique);
             dictionary.Add("isVariation", portUsageInstance.IsVariation);
-            dictionary.Add("name", portUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", portUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", portUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", portUsageInstance.PortionKind);
-            dictionary.Add("shortName", portUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,6 +154,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", portUsageInstance.AliasIds);
+            dictionary.Add("declaredName", portUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", portUsageInstance.DeclaredShortName);
             dictionary.Add("direction", portUsageInstance.Direction);
             dictionary.Add("elementId", portUsageInstance.ElementId);
             dictionary.Add("isAbstract", portUsageInstance.IsAbstract);
@@ -168,11 +170,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", portUsageInstance.IsSufficient);
             dictionary.Add("isUnique", portUsageInstance.IsUnique);
             dictionary.Add("isVariation", portUsageInstance.IsVariation);
-            dictionary.Add("name", portUsageInstance.Name);
             dictionary.Add("ownedRelationship", portUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", portUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", portUsageInstance.PortionKind);
-            dictionary.Add("shortName", portUsageInstance.ShortName);
 
             return dictionary;
         }

@@ -110,15 +110,15 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("aliasIds", annotationInstance.AliasIds);
             dictionary.Add("annotatedElement", annotationInstance.AnnotatedElement.ToString());
             dictionary.Add("annotatingElement", annotationInstance.AnnotatingElement.ToString());
+            dictionary.Add("declaredName", annotationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", annotationInstance.DeclaredShortName);
             dictionary.Add("elementId", annotationInstance.ElementId);
             dictionary.Add("isImplied", annotationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", annotationInstance.IsImpliedIncluded);
-            dictionary.Add("name", annotationInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", annotationInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", annotationInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", annotationInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", annotationInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", annotationInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", annotationInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", annotationInstance.Target)} ]");
 
@@ -150,15 +150,15 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("aliasIds", annotationInstance.AliasIds);
             dictionary.Add("annotatedElement", annotationInstance.AnnotatedElement);
             dictionary.Add("annotatingElement", annotationInstance.AnnotatingElement);
+            dictionary.Add("declaredName", annotationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", annotationInstance.DeclaredShortName);
             dictionary.Add("elementId", annotationInstance.ElementId);
             dictionary.Add("isImplied", annotationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", annotationInstance.IsImpliedIncluded);
-            dictionary.Add("name", annotationInstance.Name);
             dictionary.Add("ownedRelatedElement", annotationInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", annotationInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", annotationInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", annotationInstance.OwningRelationship);
-            dictionary.Add("shortName", annotationInstance.ShortName);
             dictionary.Add("source", annotationInstance.Source);
             dictionary.Add("target", annotationInstance.Target);
 

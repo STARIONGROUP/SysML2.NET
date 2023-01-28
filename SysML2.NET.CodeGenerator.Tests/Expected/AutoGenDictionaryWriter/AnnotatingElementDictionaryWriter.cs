@@ -109,12 +109,12 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", annotatingElementInstance.AliasIds);
             dictionary.Add("annotation", $"[ {string.Join(",", annotatingElementInstance.Annotation)} ]");
+            dictionary.Add("declaredName", annotatingElementInstance.DeclaredName);
+            dictionary.Add("declaredShortName", annotatingElementInstance.DeclaredShortName);
             dictionary.Add("elementId", annotatingElementInstance.ElementId);
             dictionary.Add("isImpliedIncluded", annotatingElementInstance.IsImpliedIncluded);
-            dictionary.Add("name", annotatingElementInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", annotatingElementInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", annotatingElementInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", annotatingElementInstance.ShortName);
 
             return dictionary;
         }
@@ -143,12 +143,12 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", annotatingElementInstance.AliasIds);
             dictionary.Add("annotation", annotatingElementInstance.Annotation);
+            dictionary.Add("declaredName", annotatingElementInstance.DeclaredName);
+            dictionary.Add("declaredShortName", annotatingElementInstance.DeclaredShortName);
             dictionary.Add("elementId", annotatingElementInstance.ElementId);
             dictionary.Add("isImpliedIncluded", annotatingElementInstance.IsImpliedIncluded);
-            dictionary.Add("name", annotatingElementInstance.Name);
             dictionary.Add("ownedRelationship", annotatingElementInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", annotatingElementInstance.OwningRelationship);
-            dictionary.Add("shortName", annotatingElementInstance.ShortName);
 
             return dictionary;
         }

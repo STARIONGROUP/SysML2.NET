@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property AnnotatedElement
         /// </summary>
-        List<Element> QueryAnnotatedElement();
+        List<IElement> QueryAnnotatedElement();
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements.

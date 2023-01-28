@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", connectorInstance.AliasIds);
+            dictionary.Add("declaredName", connectorInstance.DeclaredName);
+            dictionary.Add("declaredShortName", connectorInstance.DeclaredShortName);
             dictionary.Add("direction", connectorInstance.Direction);
             dictionary.Add("elementId", connectorInstance.ElementId);
             dictionary.Add("isAbstract", connectorInstance.IsAbstract);
@@ -122,12 +124,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", connectorInstance.IsReadOnly);
             dictionary.Add("isSufficient", connectorInstance.IsSufficient);
             dictionary.Add("isUnique", connectorInstance.IsUnique);
-            dictionary.Add("name", connectorInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", connectorInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", connectorInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", connectorInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", connectorInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", connectorInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", connectorInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", connectorInstance.Target)} ]");
 
@@ -157,6 +157,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", connectorInstance.AliasIds);
+            dictionary.Add("declaredName", connectorInstance.DeclaredName);
+            dictionary.Add("declaredShortName", connectorInstance.DeclaredShortName);
             dictionary.Add("direction", connectorInstance.Direction);
             dictionary.Add("elementId", connectorInstance.ElementId);
             dictionary.Add("isAbstract", connectorInstance.IsAbstract);
@@ -171,12 +173,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", connectorInstance.IsReadOnly);
             dictionary.Add("isSufficient", connectorInstance.IsSufficient);
             dictionary.Add("isUnique", connectorInstance.IsUnique);
-            dictionary.Add("name", connectorInstance.Name);
             dictionary.Add("ownedRelatedElement", connectorInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", connectorInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", connectorInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", connectorInstance.OwningRelationship);
-            dictionary.Add("shortName", connectorInstance.ShortName);
             dictionary.Add("source", connectorInstance.Source);
             dictionary.Add("target", connectorInstance.Target);
 

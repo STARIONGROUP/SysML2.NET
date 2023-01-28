@@ -122,6 +122,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string bodyFeature = Convert.ToString(bodyObject);
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
@@ -140,12 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string languageFeature = Convert.ToString(languageObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
@@ -158,23 +164,17 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             textualRepresentationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             textualRepresentationInstance.Annotation = annotationFeature ?? new List<Guid>();
             textualRepresentationInstance.Body = bodyFeature;
+            textualRepresentationInstance.DeclaredName = declaredNameFeature;
+            textualRepresentationInstance.DeclaredShortName = declaredShortNameFeature;
             textualRepresentationInstance.ElementId = elementIdFeature;
             textualRepresentationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             textualRepresentationInstance.Language = languageFeature;
-            textualRepresentationInstance.Name = nameFeature;
             textualRepresentationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             textualRepresentationInstance.OwningRelationship = owningRelationshipFeature;
-            textualRepresentationInstance.ShortName = shortNameFeature;
 
             return textualRepresentationInstance;
         }
@@ -211,6 +211,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string bodyFeature = Convert.ToString(bodyObject);
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
@@ -229,12 +241,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string languageFeature = Convert.ToString(languageObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
@@ -247,23 +253,17 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a TextualRepresentation");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             textualRepresentationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             textualRepresentationInstance.Annotation = annotationFeature ?? new List<Guid>();
             textualRepresentationInstance.Body = bodyFeature;
+            textualRepresentationInstance.DeclaredName = declaredNameFeature;
+            textualRepresentationInstance.DeclaredShortName = declaredShortNameFeature;
             textualRepresentationInstance.ElementId = elementIdFeature;
             textualRepresentationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             textualRepresentationInstance.Language = languageFeature;
-            textualRepresentationInstance.Name = nameFeature;
             textualRepresentationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             textualRepresentationInstance.OwningRelationship = owningRelationshipFeature;
-            textualRepresentationInstance.ShortName = shortNameFeature;
 
             return textualRepresentationInstance;
         }

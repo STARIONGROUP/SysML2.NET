@@ -30,17 +30,23 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// An AcceptActionUsage is an ActionUsage that is typed, directly or indirectly, by the
-    /// ActionDefinition AcceptAction from the Systems model library (unless it is owned by a
-    /// TransitionAction, in which case it is typed by AcceptMessageAction). It specifies the acceptance of
-    /// an incomingTransfer from the Occurrence given by the result of its receiverArgument Expression. (If
-    /// no receiverArgument is provided, the default is the this context of the AcceptActionUsage.) The
-    /// payload of the accepted Transfer is output on its payloadParameter.Which Transfers may be accepted
-    /// is determined by the typing and binding of the payloadParameter. If the triggerKind has any value
-    /// other than accept, then the payloadParameter must be bound to a payloadArgument that is an
-    /// InvocationExpression whose function is determined by the triggerKind.receiverArgument =
+    /// An AcceptActionUsage is an ActionUsage that specifies the acceptance of an incomingTransfer from the
+    /// Occurrence given by the result of its receiverArgument Expression. (If no receiverArgument is
+    /// provided, the default is the this context of the AcceptActionUsage.) The payload of the accepted
+    /// Transfer is output on its payloadParameter. Which Transfers may be accepted is determined by
+    /// conformance to the typing and (potentially) binding of the payloadParameter.receiverArgument =
     /// argument(2)payloadArgument = argument(1)payloadParameter =  if parameter->isEmpty() then null else
-    /// parameter->at(1) endifinputParameters->size() >= 2
+    /// parameter->at(1) endifinputParameters->size() >= 2not isTriggerAction() implies   
+    /// specializesFromLibrary('Actions::acceptActions')isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(ActionDefinition) or owningType.oclIsKindOf(ActionUsage)) implies   
+    /// specializesFromLibrary('Actions::Action::acceptSubactions')isTriggerAction() implies   
+    /// specializesFromLibrary('Actions::TransitionAction::accepter')payloadArgument <> null
+    /// andpayloadArgument.oclIsKindOf(TriggerInvocationExpression) implies    let invocation : Expression =
+    ///        payloadArgument.oclAsType(Expression) in    parameter->size() >= 2 and   
+    /// invocation.parameter->size() >= 2 and           
+    /// ownedFeature->selectByKind(BindingConnector)->exists(b |       
+    /// b.relatedFeatures->includes(parameter->at(2)) and       
+    /// b.relatedFeatures->includes(invocation.parameter->at(2)))
     /// </summary>
     public partial class AcceptActionUsage : IAcceptActionUsage
     {
@@ -61,7 +67,7 @@ namespace SysML2.NET.Core.POCO
             this.IsReadOnly = false;
             this.IsSufficient = false;
             this.IsUnique = true;
-            this.OwnedRelationship = new List<Relationship>();
+            this.OwnedRelationship = new List<IRelationship>();
         }
 
         /// <summary>
@@ -97,6 +103,19 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property ChainingFeature not yet supported");
         }
+
+        /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// Queries the derived property Definition
@@ -141,14 +160,6 @@ namespace SysML2.NET.Core.POCO
         public List<Documentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property EffectiveName
-        /// </summary>
-        public string QueryEffectiveName()
-        {
-            throw new NotImplementedException("Derived property EffectiveName not yet supported");
         }
 
         /// <summary>
@@ -253,7 +264,7 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does..
+        /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
         public bool IsComposite { get; set; }
 
@@ -361,7 +372,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Member
         /// </summary>
-        public List<Element> QueryMember()
+        public List<IElement> QueryMember()
         {
             throw new NotImplementedException("Derived property Member not yet supported");
         }
@@ -383,9 +394,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The primary name of this Element.
+        /// Queries the derived property Name
         /// </summary>
-        public string Name { get; set; }
+        public string QueryName()
+        {
+            throw new NotImplementedException("Derived property Name not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property NestedAction
@@ -654,7 +668,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedElement
         /// </summary>
-        public List<Element> QueryOwnedElement()
+        public List<IElement> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
@@ -718,7 +732,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedMember
         /// </summary>
-        public List<Element> QueryOwnedMember()
+        public List<IElement> QueryOwnedMember()
         {
             throw new NotImplementedException("Derived property OwnedMember not yet supported");
         }
@@ -750,7 +764,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
-        public List<Relationship> OwnedRelationship { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property OwnedSpecialization
@@ -795,7 +809,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Owner
         /// </summary>
-        public Element QueryOwner()
+        public IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
@@ -835,7 +849,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
-        public Relationship OwningRelationship { get; set; }
+        public IRelationship OwningRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property OwningType
@@ -908,12 +922,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
+        /// Queries the derived property ShortName
         /// </summary>
-        public string ShortName { get; set; }
+        public string QueryShortName()
+        {
+            throw new NotImplementedException("Derived property ShortName not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property TextualRepresentation

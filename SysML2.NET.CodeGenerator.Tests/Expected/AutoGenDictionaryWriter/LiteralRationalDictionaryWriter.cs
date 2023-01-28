@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", literalRationalInstance.AliasIds);
+            dictionary.Add("declaredName", literalRationalInstance.DeclaredName);
+            dictionary.Add("declaredShortName", literalRationalInstance.DeclaredShortName);
             dictionary.Add("direction", literalRationalInstance.Direction);
             dictionary.Add("elementId", literalRationalInstance.ElementId);
             dictionary.Add("isAbstract", literalRationalInstance.IsAbstract);
@@ -120,10 +122,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", literalRationalInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalRationalInstance.IsSufficient);
             dictionary.Add("isUnique", literalRationalInstance.IsUnique);
-            dictionary.Add("name", literalRationalInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", literalRationalInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", literalRationalInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", literalRationalInstance.ShortName);
             dictionary.Add("value", literalRationalInstance.Value);
 
             return dictionary;
@@ -152,6 +152,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", literalRationalInstance.AliasIds);
+            dictionary.Add("declaredName", literalRationalInstance.DeclaredName);
+            dictionary.Add("declaredShortName", literalRationalInstance.DeclaredShortName);
             dictionary.Add("direction", literalRationalInstance.Direction);
             dictionary.Add("elementId", literalRationalInstance.ElementId);
             dictionary.Add("isAbstract", literalRationalInstance.IsAbstract);
@@ -164,10 +166,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", literalRationalInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalRationalInstance.IsSufficient);
             dictionary.Add("isUnique", literalRationalInstance.IsUnique);
-            dictionary.Add("name", literalRationalInstance.Name);
             dictionary.Add("ownedRelationship", literalRationalInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", literalRationalInstance.OwningRelationship);
-            dictionary.Add("shortName", literalRationalInstance.ShortName);
             dictionary.Add("value", literalRationalInstance.Value);
 
             return dictionary;

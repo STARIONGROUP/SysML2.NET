@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A SuccessionFlowConnectionUsage is a FlowConnectionUsage that is also a SuccessionItemFlow.A
     /// FlowConnectionUsage must subset the base SuccessionFlowConnectionUsage successionFlowConnections
-    /// from the Systems model library.
+    /// from the Systems model library.specializesFromLibrary("Connections::successionFlowConnections")
     /// </summary>
     public partial interface ISuccessionFlowConnectionUsage : IFlowConnectionUsage, ISuccessionItemFlow
     {

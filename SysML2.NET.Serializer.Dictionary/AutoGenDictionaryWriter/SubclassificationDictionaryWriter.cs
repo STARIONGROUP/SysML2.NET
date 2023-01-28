@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", subclassificationInstance.AliasIds);
+            dictionary.Add("declaredName", subclassificationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", subclassificationInstance.DeclaredShortName);
             dictionary.Add("elementId", subclassificationInstance.ElementId);
             dictionary.Add("general", subclassificationInstance.General.ToString());
             dictionary.Add("isImplied", subclassificationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", subclassificationInstance.IsImpliedIncluded);
-            dictionary.Add("name", subclassificationInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", subclassificationInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", subclassificationInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", subclassificationInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", subclassificationInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", subclassificationInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", subclassificationInstance.Source)} ]");
             dictionary.Add("specific", subclassificationInstance.Specific.ToString());
             dictionary.Add("subclassifier", subclassificationInstance.Subclassifier.ToString());
@@ -150,16 +150,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", subclassificationInstance.AliasIds);
+            dictionary.Add("declaredName", subclassificationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", subclassificationInstance.DeclaredShortName);
             dictionary.Add("elementId", subclassificationInstance.ElementId);
             dictionary.Add("general", subclassificationInstance.General);
             dictionary.Add("isImplied", subclassificationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", subclassificationInstance.IsImpliedIncluded);
-            dictionary.Add("name", subclassificationInstance.Name);
             dictionary.Add("ownedRelatedElement", subclassificationInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", subclassificationInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", subclassificationInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", subclassificationInstance.OwningRelationship);
-            dictionary.Add("shortName", subclassificationInstance.ShortName);
             dictionary.Add("source", subclassificationInstance.Source);
             dictionary.Add("specific", subclassificationInstance.Specific);
             dictionary.Add("subclassifier", subclassificationInstance.Subclassifier);

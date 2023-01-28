@@ -33,7 +33,15 @@ namespace SysML2.NET.Core.POCO
     /// A Step is a Feature that is typed by one or more Behaviors. Steps may be used by one Behavior to
     /// coordinate the performance of other Behaviors, supporting the steady refinement of behavioral
     /// descriptions. Steps can be ordered in time and can be connected using ItemFlows to specify things
-    /// flowing between their parameters.
+    /// flowing between their
+    /// parameters.allSupertypes()->includes(resolveGlobal("Performances::performances"))owningType <> null
+    /// and    (owningType.oclIsKindOf(Behavior) or     owningType.oclIsKindOf(Step)) implies   
+    /// specializesFromLibrary('Performances::Performance::enclosedPerformance')owningType <> null and   
+    /// (owningType.oclIsKindOf(Behavior) or     owningType.oclIsKindOf(Step)) and    self.isComposite
+    /// implies    specializesFromLibrary('Performances::Performance::subperformance')isComposite and
+    /// owningType <> null and(owningType.oclIsKindOf(Structure) or owningType.oclIsKindOf(Feature) and
+    /// owningType.oclAsType(Feature).type->    exists(oclIsKindOf(Structure)) implies   
+    /// specializesFromLibrary('Objects::Object::ownedPerformance')
     /// </summary>
     public partial interface IStep : IFeature
     {

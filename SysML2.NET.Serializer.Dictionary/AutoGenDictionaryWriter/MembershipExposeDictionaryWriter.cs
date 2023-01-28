@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", membershipExposeInstance.AliasIds);
+            dictionary.Add("declaredName", membershipExposeInstance.DeclaredName);
+            dictionary.Add("declaredShortName", membershipExposeInstance.DeclaredShortName);
             dictionary.Add("elementId", membershipExposeInstance.ElementId);
             dictionary.Add("importedMembership", membershipExposeInstance.ImportedMembership.ToString());
             dictionary.Add("isImplied", membershipExposeInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", membershipExposeInstance.IsImpliedIncluded);
             dictionary.Add("isImportAll", membershipExposeInstance.IsImportAll);
             dictionary.Add("isRecursive", membershipExposeInstance.IsRecursive);
-            dictionary.Add("name", membershipExposeInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", membershipExposeInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", membershipExposeInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", membershipExposeInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", membershipExposeInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", membershipExposeInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", membershipExposeInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", membershipExposeInstance.Target)} ]");
             dictionary.Add("visibility", membershipExposeInstance.Visibility);
@@ -150,18 +150,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", membershipExposeInstance.AliasIds);
+            dictionary.Add("declaredName", membershipExposeInstance.DeclaredName);
+            dictionary.Add("declaredShortName", membershipExposeInstance.DeclaredShortName);
             dictionary.Add("elementId", membershipExposeInstance.ElementId);
             dictionary.Add("importedMembership", membershipExposeInstance.ImportedMembership);
             dictionary.Add("isImplied", membershipExposeInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", membershipExposeInstance.IsImpliedIncluded);
             dictionary.Add("isImportAll", membershipExposeInstance.IsImportAll);
             dictionary.Add("isRecursive", membershipExposeInstance.IsRecursive);
-            dictionary.Add("name", membershipExposeInstance.Name);
             dictionary.Add("ownedRelatedElement", membershipExposeInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", membershipExposeInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", membershipExposeInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", membershipExposeInstance.OwningRelationship);
-            dictionary.Add("shortName", membershipExposeInstance.ShortName);
             dictionary.Add("source", membershipExposeInstance.Source);
             dictionary.Add("target", membershipExposeInstance.Target);
             dictionary.Add("visibility", membershipExposeInstance.Visibility);

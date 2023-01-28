@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property ExposedElement
         /// </summary>
-        List<Element> QueryExposedElement();
+        List<IElement> QueryExposedElement();
 
         /// <summary>
         /// Queries the derived property SatisfiedViewpoint

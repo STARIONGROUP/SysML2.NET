@@ -32,14 +32,14 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// An OwningMembership is a Membership that owns its memberElement as a ownedRelatedElement. The
     /// ownedMemberElementM becomes an ownedMember of the membershipOwningNamespace.ownedMemberName =
-    /// ownedMemberElement.effectiveNameownedMemberShortName = ownedMemberElement.shortName
+    /// ownedMemberElement.nameownedMemberShortName = ownedMemberElement.shortName
     /// </summary>
     public partial interface IOwningMembership : IMembership
     {
         /// <summary>
         /// Queries the derived property OwnedMemberElement
         /// </summary>
-        Element QueryOwnedMemberElement();
+        IElement QueryOwnedMemberElement();
 
         /// <summary>
         /// Queries the derived property OwnedMemberElementId

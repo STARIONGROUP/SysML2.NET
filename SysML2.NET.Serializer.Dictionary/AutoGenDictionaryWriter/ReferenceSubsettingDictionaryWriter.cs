@@ -108,17 +108,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", referenceSubsettingInstance.AliasIds);
+            dictionary.Add("declaredName", referenceSubsettingInstance.DeclaredName);
+            dictionary.Add("declaredShortName", referenceSubsettingInstance.DeclaredShortName);
             dictionary.Add("elementId", referenceSubsettingInstance.ElementId);
             dictionary.Add("general", referenceSubsettingInstance.General.ToString());
             dictionary.Add("isImplied", referenceSubsettingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", referenceSubsettingInstance.IsImpliedIncluded);
-            dictionary.Add("name", referenceSubsettingInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", referenceSubsettingInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", referenceSubsettingInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", referenceSubsettingInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", referenceSubsettingInstance.OwningRelationship.ToString());
             dictionary.Add("referencedFeature", referenceSubsettingInstance.ReferencedFeature.ToString());
-            dictionary.Add("shortName", referenceSubsettingInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", referenceSubsettingInstance.Source)} ]");
             dictionary.Add("specific", referenceSubsettingInstance.Specific.ToString());
             dictionary.Add("subsettedFeature", referenceSubsettingInstance.SubsettedFeature.ToString());
@@ -151,17 +151,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", referenceSubsettingInstance.AliasIds);
+            dictionary.Add("declaredName", referenceSubsettingInstance.DeclaredName);
+            dictionary.Add("declaredShortName", referenceSubsettingInstance.DeclaredShortName);
             dictionary.Add("elementId", referenceSubsettingInstance.ElementId);
             dictionary.Add("general", referenceSubsettingInstance.General);
             dictionary.Add("isImplied", referenceSubsettingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", referenceSubsettingInstance.IsImpliedIncluded);
-            dictionary.Add("name", referenceSubsettingInstance.Name);
             dictionary.Add("ownedRelatedElement", referenceSubsettingInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", referenceSubsettingInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", referenceSubsettingInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", referenceSubsettingInstance.OwningRelationship);
             dictionary.Add("referencedFeature", referenceSubsettingInstance.ReferencedFeature);
-            dictionary.Add("shortName", referenceSubsettingInstance.ShortName);
             dictionary.Add("source", referenceSubsettingInstance.Source);
             dictionary.Add("specific", referenceSubsettingInstance.Specific);
             dictionary.Add("subsettedFeature", referenceSubsettingInstance.SubsettedFeature);

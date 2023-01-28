@@ -41,7 +41,6 @@ namespace SysML2.NET.CodeGenerator.Tests.Expected
             yield return "Comment";
             yield return "Connector";
             yield return "Dependency";
-            yield return "Element";
             yield return "Feature";
             yield return "NamespaceImport";
             yield return "LiteralInteger";

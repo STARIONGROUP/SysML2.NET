@@ -116,6 +116,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<Guid> clientFeature = (clientObject as List<string>)?.Select(Guid.Parse).ToList();
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
@@ -133,12 +145,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
-
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -164,12 +170,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
@@ -191,15 +191,15 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dependencyInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             dependencyInstance.Client = clientFeature ?? new List<Guid>();
+            dependencyInstance.DeclaredName = declaredNameFeature;
+            dependencyInstance.DeclaredShortName = declaredShortNameFeature;
             dependencyInstance.ElementId = elementIdFeature;
             dependencyInstance.IsImplied = isImpliedFeature;
             dependencyInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            dependencyInstance.Name = nameFeature;
             dependencyInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             dependencyInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             dependencyInstance.OwningRelatedElement = owningRelatedElementFeature;
             dependencyInstance.OwningRelationship = owningRelationshipFeature;
-            dependencyInstance.ShortName = shortNameFeature;
             dependencyInstance.Source = sourceFeature ?? new List<Guid>();
             dependencyInstance.Supplier = supplierFeature ?? new List<Guid>();
             dependencyInstance.Target = targetFeature ?? new List<Guid>();
@@ -233,6 +233,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<Guid> clientFeature = (clientObject as List<Guid>);
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
@@ -250,12 +262,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
-
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -281,12 +287,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Dependency");
@@ -308,15 +308,15 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dependencyInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             dependencyInstance.Client = clientFeature ?? new List<Guid>();
+            dependencyInstance.DeclaredName = declaredNameFeature;
+            dependencyInstance.DeclaredShortName = declaredShortNameFeature;
             dependencyInstance.ElementId = elementIdFeature;
             dependencyInstance.IsImplied = isImpliedFeature;
             dependencyInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            dependencyInstance.Name = nameFeature;
             dependencyInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             dependencyInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             dependencyInstance.OwningRelatedElement = owningRelatedElementFeature;
             dependencyInstance.OwningRelationship = owningRelationshipFeature;
-            dependencyInstance.ShortName = shortNameFeature;
             dependencyInstance.Source = sourceFeature ?? new List<Guid>();
             dependencyInstance.Supplier = supplierFeature ?? new List<Guid>();
             dependencyInstance.Target = targetFeature ?? new List<Guid>();

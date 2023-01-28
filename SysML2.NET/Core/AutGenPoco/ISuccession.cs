@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A Succession is a binary Connector that requires its relatedFeatures to happen separately in
     /// time. A Succession must be typed by the Association HappensBefore from the Kernel Model Library (or
-    /// a specialization of it).
+    /// a specialization of it).specializesFromLibrary("Occurences::happensBeforeLinks")
     /// </summary>
     public partial interface ISuccession : IConnector
     {

@@ -38,121 +38,113 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
     {
         private IWriter writer;
 
-        [SetUp]
+        private PartDefinition partDefinition;
+
+        private PartDefinition partDefinitionWithNullProperties;
+
+		[SetUp]
         public void SetUp()
         {
             this.writer = new Writer();
+
+            this.CreateTestData();
+		}
+
+        private void CreateTestData()
+        {
+	        this.partDefinition = new PartDefinition
+	        {
+		        Id = Guid.NewGuid(),
+		        IsIndividual = true,
+		        IsVariation = false,
+		        IsAbstract = false,
+		        IsSufficient = false,
+		        AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
+		        DeclaredName = "PartDefinition:DeclaredName",
+                ElementId = "PartDefinition:ElementId",
+                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
+		        OwningRelationship = Guid.NewGuid(),
+		        DeclaredShortName = "PartDefinition:DeclaredShortName"
+	        };
+
+	        this.partDefinitionWithNullProperties = new PartDefinition
+	        {
+		        Id = Guid.NewGuid(),
+		        IsIndividual = true,
+		        IsVariation = false,
+		        IsAbstract = false,
+		        IsSufficient = false,
+		        AliasIds = new List<string>(),
+		        DeclaredName = null,
+		        ElementId = "PartDefinition:ElementId",
+				OwnedRelationship = new List<Guid>(),
+		        OwningRelationship = Guid.NewGuid(),
+		        DeclaredShortName = null
+	        };
         }
-        
-        [Test]
+
+		[Test]
         public void Verify_that_the_writer_returns_a_dictionary_upon_write_Simplified_single_dataItem()
         {
-            var element = new Element
-            {
-                Id = Guid.NewGuid(),
-                AliasIds = new List<string> { "Element:Alias_1", "Element:Alias_2" },
-                ElementId = "Element:ElementId",
-                Name = "Element:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "Element:ShortName"
-            };
-
-            var dictionary = this.writer.Write(element, DictionaryKind.Simplified);
+            var dictionary = this.writer.Write(this.partDefinition, DictionaryKind.Simplified);
 
             Assert.That(dictionary, Is.Not.Null);
 
             dictionary.TryGetValue("@type", out var @type);
-            Assert.That(@type, Is.EqualTo("Element"));
+            Assert.That(@type, Is.EqualTo("PartDefinition"));
 
             dictionary.TryGetValue("@id", out var id);
-            Assert.That(id, Is.EqualTo(element.Id.ToString()));
+            Assert.That(id, Is.EqualTo(this.partDefinition.Id.ToString()));
 
             dictionary.TryGetValue("aliasIds", out var aliasIds);
-            Assert.That(aliasIds, Is.EqualTo(element.AliasIds));
+            Assert.That(aliasIds, Is.EqualTo(this.partDefinition.AliasIds));
 
             dictionary.TryGetValue("elementId", out var elementId);
-            Assert.That(elementId, Is.EqualTo(element.ElementId));
+            Assert.That(elementId, Is.EqualTo(this.partDefinition.ElementId));
 
-            dictionary.TryGetValue("name", out var name);
-            Assert.That(name, Is.EqualTo(element.Name));
+            dictionary.TryGetValue("declaredName", out var name);
+            Assert.That(name, Is.EqualTo(this.partDefinition.DeclaredName));
 
             dictionary.TryGetValue("ownedRelationship", out var ownedRelationship);
-            Assert.That(ownedRelationship, Is.EqualTo($"[ {string.Join(",", element.OwnedRelationship)} ]"));
+            Assert.That(ownedRelationship, Is.EqualTo($"[ {string.Join(",", this.partDefinition.OwnedRelationship)} ]"));
 
             dictionary.TryGetValue("owningRelationship", out var owningRelationship);
-            Assert.That(owningRelationship, Is.EqualTo(element.OwningRelationship.ToString()));
+            Assert.That(owningRelationship, Is.EqualTo(this.partDefinition.OwningRelationship.ToString()));
         }
 
         [Test]
         public void Verify_that_the_writer_returns_a_dictionary_upon_write_Complex_single_dataItem()
         {
-            var element = new Element
-            {
-                Id = Guid.NewGuid(),
-                AliasIds = new List<string> { "Element:Alias_1", "Element:Alias_2" },
-                ElementId = "Element:ElementId",
-                Name = "Element:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "Element:ShortName"
-            };
-
-            var dictionary = this.writer.Write(element, DictionaryKind.Complex);
+            var dictionary = this.writer.Write(this.partDefinition, DictionaryKind.Complex);
 
             Assert.That(dictionary, Is.Not.Null);
 
             dictionary.TryGetValue("@type", out var @type);
-            Assert.That(@type, Is.EqualTo("Element"));
+            Assert.That(@type, Is.EqualTo("PartDefinition"));
 
             dictionary.TryGetValue("@id", out var id);
-            Assert.That(id, Is.EqualTo(element.Id));
+            Assert.That(id, Is.EqualTo(this.partDefinition.Id));
 
             dictionary.TryGetValue("aliasIds", out var aliasIds);
-            Assert.That(aliasIds, Is.EqualTo(element.AliasIds));
+            Assert.That(aliasIds, Is.EqualTo(this.partDefinition.AliasIds));
 
             dictionary.TryGetValue("elementId", out var elementId);
-            Assert.That(elementId, Is.EqualTo(element.ElementId));
+            Assert.That(elementId, Is.EqualTo(this.partDefinition.ElementId));
 
-            dictionary.TryGetValue("name", out var name);
-            Assert.That(name, Is.EqualTo(element.Name));
+            dictionary.TryGetValue("declaredName", out var name);
+            Assert.That(name, Is.EqualTo(this.partDefinition.DeclaredName));
 
             dictionary.TryGetValue("ownedRelationship", out var ownedRelationship);
-            Assert.That(ownedRelationship, Is.EqualTo(element.OwnedRelationship));
+            Assert.That(ownedRelationship, Is.EqualTo(this.partDefinition.OwnedRelationship));
 
             dictionary.TryGetValue("owningRelationship", out var owningRelationship);
-            Assert.That(owningRelationship, Is.EqualTo(element.OwningRelationship));
+            Assert.That(owningRelationship, Is.EqualTo(this.partDefinition.OwningRelationship));
         }
 
         [Test]
         public void Verify_that_the_writer_returns_a_list_of_dictionary_upon_write_multiple_dataItems()
         {
-            var element = new Element
-            {
-                Id = Guid.NewGuid(),
-                AliasIds = new List<string> { "Element:Alias_1", "Element:Alias_2" },
-                ElementId = "Element:ElementId",
-                Name = "Element:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "Element:ShortName"
-            };
-
-            var partDefinition = new PartDefinition
-            {
-                Id = Guid.NewGuid(),
-                IsIndividual = true,
-                IsVariation = false,
-                IsAbstract = false,
-                IsSufficient = false,
-                AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-                Name = "PartDefinition:Name",
-                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-                OwningRelationship = Guid.NewGuid(),
-                ShortName = "PartDefinition:ShortName"
-            };
-
-            var dataItems = new List<IData> { element, partDefinition };
+            var dataItems = new List<IData> { this.partDefinition, this.partDefinitionWithNullProperties };
 
             var dictionaries = this.writer.Write(dataItems, DictionaryKind.Simplified);
 

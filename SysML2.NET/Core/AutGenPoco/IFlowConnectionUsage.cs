@@ -31,7 +31,9 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A FlowConnectionUsage is a ConnectionUsage that is also an ItemFlow.A FlowConnectionUsage must
-    /// subset the base FlowConnectionUsage flowConnections from the Systems model library.
+    /// subset the base FlowConnectionUsage flowConnections from the Systems model library.if
+    /// itemFlowEnds->isEmpty() then    specializesFromLibrary("Connections::messageConnections")else   
+    /// specializesFromLibrary("Connections::flowConnections"endif
     /// </summary>
     public partial interface IFlowConnectionUsage : IConnectionUsage, IActionUsage, IItemFlow
     {

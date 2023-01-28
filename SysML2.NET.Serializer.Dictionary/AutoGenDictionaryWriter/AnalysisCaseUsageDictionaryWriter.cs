@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", analysisCaseUsageInstance.AliasIds);
+            dictionary.Add("declaredName", analysisCaseUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", analysisCaseUsageInstance.DeclaredShortName);
             dictionary.Add("direction", analysisCaseUsageInstance.Direction);
             dictionary.Add("elementId", analysisCaseUsageInstance.ElementId);
             dictionary.Add("isAbstract", analysisCaseUsageInstance.IsAbstract);
@@ -122,11 +124,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", analysisCaseUsageInstance.IsSufficient);
             dictionary.Add("isUnique", analysisCaseUsageInstance.IsUnique);
             dictionary.Add("isVariation", analysisCaseUsageInstance.IsVariation);
-            dictionary.Add("name", analysisCaseUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", analysisCaseUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", analysisCaseUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", analysisCaseUsageInstance.PortionKind);
-            dictionary.Add("shortName", analysisCaseUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,6 +154,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", analysisCaseUsageInstance.AliasIds);
+            dictionary.Add("declaredName", analysisCaseUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", analysisCaseUsageInstance.DeclaredShortName);
             dictionary.Add("direction", analysisCaseUsageInstance.Direction);
             dictionary.Add("elementId", analysisCaseUsageInstance.ElementId);
             dictionary.Add("isAbstract", analysisCaseUsageInstance.IsAbstract);
@@ -168,11 +170,9 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", analysisCaseUsageInstance.IsSufficient);
             dictionary.Add("isUnique", analysisCaseUsageInstance.IsUnique);
             dictionary.Add("isVariation", analysisCaseUsageInstance.IsVariation);
-            dictionary.Add("name", analysisCaseUsageInstance.Name);
             dictionary.Add("ownedRelationship", analysisCaseUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", analysisCaseUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", analysisCaseUsageInstance.PortionKind);
-            dictionary.Add("shortName", analysisCaseUsageInstance.ShortName);
 
             return dictionary;
         }

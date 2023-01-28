@@ -31,7 +31,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A Metaclass is a Structure used to type MetadataFeatures. It must subclassify, directly or
-    /// indirectly, the base type Metadata from the Kernel Library.
+    /// indirectly, the base type Metadata from the Kernel
+    /// Library.specializesFromLibrary("Metaobjects::Metaobject")
     /// </summary>
     public partial interface IMetaclass : IStructure
     {

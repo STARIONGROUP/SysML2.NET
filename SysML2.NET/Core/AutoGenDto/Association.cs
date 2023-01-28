@@ -33,9 +33,10 @@ namespace SysML2.NET.Core.DTO
     /// An Association is a Relationship and a Classifier to enable classification of links between things
     /// (in the universe). The co-domains (types) of the associationEnd Features are the relatedTypes, as
     /// co-domain and participants (linked things) of an Association identify each other.relatedTypes =
-    /// associationEnd.typeallSupertypes()->includes(resolve("Links::Link"))oclIsKindOf(Structure) =
-    /// oclIsKindOf(AssociationStructure)endFeatures()->size() = 2 implies   
-    /// allSupertypes()->includes(resolve("Links::Link))not isAbstract implies relatedType->size() >= 2
+    /// associationEnd.typespecializesFromLibrary("Links::Link")oclIsKindOf(Structure) =
+    /// oclIsKindOf(AssociationStructure)ownedEndFeature->size() = 2 implies   
+    /// specializesFromLibrary("Links::BinaryLink)not isAbstract implies relatedType->size() >=
+    /// 2associationEnds->size() > 2 implies    not specializesFromLibrary("Links::BinaryLink")
     /// </summary>
     public partial class Association : IAssociation
     {
@@ -64,6 +65,19 @@ namespace SysML2.NET.Core.DTO
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The declared name of this Element.
+        /// </summary>
+        public string DeclaredName { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -103,11 +117,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsSufficient { get; set; }
 
         /// <summary>
-        /// The primary name of this Element.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
         public List<Guid> OwnedRelatedElement { get; set; }
@@ -126,14 +135,6 @@ namespace SysML2.NET.Core.DTO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        public string ShortName { get; set; }
 
         /// <summary>
         /// </summary>

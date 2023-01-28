@@ -32,7 +32,9 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// An InterfaceDefinition is a ConnectionDefinition all of whose ends are PortUsages, defining an
     /// interface between elements that interact through such ports.An InterfaceDefinition must subclass,
-    /// directly or indirectly, the base InterfaceDefinition Interface from the Systems model library.
+    /// directly or indirectly, the base InterfaceDefinition Interface from the Systems model
+    /// library.specializesFromLibrary("Interfaces::Interface")ownedEndFeature->size() = 2 implies   
+    /// specializesFromLibrary("Interfaces::BinaryInterface")
     /// </summary>
     public partial interface IInterfaceDefinition : IConnectionDefinition
     {

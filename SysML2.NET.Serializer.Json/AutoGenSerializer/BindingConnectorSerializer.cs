@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iBindingConnector.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iBindingConnector.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iBindingConnector.Direction.HasValue)
             {
@@ -118,8 +122,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isUnique");
             writer.WriteBooleanValue(iBindingConnector.IsUnique);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iBindingConnector.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iBindingConnector.OwnedRelatedElement)
             {
@@ -152,8 +154,6 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iBindingConnector.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iBindingConnector.Source)
             {

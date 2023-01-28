@@ -30,8 +30,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// allSupertypes()->includes(resolve("Objects::ObjectLink"))endFeature->size() = 2 implies   
-    /// allSupertypes()->includes(resolve("Objects::BinaryLinkObject"))
+    /// specializesFromLibrary("Objects::ObjectLink")endFeature->size() = 2 implies   
+    /// specializesFromLibrary("Objects::BinaryLinkObject")
     /// </summary>
     public partial interface IAssociationStructure : IAssociation, IStructure
     {

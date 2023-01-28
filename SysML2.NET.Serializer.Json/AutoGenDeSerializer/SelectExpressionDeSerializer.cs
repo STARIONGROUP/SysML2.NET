@@ -99,6 +99,24 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the aliasIds Json property was not found in the SelectExpression: {dtoInstance.Id}");
             }
 
+            if (jsonElement.TryGetProperty("declaredName", out JsonElement declaredNameProperty))
+            {
+                dtoInstance.DeclaredName = declaredNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug($"the declaredName Json property was not found in the SelectExpression: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("declaredShortName", out JsonElement declaredShortNameProperty))
+            {
+                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug($"the declaredShortName Json property was not found in the SelectExpression: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("direction", out JsonElement directionProperty))
             {
                 dtoInstance.Direction = FeatureDirectionKindDeSerializer.DeserializeNullable(directionProperty.GetString());
@@ -241,15 +259,6 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isUnique Json property was not found in the SelectExpression: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
-            {
-                dtoInstance.Name = nameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug($"the name Json property was not found in the SelectExpression: {dtoInstance.Id}");
-            }
-
             if (jsonElement.TryGetProperty("operator", out JsonElement operatorProperty))
             {
                 var propertyValue = operatorProperty.GetString();
@@ -303,15 +312,6 @@ namespace SysML2.NET.Serializer.Json
             else
             {
                 logger.LogDebug($"the owningRelationship Json property was not found in the SelectExpression: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
-            {
-                dtoInstance.ShortName = shortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug($"the shortName Json property was not found in the SelectExpression: {dtoInstance.Id}");
             }
 
 

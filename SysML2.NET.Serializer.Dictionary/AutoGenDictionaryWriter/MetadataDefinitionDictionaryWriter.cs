@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", metadataDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", metadataDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", metadataDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", metadataDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", metadataDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", metadataDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", metadataDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", metadataDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", metadataDefinitionInstance.IsVariation);
-            dictionary.Add("name", metadataDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", metadataDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", metadataDefinitionInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", metadataDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", metadataDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", metadataDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", metadataDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", metadataDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", metadataDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", metadataDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", metadataDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", metadataDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", metadataDefinitionInstance.IsVariation);
-            dictionary.Add("name", metadataDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", metadataDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", metadataDefinitionInstance.OwningRelationship);
-            dictionary.Add("shortName", metadataDefinitionInstance.ShortName);
 
             return dictionary;
         }

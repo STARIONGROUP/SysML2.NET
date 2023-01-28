@@ -41,7 +41,10 @@ namespace SysML2.NET.Core.DTO
     /// = variantMembership.ownedVariantUsagevariantMembership =
     /// ownedMembership->selectByKind(VariantMembership)not isVariation implies
     /// variantMembership->isEmpty()isVariation implies variantMembership = ownedMembershipisReference = not
-    /// isComposite
+    /// isCompositeowningVariationDefinition <> null implies   
+    /// specializes(owningVariationDefinition)owningVariationUsage <> null implies   
+    /// specializes(owningVariationUsage)isVariation implies    not
+    /// ownedSpecialization.specific->exists(isVariation)
     /// </summary>
     public partial interface IUsage : IFeature
     {

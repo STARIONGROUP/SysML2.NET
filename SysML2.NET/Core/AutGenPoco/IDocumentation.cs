@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property DocumentedElement
         /// </summary>
-        Element QueryDocumentedElement();
+        IElement QueryDocumentedElement();
 
     }
 }

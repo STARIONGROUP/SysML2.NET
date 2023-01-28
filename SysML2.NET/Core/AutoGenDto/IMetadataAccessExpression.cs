@@ -33,7 +33,8 @@ namespace SysML2.NET.Core.DTO
     /// A MetadataAccessExpression is an Expression whose result is a sequence of instances of Metaclasses
     /// representing all the MetadataFeature annotations of the referencedElement. In addition, the sequence
     /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
-    /// referencedElement, with values for all the abstract syntax properties of the Element.
+    /// referencedElement, with values for all the abstract syntax properties of the
+    /// Element.specializesFromLibrary("Performances::metadataAccessEvaluations")
     /// </summary>
     public partial interface IMetadataAccessExpression : IExpression
     {

@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", partDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", partDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", partDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", partDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", partDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", partDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", partDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", partDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", partDefinitionInstance.IsVariation);
-            dictionary.Add("name", partDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", partDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", partDefinitionInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", partDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", partDefinitionInstance.AliasIds);
+            dictionary.Add("declaredName", partDefinitionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", partDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", partDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", partDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", partDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", partDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", partDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", partDefinitionInstance.IsVariation);
-            dictionary.Add("name", partDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", partDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", partDefinitionInstance.OwningRelationship);
-            dictionary.Add("shortName", partDefinitionInstance.ShortName);
 
             return dictionary;
         }

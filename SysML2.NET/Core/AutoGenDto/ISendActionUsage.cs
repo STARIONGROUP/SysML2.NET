@@ -30,15 +30,16 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Core;
 
     /// <summary>
-    /// A SendActionUsage is an ActionUsage that is typed, directly or indirectly, by the ActionDefinition
-    /// SendAction from the Systems model library. It specifies the sending of a payload given by the result
-    /// of its payloadArgument Expression via a Transfer that from whose source is given by the result of
-    /// the senderArgument Expression and whose target is given by the result of the receiverArgument. At
-    /// least one of senderArgument and receiverArgument must be provided. If no senderArgument is provided,
-    /// the default is the this context for the action. If no receiverArgument is given, then the receiver
-    /// is to be determined from outgoing connections from the sender. senderArgument <> null or
-    /// receiverArgument <> nullpayloadArgument = argument(1)senderArgument = argument(2)receiverArgument =
-    /// argument(3)inputParameters->size() >= 3
+    /// A SendActionUsage is an ActionUsage that specifies the sending of a payload given by the result of
+    /// its payloadArgument Expression via a MessageTransfer whose source is given by the result of the
+    /// senderArgument Expression and whose target is given by the result of the receiverArgument
+    /// Expression. If no senderArgument is provided, the default is the this context for the action. If no
+    /// receiverArgument is given, then the receiver is to be determined by, e.g., outgoing Connections from
+    /// the sender. payloadArgument = argument(1)senderArgument = argument(2)receiverArgument =
+    /// argument(3)inputParameters->size() >= 3specializesFromLibrary("Actions::sendActions")isComposite and
+    /// owningType <> null and(owningType.oclIsKindOf(ActionDefinition) or
+    /// owningType.oclIsKindOf(ActionUsage)) implies   
+    /// specializesFromLibrary('Actions::Action::acceptSubactions')
     /// </summary>
     public partial interface ISendActionUsage : IActionUsage
     {

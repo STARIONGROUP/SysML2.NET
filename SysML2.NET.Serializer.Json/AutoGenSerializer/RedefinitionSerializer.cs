@@ -70,6 +70,10 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
+            writer.WritePropertyName("declaredName");
+            writer.WriteStringValue(iRedefinition.DeclaredName);
+            writer.WritePropertyName("declaredShortName");
+            writer.WriteStringValue(iRedefinition.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iRedefinition.ElementId);
 
@@ -82,8 +86,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iRedefinition.IsImpliedIncluded);
 
-            writer.WritePropertyName("name");
-            writer.WriteStringValue(iRedefinition.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iRedefinition.OwnedRelatedElement)
             {
@@ -122,8 +124,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("redefiningFeature");
             writer.WriteStringValue(iRedefinition.RedefiningFeature);
 
-            writer.WritePropertyName("shortName");
-            writer.WriteStringValue(iRedefinition.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iRedefinition.Source)
             {

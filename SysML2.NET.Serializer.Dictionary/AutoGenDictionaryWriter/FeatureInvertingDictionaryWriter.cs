@@ -108,17 +108,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", featureInvertingInstance.AliasIds);
+            dictionary.Add("declaredName", featureInvertingInstance.DeclaredName);
+            dictionary.Add("declaredShortName", featureInvertingInstance.DeclaredShortName);
             dictionary.Add("elementId", featureInvertingInstance.ElementId);
             dictionary.Add("featureInverted", featureInvertingInstance.FeatureInverted.ToString());
             dictionary.Add("invertingFeature", featureInvertingInstance.InvertingFeature.ToString());
             dictionary.Add("isImplied", featureInvertingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", featureInvertingInstance.IsImpliedIncluded);
-            dictionary.Add("name", featureInvertingInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", featureInvertingInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", featureInvertingInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", featureInvertingInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", featureInvertingInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", featureInvertingInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", featureInvertingInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", featureInvertingInstance.Target)} ]");
 
@@ -148,17 +148,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", featureInvertingInstance.AliasIds);
+            dictionary.Add("declaredName", featureInvertingInstance.DeclaredName);
+            dictionary.Add("declaredShortName", featureInvertingInstance.DeclaredShortName);
             dictionary.Add("elementId", featureInvertingInstance.ElementId);
             dictionary.Add("featureInverted", featureInvertingInstance.FeatureInverted);
             dictionary.Add("invertingFeature", featureInvertingInstance.InvertingFeature);
             dictionary.Add("isImplied", featureInvertingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", featureInvertingInstance.IsImpliedIncluded);
-            dictionary.Add("name", featureInvertingInstance.Name);
             dictionary.Add("ownedRelatedElement", featureInvertingInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", featureInvertingInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", featureInvertingInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", featureInvertingInstance.OwningRelationship);
-            dictionary.Add("shortName", featureInvertingInstance.ShortName);
             dictionary.Add("source", featureInvertingInstance.Source);
             dictionary.Add("target", featureInvertingInstance.Target);
 

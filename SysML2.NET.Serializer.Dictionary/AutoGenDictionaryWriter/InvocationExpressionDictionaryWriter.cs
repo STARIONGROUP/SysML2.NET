@@ -108,6 +108,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", invocationExpressionInstance.AliasIds);
+            dictionary.Add("declaredName", invocationExpressionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", invocationExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", invocationExpressionInstance.Direction);
             dictionary.Add("elementId", invocationExpressionInstance.ElementId);
             dictionary.Add("isAbstract", invocationExpressionInstance.IsAbstract);
@@ -120,10 +122,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", invocationExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", invocationExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", invocationExpressionInstance.IsUnique);
-            dictionary.Add("name", invocationExpressionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", invocationExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", invocationExpressionInstance.OwningRelationship.ToString());
-            dictionary.Add("shortName", invocationExpressionInstance.ShortName);
 
             return dictionary;
         }
@@ -151,6 +151,8 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", invocationExpressionInstance.AliasIds);
+            dictionary.Add("declaredName", invocationExpressionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", invocationExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", invocationExpressionInstance.Direction);
             dictionary.Add("elementId", invocationExpressionInstance.ElementId);
             dictionary.Add("isAbstract", invocationExpressionInstance.IsAbstract);
@@ -163,10 +165,8 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", invocationExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", invocationExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", invocationExpressionInstance.IsUnique);
-            dictionary.Add("name", invocationExpressionInstance.Name);
             dictionary.Add("ownedRelationship", invocationExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", invocationExpressionInstance.OwningRelationship);
-            dictionary.Add("shortName", invocationExpressionInstance.ShortName);
 
             return dictionary;
         }

@@ -116,6 +116,18 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<Guid> annotationFeature = (annotationObject as List<string>)?.Select(Guid.Parse).ToList();
 
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
+
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
@@ -188,12 +200,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
@@ -206,15 +212,11 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             metadataFeatureInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             metadataFeatureInstance.Annotation = annotationFeature ?? new List<Guid>();
+            metadataFeatureInstance.DeclaredName = declaredNameFeature;
+            metadataFeatureInstance.DeclaredShortName = declaredShortNameFeature;
             metadataFeatureInstance.Direction = directionFeature;
             metadataFeatureInstance.ElementId = elementIdFeature;
             metadataFeatureInstance.IsAbstract = isAbstractFeature;
@@ -227,10 +229,8 @@ namespace SysML2.NET.Serializer.Dictionary
             metadataFeatureInstance.IsReadOnly = isReadOnlyFeature;
             metadataFeatureInstance.IsSufficient = isSufficientFeature;
             metadataFeatureInstance.IsUnique = isUniqueFeature;
-            metadataFeatureInstance.Name = nameFeature;
             metadataFeatureInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             metadataFeatureInstance.OwningRelationship = owningRelationshipFeature;
-            metadataFeatureInstance.ShortName = shortNameFeature;
 
             return metadataFeatureInstance;
         }
@@ -260,6 +260,18 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The annotation property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
             }
             List<Guid> annotationFeature = (annotationObject as List<Guid>);
+
+            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
+            {
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
+            }
+            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
+
+            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
+            {
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
+            }
+            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -333,12 +345,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
-            if (!dictionary.TryGetValue("name", out object nameObject))
-            {
-                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
-            }
-            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
-
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
@@ -351,15 +357,11 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
-            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
-            {
-                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
-            }
-            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
-
 
             metadataFeatureInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             metadataFeatureInstance.Annotation = annotationFeature ?? new List<Guid>();
+            metadataFeatureInstance.DeclaredName = declaredNameFeature;
+            metadataFeatureInstance.DeclaredShortName = declaredShortNameFeature;
             metadataFeatureInstance.Direction = directionFeature;
             metadataFeatureInstance.ElementId = elementIdFeature;
             metadataFeatureInstance.IsAbstract = isAbstractFeature;
@@ -372,10 +374,8 @@ namespace SysML2.NET.Serializer.Dictionary
             metadataFeatureInstance.IsReadOnly = isReadOnlyFeature;
             metadataFeatureInstance.IsSufficient = isSufficientFeature;
             metadataFeatureInstance.IsUnique = isUniqueFeature;
-            metadataFeatureInstance.Name = nameFeature;
             metadataFeatureInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             metadataFeatureInstance.OwningRelationship = owningRelationshipFeature;
-            metadataFeatureInstance.ShortName = shortNameFeature;
 
             return metadataFeatureInstance;
         }

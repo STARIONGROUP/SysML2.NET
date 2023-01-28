@@ -35,7 +35,13 @@ namespace SysML2.NET.Core.DTO
     /// TransitionUsage transitionActions, if it is not a composite feature, or the TransitionUsage
     /// subtransitions inherited from its owner, if it is a composite feature.A TransitionUsage may by
     /// related to some of its ownedFeatures using TransitionFeatureMembership Relationships, corresponding
-    /// to the triggers, guards and effects of the TransitionUsage.
+    /// to the triggers, guards and effects of the TransitionUsage.isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(ActionDefinition) or  owningType.oclIsKindOf(ActionUsage)) andnot
+    /// (owningType.oclIsKindOf(StateDefinition) or     owningType.oclIsKindOf(StateUsage)) implies   
+    /// specializesFromLibrary("Actions::Action::decisionTransitionActions")specializesFromLibrary("Actions::actions::transitionActions")isComposite
+    /// and owningType <> null and(owningType.oclIsKindOf(StateDefinition) or
+    /// owningType.oclIsKindOf(StateUsage)) implies   
+    /// specializesFromLibrary("States::State::stateTransitions")
     /// </summary>
     public partial interface ITransitionUsage : IActionUsage
     {
