@@ -21,7 +21,6 @@
 	<ItemGroup>
 		<PackageReference Include="ECoreNetto.HandleBars" Version="0.4.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-		<PackageReference Include="RazorLight" Version="2.3.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.4.0" />
 	</ItemGroup>
 

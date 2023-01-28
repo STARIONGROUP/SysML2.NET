@@ -28,8 +28,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
-    using SysML2.NET.CodeGenerator.Generators.RazorLightGenerators;
-
+    
     [TestFixture]
     public class PocoGeneratorTestGenerator
     {
