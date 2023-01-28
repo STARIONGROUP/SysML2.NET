@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
 	  <Company>RHEA System S.A.</Company>
 	  <Title>SysML2 Viewer</Title>
-	  <Version>0.7.0</Version>
+	  <Version>0.8.0</Version>
 	  <Description>Web Application to inspect SysML2 model server</Description>
 	  <Copyright>Copyright © RHEA System S.A.</Copyright>
 	  <Authors>Sam Gerené</Authors>

@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFramework>netstandard2.0</TargetFramework>
 	  <LangVersion>8</LangVersion>
-	  <Version>0.7.0</Version>
+	  <Version>0.8.0</Version>
 	  <Description>A .NET implementation of the OMG SysML v2 REST/HTTP PSM</Description>
 	  <PackageId>SysML2.NET.REST</PackageId>
 	  <Company>RHEA System S.A.</Company>
@@ -14,7 +14,7 @@
 	  <Authors>Sam Gerené</Authors>
 	  <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 	  <PackageReleaseNotes>
-		  [Update] to SysML2.NET.Serializer.Json version 0.6.0
+		  [Update] to SysML2.NET.Serializer.Json version 0.8.0
 	  </PackageReleaseNotes>
   </PropertyGroup>
 
