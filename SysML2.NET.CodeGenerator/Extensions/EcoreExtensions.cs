@@ -37,7 +37,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <summary>
         /// A mapping of the known SysML value types to C# types
         /// </summary>
-        private static readonly Dictionary<string, string> TypeMapping = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> CSharpTypeMapping = new Dictionary<string, string>
         {
             {"Boolean", "bool"},
             {"Integer", "int"},
@@ -58,6 +58,32 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </returns>
         public static string QueryTypeName(this EStructuralFeature eStructuralFeature)
         {
+	        var typeName = "";
+
+	        if (eStructuralFeature is EAttribute eAttribute)
+	        {
+		        typeName = eAttribute.EType.Name;
+
+	        }
+	        else if (eStructuralFeature is EReference eReference)
+	        {
+		        typeName = eReference.EType.Name;
+	        }
+
+	        return typeName;
+        }
+
+		/// <summary>
+		/// Queries the C# type-name of the <see cref="EStructuralFeature"/>
+		/// </summary>
+		/// <param name="eStructuralFeature">
+		/// The subject <see cref="EStructuralFeature"/>
+		/// </param>
+		/// <returns>
+		/// the C# name of the type
+		/// </returns>
+		public static string QueryCSharpTypeName(this EStructuralFeature eStructuralFeature)
+        {
             var typeName = "";
 
             if (eStructuralFeature is EAttribute eAttribute)
@@ -66,7 +92,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
                 {
                     typeName = eAttribute.EType.Name;
                 }
-                else if (!TypeMapping.TryGetValue(eAttribute.EType.Name, out typeName))
+                else if (!CSharpTypeMapping.TryGetValue(eAttribute.EType.Name, out typeName))
                 {
                     throw new KeyNotFoundException($"the {eAttribute.Name}.{eAttribute.EType.Name} is not a registered Type");
                 }
@@ -79,22 +105,35 @@ namespace SysML2.NET.CodeGenerator.Extensions
             return typeName;
         }
         
-        /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature"/> Type maps to a C# bool
-        /// </summary>
-        /// <param name="eStructuralFeature">
-        /// the subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// true if it maps, false if not
-        /// </returns>
-        public static bool QueryIsBool(this EStructuralFeature eStructuralFeature)
+		/// <summary>
+		/// Queries whether the <see cref="EStructuralFeature"/> Type is a boolean
+		/// </summary>
+		/// <param name="eStructuralFeature">
+		/// the subject <see cref="EStructuralFeature"/>
+		/// </param>
+		/// <returns>
+		/// true if it maps, false if not
+		/// </returns>
+		public static bool QueryIsBool(this EStructuralFeature eStructuralFeature)
         {
-            return eStructuralFeature.QueryTypeName() == "bool";
+			if (eStructuralFeature is EAttribute eAttribute)
+	        {
+		        if (eAttribute.EType is EEnum)
+		        {
+			        return false;
+		        }
+
+		        if (eAttribute.EType.Name == "Boolean")
+		        {
+                    return true; 
+		        }
+	        }
+
+            return false;
         }
 
         /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature"/> Type maps to a C# int or double
+        /// Queries whether the <see cref="EStructuralFeature"/> Type is numeric
         /// </summary>
         /// <param name="eStructuralFeature">
         /// the subject <see cref="EStructuralFeature"/>
@@ -104,18 +143,27 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </returns>
         public static bool QueryIsNumeric(this EStructuralFeature eStructuralFeature)
         {
-            var typeName = eStructuralFeature.QueryTypeName();
-            
-            if (typeName == "int" || typeName == "double")
-            {
-                return true;
-            }
+			if (eStructuralFeature is EAttribute eAttribute)
+			{
+				if (eAttribute.EType is EEnum)
+				{
+					return false;
+				}
 
-            return false;
-        }
+				if (eAttribute.EType.Name == "Integer" 
+				    || eAttribute.EType.Name == "Real"
+					|| eAttribute.EType.Name == "UnlimitedNatural"
+					|| eAttribute.EType.Name == "EDouble")
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
 
         /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature"/> Type maps to a C# string
+        /// Queries whether the <see cref="EStructuralFeature"/> Type is an integer
         /// </summary>
         /// <param name="eStructuralFeature">
         /// the subject <see cref="EStructuralFeature"/>
@@ -123,10 +171,77 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <returns>
         /// true if it maps, false if not
         /// </returns>
-        public static bool QueryIsString(this EStructuralFeature eStructuralFeature)
+        public static bool QueryIsInt(this EStructuralFeature eStructuralFeature)
         {
-            return eStructuralFeature.QueryTypeName() == "string";
+	        if (eStructuralFeature is EAttribute eAttribute)
+	        {
+		        if (eAttribute.EType is EEnum)
+		        {
+			        return false;
+		        }
+
+		        if (eAttribute.EType.Name == "Integer")
+		        {
+			        return true;
+		        }
+	        }
+
+	        return false;
         }
+        
+		/// <summary>
+		/// Queries whether the <see cref="EStructuralFeature"/> Type is a double
+		/// </summary>
+		/// <param name="eStructuralFeature">
+		/// the subject <see cref="EStructuralFeature"/>
+		/// </param>
+		/// <returns>
+		/// true if it maps, false if not
+		/// </returns>
+		public static bool QueryIsDouble(this EStructuralFeature eStructuralFeature)
+		{
+			if (eStructuralFeature is EAttribute eAttribute)
+			{
+				if (eAttribute.EType is EEnum)
+				{
+					return false;
+				}
+
+				if (eAttribute.EType.Name == "Real" || eAttribute.EType.Name == "EDouble")
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Queries whether the <see cref="EStructuralFeature"/> Type is string
+		/// </summary>
+		/// <param name="eStructuralFeature">
+		/// the subject <see cref="EStructuralFeature"/>
+		/// </param>
+		/// <returns>
+		/// true if it maps, false if not
+		/// </returns>
+		public static bool QueryIsString(this EStructuralFeature eStructuralFeature)
+        {
+			if (eStructuralFeature is EAttribute eAttribute)
+			{
+				if (eAttribute.EType is EEnum)
+				{
+					return false;
+				}
+
+				if (eAttribute.EType.Name == "String")
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
 
         /// <summary>
         /// returns the <see cref="ENamedElement"/> ordered by Name.
@@ -167,7 +282,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// </returns>
         public static bool QueryIsScalar(this EStructuralFeature eStructuralFeature)
         {
-            if (eStructuralFeature.QueryTypeName() == "string" && eStructuralFeature.UpperBound == 1)
+            if (eStructuralFeature.QueryIsString() && eStructuralFeature.UpperBound == 1)
             {
                 return true;
             }
@@ -193,7 +308,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
                     throw new InvalidOperationException("the structural feature does not have a default value");
                 }
 
-                return eAttribute.EType is EEnum ? $"{eStructuralFeature.QueryTypeName()}.{eStructuralFeature.DefaultValueLiteral.CapitalizeFirstLetter()}" : eStructuralFeature.DefaultValueLiteral;
+                return eAttribute.EType is EEnum ? $"{eStructuralFeature.QueryCSharpTypeName()}.{eStructuralFeature.DefaultValueLiteral.CapitalizeFirstLetter()}" : eStructuralFeature.DefaultValueLiteral;
             }
 
             throw new NotSupportedException("");
@@ -253,6 +368,18 @@ namespace SysML2.NET.CodeGenerator.Extensions
 			return string.Empty;
 		}
 
+        /// <summary>
+        /// removes the specified html tags from the <paramref name="html"/>
+        /// </summary>
+        /// <param name="html">
+        /// the string from which the unwanted html tags are to be removed
+        /// </param>
+        /// <param name="unwantedTags">
+        /// list of unwanted html tags
+        /// </param>
+        /// <returns>
+        /// a cleaned up string
+        /// </returns>
 		public static string RemoveUnwantedHtmlTags(this string html, List<string> unwantedTags)
         {
             if (string.IsNullOrEmpty(html))

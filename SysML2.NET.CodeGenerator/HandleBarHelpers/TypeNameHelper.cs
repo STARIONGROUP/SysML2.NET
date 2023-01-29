@@ -47,7 +47,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (!(context.Value is EStructuralFeature eStructuralFeature))
                     throw new ArgumentException("supposed to be EStructuralFeature");
 
-                var typeName = eStructuralFeature.QueryTypeName();
+                var typeName = eStructuralFeature.QueryCSharpTypeName();
 
                 var nullable = eStructuralFeature.QueryIsNullable();
 
@@ -90,7 +90,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (!(context.Value is EStructuralFeature eStructuralFeature))
                     throw new ArgumentException("supposed to be EStructuralFeature");
 
-                var typeName = eStructuralFeature.QueryTypeName();
+                var typeName = eStructuralFeature.QueryCSharpTypeName();
 
                 var nullable = eStructuralFeature.QueryIsNullable();
 

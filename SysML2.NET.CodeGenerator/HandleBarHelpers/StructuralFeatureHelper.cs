@@ -99,7 +99,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var eStructuralFeature = arguments.Single() as EStructuralFeature;
 
-                return eStructuralFeature.QueryTypeName() == "int";
+                return eStructuralFeature.QueryIsInt();
             });
 
             handlebars.RegisterHelper("StructuralFeature.QueryIsDouble", (context, arguments) =>
@@ -111,7 +111,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var eStructuralFeature = arguments.Single() as EStructuralFeature;
 
-                return eStructuralFeature.QueryTypeName() == "double";
+                return eStructuralFeature.QueryIsDouble();
             });
 
             handlebars.RegisterHelper("StructuralFeature.QueryIsString", (context, arguments) =>
@@ -141,7 +141,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 	            if (!(context.Value is EStructuralFeature eStructuralFeature))
 		            throw new ArgumentException("supposed to be EStructuralFeature");
 
-	            var typeName = eStructuralFeature.QueryTypeName();
+	            var typeName = eStructuralFeature.QueryCSharpTypeName();
 
 	            writer.WriteSafeString($"{typeName}");
             });
