@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="HtmlDocsGenerator.cs" company="RHEA System S.A.">
+// <copyright file="GraphQLSchemaGenerator.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
 
@@ -28,15 +27,17 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
 	using ECoreNetto;
 
+	using SysML2.NET.CodeGenerator.Extensions;
 	using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
 	/// <summary>
-	/// A Handlebars based ecore to html docs generator
+	/// A Handlebars based GraphQL Schemea generator
 	/// </summary>
-	public class HtmlDocsGenerator : HandleBarsGenerator
+	public class GraphQLSchemaGenerator : HandleBarsGenerator
 	{
 		/// <summary>
-		/// Generates the HTML docs of the datatypes, enums and classes
+		/// Generates the <see cref="EClass"/> static serializers
+		/// for each <see cref="EPackage"/>
 		/// </summary>
 		/// <param name="package">
 		/// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
@@ -49,11 +50,12 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 		/// </returns>
 		public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
 		{
-			await this.GenerateHtmlDocs(package, outputDirectory);
+			await this.GenerateEnumDeSerializers(package, outputDirectory);
+			
 		}
 
 		/// <summary>
-		/// Generates the DeSerializationProvider class
+		/// Generates the DeSerializer classes for each <see cref="EClass"/> in the provided <see cref="EPackage"/>
 		/// </summary>
 		/// <param name="package">
 		/// the <see cref="EPackage"/> that contains the classes that need to be generated
@@ -64,9 +66,9 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 		/// <returns>
 		/// an awaitable <see cref="Task"/>
 		/// </returns>
-		public async Task GenerateHtmlDocs(EPackage package, DirectoryInfo outputDirectory)
+		public async Task GenerateEnumDeSerializers(EPackage package, DirectoryInfo outputDirectory)
 		{
-			var template = this.Templates["ecore-to-html-docs"];
+			var template = this.Templates["graphql-schema"];
 
 			var enums = package.EClassifiers.OfType<EEnum>().OrderBy(x => x.Name);
 			var dataTypes = package.EClassifiers.OfType<EDataType>().OrderBy(x => x.Name);
@@ -74,11 +76,11 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
 			var payload = new GeneratorPayload(enums, dataTypes, eClasses);
 
-			var generatedHtml = template(payload);
+			var generatedGraphQL = template(payload);
 
-			var fileName = "index.html";
+			var fileName = "schema.graphql";
 
-			await Write(generatedHtml, outputDirectory, fileName);
+			await Write(generatedGraphQL, outputDirectory, fileName);
 		}
 
 		/// <summary>
@@ -100,7 +102,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 		/// </summary>
 		protected override void RegisterTemplates()
 		{
-			this.RegisterTemplate("ecore-to-html-docs");
+			this.RegisterTemplate("graphql-schema");
 		}
 	}
 }

@@ -35,28 +35,15 @@ namespace SysML2.NET.CodeGenerator.Extensions
     public static class EcoreExtensions
     {
         /// <summary>
-        /// A mapping of the known SysML value types to C# types
-        /// </summary>
-        private static readonly Dictionary<string, string> CSharpTypeMapping = new Dictionary<string, string>
-        {
-            {"Boolean", "bool"},
-            {"Integer", "int"},
-            {"Real", "double"},
-            {"UnlimitedNatural", "int"},
-            {"String", "string"},
-            {"EDouble", "double"}
-        };
-
-        /// <summary>
-        /// Queries the type-name of the <see cref="EStructuralFeature"/>
-        /// </summary>
-        /// <param name="eStructuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// the name of the type
-        /// </returns>
-        public static string QueryTypeName(this EStructuralFeature eStructuralFeature)
+		/// Queries the type-name of the <see cref="EStructuralFeature"/>
+		/// </summary>
+		/// <param name="eStructuralFeature">
+		/// The subject <see cref="EStructuralFeature"/>
+		/// </param>
+		/// <returns>
+		/// the name of the type
+		/// </returns>
+		public static string QueryTypeName(this EStructuralFeature eStructuralFeature)
         {
 	        var typeName = "";
 
@@ -72,6 +59,19 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
 	        return typeName;
         }
+
+		/// <summary>
+		/// A mapping of the known SysML value types to C# types
+		/// </summary>
+		private static readonly Dictionary<string, string> CSharpTypeMapping = new Dictionary<string, string>
+		{
+			{"Boolean", "bool"},
+			{"Integer", "int"},
+			{"Real", "double"},
+			{"UnlimitedNatural", "int"},
+			{"String", "string"},
+			{"EDouble", "double"}
+		};
 
 		/// <summary>
 		/// Queries the C# type-name of the <see cref="EStructuralFeature"/>
@@ -104,7 +104,52 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             return typeName;
         }
-        
+
+		/// <summary>
+		/// A mapping of the known SysML value types to GraphQL types
+		/// </summary>
+		private static readonly Dictionary<string, string> GraphQLTypeMapping = new Dictionary<string, string>
+		{
+			{"Boolean", "Boolean"},
+			{"Integer", "Int"},
+			{"Real", "Float"},
+			{"UnlimitedNatural", "Int"},
+			{"String", "String"},
+			{"EDouble", "Float"}
+		};
+
+		/// <summary>
+		/// Queries the GraphQL type-name of the <see cref="EStructuralFeature"/>
+		/// </summary>
+		/// <param name="eStructuralFeature">
+		/// The subject <see cref="EStructuralFeature"/>
+		/// </param>
+		/// <returns>
+		/// the C# name of the type
+		/// </returns>
+		public static string QueryGraphQLTypeName(this EStructuralFeature eStructuralFeature)
+		{
+			var typeName = "";
+
+			if (eStructuralFeature is EAttribute eAttribute)
+			{
+				if (eAttribute.EType is EEnum)
+				{
+					typeName = eAttribute.EType.Name;
+				}
+				else if (!GraphQLTypeMapping.TryGetValue(eAttribute.EType.Name, out typeName))
+				{
+					throw new KeyNotFoundException($"the {eAttribute.Name}.{eAttribute.EType.Name} is not a registered Type");
+				}
+			}
+			else if (eStructuralFeature is EReference eReference)
+			{
+				typeName = eReference.EType.Name;
+			}
+
+			return typeName;
+		}
+
 		/// <summary>
 		/// Queries whether the <see cref="EStructuralFeature"/> Type is a boolean
 		/// </summary>

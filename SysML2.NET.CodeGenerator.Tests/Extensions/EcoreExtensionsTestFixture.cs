@@ -18,8 +18,6 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace SysML2.NET.CodeGenerator.Tests.Extensions
 {
     using System.Collections.Generic;

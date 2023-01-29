@@ -21,8 +21,9 @@
 namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 {
     using System;
+    using System.Linq;
 
-    using ECoreNetto;
+	using ECoreNetto;
     using ECoreNetto.Extensions;
 
     using HandlebarsDotNet;
@@ -45,7 +46,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             handlebars.RegisterHelper("DTO.TypeName", (writer, context, parameters) =>
             {
                 if (!(context.Value is EStructuralFeature eStructuralFeature))
-                    throw new ArgumentException("supposed to be EStructuralFeature");
+                    throw new ArgumentException("DTO.TypeName - supposed to be EStructuralFeature");
 
                 var typeName = eStructuralFeature.QueryCSharpTypeName();
 
@@ -88,7 +89,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             handlebars.RegisterHelper("POCO.TypeName", (writer, context, parameters) =>
             {
                 if (!(context.Value is EStructuralFeature eStructuralFeature))
-                    throw new ArgumentException("supposed to be EStructuralFeature");
+                    throw new ArgumentException("POCO.TypeName - supposed to be EStructuralFeature");
 
                 var typeName = eStructuralFeature.QueryCSharpTypeName();
 
@@ -130,6 +131,72 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                 }
             });
-        }
+
+            handlebars.RegisterHelper("GRAPHQL.TypeName", (writer, context, parameters) =>
+            {
+	            if (!(context.Value is EStructuralFeature eStructuralFeature))
+		            throw new ArgumentException("GRAPHQL.TypeName - supposed to be EStructuralFeature");
+
+	            var typeName = eStructuralFeature.QueryGraphQLTypeName();
+
+	            var nullable = eStructuralFeature.QueryIsNullable();
+
+	            var enumerable = eStructuralFeature.QueryIsEnumerable();
+
+	            if (eStructuralFeature is EAttribute)
+	            {
+		            if (enumerable)
+		            {
+			            writer.WriteSafeString($"[{typeName}]!");
+		            }
+		            else if (nullable)
+		            {
+			            writer.WriteSafeString($"{typeName}");
+		            }
+		            else
+		            {
+			            writer.WriteSafeString($"{typeName}!");
+		            }
+	            }
+	            else if (eStructuralFeature is EReference)
+	            {
+			        typeName = $"I{typeName}";
+		            
+		            if (enumerable)
+		            {
+			            writer.WriteSafeString($"[{typeName}]!");
+		            }
+		            else if (nullable)
+		            {
+			            writer.WriteSafeString($"{typeName}");
+		            }
+					else
+		            {
+			            writer.WriteSafeString($"{typeName}!");
+		            }
+	            }
+            });
+
+            handlebars.RegisterHelper("GRAPHQL.Implements", (writer, context, parameters) =>
+            {
+				if (!(context.Value is EClass eClass))
+					throw new ArgumentException("GRAPHQL.Implements - The context shall be an EClass");
+
+				var typeHierarchy = eClass.QueryTypeHierarchy().Distinct();
+                
+				if (typeHierarchy.Any())
+				{
+					var result = $"implements I{eClass.Name} & {string.Join(" & ", typeHierarchy.Select(x => $"I{x.Name}"))}";
+
+					writer.WriteSafeString(result);
+				}
+				else
+				{
+					var result = $"implements I{eClass.Name}";
+
+					writer.WriteSafeString(result);
+				}
+            });
+		}
     }
 }

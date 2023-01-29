@@ -19,7 +19,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ECoreNetto.HandleBars" Version="0.4.0" />
+		<PackageReference Include="ECoreNetto.HandleBars" Version="0.5.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.4.0" />
 	</ItemGroup>
@@ -82,6 +82,9 @@
 	  <None Update="Templates\ecore-to-html-docs.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="Templates\graphql-schema.hbs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Templates\poco-interface-template.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
@@ -97,9 +100,6 @@
 	  <None Update="Templates\dto-deserializer-template.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Templates\dto-interface-template.cshtml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
 	  <None Update="Templates\dto-interface-template.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
@@ -113,9 +113,6 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Templates\enum-deserializer-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\enum-template.cshtml">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Templates\enum-template.hbs">
