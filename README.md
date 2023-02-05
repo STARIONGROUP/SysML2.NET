@@ -27,6 +27,8 @@ SysML2.NET.REST                  | [![NuGet Badge](https://buildstats.info/nuget
 
 The reference web-application is available on [docker-hub](https://hub.docker.com/r/rheagroup/sysml2.net.viewer). A demo-version is hosted at http://viewer.sysml2.net.
 
+The generated HTML based meta-model documentation is availabe on [docker-hub](https://hub.docker.com/r/rheagroup/sysml2.net.docs). A live version is available at https://modeldocs.sysml2.net. 
+
 ## Build Status
 
 GitHub actions are used to build and test the library
