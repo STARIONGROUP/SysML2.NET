@@ -42,8 +42,8 @@ namespace SysML2.NET.CodeGenerator
         /// </returns>
         public static EPackage Load()
         {
-            string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string ecoreFileName = Path.Combine(assemblyFolder, "datamodel", "SysML.ecore");
+            var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var ecoreFileName = Path.Combine(assemblyFolder, "datamodel", "SysML.ecore");
 
             var uri = new Uri(ecoreFileName);
 

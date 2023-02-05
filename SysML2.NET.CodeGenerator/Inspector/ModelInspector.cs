@@ -206,7 +206,6 @@ namespace SysML2.NET.CodeGenerator.Inspector
                     }
                 }
             }
-
         }
     }
 }
