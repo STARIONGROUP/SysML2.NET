@@ -27,29 +27,43 @@ namespace SysML2.NET.Viewer.Services.Authentication
     using Blazored.SessionStorage;
 
     using Microsoft.AspNetCore.Components.Authorization;
-    
-    /// <summary>
-    /// Provides information about the authentication state of the current user.
-    /// </summary>
-    public class AnonymousAuthenticationStateProvider : AuthenticationStateProvider
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
+	/// <summary>
+	/// Provides information about the authentication state of the current user.
+	/// </summary>
+	public class AnonymousAuthenticationStateProvider : AuthenticationStateProvider
 	{
-        /// <summary>
-        /// Value for the <see cref="ISessionStorageService" /> key for the JWT
-        /// </summary>
-        public const string SessionStorageKey = "authenticationToken";
+		/// <summary>
+		/// The <see cref="ILogger"/> used to log
+		/// </summary>
+		private readonly ILogger<AnonymousAuthenticationStateProvider> logger;
+
+		/// <summary>
+		/// Value for the <see cref="ISessionStorageService" /> key for the JWT
+		/// </summary>
+		public const string SessionStorageKey = "authenticationToken";
         
         /// <summary>
         /// The <see cref="ISessionStorageService" /> to retrieve saved JWT
         /// </summary>
         private readonly ISessionStorageService sessionStorage;
 
-        /// <summary>
-        /// Initializes a new <see cref="AnonymousAuthenticationStateProvider" />
-        /// </summary>
-        /// <param name="sessionStorage">The <see cref="ISessionStorageService" /></param>
-        public AnonymousAuthenticationStateProvider(ISessionStorageService sessionStorage)
+		/// <summary>
+		/// Initializes a new <see cref="AnonymousAuthenticationStateProvider" />
+		/// </summary>
+		/// <param name="sessionStorage">The <see cref="ISessionStorageService" />
+		/// The (injected) <see cref="ISessionStorageService"/> that provides access to the browser session cache
+		/// </param>
+		/// <param name="loggerFactory">
+		/// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+		/// </param>
+		public AnonymousAuthenticationStateProvider(ISessionStorageService sessionStorage, ILoggerFactory loggerFactory = null)
         {
-            this.sessionStorage = sessionStorage;
+	        this.logger = loggerFactory == null ? NullLogger<AnonymousAuthenticationStateProvider>.Instance : loggerFactory.CreateLogger<AnonymousAuthenticationStateProvider>();
+
+			this.sessionStorage = sessionStorage;
         }
 
         /// <summary>
@@ -61,13 +75,15 @@ namespace SysML2.NET.Viewer.Services.Authentication
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var token = await this.sessionStorage.GetItemAsync<string>(SessionStorageKey);
-
-            if (string.IsNullOrEmpty(token))
+            
+			if (string.IsNullOrEmpty(token))
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
-            var identity = CreateClaimsIdentity();
+			this.logger.LogDebug("Authentication token retrieved from Session Storage");
+
+			var identity = CreateClaimsIdentity();
             
             return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
         }

@@ -27,8 +27,10 @@ namespace SysML2.NET.Viewer.Services.Authentication
     using Blazored.SessionStorage;
 
     using Microsoft.AspNetCore.Components.Authorization;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
-    using SySML2.NET.REST;
+	using SySML2.NET.REST;
 
     /// <summary>
     /// The purpose of the <see cref="AuthenticationService"/> is to authenticate against
@@ -36,10 +38,15 @@ namespace SysML2.NET.Viewer.Services.Authentication
     /// </summary>
     public class AuthenticationService : IAuthenticationService
     {
-        /// <summary>
-        /// The <see cref="ISessionStorageService" />
-        /// </summary>
-        private readonly ISessionStorageService sessionStorageService;
+	    /// <summary>
+	    /// The <see cref="ILogger"/> used to log
+	    /// </summary>
+	    private readonly ILogger<AuthenticationService> logger;
+
+		/// <summary>
+		/// The <see cref="ISessionStorageService" />
+		/// </summary>
+		private readonly ISessionStorageService sessionStorageService;
 
         /// <summary>
         /// The <see cref="AuthenticationStateProvider" />
@@ -51,22 +58,27 @@ namespace SysML2.NET.Viewer.Services.Authentication
         /// </summary>
         private readonly IRestClient restClient;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationService" /> class.
-        /// </summary>
-        /// <param name="restClient">
-        /// The (injected) <see cref="IRestClient" /> used to communicate with the SysML2 model server
-        /// </param>
-        /// <param name="authenticationStateProvider">
-        /// The (injected) <see cref="AuthenticationStateProvider" /> that Provides information about
-        /// the authentication state of the current user.
-        /// </param>
-        /// <param name="sessionStorageService">
-        /// The <see cref="ISessionStorageService" /> used to store and retrieve data from the browser session storage
-        /// </param>
-        public AuthenticationService(IRestClient restClient, AuthenticationStateProvider authenticationStateProvider, ISessionStorageService sessionStorageService)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthenticationService" /> class.
+		/// </summary>
+		/// <param name="restClient">
+		/// The (injected) <see cref="IRestClient" /> used to communicate with the SysML2 model server
+		/// </param>
+		/// <param name="authenticationStateProvider">
+		/// The (injected) <see cref="AuthenticationStateProvider" /> that Provides information about
+		/// the authentication state of the current user.
+		/// </param>
+		/// <param name="sessionStorageService">
+		/// The <see cref="ISessionStorageService" /> used to store and retrieve data from the browser session storage
+		/// </param>
+		/// <param name="loggerFactory">
+		/// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+		/// </param>
+		public AuthenticationService(IRestClient restClient, AuthenticationStateProvider authenticationStateProvider, ISessionStorageService sessionStorageService, ILoggerFactory loggerFactory = null)
         {
-            this.restClient = restClient;
+	        this.logger = loggerFactory == null ? NullLogger<AuthenticationService>.Instance : loggerFactory.CreateLogger<AuthenticationService>();
+
+			this.restClient = restClient;
             this.authenticationStateProvider = authenticationStateProvider;
             this.sessionStorageService = sessionStorageService;
         }
@@ -93,16 +105,18 @@ namespace SysML2.NET.Viewer.Services.Authentication
         {
             try
             {
-                var projects = await this.restClient.Open(username, password, url, cancellationToken);
+                await this.restClient.Open(username, password, url, cancellationToken);
 
-                await this.sessionStorageService.SetItemAsync(AnonymousAuthenticationStateProvider.SessionStorageKey, username);
+                await this.sessionStorageService.SetItemAsync(AnonymousAuthenticationStateProvider.SessionStorageKey, username, cancellationToken);
 
                 ((AnonymousAuthenticationStateProvider)this.authenticationStateProvider).NotifyAuthenticationStateChanged();
                 return AuthenticationStatusKind.Success;
             }
             catch (Exception e)
             {
-                return AuthenticationStatusKind.Fail;
+	            this.logger.LogError(e, "Login failed");
+                
+				return AuthenticationStatusKind.Fail;
             }
         }
 

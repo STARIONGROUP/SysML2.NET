@@ -23,7 +23,7 @@ namespace SysML2.NET.Viewer.Services.Authentication
     using SySML2.NET.REST;
     using System.Threading;
     using System.Threading.Tasks;
-
+    
     /// <summary>
     /// The purpose of the <see cref="IAuthenticationService"/> is to authenticate against
     /// a SysML2 model server

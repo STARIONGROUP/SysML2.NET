@@ -48,15 +48,21 @@ namespace SysML2.NET.CodeGenerator.Generators
 			this.Enums = enums.ToArray();
 			this.DataTypes = dataTypes.ToArray();
 			this.Classes = classes.ToArray();
-
-			var f = this.Classes.First().AllEStructuralFeaturesOrderByName.First();
-
 		}
 
+		/// <summary>
+		/// Gets the array of <see cref="EEnum"/>
+		/// </summary>
 		public EEnum[] Enums { get; private set; }
 
+		/// <summary>
+		/// Gets the array of <see cref="EDataType"/>
+		/// </summary>
 		public EDataType[] DataTypes { get; private set; }
 
+		/// <summary>
+		/// Gets the array of <see cref="EClass"/>
+		/// </summary>
 		public EClass[] Classes { get; private set; }
 	}
 }

@@ -22,7 +22,6 @@ namespace SysML2.NET.Viewer.Tests.Services.CommitHistory
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     
     using NUnit.Framework;
 
@@ -116,7 +115,7 @@ namespace SysML2.NET.Viewer.Tests.Services.CommitHistory
         {
             var history = this.commitHistoryService.QueryCommitHistory(this.branch, this.commits);
 
-            Assert.That(history.Count(), Is.EqualTo(5));
+            Assert.That(history.Length, Is.EqualTo(5));
 
             Assert.That(history[0].Description, Is.EqualTo("5"));
             Assert.That(history[1].Description, Is.EqualTo("4"));
