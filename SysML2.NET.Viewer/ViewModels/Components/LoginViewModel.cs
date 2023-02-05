@@ -25,8 +25,10 @@ namespace SysML2.NET.Viewer.ViewModels.Components
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Components;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
-    using ReactiveUI;
+	using ReactiveUI;
 
     using SySML2.NET.REST;
     using SysML2.NET.Viewer.Services.Authentication;
@@ -72,20 +74,28 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         private readonly NavigationManager navigationManager;
 
         /// <summary>
-        /// The <see cref="CancellationTokenSource"/> used to cancel asynchronous tasks.
+        /// The <see cref="ILogger"/> used to log
         /// </summary>
-        private CancellationTokenSource cancellationTokenSource;
+        private readonly ILogger<LoginViewModel> logger;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LoginViewModel"/>
-        /// </summary>
-        /// <param name="authenticationService">
-        /// The (dependency) injected <see cref="IAuthenticationService"/>
-        /// </param>
-        /// <param name="navigationManager">
-        /// The (dependency) injected <see cref="NavigationManager"/>
-        /// </param>
-        public LoginViewModel(IAuthenticationService authenticationService, NavigationManager navigationManager)
+		/// <summary>
+		/// The <see cref="CancellationTokenSource"/> used to cancel asynchronous tasks.
+		/// </summary>
+		private CancellationTokenSource cancellationTokenSource;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoginViewModel"/>
+		/// </summary>
+		/// <param name="authenticationService">
+		/// The (dependency) injected <see cref="IAuthenticationService"/>
+		/// </param>
+		/// <param name="navigationManager">
+		/// The (dependency) injected <see cref="NavigationManager"/>
+		/// </param>
+		/// <param name="loggerFactory">
+		/// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+		/// </param>
+		public LoginViewModel(IAuthenticationService authenticationService, NavigationManager navigationManager, ILoggerFactory loggerFactory = null)
         {
             this.UserName = "John Doe";
             this.Password = "secret";
@@ -93,7 +103,8 @@ namespace SysML2.NET.Viewer.ViewModels.Components
             
             this.authenticationService = authenticationService;
             this.navigationManager = navigationManager;
-        }
+            this.logger = loggerFactory == null ? NullLogger<LoginViewModel>.Instance : loggerFactory.CreateLogger<LoginViewModel>();
+		}
 
         /// <summary>
         /// Gets or sets the <see cref="AuthenticationStatusKind" />
@@ -164,6 +175,8 @@ namespace SysML2.NET.Viewer.ViewModels.Components
                 this.cancellationTokenSource.Dispose();
                 this.AuthenticationStatusKind = AuthenticationStatusKind.Fail;
                 this.ErrorMessage = e.Message;
+
+                this.logger.LogError("Login Failed", e);
             }
         }
 

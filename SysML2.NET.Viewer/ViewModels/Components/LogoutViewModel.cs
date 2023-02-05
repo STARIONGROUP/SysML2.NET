@@ -24,7 +24,9 @@ namespace SysML2.NET.Viewer.ViewModels.Components
 	using System.Threading;
 	using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Components;
+	using Microsoft.AspNetCore.Components;
+	using Microsoft.Extensions.Logging;
+	using Microsoft.Extensions.Logging.Abstractions;
 
 	using SysML2.NET.Viewer.Components;
 	using SysML2.NET.Viewer.Services.Authentication;
@@ -48,17 +50,26 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         /// The <see cref="CancellationTokenSource"/> used to cancel asynchronous tasks.
         /// </summary>
         private CancellationTokenSource cancellationTokenSource;
+        
+        /// <summary>
+        /// The <see cref="ILogger"/> used to log
+        /// </summary>
+        private readonly ILogger<LogoutViewModel> logger;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogoutViewModel" /> class.
 		/// </summary>
 		/// <param name="authenticationService">The <see cref="IAuthenticationService" /></param>
 		/// <param name="navigationManager">The <see cref="Microsoft.AspNetCore.Components.NavigationManager" /></param>
-		public LogoutViewModel(IAuthenticationService authenticationService, NavigationManager navigationManager)
+		/// <param name="loggerFactory">
+		/// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+		/// </param>
+		public LogoutViewModel(IAuthenticationService authenticationService, NavigationManager navigationManager, ILoggerFactory loggerFactory = null)
         {
             this.authenticationService = authenticationService;
             this.navigationManager = navigationManager;
-        }
+            this.logger = loggerFactory == null ? NullLogger<LogoutViewModel>.Instance : loggerFactory.CreateLogger<LogoutViewModel>();
+		}
 
         /// <summary>
         /// Logout from the SysML2 Model server
@@ -76,7 +87,9 @@ namespace SysML2.NET.Viewer.ViewModels.Components
             catch (Exception e)
             {
                 this.cancellationTokenSource.Dispose();
-            }
+
+                this.logger.LogError("Logout failed", e);
+			}
         }
     }
 }
