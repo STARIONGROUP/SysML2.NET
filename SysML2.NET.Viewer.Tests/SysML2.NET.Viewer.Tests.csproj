@@ -18,6 +18,7 @@
   <ItemGroup>
 	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
+	  <PackageReference Include="Moq" Version="4.18.4" />
 	  <PackageReference Include="NUnit" Version="3.13.3" />
 	  <PackageReference Include="NUnit.Console" Version="3.16.2" />
 	  <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
@@ -34,6 +35,7 @@
 
   <ItemGroup>
     <Folder Include="Services\CommitHistory\" />
+    <Folder Include="Services\Authentication\" />
   </ItemGroup>
 
   <ItemGroup>

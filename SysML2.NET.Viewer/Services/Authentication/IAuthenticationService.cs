@@ -50,12 +50,15 @@ namespace SysML2.NET.Viewer.Services.Authentication
         /// </returns>
         Task<AuthenticationStatusKind> Login(string username, string password, string url, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Logout from SysML2 model server
-        /// </summary>
-        /// <returns>
-        /// a <see cref="Task"/>
-        /// </returns>
-        Task Logout();
+		/// <summary>
+		/// Logout from SysML2 model server
+		/// </summary>
+		/// <param name="cancellationToken">
+		/// The <see cref="CancellationToken"/> used to cancel the operation
+		/// </param>
+		/// <returns>
+		/// a <see cref="Task"/>
+		/// </returns>
+		Task Logout(CancellationToken cancellationToken);
     }
 }

@@ -126,9 +126,9 @@ namespace SysML2.NET.Viewer.Services.Authentication
         /// <returns>
         /// a <see cref="Task"/>
         /// </returns>
-        public async Task Logout()
+        public async Task Logout(CancellationToken cancellationToken)
         {
-            await this.sessionStorageService.RemoveItemAsync(AnonymousAuthenticationStateProvider.SessionStorageKey);
+            await this.sessionStorageService.RemoveItemAsync(AnonymousAuthenticationStateProvider.SessionStorageKey, cancellationToken);
             ((AnonymousAuthenticationStateProvider)this.authenticationStateProvider).NotifyAuthenticationStateChanged();
         }
     }

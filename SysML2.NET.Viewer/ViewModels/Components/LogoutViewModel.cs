@@ -20,11 +20,14 @@
 
 namespace SysML2.NET.Viewer.ViewModels.Components
 {
-    using System.Threading.Tasks;
+	using System;
+	using System.Threading;
+	using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Components;
 
-    using SysML2.NET.Viewer.Services.Authentication;
+	using SysML2.NET.Viewer.Components;
+	using SysML2.NET.Viewer.Services.Authentication;
     
     /// <summary>
     /// View model for the <see cref="LogoutComponent" /> component
@@ -42,11 +45,16 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         private readonly NavigationManager navigationManager;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LogoutViewModel" /> class.
+        /// The <see cref="CancellationTokenSource"/> used to cancel asynchronous tasks.
         /// </summary>
-        /// <param name="authenticationService">The <see cref="IAuthenticationService" /></param>
-        /// <param name="navigationManager">The <see cref="Microsoft.AspNetCore.Components.NavigationManager" /></param>
-        public LogoutViewModel(IAuthenticationService authenticationService, NavigationManager navigationManager)
+        private CancellationTokenSource cancellationTokenSource;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LogoutViewModel" /> class.
+		/// </summary>
+		/// <param name="authenticationService">The <see cref="IAuthenticationService" /></param>
+		/// <param name="navigationManager">The <see cref="Microsoft.AspNetCore.Components.NavigationManager" /></param>
+		public LogoutViewModel(IAuthenticationService authenticationService, NavigationManager navigationManager)
         {
             this.authenticationService = authenticationService;
             this.navigationManager = navigationManager;
@@ -58,8 +66,17 @@ namespace SysML2.NET.Viewer.ViewModels.Components
         /// <returns>A <see cref="Task" /></returns>
         public async Task ExecuteLogout()
         {
-            await this.authenticationService.Logout();
-            this.navigationManager.NavigateTo("/");
+	        try
+	        {
+		        this.cancellationTokenSource = new CancellationTokenSource();
+
+		        await this.authenticationService.Logout(this.cancellationTokenSource.Token);
+		        this.navigationManager.NavigateTo("/");
+	        }
+            catch (Exception e)
+            {
+                this.cancellationTokenSource.Dispose();
+            }
         }
     }
 }
