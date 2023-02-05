@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="CommitReference.cs" company="RHEA System S.A.">
+// <copyright file="DataIdentity.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,14 +18,14 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.DTO
+namespace SysML2.NET.PIM.DTO
 {
     /// <summary>
-    /// An abstract subclass of <see cref="Record"/> that references a specific <see cref="Commit"/> (Commit Reference.referencedCommit). Project.commit is the set of all the Commit records for a given Project.
-    /// <see cref="Project.CommitRefererence"/> identifies specific <see cref="Commit"/> records in a <see cref="Project"/> that provide the context for navigating the
-    /// <see cref="IData"/> in a Project. Two special types of <see cref="CommitReference"/> are <see cref="Branch"/> and <see cref="Tag"/>
+    /// A subclass of <see cref="Record"/> that represents a unique, version-independent representation of <see cref="IData"/>
+    /// through its lifecycle. A <see cref="DataIdentity"/> is associated with 1 or more <see cref="IData"/> Version
+    /// records that represent different versions of the same <see cref="IData"/>.
     /// </summary>
-    public abstract class CommitReference : Record
+    public class DataIdentity : Record
     {
     }
 }

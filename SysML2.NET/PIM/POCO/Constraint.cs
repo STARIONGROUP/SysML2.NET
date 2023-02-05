@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DataIdentity.cs" company="RHEA System S.A.">
+// <copyright file="Constraint.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,14 +18,13 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.PIM.POCO
 {
     /// <summary>
-    /// A subclass of <see cref="Record"/> that represents a unique, version-independent representation of <see cref="IData"/>
-    /// through its lifecycle. A <see cref="DataIdentity"/> is associated with 1 or more <see cref="IData"/> Version
-    /// records that represent different versions of the same <see cref="IData"/>.
+    /// Constraint represents conditions that must be satisfied by Element objects in the query response
     /// </summary>
-    public class DataIdentity : Record
+    public class Constraint
     {
+        
     }
 }

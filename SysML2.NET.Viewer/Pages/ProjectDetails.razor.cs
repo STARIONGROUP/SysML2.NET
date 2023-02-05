@@ -30,7 +30,7 @@ namespace SysML2.NET.Viewer.Pages
 
     using Serilog;
 
-    using SysML2.NET.API.DTO;
+    using SysML2.NET.PIM.DTO;
     using SySML2.NET.REST;
 
     using SysML2.NET.Viewer.Services.CommitHistory;

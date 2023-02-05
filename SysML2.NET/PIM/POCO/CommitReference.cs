@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Constraint.cs" company="RHEA System S.A.">
+// <copyright file="CommitReference.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,13 +18,14 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.PIM.POCO
 {
     /// <summary>
-    /// Constraint represents conditions that must be satisfied by Element objects in the query response
+    /// An abstract subclass of <see cref="Record"/> that references a specific <see cref="Commit"/> (Commit Reference.referencedCommit). Project.commit is the set of all the Commit records for a given Project.
+    /// <see cref="Project.CommitRefererence"/> identifies specific <see cref="Commit"/> records in a <see cref="Project"/> that provide the context for navigating the
+    /// <see cref="IData"/> in a Project. Two special types of <see cref="CommitReference"/> are <see cref="Branch"/> and <see cref="Tag"/>
     /// </summary>
-    public class Constraint
+    public abstract class CommitReference : Record
     {
-        
     }
 }

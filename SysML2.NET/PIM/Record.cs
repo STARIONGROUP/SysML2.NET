@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API
+namespace SysML2.NET.PIM
 {
     using System;
     using System.Collections.Generic;

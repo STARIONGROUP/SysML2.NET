@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.API
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.API.DTO;
+    using SysML2.NET.PIM.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="TagDeserializer"/> is to provide deserialization capabilities
@@ -65,7 +65,7 @@ namespace SysML2.NET.Serializer.Json.API
 
             logger.Log(LogLevel.Trace, "start deserialization: Tag");
 
-            var dtoInstance = new SysML2.NET.API.DTO.Tag();
+            var dtoInstance = new SysML2.NET.PIM.DTO.Tag();
 
             if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
             {

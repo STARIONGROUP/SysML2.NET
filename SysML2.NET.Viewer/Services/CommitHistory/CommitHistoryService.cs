@@ -23,7 +23,7 @@ namespace SysML2.NET.Viewer.Services.CommitHistory
     using System.Linq;
     using System.Collections.Generic;
     
-    using SysML2.NET.API.DTO;
+    using SysML2.NET.PIM.DTO;
 
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;

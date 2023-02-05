@@ -18,12 +18,12 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.PIM.POCO
 {
     using System;
     using System.Collections.Generic;
 
-    using SysML2.NET.API;
+    using SysML2.NET.PIM;
 
     /// <summary>
     /// A subclass of <see cref="Record"/> that represents a container for other <see cref="Record"/>s and

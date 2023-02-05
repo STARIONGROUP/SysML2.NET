@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Operator.cs" company="RHEA System S.A.">
+// <copyright file="CompositeConstraint.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,25 +18,16 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API
+namespace SysML2.NET.PIM.POCO
 {
+    using System.Collections.Generic;
+
     /// <summary>
-    /// Enumeration whose literals are mathematical operators
+    /// a subtype of <see cref="Constraint"/> that represents complex conditions composed of two or more
+    /// <see cref="CompositeConstraint"/>s or <see cref="PrimitiveConstraint"/>s using logical AND or OR operators
     /// </summary>
-    public enum Operator
+    public class CompositeConstraint
     {
-        instanceOf,
-
-        equalto,
-
-        lessthan,
-
-        lesthanorequalto,
-
-        greaterthan,
-
-        greaterthanorequalto,
-
-        @in
+        public List<Constraint> Constraint { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DataIdentity.cs" company="RHEA System S.A.">
+// <copyright file="Operator.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,14 +18,25 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.DTO
+namespace SysML2.NET.PIM
 {
     /// <summary>
-    /// A subclass of <see cref="Record"/> that represents a unique, version-independent representation of <see cref="IData"/>
-    /// through its lifecycle. A <see cref="DataIdentity"/> is associated with 1 or more <see cref="IData"/> Version
-    /// records that represent different versions of the same <see cref="IData"/>.
+    /// Enumeration whose literals are mathematical operators
     /// </summary>
-    public class DataIdentity : Record
+    public enum Operator
     {
+        instanceOf,
+
+        equalto,
+
+        lessthan,
+
+        lesthanorequalto,
+
+        greaterthan,
+
+        greaterthanorequalto,
+
+        @in
     }
 }

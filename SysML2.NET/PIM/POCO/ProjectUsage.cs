@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Record.cs" company="RHEA System S.A.">
+// <copyright file="ProjectUsage.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,36 +18,26 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.DTO
+namespace SysML2.NET.PIM.POCO
 {
     using System;
-    using System.Collections.Generic;
 
-    using SysML2.NET.API;
+    using SysML2.NET.Common;
 
     /// <summary>
-    /// A subclass of <see cref="Record"/> that represents a container for other <see cref="Record"/>s and
-    /// an entry point for version management and data navigation
+    /// a realization of <see cref="IData"/> that represents the use of a <see cref="Project"/> in the context of another
+    /// <see cref="Project"/>.
     /// </summary>
-    public class Project : Record
+    public class ProjectUsage : IData
     {
         /// <summary>
-        /// Gets or sets the human readable name
+        /// Gets or sets the unique identifier
         /// </summary>
-        public string Name { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets the set of <see cref="DataIdentity"/> records corresponding to the <see cref="IData"/>
-        /// contained in the <see cref="Project"/>
+        /// Gets or sets the reference to the <see cref="Commit"/> of the <see cref="Project"/> being used.
         /// </summary>
-        /// <remarks>
-        /// this is a derived attribute
-        /// </remarks>
-        public IEnumerable<Guid> IdentifiedData => throw new NotImplementedException();
-        
-        /// <summary>
-        /// Gets or sets the default <see cref="Branch"/> in the <see cref="Project"/> which is a subset of <see cref="Branch"/>
-        /// </summary>
-        public Guid DefaultBranch { get; set; }
+        public Commit UsedProjectCommit { get; set; }
     }
 }

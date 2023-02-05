@@ -18,12 +18,12 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.DTO
+namespace SysML2.NET.PIM.DTO
 {
     using System;
     using System.Collections.Generic;
 
-    using SysML2.NET.API;
+    using SysML2.NET.PIM;
 
     /// <summary>
     /// A subclass of <see cref="Record"/> that represents the changes made to a <see cref="Project"/> at a

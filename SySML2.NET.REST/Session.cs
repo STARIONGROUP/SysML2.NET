@@ -21,11 +21,10 @@
 namespace SySML2.NET.REST
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
 
-    using SysML2.NET.API;
+    using SysML2.NET.PIM;
     
     /// <summary>
     /// The purpose of the <see cref="Session"/> class used to provide an abstraction over the REST API

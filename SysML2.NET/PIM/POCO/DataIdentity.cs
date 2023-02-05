@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="ProjectUsage.cs" company="RHEA System S.A.">
+// <copyright file="DataIdentity.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,26 +18,14 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.PIM.POCO
 {
-    using System;
-
-    using SysML2.NET.Common;
-
     /// <summary>
-    /// a realization of <see cref="IData"/> that represents the use of a <see cref="Project"/> in the context of another
-    /// <see cref="Project"/>.
+    /// A subclass of <see cref="Record"/> that represents a unique, version-independent representation of <see cref="IData"/>
+    /// through its lifecycle. A <see cref="DataIdentity"/> is associated with 1 or more <see cref="IData"/> Version
+    /// records that represent different versions of the same <see cref="IData"/>.
     /// </summary>
-    public class ProjectUsage : IData
+    public class DataIdentity : Record
     {
-        /// <summary>
-        /// Gets or sets the unique identifier
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the reference to the <see cref="Commit"/> of the <see cref="Project"/> being used.
-        /// </summary>
-        public Commit UsedProjectCommit { get; set; }
     }
 }

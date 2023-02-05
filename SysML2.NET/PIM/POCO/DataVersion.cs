@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Tag.cs" company="RHEA System S.A.">
+// <copyright file="DataVersion.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,35 +18,30 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.PIM.POCO
 {
-    using System;
+    using SysML2.NET.Common;
 
     /// <summary>
-    /// a <see cref="Tag"/> is used for annotating specific commits-of-interest during <see cref="Project"/> development,
-    /// such as for representing <see cref="Project"/> milestones, releases, baselines, or snapshots. A <see cref="Project"/>
-    /// can have 0 or more <see cref="Tag"/>s
+    /// A subclass of <see cref="Record"/> that represents <see cref="IData"/> at a specific version in its lifecycle.
+    /// A <see cref="DataVersion"/> record is associated with only one (1) <see cref="DataIdentity"/> record. <see cref="DataVersion"/>
+    /// serves as a wrapper for <see cref="IData"/> (payload) in the context of a <see cref="Commit"/> in a <see cref="Project"/>.
     /// </summary>
-    public class Tag : CommitReference
+    public class DataVersion : Record
     {
         /// <summary>
-        /// Gets or sets a reference to the tagged <see cref="Commit"/>
+        /// Gets or sets the <see cref="Project"/> <see cref="Commit"/> at which the wrapped data (payload) was created, modified, or deleted.
         /// </summary>
-        public Commit TaggedCommit { get; set; }
+        public Commit Commit { get; set; }
 
         /// <summary>
-        /// Gets a human readable name for the <see cref="Tag"/>
+        /// Gets or sets a reference to corresponding the <see cref="DataIdentity"/>
         /// </summary>
-        public string Name { get; set; }
+        public DataIdentity Identity { get; set; }
 
         /// <summary>
-        /// Gets or sets a reference to the <see cref="Project"/> that owns the <see cref="Tag"/>
+        /// Gets or sets the <see cref="IData"/> payload
         /// </summary>
-        public Project OwningProject { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="DateTime"/> the <see cref="Tag"/> was created
-        /// </summary>
-        public DateTime TimeStamp { get; set; }
+        public IData Payload { get; set; }
     }
 }

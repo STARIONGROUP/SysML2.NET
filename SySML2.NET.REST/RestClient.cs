@@ -30,8 +30,8 @@ namespace SySML2.NET.REST
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.API;
-    using SysML2.NET.API.DTO;
+    using SysML2.NET.PIM;
+    using SysML2.NET.PIM.DTO;
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO;
     using SysML2.NET.Serializer.Json;

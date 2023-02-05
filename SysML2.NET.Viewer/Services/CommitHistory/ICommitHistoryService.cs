@@ -22,7 +22,7 @@ namespace SysML2.NET.Viewer.Services.CommitHistory
 {
     using System.Collections.Generic;
 
-    using SysML2.NET.API.DTO;
+    using SysML2.NET.PIM.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="CommitHistoryService"/> is to compute the

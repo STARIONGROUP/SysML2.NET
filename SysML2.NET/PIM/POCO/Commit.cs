@@ -18,12 +18,12 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.POCO
+namespace SysML2.NET.PIM.POCO
 {
     using System;
     using System.Collections.Generic;
 
-    using SysML2.NET.API;
+    using SysML2.NET.PIM;
 
     /// <summary>
     /// A subclass of <see cref="Record"/> that represents the changes made to a <see cref="Project"/> at a

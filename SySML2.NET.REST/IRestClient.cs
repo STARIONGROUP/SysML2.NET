@@ -25,8 +25,8 @@ namespace SySML2.NET.REST
     using System.Threading.Tasks;
     using System.Threading;
     
-    using SysML2.NET.API;
-    using SysML2.NET.API.DTO;
+    using SysML2.NET.PIM;
+    using SysML2.NET.PIM.DTO;
     using SysML2.NET.Core.DTO;
 
     /// <summary>

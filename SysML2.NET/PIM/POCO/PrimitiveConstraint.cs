@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Tag.cs" company="RHEA System S.A.">
+// <copyright file="PrimitiveConstraint.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,40 +18,42 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.DTO
+namespace SysML2.NET.PIM.POCO
 {
-    using System;
+    using System.Collections.Generic;
 
     /// <summary>
-    /// a <see cref="Tag"/> is used for annotating specific commits-of-interest during <see cref="Project"/> development,
-    /// such as for representing <see cref="Project"/> milestones, releases, baselines, or snapshots. A <see cref="Project"/>
-    /// can have 0 or more <see cref="Tag"/>s
+    /// a subtype of Constraint that represents simple conditions that be modeled using the
+    /// property-operator -value tuple. e.g. mass <= 4 kg, or type instanceOf Generalization
     /// </summary>
-    public class Tag : CommitReference
+    public class PrimitiveConstraint
     {
         /// <summary>
-        /// Gets or sets a reference to the tagged <see cref="Commit"/>
+        /// Initializes a new instance of <see cref="PrimitiveConstraint"/>
         /// </summary>
-        public Guid TaggedCommit { get; set; }
-        
-        /// <summary>
-        /// Gets or sets a reference to the referenced <see cref="Commit"/>
-        /// </summary>
-        public Guid ReferencedCommit { get; set; }
+        public PrimitiveConstraint()
+        {
+            this.Values = new List<object>();
+        }
 
         /// <summary>
-        /// Gets a human readable name for the <see cref="Tag"/>
+        /// Gets or sets the name of a property of Element or its subtypes that is being constrained
         /// </summary>
-        public string Name { get; set; }
+        public string Property { get; set; }
 
         /// <summary>
-        /// Gets or sets a reference to the <see cref="Project"/> that owns the <see cref="Tag"/>
+        /// Gets or sets the mathematical operatores
         /// </summary>
-        public Guid OwningProject { get; set; }
+        public Operator Operator { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="DateTime"/> the <see cref="Tag"/> was created
+        /// Gets or sets list of primitive objects, such as String, Boolean, Integer, Double, and UUID
         /// </summary>
-        public DateTime TimeStamp { get; set; }
+        public List<object> Values { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating a logical NOT operator is applied to the <see cref="PrimitiveConstraint"/>
+        /// </summary>
+        public bool Inverse { get; set; }
     }
 }

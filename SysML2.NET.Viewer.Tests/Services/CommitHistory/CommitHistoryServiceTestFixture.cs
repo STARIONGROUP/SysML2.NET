@@ -25,7 +25,7 @@ namespace SysML2.NET.Viewer.Tests.Services.CommitHistory
     
     using NUnit.Framework;
 
-    using SysML2.NET.API.DTO;
+    using SysML2.NET.PIM.DTO;
     
     using SysML2.NET.Viewer.Services.CommitHistory;
 

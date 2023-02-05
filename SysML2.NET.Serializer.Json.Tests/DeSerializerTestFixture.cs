@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Tests
 
     using NUnit.Framework;
 
-    using SysML2.NET.API.DTO;
+    using SysML2.NET.PIM.DTO;
     using SysML2.NET.Core.DTO;
     
     /// <summary>
