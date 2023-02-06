@@ -166,9 +166,8 @@ ul.rectangle-list a:before{
 	
 	text-decoration: none;
 	font-style: normal;
-	font-weight: normal;
 
-	-webkit-font-smoothing:antialiased;
+    -webkit-font-smoothing:antialiased;
 	-moz-osx-font-smoothing:grayscale;
 }
 
