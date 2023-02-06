@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json.API
+namespace SysML2.NET.Serializer.Json.PIM
 {
     using System;
     using System.Collections.Generic;

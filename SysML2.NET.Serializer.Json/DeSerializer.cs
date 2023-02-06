@@ -34,7 +34,7 @@ namespace SysML2.NET.Serializer.Json
 
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO;
-    using SysML2.NET.Serializer.Json.API;
+    using SysML2.NET.Serializer.Json.PIM;
 
     /// <summary>
     /// The purpose of the <see cref="DeSerializer"/> is to deserialize a JSON <see cref="Stream"/> to
