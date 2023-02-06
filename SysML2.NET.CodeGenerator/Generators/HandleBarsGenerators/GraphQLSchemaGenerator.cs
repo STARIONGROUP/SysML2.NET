@@ -26,8 +26,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 	using System.IO;
 
 	using ECoreNetto;
-
-	using SysML2.NET.CodeGenerator.Extensions;
+	
 	using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
 	/// <summary>
@@ -50,8 +49,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 		/// </returns>
 		public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
 		{
-			await this.GenerateEnumDeSerializers(package, outputDirectory);
-			
+			await this.GenerateGraphDbSchema(package, outputDirectory);
 		}
 
 		/// <summary>
@@ -66,7 +64,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 		/// <returns>
 		/// an awaitable <see cref="Task"/>
 		/// </returns>
-		public async Task GenerateEnumDeSerializers(EPackage package, DirectoryInfo outputDirectory)
+		public async Task GenerateGraphDbSchema(EPackage package, DirectoryInfo outputDirectory)
 		{
 			var template = this.Templates["graphql-schema"];
 
