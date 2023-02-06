@@ -30,7 +30,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 	using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
 	/// <summary>
-	/// A Handlebars based GraphQL Schemea generator
+	/// A Handlebars based GraphQL Schema generator
 	/// </summary>
 	public class GraphQLSchemaGenerator : HandleBarsGenerator
 	{

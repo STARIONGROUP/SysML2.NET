@@ -30,10 +30,10 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
-    /// <summary>
-    /// A Handlebars based DTO code generator
-    /// </summary>
-    public class DtoSerializerGenerator : HandleBarsGenerator
+	/// <summary>
+	/// A Handlebars based DTO JSON serializer code generator
+	/// </summary>
+	public class DtoSerializerGenerator : HandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> static serializers

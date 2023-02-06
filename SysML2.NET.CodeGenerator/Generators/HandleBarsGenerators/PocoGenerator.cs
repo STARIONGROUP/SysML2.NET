@@ -20,7 +20,8 @@
 
 namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
-    using System.Linq;
+	using System;
+	using System.Linq;
     using System.Threading.Tasks;
 
     using System.IO;
@@ -29,8 +30,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
-    using System;
-
+    
     /// <summary>
     /// A Handlebars based POCO code generator
     /// </summary>

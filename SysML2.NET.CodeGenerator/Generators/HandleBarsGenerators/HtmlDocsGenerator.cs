@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
 

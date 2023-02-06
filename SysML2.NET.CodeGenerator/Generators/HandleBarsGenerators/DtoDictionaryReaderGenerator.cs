@@ -30,7 +30,10 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
-    public class DtoDictionaryReaderGenerator : HandleBarsGenerator
+	/// <summary>
+	/// A Handlebars based Dictionary reader code generator
+	/// </summary>
+	public class DtoDictionaryReaderGenerator : HandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> static serializers

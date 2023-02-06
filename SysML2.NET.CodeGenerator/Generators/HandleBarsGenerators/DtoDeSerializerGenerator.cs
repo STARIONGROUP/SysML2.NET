@@ -31,7 +31,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
     /// <summary>
-    /// A Handlebars based DTO code generator
+    /// A Handlebars based DTO JSON deserializer code generator
     /// </summary>
     public class DtoDeSerializerGenerator : HandleBarsGenerator
     {

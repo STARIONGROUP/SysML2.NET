@@ -55,7 +55,19 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
             await this.GenerateClasses(package, outputDirectory);
         }
 
-        public async Task GenerateInterfaces(EPackage package, DirectoryInfo outputDirectory)
+		/// <summary>
+		/// Generates all the interfaces for <see cref="EClass"/> instances n the <see cref="EPackage"/>
+		/// </summary>
+		/// <param name="package">
+		/// The <see cref="EPackage"/> that contains the <see cref="EClass"/> instances
+		/// </param>
+		/// <param name="outputDirectory">
+		/// The directory where the output is to be generated
+		/// </param>
+		/// <returns>
+		/// an awaitable <see cref="Task"/>
+		/// </returns>
+		public async Task GenerateInterfaces(EPackage package, DirectoryInfo outputDirectory)
         {
             var template = this.Templates["dto-interface-template"];
 
@@ -71,7 +83,22 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
             }
         }
 
-        public async Task<string> GenerateInterface(EPackage package, DirectoryInfo outputDirectory, string className)
+		/// <summary>
+		/// Generates the interface C# class file using the name of the class
+		/// </summary>
+		/// <param name="package">
+		/// The <see cref="EPackage"/> that contains the <see cref="EClass"/> instances
+		/// </param>
+		/// <param name="outputDirectory">
+		/// The directory where the output is to be generated
+		/// </param>
+		/// <param name="className">
+		/// The name of the class for which the interface is to be generated
+		/// </param>
+		/// <returns>
+		/// an awaitable <see cref="Task"/>
+		/// </returns>
+		public async Task<string> GenerateInterface(EPackage package, DirectoryInfo outputDirectory, string className)
         {
             var template = this.Templates["dto-interface-template"];
 
@@ -88,7 +115,19 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
             return generatedInterface;
         }
 
-        public async Task GenerateClasses(EPackage package, DirectoryInfo outputDirectory)
+		/// <summary>
+		/// Generates all the classes for <see cref="EClass"/> instances n the <see cref="EPackage"/>
+		/// </summary>
+		/// <param name="package">
+		/// The <see cref="EPackage"/> that contains the <see cref="EClass"/> instances
+		/// </param>
+		/// <param name="outputDirectory">
+		/// The directory where the output is to be generated
+		/// </param>
+		/// <returns>
+		/// an awaitable <see cref="Task"/>
+		/// </returns>
+		public async Task GenerateClasses(EPackage package, DirectoryInfo outputDirectory)
         {
             var template = this.Templates["dto-class-template"];
             
@@ -104,7 +143,22 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
             }
         }
 
-        public async Task<string> GenerateClass(EPackage package, DirectoryInfo outputDirectory, string className)
+		/// <summary>
+		/// Generates the C# class file using the name of the <see cref="EClass"/>
+		/// </summary>
+		/// <param name="package">
+		/// The <see cref="EPackage"/> that contains the <see cref="EClass"/> instances
+		/// </param>
+		/// <param name="outputDirectory">
+		/// The directory where the output is to be generated
+		/// </param>
+		/// <param name="className">
+		/// The name of the class for which the interface is to be generated
+		/// </param>
+		/// <returns>
+		/// an awaitable <see cref="Task"/>
+		/// </returns>
+		public async Task<string> GenerateClass(EPackage package, DirectoryInfo outputDirectory, string className)
         {
             var template = this.Templates["dto-class-template"];
 
