@@ -24,6 +24,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using System.Linq;
 
     using ECoreNetto;
+    using ECoreNetto.Extensions;
 
     using HandlebarsDotNet;
 
@@ -145,6 +146,26 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
 	            writer.WriteSafeString($"{typeName}");
             });
-		}
+
+            handlebars.RegisterHelper("StructuralFeature.QueryIsAbstract", (context, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#StructuralFeature.QueryIsAbstract}} helper must have exactly one argument");
+                }
+
+                var eStructuralFeature = arguments.Single() as EStructuralFeature;
+
+                if (eStructuralFeature is EReference eReference)
+                {
+                    var @class = eReference.QueryClass();
+
+                    return @class.Abstract;
+                }
+
+                return false;
+                
+            });
+        }
     }
 }

@@ -18,6 +18,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using System.Text;
+
 namespace SysML2.NET.CodeGenerator.Generators
 {
     using System.IO;
@@ -103,7 +105,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         {
             var filePath = Path.Combine(outputDirectory.FullName, fileName);
 
-            await File.WriteAllTextAsync(filePath, generatedCode);
+            await File.WriteAllTextAsync(filePath, generatedCode, Encoding.UTF8);
         }
     }
 }

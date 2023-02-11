@@ -61,7 +61,7 @@ namespace SysML2.NET.CodeGenerator.Inspector
 
                     if (structuralFeature is EReference reference)
                     {
-                        var referenceType = $"{reference.LowerBound}:{reference.UpperBound}";
+                        var referenceType = reference.IsContainment ? $"{reference.LowerBound}:{reference.UpperBound}:containment" : $"{reference.LowerBound}:{reference.UpperBound}";
                         
                         if (!this.referenceTypes.Contains(referenceType))
                         {
@@ -70,7 +70,6 @@ namespace SysML2.NET.CodeGenerator.Inspector
 
                             Console.WriteLine($"{eClass.Name} -- REF {referenceType}");
                         }
-                        
                     }
                     
                     if (structuralFeature is EAttribute attribute)
@@ -158,8 +157,18 @@ namespace SysML2.NET.CodeGenerator.Inspector
                 }
 
                 if (structuralFeature is EReference reference)
-                {
-                    var referenceType = $"{reference.Name}:{reference.EType.Name} [{reference.LowerBound}..{reference.UpperBound}] - REFERENCE TYPE";
+                {  
+                    var referenceType = string.Empty;
+                    if (reference.IsContainment)
+                    {
+                        referenceType = $"{reference.Name}:{reference.EType.Name} [{reference.LowerBound}..{reference.UpperBound}] - CONTAINED REFERENCE TYPE";
+                    }
+                    else
+                    {
+                        referenceType = $"{reference.Name}:{reference.EType.Name} [{reference.LowerBound}..{reference.UpperBound}] - REFERENCE TYPE";
+                    }
+
+                    
                     Console.WriteLine(referenceType);
                 }
 

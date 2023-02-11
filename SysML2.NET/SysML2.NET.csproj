@@ -27,7 +27,6 @@
 	  <Folder Include="Core\AutoGenDto\" />
 	  <Folder Include="Core\AutoGenEnum\" />
 	  <Folder Include="Core\AutoGenPoco\" />
-	  <Folder Include="Core\Poco\" />
 	</ItemGroup>
 
 </Project>

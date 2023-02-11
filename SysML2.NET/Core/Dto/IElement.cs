@@ -23,7 +23,7 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Common;
 
     /// <summary>
-    /// Hand-coded <see cref="IElement"/> class
+    /// Hand-coded <see cref="IElement"/> interface
     /// </summary>
     public partial interface IElement : IData
     {

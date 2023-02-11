@@ -77,7 +77,26 @@
 	  <Compile Remove="Expected\AutoGenDto\LiteralInteger.cs" />
 	  <Compile Remove="Expected\AutoGenDto\LiteralRational.cs" />
 	  <Compile Remove="Expected\AutoGenDto\NamespaceImport.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\AnnotatingElementFactory.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\AnnotationFactory.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\CommentFactory.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\ConnectorFactory.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\DependencyFactory.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\FeatureFactory.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\LiteralIntegerFactory.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\LiteralRationalFactory.cs" />
+	  <Compile Remove="Expected\AutoGenElementFactory\NamespaceImportFactory.cs" />
 	  <Compile Remove="Expected\AutoGenEnum\VisibilityKind.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\AnnotatingElementExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\AnnotationExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\CommentExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\ConnectorExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\DependencyExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\ElementExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\FeatureExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\LiteralIntegerExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\LiteralRationalExtensions.cs" />
+	  <Compile Remove="Expected\AutoGenPocoExtension\NamespaceImportExtensions.cs" />
 	  <Compile Remove="Expected\AutoGenSerializer\ElementSerializer.cs" />
 	  <Compile Remove="Expected\AutoGenSerializer\TriggerInvocationExpressionSerializer.cs" />
 	</ItemGroup>
@@ -89,6 +108,15 @@
 	  <Content Include="Expected\AutoGenDeSerializer\PartDefinitionDeSerializer.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
+	  <None Include="Expected\AutoGenPocoExtension\AnnotationExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\ConnectorFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\LiteralIntegerFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <Content Include="Expected\AutoGenEnum\VisibilityKind.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
@@ -267,6 +295,54 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutoGenDto\NamespaceImport.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\AnnotatingElementFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\AnnotationFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\CommentFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\DependencyFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\FeatureFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\LiteralRationalFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenElementFactory\NamespaceImportFactory.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\AnnotatingElementExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\CommentExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\ConnectorExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\DependencyExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\ElementExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\FeatureExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\LiteralIntegerExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\LiteralRationalExtensions.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Expected\AutoGenPocoExtension\NamespaceImportExtensions.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
