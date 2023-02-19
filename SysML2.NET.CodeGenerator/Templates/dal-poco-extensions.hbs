@@ -77,7 +77,7 @@ namespace SysML2.NET.Dal
                             {
                                 poco.{{ String.PascalCase structuralFeature.Name}}.Remove(poco.{{ String.PascalCase structuralFeature.Name}}.Single(x => x.Id == identifier));
                             }
-                        {{#if structuralFeature.IsContainment }}
+                        {{#if (StructuralFeature.QueryIsContainment structuralFeature) }}
                             identifiersOfObjectsToDelete.AddRange({{ structuralFeature.Name}}ToDelete);
                         {{/if}}
 
