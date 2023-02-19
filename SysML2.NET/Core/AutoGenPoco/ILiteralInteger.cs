@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralInteger.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A LiteralInteger is a LiteralExpression that provides an Integer value as a result. Its result
@@ -39,6 +40,7 @@ namespace SysML2.NET.Core.POCO
         /// The Integer value that is the result of evaluating this Expression.The Integer value that is the
         /// result of evaluating this Expression.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         int Value { get; set; }
 
     }

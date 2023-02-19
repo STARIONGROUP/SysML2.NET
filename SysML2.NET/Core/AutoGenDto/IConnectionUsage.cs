@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConnectionUsage.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.DTO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A ConnectionUsage is a ConnectorAsUsage that is also a PartUsage. Nominally, if its type is a

@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// An Import is an Relationship between its importOwningNamespace and either a Membership (for a
@@ -43,26 +44,31 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property ImportedElement
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         IElement QueryImportedElement();
 
         /// <summary>
         /// Queries the derived property ImportOwningNamespace
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Namespace QueryImportOwningNamespace();
 
         /// <summary>
         /// Whether to import memberships without regard to declared visibility.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsImportAll { get; set; }
 
         /// <summary>
         /// Whether to recursively import Memberships from visible, owned sub-Namespaces.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsRecursive { get; set; }
 
         /// <summary>
         /// The visibility level of the imported members from this Import relative to the importOwningNamespace.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         VisibilityKind Visibility { get; set; }
 
     }

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeatureChainExpression.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A FeatureChainExpression is an OperatorExpression whose operator is ".", which resolves to the
@@ -41,6 +42,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property TargetFeature
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature QueryTargetFeature();
 
     }

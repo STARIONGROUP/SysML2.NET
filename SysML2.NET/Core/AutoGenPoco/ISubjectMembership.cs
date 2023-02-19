@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISubjectMembership.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A SubjectMembership is a ParameterMembership that indicates that its ownedSubjectParameter is the
@@ -39,6 +40,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedSubjectParameter
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Usage QueryOwnedSubjectParameter();
 
     }

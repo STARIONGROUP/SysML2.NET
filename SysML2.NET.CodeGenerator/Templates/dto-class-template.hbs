@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.DTO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     {{ #Documentation this }}
     public partial class {{ this.Name }} : I{{ this.Name }}
@@ -35,7 +36,7 @@ namespace SysML2.NET.Core.DTO
         /// <summary>
         /// Initializes a new instance of the <see cref="{{ this.Name }}"/> class.
         /// </summary>
-        {{#if this.Abstract}}protected {{else}}public{{/if}} {{ this.Name }}()
+        public {{ this.Name }}()
         {
             {{#each this.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
             {{#unless structuralFeature.Derived }}
@@ -55,12 +56,14 @@ namespace SysML2.NET.Core.DTO
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid Id { get; set; }
 
         {{#each this.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
         {{#unless structuralFeature.Derived }}
         {{#unless structuralFeature.Transient }}
         {{ #Documentation structuralFeature }}
+        [EFeature(isChangeable:{{Boolean.ToLowerCase structuralFeature.Changeable}}, isVolatile:{{Boolean.ToLowerCase structuralFeature.Volatile}}, isTransient:{{Boolean.ToLowerCase structuralFeature.Transient}}, isUnsettable:{{Boolean.ToLowerCase structuralFeature.Unsettable}}, isDerived:{{Boolean.ToLowerCase structuralFeature.Derived}}, isOrdered:{{Boolean.ToLowerCase structuralFeature.Ordered}}, isUnique:{{Boolean.ToLowerCase structuralFeature.Unique}}, lowerBound:{{structuralFeature.LowerBound}}, upperBound:{{structuralFeature.UpperBound}}, isMany:{{Boolean.ToLowerCase structuralFeature.Many}}, isRequired:{{Boolean.ToLowerCase structuralFeature.Required}}, isContainment:{{Boolean.ToLowerCase (StructuralFeature.QueryIsContainment structuralFeature) }})]
         public {{#DTO.TypeName structuralFeature }} {{ String.PascalCase structuralFeature.Name }} { get; set; }
 
         {{/unless}}

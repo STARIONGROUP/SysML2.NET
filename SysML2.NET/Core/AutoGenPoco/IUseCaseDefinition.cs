@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IUseCaseDefinition.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A UseCaseDefinition is a CaseDefinition that specifies a set of actions performed by its subject, in
@@ -40,6 +41,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property IncludedUseCase
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<UseCaseUsage> QueryIncludedUseCase();
 
     }

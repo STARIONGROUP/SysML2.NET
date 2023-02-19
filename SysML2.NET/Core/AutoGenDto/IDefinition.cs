@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IDefinition.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.DTO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A Definition is a Classifier of Usages. The actual kinds of Definitions that may appear in a model
@@ -51,6 +52,7 @@ namespace SysML2.NET.Core.DTO
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
         /// Definition must be VariantMemberships.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsVariation { get; set; }
 
     }

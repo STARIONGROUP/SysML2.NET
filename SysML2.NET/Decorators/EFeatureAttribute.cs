@@ -26,7 +26,7 @@ namespace SysML2.NET.Decorators
     /// Attribute used to decorate properties with with the properties sourced from
     /// the SysML2 ecore meta-model.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = false)]
     public class EFeatureAttribute : Attribute
     {
         /// <summary>
@@ -36,16 +36,24 @@ namespace SysML2.NET.Decorators
         /// a value indicating whether this feature is IsChangeable.
         /// </param>
         /// <param name="isVolatile">
-        /// a value indicating whether this feature is IsVolatile.
+        /// a value indicating whether this feature is IsVolatile. A feature that is declared
+        /// volatile is to be generated without storage fields and with empty implementation
+        /// method bodies, which you are required to complete. Volatile is commonly used for
+        /// a feature whose value is derived from some other feature, or for a feature that is
+        /// to be implemented by hand using a different storage and implementation pattern.
         /// </param>
         /// <param name="isTransient">
-        /// a value indicating whether this feature is IsTransient.
+        /// a value indicating whether this feature is IsTransient. Transient features are
+        /// used to declare (modeled) data whose lifetime never spans application invocations
+        /// and therefore doesn't need to be persisted.
         /// </param>
         /// <param name="isUnsettable">
         /// a value indicating whether this feature is un-settable.
         /// </param>
         /// <param name="isDerived">
-        /// a value indicating whether this feature is isDerived.
+        /// a value indicating whether this feature is isDerived. The value of a derived feature
+        /// is computed from other features, so it doesn't represent any additional object state.
+        /// Derived features are typically also marked volatile and transient.
         /// </param>
         /// <param name="isOrdered">
         /// a value indicating whether this feature is isOrdered.
@@ -57,7 +65,7 @@ namespace SysML2.NET.Decorators
         /// the lower bound of the feature.
         /// </param>
         /// <param name="upperBound">
-        /// the upper bound of the feature.
+        /// the upper bound of the feature. the value -1 is equal to *
         /// </param>
         /// <param name="isMany">
         /// a value indicating whether this feature is isMany.

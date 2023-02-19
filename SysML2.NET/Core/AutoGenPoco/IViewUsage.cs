@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IViewUsage.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A ViewUsage is a usage of a ViewDefinition to specify the generation of a view of the members of a
@@ -42,26 +43,31 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property ExposedElement
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<IElement> QueryExposedElement();
 
         /// <summary>
         /// Queries the derived property SatisfiedViewpoint
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<ViewpointUsage> QuerySatisfiedViewpoint();
 
         /// <summary>
         /// Queries the derived property ViewCondition
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Expression> QueryViewCondition();
 
         /// <summary>
         /// Queries the derived property ViewDefinition
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         ViewDefinition QueryViewDefinition();
 
         /// <summary>
         /// Queries the derived property ViewRendering
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         RenderingUsage QueryViewRendering();
 
     }

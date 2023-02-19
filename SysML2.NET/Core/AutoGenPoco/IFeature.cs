@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeature.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A Feature is a Type that classifies sequences of multiple things (in the universe). These must
@@ -111,32 +112,38 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property ChainingFeature
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Feature> QueryChainingFeature();
 
         /// <summary>
         /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         FeatureDirectionKind? Direction { get; set; }
 
         /// <summary>
         /// Queries the derived property EndOwningType
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type QueryEndOwningType();
 
         /// <summary>
         /// Queries the derived property FeaturingType
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Type> QueryFeaturingType();
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
         /// cannot exist after the instance of the featuringType no longer does.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsComposite { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsDerived { get; set; }
 
         /// <summary>
@@ -149,82 +156,98 @@ namespace SysML2.NET.Core.POCO
         /// Features constrains the cardinality of the set of values of that Feature when the values of the
         /// other n-1 end Features are held fixed.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsEnd { get; set; }
 
         /// <summary>
         /// Queries the derived property IsNonunique
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool QueryIsNonunique();
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsOrdered { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature are contained in the space and time of instances of the
         /// Feature&#39;s domain.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsPortion { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsReadOnly { get; set; }
 
         /// <summary>
         /// Whether or not values for this Feature must have no duplicates or not.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsUnique { get; set; }
 
         /// <summary>
         /// Queries the derived property OwnedFeatureChaining
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<FeatureChaining> QueryOwnedFeatureChaining();
 
         /// <summary>
         /// Queries the derived property OwnedFeatureInverting
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<FeatureInverting> QueryOwnedFeatureInverting();
 
         /// <summary>
         /// Queries the derived property OwnedRedefinition
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Redefinition> QueryOwnedRedefinition();
 
         /// <summary>
         /// Queries the derived property OwnedReferenceSubsetting
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         ReferenceSubsetting QueryOwnedReferenceSubsetting();
 
         /// <summary>
         /// Queries the derived property OwnedSubsetting
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Subsetting> QueryOwnedSubsetting();
 
         /// <summary>
         /// Queries the derived property OwnedTypeFeaturing
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<TypeFeaturing> QueryOwnedTypeFeaturing();
 
         /// <summary>
         /// Queries the derived property OwnedTyping
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<FeatureTyping> QueryOwnedTyping();
 
         /// <summary>
         /// Queries the derived property OwningFeatureMembership
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         FeatureMembership QueryOwningFeatureMembership();
 
         /// <summary>
         /// Queries the derived property OwningType
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type QueryOwningType();
 
         /// <summary>
         /// Queries the derived property Type
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Type> QueryType();
 
     }

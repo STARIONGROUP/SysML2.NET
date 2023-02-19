@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     {{ #Documentation this }}
     public partial interface I{{ this.Name }} {{ #Generalization.Interfaces this }}
@@ -36,6 +37,7 @@ namespace SysML2.NET.Core.POCO
         {{#unless structuralFeature.Derived }}
         {{#unless structuralFeature.Transient }}
         {{ #Documentation structuralFeature }}
+        [EFeature(isChangeable:{{Boolean.ToLowerCase structuralFeature.Changeable}}, isVolatile:{{Boolean.ToLowerCase structuralFeature.Volatile}}, isTransient:{{Boolean.ToLowerCase structuralFeature.Transient}}, isUnsettable:{{Boolean.ToLowerCase structuralFeature.Unsettable}}, isDerived:{{Boolean.ToLowerCase structuralFeature.Derived}}, isOrdered:{{Boolean.ToLowerCase structuralFeature.Ordered}}, isUnique:{{Boolean.ToLowerCase structuralFeature.Unique}}, lowerBound:{{structuralFeature.LowerBound}}, upperBound:{{structuralFeature.UpperBound}}, isMany:{{Boolean.ToLowerCase structuralFeature.Many}}, isRequired:{{Boolean.ToLowerCase structuralFeature.Required}}, isContainment:{{Boolean.ToLowerCase (StructuralFeature.QueryIsContainment structuralFeature) }})]
         {{#POCO.TypeName structuralFeature }} {{ String.PascalCase structuralFeature.Name }} { get; set; }
 
         {{/unless}}
@@ -43,6 +45,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property {{ String.PascalCase structuralFeature.Name }}
         /// </summary>
+        [EFeature(isChangeable:{{Boolean.ToLowerCase structuralFeature.Changeable}}, isVolatile:{{Boolean.ToLowerCase structuralFeature.Volatile}}, isTransient:{{Boolean.ToLowerCase structuralFeature.Transient}}, isUnsettable:{{Boolean.ToLowerCase structuralFeature.Unsettable}}, isDerived:{{Boolean.ToLowerCase structuralFeature.Derived}}, isOrdered:{{Boolean.ToLowerCase structuralFeature.Ordered}}, isUnique:{{Boolean.ToLowerCase structuralFeature.Unique}}, lowerBound:{{structuralFeature.LowerBound}}, upperBound:{{structuralFeature.UpperBound}}, isMany:{{Boolean.ToLowerCase structuralFeature.Many}}, isRequired:{{Boolean.ToLowerCase structuralFeature.Required}}, isContainment:{{Boolean.ToLowerCase (StructuralFeature.QueryIsContainment structuralFeature) }})]
         {{#POCO.TypeName structuralFeature }} Query{{ String.PascalCase structuralFeature.Name }}();
 
         {{/unless}}

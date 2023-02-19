@@ -19,7 +19,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ECoreNetto.HandleBars" Version="0.5.0" />
+		<PackageReference Include="ECoreNetto.HandleBars" Version="0.6.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.4.0" />
 	</ItemGroup>

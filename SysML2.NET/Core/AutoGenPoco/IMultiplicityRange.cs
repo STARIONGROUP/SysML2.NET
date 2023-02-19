@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMultiplicityRange.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A MultiplicityRange is a Multiplicity whose value is defined to be the (inclusive) range of natural
@@ -42,16 +43,19 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Bound
         /// </summary>
+        [EFeature(isChangeable: false, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: 2, isMany: false, isRequired: false, isContainment: false)]
         List<Expression> QueryBound();
 
         /// <summary>
         /// Queries the derived property LowerBound
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Expression QueryLowerBound();
 
         /// <summary>
         /// Queries the derived property UpperBound
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Expression QueryUpperBound();
 
     }

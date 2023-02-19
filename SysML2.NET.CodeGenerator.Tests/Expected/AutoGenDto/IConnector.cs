@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.DTO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
@@ -53,6 +54,7 @@ namespace SysML2.NET.Core.DTO
         /// For a binary Connector, whether or not the Connector should be considered to have a direction from
         /// source to target.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsDirected { get; set; }
 
     }

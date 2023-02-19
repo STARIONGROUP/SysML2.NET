@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.DTO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A Comment is an AnnotatingElement whose body in some way describes its annotatedElements.
@@ -37,6 +38,7 @@ namespace SysML2.NET.Core.DTO
         /// <summary>
         /// The annotation text for the Comment.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         string Body { get; set; }
 
         /// <summary>
@@ -44,6 +46,7 @@ namespace SysML2.NET.Core.DTO
         /// format shall be a POSIX locale conformant to ISO/IEC 15897, with the format
         /// [language[_territory][.codeset][@modifier]].
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         string Locale { get; set; }
 
     }

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IOccurrenceUsage.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// An OccurrenceUsage is a Usage whose types are all Classes. Nominally, if a type is an
@@ -50,28 +51,33 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property IndividualDefinition
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         OccurrenceDefinition QueryIndividualDefinition();
 
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)
         /// represented by its individualDefinition.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsIndividual { get; set; }
 
         /// <summary>
         /// Queries the derived property OccurrenceDefinition
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Class> QueryOccurrenceDefinition();
 
         /// <summary>
         /// Queries the derived property PortioningFeature
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         PortioningFeature QueryPortioningFeature();
 
         /// <summary>
         /// The kind of portion of the instances of the occurrenceDefinition represented by this
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         PortionKind? PortionKind { get; set; }
 
     }

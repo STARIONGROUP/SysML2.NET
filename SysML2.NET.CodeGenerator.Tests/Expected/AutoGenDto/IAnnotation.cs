@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.DTO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// An Annotation is a Relationship between an AnnotatingElement and the Element that is annotated by
@@ -37,11 +38,13 @@ namespace SysML2.NET.Core.DTO
     {
         /// <summary>
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid AnnotatedElement { get; set; }
 
         /// <summary>
         /// The AnnotatingElement that annotates the annotatedElement of this Annotation.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid AnnotatingElement { get; set; }
 
     }

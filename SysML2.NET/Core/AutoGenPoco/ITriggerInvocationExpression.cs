@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ITriggerInvocationExpression.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// A TriggerInvocationExpression is an InvocationExpression that invokes one of the trigger Functions
@@ -41,6 +42,7 @@ namespace SysML2.NET.Core.POCO
         /// Indicates which of the Functions from the Kernel Triggers package is to be invoked by this
         /// TriggerInvocationExpression.
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         TriggerKind Kind { get; set; }
 
     }

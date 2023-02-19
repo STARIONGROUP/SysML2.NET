@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IItemFlow.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -28,6 +28,7 @@ namespace SysML2.NET.Core.POCO
     using System.Collections.Generic;
 
     using SysML2.NET.Core;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// An ItemFlow is a Step that represents the transfer of objects or values from one Feature to another.
@@ -41,31 +42,37 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Interaction
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Interaction> QueryInteraction();
 
         /// <summary>
         /// Queries the derived property ItemFeature
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         ItemFeature QueryItemFeature();
 
         /// <summary>
         /// Queries the derived property ItemFlowEnd
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: 2, isMany: false, isRequired: false, isContainment: false)]
         List<ItemFlowEnd> QueryItemFlowEnd();
 
         /// <summary>
         /// Queries the derived property ItemType
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Classifier> QueryItemType();
 
         /// <summary>
         /// Queries the derived property SourceOutputFeature
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature QuerySourceOutputFeature();
 
         /// <summary>
         /// Queries the derived property TargetInputFeature
         /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature QueryTargetInputFeature();
 
     }
