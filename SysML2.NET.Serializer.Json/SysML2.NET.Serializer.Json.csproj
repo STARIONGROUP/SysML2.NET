@@ -13,13 +13,12 @@
 		<Authors>Sam Gerené</Authors>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
-			[Update] SysML.ecore from source git repos - [TAG: 2022-12] (regenerate code)
-			[Update] to System.Text.Json version 7.0.1
+			[Update] to System.Text.Json version 7.0.2
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Text.Json" Version="7.0.1" />
+		<PackageReference Include="System.Text.Json" Version="7.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
 	</ItemGroup>
 
