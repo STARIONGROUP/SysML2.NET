@@ -67,6 +67,7 @@ namespace SysML2.NET.Core.POCO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// The Element or Elements dependent on the supplier Elements.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<IElement> Client { get; set; }
@@ -234,16 +235,19 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// The relatedElements from which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<IElement> Source { get; set; }
 
         /// <summary>
+        /// The Element or Elements on which the client Elements depend in some respect.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<IElement> Supplier { get; set; }
 
         /// <summary>
+        /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<IElement> Target { get; set; }

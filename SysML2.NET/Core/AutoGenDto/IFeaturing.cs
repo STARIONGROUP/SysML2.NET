@@ -41,11 +41,13 @@ namespace SysML2.NET.Core.DTO
     public partial interface IFeaturing : IRelationship
     {
         /// <summary>
+        /// The Feature that is featured by the featuringType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid Feature { get; set; }
 
         /// <summary>
+        /// The Type that features the featureOfType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid Type { get; set; }

@@ -37,6 +37,8 @@ namespace SysML2.NET.Core.POCO
     public partial interface IDifferencing : IRelationship
     {
         /// <summary>
+        /// Type that partly determines interpretations of typeDifferenced, as described in
+        /// Type::differencingType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type DifferencingType { get; set; }

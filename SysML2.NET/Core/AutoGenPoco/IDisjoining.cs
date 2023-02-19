@@ -39,6 +39,7 @@ namespace SysML2.NET.Core.POCO
     public partial interface IDisjoining : IRelationship
     {
         /// <summary>
+        /// Type asserted to be disjoint with the typeDisjoined.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type DisjoiningType { get; set; }
@@ -50,6 +51,7 @@ namespace SysML2.NET.Core.POCO
         Type QueryOwningType();
 
         /// <summary>
+        /// Type asserted to be disjoint with the disjoiningType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type TypeDisjoined { get; set; }

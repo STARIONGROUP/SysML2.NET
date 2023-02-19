@@ -38,11 +38,13 @@ namespace SysML2.NET.Core.DTO
     public partial interface ISpecialization : IRelationship
     {
         /// <summary>
+        /// A Type with a superset of all instances of the specific Type, which might be the same set.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid General { get; set; }
 
         /// <summary>
+        /// A Type with a subset of all instances of the general Type, which might be the same set.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid Specific { get; set; }

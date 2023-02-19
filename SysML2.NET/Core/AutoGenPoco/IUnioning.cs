@@ -42,6 +42,7 @@ namespace SysML2.NET.Core.POCO
         Type QueryTypeUnioned();
 
         /// <summary>
+        /// Type that partly determines interpretations of typeUnioned, as described in Type::unioningType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type UnioningType { get; set; }

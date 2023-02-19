@@ -46,11 +46,13 @@ namespace SysML2.NET.Core.POCO
         Feature QueryOwningFeature();
 
         /// <summary>
+        /// The Type that is being applied by this FeatureTyping.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type Type { get; set; }
 
         /// <summary>
+        /// The Feature that has its Type determined by this FeatureTyping.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature TypedFeature { get; set; }

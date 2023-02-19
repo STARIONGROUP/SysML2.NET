@@ -18,6 +18,8 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using SysML2.NET.CodeGenerator.Extensions;
+
 namespace SysML2.NET.CodeGenerator.Inspector
 {
     using System;
@@ -140,7 +142,7 @@ namespace SysML2.NET.CodeGenerator.Inspector
         /// <param name="className">
         /// the name of the class that is to be inspected
         /// </param>
-        public void Inspect(string className)
+        public static void Inspect(string className)
         {
             var rootPackage = DataModelLoader.Load();
             
@@ -212,6 +214,31 @@ namespace SysML2.NET.CodeGenerator.Inspector
                                 $"{attribute.Name}:{attribute.EType.Name} [{attribute.LowerBound}..{attribute.UpperBound}] - VALUETYPE";
                             Console.WriteLine(valueType);
                         }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Analyzes the model and prints the names of all classes and features that do not have
+        /// any documentation
+        /// </summary>
+        public static void AnalyzeDocumentation()
+        {
+            var rootPackage = DataModelLoader.Load();
+
+            foreach (var eClass in rootPackage.EClassifiers.OfType<EClass>().OrderBy(x => x.Name))
+            {
+                if (string.IsNullOrEmpty(eClass.QueryRawDocumentation()))
+                {
+                    Console.WriteLine($"{eClass.Name}");
+                }
+
+                foreach (var eStructuralFeature in eClass.EStructuralFeaturesOrderByName)
+                {
+                    if (string.IsNullOrEmpty(eStructuralFeature.QueryRawDocumentation()))
+                    {
+                        Console.WriteLine($"{eClass.Name}:{eStructuralFeature.Name}");
                     }
                 }
             }

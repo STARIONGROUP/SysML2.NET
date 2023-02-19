@@ -37,6 +37,8 @@ namespace SysML2.NET.Core.DTO
     public partial interface IFeatureChaining : IRelationship
     {
         /// <summary>
+        /// The Feature whose values partly determine values of featureChained, as described in
+        /// Feature::chainingFeature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid ChainingFeature { get; set; }

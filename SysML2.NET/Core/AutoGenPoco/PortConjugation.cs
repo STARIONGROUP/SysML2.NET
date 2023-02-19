@@ -75,6 +75,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// The Type that is the result of applying Conjugation to the originalType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Type ConjugatedType { get; set; }
@@ -146,11 +147,13 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// The PortDefinition being conjugated.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public PortDefinition OriginalPortDefinition { get; set; }
 
         /// <summary>
+        /// The Type to be conjugated.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Type OriginalType { get; set; }
@@ -261,11 +264,13 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// The relatedElements from which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<IElement> Source { get; set; }
 
         /// <summary>
+        /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<IElement> Target { get; set; }

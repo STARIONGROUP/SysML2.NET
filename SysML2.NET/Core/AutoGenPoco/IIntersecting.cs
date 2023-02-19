@@ -37,6 +37,8 @@ namespace SysML2.NET.Core.POCO
     public partial interface IIntersecting : IRelationship
     {
         /// <summary>
+        /// Type that partly determines interpretations of typeIntersected, as described in
+        /// Type::intersectingType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type IntersectingType { get; set; }

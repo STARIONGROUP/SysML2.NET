@@ -40,11 +40,13 @@ namespace SysML2.NET.Core.DTO
     public partial interface IFeatureTyping : ISpecialization
     {
         /// <summary>
+        /// The Type that is being applied by this FeatureTyping.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid Type { get; set; }
 
         /// <summary>
+        /// The Feature that has its Type determined by this FeatureTyping.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid TypedFeature { get; set; }

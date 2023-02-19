@@ -41,6 +41,7 @@ namespace SysML2.NET.Core.DTO
     public partial interface IReferenceSubsetting : ISubsetting
     {
         /// <summary>
+        /// The Feature that is referenced by the referencingFeature of this ReferenceSubsetting.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid ReferencedFeature { get; set; }

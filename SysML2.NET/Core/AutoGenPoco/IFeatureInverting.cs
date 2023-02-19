@@ -40,11 +40,13 @@ namespace SysML2.NET.Core.POCO
     public partial interface IFeatureInverting : IRelationship
     {
         /// <summary>
+        /// Feature that is an the inverse of invertingFeature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature FeatureInverted { get; set; }
 
         /// <summary>
+        /// Feature that is an inverse of invertedFeature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature InvertingFeature { get; set; }

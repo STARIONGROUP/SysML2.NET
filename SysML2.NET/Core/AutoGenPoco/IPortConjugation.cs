@@ -46,6 +46,7 @@ namespace SysML2.NET.Core.POCO
         ConjugatedPortDefinition QueryConjugatedPortDefinition();
 
         /// <summary>
+        /// The PortDefinition being conjugated.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         PortDefinition OriginalPortDefinition { get; set; }

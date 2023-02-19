@@ -667,6 +667,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// The Element whose metadata is being accessed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public IElement ReferencedElement { get; set; }

@@ -36,6 +36,7 @@ namespace SysML2.NET.Core.DTO
     public partial interface IUnioning : IRelationship
     {
         /// <summary>
+        /// Type that partly determines interpretations of typeUnioned, as described in Type::unioningType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid UnioningType { get; set; }

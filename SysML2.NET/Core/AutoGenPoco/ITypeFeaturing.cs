@@ -37,11 +37,13 @@ namespace SysML2.NET.Core.POCO
     public partial interface ITypeFeaturing : IFeaturing
     {
         /// <summary>
+        /// The Feature that is featured by the featuringType. It is the source of the Relationship.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature FeatureOfType { get; set; }
 
         /// <summary>
+        /// The Type that features the featureOfType. It is the target of the Relationship.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Type FeaturingType { get; set; }

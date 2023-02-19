@@ -50,11 +50,13 @@ namespace SysML2.NET.Core.POCO
         Feature QueryOwningFeature();
 
         /// <summary>
+        /// The Feature that is subsetted by the subsettingFeature of this Subsetting.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature SubsettedFeature { get; set; }
 
         /// <summary>
+        /// The Feature that is a subset of the subsettedFeature of this Subsetting.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Feature SubsettingFeature { get; set; }

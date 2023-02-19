@@ -43,11 +43,13 @@ namespace SysML2.NET.Core.POCO
         Classifier QueryOwningClassifier();
 
         /// <summary>
+        /// The more specific Classifier in this Subclassification.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Classifier Subclassifier { get; set; }
 
         /// <summary>
+        /// The more general Classifier in this Subclassification.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Classifier Superclassifier { get; set; }

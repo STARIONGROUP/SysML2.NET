@@ -367,7 +367,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <returns></returns>
         public static IEnumerable<string> QueryDocumentation(this EModelElement eModelElement)
         {
-            var annotation = eModelElement.EAnnotations.FirstOrDefault();
+            var annotation = eModelElement.EAnnotations.FirstOrDefault(x => x.Details.ContainsKey("documentation"));
             if (annotation == null)
             {
                 return Enumerable.Empty<string>();
@@ -395,10 +395,10 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <returns></returns>
         public static string QueryRawDocumentation(this EModelElement eModelElement)
         {
-	        var annotation = eModelElement.EAnnotations.FirstOrDefault();
+            var annotation = eModelElement.EAnnotations.FirstOrDefault(x => x.Details.ContainsKey("documentation"));
 	        if (annotation == null)
-	        {
-		        return string.Empty;
+            {
+                return string.Empty;
 	        }
 
 	        if (annotation.Details.TryGetValue("documentation", out var documentation))

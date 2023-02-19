@@ -53,7 +53,13 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
         [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
         public void Verify_that_inspect_class_executes_as_expected(string className)
         {
-            Assert.That(() => this.modelInspector.Inspect(className), Throws.Nothing);
+            Assert.That(() => ModelInspector.Inspect(className), Throws.Nothing);
+        }
+
+        [Test]
+        public void Verify_that_analyze_docs_executes_as_expected()
+        {
+            Assert.That(ModelInspector.AnalyzeDocumentation, Throws.Nothing);
         }
     }
 }

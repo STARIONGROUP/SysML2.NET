@@ -42,6 +42,7 @@ namespace SysML2.NET.Core.DTO
     public partial interface IMembership : IRelationship
     {
         /// <summary>
+        /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid MemberElement { get; set; }

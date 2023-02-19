@@ -44,11 +44,13 @@ namespace SysML2.NET.Core.DTO
     public partial interface ISubsetting : ISpecialization
     {
         /// <summary>
+        /// The Feature that is subsetted by the subsettingFeature of this Subsetting.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid SubsettedFeature { get; set; }
 
         /// <summary>
+        /// The Feature that is a subset of the subsettedFeature of this Subsetting.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid SubsettingFeature { get; set; }

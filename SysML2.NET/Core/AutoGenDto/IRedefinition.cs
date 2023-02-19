@@ -48,11 +48,13 @@ namespace SysML2.NET.Core.DTO
     public partial interface IRedefinition : ISubsetting
     {
         /// <summary>
+        /// The Feature that is redefined by the redefiningFeature of this Redefinition.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid RedefinedFeature { get; set; }
 
         /// <summary>
+        /// The Feature that is redefining the redefinedFeature of this Redefinition.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid RedefiningFeature { get; set; }

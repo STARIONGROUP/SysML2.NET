@@ -43,11 +43,13 @@ namespace SysML2.NET.Core.DTO
     public partial interface IConjugation : IRelationship
     {
         /// <summary>
+        /// The Type that is the result of applying Conjugation to the originalType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid ConjugatedType { get; set; }
 
         /// <summary>
+        /// The Type to be conjugated.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid OriginalType { get; set; }

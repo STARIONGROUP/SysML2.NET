@@ -78,6 +78,8 @@ namespace SysML2.NET.Core.POCO
         public string DeclaredShortName { get; set; }
 
         /// <summary>
+        /// Type that partly determines interpretations of typeDifferenced, as described in
+        /// Type::differencingType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Type DifferencingType { get; set; }
@@ -230,11 +232,13 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// The relatedElements from which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<IElement> Source { get; set; }
 
         /// <summary>
+        /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<IElement> Target { get; set; }

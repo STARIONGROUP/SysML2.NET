@@ -39,11 +39,13 @@ namespace SysML2.NET.Core.POCO
     public partial interface IDependency : IRelationship
     {
         /// <summary>
+        /// The Element or Elements dependent on the supplier Elements.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<IElement> Client { get; set; }
 
         /// <summary>
+        /// The Element or Elements on which the client Elements depend in some respect.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<IElement> Supplier { get; set; }

@@ -39,11 +39,13 @@ namespace SysML2.NET.Core.DTO
     public partial interface IDisjoining : IRelationship
     {
         /// <summary>
+        /// Type asserted to be disjoint with the typeDisjoined.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid DisjoiningType { get; set; }
 
         /// <summary>
+        /// Type asserted to be disjoint with the disjoiningType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid TypeDisjoined { get; set; }

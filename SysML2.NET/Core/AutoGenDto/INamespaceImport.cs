@@ -40,6 +40,7 @@ namespace SysML2.NET.Core.DTO
     public partial interface INamespaceImport : IImport
     {
         /// <summary>
+        /// The Namespace whose visible Memberships are imported by this NamespaceImport.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid ImportedNamespace { get; set; }
