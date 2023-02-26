@@ -99,8 +99,8 @@
                             <tr>
                                 <td>Generalizations</td>
                                 <td>
-                                    {{#each eClass.ESuperTypes as | subClass |}}
-                                    <a href="#{{subClass.Name}}">{{subClass.Name}}</a>
+                                    {{#each eClass.ESuperTypes as | superClass |}}
+                                    <a href="#{{superClass.Name}}">{{superClass.Name}}</a>
                                     {{/each}}
                                 </td>
                             </tr>
@@ -133,5 +133,6 @@
                 </article>
             </main>
         </div>
+        <img src="sysml2-class-inheritance.svg" alt="SysML version 2 - Inheritance"/>
     </body>
 </html>

@@ -61,6 +61,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 
 	            writer.WriteSafeString(eModelElement.QueryRawDocumentation());
             });
+
+            handlebars.RegisterHelper("DotDocumentation", (writer, context, parameters) =>
+            {
+	            if (!(context.Value is EModelElement eModelElement))
+		            throw new ArgumentException("supposed to be EModelElement");
+
+	            var documentation = eModelElement.QueryRawDocumentation();
+
+	            documentation = documentation.Replace(":","_") 
+							.Replace("\"", "\\\"");
+                
+				writer.WriteSafeString(documentation);
+            });
 		}
     }
 }

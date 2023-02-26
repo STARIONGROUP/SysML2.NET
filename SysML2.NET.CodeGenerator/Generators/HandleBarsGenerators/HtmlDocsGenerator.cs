@@ -49,10 +49,11 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 		public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
 		{
 			await this.GenerateHtmlDocs(package, outputDirectory);
+			await this.GenerateDotFile(package, outputDirectory);
 		}
 
 		/// <summary>
-		/// Generates the DeSerializationProvider class
+		/// Generates the HTML docs
 		/// </summary>
 		/// <param name="package">
 		/// the <see cref="EPackage"/> that contains the classes that need to be generated
@@ -81,6 +82,35 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 		}
 
 		/// <summary>
+		/// Generates the dot file used by GraphViz to generate a uml diagram
+		/// </summary>
+		/// <param name="package">
+		/// the <see cref="EPackage"/> that contains the classes that need to be generated
+		/// </param>
+		/// <param name="outputDirectory">
+		/// The target <see cref="DirectoryInfo"/>
+		/// </param>
+		/// <returns>
+		/// an awaitable <see cref="Task"/>
+		/// </returns>
+		public async Task GenerateDotFile(EPackage package, DirectoryInfo outputDirectory)
+		{
+			var template = this.Templates["ecore-to-dot"];
+
+			var enums = package.EClassifiers.OfType<EEnum>().OrderBy(x => x.Name);
+			var dataTypes = package.EClassifiers.OfType<EDataType>().OrderBy(x => x.Name);
+			var eClasses = package.EClassifiers.OfType<EClass>().OrderBy(x => x.Name);
+
+			var payload = new GeneratorPayload(enums, dataTypes, eClasses);
+
+			var generatedDot = template(payload);
+
+			var fileName = "sysml2-class-inheritance.dot";
+
+			await Write(generatedDot, outputDirectory, fileName);
+		}
+
+		/// <summary>
 		/// Register the custom helpers
 		/// </summary>
 		protected override void RegisterHelpers()
@@ -100,6 +130,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 		protected override void RegisterTemplates()
 		{
 			this.RegisterTemplate("ecore-to-html-docs");
+			this.RegisterTemplate("ecore-to-dot");
 		}
 	}
 }
