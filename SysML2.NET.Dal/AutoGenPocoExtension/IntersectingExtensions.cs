@@ -207,6 +207,37 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.Intersecting"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.Intersecting"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.Intersecting"/>
+        /// </returns>
+        public static Core.DTO.Intersecting ToDto(this Core.POCO.Intersecting poco)
+        {
+            var dto = new Core.DTO.Intersecting();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.IntersectingType = poco.IntersectingType.Id;
+            dto.IsImplied = poco.IsImplied;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
+
+            return dto;
+        }
     }
 }
 

@@ -179,6 +179,45 @@ namespace SysML2.NET.Dal
             {{/unless}}
             {{/each}}
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.{{ this.Name }}"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.{{ this.Name }}"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.{{ this.Name }}"/>
+        /// </returns>
+        public static Core.DTO.{{ this.Name }} ToDto(this Core.POCO.{{ this.Name }} poco)
+        {
+            var dto = new Core.DTO.{{ this.Name }}();
+
+            dto.Id = poco.Id;
+            {{#each this.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
+            {{#unless structuralFeature.Derived }}
+            {{#unless structuralFeature.Transient }}
+            {{#if (StructuralFeature.QueryIsAttribute structuralFeature) }}
+                {{#if (StructuralFeature.QueryIsNullable structuralFeature)}}
+                    dto.{{ String.PascalCase structuralFeature.Name }} = poco.{{ String.PascalCase structuralFeature.Name }};
+                {{else}}
+                    dto.{{ String.PascalCase structuralFeature.Name }} = poco.{{ String.PascalCase structuralFeature.Name }};
+                {{/if}}
+            {{ else if (StructuralFeature.QueryIsReference structuralFeature)}}
+                {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}
+                    dto.{{ String.PascalCase structuralFeature.Name }} = poco.{{ String.PascalCase structuralFeature.Name }}.Select(x => x.Id).ToList();
+                {{ else if (StructuralFeature.QueryIsNullable structuralFeature)}}
+                    dto.{{ String.PascalCase structuralFeature.Name }} = poco.{{ String.PascalCase structuralFeature.Name }}?.Id;
+                {{ else }}
+                    dto.{{ String.PascalCase structuralFeature.Name }} = poco.{{ String.PascalCase structuralFeature.Name }}.Id;
+                {{/if}}
+            {{/if}}
+            {{/unless}}
+            {{/unless}}
+            {{/each}}
+
+            return dto;
+        }
     }
 }
 

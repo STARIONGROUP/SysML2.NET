@@ -141,6 +141,31 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.Package"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.Package"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.Package"/>
+        /// </returns>
+        public static Core.DTO.Package ToDto(this Core.POCO.Package poco)
+        {
+            var dto = new Core.DTO.Package();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            return dto;
+        }
     }
 }
 

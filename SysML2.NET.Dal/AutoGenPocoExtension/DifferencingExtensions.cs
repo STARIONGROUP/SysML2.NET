@@ -207,6 +207,37 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.Differencing"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.Differencing"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.Differencing"/>
+        /// </returns>
+        public static Core.DTO.Differencing ToDto(this Core.POCO.Differencing poco)
+        {
+            var dto = new Core.DTO.Differencing();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.DifferencingType = poco.DifferencingType.Id;
+            dto.ElementId = poco.ElementId;
+            dto.IsImplied = poco.IsImplied;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
+
+            return dto;
+        }
     }
 }
 

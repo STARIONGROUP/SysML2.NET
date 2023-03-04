@@ -160,6 +160,34 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.Comment"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.Comment"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.Comment"/>
+        /// </returns>
+        public static Core.DTO.Comment ToDto(this Core.POCO.Comment poco)
+        {
+            var dto = new Core.DTO.Comment();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.Annotation = poco.Annotation.Select(x => x.Id).ToList();
+            dto.Body = poco.Body;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.Locale = poco.Locale;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            return dto;
+        }
     }
 }
 

@@ -243,6 +243,41 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.ConjugatedPortTyping"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.ConjugatedPortTyping"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.ConjugatedPortTyping"/>
+        /// </returns>
+        public static Core.DTO.ConjugatedPortTyping ToDto(this Core.POCO.ConjugatedPortTyping poco)
+        {
+            var dto = new Core.DTO.ConjugatedPortTyping();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.ConjugatedPortDefinition = poco.ConjugatedPortDefinition.Id;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.General = poco.General.Id;
+            dto.IsImplied = poco.IsImplied;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Specific = poco.Specific.Id;
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
+            dto.Type = poco.Type.Id;
+            dto.TypedFeature = poco.TypedFeature.Id;
+
+            return dto;
+        }
     }
 }
 

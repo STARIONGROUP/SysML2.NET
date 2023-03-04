@@ -216,6 +216,38 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.Disjoining"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.Disjoining"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.Disjoining"/>
+        /// </returns>
+        public static Core.DTO.Disjoining ToDto(this Core.POCO.Disjoining poco)
+        {
+            var dto = new Core.DTO.Disjoining();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.DisjoiningType = poco.DisjoiningType.Id;
+            dto.ElementId = poco.ElementId;
+            dto.IsImplied = poco.IsImplied;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
+            dto.TypeDisjoined = poco.TypeDisjoined.Id;
+
+            return dto;
+        }
     }
 }
 

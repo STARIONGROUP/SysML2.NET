@@ -234,6 +234,40 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.TypeFeaturing"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.TypeFeaturing"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.TypeFeaturing"/>
+        /// </returns>
+        public static Core.DTO.TypeFeaturing ToDto(this Core.POCO.TypeFeaturing poco)
+        {
+            var dto = new Core.DTO.TypeFeaturing();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.Feature = poco.Feature.Id;
+            dto.FeatureOfType = poco.FeatureOfType.Id;
+            dto.FeaturingType = poco.FeaturingType.Id;
+            dto.IsImplied = poco.IsImplied;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
+            dto.Type = poco.Type.Id;
+
+            return dto;
+        }
     }
 }
 

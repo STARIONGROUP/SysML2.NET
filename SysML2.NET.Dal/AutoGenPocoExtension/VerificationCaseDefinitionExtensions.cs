@@ -149,6 +149,35 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.VerificationCaseDefinition"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.VerificationCaseDefinition"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.VerificationCaseDefinition"/>
+        /// </returns>
+        public static Core.DTO.VerificationCaseDefinition ToDto(this Core.POCO.VerificationCaseDefinition poco)
+        {
+            var dto = new Core.DTO.VerificationCaseDefinition();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.IsAbstract = poco.IsAbstract;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.IsIndividual = poco.IsIndividual;
+            dto.IsSufficient = poco.IsSufficient;
+            dto.IsVariation = poco.IsVariation;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            return dto;
+        }
     }
 }
 

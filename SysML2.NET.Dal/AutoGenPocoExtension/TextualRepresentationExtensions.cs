@@ -160,6 +160,34 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.TextualRepresentation"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.TextualRepresentation"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.TextualRepresentation"/>
+        /// </returns>
+        public static Core.DTO.TextualRepresentation ToDto(this Core.POCO.TextualRepresentation poco)
+        {
+            var dto = new Core.DTO.TextualRepresentation();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.Annotation = poco.Annotation.Select(x => x.Id).ToList();
+            dto.Body = poco.Body;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.Language = poco.Language;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            return dto;
+        }
     }
 }
 

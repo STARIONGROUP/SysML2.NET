@@ -145,6 +145,33 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.Classifier"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.Classifier"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.Classifier"/>
+        /// </returns>
+        public static Core.DTO.Classifier ToDto(this Core.POCO.Classifier poco)
+        {
+            var dto = new Core.DTO.Classifier();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.IsAbstract = poco.IsAbstract;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.IsSufficient = poco.IsSufficient;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            return dto;
+        }
     }
 }
 

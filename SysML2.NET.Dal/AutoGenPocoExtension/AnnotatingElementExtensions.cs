@@ -156,6 +156,32 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.AnnotatingElement"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.AnnotatingElement"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.AnnotatingElement"/>
+        /// </returns>
+        public static Core.DTO.AnnotatingElement ToDto(this Core.POCO.AnnotatingElement poco)
+        {
+            var dto = new Core.DTO.AnnotatingElement();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.Annotation = poco.Annotation.Select(x => x.Id).ToList();
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            return dto;
+        }
     }
 }
 

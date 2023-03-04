@@ -149,6 +149,35 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.ConstraintDefinition"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.ConstraintDefinition"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.ConstraintDefinition"/>
+        /// </returns>
+        public static Core.DTO.ConstraintDefinition ToDto(this Core.POCO.ConstraintDefinition poco)
+        {
+            var dto = new Core.DTO.ConstraintDefinition();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.IsAbstract = poco.IsAbstract;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.IsIndividual = poco.IsIndividual;
+            dto.IsSufficient = poco.IsSufficient;
+            dto.IsVariation = poco.IsVariation;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            return dto;
+        }
     }
 }
 

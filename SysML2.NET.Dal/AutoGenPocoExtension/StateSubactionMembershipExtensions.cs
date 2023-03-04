@@ -233,6 +233,43 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.StateSubactionMembership"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.StateSubactionMembership"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.StateSubactionMembership"/>
+        /// </returns>
+        public static Core.DTO.StateSubactionMembership ToDto(this Core.POCO.StateSubactionMembership poco)
+        {
+            var dto = new Core.DTO.StateSubactionMembership();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.Feature = poco.Feature.Id;
+            dto.IsImplied = poco.IsImplied;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.Kind = poco.Kind;
+            dto.MemberElement = poco.MemberElement.Id;
+            dto.MemberName = poco.MemberName;
+            dto.MemberShortName = poco.MemberShortName;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
+            dto.Type = poco.Type.Id;
+            dto.Visibility = poco.Visibility;
+
+            return dto;
+        }
     }
 }
 

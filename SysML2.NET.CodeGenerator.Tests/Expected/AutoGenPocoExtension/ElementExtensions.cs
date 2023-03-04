@@ -24,15 +24,15 @@
 
 namespace SysML2.NET.Dal
 {
-	using System;
-	using System.Collections.Concurrent;
-	using System.Collections.Generic;
-	
-	/// <summary>
-	/// A static class that provides extension methods for the <see cref="Core.POCO.IElement"/> class
-	/// </summary>
-	public static class ElementExtensions
-	{
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    
+    /// <summary>
+    /// A static class that provides extension methods for the <see cref="Core.POCO.IElement"/> class
+    /// </summary>
+    public static class ElementExtensions
+    {
         /// <summary>
         /// Updates the value properties of the <see cref="Core.POCO.IElement"/> by setting the value equal to that of the dto.
         /// Removes deleted objects from the reference properties and returns the unique identifiers
@@ -51,25 +51,25 @@ namespace SysML2.NET.Dal
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
         public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.IElement poco, Core.DTO.IElement dto)
-		{
-			if (poco == null)
-			{
-				throw new ArgumentNullException(nameof(poco), $"the {nameof(poco)} may not be null");
-			}
+        {
+            if (poco == null)
+            {
+                throw new ArgumentNullException(nameof(poco), $"the {nameof(poco)} may not be null");
+            }
 
-			if (dto == null)
-			{
-				throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
-			}
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
+            }
 
-			switch (poco)
-			{
-				case Core.POCO.PartDefinition partDefinition:
-					return partDefinition.UpdateValueAndRemoveDeletedReferenceProperties(dto);
-				default:
-					throw new NotSupportedException($"{poco.GetType().Name} not yet supported");
-			}
-		}
+            switch (poco)
+            {
+                case Core.POCO.PartDefinition partDefinition:
+                    return partDefinition.UpdateValueAndRemoveDeletedReferenceProperties(dto);
+                default:
+                    throw new NotSupportedException($"{poco.GetType().Name} not yet supported");
+            }
+        }
 
         /// <summary>
         /// Updates the Reference properties of the <see cref="Core.POCO.IElement"/> using the data (identifiers) encapsulated in the DTO
@@ -87,24 +87,24 @@ namespace SysML2.NET.Dal
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
         public static void UpdateReferenceProperties(this Core.POCO.IElement poco, Core.DTO.IElement dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
-		{
-			if (poco == null)
-			{
-				throw new ArgumentNullException(nameof(poco), $"the {nameof(poco)} may not be null");
-			}
+        {
+            if (poco == null)
+            {
+                throw new ArgumentNullException(nameof(poco), $"the {nameof(poco)} may not be null");
+            }
 
-			if (dto == null)
-			{
-				throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
-			}
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
+            }
 
-			if (cache == null)
-			{
-				throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
-			}
+            if (cache == null)
+            {
+                throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
+            }
 
-			switch (poco)
-			{
+            switch (poco)
+            {
                 case Core.POCO.AnnotatingElement annotatingElement:
                     annotatingElement.UpdateReferenceProperties((Core.DTO.AnnotatingElement)dto, cache);
                     break;
@@ -133,10 +133,10 @@ namespace SysML2.NET.Dal
                     literalRational.UpdateReferenceProperties((Core.DTO.LiteralRational)dto, cache);
                     break;
                 default:
-					throw new NotSupportedException($"{poco.GetType().Name} not yet supported");
-			}
-		}
-	}
+                    throw new NotSupportedException($"{poco.GetType().Name} not yet supported");
+            }
+        }
+    }
 }
 
 // ------------------------------------------------------------------------------------------------

@@ -226,6 +226,50 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.InterfaceUsage"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.InterfaceUsage"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.InterfaceUsage"/>
+        /// </returns>
+        public static Core.DTO.InterfaceUsage ToDto(this Core.POCO.InterfaceUsage poco)
+        {
+            var dto = new Core.DTO.InterfaceUsage();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.Direction = poco.Direction;
+            dto.ElementId = poco.ElementId;
+            dto.IsAbstract = poco.IsAbstract;
+            dto.IsComposite = poco.IsComposite;
+            dto.IsDerived = poco.IsDerived;
+            dto.IsDirected = poco.IsDirected;
+            dto.IsEnd = poco.IsEnd;
+            dto.IsImplied = poco.IsImplied;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.IsIndividual = poco.IsIndividual;
+            dto.IsOrdered = poco.IsOrdered;
+            dto.IsPortion = poco.IsPortion;
+            dto.IsReadOnly = poco.IsReadOnly;
+            dto.IsSufficient = poco.IsSufficient;
+            dto.IsUnique = poco.IsUnique;
+            dto.IsVariation = poco.IsVariation;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.PortionKind = poco.PortionKind;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
+
+            return dto;
+        }
     }
 }
 

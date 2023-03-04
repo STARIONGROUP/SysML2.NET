@@ -234,6 +234,40 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.Subclassification"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.Subclassification"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.Subclassification"/>
+        /// </returns>
+        public static Core.DTO.Subclassification ToDto(this Core.POCO.Subclassification poco)
+        {
+            var dto = new Core.DTO.Subclassification();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.ElementId = poco.ElementId;
+            dto.General = poco.General.Id;
+            dto.IsImplied = poco.IsImplied;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Specific = poco.Specific.Id;
+            dto.Subclassifier = poco.Subclassifier.Id;
+            dto.Superclassifier = poco.Superclassifier.Id;
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
+
+            return dto;
+        }
     }
 }
 

@@ -161,6 +161,41 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.InvocationExpression"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.InvocationExpression"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.InvocationExpression"/>
+        /// </returns>
+        public static Core.DTO.InvocationExpression ToDto(this Core.POCO.InvocationExpression poco)
+        {
+            var dto = new Core.DTO.InvocationExpression();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.Direction = poco.Direction;
+            dto.ElementId = poco.ElementId;
+            dto.IsAbstract = poco.IsAbstract;
+            dto.IsComposite = poco.IsComposite;
+            dto.IsDerived = poco.IsDerived;
+            dto.IsEnd = poco.IsEnd;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.IsOrdered = poco.IsOrdered;
+            dto.IsPortion = poco.IsPortion;
+            dto.IsReadOnly = poco.IsReadOnly;
+            dto.IsSufficient = poco.IsSufficient;
+            dto.IsUnique = poco.IsUnique;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            return dto;
+        }
     }
 }
 

@@ -169,6 +169,45 @@ namespace SysML2.NET.Dal
             }
 
         }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.AssertConstraintUsage"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.AssertConstraintUsage"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.AssertConstraintUsage"/>
+        /// </returns>
+        public static Core.DTO.AssertConstraintUsage ToDto(this Core.POCO.AssertConstraintUsage poco)
+        {
+            var dto = new Core.DTO.AssertConstraintUsage();
+
+            dto.Id = poco.Id;
+            dto.AliasIds = poco.AliasIds;
+            dto.DeclaredName = poco.DeclaredName;
+            dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.Direction = poco.Direction;
+            dto.ElementId = poco.ElementId;
+            dto.IsAbstract = poco.IsAbstract;
+            dto.IsComposite = poco.IsComposite;
+            dto.IsDerived = poco.IsDerived;
+            dto.IsEnd = poco.IsEnd;
+            dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.IsIndividual = poco.IsIndividual;
+            dto.IsNegated = poco.IsNegated;
+            dto.IsOrdered = poco.IsOrdered;
+            dto.IsPortion = poco.IsPortion;
+            dto.IsReadOnly = poco.IsReadOnly;
+            dto.IsSufficient = poco.IsSufficient;
+            dto.IsUnique = poco.IsUnique;
+            dto.IsVariation = poco.IsVariation;
+            dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.PortionKind = poco.PortionKind;
+
+            return dto;
+        }
     }
 }
 
