@@ -30,6 +30,7 @@ namespace SysML2.NET.Dal.Tests
 	/// <summary>
 	/// Suite of tests for the <see cref="Assembler"/> class
 	/// </summary>
+	[TestFixture]
 	public class AssemblerTestFixture
 	{
 		private IAssembler assembler;
