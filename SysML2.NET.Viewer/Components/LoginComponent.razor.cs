@@ -69,8 +69,28 @@ namespace SysML2.NET.Viewer.Components
         /// </summary>
         public void Dispose()
         {
-            this.disposables.ForEach(x => x.Dispose());
-            this.disposables.Clear();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">
+        /// A value indicating whether we are performing cleanup or not
+        /// </param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.disposables.ForEach(x => x.Dispose());
+                this.disposables.Clear();
+            }
+        }
+
+        ~LoginComponent()
+        {
+            this.Dispose(false);
         }
     }
 }

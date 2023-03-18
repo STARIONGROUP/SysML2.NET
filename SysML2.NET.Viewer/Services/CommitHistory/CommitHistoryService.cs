@@ -74,7 +74,7 @@ namespace SysML2.NET.Viewer.Services.CommitHistory
 
             if (head == null)
             {
-				this.logger.LogWarning($"The head commit is missing from the Branch:{branch.Id}");
+				this.logger.LogWarning("The head commit is missing from the Branch:{branch}", branch.Id);
             }
 
             result.Add(head);
