@@ -34,9 +34,9 @@ namespace SysML2.NET.Core.DTO
     /// A ConnectionUsage is a ConnectorAsUsage that is also a PartUsage. Nominally, if its type is a
     /// ConnectionDefinition, then a ConnectionUsage is a Usage of that ConnectionDefinition, representing a
     /// connection between parts of a system. However, other kinds of kernel AssociationStructures are also
-    /// allowed, to permit use of AssociationStructures from the Kernel Model
-    /// Libraries.specializesFromLibrary("Connections::connections")ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Connections::binaryConnections")
+    /// allowed, to permit use of AssociationStructures from the Kernel Library (such as the default
+    /// BinaryLinkObject).A ConnectionUsage must subset the base ConnectionUsage connections from the
+    /// Systems model library.
     /// </summary>
     public partial interface IConnectionUsage : IConnectorAsUsage, IPartUsage
     {

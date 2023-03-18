@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", booleanExpressionInstance.AliasIds);
-            dictionary.Add("declaredName", booleanExpressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", booleanExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", booleanExpressionInstance.Direction);
             dictionary.Add("elementId", booleanExpressionInstance.ElementId);
             dictionary.Add("isAbstract", booleanExpressionInstance.IsAbstract);
@@ -122,8 +120,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", booleanExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", booleanExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", booleanExpressionInstance.IsUnique);
+            dictionary.Add("name", booleanExpressionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", booleanExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", booleanExpressionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", booleanExpressionInstance.ShortName);
 
             return dictionary;
         }
@@ -151,8 +151,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", booleanExpressionInstance.AliasIds);
-            dictionary.Add("declaredName", booleanExpressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", booleanExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", booleanExpressionInstance.Direction);
             dictionary.Add("elementId", booleanExpressionInstance.ElementId);
             dictionary.Add("isAbstract", booleanExpressionInstance.IsAbstract);
@@ -165,8 +163,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", booleanExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", booleanExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", booleanExpressionInstance.IsUnique);
+            dictionary.Add("name", booleanExpressionInstance.Name);
             dictionary.Add("ownedRelationship", booleanExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", booleanExpressionInstance.OwningRelationship);
+            dictionary.Add("shortName", booleanExpressionInstance.ShortName);
 
             return dictionary;
         }

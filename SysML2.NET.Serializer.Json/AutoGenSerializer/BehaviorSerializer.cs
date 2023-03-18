@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iBehavior.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iBehavior.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iBehavior.ElementId);
 
@@ -86,6 +82,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iBehavior.IsSufficient);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iBehavior.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iBehavior.OwnedRelationship)
             {
@@ -102,6 +100,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iBehavior.ShortName);
             writer.WriteEndObject();
         }
     }

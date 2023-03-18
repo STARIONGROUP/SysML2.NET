@@ -31,13 +31,10 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A VerificationCaseUsage is a Usage of a VerificationCaseDefinition.verifiedRequirement =    if
-    /// objectiveRequirement = null then OrderedSet{}    else        
-    /// objectiveRequirement.featureMembership->            selectByKind(RequirementVerificationMembership).
-    ///            verifiedRequirement->asOrderedSet()   
-    /// endifspecializesFromLibrary('VerificationCases::verificationCases')isComposite and owningType <>
-    /// null and    (owningType.oclIsKindOf(VerificationCaseDefinition) or    
-    /// owningType.oclIsKindOf(VerificationCaseUsage))
+    /// A VerificationCaseUsage is a Usage of a VerificationCaseDefinition.A VerificationCaseUsage must
+    /// subset, directly or indirectly, either the base VerificationCaseUsage verificationCases from the
+    /// Systems model library, if it is not owned by a VerificationCaseDefinition or VerificationCaseUsage,
+    /// or the VerificationCaseUsage subVerificationCases inherited from its owner, otherwise.
     /// </summary>
     public partial interface IVerificationCaseUsage : ICaseUsage
     {

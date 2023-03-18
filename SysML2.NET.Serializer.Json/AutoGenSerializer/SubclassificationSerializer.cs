@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iSubclassification.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iSubclassification.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iSubclassification.ElementId);
 
@@ -86,6 +82,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iSubclassification.IsImpliedIncluded);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iSubclassification.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iSubclassification.OwnedRelatedElement)
             {
@@ -118,6 +116,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iSubclassification.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iSubclassification.Source)
             {

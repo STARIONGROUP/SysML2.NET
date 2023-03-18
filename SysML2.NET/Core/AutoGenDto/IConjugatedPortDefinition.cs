@@ -31,14 +31,14 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConjugatedPortDefinition is a PortDefinition that is a PortDefinition of its original
+    /// A ConjugatedPortDefinition is a PortDefinition that is a PortConjugation of its original
     /// PortDefinition. That is, a ConjugatedPortDefinition inherits all the features of the original
     /// PortDefinition, but input flows of the original PortDefinition become outputs on the
     /// ConjugatedPortDefinition and output flows of the original PortDefinition become inputs on the
     /// ConjugatedPortDefinition. Every PortDefinition (that is not itself a ConjugatedPortDefinition) has
     /// exactly one corresponding ConjugatedPortDefinition, whose effective name is the name of the
-    /// originalPortDefinition, with the character ~ prepended.ownedPortConjugator.originalPortDefinition =
-    /// originalPortDefinitionconjugatedPortDefinition = null
+    /// originalPortDefinition, with the character ~ prepended.originalPortDefinition =
+    /// ownedPortConjugator.originalPortDefinitionconjugatedPortDefinition = null
     /// </summary>
     public partial interface IConjugatedPortDefinition : IPortDefinition
     {

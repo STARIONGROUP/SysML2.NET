@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iForkNode.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iForkNode.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iForkNode.Direction.HasValue)
             {
@@ -122,6 +118,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iForkNode.IsVariation);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iForkNode.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iForkNode.OwnedRelationship)
             {
@@ -147,6 +145,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iForkNode.ShortName);
             writer.WriteEndObject();
         }
     }

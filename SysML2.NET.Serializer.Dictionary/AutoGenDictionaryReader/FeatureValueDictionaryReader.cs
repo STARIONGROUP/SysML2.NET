@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
@@ -170,6 +158,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string memberShortNameFeature = memberShortNameObject == null ? null : Convert.ToString(memberShortNameObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
@@ -194,6 +188,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
@@ -214,8 +214,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             featureValueInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            featureValueInstance.DeclaredName = declaredNameFeature;
-            featureValueInstance.DeclaredShortName = declaredShortNameFeature;
             featureValueInstance.ElementId = elementIdFeature;
             featureValueInstance.IsDefault = isDefaultFeature;
             featureValueInstance.IsImplied = isImpliedFeature;
@@ -224,10 +222,12 @@ namespace SysML2.NET.Serializer.Dictionary
             featureValueInstance.MemberElement = memberElementFeature;
             featureValueInstance.MemberName = memberNameFeature;
             featureValueInstance.MemberShortName = memberShortNameFeature;
+            featureValueInstance.Name = nameFeature;
             featureValueInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             featureValueInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             featureValueInstance.OwningRelatedElement = owningRelatedElementFeature;
             featureValueInstance.OwningRelationship = owningRelationshipFeature;
+            featureValueInstance.ShortName = shortNameFeature;
             featureValueInstance.Source = sourceFeature ?? new List<Guid>();
             featureValueInstance.Target = targetFeature ?? new List<Guid>();
             featureValueInstance.Visibility = visibilityFeature;
@@ -255,18 +255,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
@@ -315,6 +303,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string memberShortNameFeature = memberShortNameObject == null ? null : Convert.ToString(memberShortNameObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
@@ -339,6 +333,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a FeatureValue");
@@ -359,8 +359,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             featureValueInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            featureValueInstance.DeclaredName = declaredNameFeature;
-            featureValueInstance.DeclaredShortName = declaredShortNameFeature;
             featureValueInstance.ElementId = elementIdFeature;
             featureValueInstance.IsDefault = isDefaultFeature;
             featureValueInstance.IsImplied = isImpliedFeature;
@@ -369,10 +367,12 @@ namespace SysML2.NET.Serializer.Dictionary
             featureValueInstance.MemberElement = memberElementFeature;
             featureValueInstance.MemberName = memberNameFeature;
             featureValueInstance.MemberShortName = memberShortNameFeature;
+            featureValueInstance.Name = nameFeature;
             featureValueInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             featureValueInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             featureValueInstance.OwningRelatedElement = owningRelatedElementFeature;
             featureValueInstance.OwningRelationship = owningRelationshipFeature;
+            featureValueInstance.ShortName = shortNameFeature;
             featureValueInstance.Source = sourceFeature ?? new List<Guid>();
             featureValueInstance.Target = targetFeature ?? new List<Guid>();
             featureValueInstance.Visibility = visibilityFeature;

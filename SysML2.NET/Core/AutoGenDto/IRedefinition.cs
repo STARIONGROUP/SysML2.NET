@@ -31,24 +31,19 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// Redefinition is a kind of Subsetting that requires the redefinedFeature and the redefiningFeature to
-    /// have the same values (on each instance of the domain of the redefiningFeature). This means any
-    /// restrictions on the redefiningFeature, such as type or multiplicity, also apply to the
-    /// redefinedFeature (on each instance of the domain of the redefiningFeature), and vice versa. The
-    /// redefinedFeature might have values for instances of the domain of the redefiningFeature, but only as
-    /// instances of the domain of the redefinedFeature that happen to also be instances of the domain of
-    /// the redefiningFeature. This is supported by the constraints inherited from Subsetting on the domains
-    /// of the redefiningFeature and redefinedFeature. However, these constraints are narrowed for
-    /// Redefinition to require the owningTypes of the redefiningFeature and redefinedFeature to be
-    /// different and the redefinedFeature to not be inherited into the owningNamespace of the
-    /// redefiningFeature.This enables the redefiningFeature to have the same name as the redefinedFeature,
-    /// if desired.let anythingType: Type =   
-    /// subsettingFeature.resolveGlobal('Base::Anything').oclAsType(Type) in -- Including "Anything"
-    /// accounts for implicit featuringType of Features-- with no explicit featuringType.let
-    /// subsettingFeaturingTypes: Set(Type) =   
-    /// subsettingFeature.featuringTypes->asSet()->including(anythingType) inlet subsettedFeaturingTypes:
-    /// Set(Type) =    subsettedFeature.featuringTypes->asSet()->including(anythingType)
-    /// insubsettingFeaturingTypes <> subsettedFeaturingType
+    /// Redefinition specializes Subsetting to require the redefinedFeature and
+    /// the redefiningFeature to have the same values (on each instance of the domain of the
+    /// redefiningFeature). This means any restrictions on the redefiningFeature, such as type or
+    /// multiplicity, also apply to the redefinedFeature (on each instance of the owningType of the
+    /// redefining Feature), and vice versa. The redefinedFeature might have values for instances of
+    /// the owningType of the redefiningFeature, but only as instances of the owningType of the
+    /// redefinedFeature that happen to also be instances of the owningType of the redefiningFeature. This
+    /// is supported by the constraints inherited from Subsetting on the domains of the
+    /// redefiningFeature and redefinedFeature. However, these constraints are narrowed for Redefinition to
+    /// require the owningTypes of the redefiningFeature and redefinedFeature to be different and the
+    /// redefinedFeature to not be imported into the owningNamespace of the
+    /// redefiningFeature. This enables the redefiningFeature to have the same name as the
+    /// redefinedFeature if desired.
     /// </summary>
     public partial interface IRedefinition : ISubsetting
     {

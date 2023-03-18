@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", renderingDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", renderingDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", renderingDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", renderingDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", renderingDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", renderingDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", renderingDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", renderingDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", renderingDefinitionInstance.IsVariation);
+            dictionary.Add("name", renderingDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", renderingDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", renderingDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", renderingDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", renderingDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", renderingDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", renderingDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", renderingDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", renderingDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", renderingDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", renderingDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", renderingDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", renderingDefinitionInstance.IsVariation);
+            dictionary.Add("name", renderingDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", renderingDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", renderingDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", renderingDefinitionInstance.ShortName);
 
             return dictionary;
         }

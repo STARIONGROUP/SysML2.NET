@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iInteraction.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iInteraction.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iInteraction.ElementId);
 
@@ -89,6 +85,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iInteraction.IsSufficient);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iInteraction.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iInteraction.OwnedRelatedElement)
             {
@@ -121,6 +119,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iInteraction.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iInteraction.Source)
             {

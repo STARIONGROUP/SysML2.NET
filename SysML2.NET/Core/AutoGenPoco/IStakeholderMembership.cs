@@ -31,10 +31,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A StakeholderMembership is a ParameterMembership that identifies a PartUsage as a
-    /// stakeholderParameter of a RequirementDefinition or RequirementUsage, which specifies a role played
-    /// by an entity with concerns framed by the owningType.owningType.oclIsKindOf(RequirementUsage)
-    /// orowningType.oclIsKindOf(RequirementDefinition)
+    /// A StakeholderMembership is a ParameterMembership that identifies a PartUsage as a stakeholder
+    /// parameter, which specifies a role played by an entity with Concerns framed by the parametered
+    /// requirement.
     /// </summary>
     public partial interface IStakeholderMembership : IParameterMembership
     {

@@ -42,7 +42,7 @@ namespace SysML2.NET.Core
         /// An intermediate level of visibility between public and private. By default, it is equivalent to
         /// private for the purposes of normal access to and import of Elements from a Namespace. However, other
         /// Relationships may be specified to include Memberships with protected visibility in the list of
-        /// memberships for a Namespace (e.g., Specialization).
+        /// memberships for a Namespace (e.g., Generalization).
         /// </summary>
         Protected = 1,
 

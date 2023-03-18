@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", stepInstance.AliasIds);
-            dictionary.Add("declaredName", stepInstance.DeclaredName);
-            dictionary.Add("declaredShortName", stepInstance.DeclaredShortName);
             dictionary.Add("direction", stepInstance.Direction);
             dictionary.Add("elementId", stepInstance.ElementId);
             dictionary.Add("isAbstract", stepInstance.IsAbstract);
@@ -122,8 +120,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", stepInstance.IsReadOnly);
             dictionary.Add("isSufficient", stepInstance.IsSufficient);
             dictionary.Add("isUnique", stepInstance.IsUnique);
+            dictionary.Add("name", stepInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", stepInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", stepInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", stepInstance.ShortName);
 
             return dictionary;
         }
@@ -151,8 +151,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", stepInstance.AliasIds);
-            dictionary.Add("declaredName", stepInstance.DeclaredName);
-            dictionary.Add("declaredShortName", stepInstance.DeclaredShortName);
             dictionary.Add("direction", stepInstance.Direction);
             dictionary.Add("elementId", stepInstance.ElementId);
             dictionary.Add("isAbstract", stepInstance.IsAbstract);
@@ -165,8 +163,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", stepInstance.IsReadOnly);
             dictionary.Add("isSufficient", stepInstance.IsSufficient);
             dictionary.Add("isUnique", stepInstance.IsUnique);
+            dictionary.Add("name", stepInstance.Name);
             dictionary.Add("ownedRelationship", stepInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", stepInstance.OwningRelationship);
+            dictionary.Add("shortName", stepInstance.ShortName);
 
             return dictionary;
         }

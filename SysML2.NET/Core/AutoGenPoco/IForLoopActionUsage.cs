@@ -31,16 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ForLoopActionUsage is a LoopActionUsage that specifies that its bodyClause ActionUsage should be
-    /// performed once for each value, in order, from the sequence of values obtained as the result of the
-    /// seqArgument Expression, with the loopVariable set to the value for each iteration.seqArgument =   
-    /// let parameter : Feature = inputParameter(1) in    if parameter <> null and
-    /// parameter.oclIsKindOf(Expression) then        parameter.oclAsType(Expression)    else        null   
-    /// endifisSubactionUsage() implies    specializesFromLibrary('Actions::Action::forLoops')loopVariable
-    /// <> null
-    /// andloopVariable.redefinesFromLibrary('Actions::ForLoopAction::var')specializesFromLibrary('Actions::forLoopActions')loopVariable
-    /// =    if ownedFeature->isEmpty() or         not ownedFeature->first().oclIsKindOf(ReferenceUsage)
-    /// then         null    else         ownedFeature->first().oclAsType(ReferenceUsage)    endif
+    /// A ForLoopActionUsage is a LoopActionUsage that is typed, directly or indirectly, by the
+    /// ActionDefinition ForLoopAction from the Systems model library. It specifies that the bodyClause
+    /// ActionUsage should be performed once for each value, in order, from the sequence of values obtained
+    /// as the result of the seqArgument Expression. The bodyAction must have one input parameter, which
+    /// receives a value from the sequence on each iteration.
     /// </summary>
     public partial interface IForLoopActionUsage : ILoopActionUsage
     {

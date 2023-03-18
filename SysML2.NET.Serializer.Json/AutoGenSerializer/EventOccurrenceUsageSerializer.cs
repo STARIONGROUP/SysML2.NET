@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iEventOccurrenceUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iEventOccurrenceUsage.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iEventOccurrenceUsage.Direction.HasValue)
             {
@@ -122,6 +118,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsVariation);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iEventOccurrenceUsage.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iEventOccurrenceUsage.OwnedRelationship)
             {
@@ -147,6 +145,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iEventOccurrenceUsage.ShortName);
             writer.WriteEndObject();
         }
     }

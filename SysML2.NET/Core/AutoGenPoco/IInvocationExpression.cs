@@ -32,11 +32,9 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An InvocationExpression is an Expression each of whose input parameters are bound to the result of
-    /// an argument Expression.not ownedTyping->exists(oclIsKindOf(Behavior)) andnot
-    /// ownedSubsetting.subsettedFeature.type->exists(oclIsKindOf(Behavior)) implies   
-    /// ownedFeature.selectByKind(BindingConnector)->exists(        relatedFeature->includes(self) and      
-    ///  relatedFeature->includes(result))            TBDownedFeature->    select(direction =
-    /// _'in').valuation->    select(v | v <> null).value
+    /// an owned argument Expression. Each input parameter may be bound to the result of at most one
+    /// argument.isModelLevelEvaluable =     argument->forAll(isModelLevelEvaluable) and    
+    /// function.isModelLevelEvaluable
     /// </summary>
     public partial interface IInvocationExpression : IExpression
     {

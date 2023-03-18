@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
@@ -158,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
@@ -176,19 +170,25 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string reqIdFeature = reqIdObject == null ? null : Convert.ToString(reqIdObject);
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             viewpointDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            viewpointDefinitionInstance.DeclaredName = declaredNameFeature;
-            viewpointDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             viewpointDefinitionInstance.ElementId = elementIdFeature;
             viewpointDefinitionInstance.IsAbstract = isAbstractFeature;
             viewpointDefinitionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             viewpointDefinitionInstance.IsIndividual = isIndividualFeature;
             viewpointDefinitionInstance.IsSufficient = isSufficientFeature;
             viewpointDefinitionInstance.IsVariation = isVariationFeature;
+            viewpointDefinitionInstance.Name = nameFeature;
             viewpointDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             viewpointDefinitionInstance.OwningRelationship = owningRelationshipFeature;
             viewpointDefinitionInstance.ReqId = reqIdFeature;
+            viewpointDefinitionInstance.ShortName = shortNameFeature;
 
             return viewpointDefinitionInstance;
         }
@@ -213,18 +213,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
@@ -261,6 +249,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
@@ -279,19 +273,25 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string reqIdFeature = reqIdObject == null ? null : Convert.ToString(reqIdObject);
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ViewpointDefinition");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             viewpointDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            viewpointDefinitionInstance.DeclaredName = declaredNameFeature;
-            viewpointDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             viewpointDefinitionInstance.ElementId = elementIdFeature;
             viewpointDefinitionInstance.IsAbstract = isAbstractFeature;
             viewpointDefinitionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             viewpointDefinitionInstance.IsIndividual = isIndividualFeature;
             viewpointDefinitionInstance.IsSufficient = isSufficientFeature;
             viewpointDefinitionInstance.IsVariation = isVariationFeature;
+            viewpointDefinitionInstance.Name = nameFeature;
             viewpointDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             viewpointDefinitionInstance.OwningRelationship = owningRelationshipFeature;
             viewpointDefinitionInstance.ReqId = reqIdFeature;
+            viewpointDefinitionInstance.ShortName = shortNameFeature;
 
             return viewpointDefinitionInstance;
         }

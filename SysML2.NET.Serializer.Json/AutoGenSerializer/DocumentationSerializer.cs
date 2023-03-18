@@ -80,10 +80,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("body");
             writer.WriteStringValue(iDocumentation.Body);
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iDocumentation.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iDocumentation.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iDocumentation.ElementId);
 
@@ -92,6 +88,8 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("locale");
             writer.WriteStringValue(iDocumentation.Locale);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iDocumentation.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iDocumentation.OwnedRelationship)
             {
@@ -108,6 +106,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iDocumentation.ShortName);
             writer.WriteEndObject();
         }
     }

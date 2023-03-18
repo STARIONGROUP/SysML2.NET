@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
@@ -194,6 +182,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("operator", out object operatorObject))
             {
                 throw new ArgumentException("The operator property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
@@ -212,10 +206,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             featureChainExpressionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            featureChainExpressionInstance.DeclaredName = declaredNameFeature;
-            featureChainExpressionInstance.DeclaredShortName = declaredShortNameFeature;
             featureChainExpressionInstance.Direction = directionFeature;
             featureChainExpressionInstance.ElementId = elementIdFeature;
             featureChainExpressionInstance.IsAbstract = isAbstractFeature;
@@ -228,9 +226,11 @@ namespace SysML2.NET.Serializer.Dictionary
             featureChainExpressionInstance.IsReadOnly = isReadOnlyFeature;
             featureChainExpressionInstance.IsSufficient = isSufficientFeature;
             featureChainExpressionInstance.IsUnique = isUniqueFeature;
+            featureChainExpressionInstance.Name = nameFeature;
             featureChainExpressionInstance.Operator = operatorFeature;
             featureChainExpressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             featureChainExpressionInstance.OwningRelationship = owningRelationshipFeature;
+            featureChainExpressionInstance.ShortName = shortNameFeature;
 
             return featureChainExpressionInstance;
         }
@@ -254,18 +254,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -339,6 +327,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("operator", out object operatorObject))
             {
                 throw new ArgumentException("The operator property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
@@ -357,10 +351,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             featureChainExpressionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            featureChainExpressionInstance.DeclaredName = declaredNameFeature;
-            featureChainExpressionInstance.DeclaredShortName = declaredShortNameFeature;
             featureChainExpressionInstance.Direction = directionFeature;
             featureChainExpressionInstance.ElementId = elementIdFeature;
             featureChainExpressionInstance.IsAbstract = isAbstractFeature;
@@ -373,9 +371,11 @@ namespace SysML2.NET.Serializer.Dictionary
             featureChainExpressionInstance.IsReadOnly = isReadOnlyFeature;
             featureChainExpressionInstance.IsSufficient = isSufficientFeature;
             featureChainExpressionInstance.IsUnique = isUniqueFeature;
+            featureChainExpressionInstance.Name = nameFeature;
             featureChainExpressionInstance.Operator = operatorFeature;
             featureChainExpressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             featureChainExpressionInstance.OwningRelationship = owningRelationshipFeature;
+            featureChainExpressionInstance.ShortName = shortNameFeature;
 
             return featureChainExpressionInstance;
         }

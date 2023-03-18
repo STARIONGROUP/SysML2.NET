@@ -31,20 +31,17 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A VerificationCaseUsage is a Usage of a VerificationCaseDefinition.verifiedRequirement =    if
-    /// objectiveRequirement = null then OrderedSet{}    else        
-    /// objectiveRequirement.featureMembership->            selectByKind(RequirementVerificationMembership).
-    ///            verifiedRequirement->asOrderedSet()   
-    /// endifspecializesFromLibrary('VerificationCases::verificationCases')isComposite and owningType <>
-    /// null and    (owningType.oclIsKindOf(VerificationCaseDefinition) or    
-    /// owningType.oclIsKindOf(VerificationCaseUsage))
+    /// A VerificationCaseUsage is a Usage of a VerificationCaseDefinition.A VerificationCaseUsage must
+    /// subset, directly or indirectly, either the base VerificationCaseUsage verificationCases from the
+    /// Systems model library, if it is not owned by a VerificationCaseDefinition or VerificationCaseUsage,
+    /// or the VerificationCaseUsage subVerificationCases inherited from its owner, otherwise.
     /// </summary>
     public partial interface IVerificationCaseUsage : ICaseUsage
     {
         /// <summary>
         /// Queries the derived property VerificationCaseDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         VerificationCaseDefinition QueryVerificationCaseDefinition();
 
         /// <summary>

@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", flowConnectionDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", flowConnectionDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", flowConnectionDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", flowConnectionDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", flowConnectionDefinitionInstance.IsAbstract);
             dictionary.Add("isImplied", flowConnectionDefinitionInstance.IsImplied);
@@ -117,10 +115,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isIndividual", flowConnectionDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", flowConnectionDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", flowConnectionDefinitionInstance.IsVariation);
+            dictionary.Add("name", flowConnectionDefinitionInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", flowConnectionDefinitionInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", flowConnectionDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", flowConnectionDefinitionInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", flowConnectionDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", flowConnectionDefinitionInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", flowConnectionDefinitionInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", flowConnectionDefinitionInstance.Target)} ]");
 
@@ -150,8 +150,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", flowConnectionDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", flowConnectionDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", flowConnectionDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", flowConnectionDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", flowConnectionDefinitionInstance.IsAbstract);
             dictionary.Add("isImplied", flowConnectionDefinitionInstance.IsImplied);
@@ -159,10 +157,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isIndividual", flowConnectionDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", flowConnectionDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", flowConnectionDefinitionInstance.IsVariation);
+            dictionary.Add("name", flowConnectionDefinitionInstance.Name);
             dictionary.Add("ownedRelatedElement", flowConnectionDefinitionInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", flowConnectionDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", flowConnectionDefinitionInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", flowConnectionDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", flowConnectionDefinitionInstance.ShortName);
             dictionary.Add("source", flowConnectionDefinitionInstance.Source);
             dictionary.Add("target", flowConnectionDefinitionInstance.Target);
 

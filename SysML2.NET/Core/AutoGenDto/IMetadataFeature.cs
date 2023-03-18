@@ -33,18 +33,8 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A MetadataFeature is a Feature that is an AnnotatingElement used to annotate another Element with
     /// metadata. It is typed by a Metaclass. All its ownedFeatures must redefine features of its metaclass
-    /// and any feature bindings must be model-level
-    /// evaluable.specializesFromLibrary("Metaobjects::metaobjects")isSemantic() implies    let
-    /// annotatedTypes : Sequence(Type) =         annotatedElement->selectAsKind(Type) in    let baseTypes :
-    /// Sequence(MetadataFeature) =         evaluateFeature(resolveGlobal(           
-    /// 'Metaobjects::SemanticMetadata::baseType').            oclAsType(Feature))->       
-    /// selectAsKind(MetadataFeature) in    annotatedTypes->notEmpty() and     baseTypes()->notEmpty() and  
-    ///   baseTypes()->first().isSyntactic() implies        let annotatedType : Type =
-    /// annotatedTypes->first() in        let baseType : Element = baseTypes->first().syntaxElement() in    
-    ///    if annotatedType.oclIsKindOf(Classifier) and             baseType.oclIsKindOf(Feature) then      
-    ///      baseType.oclAsType(Feature).type->                forAll(t | annotatedType.specializes(t))     
-    ///   else if baseType.oclIsKindOf(Type) then           
-    /// annotatedType.specializes(baseType.oclAsType(Type))        else            true        endif
+    /// and any feature bindings must be model-level evaluable.A MetadataFeature must subset, directly or
+    /// indirectly, the base MetadataFeature metadata from the Kernel Library.
     /// </summary>
     public partial interface IMetadataFeature : IFeature, IAnnotatingElement
     {

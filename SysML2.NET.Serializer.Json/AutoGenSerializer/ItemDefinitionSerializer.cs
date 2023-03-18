@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iItemDefinition.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iItemDefinition.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iItemDefinition.ElementId);
 
@@ -92,6 +88,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iItemDefinition.IsVariation);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iItemDefinition.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iItemDefinition.OwnedRelationship)
             {
@@ -108,6 +106,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iItemDefinition.ShortName);
             writer.WriteEndObject();
         }
     }

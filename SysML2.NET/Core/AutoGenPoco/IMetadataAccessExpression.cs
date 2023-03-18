@@ -34,8 +34,7 @@ namespace SysML2.NET.Core.POCO
     /// A MetadataAccessExpression is an Expression whose result is a sequence of instances of Metaclasses
     /// representing all the MetadataFeature annotations of the referencedElement. In addition, the sequence
     /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
-    /// referencedElement, with values for all the abstract syntax properties of the
-    /// referencedElement.specializesFromLibrary("Performances::metadataAccessEvaluations")
+    /// referencedElement, with values for all the abstract syntax properties of the Element.
     /// </summary>
     public partial interface IMetadataAccessExpression : IExpression
     {
@@ -43,7 +42,7 @@ namespace SysML2.NET.Core.POCO
         /// The Element whose metadata is being accessed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        IElement ReferencedElement { get; set; }
+        Element ReferencedElement { get; set; }
 
     }
 }

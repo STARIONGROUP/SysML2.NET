@@ -31,25 +31,16 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An ItemFlow is a Step that represents the transfer of objects or data values from one Feature to
-    /// another. ItemFlows can take non-zero time to complete.if itemFlowEnds->isEmpty() then   
-    /// specializesFromLibrary("Transfers::transfers")else   
-    /// specializesFromLibrary("Transfers::flowTransfers")endifitemType =    if itemFeature = null then
-    /// Sequence{}    else itemFeature.type    endifsourceOutputFeature =    if connectorEnd->isEmpty() or  
-    ///       connectorEnd.ownedFeature->isEmpty()    then null    else connectorEnd.ownedFeature->first()  
-    ///  endiftargetInputFeature =    if connectorEnd->size() < 2 or        
-    /// connectorEnd->at(2).ownedFeature->isEmpty()    then null    else
-    /// connectorEnd->at(2).ownedFeature->first()    endifitemFlowEnd =
-    /// connectorEnd->selectByKind(ItemFlowEnd)itemFeature =    let itemFeatures : Sequence(ItemFeature) =  
-    ///       ownedFeature->selectByKind(ItemFeature) in    if itemFeatures->isEmpty() then null    else
-    /// itemFeatures->first()    endifownedFeature->selectByKind(ItemFeature)->size() <= 1
+    /// An ItemFlow is a Step that represents the transfer of objects or values from one Feature to another.
+    /// ItemFlows can take non-zero time to complete.An ItemFlow must be typed by the Interaction Transfer
+    /// from the Kernel Semantic Library, or a specialization of it.
     /// </summary>
     public partial interface IItemFlow : IConnector, IStep
     {
         /// <summary>
         /// Queries the derived property Interaction
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Interaction> QueryInteraction();
 
         /// <summary>
@@ -61,8 +52,14 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property ItemFlowEnd
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: 2, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 2, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<ItemFlowEnd> QueryItemFlowEnd();
+
+        /// <summary>
+        /// Queries the derived property ItemFlowFeature
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 2, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        List<ItemFlowFeature> QueryItemFlowFeature();
 
         /// <summary>
         /// Queries the derived property ItemType

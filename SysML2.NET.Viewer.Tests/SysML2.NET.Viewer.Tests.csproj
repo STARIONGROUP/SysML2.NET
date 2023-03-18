@@ -40,8 +40,4 @@
     <Folder Include="ViewModels\Components\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SysML2.NET.Viewer\SysML2.NET.Viewer.csproj" />
-  </ItemGroup>
-
 </Project>

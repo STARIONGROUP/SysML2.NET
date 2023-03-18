@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
@@ -145,6 +133,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -175,6 +169,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The referencedFeature property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
             }
             Guid referencedFeatureFeature = Guid.Parse(Convert.ToString(referencedFeatureObject));
+
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
@@ -208,17 +208,17 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             referenceSubsettingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            referenceSubsettingInstance.DeclaredName = declaredNameFeature;
-            referenceSubsettingInstance.DeclaredShortName = declaredShortNameFeature;
             referenceSubsettingInstance.ElementId = elementIdFeature;
             referenceSubsettingInstance.General = generalFeature;
             referenceSubsettingInstance.IsImplied = isImpliedFeature;
             referenceSubsettingInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            referenceSubsettingInstance.Name = nameFeature;
             referenceSubsettingInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             referenceSubsettingInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             referenceSubsettingInstance.OwningRelatedElement = owningRelatedElementFeature;
             referenceSubsettingInstance.OwningRelationship = owningRelationshipFeature;
             referenceSubsettingInstance.ReferencedFeature = referencedFeatureFeature;
+            referenceSubsettingInstance.ShortName = shortNameFeature;
             referenceSubsettingInstance.Source = sourceFeature ?? new List<Guid>();
             referenceSubsettingInstance.Specific = specificFeature;
             referenceSubsettingInstance.SubsettedFeature = subsettedFeatureFeature;
@@ -248,18 +248,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
@@ -283,6 +271,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -313,6 +307,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The referencedFeature property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
             }
             Guid referencedFeatureFeature = Guid.Parse(Convert.ToString(referencedFeatureObject));
+
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ReferenceSubsetting");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
@@ -346,17 +346,17 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             referenceSubsettingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            referenceSubsettingInstance.DeclaredName = declaredNameFeature;
-            referenceSubsettingInstance.DeclaredShortName = declaredShortNameFeature;
             referenceSubsettingInstance.ElementId = elementIdFeature;
             referenceSubsettingInstance.General = generalFeature;
             referenceSubsettingInstance.IsImplied = isImpliedFeature;
             referenceSubsettingInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            referenceSubsettingInstance.Name = nameFeature;
             referenceSubsettingInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             referenceSubsettingInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             referenceSubsettingInstance.OwningRelatedElement = owningRelatedElementFeature;
             referenceSubsettingInstance.OwningRelationship = owningRelationshipFeature;
             referenceSubsettingInstance.ReferencedFeature = referencedFeatureFeature;
+            referenceSubsettingInstance.ShortName = shortNameFeature;
             referenceSubsettingInstance.Source = sourceFeature ?? new List<Guid>();
             referenceSubsettingInstance.Specific = specificFeature;
             referenceSubsettingInstance.SubsettedFeature = subsettedFeatureFeature;

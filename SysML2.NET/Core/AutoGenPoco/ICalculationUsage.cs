@@ -34,17 +34,17 @@ namespace SysML2.NET.Core.POCO
     /// A CalculationUsage is an ActionUsage that is also an Expression, and, so, is typed by a Function.
     /// Nominally, if the type is a CalculationDefinition, a CalculationUsage is a Usage of that
     /// CalculationDefinition within a system. However, other kinds of kernel Functions are also allowed, to
-    /// permit use of Functions from the Kernel Model
-    /// Libraries.specializesFromLibrary('Calculations::calculations')owningType <> null
-    /// and(owningType.oclIsKindOf(CalculationDefinition) or owningType.oclIsKindOf(CalculationUsage))
-    /// implies    specializesFromLibrary('Calculations::Calculation::subcalculations')
+    /// permit use of Functions from the Kernel Library.A CalculationUsage must subset, directly or
+    /// indirectly, either the base CalculationUsage calculations from the Systems model library, if it is
+    /// not a composite feature, or the CalculationUsage subcalculations inherited from its owner, if it is
+    /// a composite feature.
     /// </summary>
     public partial interface ICalculationUsage : IActionUsage, IExpression
     {
         /// <summary>
         /// Queries the derived property CalculationDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Function QueryCalculationDefinition();
 
     }

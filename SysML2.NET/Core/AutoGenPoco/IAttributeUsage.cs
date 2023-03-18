@@ -34,17 +34,16 @@ namespace SysML2.NET.Core.POCO
     /// An AttributeUsage is a Usage whose type is a DataType. Nominally, if the type is an
     /// AttributeDefinition, an AttributeUsage is a usage of a AttributeDefinition to represent the value of
     /// some system quality or characteristic. However, other kinds of kernel DataTypes are also allowed, to
-    /// permit use of DataTypes from the Kernel Model Libraries. An AttributeUsage itself as well as all its
-    /// nested features must be referential (non-composite).An AttributeUsage must specialize, directly or
-    /// indirectly, the base Feature Base::dataValues from the Kernel Semantic
-    /// Library.isReferencefeature->forAll(not isComposite)specializesFromLibrary("Base::dataValues")
+    /// permit use of DataTypes from the Kernel Library. An AttributeUsage itself as well as all its nested
+    /// features must have isComposite = false.An AttributeUsage must subset, directly or indirectly, the
+    /// base AttributeUsage attributeValues from the Systems model library.
     /// </summary>
     public partial interface IAttributeUsage : IUsage
     {
         /// <summary>
         /// Queries the derived property AttributeDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<DataType> QueryAttributeDefinition();
 
     }

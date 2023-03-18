@@ -31,7 +31,7 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Definition is a Classifier of Usages. The actual kinds of Definition that may appear in a model
+    /// A Definition is a Classifier of Usages. The actual kinds of Definitions that may appear in a model
     /// are given by the subclasses of Definition (possibly as extended with user-defined
     /// SemanticMetadata).Normally, a Definition has owned Usages that model features of the thing being
     /// defined. A Definition may also have other Definitions nested in it, but this has no semantic
@@ -42,32 +42,7 @@ namespace SysML2.NET.Core.DTO
     /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
     /// an abstract Usage of the variation point Definition.isVariation implies variantMembership =
     /// ownedMembershipvariant = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)not isVariation implies
-    /// variantMembership->isEmpty()isVariation implies    not
-    /// ownedSpecialization.specific->exists(isVariation)usage = feature->selectByKind(Usage)directedUsage =
-    /// directedFeature->selectByKind(Usage)ownedUsage = ownedFeature->selectByKind(Usage)ownedAttribute =
-    /// ownedUsage->selectByKind(AttributeUsage)ownedReference =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedEnumeration =
-    /// ownedUsage->selectByKind(EnumerationUsage)ownedOccurrence =
-    /// ownedUsage->selectByKind(OccurrenceUsage)ownedItem = ownedUsage->selectByKind(ItemUsage)ownedPart =
-    /// ownedUsage->selectByKind(PartUsage)ownedPort = ownedUsage->selectByKind(PortUsage)ownedConnection =
-    /// ownedUsage->selectByKind(ConnectorAsUsage)ownedFlow =
-    /// ownedUsage->selectByKind(FlowUsage)ownedInterface =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedAllocation =
-    /// ownedUsage->selectByKind(AllocationUsage)ownedAction =
-    /// ownedUsage->selectByKind(ActionUsage)ownedState =
-    /// ownedUsage->selectByKind(StateUsage)ownedTransition =
-    /// ownedUsage->selectByKind(TransitionUsage)ownedCalculation =
-    /// ownedUsage->selectByKind(CalculationUsage)ownedConstraint =
-    /// ownedUsage->selectByKind(ConstraintUsage)ownedRequirement =
-    /// ownedUsage->selectByKind(RequirementUsage)ownedConcern =
-    /// ownedUsage->selectByKind(ConcernUsage)ownedCase =
-    /// ownedUsage->selectByKind(CaseUsage)ownedAnalysisCase =
-    /// ownedUsage->selectByKind(AnalysisCaseUsage)ownedVerificationCase =
-    /// ownedUsage->selectByKind(VerificationCaseUsage)ownedUseCase =
-    /// ownedUsage->selectByKind(UseCaseUsage)ownedView = ownedUsage->selectByKind(ViewUsage)ownedViewpoint
-    /// = ownedUsage->selectByKind(ViewpointUsage)ownedRendering =
-    /// ownedUsage->selectByKind(RenderingUsage)ownedMetadata = ownedUsage->selectByKind(MetadataUsage)
+    /// ownedMembership->selectByKind(VariantMembership)not isVariation implies variantMembership->isEmpty()
     /// </summary>
     public partial interface IDefinition : IClassifier
     {

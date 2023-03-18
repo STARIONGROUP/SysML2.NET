@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", conjugatedPortDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", conjugatedPortDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", conjugatedPortDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", conjugatedPortDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", conjugatedPortDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", conjugatedPortDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", conjugatedPortDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", conjugatedPortDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", conjugatedPortDefinitionInstance.IsVariation);
+            dictionary.Add("name", conjugatedPortDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", conjugatedPortDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", conjugatedPortDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", conjugatedPortDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", conjugatedPortDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", conjugatedPortDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", conjugatedPortDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", conjugatedPortDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", conjugatedPortDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", conjugatedPortDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", conjugatedPortDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", conjugatedPortDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", conjugatedPortDefinitionInstance.IsVariation);
+            dictionary.Add("name", conjugatedPortDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", conjugatedPortDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", conjugatedPortDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", conjugatedPortDefinitionInstance.ShortName);
 
             return dictionary;
         }

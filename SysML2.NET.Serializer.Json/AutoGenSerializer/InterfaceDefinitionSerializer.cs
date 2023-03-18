@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iInterfaceDefinition.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iInterfaceDefinition.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iInterfaceDefinition.ElementId);
 
@@ -95,6 +91,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iInterfaceDefinition.IsVariation);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iInterfaceDefinition.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iInterfaceDefinition.OwnedRelatedElement)
             {
@@ -127,6 +125,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iInterfaceDefinition.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iInterfaceDefinition.Source)
             {

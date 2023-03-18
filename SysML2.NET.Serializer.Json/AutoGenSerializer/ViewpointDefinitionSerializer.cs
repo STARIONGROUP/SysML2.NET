@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iViewpointDefinition.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iViewpointDefinition.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iViewpointDefinition.ElementId);
 
@@ -92,6 +88,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iViewpointDefinition.IsVariation);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iViewpointDefinition.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iViewpointDefinition.OwnedRelationship)
             {
@@ -110,6 +108,8 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WritePropertyName("reqId");
             writer.WriteStringValue(iViewpointDefinition.ReqId);
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iViewpointDefinition.ShortName);
             writer.WriteEndObject();
         }
     }

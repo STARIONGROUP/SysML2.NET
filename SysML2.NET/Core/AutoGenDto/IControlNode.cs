@@ -32,15 +32,12 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A ControlNode is an ActionUsage that does not have any inherent behavior but provides constraints on
-    /// incoming and outgoing Successions that are used to control other Actions. A ControlNode must be a
-    /// composite owned usage of an ActionDefinition or
-    /// ActionUsage.sourceConnector->selectByKind(Succession)->   
-    /// collect(connectorEnd->at(1).multiplicity)->    forAll(sourceMult |        
-    /// multiplicityHasBounds(sourceMult, 1, 1))owningType <> null and
-    /// (owningType.oclIsKindOf(ActionDefinition) or
-    /// owningType.oclIsKindOf(ActionUsage))targetConnector->selectByKind(Succession)->   
-    /// collect(connectorEnd->at(2).multiplicity)->    forAll(targetMult |        
-    /// multiplicityHasBounds(targetMult, 1, 1))specializesFromLibrary('Action::Action::controls')
+    /// incoming and outgoing Succession Connectors that are used to control other Actions.A ControlNode
+    /// must be a composite owned feature of an ActionDefinition or ActionUsage, subsetting, directly or
+    /// indirectly, the ActionUsage Action::controls. This implies that the ControlNode is typed by
+    /// ControlAction from the Systems model library, or a subtype of it.All outgoing Successions from a
+    /// ControlNode must have source multiplicity of 1..1. All incoming Succession must have target
+    /// multiplicity of 1..1.
     /// </summary>
     public partial interface IControlNode : IActionUsage
     {

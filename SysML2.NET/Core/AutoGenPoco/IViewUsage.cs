@@ -32,26 +32,17 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A ViewUsage is a usage of a ViewDefinition to specify the generation of a view of the members of a
-    /// collection of exposedNamespaces. The ViewUsage can satisfy more viewpoints than its definition, and
-    /// it can specialize the viewRendering specified by its definition.exposedElement =
-    /// ownedImport->selectByKind(Expose).    importedMemberships(Set{}).memberElement->    select(elm |
-    /// includeAsExposed(elm))->    asOrderedSet()satisfiedViewpoint = ownedRequirement->   
-    /// selectByKind(ViewpointUsage)->    select(isComposite)viewCondition = featureMembership->   
-    /// selectByKind(ElementFilterMembership).    conditionviewRendering =    let renderings:
-    /// OrderedSet(ViewRenderingMembership) =       
-    /// featureMembership->selectByKind(ViewRenderingMembership) in    if renderings->isEmpty() then null   
-    /// else renderings->first().referencedRendering    endiffeatureMembership->   
-    /// selectByKind(ViewRenderingMembership)->    size() <=
-    /// 1specializesFromLibrary('Views::views')owningType <> null and(owningType.oclIsKindOf(ViewDefinition)
-    /// or owningType.oclIsKindOf(ViewUsage)) implies    specializesFromLibrary('Views::View::subviews')
+    /// collection of exposedNamespaces. The ViewDefinition can satisfy more viewpoints than its definition,
+    /// and it can specialize the rendering specified by its definition.A ViewUsage must subset, directly or
+    /// indirectly, the base ViewUsage views from the Systems model library.
     /// </summary>
     public partial interface IViewUsage : IPartUsage
     {
         /// <summary>
-        /// Queries the derived property ExposedElement
+        /// Queries the derived property ExposedNamespace
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<IElement> QueryExposedElement();
+        List<Namespace> QueryExposedNamespace();
 
         /// <summary>
         /// Queries the derived property SatisfiedViewpoint
@@ -68,8 +59,14 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property ViewDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         ViewDefinition QueryViewDefinition();
+
+        /// <summary>
+        /// Queries the derived property ViewedElement
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        List<Element> QueryViewedElement();
 
         /// <summary>
         /// Queries the derived property ViewRendering

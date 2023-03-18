@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iRequirementConstraintMembership.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iRequirementConstraintMembership.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iRequirementConstraintMembership.ElementId);
 
@@ -96,6 +92,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iRequirementConstraintMembership.MemberName);
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iRequirementConstraintMembership.MemberShortName);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iRequirementConstraintMembership.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iRequirementConstraintMembership.OwnedRelatedElement)
             {
@@ -128,6 +126,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iRequirementConstraintMembership.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iRequirementConstraintMembership.Source)
             {

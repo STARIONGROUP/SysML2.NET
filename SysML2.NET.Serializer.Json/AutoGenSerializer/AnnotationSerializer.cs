@@ -76,10 +76,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("annotatingElement");
             writer.WriteStringValue(iAnnotation.AnnotatingElement);
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iAnnotation.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iAnnotation.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iAnnotation.ElementId);
 
@@ -89,6 +85,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iAnnotation.IsImpliedIncluded);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iAnnotation.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iAnnotation.OwnedRelatedElement)
             {
@@ -121,6 +119,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iAnnotation.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iAnnotation.Source)
             {

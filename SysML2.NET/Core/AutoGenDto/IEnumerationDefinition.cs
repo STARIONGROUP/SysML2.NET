@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An EnumerationDefinition is an AttributeDefinition all of whose instances are given by an explicit
-    /// list of enumeratedValues. This is realized by requiring that the EnumerationDefinition have
-    /// isVariation = true, with the enumeratedValues being its variants. isVariation
+    /// list of enumeratedValues. An EnumerationDefinition must subclass, directly or indirectly, the base
+    /// EnumerationDefinition EnumerationValue from the Systems model library.
     /// </summary>
     public partial interface IEnumerationDefinition : IAttributeDefinition
     {

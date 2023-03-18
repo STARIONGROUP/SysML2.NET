@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", mergeNodeInstance.AliasIds);
-            dictionary.Add("declaredName", mergeNodeInstance.DeclaredName);
-            dictionary.Add("declaredShortName", mergeNodeInstance.DeclaredShortName);
             dictionary.Add("direction", mergeNodeInstance.Direction);
             dictionary.Add("elementId", mergeNodeInstance.ElementId);
             dictionary.Add("isAbstract", mergeNodeInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", mergeNodeInstance.IsSufficient);
             dictionary.Add("isUnique", mergeNodeInstance.IsUnique);
             dictionary.Add("isVariation", mergeNodeInstance.IsVariation);
+            dictionary.Add("name", mergeNodeInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", mergeNodeInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", mergeNodeInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", mergeNodeInstance.PortionKind);
+            dictionary.Add("shortName", mergeNodeInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", mergeNodeInstance.AliasIds);
-            dictionary.Add("declaredName", mergeNodeInstance.DeclaredName);
-            dictionary.Add("declaredShortName", mergeNodeInstance.DeclaredShortName);
             dictionary.Add("direction", mergeNodeInstance.Direction);
             dictionary.Add("elementId", mergeNodeInstance.ElementId);
             dictionary.Add("isAbstract", mergeNodeInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", mergeNodeInstance.IsSufficient);
             dictionary.Add("isUnique", mergeNodeInstance.IsUnique);
             dictionary.Add("isVariation", mergeNodeInstance.IsVariation);
+            dictionary.Add("name", mergeNodeInstance.Name);
             dictionary.Add("ownedRelationship", mergeNodeInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", mergeNodeInstance.OwningRelationship);
             dictionary.Add("portionKind", mergeNodeInstance.PortionKind);
+            dictionary.Add("shortName", mergeNodeInstance.ShortName);
 
             return dictionary;
         }

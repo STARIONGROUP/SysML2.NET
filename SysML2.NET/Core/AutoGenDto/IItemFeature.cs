@@ -31,9 +31,6 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An ItemFeature is the ownedFeature of an ItemFlow that identifies the things carried by the kinds of
-    /// transfers that are instances of the ItemFlow.ownedRedefinition.redefinedFeature->   
-    /// redefinesFromLibrary("Transfers::Transfer::item")
     /// </summary>
     public partial interface IItemFeature : IFeature
     {

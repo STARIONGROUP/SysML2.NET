@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", constraintUsageInstance.AliasIds);
-            dictionary.Add("declaredName", constraintUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", constraintUsageInstance.DeclaredShortName);
             dictionary.Add("direction", constraintUsageInstance.Direction);
             dictionary.Add("elementId", constraintUsageInstance.ElementId);
             dictionary.Add("isAbstract", constraintUsageInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", constraintUsageInstance.IsSufficient);
             dictionary.Add("isUnique", constraintUsageInstance.IsUnique);
             dictionary.Add("isVariation", constraintUsageInstance.IsVariation);
+            dictionary.Add("name", constraintUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", constraintUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", constraintUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", constraintUsageInstance.PortionKind);
+            dictionary.Add("shortName", constraintUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", constraintUsageInstance.AliasIds);
-            dictionary.Add("declaredName", constraintUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", constraintUsageInstance.DeclaredShortName);
             dictionary.Add("direction", constraintUsageInstance.Direction);
             dictionary.Add("elementId", constraintUsageInstance.ElementId);
             dictionary.Add("isAbstract", constraintUsageInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", constraintUsageInstance.IsSufficient);
             dictionary.Add("isUnique", constraintUsageInstance.IsUnique);
             dictionary.Add("isVariation", constraintUsageInstance.IsVariation);
+            dictionary.Add("name", constraintUsageInstance.Name);
             dictionary.Add("ownedRelationship", constraintUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", constraintUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", constraintUsageInstance.PortionKind);
+            dictionary.Add("shortName", constraintUsageInstance.ShortName);
 
             return dictionary;
         }

@@ -31,17 +31,17 @@ namespace SysML2.NET.Core
     public enum TransitionFeatureKind
     {
         /// <summary>
-        /// Indicates that the transitionFeature of a TransitionFeatureMembership is a triggerAction.
+        /// Indicates that a member Transfer of a TransitionUsage represents a trigger.
         /// </summary>
         Trigger = 0,
 
         /// <summary>
-        /// Indicates that the transitionFeature of a TransitionFeatureMembership is a guardExpression.
+        /// Indicates that a member Expression of a TransitionUsage represents a guard.
         /// </summary>
         Guard = 1,
 
         /// <summary>
-        /// Indicates that the transitionFeature of a TransitionFeatureMembership is an effectAction.
+        /// Indicates that a member Step of a TransitionUsage represents an effect.
         /// </summary>
         Effect = 2,
 

@@ -32,8 +32,10 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A ForkNode is a ControlNode that must be followed by successor Actions as given by all its outgoing
-    /// Successions.targetConnector->selectByKind(Succession)->size() <=
-    /// 1specializesFromLibrary("Actions::Action::forks")
+    /// Successions. All outgoing Successions must have a target multiplicity of 1..1. A ForkNode may have
+    /// at most one incoming Succession.A ForkNode must subset, directly or indirectly, the ActionUsage
+    /// Action::forks, implying that it is typed by ForkAction from the Systems model library (or a subtype
+    /// of it).
     /// </summary>
     public partial class ForkNode : IForkNode
     {
@@ -70,23 +72,7 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
-
-        /// <summary>
-        /// Indicates how values of this Feature are determined or used (as specified for the
-        /// FeatureDirectionKind).
+        /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public FeatureDirectionKind? Direction { get; set; }
@@ -107,21 +93,21 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after the instance of the featuringType no longer does..
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
 
         /// <summary>
         /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
+        /// multiplicity of the Feature.An end Feature is always considered to map each domain entity to a
+        /// single co-domain entity, whether or not a Multiplicity is given for it. If a Multiplicity is given
         /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
         /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
         /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
@@ -155,8 +141,8 @@ namespace SysML2.NET.Core.DTO
         public bool IsOrdered { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
-        /// the Feature and represent the same thing as those instances.
+        /// Whether the values of this Feature are contained in the space and time of instances of the
+        /// Feature&#39;s domain.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsPortion { get; set; }
@@ -172,7 +158,7 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -192,6 +178,12 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariation { get; set; }
 
         /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
+
+        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -204,11 +196,20 @@ namespace SysML2.NET.Core.DTO
         public Guid? OwningRelationship { get; set; }
 
         /// <summary>
-        /// The kind of (temporal) portion of the life of the occurrenceDefinition represented by this
+        /// The kind of portion of the instances of the occurrenceDefinition represented by this
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public PortionKind? PortionKind { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
     }
 }

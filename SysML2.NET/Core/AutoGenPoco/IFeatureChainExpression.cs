@@ -32,16 +32,10 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A FeatureChainExpression is an OperatorExpression whose operator is ".", which resolves to the
-    /// Function ControlFunctions::'.' from the Kernel Functions Library. It evaluates to the result of
-    /// chaining the result Feature of its single argument Expression with its targetFeature.let
-    /// sourceParameter : Feature = sourceTargetFeature() insourceTargetFeature <> null
-    /// andsourceTargetFeature.redefinesFromLibrary("ControlFunctions::'.'::source::target")let
-    /// sourceParameter : Feature = sourceTargetFeature() insourceTargetFeature <> null
-    /// andsourceTargetFeature.redefines(targetFeature)targetFeature =    let nonParameterMemberships :
-    /// Sequence(Membership) = ownedMembership->        reject(oclIsKindOf(ParameterMembership)) in    if
-    /// nonParameterMemberships->isEmpty() or       not
-    /// nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)    then null    else
-    /// nonParameterMemberships->first().memberElement.oclAsType(Feature)    endif
+    /// library Function ControlFunctions::'.'. It evaluates to the result of chaining the result Feature of
+    /// its single argument Expression with its targetFeature.The first two members of a
+    /// FeatureChainExpression must be its single argument Expression and its targetFeature. Its only other
+    /// members shall be those necessary to complete it as an InvocationExpression.
     /// </summary>
     public partial interface IFeatureChainExpression : IOperatorExpression
     {

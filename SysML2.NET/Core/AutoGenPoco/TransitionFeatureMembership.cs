@@ -32,14 +32,9 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A TransitionFeatureMembership is a FeatureMembership for a trigger, guard or effect of a
-    /// TransitionUsage, whose transitionFeature is a AcceptActionUsage, Boolean-valued Expression or
-    /// ActionUsage, depending on its kind. kind = TransitionFeatureKind::trigger implies   
-    /// transitionFeature.oclIsKindOf(AcceptActionUsage)owningType.oclIsKindOf(TransitionUsage)kind =
-    /// TransitionFeatureKind::guard implies    transitionFeature.oclIsKindOf(Expression) and    let guard :
-    /// Expression = transitionFeature.oclIsKindOf(Expression) in   
-    /// guard.result.specializesFromLibrary('ScalarValues::Boolean') and    guard.result.multiplicity <>
-    /// null and    guard.result.multiplicity.hasBounds(1,1)kind = TransitionFeatureKind::effect implies   
-    /// transitionFeature.oclIsKindOf(ActionUsage)
+    /// TransitionUsage. The ownedMemberFeature must be a Step. For a trigger, the ownedMemberFeature must
+    /// more specifically be a Transfer, while for a guard it must be an Expression with a result type of
+    /// Boolean.
     /// </summary>
     public partial class TransitionFeatureMembership : ITransitionFeatureMembership
     {
@@ -51,10 +46,10 @@ namespace SysML2.NET.Core.POCO
             this.AliasIds = new List<string>();
             this.IsImplied = false;
             this.IsImpliedIncluded = false;
-            this.OwnedRelatedElement = new List<IElement>();
-            this.OwnedRelationship = new List<IRelationship>();
-            this.Source = new List<IElement>();
-            this.Target = new List<IElement>();
+            this.OwnedRelatedElement = new List<Element>();
+            this.OwnedRelationship = new List<Relationship>();
+            this.Source = new List<Element>();
+            this.Target = new List<Element>();
             this.Visibility = VisibilityKind.Public;
         }
 
@@ -71,27 +66,21 @@ namespace SysML2.NET.Core.POCO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
-
-        /// <summary>
         /// Queries the derived property Documentation
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Documentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property EffectiveName
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string QueryEffectiveName()
+        {
+            throw new NotImplementedException("Derived property EffectiveName not yet supported");
         }
 
         /// <summary>
@@ -134,7 +123,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether this TransitionFeatureMembership  is for a trigger, guard or effect.
+        /// Whether this TransitionFeatureMembership is for a trigger, guard or effect.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public TransitionFeatureKind Kind { get; set; }
@@ -143,7 +132,7 @@ namespace SysML2.NET.Core.POCO
         /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement MemberElement { get; set; }
+        public Element MemberElement { get; set; }
 
         /// <summary>
         /// Queries the derived property MemberElementId
@@ -176,13 +165,10 @@ namespace SysML2.NET.Core.POCO
         public string MemberShortName { get; set; }
 
         /// <summary>
-        /// Queries the derived property Name
+        /// The primary name of this Element.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryName()
-        {
-            throw new NotImplementedException("Derived property Name not yet supported");
-        }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// Queries the derived property OwnedAnnotation
@@ -197,7 +183,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedElement
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryOwnedElement()
+        public List<Element> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
@@ -206,7 +192,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedMemberElement
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement QueryOwnedMemberElement()
+        public Element QueryOwnedMemberElement()
         {
             throw new NotImplementedException("Derived property OwnedMemberElement not yet supported");
         }
@@ -251,19 +237,19 @@ namespace SysML2.NET.Core.POCO
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
-        public List<IElement> OwnedRelatedElement { get; set; }
+        public List<Element> OwnedRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
-        public List<IRelationship> OwnedRelationship { get; set; }
+        public List<Relationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property Owner
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement QueryOwner()
+        public Element QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
@@ -290,13 +276,13 @@ namespace SysML2.NET.Core.POCO
         /// The relatedElement of this Relationship that owns the Relationship, if any.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement OwningRelatedElement { get; set; }
+        public Element OwningRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IRelationship OwningRelationship { get; set; }
+        public Relationship OwningRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property OwningType
@@ -319,32 +305,32 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property RelatedElement
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryRelatedElement()
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 2, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Element> QueryRelatedElement()
         {
             throw new NotImplementedException("Derived property RelatedElement not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property ShortName
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryShortName()
-        {
-            throw new NotImplementedException("Derived property ShortName not yet supported");
-        }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> Source { get; set; }
+        public List<Element> Source { get; set; }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> Target { get; set; }
+        public List<Element> Target { get; set; }
 
         /// <summary>
         /// Queries the derived property TextualRepresentation

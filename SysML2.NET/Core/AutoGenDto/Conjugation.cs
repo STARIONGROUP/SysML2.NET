@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.DTO
     /// out in the originalType are considered to have an effective direction of in in the originalType.
     /// Features with direction inout, or with no direction, in the originalType, are inherited without
     /// change.A Type may participate as a conjugatedType in at most one Conjugation relationship, and such
-    /// a Type may not also be the specific Type in any Specialization relationship.
+    /// a Type may not also be the specific Type in any Generalization relationship.
     /// </summary>
     public partial class Conjugation : IConjugation
     {
@@ -75,21 +75,6 @@ namespace SysML2.NET.Core.DTO
         public Guid ConjugatedType { get; set; }
 
         /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
-
-        /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
@@ -112,6 +97,12 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// The Type to be conjugated.
@@ -142,6 +133,15 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.

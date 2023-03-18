@@ -108,14 +108,14 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", behaviorInstance.AliasIds);
-            dictionary.Add("declaredName", behaviorInstance.DeclaredName);
-            dictionary.Add("declaredShortName", behaviorInstance.DeclaredShortName);
             dictionary.Add("elementId", behaviorInstance.ElementId);
             dictionary.Add("isAbstract", behaviorInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", behaviorInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", behaviorInstance.IsSufficient);
+            dictionary.Add("name", behaviorInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", behaviorInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", behaviorInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", behaviorInstance.ShortName);
 
             return dictionary;
         }
@@ -143,14 +143,14 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", behaviorInstance.AliasIds);
-            dictionary.Add("declaredName", behaviorInstance.DeclaredName);
-            dictionary.Add("declaredShortName", behaviorInstance.DeclaredShortName);
             dictionary.Add("elementId", behaviorInstance.ElementId);
             dictionary.Add("isAbstract", behaviorInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", behaviorInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", behaviorInstance.IsSufficient);
+            dictionary.Add("name", behaviorInstance.Name);
             dictionary.Add("ownedRelationship", behaviorInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", behaviorInstance.OwningRelationship);
+            dictionary.Add("shortName", behaviorInstance.ShortName);
 
             return dictionary;
         }

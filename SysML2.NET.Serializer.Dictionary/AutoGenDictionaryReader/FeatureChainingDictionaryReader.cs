@@ -116,18 +116,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid chainingFeatureFeature = Guid.Parse(Convert.ToString(chainingFeatureObject));
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
@@ -145,6 +133,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -170,6 +164,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
@@ -185,15 +185,15 @@ namespace SysML2.NET.Serializer.Dictionary
 
             featureChainingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             featureChainingInstance.ChainingFeature = chainingFeatureFeature;
-            featureChainingInstance.DeclaredName = declaredNameFeature;
-            featureChainingInstance.DeclaredShortName = declaredShortNameFeature;
             featureChainingInstance.ElementId = elementIdFeature;
             featureChainingInstance.IsImplied = isImpliedFeature;
             featureChainingInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            featureChainingInstance.Name = nameFeature;
             featureChainingInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             featureChainingInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             featureChainingInstance.OwningRelatedElement = owningRelatedElementFeature;
             featureChainingInstance.OwningRelationship = owningRelationshipFeature;
+            featureChainingInstance.ShortName = shortNameFeature;
             featureChainingInstance.Source = sourceFeature ?? new List<Guid>();
             featureChainingInstance.Target = targetFeature ?? new List<Guid>();
 
@@ -226,18 +226,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid chainingFeatureFeature = Guid.Parse(Convert.ToString(chainingFeatureObject));
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
@@ -255,6 +243,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -280,6 +274,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a FeatureChaining");
@@ -295,15 +295,15 @@ namespace SysML2.NET.Serializer.Dictionary
 
             featureChainingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             featureChainingInstance.ChainingFeature = chainingFeatureFeature;
-            featureChainingInstance.DeclaredName = declaredNameFeature;
-            featureChainingInstance.DeclaredShortName = declaredShortNameFeature;
             featureChainingInstance.ElementId = elementIdFeature;
             featureChainingInstance.IsImplied = isImpliedFeature;
             featureChainingInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            featureChainingInstance.Name = nameFeature;
             featureChainingInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             featureChainingInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             featureChainingInstance.OwningRelatedElement = owningRelatedElementFeature;
             featureChainingInstance.OwningRelationship = owningRelationshipFeature;
+            featureChainingInstance.ShortName = shortNameFeature;
             featureChainingInstance.Source = sourceFeature ?? new List<Guid>();
             featureChainingInstance.Target = targetFeature ?? new List<Guid>();
 

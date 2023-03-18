@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iPortUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iPortUsage.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iPortUsage.Direction.HasValue)
             {
@@ -122,6 +118,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iPortUsage.IsVariation);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iPortUsage.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iPortUsage.OwnedRelationship)
             {
@@ -147,6 +145,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iPortUsage.ShortName);
             writer.WriteEndObject();
         }
     }

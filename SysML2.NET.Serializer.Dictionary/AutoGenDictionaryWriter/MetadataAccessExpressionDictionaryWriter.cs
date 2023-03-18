@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", metadataAccessExpressionInstance.AliasIds);
-            dictionary.Add("declaredName", metadataAccessExpressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", metadataAccessExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", metadataAccessExpressionInstance.Direction);
             dictionary.Add("elementId", metadataAccessExpressionInstance.ElementId);
             dictionary.Add("isAbstract", metadataAccessExpressionInstance.IsAbstract);
@@ -122,9 +120,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", metadataAccessExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", metadataAccessExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", metadataAccessExpressionInstance.IsUnique);
+            dictionary.Add("name", metadataAccessExpressionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", metadataAccessExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", metadataAccessExpressionInstance.OwningRelationship.ToString());
             dictionary.Add("referencedElement", metadataAccessExpressionInstance.ReferencedElement.ToString());
+            dictionary.Add("shortName", metadataAccessExpressionInstance.ShortName);
 
             return dictionary;
         }
@@ -152,8 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", metadataAccessExpressionInstance.AliasIds);
-            dictionary.Add("declaredName", metadataAccessExpressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", metadataAccessExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", metadataAccessExpressionInstance.Direction);
             dictionary.Add("elementId", metadataAccessExpressionInstance.ElementId);
             dictionary.Add("isAbstract", metadataAccessExpressionInstance.IsAbstract);
@@ -166,9 +164,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", metadataAccessExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", metadataAccessExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", metadataAccessExpressionInstance.IsUnique);
+            dictionary.Add("name", metadataAccessExpressionInstance.Name);
             dictionary.Add("ownedRelationship", metadataAccessExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", metadataAccessExpressionInstance.OwningRelationship);
             dictionary.Add("referencedElement", metadataAccessExpressionInstance.ReferencedElement);
+            dictionary.Add("shortName", metadataAccessExpressionInstance.ShortName);
 
             return dictionary;
         }

@@ -31,14 +31,13 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Membership is a Relationship between a Namespace and an Element that indicates the Element is a
+    /// Membership is a Relationship between a Namespace and an Element that indicates the Element is a
     /// member of (i.e., is contained in) the Namespace. Any memberNames specify how the memberElement is
     /// identified in the Namespace and the visibility specifies whether or not the memberElement is
     /// publicly visible from outside the Namespace.If a Membership is an OwningMembership, then it owns its
     /// memberElement, which becomes an ownedMember of the membershipOwningNamespace. Otherwise, the
     /// memberNames of a Membership are effectively aliases within the membershipOwningNamespace for an
-    /// Element with a separate OwningMembership in the same or a different Namespace. memberElementId
-    /// = memberElement.elementId
+    /// Element with a separate OwningMembership in the same or a different Namespace.
     /// </summary>
     public partial interface IMembership : IRelationship
     {
@@ -46,7 +45,7 @@ namespace SysML2.NET.Core.POCO
         /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        IElement MemberElement { get; set; }
+        Element MemberElement { get; set; }
 
         /// <summary>
         /// Queries the derived property MemberElementId

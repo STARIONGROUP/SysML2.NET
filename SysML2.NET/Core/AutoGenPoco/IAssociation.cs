@@ -33,27 +33,24 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// An Association is a Relationship and a Classifier to enable classification of links between things
     /// (in the universe). The co-domains (types) of the associationEnd Features are the relatedTypes, as
-    /// co-domain and participants (linked things) of an Association identify each other.relatedType =
-    /// associationEnd.typespecializesFromLibrary("Links::Link")oclIsKindOf(Structure) =
-    /// oclIsKindOf(AssociationStructure)ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Links::BinaryLink)not isAbstract implies relatedType->size() >=
-    /// 2associationEnds->size() > 2 implies    not specializesFromLibrary("Links::BinaryLink")sourceType = 
-    ///   if relatedType->isEmpty() then null    else relatedType->first() endiftargetType =    if
-    /// relatedType->size() < 2 then OrderedSet{}    else         relatedType->            subSequence(2,
-    /// relatedType->size())->            asOrderedSet()     endif
+    /// co-domain and participants (linked things) of an Association identify each other.relatedTypes =
+    /// associationEnd.typelet numend : Natural = associationEnd->size() in    allSupertypes()->includes(   
+    ///     if numend = 2 then Kernel Library::BinaryLink        else Kernel
+    /// Library::Link)oclIsKindOf(Structure) =
+    /// oclIsKindOf(AssociationStructure)allSupertypes()->includes(Kernel Library::Link)
     /// </summary>
     public partial interface IAssociation : IClassifier, IRelationship
     {
         /// <summary>
         /// Queries the derived property AssociationEnd
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 2, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Feature> QueryAssociationEnd();
 
         /// <summary>
         /// Queries the derived property RelatedType
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 2, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Type> QueryRelatedType();
 
         /// <summary>
@@ -65,7 +62,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property TargetType
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Type> QueryTargetType();
 
     }

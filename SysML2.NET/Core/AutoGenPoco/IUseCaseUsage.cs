@@ -31,11 +31,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A UseCaseUsage is a Usage of a UseCaseDefinition.includedUseCase = ownedUseCase->   
-    /// selectByKind(IncludeUseCaseUsage).   
-    /// useCaseIncludedspecializesFromLibrary('UseCases::useCases')isComposite and owningType <> null
-    /// and(owningType.oclIsKindOf(UseCaseDefinition) or owningType.oclIsKindOf(UseCaseUsage)) implies   
-    /// specializesFromLibrary('UseCases::UseCase::subUseCases')
+    /// A UseCaseUsage is a Usage of a UseCaseDefinition.A UseCaseUsage must subset, directly or indirectly,
+    /// either the base UseCaseUsage useCases from the Systems model library. If it is owned by a
+    /// UseCaseDefinition or UseCaseUsage then it must subset the UseCaseUsage UseCase::subUseCases.
     /// </summary>
     public partial interface IUseCaseUsage : ICaseUsage
     {
@@ -48,7 +46,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property UseCaseDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         UseCaseDefinition QueryUseCaseDefinition();
 
     }

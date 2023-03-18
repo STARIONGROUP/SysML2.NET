@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", includeUseCaseUsageInstance.AliasIds);
-            dictionary.Add("declaredName", includeUseCaseUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", includeUseCaseUsageInstance.DeclaredShortName);
             dictionary.Add("direction", includeUseCaseUsageInstance.Direction);
             dictionary.Add("elementId", includeUseCaseUsageInstance.ElementId);
             dictionary.Add("isAbstract", includeUseCaseUsageInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", includeUseCaseUsageInstance.IsSufficient);
             dictionary.Add("isUnique", includeUseCaseUsageInstance.IsUnique);
             dictionary.Add("isVariation", includeUseCaseUsageInstance.IsVariation);
+            dictionary.Add("name", includeUseCaseUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", includeUseCaseUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", includeUseCaseUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", includeUseCaseUsageInstance.PortionKind);
+            dictionary.Add("shortName", includeUseCaseUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", includeUseCaseUsageInstance.AliasIds);
-            dictionary.Add("declaredName", includeUseCaseUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", includeUseCaseUsageInstance.DeclaredShortName);
             dictionary.Add("direction", includeUseCaseUsageInstance.Direction);
             dictionary.Add("elementId", includeUseCaseUsageInstance.ElementId);
             dictionary.Add("isAbstract", includeUseCaseUsageInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", includeUseCaseUsageInstance.IsSufficient);
             dictionary.Add("isUnique", includeUseCaseUsageInstance.IsUnique);
             dictionary.Add("isVariation", includeUseCaseUsageInstance.IsVariation);
+            dictionary.Add("name", includeUseCaseUsageInstance.Name);
             dictionary.Add("ownedRelationship", includeUseCaseUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", includeUseCaseUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", includeUseCaseUsageInstance.PortionKind);
+            dictionary.Add("shortName", includeUseCaseUsageInstance.ShortName);
 
             return dictionary;
         }

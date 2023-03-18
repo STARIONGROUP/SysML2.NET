@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", resultExpressionMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", resultExpressionMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", resultExpressionMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", resultExpressionMembershipInstance.ElementId);
             dictionary.Add("feature", resultExpressionMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", resultExpressionMembershipInstance.IsImplied);
@@ -117,10 +115,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", resultExpressionMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", resultExpressionMembershipInstance.MemberName);
             dictionary.Add("memberShortName", resultExpressionMembershipInstance.MemberShortName);
+            dictionary.Add("name", resultExpressionMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", resultExpressionMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", resultExpressionMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", resultExpressionMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", resultExpressionMembershipInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", resultExpressionMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", resultExpressionMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", resultExpressionMembershipInstance.Target)} ]");
             dictionary.Add("type", resultExpressionMembershipInstance.Type.ToString());
@@ -152,8 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", resultExpressionMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", resultExpressionMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", resultExpressionMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", resultExpressionMembershipInstance.ElementId);
             dictionary.Add("feature", resultExpressionMembershipInstance.Feature);
             dictionary.Add("isImplied", resultExpressionMembershipInstance.IsImplied);
@@ -161,10 +159,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", resultExpressionMembershipInstance.MemberElement);
             dictionary.Add("memberName", resultExpressionMembershipInstance.MemberName);
             dictionary.Add("memberShortName", resultExpressionMembershipInstance.MemberShortName);
+            dictionary.Add("name", resultExpressionMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", resultExpressionMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", resultExpressionMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", resultExpressionMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", resultExpressionMembershipInstance.OwningRelationship);
+            dictionary.Add("shortName", resultExpressionMembershipInstance.ShortName);
             dictionary.Add("source", resultExpressionMembershipInstance.Source);
             dictionary.Add("target", resultExpressionMembershipInstance.Target);
             dictionary.Add("type", resultExpressionMembershipInstance.Type);

@@ -116,18 +116,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid conjugatedTypeFeature = Guid.Parse(Convert.ToString(conjugatedTypeObject));
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
@@ -145,6 +133,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("originalType", out object originalTypeObject))
             {
@@ -176,6 +170,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
@@ -191,16 +191,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
             conjugationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             conjugationInstance.ConjugatedType = conjugatedTypeFeature;
-            conjugationInstance.DeclaredName = declaredNameFeature;
-            conjugationInstance.DeclaredShortName = declaredShortNameFeature;
             conjugationInstance.ElementId = elementIdFeature;
             conjugationInstance.IsImplied = isImpliedFeature;
             conjugationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            conjugationInstance.Name = nameFeature;
             conjugationInstance.OriginalType = originalTypeFeature;
             conjugationInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             conjugationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             conjugationInstance.OwningRelatedElement = owningRelatedElementFeature;
             conjugationInstance.OwningRelationship = owningRelationshipFeature;
+            conjugationInstance.ShortName = shortNameFeature;
             conjugationInstance.Source = sourceFeature ?? new List<Guid>();
             conjugationInstance.Target = targetFeature ?? new List<Guid>();
 
@@ -233,18 +233,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid conjugatedTypeFeature = Guid.Parse(Convert.ToString(conjugatedTypeObject));
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
@@ -262,6 +250,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("originalType", out object originalTypeObject))
             {
@@ -293,6 +287,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Conjugation");
@@ -308,16 +308,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
             conjugationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             conjugationInstance.ConjugatedType = conjugatedTypeFeature;
-            conjugationInstance.DeclaredName = declaredNameFeature;
-            conjugationInstance.DeclaredShortName = declaredShortNameFeature;
             conjugationInstance.ElementId = elementIdFeature;
             conjugationInstance.IsImplied = isImpliedFeature;
             conjugationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            conjugationInstance.Name = nameFeature;
             conjugationInstance.OriginalType = originalTypeFeature;
             conjugationInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             conjugationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             conjugationInstance.OwningRelatedElement = owningRelatedElementFeature;
             conjugationInstance.OwningRelationship = owningRelationshipFeature;
+            conjugationInstance.ShortName = shortNameFeature;
             conjugationInstance.Source = sourceFeature ?? new List<Guid>();
             conjugationInstance.Target = targetFeature ?? new List<Guid>();
 

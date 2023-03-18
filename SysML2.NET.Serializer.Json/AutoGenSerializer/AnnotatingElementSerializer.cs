@@ -77,16 +77,14 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iAnnotatingElement.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iAnnotatingElement.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iAnnotatingElement.ElementId);
 
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iAnnotatingElement.IsImpliedIncluded);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iAnnotatingElement.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iAnnotatingElement.OwnedRelationship)
             {
@@ -103,6 +101,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iAnnotatingElement.ShortName);
             writer.WriteEndObject();
         }
     }

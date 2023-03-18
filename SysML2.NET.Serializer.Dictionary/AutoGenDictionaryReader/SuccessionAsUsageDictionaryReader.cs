@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
@@ -212,6 +200,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
@@ -236,6 +230,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
@@ -250,8 +250,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             successionAsUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            successionAsUsageInstance.DeclaredName = declaredNameFeature;
-            successionAsUsageInstance.DeclaredShortName = declaredShortNameFeature;
             successionAsUsageInstance.Direction = directionFeature;
             successionAsUsageInstance.ElementId = elementIdFeature;
             successionAsUsageInstance.IsAbstract = isAbstractFeature;
@@ -267,10 +265,12 @@ namespace SysML2.NET.Serializer.Dictionary
             successionAsUsageInstance.IsSufficient = isSufficientFeature;
             successionAsUsageInstance.IsUnique = isUniqueFeature;
             successionAsUsageInstance.IsVariation = isVariationFeature;
+            successionAsUsageInstance.Name = nameFeature;
             successionAsUsageInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             successionAsUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             successionAsUsageInstance.OwningRelatedElement = owningRelatedElementFeature;
             successionAsUsageInstance.OwningRelationship = owningRelationshipFeature;
+            successionAsUsageInstance.ShortName = shortNameFeature;
             successionAsUsageInstance.Source = sourceFeature ?? new List<Guid>();
             successionAsUsageInstance.Target = targetFeature ?? new List<Guid>();
 
@@ -296,18 +296,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -399,6 +387,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
@@ -423,6 +417,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a SuccessionAsUsage");
@@ -437,8 +437,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             successionAsUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            successionAsUsageInstance.DeclaredName = declaredNameFeature;
-            successionAsUsageInstance.DeclaredShortName = declaredShortNameFeature;
             successionAsUsageInstance.Direction = directionFeature;
             successionAsUsageInstance.ElementId = elementIdFeature;
             successionAsUsageInstance.IsAbstract = isAbstractFeature;
@@ -454,10 +452,12 @@ namespace SysML2.NET.Serializer.Dictionary
             successionAsUsageInstance.IsSufficient = isSufficientFeature;
             successionAsUsageInstance.IsUnique = isUniqueFeature;
             successionAsUsageInstance.IsVariation = isVariationFeature;
+            successionAsUsageInstance.Name = nameFeature;
             successionAsUsageInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             successionAsUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             successionAsUsageInstance.OwningRelatedElement = owningRelatedElementFeature;
             successionAsUsageInstance.OwningRelationship = owningRelationshipFeature;
+            successionAsUsageInstance.ShortName = shortNameFeature;
             successionAsUsageInstance.Source = sourceFeature ?? new List<Guid>();
             successionAsUsageInstance.Target = targetFeature ?? new List<Guid>();
 

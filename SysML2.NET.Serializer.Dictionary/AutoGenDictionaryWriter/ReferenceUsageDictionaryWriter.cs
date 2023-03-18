@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", referenceUsageInstance.AliasIds);
-            dictionary.Add("declaredName", referenceUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", referenceUsageInstance.DeclaredShortName);
             dictionary.Add("direction", referenceUsageInstance.Direction);
             dictionary.Add("elementId", referenceUsageInstance.ElementId);
             dictionary.Add("isAbstract", referenceUsageInstance.IsAbstract);
@@ -123,8 +121,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", referenceUsageInstance.IsSufficient);
             dictionary.Add("isUnique", referenceUsageInstance.IsUnique);
             dictionary.Add("isVariation", referenceUsageInstance.IsVariation);
+            dictionary.Add("name", referenceUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", referenceUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", referenceUsageInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", referenceUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -152,8 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", referenceUsageInstance.AliasIds);
-            dictionary.Add("declaredName", referenceUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", referenceUsageInstance.DeclaredShortName);
             dictionary.Add("direction", referenceUsageInstance.Direction);
             dictionary.Add("elementId", referenceUsageInstance.ElementId);
             dictionary.Add("isAbstract", referenceUsageInstance.IsAbstract);
@@ -167,8 +165,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", referenceUsageInstance.IsSufficient);
             dictionary.Add("isUnique", referenceUsageInstance.IsUnique);
             dictionary.Add("isVariation", referenceUsageInstance.IsVariation);
+            dictionary.Add("name", referenceUsageInstance.Name);
             dictionary.Add("ownedRelationship", referenceUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", referenceUsageInstance.OwningRelationship);
+            dictionary.Add("shortName", referenceUsageInstance.ShortName);
 
             return dictionary;
         }

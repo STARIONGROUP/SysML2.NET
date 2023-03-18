@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", requirementVerificationMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", requirementVerificationMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", requirementVerificationMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementVerificationMembershipInstance.ElementId);
             dictionary.Add("feature", requirementVerificationMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", requirementVerificationMembershipInstance.IsImplied);
@@ -118,10 +116,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", requirementVerificationMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", requirementVerificationMembershipInstance.MemberName);
             dictionary.Add("memberShortName", requirementVerificationMembershipInstance.MemberShortName);
+            dictionary.Add("name", requirementVerificationMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", requirementVerificationMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", requirementVerificationMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", requirementVerificationMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", requirementVerificationMembershipInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", requirementVerificationMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", requirementVerificationMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", requirementVerificationMembershipInstance.Target)} ]");
             dictionary.Add("type", requirementVerificationMembershipInstance.Type.ToString());
@@ -153,8 +153,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", requirementVerificationMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", requirementVerificationMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", requirementVerificationMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementVerificationMembershipInstance.ElementId);
             dictionary.Add("feature", requirementVerificationMembershipInstance.Feature);
             dictionary.Add("isImplied", requirementVerificationMembershipInstance.IsImplied);
@@ -163,10 +161,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", requirementVerificationMembershipInstance.MemberElement);
             dictionary.Add("memberName", requirementVerificationMembershipInstance.MemberName);
             dictionary.Add("memberShortName", requirementVerificationMembershipInstance.MemberShortName);
+            dictionary.Add("name", requirementVerificationMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", requirementVerificationMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", requirementVerificationMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", requirementVerificationMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", requirementVerificationMembershipInstance.OwningRelationship);
+            dictionary.Add("shortName", requirementVerificationMembershipInstance.ShortName);
             dictionary.Add("source", requirementVerificationMembershipInstance.Source);
             dictionary.Add("target", requirementVerificationMembershipInstance.Target);
             dictionary.Add("type", requirementVerificationMembershipInstance.Type);

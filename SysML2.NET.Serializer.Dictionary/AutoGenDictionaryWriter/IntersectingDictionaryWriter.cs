@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", intersectingInstance.AliasIds);
-            dictionary.Add("declaredName", intersectingInstance.DeclaredName);
-            dictionary.Add("declaredShortName", intersectingInstance.DeclaredShortName);
             dictionary.Add("elementId", intersectingInstance.ElementId);
             dictionary.Add("intersectingType", intersectingInstance.IntersectingType.ToString());
             dictionary.Add("isImplied", intersectingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", intersectingInstance.IsImpliedIncluded);
+            dictionary.Add("name", intersectingInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", intersectingInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", intersectingInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", intersectingInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", intersectingInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", intersectingInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", intersectingInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", intersectingInstance.Target)} ]");
 
@@ -147,16 +147,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", intersectingInstance.AliasIds);
-            dictionary.Add("declaredName", intersectingInstance.DeclaredName);
-            dictionary.Add("declaredShortName", intersectingInstance.DeclaredShortName);
             dictionary.Add("elementId", intersectingInstance.ElementId);
             dictionary.Add("intersectingType", intersectingInstance.IntersectingType);
             dictionary.Add("isImplied", intersectingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", intersectingInstance.IsImpliedIncluded);
+            dictionary.Add("name", intersectingInstance.Name);
             dictionary.Add("ownedRelatedElement", intersectingInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", intersectingInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", intersectingInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", intersectingInstance.OwningRelationship);
+            dictionary.Add("shortName", intersectingInstance.ShortName);
             dictionary.Add("source", intersectingInstance.Source);
             dictionary.Add("target", intersectingInstance.Target);
 

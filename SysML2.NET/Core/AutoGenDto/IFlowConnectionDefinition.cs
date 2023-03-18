@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A FlowConnectionDefinition is a ConnectionDefinition and ActionDefinition that is also an
-    /// Interaction representing flows between
-    /// Usages.specializesFromLibrary("Connections::MessageConnection")
+    /// Interaction representing flows between Usages.A FlowConnectionDefinition must subclassify, directly
+    /// or indirectly, the base FlowConnectionDefinition FlowConnection from the Systems model library.
     /// </summary>
     public partial interface IFlowConnectionDefinition : IConnectionDefinition, IActionDefinition, IInteraction
     {

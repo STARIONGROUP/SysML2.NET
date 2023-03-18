@@ -33,8 +33,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A ParameterMembership is a FeatureMembership that identifies its memberFeature as a parameter, which
     /// is always owned, and must have a direction. A ParameterMembership must be owned by a Behavior or a
-    /// Step.ownedMemberParameter.direction <> nullowningType.oclIsKindOf(Behavior) or
-    /// owningType.oclIsKindOf(Step)
+    /// Step.
     /// </summary>
     public partial interface IParameterMembership : IFeatureMembership
     {

@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iStateSubactionMembership.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iStateSubactionMembership.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iStateSubactionMembership.ElementId);
 
@@ -96,6 +92,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iStateSubactionMembership.MemberName);
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iStateSubactionMembership.MemberShortName);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iStateSubactionMembership.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iStateSubactionMembership.OwnedRelatedElement)
             {
@@ -128,6 +126,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iStateSubactionMembership.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iStateSubactionMembership.Source)
             {

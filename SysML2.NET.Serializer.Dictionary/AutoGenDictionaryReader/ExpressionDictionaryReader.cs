@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Expression");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Expression");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a Expression");
@@ -194,6 +182,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Expression");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Expression");
@@ -206,10 +200,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Expression");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             expressionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            expressionInstance.DeclaredName = declaredNameFeature;
-            expressionInstance.DeclaredShortName = declaredShortNameFeature;
             expressionInstance.Direction = directionFeature;
             expressionInstance.ElementId = elementIdFeature;
             expressionInstance.IsAbstract = isAbstractFeature;
@@ -222,8 +220,10 @@ namespace SysML2.NET.Serializer.Dictionary
             expressionInstance.IsReadOnly = isReadOnlyFeature;
             expressionInstance.IsSufficient = isSufficientFeature;
             expressionInstance.IsUnique = isUniqueFeature;
+            expressionInstance.Name = nameFeature;
             expressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             expressionInstance.OwningRelationship = owningRelationshipFeature;
+            expressionInstance.ShortName = shortNameFeature;
 
             return expressionInstance;
         }
@@ -247,18 +247,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Expression");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Expression");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Expression");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -332,6 +320,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Expression");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Expression");
@@ -344,10 +338,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Expression");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             expressionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            expressionInstance.DeclaredName = declaredNameFeature;
-            expressionInstance.DeclaredShortName = declaredShortNameFeature;
             expressionInstance.Direction = directionFeature;
             expressionInstance.ElementId = elementIdFeature;
             expressionInstance.IsAbstract = isAbstractFeature;
@@ -360,8 +358,10 @@ namespace SysML2.NET.Serializer.Dictionary
             expressionInstance.IsReadOnly = isReadOnlyFeature;
             expressionInstance.IsSufficient = isSufficientFeature;
             expressionInstance.IsUnique = isUniqueFeature;
+            expressionInstance.Name = nameFeature;
             expressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             expressionInstance.OwningRelationship = owningRelationshipFeature;
+            expressionInstance.ShortName = shortNameFeature;
 
             return expressionInstance;
         }

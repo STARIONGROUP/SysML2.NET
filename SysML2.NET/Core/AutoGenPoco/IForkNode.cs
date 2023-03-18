@@ -32,8 +32,10 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A ForkNode is a ControlNode that must be followed by successor Actions as given by all its outgoing
-    /// Successions.targetConnector->selectByKind(Succession)->size() <=
-    /// 1specializesFromLibrary("Actions::Action::forks")
+    /// Successions. All outgoing Successions must have a target multiplicity of 1..1. A ForkNode may have
+    /// at most one incoming Succession.A ForkNode must subset, directly or indirectly, the ActionUsage
+    /// Action::forks, implying that it is typed by ForkAction from the Systems model library (or a subtype
+    /// of it).
     /// </summary>
     public partial interface IForkNode : IControlNode
     {

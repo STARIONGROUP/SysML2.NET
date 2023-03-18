@@ -31,28 +31,23 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
-    /// which they are used (domain of the Connector). The associations of the Connector restrict what kinds
-    /// of things might be linked. The Connector further restricts these links to be between values of
-    /// Features on instances of its domain.relatedFeature = connectorEnd.ownedReferenceSubsetting->   
-    /// select(s | s <> null).subsettedFeaturerelatedFeature->forAll(f |     if featuringType->isEmpty()
-    /// then f.isFeaturedWithin(null)    else featuringType->exists(t | f.isFeaturedWithin(t))   
-    /// endif)sourceFeature =     if relatedFeature->isEmpty() then null     else relatedFeature->first()   
-    ///  endiftargetFeature =    if relatedFeature->size() < 2 then OrderedSet{}    else        
-    /// relatedFeature->            subSequence(2, relatedFeature->size())->            asOrderedSet()   
-    /// endifnot isAbstract implies relatedFeature->size() >=
-    /// 2specializesFromLibrary("Links::links")association->exists(oclIsKindOf(AssociationStructure))
-    /// implies    specializesFromLibrary("Objects::linkObjects")connectorEnds->size() = 2
-    /// andassociation->exists(oclIsKindOf(AssocationStructure)) implies   
-    /// specializesFromLibrary("Objects::binaryLinkObjects")connectorEnd->size() = 2 implies   
-    /// specializesFromLibrary("Links::binaryLinks")connectorEnds->size() > 2 implies    not
-    /// specializesFromLibrary("Links::BinaryLink")
+    /// A Connector is a usage of Associations, with links restricted to instances of the Type in which it
+    /// is used (domain of the Connector). Associations restrict what kinds of things might be linked. The
+    /// Connector further restricts these links to between values of two Features on instances of
+    /// its domain.relatedFeature =
+    /// connectorEnd.ownedReferenceSubsetting.subsettedFeaturerelatedFeature->forAll(f |     if
+    /// featuringType->isEmpty() then f.isFeaturedWithin(null)    else featuringType->exists(t |
+    /// f.isFeaturedWithin(t))    endif)sourceFeature =     if relatedFeature->size() = 2 then
+    /// relatedFeature->at(1)     else null     endiftargetFeature =    if sourceFeature = null then
+    /// relatedFeature    else relatedFeature->excluding(sourceFeature)    endifconnectorEnd =
+    /// feature->select(isEnd)association->forAll(a |    a.associationEnd->forAll(ae |       
+    /// connectorEnd->one(ce |             ce.ownedRedefinition.redefinedFeature->includes(ae))))
     /// </summary>
     public partial interface IConnector : IFeature, IRelationship
     {
         /// <summary>
         /// For a binary Connector, whether or not the Connector should be considered to have a direction from
-        /// sourceFeature to targetFeature.
+        /// source to target.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsDirected { get; set; }

@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.DTO
     public partial interface IDependency : IRelationship
     {
         /// <summary>
-        /// The Element or Elements dependent on the supplier Elements.
+        /// The Element or Elements dependent on the supplier elements.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Guid> Client { get; set; }

@@ -31,17 +31,16 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Namespace is an Element that contains other Element, known as its members, via Membership
+    /// A Namespace is an Element that contains other Elements, known as its members, via Membership
     /// Relationships with those Elements. The members of a Namespace may be owned by the Namespace, aliased
-    /// in the Namespace, or imported into the Namespace via Import Relationships with other Namespace.A
-    /// Namespace can provide names for its members via the memberNames and memberShortNames specified by
-    /// the Memberships in the Namespace. If a Membership specifies a memberName and/or memberShortName,
-    /// then that those are names of the corresponding memberElement relative to the Namespace. For an
-    /// OwningMembership, the owningMemberName and owningMemberShortName are given by the Element name and
-    /// shortName. Note that the same Element may be the memberElement of multiple Memberships in a
-    /// Namespace (though it may be owned at most once), each of which may define a separate alias for the
-    /// Element relative to the Namespace.membership->forAll(m1 |     membership->forAll(m2 |         m1 <>
-    /// m2 implies m1.isDistinguishableFrom(m2)))member = membership.memberElementownedMember =
+    /// in the Namespace, or imported into the Namespace via Import Relationships with other Namespaces.A
+    /// Namespace can provide names for its members via the memberNames specified by the Memberships in the
+    /// Namespace. If a Membership specifies a memberName, then that is the name of the corresponding
+    /// memberElement relative to the Namespace. Note that the same Element may be the memberElement of
+    /// multiple Memberships in a Namespace (though it may be owned at most once), each of which may define
+    /// a separate alias for the Element relative to the Namespace.membership->forAll(m1 |
+    /// membership->forAll(m2 | m1 <> m2 implies m1.isDistinguishableFrom(m2)))member =
+    /// membership.memberElementownedMember =
     /// ownedMembership->selectByKind(OwningMembership).ownedMemberElementimportedMembership =
     /// importedMemberships(Set{})ownedImport = ownedRelationship->selectByKind(Import)ownedMembership =
     /// ownedRelationship->selectByKind(Membership)
@@ -71,21 +70,6 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
-
-        /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
@@ -103,6 +87,12 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
+
+        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -113,6 +103,15 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
     }
 }

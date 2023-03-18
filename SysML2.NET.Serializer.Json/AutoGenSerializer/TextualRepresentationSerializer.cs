@@ -80,10 +80,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("body");
             writer.WriteStringValue(iTextualRepresentation.Body);
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iTextualRepresentation.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iTextualRepresentation.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iTextualRepresentation.ElementId);
 
@@ -93,6 +89,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("language");
             writer.WriteStringValue(iTextualRepresentation.Language);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iTextualRepresentation.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iTextualRepresentation.OwnedRelationship)
             {
@@ -109,6 +107,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iTextualRepresentation.ShortName);
             writer.WriteEndObject();
         }
     }

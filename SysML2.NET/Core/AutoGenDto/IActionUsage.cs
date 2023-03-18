@@ -34,22 +34,9 @@ namespace SysML2.NET.Core.DTO
     /// An ActionUsage is a Usage that is also a Step, and, so, is typed by a Behavior. Nominally, if the
     /// type is an ActionDefinition, an ActionUsage is a Usage of that ActionDefinition within a system.
     /// However, other kinds of kernel Behaviors are also allowed, to permit use of Behaviors from the
-    /// Kernel Model Libraries.isSubactionUsage() implies   
-    /// specializesFromLibrary('Actions::Action::subactions')specializesFromLibrary('Actions::actions')isComposite
-    /// and owningType <> null and(owningType.oclIsKindOf(PartDefinition) or
-    /// owningType.oclIsKindOf(PartUsage)) implies   
-    /// specializesFromLibrary('Parts::Part::ownedActions')owningFeatureMembership <> null
-    /// andowningFeatureMembership.oclIsKindOf(StateSubactionMembership) implies    let kind :
-    /// StateSubactionKind =         owningFeatureMembership.oclAsType(StateSubactionMembership).kind in   
-    /// if kind = StateSubactionKind::entry then       
-    /// redefinesFromLibrary('States::StateAction::entryAction')    else if kind = StateSubactionKind::do
-    /// then        redefinesFromLibrary('States::StateAction::doAction')    else       
-    /// redefinesFromLibrary('States::StateAction::exitAction')    endif endifowningType <> null and   
-    /// (owningType.oclIsKindOf(AnalysisCaseDefinition) and       
-    /// owningType.oclAsType(AnalysisCaseDefinition).analysisAction->            includes(self) or    
-    /// owningType.oclIsKindOf(AnalysisCaseUsage) and       
-    /// owningType.oclAsType(AnalysisCaseUsage).analysisAction->            includes(self)) implies   
-    /// specializesFromLibrary('AnalysisCases::AnalysisCase::analysisSteps')
+    /// Kernel Library.An ActionUsage must subset, directly or indirectly, the base ActionUsage actions from
+    /// the Systems model library. if it is a feature of an ActionDefinition or ActionUsage, then it must
+    /// subset, directly or indirectly, the ActionUsage Action::subactions.
     /// </summary>
     public partial interface IActionUsage : IOccurrenceUsage, IStep
     {

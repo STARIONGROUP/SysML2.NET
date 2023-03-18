@@ -31,12 +31,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An AnalysisCaseDefinition is a CaseDefinition for the case of carrying out an
-    /// analysis.analysisAction = action->select(    isComposite and    
-    /// specializes('AnalysisCases::AnalysisAction'))resultExpression =    let results :
-    /// OrderedSet(ResultExpressionMembership) =        featureMembersip->           
-    /// selectByKind(ResultExpressionMembership) in    if results->isEmpty() then null    else
-    /// results->first().ownedResultExpression    endifspecializesFromLibrary('AnalysisCases::AnalysisCase')
+    /// An AnalysisCaseDefinition is a CaseDefinition for the case of carrying out an analysis.An
+    /// AnalysisCaseDefinition must subclass, directly or indirectly, the base AnalysisCaseDefinition
+    /// AnalysisCase from the Systems model library.
     /// </summary>
     public partial interface IAnalysisCaseDefinition : ICaseDefinition
     {

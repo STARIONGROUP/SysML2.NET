@@ -31,13 +31,11 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A PortUsage is a usage of a PortDefinition. A PortUsage itself as well as all its nestedUsages must
-    /// be referential (non-composite).nestedUsage->    reject(oclIsKindOf(PortUsage))->    forAll(not
-    /// isComposite)specializesFromLibrary('Ports::ports')isComposite and owningType <> null
-    /// and(owningType.oclIsKindOf(PortDefinition) or owningType.oclIsKindOf(PortUsage)) implies   
-    /// specializesFromLibrary('Ports::Port::subports')owningType = null ornot
-    /// owningType.oclIsKindOf(PortDefinition) andnot owningType.oclIsKindOf(PortUsage) implies   
-    /// isReference
+    /// A PortUsage is a usage of a PortDefinition. A PortUsage must be owned by a PartDefinition, a
+    /// PortDefinition, a PartUsage or another PortUsage.  Any nestedUsages of a PortUsage, other than
+    /// nested PortUsages, must not be composite.A PortUsage must subset, directly or indirectly, the
+    /// PortUsage ports from the Systems model library.nestedUsage->    select(not oclIsKindOf(PortUsage))->
+    /// forAll(not isComposite)
     /// </summary>
     public partial interface IPortUsage : IOccurrenceUsage
     {

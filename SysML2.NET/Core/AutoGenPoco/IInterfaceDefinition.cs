@@ -32,16 +32,15 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An InterfaceDefinition is a ConnectionDefinition all of whose ends are PortUsages, defining an
-    /// interface between elements that interact through such
-    /// ports.specializesFromLibrary("Interfaces::Interface")ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Interfaces::BinaryInterface")
+    /// interface between elements that interact through such ports.An InterfaceDefinition must subclass,
+    /// directly or indirectly, the base InterfaceDefinition Interface from the Systems model library.
     /// </summary>
     public partial interface IInterfaceDefinition : IConnectionDefinition
     {
         /// <summary>
         /// Queries the derived property InterfaceEnd
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 2, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<PortUsage> QueryInterfaceEnd();
 
     }

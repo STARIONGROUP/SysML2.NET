@@ -31,20 +31,17 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An OccurrenceUsage is a Usage whose types are all Classes. Nominally, if a type is an
+    /// An OccurrenceUsage is a Usage whose type is a Class. Nominally, if the type is an
     /// OccurrenceDefinition, an OccurrenceUsage is a Usage of that OccurrenceDefinition within a system.
     /// However, other types of Kernel Classes are also allowed, to permit use of Classes from the Kernel
-    /// Model Libraries.individualDefinition =    let individualDefinitions :
-    /// OrderedSet(OccurrenceDefinition) =         occurrenceDefinition->           
-    /// selectByKind(OccurrenceDefinition)->            select(isIndividual) in    if
-    /// individualDefinitions->isEmpty() then null    else individualDefinitions->first() endifisIndividual
-    /// implies individualDefinition <> nullspecializesFromLibrary("Occurrences::occurrences")isComposite
-    /// andowningType <> null and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(OccurrenceUsage)
-    /// or owningType.oclIsKindOf(Feature) and    owningType.oclAsType(Feature).type->       
-    /// exists(oclIsKind(Class))) implies   
-    /// specializesFromLibrary("Occurrences::Occurrence::suboccurrences")occurrenceDefinition->select(isIndividual).size()
-    /// <= 1portionKind <> null implies    occurrenceDefinition->forAll(occ |        
-    /// featuringType->exists(specializes(occ)))
+    /// Library.An OccurrenceUsage must subset, directly or indirectly, the base Feature occurrences from
+    /// the Kernel model library.if portionKind = null then portioningFeature = nullelse    
+    /// portioningFeature <> null and    portionKind = portioningFeature.portionKind and   
+    /// occurrenceDefinition.asSet() = portioningFeature.type.asSet()endiflet individualDefinitions :
+    /// Sequence(OccurrenceDefinition) =     occurrenceDefinition->       
+    /// selectByKind(OccurrenceDefinition)->        select(isIndividual) inif
+    /// individualDefinitions->isEmpty() then nullelse individualDefinitions->at(1) endifisIndividual
+    /// implies individualDefinition <> null
     /// </summary>
     public partial interface IOccurrenceUsage : IUsage
     {
@@ -56,7 +53,7 @@ namespace SysML2.NET.Core.DTO
         bool IsIndividual { get; set; }
 
         /// <summary>
-        /// The kind of (temporal) portion of the life of the occurrenceDefinition represented by this
+        /// The kind of portion of the instances of the occurrenceDefinition represented by this
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

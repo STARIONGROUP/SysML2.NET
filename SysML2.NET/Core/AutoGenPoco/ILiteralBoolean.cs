@@ -31,13 +31,15 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// LiteralBoolean is a LiteralExpression that provides a Boolean value as a result. Its result
-    /// parameter must have type Boolean.
+    /// LiteralBoolean is a LiteralExpression that provides a Boolean value as a result. It must have
+    /// an owned result parameter whose type is Boolean.An Expression that provides a Boolean value as a
+    /// result.A LiteralBoolean must be typed by a specialization of Evaluation with no input parameters and
+    /// a single Boolean value as its result.
     /// </summary>
     public partial interface ILiteralBoolean : ILiteralExpression
     {
         /// <summary>
-        /// The Boolean value that is the result of evaluating this LiteralBoolean.The Boolean value that is the
+        /// The Boolean value that is the result of evaluating this Expression.The Boolean value that is the
         /// result of evaluating this Expression.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

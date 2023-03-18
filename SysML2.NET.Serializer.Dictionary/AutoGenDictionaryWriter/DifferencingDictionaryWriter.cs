@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", differencingInstance.AliasIds);
-            dictionary.Add("declaredName", differencingInstance.DeclaredName);
-            dictionary.Add("declaredShortName", differencingInstance.DeclaredShortName);
             dictionary.Add("differencingType", differencingInstance.DifferencingType.ToString());
             dictionary.Add("elementId", differencingInstance.ElementId);
             dictionary.Add("isImplied", differencingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", differencingInstance.IsImpliedIncluded);
+            dictionary.Add("name", differencingInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", differencingInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", differencingInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", differencingInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", differencingInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", differencingInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", differencingInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", differencingInstance.Target)} ]");
 
@@ -147,16 +147,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", differencingInstance.AliasIds);
-            dictionary.Add("declaredName", differencingInstance.DeclaredName);
-            dictionary.Add("declaredShortName", differencingInstance.DeclaredShortName);
             dictionary.Add("differencingType", differencingInstance.DifferencingType);
             dictionary.Add("elementId", differencingInstance.ElementId);
             dictionary.Add("isImplied", differencingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", differencingInstance.IsImpliedIncluded);
+            dictionary.Add("name", differencingInstance.Name);
             dictionary.Add("ownedRelatedElement", differencingInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", differencingInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", differencingInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", differencingInstance.OwningRelationship);
+            dictionary.Add("shortName", differencingInstance.ShortName);
             dictionary.Add("source", differencingInstance.Source);
             dictionary.Add("target", differencingInstance.Target);
 

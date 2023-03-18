@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", expressionInstance.AliasIds);
-            dictionary.Add("declaredName", expressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", expressionInstance.DeclaredShortName);
             dictionary.Add("direction", expressionInstance.Direction);
             dictionary.Add("elementId", expressionInstance.ElementId);
             dictionary.Add("isAbstract", expressionInstance.IsAbstract);
@@ -122,8 +120,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", expressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", expressionInstance.IsSufficient);
             dictionary.Add("isUnique", expressionInstance.IsUnique);
+            dictionary.Add("name", expressionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", expressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", expressionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", expressionInstance.ShortName);
 
             return dictionary;
         }
@@ -151,8 +151,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", expressionInstance.AliasIds);
-            dictionary.Add("declaredName", expressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", expressionInstance.DeclaredShortName);
             dictionary.Add("direction", expressionInstance.Direction);
             dictionary.Add("elementId", expressionInstance.ElementId);
             dictionary.Add("isAbstract", expressionInstance.IsAbstract);
@@ -165,8 +163,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", expressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", expressionInstance.IsSufficient);
             dictionary.Add("isUnique", expressionInstance.IsUnique);
+            dictionary.Add("name", expressionInstance.Name);
             dictionary.Add("ownedRelationship", expressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", expressionInstance.OwningRelationship);
+            dictionary.Add("shortName", expressionInstance.ShortName);
 
             return dictionary;
         }

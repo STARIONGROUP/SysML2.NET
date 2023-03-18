@@ -108,17 +108,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", concernDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", concernDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", concernDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", concernDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", concernDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", concernDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", concernDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", concernDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", concernDefinitionInstance.IsVariation);
+            dictionary.Add("name", concernDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", concernDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", concernDefinitionInstance.OwningRelationship.ToString());
             dictionary.Add("reqId", concernDefinitionInstance.ReqId);
+            dictionary.Add("shortName", concernDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -146,17 +146,17 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", concernDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", concernDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", concernDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", concernDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", concernDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", concernDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", concernDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", concernDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", concernDefinitionInstance.IsVariation);
+            dictionary.Add("name", concernDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", concernDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", concernDefinitionInstance.OwningRelationship);
             dictionary.Add("reqId", concernDefinitionInstance.ReqId);
+            dictionary.Add("shortName", concernDefinitionInstance.ShortName);
 
             return dictionary;
         }

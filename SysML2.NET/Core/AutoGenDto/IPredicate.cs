@@ -31,8 +31,9 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Predicate is a Function whose result parameter has type Boolean and multiplicity
-    /// 1..1.specializesFromLibrary("Performances::BooleanEvaluation")
+    /// A Predicate is a Function whose result Parameter has type Boolean and multiplicity 1..1.A Predicate
+    /// is a Function whose result is a Boolean true or false value. These are typically used to test
+    /// logical statements about modeled objects.
     /// </summary>
     public partial interface IPredicate : IFunction
     {

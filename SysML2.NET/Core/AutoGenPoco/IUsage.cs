@@ -42,44 +42,14 @@ namespace SysML2.NET.Core.POCO
     /// = variantMembership.ownedVariantUsagevariantMembership =
     /// ownedMembership->selectByKind(VariantMembership)not isVariation implies
     /// variantMembership->isEmpty()isVariation implies variantMembership = ownedMembershipisReference = not
-    /// isCompositeowningVariationUsage <> null implies    specializes(owningVariationUsage)isVariation
-    /// implies    not ownedSpecialization.specific->exists(isVariation)owningVariationDefinition <> null
-    /// implies    specializes(owningVariationDefinition)directedUsage =
-    /// directedFeature->selectByKind(Usage)nestedAction =
-    /// nestedUsage->selectByKind(ActionUsage)nestedAllocation =
-    /// nestedUsage->selectByKind(AllocationUsage)nestedAnalysisCase =
-    /// nestedUsage->selectByKind(AnalysisCaseUsage)nestedAttribute =
-    /// nestedUsage->selectByKind(AttributeUsage)nestedCalculation =
-    /// nestedUsage->selectByKind(CalculationUsage)nestedCase =
-    /// nestedUsage->selectByKind(CaseUsage)nestedConcern =
-    /// nestedUsage->selectByKind(ConcernUsage)nestedConnection =
-    /// nestedUsage->selectByKind(ConnectorAsUsage)nestedConstraint =
-    /// nestedUsage->selectByKind(ConstraintUsage)ownedNested =
-    /// nestedUsage->selectByKind(EnumerationUsage)nestedFlow =
-    /// nestedUsage->selectByKind(FlowUsage)nestedInterface =
-    /// nestedUsage->selectByKind(ReferenceUsage)nestedItem =
-    /// nestedUsage->selectByKind(ItemUsage)nestedMetadata =
-    /// nestedUsage->selectByKind(MetadataUsage)nestedOccurrence =
-    /// nestedUsage->selectByKind(OccurrenceUsage)nestedPart =
-    /// nestedUsage->selectByKind(PartUsage)nestedPort = nestedUsage->selectByKind(PortUsage)nestedReference
-    /// = nestedUsage->selectByKind(ReferenceUsage)nestedRendering =
-    /// nestedUsage->selectByKind(RenderingUsage)nestedRequirement =
-    /// nestedUsage->selectByKind(RequirementUsage)nestedState =
-    /// nestedUsage->selectByKind(StateUsage)nestedTransition =
-    /// nestedUsage->selectByKind(TransitionUsage)nestedUsage =
-    /// ownedFeature->selectByKind(Usage)nestedUseCase =
-    /// nestedUsage->selectByKind(UseCaseUsage)nestedVerificationCase =
-    /// nestedUsage->selectByKind(VerificationCaseUsage)nestedView =
-    /// nestedUsage->selectByKind(ViewUsage)nestedViewpoint = nestedUsage->selectByKind(ViewpointUsage)usage
-    /// = feature->selectByKind(Usage)owningType <> null implies    (owningType.oclIsKindOf(Definition) or  
-    /// ownigType.oclIsKindOf(Usage))
+    /// isComposite
     /// </summary>
     public partial interface IUsage : IFeature
     {
         /// <summary>
         /// Queries the derived property Definition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Classifier> QueryDefinition();
 
         /// <summary>

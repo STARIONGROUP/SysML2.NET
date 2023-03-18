@@ -109,15 +109,15 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", featureChainingInstance.AliasIds);
             dictionary.Add("chainingFeature", featureChainingInstance.ChainingFeature.ToString());
-            dictionary.Add("declaredName", featureChainingInstance.DeclaredName);
-            dictionary.Add("declaredShortName", featureChainingInstance.DeclaredShortName);
             dictionary.Add("elementId", featureChainingInstance.ElementId);
             dictionary.Add("isImplied", featureChainingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", featureChainingInstance.IsImpliedIncluded);
+            dictionary.Add("name", featureChainingInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", featureChainingInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", featureChainingInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", featureChainingInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", featureChainingInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", featureChainingInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", featureChainingInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", featureChainingInstance.Target)} ]");
 
@@ -148,15 +148,15 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", featureChainingInstance.AliasIds);
             dictionary.Add("chainingFeature", featureChainingInstance.ChainingFeature);
-            dictionary.Add("declaredName", featureChainingInstance.DeclaredName);
-            dictionary.Add("declaredShortName", featureChainingInstance.DeclaredShortName);
             dictionary.Add("elementId", featureChainingInstance.ElementId);
             dictionary.Add("isImplied", featureChainingInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", featureChainingInstance.IsImpliedIncluded);
+            dictionary.Add("name", featureChainingInstance.Name);
             dictionary.Add("ownedRelatedElement", featureChainingInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", featureChainingInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", featureChainingInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", featureChainingInstance.OwningRelationship);
+            dictionary.Add("shortName", featureChainingInstance.ShortName);
             dictionary.Add("source", featureChainingInstance.Source);
             dictionary.Add("target", featureChainingInstance.Target);
 

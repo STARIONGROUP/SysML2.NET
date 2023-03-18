@@ -33,11 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A VariantMembership is a Membership between a variation point Definition or Usage and a Usage that
     /// represents a variant in the context of that variation. The membershipOwningNamespace for the
-    /// VariantMembership must be either a Definition or a Usage with isVariation =
-    /// true.membershipOwningNamespace.oclIsKindOf(Definition) and   
-    /// membershipOwningNamespace.oclAsType(Definition).isVariation
-    /// ormembershipOwningNamespace.oclIsKindOf(Usage) and   
-    /// membershipOwningNamespace.oclAsType(Usage).isVariation
+    /// VariantMembership must be either a Definition or a Usage with isVariation = true.
     /// </summary>
     public partial interface IVariantMembership : IOwningMembership
     {

@@ -31,17 +31,18 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A  MetadataUsage is a Usage and a MetadataFeature, used to annotate other Elements in a system model
+    /// An MetadataUsage is a Usage and a MetadataFeature, used to annotate other Elements in a system model
     /// with metadata. As a MetadataFeature, its type must be a Metaclass, which will nominally be a
-    /// MetadataDefinition. However, any kernel Metaclass is also allowed, to permit use of Metaclasses from
-    /// the Kernel Model Libraries.specializesFromLibrary('Metadata::metadataItems')
+    /// MetadataDefinition. However, any Kernel Metaclass is also allowed, to permit use of Metaclasses from
+    /// the Kernel Library.A MetadataUsage must subset, directly or indirectly, the base MetadataUsage
+    /// metadataItems from the Systems model library.
     /// </summary>
     public partial interface IMetadataUsage : IItemUsage, IMetadataFeature
     {
         /// <summary>
         /// Queries the derived property MetadataDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Metaclass QueryMetadataDefinition();
 
     }

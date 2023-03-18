@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", itemFeatureInstance.AliasIds);
-            dictionary.Add("declaredName", itemFeatureInstance.DeclaredName);
-            dictionary.Add("declaredShortName", itemFeatureInstance.DeclaredShortName);
             dictionary.Add("direction", itemFeatureInstance.Direction);
             dictionary.Add("elementId", itemFeatureInstance.ElementId);
             dictionary.Add("isAbstract", itemFeatureInstance.IsAbstract);
@@ -122,8 +120,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", itemFeatureInstance.IsReadOnly);
             dictionary.Add("isSufficient", itemFeatureInstance.IsSufficient);
             dictionary.Add("isUnique", itemFeatureInstance.IsUnique);
+            dictionary.Add("name", itemFeatureInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", itemFeatureInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", itemFeatureInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", itemFeatureInstance.ShortName);
 
             return dictionary;
         }
@@ -151,8 +151,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", itemFeatureInstance.AliasIds);
-            dictionary.Add("declaredName", itemFeatureInstance.DeclaredName);
-            dictionary.Add("declaredShortName", itemFeatureInstance.DeclaredShortName);
             dictionary.Add("direction", itemFeatureInstance.Direction);
             dictionary.Add("elementId", itemFeatureInstance.ElementId);
             dictionary.Add("isAbstract", itemFeatureInstance.IsAbstract);
@@ -165,8 +163,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", itemFeatureInstance.IsReadOnly);
             dictionary.Add("isSufficient", itemFeatureInstance.IsSufficient);
             dictionary.Add("isUnique", itemFeatureInstance.IsUnique);
+            dictionary.Add("name", itemFeatureInstance.Name);
             dictionary.Add("ownedRelationship", itemFeatureInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", itemFeatureInstance.OwningRelationship);
+            dictionary.Add("shortName", itemFeatureInstance.ShortName);
 
             return dictionary;
         }

@@ -4,7 +4,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <Version>0.10.0</Version>
+        <Version>0.10.0-GSEF</Version>
         <Description>A .NET implementation of the OMG SysML v2 specification.</Description>
         <PackageId>SysML2.NET</PackageId>
         <Company>RHEA System S.A.</Company>
@@ -15,8 +15,7 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Refactor] API namespace to PIM namespace
-            [Add] generated EFeature annotations to DTO and POCO; fixes #17
+            [Downgrade] to release 2022-09 to support GSEF
         </PackageReleaseNotes>
     </PropertyGroup>
 

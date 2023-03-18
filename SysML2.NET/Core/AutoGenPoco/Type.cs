@@ -34,28 +34,22 @@ namespace SysML2.NET.Core.POCO
     /// A Type is a Namespace that is the most general kind of Element supporting the semantics of
     /// classification. A Type may be a Classifier or a Feature, defining conditions on what is classified
     /// by the Type (see also the description of isSufficient).ownedSpecialization =
-    /// ownedRelationship->selectByKind(Specialization)->    select(s | s.special = self)    multiplicity = 
-    ///    let ownedMultiplicities: Sequence(Multiplicity) =        ownedMember->selectByKind(Multiplicity)
-    /// in    if ownedMultiplicities->isEmpty() then null    else ownedMultiplicities->first()   
-    /// endifownedFeatureMembership = ownedRelationship->selectByKind(FeatureMembership)let
-    /// ownedConjugators: Sequence(Conjugator) =     ownedRelationship->selectByKind(Conjugation) in   
-    /// ownedConjugator =         if ownedConjugators->isEmpty() then null         else
-    /// ownedConjugators->at(1) endifoutput =    if isConjugated then         conjugator.originalType.input 
-    ///   else         feature->select(direction = out or direction = inout)    endifinput =     if
-    /// isConjugated then         conjugator.originalType.output    else         feature->select(direction =
-    /// _'in' or direction = inout)    endifinheritedMembership =
-    /// inheritedMemberships(Set{})specializesFromLibrary('Base::Anything')directedFeature =
-    /// feature->select(f | directionOf(f) <> null)feature =
+    /// ownedRelationship->selectByKind(Specialization)->    select(g | g.special = self)    multiplicity =
+    /// feature->select(oclIsKindOf(Multiplicity))ownedFeatureMembership =
+    /// ownedRelationship->selectByKind(FeatureMembership)let ownedConjugators: Sequence(Conjugator) =    
+    /// ownedRelationship->selectByKind(Conjugation) in    ownedConjugators->size() = 1 and   
+    /// ownedConjugator = ownedConjugators->at(1)output =    if isConjugated then        
+    /// conjugator.originalType.input    else         feature->select(direction = out or direction = inout) 
+    ///   endifinput =     if isConjugated then         conjugator.originalType.output    else        
+    /// feature->select(direction = _'in' or direction = inout)    endifinheritedMembership =
+    /// inheritedMemberships(Set{})disjointType =
+    /// disjoiningTypeDisjoining.disjoiningTypeallSupertypes()->includes(Kernel
+    /// Library::Anything)directedFeature = feature->select(direction <> null)feature =
     /// featureMembership.ownedMemberFeaturefeatureMembership = ownedMembership->union(   
     /// inheritedMembership->selectByKind(FeatureMembership))ownedFeature =
-    /// ownedFeatureMembership.ownedMemberFeaturedifferencingType =
-    /// ownedDifferencing.differencingTypeintersectingType->excludes(self)differencingType->excludes(self)unioningType
-    /// = ownedUnioning.unioningTypeunioningType->excludes(self)intersectingType =
-    /// ownedIntersecting.intersectingTypeownedRelationship->selectByKind(Conjugator)->size() <=
-    /// 1ownedMember->selectByKind(Multiplicity)->size() <= 1endFeature =
-    /// feature->select(isEnd)ownedRelationship->selectByKind(Disjoining)ownedRelationship->selectByKind(Unioning)ownedRelationship->selectByKind(Intersecting)ownedRelationship->selectByKind(Differencing)ownedEndFeature
-    /// = ownedFeature->select(isEnd)inheritedFeature = inheritedMemberships->   
-    /// selectByKind(FeatureMembership).memberFeature
+    /// ownedFeatureMembership.ownedMemberFeatureintersectingType->excludes(self)unioningType->excludes(self)differencingType->excludes(self)differencingType
+    /// = ownedDifferencing.differencingTypeunioningType = ownedUnioning.unioningTypeintersectingType =
+    /// ownedIntersecting.intersectingType
     /// </summary>
     public partial class Type : IType
     {
@@ -68,7 +62,7 @@ namespace SysML2.NET.Core.POCO
             this.IsAbstract = false;
             this.IsImpliedIncluded = false;
             this.IsSufficient = false;
-            this.OwnedRelationship = new List<IRelationship>();
+            this.OwnedRelationship = new List<Relationship>();
         }
 
         /// <summary>
@@ -82,21 +76,6 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// Queries the derived property DifferencingType
@@ -123,6 +102,15 @@ namespace SysML2.NET.Core.POCO
         public List<Documentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property EffectiveName
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string QueryEffectiveName()
+        {
+            throw new NotImplementedException("Derived property EffectiveName not yet supported");
         }
 
         /// <summary>
@@ -244,7 +232,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -254,7 +242,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property Member
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryMember()
+        public List<Element> QueryMember()
         {
             throw new NotImplementedException("Derived property Member not yet supported");
         }
@@ -278,13 +266,10 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property Name
+        /// The primary name of this Element.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryName()
-        {
-            throw new NotImplementedException("Derived property Name not yet supported");
-        }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// Queries the derived property Output
@@ -335,7 +320,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedElement
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryOwnedElement()
+        public List<Element> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
@@ -371,7 +356,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedImport
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IImport> QueryOwnedImport()
+        public List<Import> QueryOwnedImport()
         {
             throw new NotImplementedException("Derived property OwnedImport not yet supported");
         }
@@ -389,7 +374,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedMember
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryOwnedMember()
+        public List<Element> QueryOwnedMember()
         {
             throw new NotImplementedException("Derived property OwnedMember not yet supported");
         }
@@ -407,7 +392,7 @@ namespace SysML2.NET.Core.POCO
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
-        public List<IRelationship> OwnedRelationship { get; set; }
+        public List<Relationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property OwnedSpecialization
@@ -431,7 +416,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property Owner
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement QueryOwner()
+        public Element QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
@@ -458,7 +443,7 @@ namespace SysML2.NET.Core.POCO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IRelationship OwningRelationship { get; set; }
+        public Relationship OwningRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property QualifiedName
@@ -470,13 +455,13 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property ShortName
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryShortName()
-        {
-            throw new NotImplementedException("Derived property ShortName not yet supported");
-        }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
         /// <summary>
         /// Queries the derived property TextualRepresentation

@@ -31,16 +31,15 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A FlowConnectionUsage is a ConnectionUsage that is also an ItemFlow.if itemFlowEnds->isEmpty() then 
-    ///   specializesFromLibrary("Connections::messageConnections")else   
-    /// specializesFromLibrary("Connections::flowConnections"endif
+    /// A FlowConnectionUsage is a ConnectionUsage that is also an ItemFlow.A FlowConnectionUsage must
+    /// subset the base FlowConnectionUsage flowConnections from the Systems model library.
     /// </summary>
     public partial interface IFlowConnectionUsage : IConnectionUsage, IActionUsage, IItemFlow
     {
         /// <summary>
         /// Queries the derived property FlowConnectionDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Interaction> QueryFlowConnectionDefinition();
 
     }

@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", featureChainExpressionInstance.AliasIds);
-            dictionary.Add("declaredName", featureChainExpressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", featureChainExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", featureChainExpressionInstance.Direction);
             dictionary.Add("elementId", featureChainExpressionInstance.ElementId);
             dictionary.Add("isAbstract", featureChainExpressionInstance.IsAbstract);
@@ -122,9 +120,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", featureChainExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", featureChainExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", featureChainExpressionInstance.IsUnique);
+            dictionary.Add("name", featureChainExpressionInstance.Name);
             dictionary.Add("operator", featureChainExpressionInstance.Operator);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", featureChainExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", featureChainExpressionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", featureChainExpressionInstance.ShortName);
 
             return dictionary;
         }
@@ -152,8 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", featureChainExpressionInstance.AliasIds);
-            dictionary.Add("declaredName", featureChainExpressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", featureChainExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", featureChainExpressionInstance.Direction);
             dictionary.Add("elementId", featureChainExpressionInstance.ElementId);
             dictionary.Add("isAbstract", featureChainExpressionInstance.IsAbstract);
@@ -166,9 +164,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", featureChainExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", featureChainExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", featureChainExpressionInstance.IsUnique);
+            dictionary.Add("name", featureChainExpressionInstance.Name);
             dictionary.Add("operator", featureChainExpressionInstance.Operator);
             dictionary.Add("ownedRelationship", featureChainExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", featureChainExpressionInstance.OwningRelationship);
+            dictionary.Add("shortName", featureChainExpressionInstance.ShortName);
 
             return dictionary;
         }

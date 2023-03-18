@@ -31,22 +31,11 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A RequirementDefinition is a ConstraintDefinition that defines a requirement used in the context of
-    /// a specification as a constraint that a valid solution must satisfy. The specification is relative to
-    /// a specified subject, possibly in collaboration with one or more external actors.text =
-    /// documentation.bodyassumedConstraint = ownedFeatureMembership->   
-    /// selectByKind(RequirementConstraintMembership)->    select(kind =
-    /// RequirementConstraintKind::assumption).    ownedConstraintrequiredConstraint =
-    /// ownedFeatureMembership->    selectByKind(RequirementConstraintMembership)->    select(kind =
-    /// RequirementConstraintKind::requirement).    ownedConstraintsubjectParameter =    let subjects :
-    /// OrderedSet(SubjectMembership) =         featureMembership->selectByKind(SubjectMembership) in    if
-    /// subjects->isEmpty() then null    else subjects->first().ownedSubjectParameter    endifframedConcern
-    /// = featureMembership->    selectByKind(FramedConcernMembership).    ownedConcernactorParameter =
-    /// featureMembership->    selectByKind(ActorMembership).    ownedActorParameterstakeholderParameter =
-    /// featureMembership->    selectByKind(StakholderMembership).   
-    /// ownedStakeholderParameterfeatureMembership->	    selectByKind(SubjectMembership)->    size() <=
-    /// 1input->notEmpty() and input->first() =
-    /// subjectParameterspecializesFromLibrary('Requirements::RequirementCheck')
+    /// A RequirementDefinition is a ConstraintDefinition that defines a requirement as a constraint that is
+    /// used in the context of a specification of a that a valid solution must satisfy. The specification is
+    /// relative to a specified subject, possibly in collaboration with one or more external actors.A
+    /// RequirementDefinition must subclass, directly or indirectly, the base RequirementDefinition
+    /// RequirementCheck from the Systems model library.
     /// </summary>
     public partial class RequirementDefinition : IRequirementDefinition
     {
@@ -74,21 +63,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -125,7 +99,7 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -137,6 +111,12 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsVariation { get; set; }
+
+        /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
@@ -152,11 +132,20 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementDefinition (used, e.g., to link it to
-        /// an original requirement text in some source document), which is the declaredShortName for the
+        /// an original requirement text in some source document), derived as the modeledId for the
         /// RequirementDefinition.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public string ReqId { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
     }
 }

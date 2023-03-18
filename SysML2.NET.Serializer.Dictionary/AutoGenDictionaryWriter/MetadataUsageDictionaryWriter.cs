@@ -109,8 +109,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", metadataUsageInstance.AliasIds);
             dictionary.Add("annotation", $"[ {string.Join(",", metadataUsageInstance.Annotation)} ]");
-            dictionary.Add("declaredName", metadataUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", metadataUsageInstance.DeclaredShortName);
             dictionary.Add("direction", metadataUsageInstance.Direction);
             dictionary.Add("elementId", metadataUsageInstance.ElementId);
             dictionary.Add("isAbstract", metadataUsageInstance.IsAbstract);
@@ -125,9 +123,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", metadataUsageInstance.IsSufficient);
             dictionary.Add("isUnique", metadataUsageInstance.IsUnique);
             dictionary.Add("isVariation", metadataUsageInstance.IsVariation);
+            dictionary.Add("name", metadataUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", metadataUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", metadataUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", metadataUsageInstance.PortionKind);
+            dictionary.Add("shortName", metadataUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -156,8 +156,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", metadataUsageInstance.AliasIds);
             dictionary.Add("annotation", metadataUsageInstance.Annotation);
-            dictionary.Add("declaredName", metadataUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", metadataUsageInstance.DeclaredShortName);
             dictionary.Add("direction", metadataUsageInstance.Direction);
             dictionary.Add("elementId", metadataUsageInstance.ElementId);
             dictionary.Add("isAbstract", metadataUsageInstance.IsAbstract);
@@ -172,9 +170,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", metadataUsageInstance.IsSufficient);
             dictionary.Add("isUnique", metadataUsageInstance.IsUnique);
             dictionary.Add("isVariation", metadataUsageInstance.IsVariation);
+            dictionary.Add("name", metadataUsageInstance.Name);
             dictionary.Add("ownedRelationship", metadataUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", metadataUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", metadataUsageInstance.PortionKind);
+            dictionary.Add("shortName", metadataUsageInstance.ShortName);
 
             return dictionary;
         }

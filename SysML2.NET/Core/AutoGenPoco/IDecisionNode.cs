@@ -31,13 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A DecisionNode is a ControlNode that makes a selection from its outgoing
-    /// Successions.targetConnector->selectByKind(Succession)->size() <=
-    /// 1sourceConnector->selectAsKind(Succession)->    collect(connectorEnd->at(2))->    forAll(targetMult
-    /// |        multiplicityHasBounds(targetMult, 0,
-    /// 1))specializesFromLibrary("Actions::Action::decisions")sourceConnector->selectByKind(Succession)->  
-    ///  forAll(subsetsChain(this,        
-    /// resolveGlobal("ControlPerformances::MergePerformance::outgoingHBLink")))
+    /// A DecisionNode is a ControlNode that makes a selection from its outgoing Successions. All outgoing
+    /// Successions must be must have a target multiplicity of 0..1 and subset the Feature
+    /// DecisionAction::outgoingHBLink. A DecisionNode may have at most one incoming Succession.A
+    /// DecisionNode must subset, directly or indirectly, the ActionUsage Action::decisions, implying that
+    /// it is typed by DecisionAction from the Systems model library (or a subtype of it).
     /// </summary>
     public partial interface IDecisionNode : IControlNode
     {

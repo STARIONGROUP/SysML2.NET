@@ -31,35 +31,14 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A RequirementUsage is a Usage of a RequirementDefinition.actorParameter = featureMembership->   
-    /// selectByKind(ActorMembership).    ownedActorParameterassumedConstraint = ownedFeatureMembership->   
-    /// selectByKind(RequirementConstraintMembership)->    select(kind =
-    /// RequirementConstraintKind::assumption).    ownedConstraintframedConcern = featureMembership->   
-    /// selectByKind(FramedConcernMembership).    ownedConcernrequiredConstraint = ownedFeatureMembership-> 
-    ///   selectByKind(RequirementConstraintMembership)->    select(kind =
-    /// RequirementConstraintKind::requirement).    ownedConstraintstakeholderParameter =
-    /// featureMembership->    selectByKind(AStakholderMembership).   
-    /// ownedStakeholderParametersubjectParameter =    let subjects : OrderedSet(SubjectMembership) =       
-    ///  featureMembership->selectByKind(SubjectMembership) in    if subjects->isEmpty() then null    else
-    /// subjects->first().ownedSubjectParameter    endiftext = documentation.bodyfeatureMembership->   
-    /// selectByKind(SubjectMembership)->    size() <= 1input->notEmpty() and input->first() =
-    /// subjectParameterspecializesFromLibrary('Requirements::requirementChecks')isComposite and owningType
-    /// <> null and    (owningType.oclIsKindOf(RequirementDefinition) or    
-    /// owningType.oclIsKindOf(RequirementUsage)) implies   
-    /// specializesFromLibrary('Requirements::RequirementCheck::subrequirements')owningfeatureMembership <>
-    /// null andowningfeatureMembership.oclIsKindOf(ObjectiveMembership) implies   
-    /// owningType.ownedSpecialization.general->forAll(gen |        (gen.oclIsKindOf(CaseDefinition) implies
-    ///            redefines(gen.oclAsType(CaseDefinition).objectiveRequirement)) and       
-    /// (gen.oclIsKindOf(CaseUsage) implies           
-    /// redefines(gen.oclAsType(CaseUsage).objectiveRequirement))owningFeatureMembership <> null
-    /// andowningFeatureMembership.oclIsKindOf(RequirementVerificationMembership) implies   
-    /// specializesFromLibrary('VerificationCases::VerificationCase::obj::requirementVerifications')
+    /// A RequirementUsage is a Usage of a RequirementDefinition.A RequirementUsage must subset, directly or
+    /// indirectly, the base RequirementUsage requirementChecks from the Systems model library.
     /// </summary>
     public partial interface IRequirementUsage : IConstraintUsage
     {
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementUsage (used, e.g., to link it to an
-        /// original requirement text in some source document), which is the declaredShortName for the
+        /// original requirement text in some source document), derived as the modeledId for the
         /// RequirementUsage.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

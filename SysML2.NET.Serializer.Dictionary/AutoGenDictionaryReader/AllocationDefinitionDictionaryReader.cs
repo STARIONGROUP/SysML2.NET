@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
@@ -164,6 +152,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
@@ -188,6 +182,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
@@ -202,8 +202,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             allocationDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            allocationDefinitionInstance.DeclaredName = declaredNameFeature;
-            allocationDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             allocationDefinitionInstance.ElementId = elementIdFeature;
             allocationDefinitionInstance.IsAbstract = isAbstractFeature;
             allocationDefinitionInstance.IsImplied = isImpliedFeature;
@@ -211,10 +209,12 @@ namespace SysML2.NET.Serializer.Dictionary
             allocationDefinitionInstance.IsIndividual = isIndividualFeature;
             allocationDefinitionInstance.IsSufficient = isSufficientFeature;
             allocationDefinitionInstance.IsVariation = isVariationFeature;
+            allocationDefinitionInstance.Name = nameFeature;
             allocationDefinitionInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             allocationDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             allocationDefinitionInstance.OwningRelatedElement = owningRelatedElementFeature;
             allocationDefinitionInstance.OwningRelationship = owningRelationshipFeature;
+            allocationDefinitionInstance.ShortName = shortNameFeature;
             allocationDefinitionInstance.Source = sourceFeature ?? new List<Guid>();
             allocationDefinitionInstance.Target = targetFeature ?? new List<Guid>();
 
@@ -241,18 +241,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
@@ -295,6 +283,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
@@ -319,6 +313,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a AllocationDefinition");
@@ -333,8 +333,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             allocationDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            allocationDefinitionInstance.DeclaredName = declaredNameFeature;
-            allocationDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             allocationDefinitionInstance.ElementId = elementIdFeature;
             allocationDefinitionInstance.IsAbstract = isAbstractFeature;
             allocationDefinitionInstance.IsImplied = isImpliedFeature;
@@ -342,10 +340,12 @@ namespace SysML2.NET.Serializer.Dictionary
             allocationDefinitionInstance.IsIndividual = isIndividualFeature;
             allocationDefinitionInstance.IsSufficient = isSufficientFeature;
             allocationDefinitionInstance.IsVariation = isVariationFeature;
+            allocationDefinitionInstance.Name = nameFeature;
             allocationDefinitionInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             allocationDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             allocationDefinitionInstance.OwningRelatedElement = owningRelatedElementFeature;
             allocationDefinitionInstance.OwningRelationship = owningRelationshipFeature;
+            allocationDefinitionInstance.ShortName = shortNameFeature;
             allocationDefinitionInstance.Source = sourceFeature ?? new List<Guid>();
             allocationDefinitionInstance.Target = targetFeature ?? new List<Guid>();
 

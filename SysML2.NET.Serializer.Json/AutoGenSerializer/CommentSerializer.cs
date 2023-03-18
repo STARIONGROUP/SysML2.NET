@@ -80,10 +80,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("body");
             writer.WriteStringValue(iComment.Body);
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iComment.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iComment.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iComment.ElementId);
 
@@ -92,6 +88,8 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WritePropertyName("locale");
             writer.WriteStringValue(iComment.Locale);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iComment.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iComment.OwnedRelationship)
             {
@@ -108,6 +106,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iComment.ShortName);
             writer.WriteEndObject();
         }
     }

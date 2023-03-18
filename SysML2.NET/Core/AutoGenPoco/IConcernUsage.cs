@@ -31,20 +31,18 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConcernUsage is a Usage of a ConcernDefinition. The ownedStakeholder features of the ConcernUsage
-    /// shall all subset the ConcernCheck::concernedStakeholders feature. If the ConcernUsage is an
-    /// ownedFeature of a StakeholderDefinition or StakeholderUsage, then the ConcernUsage shall have an
-    /// ownedStakeholder feature that is bound to the self feature of its
-    /// owner.specializesFromLibrary('Requirements::concernChecks')owningFeatureMembership <> null
-    /// andowningFeatureMembership.oclIsKindOf(FramedConcernMembership) implies   
-    /// specializesFromLibrary('Requirements::RequirementCheck::concerns')
+    /// A ConcernUsage is a Usage of a ConcernDefinition.A ConcernUsage must subset, directly or indirectly,
+    /// the base ConcernUsage concernChecks from the Systems model library. The ownedStakeholder features of
+    /// the ConcernUsage shall all subset the ConcernCheck::concernedStakeholders feature. If the
+    /// ConcernUsage is an ownedFeature of a StakeholderDefinition or StakeholderUsage, then the
+    /// ConcernUsage shall have an ownedStakeholder feature that is bound to the self feature of its owner.
     /// </summary>
     public partial interface IConcernUsage : IRequirementUsage
     {
         /// <summary>
         /// Queries the derived property ConcernDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         ConcernDefinition QueryConcernDefinition();
 
     }

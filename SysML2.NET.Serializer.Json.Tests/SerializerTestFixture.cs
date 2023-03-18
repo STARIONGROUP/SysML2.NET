@@ -58,10 +58,10 @@ namespace SysML2.NET.Serializer.Json.Tests
 		        IsAbstract = false,
 		        IsSufficient = false,
 		        AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-		        DeclaredName = "PartDefinition:DeclaredName",
+		        Name = "PartDefinition:DeclaredName",
 		        OwnedRelationship = new List<Guid> { Guid.NewGuid() },
 		        OwningRelationship = Guid.NewGuid(),
-		        DeclaredShortName = "PartDefinition:DeclaredShortName"
+		        ShortName = "PartDefinition:DeclaredShortName"
 	        };
 
 	        this.partDefinitionWithNullProperties = new PartDefinition
@@ -72,10 +72,10 @@ namespace SysML2.NET.Serializer.Json.Tests
 		        IsAbstract = false,
 		        IsSufficient = false,
 		        AliasIds = new List<string>(),
-		        DeclaredName = null,
+		        Name = null,
 		        OwnedRelationship = new List<Guid>(),
 		        OwningRelationship = Guid.NewGuid(),
-		        DeclaredShortName = null
+		        ShortName = null
 	        };
 		}
 

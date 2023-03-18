@@ -31,12 +31,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ViewRenderingMembership is a <coed>FeatureMembership that identifies the viewRendering of a
-    /// ViewDefinition or ViewUsage.</coed>referencedRendering =    let reference: ReferenceSubsetting =    
-    ///     ownedRendering.ownedReferenceSubsetting in    if reference = null then ownedRendering    else if
-    /// not reference.referencedFeature.oclIsKindOf(RenderingUsage) then null    else
-    /// reference.referencedFeature.oclAsType(RenderingUsage)    endifowningType.oclIsKindOf(ViewDefinition)
-    /// orowningType.oclIsKindOf(ViewUsage)
+    /// A ViewRenderingMembership is a FeatureMembership that identifies the viewRendering of a View. The
+    /// ownedMemberFeature of a RequirementConstraintMembership must be a RenderingUsage.
     /// </summary>
     public partial interface IViewRenderingMembership : IFeatureMembership
     {

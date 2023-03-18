@@ -33,14 +33,11 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An Association is a Relationship and a Classifier to enable classification of links between things
     /// (in the universe). The co-domains (types) of the associationEnd Features are the relatedTypes, as
-    /// co-domain and participants (linked things) of an Association identify each other.relatedType =
-    /// associationEnd.typespecializesFromLibrary("Links::Link")oclIsKindOf(Structure) =
-    /// oclIsKindOf(AssociationStructure)ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Links::BinaryLink)not isAbstract implies relatedType->size() >=
-    /// 2associationEnds->size() > 2 implies    not specializesFromLibrary("Links::BinaryLink")sourceType = 
-    ///   if relatedType->isEmpty() then null    else relatedType->first() endiftargetType =    if
-    /// relatedType->size() < 2 then OrderedSet{}    else         relatedType->            subSequence(2,
-    /// relatedType->size())->            asOrderedSet()     endif
+    /// co-domain and participants (linked things) of an Association identify each other.relatedTypes =
+    /// associationEnd.typelet numend : Natural = associationEnd->size() in    allSupertypes()->includes(   
+    ///     if numend = 2 then Kernel Library::BinaryLink        else Kernel
+    /// Library::Link)oclIsKindOf(Structure) =
+    /// oclIsKindOf(AssociationStructure)allSupertypes()->includes(Kernel Library::Link)
     /// </summary>
     public partial interface IAssociation : IClassifier, IRelationship
     {

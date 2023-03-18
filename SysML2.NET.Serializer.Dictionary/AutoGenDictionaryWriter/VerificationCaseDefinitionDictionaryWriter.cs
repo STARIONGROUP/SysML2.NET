@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", verificationCaseDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", verificationCaseDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", verificationCaseDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", verificationCaseDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", verificationCaseDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", verificationCaseDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", verificationCaseDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", verificationCaseDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", verificationCaseDefinitionInstance.IsVariation);
+            dictionary.Add("name", verificationCaseDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", verificationCaseDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", verificationCaseDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", verificationCaseDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", verificationCaseDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", verificationCaseDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", verificationCaseDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", verificationCaseDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", verificationCaseDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", verificationCaseDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", verificationCaseDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", verificationCaseDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", verificationCaseDefinitionInstance.IsVariation);
+            dictionary.Add("name", verificationCaseDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", verificationCaseDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", verificationCaseDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", verificationCaseDefinitionInstance.ShortName);
 
             return dictionary;
         }

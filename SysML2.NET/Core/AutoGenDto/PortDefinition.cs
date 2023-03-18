@@ -33,12 +33,10 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A PortDefinition defines a point at which external entities can connect to and interact with a
     /// system or part of a system. Any ownedUsages of a PortDefinition, other than PortUsages, must not be
-    /// composite.conjugatedPortDefinition = let conjugatedPortDefinitions :
-    /// OrderedSet(ConjugatedPortDefinition) =    ownedMember->selectByKind(ConjugatedPortDefinition) inif
-    /// conjugatedPortDefinitions->isEmpty() then nullelse
-    /// conjugatedPortDefinitions->first()endifownedUsage->    reject(oclIsKindOf(PortUsage))->   
-    /// forAll(not isComposite)not oclIsKindOf(ConjugatedPortDefinition) implies    ownedMember->       
-    /// selectByKind(ConjugatedPortDefinition)->        size() = 1specializeFromLibrary('Ports::Port')
+    /// composite.A PortDefinition must subclass, directly or indirectly, the base Class Port from the
+    /// Systems model library.conjugatedPortDefinition =
+    /// ownedMember->select(oclIsKindOf(ConjugatedPortDefinition))ownedUsage->    select(not
+    /// oclIsKindOf(PortUsage))->    forAll(not isComposite)
     /// </summary>
     public partial class PortDefinition : IPortDefinition
     {
@@ -66,21 +64,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -117,7 +100,7 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -131,6 +114,12 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariation { get; set; }
 
         /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
+
+        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -141,6 +130,15 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
     }
 }

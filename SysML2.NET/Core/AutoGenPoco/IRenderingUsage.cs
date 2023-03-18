@@ -32,18 +32,15 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A RenderingUsage is the usage of a RenderingDefinition to specify the rendering of a specific model
-    /// view to produce a physical view artifact.specializeFromLibrary('Views::renderings')owningType <>
-    /// null and(owningType.oclIsKindOf(RenderingDefinition) or owningType.oclIsKindOf(RenderingUsage))
-    /// implies    specializesFromLibrary('Views::Rendering::subrenderings')owningFeatureMembership <> null
-    /// andowningFeatureMembership.oclIsKindOf(ViewRenderingMembership) implies   
-    /// redefinesFromLibrary('Views::View::viewRendering')
+    /// view to produce a physical view artifact.A RenderingUsage must subset, directly or indirectly, the
+    /// base RenderingUsage renderings from the Systems model library.
     /// </summary>
     public partial interface IRenderingUsage : IPartUsage
     {
         /// <summary>
         /// Queries the derived property RenderingDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         RenderingDefinition QueryRenderingDefinition();
 
     }

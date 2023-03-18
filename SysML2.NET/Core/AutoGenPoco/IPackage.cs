@@ -33,8 +33,9 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A Package is a Namespace used to group Elements, without any instance-level semantics. It may have
     /// one or more model-level evaluable filterCondition Expressions used to filter its
-    /// importedMemberships. Any imported member must meet all of the filterConditions.filterCondition =
-    /// ownedMembership->    selectByKind(ElementFilterMembership).condition
+    /// importedMemberships. Any imported member must meet all of the
+    /// filterConditions.ownedMembership->forAll(visibility <>
+    /// VisibilityKind::protected)ownedImport->forAll(visibility <> VisibilityKind::protected)
     /// </summary>
     public partial interface IPackage : INamespace
     {

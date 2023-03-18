@@ -31,18 +31,19 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Relationship is an Element that relates other Element. Some of its relatedElements may be owned,
-    /// in which case those ownedRelatedElements will be deleted from a model if their owningRelationship
-    /// is. A Relationship may also be owned by another Element, in which case the ownedRelatedElements of
-    /// the Relationship are also considered to be transitively owned by the owningRelatedElement of the
-    /// Relationship.The relatedElements of a Relationship are divided into source and target Elements. The
-    /// Relationship is considered to be directed from the source to the target Elements. An undirected
-    /// Relationship may have either all source or all target Elements.A &quot;relationship Element&quot; in
-    /// the abstract syntax is generically any Element that is an instance of either Relationship or a
-    /// direct or indirect specialization of Relationship. Any other kind of Element is a
-    /// &quot;non-relationship Element&quot;. It is a convention of that non-relationship Elements are only
-    /// related via reified relationship Elements. Any meta-associations directly between non-relationship
-    /// Elements must be derived from underlying reified Relationship.relatedElement = source->union(target)
+    /// A Relationship is an Element that relates two or more other Elements. Some of its relatedElements
+    /// may be owned, in which case those ownedRelatedElements will be deleted from a model if their
+    /// owningRelationship is. A Relationship may also be owned by another Element, in which case the
+    /// ownedRelatedElements of the Relationship are also considered to be transitively owned by the
+    /// owningRelatedElement of the Relationship.The relatedElements of a Relationship are divided into
+    /// source and target Elements. The Relationship is considered to be directed from the source to the
+    /// target Elements. An undirected Relationship may have either all source or all target Elements.A
+    /// &quot;relationship Element&quot; in the kernel abstract syntax is generically any Element that is an
+    /// instance of either Relationship or a direct or indirect specialization of Relationship. Any other
+    /// kind of Element is a &quot;non-relationship Element&quot;. It is a convention of the kernel abstract
+    /// syntax that non-relationship Elements are only related via reified relationship Elements. Any
+    /// meta-associations directly between non-relationship Elements must be derived from underlying reified
+    /// Relationships.relatedElement = source->union(target)
     /// </summary>
     public partial interface IRelationship : IElement
     {

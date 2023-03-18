@@ -33,19 +33,10 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A MultiplicityRange is a Multiplicity whose value is defined to be the (inclusive) range of natural
     /// numbers given by the result of a lowerBound Expression and the result of an upperBound Expression.
-    /// The result of these Expressions shall be of type Natural. If the result of the upperBound Expression
-    /// is the unbounded value *, then the specified range includes all natural numbers greater than or
-    /// equal to the lowerBound value. If no lowerBound Expression, then the default is that the lower bound
-    /// has the same value as the upper bound, except if the upperBound evaluates to *, in which case the
-    /// default for the lower bound is 0.bound->forAll(b | b.featuringType =
-    /// self.featuringType)bound.result->forAll(specializesFromLibrary('ScalarValues::Natural'))lowerBound =
-    ///    let ownedMembers : Sequence(Element) =        
-    /// ownedMembership->selectByKind(OwningMembership).ownedMember in    if ownedMembers->size() < 2 or    
-    ///     not ownedMembers->first().oclIsKindOf(Expression) then null    else
-    /// ownedMembers->first().oclAsType(Expression)    endifupperBound =    let ownedMembers :
-    /// Sequence(Element) =         ownedMembership->selectByKind(OwningMembership).ownedMember in    if
-    /// ownedMembers->isEmpty() or        not ownedMembers->last().oclIsKindOf(Expression)     then null   
-    /// else ownedMembers->last().oclAsType(Expression)    endif
+    /// The result of the lowerBound Expression shall be of type Natural, while the result of the upperBound
+    /// Expression shall be of type UnlimitedNatural. If the result of the upperBound Expression is the
+    /// unbounded value *, then the specified range includes all natural numbers greater than or equal to
+    /// the lowerBound value.bound->forAll(b | b.featuringType = self.featuringType)
     /// </summary>
     public partial interface IMultiplicityRange : IMultiplicity
     {

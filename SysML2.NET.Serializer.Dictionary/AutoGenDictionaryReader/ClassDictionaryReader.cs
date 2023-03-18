@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Class");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Class");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Class");
@@ -146,6 +134,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isSufficientFeature = Convert.ToBoolean(isSufficientObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Class");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Class");
@@ -158,16 +152,22 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Class");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             classInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            classInstance.DeclaredName = declaredNameFeature;
-            classInstance.DeclaredShortName = declaredShortNameFeature;
             classInstance.ElementId = elementIdFeature;
             classInstance.IsAbstract = isAbstractFeature;
             classInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             classInstance.IsSufficient = isSufficientFeature;
+            classInstance.Name = nameFeature;
             classInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             classInstance.OwningRelationship = owningRelationshipFeature;
+            classInstance.ShortName = shortNameFeature;
 
             return classInstance;
         }
@@ -192,18 +192,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Class");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Class");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Class");
@@ -228,6 +216,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isSufficientFeature = Convert.ToBoolean(isSufficientObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Class");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Class");
@@ -240,16 +234,22 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Class");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             classInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            classInstance.DeclaredName = declaredNameFeature;
-            classInstance.DeclaredShortName = declaredShortNameFeature;
             classInstance.ElementId = elementIdFeature;
             classInstance.IsAbstract = isAbstractFeature;
             classInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             classInstance.IsSufficient = isSufficientFeature;
+            classInstance.Name = nameFeature;
             classInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             classInstance.OwningRelationship = owningRelationshipFeature;
+            classInstance.ShortName = shortNameFeature;
 
             return classInstance;
         }

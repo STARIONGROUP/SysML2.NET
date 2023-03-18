@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
@@ -164,6 +152,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string memberShortNameFeature = memberShortNameObject == null ? null : Convert.ToString(memberShortNameObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
@@ -187,6 +181,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
+
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
@@ -214,8 +214,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             viewRenderingMembershipInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            viewRenderingMembershipInstance.DeclaredName = declaredNameFeature;
-            viewRenderingMembershipInstance.DeclaredShortName = declaredShortNameFeature;
             viewRenderingMembershipInstance.ElementId = elementIdFeature;
             viewRenderingMembershipInstance.Feature = featureFeature;
             viewRenderingMembershipInstance.IsImplied = isImpliedFeature;
@@ -223,10 +221,12 @@ namespace SysML2.NET.Serializer.Dictionary
             viewRenderingMembershipInstance.MemberElement = memberElementFeature;
             viewRenderingMembershipInstance.MemberName = memberNameFeature;
             viewRenderingMembershipInstance.MemberShortName = memberShortNameFeature;
+            viewRenderingMembershipInstance.Name = nameFeature;
             viewRenderingMembershipInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             viewRenderingMembershipInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             viewRenderingMembershipInstance.OwningRelatedElement = owningRelatedElementFeature;
             viewRenderingMembershipInstance.OwningRelationship = owningRelationshipFeature;
+            viewRenderingMembershipInstance.ShortName = shortNameFeature;
             viewRenderingMembershipInstance.Source = sourceFeature ?? new List<Guid>();
             viewRenderingMembershipInstance.Target = targetFeature ?? new List<Guid>();
             viewRenderingMembershipInstance.Type = typeFeature;
@@ -255,18 +255,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
@@ -309,6 +297,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             string memberShortNameFeature = memberShortNameObject == null ? null : Convert.ToString(memberShortNameObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
@@ -332,6 +326,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
+
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ViewRenderingMembership");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
@@ -359,8 +359,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             viewRenderingMembershipInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            viewRenderingMembershipInstance.DeclaredName = declaredNameFeature;
-            viewRenderingMembershipInstance.DeclaredShortName = declaredShortNameFeature;
             viewRenderingMembershipInstance.ElementId = elementIdFeature;
             viewRenderingMembershipInstance.Feature = featureFeature;
             viewRenderingMembershipInstance.IsImplied = isImpliedFeature;
@@ -368,10 +366,12 @@ namespace SysML2.NET.Serializer.Dictionary
             viewRenderingMembershipInstance.MemberElement = memberElementFeature;
             viewRenderingMembershipInstance.MemberName = memberNameFeature;
             viewRenderingMembershipInstance.MemberShortName = memberShortNameFeature;
+            viewRenderingMembershipInstance.Name = nameFeature;
             viewRenderingMembershipInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             viewRenderingMembershipInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             viewRenderingMembershipInstance.OwningRelatedElement = owningRelatedElementFeature;
             viewRenderingMembershipInstance.OwningRelationship = owningRelationshipFeature;
+            viewRenderingMembershipInstance.ShortName = shortNameFeature;
             viewRenderingMembershipInstance.Source = sourceFeature ?? new List<Guid>();
             viewRenderingMembershipInstance.Target = targetFeature ?? new List<Guid>();
             viewRenderingMembershipInstance.Type = typeFeature;

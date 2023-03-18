@@ -33,20 +33,20 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A FeatureInverting is a Relationship between Features asserting that their interpretations
     /// (sequences) are the reverse of each other, identified as featureInverted and invertingFeature. For
-    /// example, a Feature identifying each person&#39;s parents is the inverse of a Feature identifying
-    /// each person&#39;s children. A person identified as a parent of another will identify that other as
-    /// one of their children.
+    /// example, a Feature identifying each person's parents is the inverse of a Feature identifying each
+    /// person's children.  A person identified as a parent of another will identify that other as one of
+    /// their children.
     /// </summary>
     public partial interface IFeatureInverting : IRelationship
     {
         /// <summary>
-        /// The Feature that is an inverse of the invertingFeature.
+        /// Feature that is an the inverse of invertingFeature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid FeatureInverted { get; set; }
 
         /// <summary>
-        /// The Feature that is an inverse of the invertedFeature.
+        /// Feature that is an inverse of invertedFeature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid InvertingFeature { get; set; }

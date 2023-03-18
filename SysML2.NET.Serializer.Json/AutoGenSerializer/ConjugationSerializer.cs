@@ -73,10 +73,6 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("conjugatedType");
             writer.WriteStringValue(iConjugation.ConjugatedType);
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iConjugation.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iConjugation.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iConjugation.ElementId);
 
@@ -86,6 +82,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iConjugation.IsImpliedIncluded);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iConjugation.Name);
             writer.WritePropertyName("originalType");
             writer.WriteStringValue(iConjugation.OriginalType);
 
@@ -121,6 +119,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iConjugation.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iConjugation.Source)
             {

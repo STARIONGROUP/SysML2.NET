@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
@@ -152,6 +140,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
@@ -164,17 +158,23 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             enumerationDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            enumerationDefinitionInstance.DeclaredName = declaredNameFeature;
-            enumerationDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             enumerationDefinitionInstance.ElementId = elementIdFeature;
             enumerationDefinitionInstance.IsAbstract = isAbstractFeature;
             enumerationDefinitionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             enumerationDefinitionInstance.IsSufficient = isSufficientFeature;
             enumerationDefinitionInstance.IsVariation = isVariationFeature;
+            enumerationDefinitionInstance.Name = nameFeature;
             enumerationDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             enumerationDefinitionInstance.OwningRelationship = owningRelationshipFeature;
+            enumerationDefinitionInstance.ShortName = shortNameFeature;
 
             return enumerationDefinitionInstance;
         }
@@ -199,18 +199,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
@@ -241,6 +229,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
@@ -253,17 +247,23 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a EnumerationDefinition");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             enumerationDefinitionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            enumerationDefinitionInstance.DeclaredName = declaredNameFeature;
-            enumerationDefinitionInstance.DeclaredShortName = declaredShortNameFeature;
             enumerationDefinitionInstance.ElementId = elementIdFeature;
             enumerationDefinitionInstance.IsAbstract = isAbstractFeature;
             enumerationDefinitionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             enumerationDefinitionInstance.IsSufficient = isSufficientFeature;
             enumerationDefinitionInstance.IsVariation = isVariationFeature;
+            enumerationDefinitionInstance.Name = nameFeature;
             enumerationDefinitionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             enumerationDefinitionInstance.OwningRelationship = owningRelationshipFeature;
+            enumerationDefinitionInstance.ShortName = shortNameFeature;
 
             return enumerationDefinitionInstance;
         }

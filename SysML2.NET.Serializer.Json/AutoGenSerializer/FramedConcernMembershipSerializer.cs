@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iFramedConcernMembership.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iFramedConcernMembership.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iFramedConcernMembership.ElementId);
 
@@ -96,6 +92,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iFramedConcernMembership.MemberName);
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iFramedConcernMembership.MemberShortName);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iFramedConcernMembership.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iFramedConcernMembership.OwnedRelatedElement)
             {
@@ -128,6 +126,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iFramedConcernMembership.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iFramedConcernMembership.Source)
             {

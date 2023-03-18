@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", interfaceDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", interfaceDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", interfaceDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", interfaceDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", interfaceDefinitionInstance.IsAbstract);
             dictionary.Add("isImplied", interfaceDefinitionInstance.IsImplied);
@@ -117,10 +115,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isIndividual", interfaceDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", interfaceDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", interfaceDefinitionInstance.IsVariation);
+            dictionary.Add("name", interfaceDefinitionInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", interfaceDefinitionInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", interfaceDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", interfaceDefinitionInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", interfaceDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", interfaceDefinitionInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", interfaceDefinitionInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", interfaceDefinitionInstance.Target)} ]");
 
@@ -150,8 +150,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", interfaceDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", interfaceDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", interfaceDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", interfaceDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", interfaceDefinitionInstance.IsAbstract);
             dictionary.Add("isImplied", interfaceDefinitionInstance.IsImplied);
@@ -159,10 +157,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isIndividual", interfaceDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", interfaceDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", interfaceDefinitionInstance.IsVariation);
+            dictionary.Add("name", interfaceDefinitionInstance.Name);
             dictionary.Add("ownedRelatedElement", interfaceDefinitionInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", interfaceDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", interfaceDefinitionInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", interfaceDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", interfaceDefinitionInstance.ShortName);
             dictionary.Add("source", interfaceDefinitionInstance.Source);
             dictionary.Add("target", interfaceDefinitionInstance.Target);
 

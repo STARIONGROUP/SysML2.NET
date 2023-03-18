@@ -32,8 +32,10 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A JoinNode is a ControlNode that waits for the completion of all the predecessor Actions given by
-    /// incoming Successions.sourceConnector->selectByKind(Succession)->size() <=
-    /// 1specializesFromLibrary("Actions::Action::join")
+    /// incoming Successions. All incoming Successions must have a source multiplicity of 1..1. A JoinNode
+    /// may have at most one outgoing Succession.A JoinNode must subset, directly or indirectly, the
+    /// ActionUsage Action::joins, implying that it is typed by JoinAction from the Systems model library
+    /// (or a subtype of it).
     /// </summary>
     public partial interface IJoinNode : IControlNode
     {

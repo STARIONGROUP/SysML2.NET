@@ -32,9 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An ObjectiveMembership is a FeatureMembership that indicates that its ownedObjectiveRequirement is
-    /// the objective RequirementUsage  for its owningType, which must be a CaseDefinition or
-    /// CaseUsage.owningType.oclIsType(CaseDefinition)
-    /// orowningType.oclIsType(CaseUsage)ownedObjectiveRequirement.isComposite
+    /// the objective RequirementUsage for its owningType. The owningType of an ObjectiveMembership must be
+    /// a CaseDefinition or CaseUsage.
     /// </summary>
     public partial interface IObjectiveMembership : IFeatureMembership
     {

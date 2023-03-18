@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iAssociationStructure.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iAssociationStructure.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iAssociationStructure.ElementId);
 
@@ -89,6 +85,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iAssociationStructure.IsSufficient);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iAssociationStructure.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iAssociationStructure.OwnedRelatedElement)
             {
@@ -121,6 +119,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iAssociationStructure.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iAssociationStructure.Source)
             {

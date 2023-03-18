@@ -31,20 +31,18 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A PortUsage is a usage of a PortDefinition. A PortUsage itself as well as all its nestedUsages must
-    /// be referential (non-composite).nestedUsage->    reject(oclIsKindOf(PortUsage))->    forAll(not
-    /// isComposite)specializesFromLibrary('Ports::ports')isComposite and owningType <> null
-    /// and(owningType.oclIsKindOf(PortDefinition) or owningType.oclIsKindOf(PortUsage)) implies   
-    /// specializesFromLibrary('Ports::Port::subports')owningType = null ornot
-    /// owningType.oclIsKindOf(PortDefinition) andnot owningType.oclIsKindOf(PortUsage) implies   
-    /// isReference
+    /// A PortUsage is a usage of a PortDefinition. A PortUsage must be owned by a PartDefinition, a
+    /// PortDefinition, a PartUsage or another PortUsage.  Any nestedUsages of a PortUsage, other than
+    /// nested PortUsages, must not be composite.A PortUsage must subset, directly or indirectly, the
+    /// PortUsage ports from the Systems model library.nestedUsage->    select(not oclIsKindOf(PortUsage))->
+    /// forAll(not isComposite)
     /// </summary>
     public partial interface IPortUsage : IOccurrenceUsage
     {
         /// <summary>
         /// Queries the derived property PortDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<PortDefinition> QueryPortDefinition();
 
     }

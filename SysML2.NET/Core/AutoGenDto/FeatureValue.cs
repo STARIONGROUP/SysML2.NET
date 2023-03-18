@@ -34,21 +34,16 @@ namespace SysML2.NET.Core.DTO
     /// A FeatureValue is a Membership that identifies a particular member Expression that provides the
     /// value of the Feature that owns the FeatureValue. The value is specified as either a bound value or
     /// an initial value, and as either a concrete or default value. A Feature can have at most one
-    /// FeatureValue.The result of the value Expression is bound to the featureWithValue using a
-    /// BindingConnector. If isInitial = false, then the featuringType of the BindingConnector is the same
-    /// as the featuringType of the featureWithValue. If isInitial = true, then the featuringType of the
-    /// BindingConnector is restricted to its startShot.If isDefault = false, then the above semantics of
-    /// the FeatureValue are realized for the given featureWithValue. Otherwise, the semantics are realized
-    /// for any individual of the featuringType of the featureWithValue, unless another value is explicitly
-    /// given for the featureWithValue for that individual.not isDefault implies   
-    /// featureWithValue.ownedMember->        selectByKind(BindingConnector)->exists(b |           
-    /// b.relatedFeature->includes(featureWithValue) and            b.relatedFeature->includes(value.result)
-    /// and            if not isInitial then                 b.featuringType =
-    /// featureWithValue.featuringType            else                 b.featuringType->exists(t |          
-    ///          t.oclIsKindOf(Feature) and                    t.oclAsType(Feature).chainingFeature =       
-    ///                 Sequence{                            resolveGlobal("Base::things::that"),           
-    ///                 resolveGlobal("Occurrences::Occurrence::startShot")                        }        
-    /// )            endif)
+    /// FeatureValue.If isInitial = false, then the result of the value expression is bound to the
+    /// featureWithValue using a BindingConnector. Otherwise, the featureWithValue is initialized using a
+    /// FeatureWritePeformance.If isDefault = false, then the above semantics of the FeatureValue are
+    /// realized for the given featureWithValue. Otherwise, the semantics are realized for any individual of
+    /// the featuringType of the featureWithValue, unless another value is explicitly given for the
+    /// featureWithValue for that individual.value.featuringType =
+    /// featureWithValue.featuringTypevalueConnector.owningNamespace = featureWithValue
+    /// andvalueConnector.relatedFeature->includes(featureWithValue)
+    /// andvalueConnector.relatedFeature->includes(value.result) andvalueConnector.featuringType =
+    /// featureWithValue.featuringType
     /// </summary>
     public partial class FeatureValue : IFeatureValue
     {
@@ -82,21 +77,6 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
-
-        /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
@@ -104,7 +84,7 @@ namespace SysML2.NET.Core.DTO
         public string ElementId { get; set; }
 
         /// <summary>
-        /// Whether this FeatureValue is a concrete specification of the bound or initial value of the
+        /// Whether this FeatureValue is a concrete specification of the bound of initial value of the
         /// featureWithValue, or just a default value that may be overridden.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -152,6 +132,12 @@ namespace SysML2.NET.Core.DTO
         public string MemberShortName { get; set; }
 
         /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
+
+        /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -174,6 +160,15 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.

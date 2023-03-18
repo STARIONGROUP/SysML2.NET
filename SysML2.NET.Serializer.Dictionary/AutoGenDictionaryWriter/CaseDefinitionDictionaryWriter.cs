@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", caseDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", caseDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", caseDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", caseDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", caseDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", caseDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", caseDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", caseDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", caseDefinitionInstance.IsVariation);
+            dictionary.Add("name", caseDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", caseDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", caseDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", caseDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", caseDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", caseDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", caseDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", caseDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", caseDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", caseDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", caseDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", caseDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", caseDefinitionInstance.IsVariation);
+            dictionary.Add("name", caseDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", caseDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", caseDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", caseDefinitionInstance.ShortName);
 
             return dictionary;
         }

@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", constraintDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", constraintDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", constraintDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", constraintDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", constraintDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", constraintDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", constraintDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", constraintDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", constraintDefinitionInstance.IsVariation);
+            dictionary.Add("name", constraintDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", constraintDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", constraintDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", constraintDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", constraintDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", constraintDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", constraintDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", constraintDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", constraintDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", constraintDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", constraintDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", constraintDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", constraintDefinitionInstance.IsVariation);
+            dictionary.Add("name", constraintDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", constraintDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", constraintDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", constraintDefinitionInstance.ShortName);
 
             return dictionary;
         }

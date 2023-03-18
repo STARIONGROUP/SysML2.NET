@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", forkNodeInstance.AliasIds);
-            dictionary.Add("declaredName", forkNodeInstance.DeclaredName);
-            dictionary.Add("declaredShortName", forkNodeInstance.DeclaredShortName);
             dictionary.Add("direction", forkNodeInstance.Direction);
             dictionary.Add("elementId", forkNodeInstance.ElementId);
             dictionary.Add("isAbstract", forkNodeInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", forkNodeInstance.IsSufficient);
             dictionary.Add("isUnique", forkNodeInstance.IsUnique);
             dictionary.Add("isVariation", forkNodeInstance.IsVariation);
+            dictionary.Add("name", forkNodeInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", forkNodeInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", forkNodeInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", forkNodeInstance.PortionKind);
+            dictionary.Add("shortName", forkNodeInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", forkNodeInstance.AliasIds);
-            dictionary.Add("declaredName", forkNodeInstance.DeclaredName);
-            dictionary.Add("declaredShortName", forkNodeInstance.DeclaredShortName);
             dictionary.Add("direction", forkNodeInstance.Direction);
             dictionary.Add("elementId", forkNodeInstance.ElementId);
             dictionary.Add("isAbstract", forkNodeInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", forkNodeInstance.IsSufficient);
             dictionary.Add("isUnique", forkNodeInstance.IsUnique);
             dictionary.Add("isVariation", forkNodeInstance.IsVariation);
+            dictionary.Add("name", forkNodeInstance.Name);
             dictionary.Add("ownedRelationship", forkNodeInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", forkNodeInstance.OwningRelationship);
             dictionary.Add("portionKind", forkNodeInstance.PortionKind);
+            dictionary.Add("shortName", forkNodeInstance.ShortName);
 
             return dictionary;
         }

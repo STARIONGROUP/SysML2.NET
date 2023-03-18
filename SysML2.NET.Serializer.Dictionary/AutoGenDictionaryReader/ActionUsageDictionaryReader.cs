@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
@@ -206,6 +194,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
@@ -224,10 +218,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             PortionKind? portionKindFeature = portionKindObject == null ? null : (PortionKind?)Enum.Parse(typeof(PortionKind), Convert.ToString(portionKindObject), true);
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             actionUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            actionUsageInstance.DeclaredName = declaredNameFeature;
-            actionUsageInstance.DeclaredShortName = declaredShortNameFeature;
             actionUsageInstance.Direction = directionFeature;
             actionUsageInstance.ElementId = elementIdFeature;
             actionUsageInstance.IsAbstract = isAbstractFeature;
@@ -242,9 +240,11 @@ namespace SysML2.NET.Serializer.Dictionary
             actionUsageInstance.IsSufficient = isSufficientFeature;
             actionUsageInstance.IsUnique = isUniqueFeature;
             actionUsageInstance.IsVariation = isVariationFeature;
+            actionUsageInstance.Name = nameFeature;
             actionUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             actionUsageInstance.OwningRelationship = owningRelationshipFeature;
             actionUsageInstance.PortionKind = portionKindFeature;
+            actionUsageInstance.ShortName = shortNameFeature;
 
             return actionUsageInstance;
         }
@@ -268,18 +268,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -365,6 +353,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
@@ -383,10 +377,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             PortionKind? portionKindFeature = (PortionKind?)portionKindObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a ActionUsage");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             actionUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            actionUsageInstance.DeclaredName = declaredNameFeature;
-            actionUsageInstance.DeclaredShortName = declaredShortNameFeature;
             actionUsageInstance.Direction = directionFeature;
             actionUsageInstance.ElementId = elementIdFeature;
             actionUsageInstance.IsAbstract = isAbstractFeature;
@@ -401,9 +399,11 @@ namespace SysML2.NET.Serializer.Dictionary
             actionUsageInstance.IsSufficient = isSufficientFeature;
             actionUsageInstance.IsUnique = isUniqueFeature;
             actionUsageInstance.IsVariation = isVariationFeature;
+            actionUsageInstance.Name = nameFeature;
             actionUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             actionUsageInstance.OwningRelationship = owningRelationshipFeature;
             actionUsageInstance.PortionKind = portionKindFeature;
+            actionUsageInstance.ShortName = shortNameFeature;
 
             return actionUsageInstance;
         }

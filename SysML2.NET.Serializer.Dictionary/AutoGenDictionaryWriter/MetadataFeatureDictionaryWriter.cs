@@ -109,8 +109,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", metadataFeatureInstance.AliasIds);
             dictionary.Add("annotation", $"[ {string.Join(",", metadataFeatureInstance.Annotation)} ]");
-            dictionary.Add("declaredName", metadataFeatureInstance.DeclaredName);
-            dictionary.Add("declaredShortName", metadataFeatureInstance.DeclaredShortName);
             dictionary.Add("direction", metadataFeatureInstance.Direction);
             dictionary.Add("elementId", metadataFeatureInstance.ElementId);
             dictionary.Add("isAbstract", metadataFeatureInstance.IsAbstract);
@@ -123,8 +121,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", metadataFeatureInstance.IsReadOnly);
             dictionary.Add("isSufficient", metadataFeatureInstance.IsSufficient);
             dictionary.Add("isUnique", metadataFeatureInstance.IsUnique);
+            dictionary.Add("name", metadataFeatureInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", metadataFeatureInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", metadataFeatureInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", metadataFeatureInstance.ShortName);
 
             return dictionary;
         }
@@ -153,8 +153,6 @@ namespace SysML2.NET.Serializer.Dictionary
 
             dictionary.Add("aliasIds", metadataFeatureInstance.AliasIds);
             dictionary.Add("annotation", metadataFeatureInstance.Annotation);
-            dictionary.Add("declaredName", metadataFeatureInstance.DeclaredName);
-            dictionary.Add("declaredShortName", metadataFeatureInstance.DeclaredShortName);
             dictionary.Add("direction", metadataFeatureInstance.Direction);
             dictionary.Add("elementId", metadataFeatureInstance.ElementId);
             dictionary.Add("isAbstract", metadataFeatureInstance.IsAbstract);
@@ -167,8 +165,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", metadataFeatureInstance.IsReadOnly);
             dictionary.Add("isSufficient", metadataFeatureInstance.IsSufficient);
             dictionary.Add("isUnique", metadataFeatureInstance.IsUnique);
+            dictionary.Add("name", metadataFeatureInstance.Name);
             dictionary.Add("ownedRelationship", metadataFeatureInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", metadataFeatureInstance.OwningRelationship);
+            dictionary.Add("shortName", metadataFeatureInstance.ShortName);
 
             return dictionary;
         }

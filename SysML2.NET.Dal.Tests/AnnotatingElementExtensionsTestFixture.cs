@@ -43,13 +43,13 @@ namespace SysML2.NET.Dal.Tests
 				Id = Guid.NewGuid()
 			};
 
-			var ownedMemberShip = new Core.POCO.Membership
+			var relationship = new Core.POCO.Relationship
 			{
 				Id = Guid.NewGuid()
 			};
 
-			var owningMemberShip = new Core.POCO.Membership
-			{
+			var owningRMembership = new Core.POCO.Relationship
+            {
 				Id = Guid.NewGuid()
 			};
 
@@ -58,21 +58,21 @@ namespace SysML2.NET.Dal.Tests
 				Id = Guid.NewGuid(),
 				AliasIds = new List<string> { "alias_1", "alias_2" },
 				Annotation = new List<Annotation> { annotation },
-				DeclaredName = "declared name",
-				DeclaredShortName = "declared shortname",
+				Name = "declared name",
+				ShortName = "declared shortname",
 				ElementId = "element id",
 				IsImpliedIncluded = true,
-				OwnedRelationship = new List<IRelationship>{ ownedMemberShip },
-				OwningRelationship = owningMemberShip
-			};
+				OwnedRelationship = new List<Relationship>{ relationship },
+				OwningRelationship = owningRMembership
+            };
 
 			var dto = poco.ToDto();
 
 			Assert.That(dto.Id, Is.EqualTo(poco.Id));
 			Assert.That(dto.AliasIds, Is.EquivalentTo(poco.AliasIds));
 			Assert.That(dto.Annotation.Single(),  Is.EqualTo(poco.Annotation.Single().Id));
-			Assert.That(dto.DeclaredName, Is.EqualTo(poco.DeclaredName));
-			Assert.That(dto.DeclaredShortName, Is.EqualTo(poco.DeclaredShortName));
+			Assert.That(dto.Name, Is.EqualTo(poco.Name));
+			Assert.That(dto.ShortName, Is.EqualTo(poco.ShortName));
 			Assert.That(dto.ElementId, Is.EqualTo(poco.ElementId));
 			Assert.That(dto.IsImpliedIncluded, Is.EqualTo(poco.IsImpliedIncluded));
 			Assert.That(dto.OwnedRelationship.Single(), Is.EqualTo(poco.OwnedRelationship.Single().Id));

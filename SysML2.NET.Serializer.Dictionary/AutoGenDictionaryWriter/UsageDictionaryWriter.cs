@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", usageInstance.AliasIds);
-            dictionary.Add("declaredName", usageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", usageInstance.DeclaredShortName);
             dictionary.Add("direction", usageInstance.Direction);
             dictionary.Add("elementId", usageInstance.ElementId);
             dictionary.Add("isAbstract", usageInstance.IsAbstract);
@@ -123,8 +121,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", usageInstance.IsSufficient);
             dictionary.Add("isUnique", usageInstance.IsUnique);
             dictionary.Add("isVariation", usageInstance.IsVariation);
+            dictionary.Add("name", usageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", usageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", usageInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", usageInstance.ShortName);
 
             return dictionary;
         }
@@ -152,8 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", usageInstance.AliasIds);
-            dictionary.Add("declaredName", usageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", usageInstance.DeclaredShortName);
             dictionary.Add("direction", usageInstance.Direction);
             dictionary.Add("elementId", usageInstance.ElementId);
             dictionary.Add("isAbstract", usageInstance.IsAbstract);
@@ -167,8 +165,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", usageInstance.IsSufficient);
             dictionary.Add("isUnique", usageInstance.IsUnique);
             dictionary.Add("isVariation", usageInstance.IsVariation);
+            dictionary.Add("name", usageInstance.Name);
             dictionary.Add("ownedRelationship", usageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", usageInstance.OwningRelationship);
+            dictionary.Add("shortName", usageInstance.ShortName);
 
             return dictionary;
         }

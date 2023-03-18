@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", enumerationUsageInstance.AliasIds);
-            dictionary.Add("declaredName", enumerationUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", enumerationUsageInstance.DeclaredShortName);
             dictionary.Add("direction", enumerationUsageInstance.Direction);
             dictionary.Add("elementId", enumerationUsageInstance.ElementId);
             dictionary.Add("isAbstract", enumerationUsageInstance.IsAbstract);
@@ -123,8 +121,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", enumerationUsageInstance.IsSufficient);
             dictionary.Add("isUnique", enumerationUsageInstance.IsUnique);
             dictionary.Add("isVariation", enumerationUsageInstance.IsVariation);
+            dictionary.Add("name", enumerationUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", enumerationUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", enumerationUsageInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", enumerationUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -152,8 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", enumerationUsageInstance.AliasIds);
-            dictionary.Add("declaredName", enumerationUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", enumerationUsageInstance.DeclaredShortName);
             dictionary.Add("direction", enumerationUsageInstance.Direction);
             dictionary.Add("elementId", enumerationUsageInstance.ElementId);
             dictionary.Add("isAbstract", enumerationUsageInstance.IsAbstract);
@@ -167,8 +165,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", enumerationUsageInstance.IsSufficient);
             dictionary.Add("isUnique", enumerationUsageInstance.IsUnique);
             dictionary.Add("isVariation", enumerationUsageInstance.IsVariation);
+            dictionary.Add("name", enumerationUsageInstance.Name);
             dictionary.Add("ownedRelationship", enumerationUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", enumerationUsageInstance.OwningRelationship);
+            dictionary.Add("shortName", enumerationUsageInstance.ShortName);
 
             return dictionary;
         }

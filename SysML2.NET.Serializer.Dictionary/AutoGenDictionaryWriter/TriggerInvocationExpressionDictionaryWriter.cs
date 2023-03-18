@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", triggerInvocationExpressionInstance.AliasIds);
-            dictionary.Add("declaredName", triggerInvocationExpressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", triggerInvocationExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", triggerInvocationExpressionInstance.Direction);
             dictionary.Add("elementId", triggerInvocationExpressionInstance.ElementId);
             dictionary.Add("isAbstract", triggerInvocationExpressionInstance.IsAbstract);
@@ -123,8 +121,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", triggerInvocationExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", triggerInvocationExpressionInstance.IsUnique);
             dictionary.Add("kind", triggerInvocationExpressionInstance.Kind);
+            dictionary.Add("name", triggerInvocationExpressionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", triggerInvocationExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", triggerInvocationExpressionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", triggerInvocationExpressionInstance.ShortName);
 
             return dictionary;
         }
@@ -152,8 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", triggerInvocationExpressionInstance.AliasIds);
-            dictionary.Add("declaredName", triggerInvocationExpressionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", triggerInvocationExpressionInstance.DeclaredShortName);
             dictionary.Add("direction", triggerInvocationExpressionInstance.Direction);
             dictionary.Add("elementId", triggerInvocationExpressionInstance.ElementId);
             dictionary.Add("isAbstract", triggerInvocationExpressionInstance.IsAbstract);
@@ -167,8 +165,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", triggerInvocationExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", triggerInvocationExpressionInstance.IsUnique);
             dictionary.Add("kind", triggerInvocationExpressionInstance.Kind);
+            dictionary.Add("name", triggerInvocationExpressionInstance.Name);
             dictionary.Add("ownedRelationship", triggerInvocationExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", triggerInvocationExpressionInstance.OwningRelationship);
+            dictionary.Add("shortName", triggerInvocationExpressionInstance.ShortName);
 
             return dictionary;
         }

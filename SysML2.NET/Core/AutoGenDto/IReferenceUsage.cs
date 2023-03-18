@@ -32,10 +32,10 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A ReferenceUsage is a Usage that specifies a non-compositional (isComposite = false) reference to
-    /// something. The definition of a ReferenceUsage can be any kind of Classifier, with the default being
-    /// the top-level Classifier Base::Anything from the Kernel Semantic Library. This allows the
-    /// specification of a generic reference without distinguishing if the thing referenced is an attribute
-    /// value, item, action, etc.isReference
+    /// something. The type of a ReferenceUsage can be any kind of Classifier, with the default being the
+    /// top-level Classifier Anything from the Kernel library. This allows the specification of a generic
+    /// reference without distinguishing if the thing referenced is an attribute value, item, action, etc.
+    /// All features of a ReferenceUsage must also have isComposite = false.
     /// </summary>
     public partial interface IReferenceUsage : IUsage
     {

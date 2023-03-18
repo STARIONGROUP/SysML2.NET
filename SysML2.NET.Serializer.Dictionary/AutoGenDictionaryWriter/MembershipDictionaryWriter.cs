@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", membershipInstance.AliasIds);
-            dictionary.Add("declaredName", membershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", membershipInstance.DeclaredShortName);
             dictionary.Add("elementId", membershipInstance.ElementId);
             dictionary.Add("isImplied", membershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", membershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", membershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", membershipInstance.MemberName);
             dictionary.Add("memberShortName", membershipInstance.MemberShortName);
+            dictionary.Add("name", membershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", membershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", membershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", membershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", membershipInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", membershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", membershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", membershipInstance.Target)} ]");
             dictionary.Add("visibility", membershipInstance.Visibility);
@@ -150,18 +150,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", membershipInstance.AliasIds);
-            dictionary.Add("declaredName", membershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", membershipInstance.DeclaredShortName);
             dictionary.Add("elementId", membershipInstance.ElementId);
             dictionary.Add("isImplied", membershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", membershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", membershipInstance.MemberElement);
             dictionary.Add("memberName", membershipInstance.MemberName);
             dictionary.Add("memberShortName", membershipInstance.MemberShortName);
+            dictionary.Add("name", membershipInstance.Name);
             dictionary.Add("ownedRelatedElement", membershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", membershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", membershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", membershipInstance.OwningRelationship);
+            dictionary.Add("shortName", membershipInstance.ShortName);
             dictionary.Add("source", membershipInstance.Source);
             dictionary.Add("target", membershipInstance.Target);
             dictionary.Add("visibility", membershipInstance.Visibility);

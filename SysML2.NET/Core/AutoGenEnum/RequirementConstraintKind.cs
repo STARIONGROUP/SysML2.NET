@@ -37,7 +37,7 @@ namespace SysML2.NET.Core
         Assumption = 0,
 
         /// <summary>
-        /// Indicates that a member ConstraintUsage of a RequirementDefinition or RequirementUsagerepresents an
+        /// Indicates that a member ConstraintUsage of a RequirementDefinition or RequirementUsage represents an
         /// requirement.
         /// </summary>
         Requirement = 1,

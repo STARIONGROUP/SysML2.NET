@@ -31,18 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An IfActionUsage is an ActionUsage that specifies that the thenAction ActionUsage should be
-    /// performed if the result of the ifArgument Expression is true. It may also optionally specify an
-    /// elseAction ActionUsage that is performed if the result of the ifArgument is false.thenAction =    
-    /// let parameter : Feature = inputParameter(2) in    if parameter <> null and
-    /// parameter.oclIsKindOf(ActionUsage) then        parameter.oclAsType(ActionUsage)    else        null 
-    ///   endifisSubactionUsage() implies    specializesFromLibrary('Actions::Action::ifSubactions')if
-    /// elseAction = null then    specifiesFromLibrary('Actions::ifThenActions')else   
-    /// specifiesFromLibrary('Actions::ifThenElseActions')endififArgument =     let parameter : Feature =
-    /// inputParameter(1) in    if parameter <> null and parameter.oclIsKindOf(Expression) then       
-    /// parameter.oclAsType(Expression)    else        null    endifelseAction =     let parameter : Feature
-    /// = inputParameter(3) in    if parameter <> null and parameter.oclIsKindOf(ActionUsage) then       
-    /// parameter.oclAsType(ActionUsage)    else        null    endif
+    /// An IfActionUsage is an ActionUsage that is typed, directly or indirectly, by the ActionDefinition
+    /// IfThenAction from the Systems model library, or, more specifically, by IfThenElseAction, if it has
+    /// an elseAction. It specifies that the thenAction ActionUsage should be performed if the result of the
+    /// ifArgument Expression is true. It may also optionally specify a elseAction ActionUsage that is
+    /// performed if the result of the ifArgument is false.
     /// </summary>
     public partial interface IIfActionUsage : IActionUsage
     {

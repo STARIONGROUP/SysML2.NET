@@ -32,18 +32,9 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A ViewUsage is a usage of a ViewDefinition to specify the generation of a view of the members of a
-    /// collection of exposedNamespaces. The ViewUsage can satisfy more viewpoints than its definition, and
-    /// it can specialize the viewRendering specified by its definition.exposedElement =
-    /// ownedImport->selectByKind(Expose).    importedMemberships(Set{}).memberElement->    select(elm |
-    /// includeAsExposed(elm))->    asOrderedSet()satisfiedViewpoint = ownedRequirement->   
-    /// selectByKind(ViewpointUsage)->    select(isComposite)viewCondition = featureMembership->   
-    /// selectByKind(ElementFilterMembership).    conditionviewRendering =    let renderings:
-    /// OrderedSet(ViewRenderingMembership) =       
-    /// featureMembership->selectByKind(ViewRenderingMembership) in    if renderings->isEmpty() then null   
-    /// else renderings->first().referencedRendering    endiffeatureMembership->   
-    /// selectByKind(ViewRenderingMembership)->    size() <=
-    /// 1specializesFromLibrary('Views::views')owningType <> null and(owningType.oclIsKindOf(ViewDefinition)
-    /// or owningType.oclIsKindOf(ViewUsage)) implies    specializesFromLibrary('Views::View::subviews')
+    /// collection of exposedNamespaces. The ViewDefinition can satisfy more viewpoints than its definition,
+    /// and it can specialize the rendering specified by its definition.A ViewUsage must subset, directly or
+    /// indirectly, the base ViewUsage views from the Systems model library.
     /// </summary>
     public partial interface IViewUsage : IPartUsage
     {

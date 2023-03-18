@@ -31,11 +31,9 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A <coed>LifeClass is a Class that specializes both the Class Occurrences::Life from the Kernel
-    /// Semantic Library and a single OccurrenceDefinition, and has a multiplicity of 0..1. This constrains
-    /// the OccurrenceDefinition being specialized to have at most one instance that is a complete
-    /// Life.</coed>specializesFromLibrary("Occurrences::Life")multiplicity <> null
-    /// andmultiplicity.specializesFromLibrary("Base::zeroOrOne")specializes(individualDefinition)isSufficient
+    /// A LifeClass is a Class that specializes both the Base::Life Class from the Kernel Library and a
+    /// single OccurrenceDefinition, and has a multiplicity of 0..1. This constrains the
+    /// OccurrenceDefinition to have at most one instance that is a complete Life.
     /// </summary>
     public partial interface ILifeClass : IClass
     {

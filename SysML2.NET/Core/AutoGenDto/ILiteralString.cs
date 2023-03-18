@@ -31,13 +31,15 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A LiteralString is a LiteralExpression that provides a String value as a result. Its result
-    /// parameter must have the type String.
+    /// A LiteralString  is a LiteralExpression that provides a String value as a result. It
+    /// must have an owned result parameter whose type is String.An Expression that provides a String value
+    /// as a result.A LiteralString must be typed by a specialization of Evaluation with no input parameters
+    /// and a single String value as its result.
     /// </summary>
     public partial interface ILiteralString : ILiteralExpression
     {
         /// <summary>
-        /// The String value that is the result of evaluating this LiteralString.The String value that is the
+        /// The String value that is the result of evaluating this Expression.The String value that is the
         /// result of evaluating this Expression.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

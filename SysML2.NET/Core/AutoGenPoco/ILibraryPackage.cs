@@ -38,8 +38,8 @@ namespace SysML2.NET.Core.POCO
     {
         /// <summary>
         /// Whether this LibraryPackage contains a standard library model. This should only be set to true for
-        /// LibraryPackages in the standard Kernel Model Libraries or in normative model libraries for a
-        /// language built on KerML.
+        /// LibraryPackage in the standard Kernel Libraries or in normative model libraries for a language built
+        /// on KerML.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsStandard { get; set; }

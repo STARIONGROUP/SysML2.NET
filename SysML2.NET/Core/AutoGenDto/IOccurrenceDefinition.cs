@@ -38,11 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// temporal portions of the individual being represented, but only one of these can be the complete
     /// Life of the individual. All other instances must be portions of the &quot;maximal portion&quot; that
     /// is single Life instance, capturing the conception that all of the instances represent one individual
-    /// with a single &quot;identity&quot;.An OccurrenceDefinition must specialize, directly or indirectly,
-    /// the base Class Occurrence from the Kernel Semantic Library.let n : Integer =
-    /// ownedMember->selectByKind(LifeClass) inif isIndividual then n = 1 else n = 0 endiflifeClass =    let
-    /// lifeClasses: OrderedSet(LifeClass) =         ownedMember->selectByKind(LifeClass) in    if
-    /// lifeClasses->isEmpty() then null    else lifeClasses->first()    endif
+    /// with a single &quot;identity&quot;.An OccurrenceDefinition must subclass, directly or indirectly,
+    /// the base Class Occurrence from the Kernel model library.if not isIndividual then lifeClass =
+    /// nullelse    lifeClass <> null and    lifeClass.allSupertypes()->includes(self)endif
     /// </summary>
     public partial interface IOccurrenceDefinition : IDefinition, IClass
     {

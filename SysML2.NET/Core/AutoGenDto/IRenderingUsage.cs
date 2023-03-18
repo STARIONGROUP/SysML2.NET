@@ -32,11 +32,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A RenderingUsage is the usage of a RenderingDefinition to specify the rendering of a specific model
-    /// view to produce a physical view artifact.specializeFromLibrary('Views::renderings')owningType <>
-    /// null and(owningType.oclIsKindOf(RenderingDefinition) or owningType.oclIsKindOf(RenderingUsage))
-    /// implies    specializesFromLibrary('Views::Rendering::subrenderings')owningFeatureMembership <> null
-    /// andowningFeatureMembership.oclIsKindOf(ViewRenderingMembership) implies   
-    /// redefinesFromLibrary('Views::View::viewRendering')
+    /// view to produce a physical view artifact.A RenderingUsage must subset, directly or indirectly, the
+    /// base RenderingUsage renderings from the Systems model library.
     /// </summary>
     public partial interface IRenderingUsage : IPartUsage
     {

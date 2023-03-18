@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iIntersecting.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iIntersecting.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iIntersecting.ElementId);
 
@@ -86,6 +82,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iIntersecting.IsImpliedIncluded);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iIntersecting.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iIntersecting.OwnedRelatedElement)
             {
@@ -118,6 +116,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iIntersecting.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iIntersecting.Source)
             {

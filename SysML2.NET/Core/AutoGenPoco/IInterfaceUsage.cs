@@ -32,15 +32,15 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An InterfaceUsage is a Usage of an InterfaceDefinition to represent an interface connecting parts of
-    /// a system through specific ports.ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Interfaces::binaryInterfaces")specializesFromLibrary("Interfaces::interfaces")
+    /// a system through specific ports.An InterfaceUsage must subset, directly or indirectly, the base
+    /// InterfaceUsage interfaces from the Systems model libary.
     /// </summary>
     public partial interface IInterfaceUsage : IConnectionUsage
     {
         /// <summary>
         /// Queries the derived property InterfaceDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<InterfaceDefinition> QueryInterfaceDefinition();
 
     }

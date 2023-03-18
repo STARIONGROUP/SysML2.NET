@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", itemDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", itemDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", itemDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", itemDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", itemDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", itemDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", itemDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", itemDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", itemDefinitionInstance.IsVariation);
+            dictionary.Add("name", itemDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", itemDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", itemDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", itemDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", itemDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", itemDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", itemDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", itemDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", itemDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", itemDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", itemDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", itemDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", itemDefinitionInstance.IsVariation);
+            dictionary.Add("name", itemDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", itemDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", itemDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", itemDefinitionInstance.ShortName);
 
             return dictionary;
         }

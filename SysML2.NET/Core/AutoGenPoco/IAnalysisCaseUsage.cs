@@ -31,14 +31,10 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An AnalysisCaseUsage is a Usage of an AnalysisCaseDefinition.analysisAction = usage->select(   
-    /// isComposite and    specializes('AnalysisCases::AnalysisAction'))resultExpression =    let results :
-    /// OrderedSet(ResultExpressionMembership) =        featureMembersip->           
-    /// selectByKind(ResultExpressionMembership) in    if results->isEmpty() then null    else
-    /// results->first().ownedResultExpression   
-    /// endifspecializesFromLibrary('AnalysisCases::analysisCases')isComposite and owningType <> null and   
-    /// (owningType.oclIsKindOf(AnalysisCaseDefinition) or     owningType.oclIsKindOf(AnalysisCaseUsage))
-    /// implies    specializesFromLibrary('AnalysisCases::AnalysisCase::subAnalysisCases')
+    /// An AnalysisCaseUsage is a Usage of an AnalysisCaseDefinition.An AnalysisCaseUsage must subset,
+    /// directly or indirectly, either the base AnalysisCaseUsage analysisCases from the Systems model
+    /// library, if it is not owned by an AnalysisCaseDefinition or AnalysisCaseUsage, or the
+    /// AnalysisCaseUsage subAnalysisCases inherited from its owner, otherwise.
     /// </summary>
     public partial interface IAnalysisCaseUsage : ICaseUsage
     {
@@ -51,7 +47,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property AnalysisCaseDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         AnalysisCaseDefinition QueryAnalysisCaseDefinition();
 
         /// <summary>

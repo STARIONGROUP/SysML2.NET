@@ -33,8 +33,8 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A UseCaseDefinition is a CaseDefinition that specifies a set of actions performed by its subject, in
     /// interaction with one or more actors external to the subject. The objective is to yield an observable
-    /// result that is of value to one or more of the actors.includedUseCase = ownedUseCase->   
-    /// selectByKind(IncludeUseCaseUsage).    useCaseIncludedspecializesFromLibrary('UseCases::UseCase')
+    /// result that is of value for one or more of the actors.A UseCaseDefinition must subclass, directly or
+    /// indirectly, the base UseCaseDefinition UseCase from the Systems model library.
     /// </summary>
     public partial interface IUseCaseDefinition : ICaseDefinition
     {

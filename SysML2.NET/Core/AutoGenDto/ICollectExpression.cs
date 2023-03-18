@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A CollectExpression is an OperatorExpression whose operator is "collect", which resolves to the
-    /// Function ControlFunctions::collect from the Kernel Functions Library.operator = "collect"
+    /// library Function ControlFunctions::collect.
     /// </summary>
     public partial interface ICollectExpression : IOperatorExpression
     {

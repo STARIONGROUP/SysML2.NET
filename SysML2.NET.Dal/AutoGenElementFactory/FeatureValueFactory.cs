@@ -56,8 +56,6 @@ namespace SysML2.NET.Dal
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
                 ElementId = dto.ElementId,
                 IsDefault = dto.IsDefault,
                 IsImplied = dto.IsImplied,
@@ -65,6 +63,8 @@ namespace SysML2.NET.Dal
                 IsInitial = dto.IsInitial,
                 MemberName = dto.MemberName,
                 MemberShortName = dto.MemberShortName,
+                Name = dto.Name,
+                ShortName = dto.ShortName,
                 Visibility = dto.Visibility,
             };
 

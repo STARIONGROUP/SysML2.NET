@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
@@ -200,6 +188,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
@@ -212,10 +206,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             attributeUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            attributeUsageInstance.DeclaredName = declaredNameFeature;
-            attributeUsageInstance.DeclaredShortName = declaredShortNameFeature;
             attributeUsageInstance.Direction = directionFeature;
             attributeUsageInstance.ElementId = elementIdFeature;
             attributeUsageInstance.IsAbstract = isAbstractFeature;
@@ -229,8 +227,10 @@ namespace SysML2.NET.Serializer.Dictionary
             attributeUsageInstance.IsSufficient = isSufficientFeature;
             attributeUsageInstance.IsUnique = isUniqueFeature;
             attributeUsageInstance.IsVariation = isVariationFeature;
+            attributeUsageInstance.Name = nameFeature;
             attributeUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             attributeUsageInstance.OwningRelationship = owningRelationshipFeature;
+            attributeUsageInstance.ShortName = shortNameFeature;
 
             return attributeUsageInstance;
         }
@@ -254,18 +254,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -345,6 +333,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isVariationFeature = Convert.ToBoolean(isVariationObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
@@ -357,10 +351,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a AttributeUsage");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             attributeUsageInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            attributeUsageInstance.DeclaredName = declaredNameFeature;
-            attributeUsageInstance.DeclaredShortName = declaredShortNameFeature;
             attributeUsageInstance.Direction = directionFeature;
             attributeUsageInstance.ElementId = elementIdFeature;
             attributeUsageInstance.IsAbstract = isAbstractFeature;
@@ -374,8 +372,10 @@ namespace SysML2.NET.Serializer.Dictionary
             attributeUsageInstance.IsSufficient = isSufficientFeature;
             attributeUsageInstance.IsUnique = isUniqueFeature;
             attributeUsageInstance.IsVariation = isVariationFeature;
+            attributeUsageInstance.Name = nameFeature;
             attributeUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             attributeUsageInstance.OwningRelationship = owningRelationshipFeature;
+            attributeUsageInstance.ShortName = shortNameFeature;
 
             return attributeUsageInstance;
         }

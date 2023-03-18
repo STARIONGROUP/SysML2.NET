@@ -31,18 +31,15 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ViewpointUsage is a Usage of a ViewpointDefinition.viewpointStakeholder =
-    /// framedConcern.featureMemberhsip->    selectByKind(StakeholderMembership).   
-    /// ownedStakeholderParameterspecializesFromLibrary('Views::viewpoints')isComposite and owningType <>
-    /// null and(owningType.oclIsKindOf(ViewDefinition) or owningType.oclIsKindOf(ViewUsage)) implies   
-    /// specializesFromLibrary('Views::View::viewpointSatisfactions')
+    /// A ViewpointUsage is a usage of a ViewpointDefinition.A ViewpointUsage must subset, directly or
+    /// indirectly, the base ViewpointUsage viewpoints from the Systems model library.
     /// </summary>
     public partial interface IViewpointUsage : IRequirementUsage
     {
         /// <summary>
         /// Queries the derived property ViewpointDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         ViewpointDefinition QueryViewpointDefinition();
 
         /// <summary>

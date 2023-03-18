@@ -108,15 +108,15 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", enumerationDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", enumerationDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", enumerationDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", enumerationDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", enumerationDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", enumerationDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", enumerationDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", enumerationDefinitionInstance.IsVariation);
+            dictionary.Add("name", enumerationDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", enumerationDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", enumerationDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", enumerationDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -144,15 +144,15 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", enumerationDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", enumerationDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", enumerationDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", enumerationDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", enumerationDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", enumerationDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", enumerationDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", enumerationDefinitionInstance.IsVariation);
+            dictionary.Add("name", enumerationDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", enumerationDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", enumerationDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", enumerationDefinitionInstance.ShortName);
 
             return dictionary;
         }

@@ -56,8 +56,6 @@ namespace SysML2.NET.Dal
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
                 Direction = dto.Direction,
                 ElementId = dto.ElementId,
                 IsAbstract = dto.IsAbstract,
@@ -70,6 +68,8 @@ namespace SysML2.NET.Dal
                 IsReadOnly = dto.IsReadOnly,
                 IsSufficient = dto.IsSufficient,
                 IsUnique = dto.IsUnique,
+                Name = dto.Name,
+                ShortName = dto.ShortName,
             };
 
             return poco;

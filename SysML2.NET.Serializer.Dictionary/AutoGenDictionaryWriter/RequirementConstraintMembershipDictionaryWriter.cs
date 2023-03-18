@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", requirementConstraintMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", requirementConstraintMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", requirementConstraintMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementConstraintMembershipInstance.ElementId);
             dictionary.Add("feature", requirementConstraintMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", requirementConstraintMembershipInstance.IsImplied);
@@ -118,10 +116,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", requirementConstraintMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", requirementConstraintMembershipInstance.MemberName);
             dictionary.Add("memberShortName", requirementConstraintMembershipInstance.MemberShortName);
+            dictionary.Add("name", requirementConstraintMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", requirementConstraintMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", requirementConstraintMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", requirementConstraintMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", requirementConstraintMembershipInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", requirementConstraintMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", requirementConstraintMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", requirementConstraintMembershipInstance.Target)} ]");
             dictionary.Add("type", requirementConstraintMembershipInstance.Type.ToString());
@@ -153,8 +153,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", requirementConstraintMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", requirementConstraintMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", requirementConstraintMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementConstraintMembershipInstance.ElementId);
             dictionary.Add("feature", requirementConstraintMembershipInstance.Feature);
             dictionary.Add("isImplied", requirementConstraintMembershipInstance.IsImplied);
@@ -163,10 +161,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", requirementConstraintMembershipInstance.MemberElement);
             dictionary.Add("memberName", requirementConstraintMembershipInstance.MemberName);
             dictionary.Add("memberShortName", requirementConstraintMembershipInstance.MemberShortName);
+            dictionary.Add("name", requirementConstraintMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", requirementConstraintMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", requirementConstraintMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", requirementConstraintMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", requirementConstraintMembershipInstance.OwningRelationship);
+            dictionary.Add("shortName", requirementConstraintMembershipInstance.ShortName);
             dictionary.Add("source", requirementConstraintMembershipInstance.Source);
             dictionary.Add("target", requirementConstraintMembershipInstance.Target);
             dictionary.Add("type", requirementConstraintMembershipInstance.Type);

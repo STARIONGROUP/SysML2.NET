@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", whileLoopActionUsageInstance.AliasIds);
-            dictionary.Add("declaredName", whileLoopActionUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", whileLoopActionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", whileLoopActionUsageInstance.Direction);
             dictionary.Add("elementId", whileLoopActionUsageInstance.ElementId);
             dictionary.Add("isAbstract", whileLoopActionUsageInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", whileLoopActionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", whileLoopActionUsageInstance.IsUnique);
             dictionary.Add("isVariation", whileLoopActionUsageInstance.IsVariation);
+            dictionary.Add("name", whileLoopActionUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", whileLoopActionUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", whileLoopActionUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", whileLoopActionUsageInstance.PortionKind);
+            dictionary.Add("shortName", whileLoopActionUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", whileLoopActionUsageInstance.AliasIds);
-            dictionary.Add("declaredName", whileLoopActionUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", whileLoopActionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", whileLoopActionUsageInstance.Direction);
             dictionary.Add("elementId", whileLoopActionUsageInstance.ElementId);
             dictionary.Add("isAbstract", whileLoopActionUsageInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", whileLoopActionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", whileLoopActionUsageInstance.IsUnique);
             dictionary.Add("isVariation", whileLoopActionUsageInstance.IsVariation);
+            dictionary.Add("name", whileLoopActionUsageInstance.Name);
             dictionary.Add("ownedRelationship", whileLoopActionUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", whileLoopActionUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", whileLoopActionUsageInstance.PortionKind);
+            dictionary.Add("shortName", whileLoopActionUsageInstance.ShortName);
 
             return dictionary;
         }

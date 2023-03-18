@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", transitionUsageInstance.AliasIds);
-            dictionary.Add("declaredName", transitionUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", transitionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", transitionUsageInstance.Direction);
             dictionary.Add("elementId", transitionUsageInstance.ElementId);
             dictionary.Add("isAbstract", transitionUsageInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", transitionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", transitionUsageInstance.IsUnique);
             dictionary.Add("isVariation", transitionUsageInstance.IsVariation);
+            dictionary.Add("name", transitionUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", transitionUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", transitionUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", transitionUsageInstance.PortionKind);
+            dictionary.Add("shortName", transitionUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", transitionUsageInstance.AliasIds);
-            dictionary.Add("declaredName", transitionUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", transitionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", transitionUsageInstance.Direction);
             dictionary.Add("elementId", transitionUsageInstance.ElementId);
             dictionary.Add("isAbstract", transitionUsageInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", transitionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", transitionUsageInstance.IsUnique);
             dictionary.Add("isVariation", transitionUsageInstance.IsVariation);
+            dictionary.Add("name", transitionUsageInstance.Name);
             dictionary.Add("ownedRelationship", transitionUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", transitionUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", transitionUsageInstance.PortionKind);
+            dictionary.Add("shortName", transitionUsageInstance.ShortName);
 
             return dictionary;
         }

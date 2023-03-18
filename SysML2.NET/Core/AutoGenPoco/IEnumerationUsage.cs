@@ -31,7 +31,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An EnumerationUsage is an AttributeUsage whose attributeDefinition is an EnumerationDefinition.
+    /// An EnumerationUsage is an AttributeUsage whose attributeDefinition is an EnumerationDefinition.An
+    /// EnumerationUsage must subset, directly or indirectly, the base EnumerationUsage enumerationValues
+    /// from the Systems model library.
     /// </summary>
     public partial interface IEnumerationUsage : IAttributeUsage
     {

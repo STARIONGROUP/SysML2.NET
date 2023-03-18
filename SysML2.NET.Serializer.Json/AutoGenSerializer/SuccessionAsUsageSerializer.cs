@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iSuccessionAsUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iSuccessionAsUsage.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iSuccessionAsUsage.Direction.HasValue)
             {
@@ -125,6 +121,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iSuccessionAsUsage.IsVariation);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iSuccessionAsUsage.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iSuccessionAsUsage.OwnedRelatedElement)
             {
@@ -157,6 +155,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iSuccessionAsUsage.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iSuccessionAsUsage.Source)
             {

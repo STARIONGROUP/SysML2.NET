@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
@@ -152,6 +140,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isSufficientFeature = Convert.ToBoolean(isSufficientObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
@@ -176,6 +170,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
@@ -190,17 +190,17 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             interactionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            interactionInstance.DeclaredName = declaredNameFeature;
-            interactionInstance.DeclaredShortName = declaredShortNameFeature;
             interactionInstance.ElementId = elementIdFeature;
             interactionInstance.IsAbstract = isAbstractFeature;
             interactionInstance.IsImplied = isImpliedFeature;
             interactionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             interactionInstance.IsSufficient = isSufficientFeature;
+            interactionInstance.Name = nameFeature;
             interactionInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             interactionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             interactionInstance.OwningRelatedElement = owningRelatedElementFeature;
             interactionInstance.OwningRelationship = owningRelationshipFeature;
+            interactionInstance.ShortName = shortNameFeature;
             interactionInstance.Source = sourceFeature ?? new List<Guid>();
             interactionInstance.Target = targetFeature ?? new List<Guid>();
 
@@ -227,18 +227,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
@@ -269,6 +257,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isSufficientFeature = Convert.ToBoolean(isSufficientObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
                 throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
@@ -293,6 +287,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Interaction");
@@ -307,17 +307,17 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             interactionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            interactionInstance.DeclaredName = declaredNameFeature;
-            interactionInstance.DeclaredShortName = declaredShortNameFeature;
             interactionInstance.ElementId = elementIdFeature;
             interactionInstance.IsAbstract = isAbstractFeature;
             interactionInstance.IsImplied = isImpliedFeature;
             interactionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             interactionInstance.IsSufficient = isSufficientFeature;
+            interactionInstance.Name = nameFeature;
             interactionInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             interactionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             interactionInstance.OwningRelatedElement = owningRelatedElementFeature;
             interactionInstance.OwningRelationship = owningRelationshipFeature;
+            interactionInstance.ShortName = shortNameFeature;
             interactionInstance.Source = sourceFeature ?? new List<Guid>();
             interactionInstance.Target = targetFeature ?? new List<Guid>();
 

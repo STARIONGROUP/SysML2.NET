@@ -31,11 +31,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ViewpointUsage is a Usage of a ViewpointDefinition.viewpointStakeholder =
-    /// framedConcern.featureMemberhsip->    selectByKind(StakeholderMembership).   
-    /// ownedStakeholderParameterspecializesFromLibrary('Views::viewpoints')isComposite and owningType <>
-    /// null and(owningType.oclIsKindOf(ViewDefinition) or owningType.oclIsKindOf(ViewUsage)) implies   
-    /// specializesFromLibrary('Views::View::viewpointSatisfactions')
+    /// A ViewpointUsage is a usage of a ViewpointDefinition.A ViewpointUsage must subset, directly or
+    /// indirectly, the base ViewpointUsage viewpoints from the Systems model library.
     /// </summary>
     public partial interface IViewpointUsage : IRequirementUsage
     {

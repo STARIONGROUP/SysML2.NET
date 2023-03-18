@@ -43,7 +43,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutGenPoco");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenPoco");
 
             rootPackage = DataModelLoader.Load();
 

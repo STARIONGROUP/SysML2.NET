@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", ifActionUsageInstance.AliasIds);
-            dictionary.Add("declaredName", ifActionUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", ifActionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", ifActionUsageInstance.Direction);
             dictionary.Add("elementId", ifActionUsageInstance.ElementId);
             dictionary.Add("isAbstract", ifActionUsageInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", ifActionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", ifActionUsageInstance.IsUnique);
             dictionary.Add("isVariation", ifActionUsageInstance.IsVariation);
+            dictionary.Add("name", ifActionUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", ifActionUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", ifActionUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", ifActionUsageInstance.PortionKind);
+            dictionary.Add("shortName", ifActionUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", ifActionUsageInstance.AliasIds);
-            dictionary.Add("declaredName", ifActionUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", ifActionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", ifActionUsageInstance.Direction);
             dictionary.Add("elementId", ifActionUsageInstance.ElementId);
             dictionary.Add("isAbstract", ifActionUsageInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", ifActionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", ifActionUsageInstance.IsUnique);
             dictionary.Add("isVariation", ifActionUsageInstance.IsVariation);
+            dictionary.Add("name", ifActionUsageInstance.Name);
             dictionary.Add("ownedRelationship", ifActionUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", ifActionUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", ifActionUsageInstance.PortionKind);
+            dictionary.Add("shortName", ifActionUsageInstance.ShortName);
 
             return dictionary;
         }

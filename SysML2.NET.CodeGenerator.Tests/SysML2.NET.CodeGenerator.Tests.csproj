@@ -37,27 +37,6 @@
 	  <Compile Remove="Expected\AutGenPoco\NamespaceImport.cs" />
 	  <Compile Remove="Expected\AutoGenDeSerializer\FeatureDirectionKindDeserializer.cs" />
 	  <Compile Remove="Expected\AutoGenDeSerializer\PartDefinitionDeSerializer.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\AnnotatingElementDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\AnnotationDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\CommentDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\ConnectorDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\DependencyDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\FeatureDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\ItemFlowDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\LiteralIntegerDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\LiteralRationalDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\MultiplicityRangeDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryReader\NamespaceImportDictionaryReader.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\AcceptActionUsageWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\AnnotatingElementDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\AnnotationDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\CommentDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\ConnectorDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\DependencyDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\FeatureDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\LiteralIntegerDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\LiteralRationalDictionaryWriter.cs" />
-	  <Compile Remove="Expected\AutoGenDictionaryWriter\NamespaceImportDictionaryWriter.cs" />
 	  <Compile Remove="Expected\AutoGenDto\AnnotatingElement.cs" />
 	  <Compile Remove="Expected\AutoGenDto\Annotation.cs" />
 	  <Compile Remove="Expected\AutoGenDto\Comment.cs" />
@@ -184,60 +163,6 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutGenPoco\NamespaceImport.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\AnnotatingElementDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\AnnotationDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\CommentDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\ConnectorDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\DependencyDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\FeatureDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\LiteralIntegerDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\LiteralRationalDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryReader\NamespaceImportDictionaryReader.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\AnnotatingElementDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\AnnotationDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\CommentDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\ConnectorDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\DependencyDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\FeatureDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\LiteralIntegerDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\LiteralRationalDictionaryWriter.cs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Expected\AutoGenDictionaryWriter\NamespaceImportDictionaryWriter.cs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Include="Expected\AutoGenDto\AnnotatingElement.cs">

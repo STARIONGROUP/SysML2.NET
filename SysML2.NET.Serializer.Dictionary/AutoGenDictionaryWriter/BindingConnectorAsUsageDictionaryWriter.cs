@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", bindingConnectorAsUsageInstance.AliasIds);
-            dictionary.Add("declaredName", bindingConnectorAsUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", bindingConnectorAsUsageInstance.DeclaredShortName);
             dictionary.Add("direction", bindingConnectorAsUsageInstance.Direction);
             dictionary.Add("elementId", bindingConnectorAsUsageInstance.ElementId);
             dictionary.Add("isAbstract", bindingConnectorAsUsageInstance.IsAbstract);
@@ -125,10 +123,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", bindingConnectorAsUsageInstance.IsSufficient);
             dictionary.Add("isUnique", bindingConnectorAsUsageInstance.IsUnique);
             dictionary.Add("isVariation", bindingConnectorAsUsageInstance.IsVariation);
+            dictionary.Add("name", bindingConnectorAsUsageInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", bindingConnectorAsUsageInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", bindingConnectorAsUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", bindingConnectorAsUsageInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", bindingConnectorAsUsageInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", bindingConnectorAsUsageInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", bindingConnectorAsUsageInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", bindingConnectorAsUsageInstance.Target)} ]");
 
@@ -158,8 +158,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", bindingConnectorAsUsageInstance.AliasIds);
-            dictionary.Add("declaredName", bindingConnectorAsUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", bindingConnectorAsUsageInstance.DeclaredShortName);
             dictionary.Add("direction", bindingConnectorAsUsageInstance.Direction);
             dictionary.Add("elementId", bindingConnectorAsUsageInstance.ElementId);
             dictionary.Add("isAbstract", bindingConnectorAsUsageInstance.IsAbstract);
@@ -175,10 +173,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", bindingConnectorAsUsageInstance.IsSufficient);
             dictionary.Add("isUnique", bindingConnectorAsUsageInstance.IsUnique);
             dictionary.Add("isVariation", bindingConnectorAsUsageInstance.IsVariation);
+            dictionary.Add("name", bindingConnectorAsUsageInstance.Name);
             dictionary.Add("ownedRelatedElement", bindingConnectorAsUsageInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", bindingConnectorAsUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", bindingConnectorAsUsageInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", bindingConnectorAsUsageInstance.OwningRelationship);
+            dictionary.Add("shortName", bindingConnectorAsUsageInstance.ShortName);
             dictionary.Add("source", bindingConnectorAsUsageInstance.Source);
             dictionary.Add("target", bindingConnectorAsUsageInstance.Target);
 

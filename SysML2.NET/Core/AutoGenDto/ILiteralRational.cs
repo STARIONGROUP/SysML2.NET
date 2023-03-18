@@ -31,14 +31,16 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A LiteralRational is a LiteralExpression that provides a Rational value as a result. Its result
-    /// parameter must have the type Rational.
+    /// A LiteralRational is a LiteralExpression that provides a Rational value as a result. It must have an
+    /// owned result parameter whose type is Rational.An Expression that provides a Real value as a result.A
+    /// LiteralReal must be typed by a specialization of Evaluation with no input parameters and a single
+    /// Real value as its result.
     /// </summary>
     public partial interface ILiteralRational : ILiteralExpression
     {
         /// <summary>
-        /// The value whose rational approximation is the result of evaluating this LiteralRational.The Real
-        /// value that is the result of evaluating this Expression.
+        /// The value whose rational approximation is the result of evaluating this Expression.The Real value
+        /// that is the result of evaluating this Expression.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         double Value { get; set; }

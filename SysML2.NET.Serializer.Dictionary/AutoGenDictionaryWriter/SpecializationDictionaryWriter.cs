@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", specializationInstance.AliasIds);
-            dictionary.Add("declaredName", specializationInstance.DeclaredName);
-            dictionary.Add("declaredShortName", specializationInstance.DeclaredShortName);
             dictionary.Add("elementId", specializationInstance.ElementId);
             dictionary.Add("general", specializationInstance.General.ToString());
             dictionary.Add("isImplied", specializationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", specializationInstance.IsImpliedIncluded);
+            dictionary.Add("name", specializationInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", specializationInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", specializationInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", specializationInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", specializationInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", specializationInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", specializationInstance.Source)} ]");
             dictionary.Add("specific", specializationInstance.Specific.ToString());
             dictionary.Add("target", $"[ {string.Join(",", specializationInstance.Target)} ]");
@@ -148,16 +148,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", specializationInstance.AliasIds);
-            dictionary.Add("declaredName", specializationInstance.DeclaredName);
-            dictionary.Add("declaredShortName", specializationInstance.DeclaredShortName);
             dictionary.Add("elementId", specializationInstance.ElementId);
             dictionary.Add("general", specializationInstance.General);
             dictionary.Add("isImplied", specializationInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", specializationInstance.IsImpliedIncluded);
+            dictionary.Add("name", specializationInstance.Name);
             dictionary.Add("ownedRelatedElement", specializationInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", specializationInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", specializationInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", specializationInstance.OwningRelationship);
+            dictionary.Add("shortName", specializationInstance.ShortName);
             dictionary.Add("source", specializationInstance.Source);
             dictionary.Add("specific", specializationInstance.Specific);
             dictionary.Add("target", specializationInstance.Target);

@@ -31,25 +31,19 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConstraintUsage is an OccurrenceUsage that is also a BooleanExpression, and, so, is typed by a
+    /// A ConstraintUsage is a OccurrenceUsage that is also a BooleanExpression, and, so, is typed by a
     /// Predicate. Nominally, if the type is a ConstraintDefinition, a ConstraintUsage is a Usage of that
     /// ConstraintDefinition. However, other kinds of kernel Predicates are also allowed, to permit use of
-    /// Predicates from the Kernel Model Libraries.owningFeatureMembership <> null
-    /// andowningFeatureMembership.oclIsKindOf(RequirementConstraintMembership) implies    if
-    /// owningFeatureMembership.oclAsType(RequirementConstraintMembership).kind =        
-    /// RequirementConstraintKind::assumption then       
-    /// specializesFromLibrary('Requirements::RequirementCheck::assumptions')    else       
-    /// specializesFromLibrary('Requirements::RequirementCheck::constraints')   
-    /// endifspecializesFromLibrary('Constraints::constraintChecks')owningType <> null
-    /// and(owningType.oclIsKindOf(ItemDefinition) or owningType.oclIsKindOf(ItemUsage)) implies   
-    /// specializesFromLibrary('Items::Item::checkedConstraints')
+    /// Predicates from the Kernel Library.A ConstraintUsage (other than an AssertConstraintUsage owned by a
+    /// Part) must subset, directly or indirectly, the base ConstraintUsage constraintChecks from the
+    /// Systems model library.
     /// </summary>
     public partial interface IConstraintUsage : IOccurrenceUsage, IBooleanExpression
     {
         /// <summary>
         /// Queries the derived property ConstraintDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Predicate QueryConstraintDefinition();
 
     }

@@ -31,11 +31,10 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A LoopActionUsage is an ActionUsage that specifies that its bodyAction should be performed
+    /// A LoopActionUsage is an ActionUsage that is typed, directly or indirectly, by the ActionDefinition
+    /// LoopAction from the Systems model library. It specifies that its bodyAction should be performed
     /// repeatedly. Its subclasses WhileLoopActionUsage and ForLoopActionUsage provide different ways to
-    /// determine how many times the bodyAction should be performed.bodyAction =    let parameter : Feature
-    /// = inputParameter(2) in    if parameter <> null and parameter.oclIsKindOf(Action) then       
-    /// parameter.oclAsType(Action)    else        null    endif
+    /// determine how many times the bodyAction should be performed.
     /// </summary>
     public partial interface ILoopActionUsage : IActionUsage
     {

@@ -110,13 +110,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("aliasIds", textualRepresentationInstance.AliasIds);
             dictionary.Add("annotation", $"[ {string.Join(",", textualRepresentationInstance.Annotation)} ]");
             dictionary.Add("body", textualRepresentationInstance.Body);
-            dictionary.Add("declaredName", textualRepresentationInstance.DeclaredName);
-            dictionary.Add("declaredShortName", textualRepresentationInstance.DeclaredShortName);
             dictionary.Add("elementId", textualRepresentationInstance.ElementId);
             dictionary.Add("isImpliedIncluded", textualRepresentationInstance.IsImpliedIncluded);
             dictionary.Add("language", textualRepresentationInstance.Language);
+            dictionary.Add("name", textualRepresentationInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", textualRepresentationInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", textualRepresentationInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", textualRepresentationInstance.ShortName);
 
             return dictionary;
         }
@@ -146,13 +146,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("aliasIds", textualRepresentationInstance.AliasIds);
             dictionary.Add("annotation", textualRepresentationInstance.Annotation);
             dictionary.Add("body", textualRepresentationInstance.Body);
-            dictionary.Add("declaredName", textualRepresentationInstance.DeclaredName);
-            dictionary.Add("declaredShortName", textualRepresentationInstance.DeclaredShortName);
             dictionary.Add("elementId", textualRepresentationInstance.ElementId);
             dictionary.Add("isImpliedIncluded", textualRepresentationInstance.IsImpliedIncluded);
             dictionary.Add("language", textualRepresentationInstance.Language);
+            dictionary.Add("name", textualRepresentationInstance.Name);
             dictionary.Add("ownedRelationship", textualRepresentationInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", textualRepresentationInstance.OwningRelationship);
+            dictionary.Add("shortName", textualRepresentationInstance.ShortName);
 
             return dictionary;
         }

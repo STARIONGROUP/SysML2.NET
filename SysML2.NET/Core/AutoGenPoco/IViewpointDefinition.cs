@@ -32,9 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A ViewpointDefinition is a RequirementDefinition that specifies one or more stakeholder concerns
-    /// that are to be satisfied by creating a view of a model.viewpointStakeholder =
-    /// framedConcern.featureMemberhsip->    selectByKind(StakeholderMembership).   
-    /// ownedStakeholderParameterspecializesFromLibrary('Views::Viewpoint')
+    /// that to be satisfied by created a view of a model.A ViewpointDefinition must subclass, directly or
+    /// indirectly, the base ViewpointDefinition Viewpoint from the Systems model library.
     /// </summary>
     public partial interface IViewpointDefinition : IRequirementDefinition
     {

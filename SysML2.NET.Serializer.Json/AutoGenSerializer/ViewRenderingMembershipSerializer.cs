@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iViewRenderingMembership.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iViewRenderingMembership.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iViewRenderingMembership.ElementId);
 
@@ -93,6 +89,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WriteStringValue(iViewRenderingMembership.MemberName);
             writer.WritePropertyName("memberShortName");
             writer.WriteStringValue(iViewRenderingMembership.MemberShortName);
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iViewRenderingMembership.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iViewRenderingMembership.OwnedRelatedElement)
             {
@@ -125,6 +123,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iViewRenderingMembership.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iViewRenderingMembership.Source)
             {

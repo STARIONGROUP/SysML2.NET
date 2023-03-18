@@ -33,14 +33,11 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An Association is a Relationship and a Classifier to enable classification of links between things
     /// (in the universe). The co-domains (types) of the associationEnd Features are the relatedTypes, as
-    /// co-domain and participants (linked things) of an Association identify each other.relatedType =
-    /// associationEnd.typespecializesFromLibrary("Links::Link")oclIsKindOf(Structure) =
-    /// oclIsKindOf(AssociationStructure)ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Links::BinaryLink)not isAbstract implies relatedType->size() >=
-    /// 2associationEnds->size() > 2 implies    not specializesFromLibrary("Links::BinaryLink")sourceType = 
-    ///   if relatedType->isEmpty() then null    else relatedType->first() endiftargetType =    if
-    /// relatedType->size() < 2 then OrderedSet{}    else         relatedType->            subSequence(2,
-    /// relatedType->size())->            asOrderedSet()     endif
+    /// co-domain and participants (linked things) of an Association identify each other.relatedTypes =
+    /// associationEnd.typelet numend : Natural = associationEnd->size() in    allSupertypes()->includes(   
+    ///     if numend = 2 then Kernel Library::BinaryLink        else Kernel
+    /// Library::Link)oclIsKindOf(Structure) =
+    /// oclIsKindOf(AssociationStructure)allSupertypes()->includes(Kernel Library::Link)
     /// </summary>
     public partial class Association : IAssociation
     {
@@ -71,21 +68,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -123,11 +105,17 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsSufficient { get; set; }
+
+        /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -152,6 +140,15 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.

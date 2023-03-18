@@ -33,7 +33,11 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A SuccessionItemFlow is an ItemFlow that also provides temporal ordering. It classifies Transfers
     /// that cannot start until the source Occurrence has completed and that must complete before the target
-    /// Occurrence can start.specializesFromLibrary("Transfers::flowTransfersBefore")
+    /// Occurrence can start.A SuccessionItemFlow must be typed by the Interaction TransferBefore from the
+    /// Kernel Library, or a specialization of it.SuccessionItemFlows are ItemFlows that also provide
+    /// temporal ordering. They classify Transfers that must complete before the target behavior can
+    /// start.Must be typed by M1 TransferBefore or one of its
+    /// specializations.<br>association-&gt;is=OrSpecializationOf(TransferBefore) }
     /// </summary>
     public partial interface ISuccessionItemFlow : IItemFlow, ISuccession
     {

@@ -31,18 +31,9 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An ItemFlow is a Step that represents the transfer of objects or data values from one Feature to
-    /// another. ItemFlows can take non-zero time to complete.if itemFlowEnds->isEmpty() then   
-    /// specializesFromLibrary("Transfers::transfers")else   
-    /// specializesFromLibrary("Transfers::flowTransfers")endifitemType =    if itemFeature = null then
-    /// Sequence{}    else itemFeature.type    endifsourceOutputFeature =    if connectorEnd->isEmpty() or  
-    ///       connectorEnd.ownedFeature->isEmpty()    then null    else connectorEnd.ownedFeature->first()  
-    ///  endiftargetInputFeature =    if connectorEnd->size() < 2 or        
-    /// connectorEnd->at(2).ownedFeature->isEmpty()    then null    else
-    /// connectorEnd->at(2).ownedFeature->first()    endifitemFlowEnd =
-    /// connectorEnd->selectByKind(ItemFlowEnd)itemFeature =    let itemFeatures : Sequence(ItemFeature) =  
-    ///       ownedFeature->selectByKind(ItemFeature) in    if itemFeatures->isEmpty() then null    else
-    /// itemFeatures->first()    endifownedFeature->selectByKind(ItemFeature)->size() <= 1
+    /// An ItemFlow is a Step that represents the transfer of objects or values from one Feature to another.
+    /// ItemFlows can take non-zero time to complete.An ItemFlow must be typed by the Interaction Transfer
+    /// from the Kernel Semantic Library, or a specialization of it.
     /// </summary>
     public partial class ItemFlow : IItemFlow
     {
@@ -83,23 +74,7 @@ namespace SysML2.NET.Core.DTO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
-
-        /// <summary>
-        /// Indicates how values of this Feature are determined or used (as specified for the
-        /// FeatureDirectionKind).
+        /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public FeatureDirectionKind? Direction { get; set; }
@@ -120,28 +95,28 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after the instance of the featuringType no longer does..
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
 
         /// <summary>
         /// For a binary Connector, whether or not the Connector should be considered to have a direction from
-        /// sourceFeature to targetFeature.
+        /// source to target.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDirected { get; set; }
 
         /// <summary>
         /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
+        /// multiplicity of the Feature.An end Feature is always considered to map each domain entity to a
+        /// single co-domain entity, whether or not a Multiplicity is given for it. If a Multiplicity is given
         /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
         /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
         /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
@@ -175,8 +150,8 @@ namespace SysML2.NET.Core.DTO
         public bool IsOrdered { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
-        /// the Feature and represent the same thing as those instances.
+        /// Whether the values of this Feature are contained in the space and time of instances of the
+        /// Feature&#39;s domain.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsPortion { get; set; }
@@ -192,7 +167,7 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -203,6 +178,12 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsUnique { get; set; }
+
+        /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -227,6 +208,15 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.

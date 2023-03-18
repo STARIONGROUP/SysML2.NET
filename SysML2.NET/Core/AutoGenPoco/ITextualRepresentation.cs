@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.POCO
     /// A TextualRepresentation is an AnnotatingElement whose body represents the representedElement in a
     /// given language. The representedElement must be the owner of the TextualRepresentation. The named
     /// language can be a natural language, in which case the body is an informal representation, or an
-    /// artificial language, in which case the body is expected to be a formal, machine-parsable
+    /// artifical language, in which case the body is expected to be a formal, machine-parsable
     /// representation.If the named language of a TextualRepresentation is machine-parsable, then the body
     /// text should be legal input text as defined for that language. The interpretation of the named
     /// language string shall be case insensitive. The following language names are defined to correspond to
@@ -44,17 +44,20 @@ namespace SysML2.NET.Core.POCO
     /// style="text-align: center; width: 154px;">ocl</td>			<td style="width: 332px;">Object Constraint
     /// Language</td>		</tr>		<tr>			<td style="text-align: center; width: 154px;">alf</td>			<td
     /// style="width: 332px;">Action Language for fUML</td>		</tr>	</tbody></table>Other specifications may
-    /// define specific language strings, other than those shown above, to be used to indicate the use of
-    /// languages from those specifications in KerML TextualRepresentation.If the language of a
-    /// TextualRepresentation is &quot;kerml&quot;, then the body text shall be a legal representation of
-    /// the representedElement in the KerML textual concrete syntax. A conforming tool can use such a
-    /// TextualRepresentation Annotation to record the original KerML concrete syntax text from which an
-    /// Element was parsed. In this case, it is a tool responsibility to ensure that the body of the
-    /// TextualRepresentation remains correct (or the Annotation is removed) if the annotated Element
-    /// changes other than by re-parsing the body text.An Element with a TextualRepresentation in a language
-    /// other than KerML is essentially a semantically &quot;opaque&quot; Element specified in the other
-    /// language. However, a conforming KerML tool may interpret such an element consistently with the
-    /// specification of the named language.
+    /// define specific language strings, other than those shown in <mms-view-link
+    /// mms-doc-id="_19_0_4_12e503d9_1655498859928_646482_53332"
+    /// mms-element-id="MMS_1656305537944_6a3ca48e-424a-4a4d-8ce2-56df128ebabe"
+    /// mms-pe-id="_hidden_MMS_1656305558930_8d3925ff-003f-4024-a594-14317550f480_pei">[cf:Standard Language
+    /// Names.vlink]</mms-view-link>, to be used to indicate the use of languages from those specifications
+    /// in KerML TextualRepresentations.If the language of a TextualRepresentation is &quot;kerml&quot;,
+    /// then the body text shall be a legal representation of the representedElement in the KerML textual
+    /// concrete syntax. A conforming tool can use such a TextualRepresentation Annotation to record the
+    /// original KerML concrete syntax text from which an Element was parsed. In this case, it is a tool
+    /// responsibility to ensure that the body of the TextualRepresentation remains correct (or the
+    /// Annotation is removed) if the annotated Element changes other than by re-parsing the body text.An
+    /// Element with a TextualRepresentation in a language other than KerML is essentially a semantically
+    /// &quot;opaque&quot; Element specified in the other language. However, a conforming KerML tool may
+    /// interpret such an element consistently with the specification of the named language.
     /// </summary>
     public partial interface ITextualRepresentation : IAnnotatingElement
     {
@@ -74,7 +77,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property RepresentedElement
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        IElement QueryRepresentedElement();
+        Element QueryRepresentedElement();
 
     }
 }

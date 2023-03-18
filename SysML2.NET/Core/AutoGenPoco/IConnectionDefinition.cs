@@ -31,17 +31,17 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConnectionDefinition is a PartDefinition that is also an AssociationStructure. The end Features of
-    /// a ConnectionDefinition must be
-    /// Usages.specializesFromLibrary("Connections::Connection")ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Connections::BinaryConnections")
+    /// A ConnectionDefinition is a PartDefinition that is also an AssociationStructure, with two or more
+    /// end features. The associationEnds of a ConnectionDefinition must be Usages.A ConnectionDefinition
+    /// must subclass, directly or indirectly, the base ConnectionDefinition Connection from the Systems
+    /// model library.
     /// </summary>
     public partial interface IConnectionDefinition : IPartDefinition, IAssociationStructure
     {
         /// <summary>
         /// Queries the derived property ConnectionEnd
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 2, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Usage> QueryConnectionEnd();
 
     }

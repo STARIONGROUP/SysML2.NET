@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An InterfaceUsage is a Usage of an InterfaceDefinition to represent an interface connecting parts of
-    /// a system through specific ports.ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Interfaces::binaryInterfaces")specializesFromLibrary("Interfaces::interfaces")
+    /// a system through specific ports.An InterfaceUsage must subset, directly or indirectly, the base
+    /// InterfaceUsage interfaces from the Systems model libary.
     /// </summary>
     public partial interface IInterfaceUsage : IConnectionUsage
     {

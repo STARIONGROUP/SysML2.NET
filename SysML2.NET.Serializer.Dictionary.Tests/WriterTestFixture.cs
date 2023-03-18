@@ -60,11 +60,11 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 		        IsAbstract = false,
 		        IsSufficient = false,
 		        AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-		        DeclaredName = "PartDefinition:DeclaredName",
+		        Name = "PartDefinition:DeclaredName",
                 ElementId = "PartDefinition:ElementId",
                 OwnedRelationship = new List<Guid> { Guid.NewGuid() },
 		        OwningRelationship = Guid.NewGuid(),
-		        DeclaredShortName = "PartDefinition:DeclaredShortName"
+		        ShortName = "PartDefinition:DeclaredShortName"
 	        };
 
 	        this.partDefinitionWithNullProperties = new PartDefinition
@@ -75,11 +75,11 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 		        IsAbstract = false,
 		        IsSufficient = false,
 		        AliasIds = new List<string>(),
-		        DeclaredName = null,
+		        Name = null,
 		        ElementId = "PartDefinition:ElementId",
 				OwnedRelationship = new List<Guid>(),
 		        OwningRelationship = Guid.NewGuid(),
-		        DeclaredShortName = null
+		        ShortName = null
 	        };
         }
 
@@ -103,7 +103,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(elementId, Is.EqualTo(this.partDefinition.ElementId));
 
             dictionary.TryGetValue("declaredName", out var name);
-            Assert.That(name, Is.EqualTo(this.partDefinition.DeclaredName));
+            Assert.That(name, Is.EqualTo(this.partDefinition.Name));
 
             dictionary.TryGetValue("ownedRelationship", out var ownedRelationship);
             Assert.That(ownedRelationship, Is.EqualTo($"[ {string.Join(",", this.partDefinition.OwnedRelationship)} ]"));
@@ -132,7 +132,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(elementId, Is.EqualTo(this.partDefinition.ElementId));
 
             dictionary.TryGetValue("declaredName", out var name);
-            Assert.That(name, Is.EqualTo(this.partDefinition.DeclaredName));
+            Assert.That(name, Is.EqualTo(this.partDefinition.Name));
 
             dictionary.TryGetValue("ownedRelationship", out var ownedRelationship);
             Assert.That(ownedRelationship, Is.EqualTo(this.partDefinition.OwnedRelationship));

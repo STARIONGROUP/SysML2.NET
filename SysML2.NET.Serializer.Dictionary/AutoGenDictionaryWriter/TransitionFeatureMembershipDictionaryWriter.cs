@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", transitionFeatureMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", transitionFeatureMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", transitionFeatureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", transitionFeatureMembershipInstance.ElementId);
             dictionary.Add("feature", transitionFeatureMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", transitionFeatureMembershipInstance.IsImplied);
@@ -118,10 +116,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", transitionFeatureMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", transitionFeatureMembershipInstance.MemberName);
             dictionary.Add("memberShortName", transitionFeatureMembershipInstance.MemberShortName);
+            dictionary.Add("name", transitionFeatureMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", transitionFeatureMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", transitionFeatureMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", transitionFeatureMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", transitionFeatureMembershipInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", transitionFeatureMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", transitionFeatureMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", transitionFeatureMembershipInstance.Target)} ]");
             dictionary.Add("type", transitionFeatureMembershipInstance.Type.ToString());
@@ -153,8 +153,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", transitionFeatureMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", transitionFeatureMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", transitionFeatureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", transitionFeatureMembershipInstance.ElementId);
             dictionary.Add("feature", transitionFeatureMembershipInstance.Feature);
             dictionary.Add("isImplied", transitionFeatureMembershipInstance.IsImplied);
@@ -163,10 +161,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("memberElement", transitionFeatureMembershipInstance.MemberElement);
             dictionary.Add("memberName", transitionFeatureMembershipInstance.MemberName);
             dictionary.Add("memberShortName", transitionFeatureMembershipInstance.MemberShortName);
+            dictionary.Add("name", transitionFeatureMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", transitionFeatureMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", transitionFeatureMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", transitionFeatureMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", transitionFeatureMembershipInstance.OwningRelationship);
+            dictionary.Add("shortName", transitionFeatureMembershipInstance.ShortName);
             dictionary.Add("source", transitionFeatureMembershipInstance.Source);
             dictionary.Add("target", transitionFeatureMembershipInstance.Target);
             dictionary.Add("type", transitionFeatureMembershipInstance.Type);

@@ -31,9 +31,10 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A PartDefinition is an ItemDefinition of a Class of systems or parts of systems. Note that all parts
+    /// A PartDefinition is a ItemDefinition of a Class of systems or parts of systems. Note that all parts
     /// may be considered items for certain purposes, but not all items are parts that can perform actions
-    /// within a system.specializesFromLibrary("Parts::Part")
+    /// within a system.A PartDefinition must subclass, directly or indirectly, the base PartDefinition Part
+    /// from the Systems model library.
     /// </summary>
     public partial interface IPartDefinition : IItemDefinition
     {

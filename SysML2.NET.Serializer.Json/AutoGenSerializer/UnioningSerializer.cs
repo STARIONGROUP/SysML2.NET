@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iUnioning.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iUnioning.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iUnioning.ElementId);
 
@@ -83,6 +79,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iUnioning.IsImpliedIncluded);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iUnioning.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iUnioning.OwnedRelatedElement)
             {
@@ -115,6 +113,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iUnioning.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iUnioning.Source)
             {

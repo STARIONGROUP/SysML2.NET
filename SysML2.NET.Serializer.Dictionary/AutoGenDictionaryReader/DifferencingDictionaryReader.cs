@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("differencingType", out object differencingTypeObject))
             {
                 throw new ArgumentException("The differencingType property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
@@ -145,6 +133,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -170,6 +164,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
@@ -184,16 +184,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             differencingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            differencingInstance.DeclaredName = declaredNameFeature;
-            differencingInstance.DeclaredShortName = declaredShortNameFeature;
             differencingInstance.DifferencingType = differencingTypeFeature;
             differencingInstance.ElementId = elementIdFeature;
             differencingInstance.IsImplied = isImpliedFeature;
             differencingInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            differencingInstance.Name = nameFeature;
             differencingInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             differencingInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             differencingInstance.OwningRelatedElement = owningRelatedElementFeature;
             differencingInstance.OwningRelationship = owningRelationshipFeature;
+            differencingInstance.ShortName = shortNameFeature;
             differencingInstance.Source = sourceFeature ?? new List<Guid>();
             differencingInstance.Target = targetFeature ?? new List<Guid>();
 
@@ -220,18 +220,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("differencingType", out object differencingTypeObject))
             {
                 throw new ArgumentException("The differencingType property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
@@ -255,6 +243,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -280,6 +274,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
                 throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Differencing");
@@ -294,16 +294,16 @@ namespace SysML2.NET.Serializer.Dictionary
 
 
             differencingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            differencingInstance.DeclaredName = declaredNameFeature;
-            differencingInstance.DeclaredShortName = declaredShortNameFeature;
             differencingInstance.DifferencingType = differencingTypeFeature;
             differencingInstance.ElementId = elementIdFeature;
             differencingInstance.IsImplied = isImpliedFeature;
             differencingInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            differencingInstance.Name = nameFeature;
             differencingInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             differencingInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             differencingInstance.OwningRelatedElement = owningRelatedElementFeature;
             differencingInstance.OwningRelationship = owningRelationshipFeature;
+            differencingInstance.ShortName = shortNameFeature;
             differencingInstance.Source = sourceFeature ?? new List<Guid>();
             differencingInstance.Target = targetFeature ?? new List<Guid>();
 

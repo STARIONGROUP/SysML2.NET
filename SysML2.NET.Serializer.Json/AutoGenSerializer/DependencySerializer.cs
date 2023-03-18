@@ -77,10 +77,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iDependency.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iDependency.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iDependency.ElementId);
 
@@ -90,6 +86,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iDependency.IsImpliedIncluded);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iDependency.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iDependency.OwnedRelatedElement)
             {
@@ -122,6 +120,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iDependency.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iDependency.Source)
             {

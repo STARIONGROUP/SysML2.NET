@@ -77,10 +77,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iMetadataUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iMetadataUsage.DeclaredShortName);
             writer.WritePropertyName("direction");
             if (iMetadataUsage.Direction.HasValue)
             {
@@ -129,6 +125,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isVariation");
             writer.WriteBooleanValue(iMetadataUsage.IsVariation);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iMetadataUsage.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iMetadataUsage.OwnedRelationship)
             {
@@ -154,6 +152,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iMetadataUsage.ShortName);
             writer.WriteEndObject();
         }
     }

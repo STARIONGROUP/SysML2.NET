@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", joinNodeInstance.AliasIds);
-            dictionary.Add("declaredName", joinNodeInstance.DeclaredName);
-            dictionary.Add("declaredShortName", joinNodeInstance.DeclaredShortName);
             dictionary.Add("direction", joinNodeInstance.Direction);
             dictionary.Add("elementId", joinNodeInstance.ElementId);
             dictionary.Add("isAbstract", joinNodeInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", joinNodeInstance.IsSufficient);
             dictionary.Add("isUnique", joinNodeInstance.IsUnique);
             dictionary.Add("isVariation", joinNodeInstance.IsVariation);
+            dictionary.Add("name", joinNodeInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", joinNodeInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", joinNodeInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", joinNodeInstance.PortionKind);
+            dictionary.Add("shortName", joinNodeInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", joinNodeInstance.AliasIds);
-            dictionary.Add("declaredName", joinNodeInstance.DeclaredName);
-            dictionary.Add("declaredShortName", joinNodeInstance.DeclaredShortName);
             dictionary.Add("direction", joinNodeInstance.Direction);
             dictionary.Add("elementId", joinNodeInstance.ElementId);
             dictionary.Add("isAbstract", joinNodeInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", joinNodeInstance.IsSufficient);
             dictionary.Add("isUnique", joinNodeInstance.IsUnique);
             dictionary.Add("isVariation", joinNodeInstance.IsVariation);
+            dictionary.Add("name", joinNodeInstance.Name);
             dictionary.Add("ownedRelationship", joinNodeInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", joinNodeInstance.OwningRelationship);
             dictionary.Add("portionKind", joinNodeInstance.PortionKind);
+            dictionary.Add("shortName", joinNodeInstance.ShortName);
 
             return dictionary;
         }

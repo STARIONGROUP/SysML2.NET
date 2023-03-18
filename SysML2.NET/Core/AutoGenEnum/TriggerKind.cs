@@ -25,26 +25,25 @@
 namespace SysML2.NET.Core
 {
     /// <summary>
-    /// TriggerKind enumerates the kinds of triggers that can be represented by a
-    /// TriggerInvocationExpression.
+    /// TriggerKind enumerates the kinds of triggers that can be represented by TriggerInvocationExpression.
     /// </summary>
     public enum TriggerKind
     {
         /// <summary>
-        /// Indicates a change trigger, corresponding to the TriggerWhen Function from the Triggers model in the
-        /// Kernel Semantic Library.
+        /// Indicates a change trigger, corresponding to the TriggerWhen Function from the Triggers library
+        /// model.
         /// </summary>
         When = 0,
 
         /// <summary>
-        /// Indicates an absolute time trigger, corresponding to the TriggerAt Function from the Triggers model
-        /// in the Kernel Semantic Library.
+        /// Indicates an absolute time trigger, corresponding to the TriggerAt Function from the Triggers
+        /// library model.
         /// </summary>
         At = 1,
 
         /// <summary>
         /// Indicates a relative time trigger, corresponding to the TriggerAfter Function from the Triggers
-        /// model in the Kernel Semantic Library.
+        /// library model.
         /// </summary>
         After = 2,
 

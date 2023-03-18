@@ -31,14 +31,14 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Classifier is a Type that classifies:<ul>	<li>Things (in the universe) regardless of how Features
-    /// relate them. (These are interpreted semantically as sequences of exactly one thing.)</li>	<li>How
-    /// the above things are related by Features. (These are interpreted semantically as sequences of
-    /// multiple things, such that the last thing in the sequence is also classified by the Classifier. Note
-    /// that his means that a Classifier modeled as specializing a Feature cannot classify
-    /// anything.)</li></ul>ownedSubclassification =    
-    /// ownedSpecialization->selectByKind(Superclassification)multiplicity <> null implies
-    /// multiplicity.featuringType->isEmpty()
+    /// A Classifier is a Type for model elements that classify:<ul>	<li>Things (in the universe)
+    /// regardless of how Features relate them.  These are sequences of exactly one thing
+    /// (sequence of length 1).</li>	<li>How the above things are related by Features. These are
+    /// sequences of multiple things (length &gt; 1).</li></ul>Classifiers that classify relationships
+    /// (sequence length &gt; 1) must also classify the things at the end of those sequences (sequence
+    /// length =1).  Because of this, Classifiers specializing Features cannot classify anything (any
+    /// sequences).ownedSuperclassing = ownedGeneralization->intersection(superclassing)multiplicity <> null
+    /// implies multiplicity.featuringType->isEmpty()
     /// </summary>
     public partial interface IClassifier : IType
     {

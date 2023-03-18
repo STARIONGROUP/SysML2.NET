@@ -26,22 +26,23 @@ namespace SysML2.NET.Core
 {
     /// <summary>
     /// A StateSubactionKind indicates whether the action of a StateSubactionMembership is an entry, do or
-    /// exit action.
+    /// exit action.A StateActionKind indicates whether a Action feature of a State is an entry, do or exit
+    /// Action.
     /// </summary>
     public enum StateSubactionKind
     {
         /// <summary>
-        /// Indicates that the action of a StateSubactionMembership is an entryAction.
+        /// Indicates that a subaction of a StateUsage is an entry action.
         /// </summary>
         Entry = 0,
 
         /// <summary>
-        /// Indicates that the action of a StateSubactionMembership is a doAction.
+        /// Indicates that a subaction of a StateUsage is a do action.
         /// </summary>
         Do = 1,
 
         /// <summary>
-        /// Indicates that the action of a StateSubactionMembership is an exitAction.
+        /// Indicates that a subaction of a StateUsage is an exit action.
         /// </summary>
         Exit = 2,
 

@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", requirementUsageInstance.AliasIds);
-            dictionary.Add("declaredName", requirementUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", requirementUsageInstance.DeclaredShortName);
             dictionary.Add("direction", requirementUsageInstance.Direction);
             dictionary.Add("elementId", requirementUsageInstance.ElementId);
             dictionary.Add("isAbstract", requirementUsageInstance.IsAbstract);
@@ -124,10 +122,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", requirementUsageInstance.IsSufficient);
             dictionary.Add("isUnique", requirementUsageInstance.IsUnique);
             dictionary.Add("isVariation", requirementUsageInstance.IsVariation);
+            dictionary.Add("name", requirementUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", requirementUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", requirementUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", requirementUsageInstance.PortionKind);
             dictionary.Add("reqId", requirementUsageInstance.ReqId);
+            dictionary.Add("shortName", requirementUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -155,8 +155,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", requirementUsageInstance.AliasIds);
-            dictionary.Add("declaredName", requirementUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", requirementUsageInstance.DeclaredShortName);
             dictionary.Add("direction", requirementUsageInstance.Direction);
             dictionary.Add("elementId", requirementUsageInstance.ElementId);
             dictionary.Add("isAbstract", requirementUsageInstance.IsAbstract);
@@ -171,10 +169,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", requirementUsageInstance.IsSufficient);
             dictionary.Add("isUnique", requirementUsageInstance.IsUnique);
             dictionary.Add("isVariation", requirementUsageInstance.IsVariation);
+            dictionary.Add("name", requirementUsageInstance.Name);
             dictionary.Add("ownedRelationship", requirementUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", requirementUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", requirementUsageInstance.PortionKind);
             dictionary.Add("reqId", requirementUsageInstance.ReqId);
+            dictionary.Add("shortName", requirementUsageInstance.ShortName);
 
             return dictionary;
         }

@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", allocationUsageInstance.AliasIds);
-            dictionary.Add("declaredName", allocationUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", allocationUsageInstance.DeclaredShortName);
             dictionary.Add("direction", allocationUsageInstance.Direction);
             dictionary.Add("elementId", allocationUsageInstance.ElementId);
             dictionary.Add("isAbstract", allocationUsageInstance.IsAbstract);
@@ -126,11 +124,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", allocationUsageInstance.IsSufficient);
             dictionary.Add("isUnique", allocationUsageInstance.IsUnique);
             dictionary.Add("isVariation", allocationUsageInstance.IsVariation);
+            dictionary.Add("name", allocationUsageInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", allocationUsageInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", allocationUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", allocationUsageInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", allocationUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", allocationUsageInstance.PortionKind);
+            dictionary.Add("shortName", allocationUsageInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", allocationUsageInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", allocationUsageInstance.Target)} ]");
 
@@ -160,8 +160,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", allocationUsageInstance.AliasIds);
-            dictionary.Add("declaredName", allocationUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", allocationUsageInstance.DeclaredShortName);
             dictionary.Add("direction", allocationUsageInstance.Direction);
             dictionary.Add("elementId", allocationUsageInstance.ElementId);
             dictionary.Add("isAbstract", allocationUsageInstance.IsAbstract);
@@ -178,11 +176,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", allocationUsageInstance.IsSufficient);
             dictionary.Add("isUnique", allocationUsageInstance.IsUnique);
             dictionary.Add("isVariation", allocationUsageInstance.IsVariation);
+            dictionary.Add("name", allocationUsageInstance.Name);
             dictionary.Add("ownedRelatedElement", allocationUsageInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", allocationUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", allocationUsageInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", allocationUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", allocationUsageInstance.PortionKind);
+            dictionary.Add("shortName", allocationUsageInstance.ShortName);
             dictionary.Add("source", allocationUsageInstance.Source);
             dictionary.Add("target", allocationUsageInstance.Target);
 

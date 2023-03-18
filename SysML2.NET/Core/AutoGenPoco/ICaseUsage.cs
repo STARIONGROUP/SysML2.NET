@@ -31,19 +31,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A CaseUsage is a Usage of a CaseDefinition.objectiveRequirement =     let objectives:
-    /// OrderedSet(RequirementUsage) =         featureMembership->           
-    /// selectByKind(ObjectiveMembership).            ownedRequirement in    if objectives->isEmpty() then
-    /// null    else objectives->first().ownedObjectiveRequirement    endiffeatureMembership->   
-    /// selectByKind(ObjectiveMembership)->    size() <=
-    /// 1featureMembership->	selectByKind(SubjectMembership)->	size() <= 1actorParameter =
-    /// featureMembership->    selectByKind(ActorMembership).    ownedActorParametersubjectParameter =   
-    /// let subjects : OrderedSet(SubjectMembership) =        
-    /// featureMembership->selectByKind(SubjectMembership) in    if subjects->isEmpty() then null    else
-    /// subjects->first().ownedSubjectParameter    endifinput->notEmpty() and input->first() =
-    /// subjectParameterspecializeFromLibrary('Cases::cases')isComposite and owningType <> null and    
-    /// (owningType.oclIsKindOf(CaseDefinition) or     owningType.oclIsKindOf(CaseUsage)) implies   
-    /// specializesFromLibrary('Cases::Case::subcases')
+    /// A CaseUsage is a Usage of a CaseDefinition.A CaseUsage must subset, directly or indirectly, either
+    /// the base CaseUsage cases from the Systems model library. If it is owned by a CaseDefinition or
+    /// CaseUsage, it must subset the CaseUsage Cases::subcases.
     /// </summary>
     public partial interface ICaseUsage : ICalculationUsage
     {
@@ -56,7 +46,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property CaseDefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         CaseDefinition QueryCaseDefinition();
 
         /// <summary>

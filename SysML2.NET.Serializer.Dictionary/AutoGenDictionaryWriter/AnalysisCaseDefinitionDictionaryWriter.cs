@@ -108,16 +108,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", analysisCaseDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", analysisCaseDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", analysisCaseDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", analysisCaseDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", analysisCaseDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", analysisCaseDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", analysisCaseDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", analysisCaseDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", analysisCaseDefinitionInstance.IsVariation);
+            dictionary.Add("name", analysisCaseDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", analysisCaseDefinitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", analysisCaseDefinitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", analysisCaseDefinitionInstance.ShortName);
 
             return dictionary;
         }
@@ -145,16 +145,16 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", analysisCaseDefinitionInstance.AliasIds);
-            dictionary.Add("declaredName", analysisCaseDefinitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", analysisCaseDefinitionInstance.DeclaredShortName);
             dictionary.Add("elementId", analysisCaseDefinitionInstance.ElementId);
             dictionary.Add("isAbstract", analysisCaseDefinitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", analysisCaseDefinitionInstance.IsImpliedIncluded);
             dictionary.Add("isIndividual", analysisCaseDefinitionInstance.IsIndividual);
             dictionary.Add("isSufficient", analysisCaseDefinitionInstance.IsSufficient);
             dictionary.Add("isVariation", analysisCaseDefinitionInstance.IsVariation);
+            dictionary.Add("name", analysisCaseDefinitionInstance.Name);
             dictionary.Add("ownedRelationship", analysisCaseDefinitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", analysisCaseDefinitionInstance.OwningRelationship);
+            dictionary.Add("shortName", analysisCaseDefinitionInstance.ShortName);
 
             return dictionary;
         }

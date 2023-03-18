@@ -108,18 +108,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", owningMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", owningMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", owningMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", owningMembershipInstance.ElementId);
             dictionary.Add("isImplied", owningMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", owningMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", owningMembershipInstance.MemberElement.ToString());
             dictionary.Add("memberName", owningMembershipInstance.MemberName);
             dictionary.Add("memberShortName", owningMembershipInstance.MemberShortName);
+            dictionary.Add("name", owningMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", owningMembershipInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", owningMembershipInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", owningMembershipInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", owningMembershipInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", owningMembershipInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", owningMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", owningMembershipInstance.Target)} ]");
             dictionary.Add("visibility", owningMembershipInstance.Visibility);
@@ -150,18 +150,18 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", owningMembershipInstance.AliasIds);
-            dictionary.Add("declaredName", owningMembershipInstance.DeclaredName);
-            dictionary.Add("declaredShortName", owningMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", owningMembershipInstance.ElementId);
             dictionary.Add("isImplied", owningMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", owningMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", owningMembershipInstance.MemberElement);
             dictionary.Add("memberName", owningMembershipInstance.MemberName);
             dictionary.Add("memberShortName", owningMembershipInstance.MemberShortName);
+            dictionary.Add("name", owningMembershipInstance.Name);
             dictionary.Add("ownedRelatedElement", owningMembershipInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", owningMembershipInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", owningMembershipInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", owningMembershipInstance.OwningRelationship);
+            dictionary.Add("shortName", owningMembershipInstance.ShortName);
             dictionary.Add("source", owningMembershipInstance.Source);
             dictionary.Add("target", owningMembershipInstance.Target);
             dictionary.Add("visibility", owningMembershipInstance.Visibility);

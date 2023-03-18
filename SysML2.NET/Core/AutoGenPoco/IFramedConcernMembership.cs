@@ -32,7 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A FramedConcernMembership is a RequirementConstraintMembership for a framed ConcernUsage of a
-    /// RequirementDefinition or RequirementUsage.kind = RequirementConstraintKind::requirement
+    /// RequirementDefinition or RequirementUsage. The ownedConstraint of a FramedConcernMembership must be
+    /// a ConcernUsage.
     /// </summary>
     public partial interface IFramedConcernMembership : IRequirementConstraintMembership
     {

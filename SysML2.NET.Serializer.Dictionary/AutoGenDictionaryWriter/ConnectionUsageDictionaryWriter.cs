@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", connectionUsageInstance.AliasIds);
-            dictionary.Add("declaredName", connectionUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", connectionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", connectionUsageInstance.Direction);
             dictionary.Add("elementId", connectionUsageInstance.ElementId);
             dictionary.Add("isAbstract", connectionUsageInstance.IsAbstract);
@@ -126,11 +124,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", connectionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", connectionUsageInstance.IsUnique);
             dictionary.Add("isVariation", connectionUsageInstance.IsVariation);
+            dictionary.Add("name", connectionUsageInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", connectionUsageInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", connectionUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", connectionUsageInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", connectionUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", connectionUsageInstance.PortionKind);
+            dictionary.Add("shortName", connectionUsageInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", connectionUsageInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", connectionUsageInstance.Target)} ]");
 
@@ -160,8 +160,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", connectionUsageInstance.AliasIds);
-            dictionary.Add("declaredName", connectionUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", connectionUsageInstance.DeclaredShortName);
             dictionary.Add("direction", connectionUsageInstance.Direction);
             dictionary.Add("elementId", connectionUsageInstance.ElementId);
             dictionary.Add("isAbstract", connectionUsageInstance.IsAbstract);
@@ -178,11 +176,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", connectionUsageInstance.IsSufficient);
             dictionary.Add("isUnique", connectionUsageInstance.IsUnique);
             dictionary.Add("isVariation", connectionUsageInstance.IsVariation);
+            dictionary.Add("name", connectionUsageInstance.Name);
             dictionary.Add("ownedRelatedElement", connectionUsageInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", connectionUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", connectionUsageInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", connectionUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", connectionUsageInstance.PortionKind);
+            dictionary.Add("shortName", connectionUsageInstance.ShortName);
             dictionary.Add("source", connectionUsageInstance.Source);
             dictionary.Add("target", connectionUsageInstance.Target);
 

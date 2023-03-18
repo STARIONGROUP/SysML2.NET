@@ -116,18 +116,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<Guid> annotationFeature = (annotationObject as List<string>)?.Select(Guid.Parse).ToList();
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
@@ -139,6 +127,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
@@ -152,15 +146,21 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             annotatingElementInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             annotatingElementInstance.Annotation = annotationFeature ?? new List<Guid>();
-            annotatingElementInstance.DeclaredName = declaredNameFeature;
-            annotatingElementInstance.DeclaredShortName = declaredShortNameFeature;
             annotatingElementInstance.ElementId = elementIdFeature;
             annotatingElementInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            annotatingElementInstance.Name = nameFeature;
             annotatingElementInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             annotatingElementInstance.OwningRelationship = owningRelationshipFeature;
+            annotatingElementInstance.ShortName = shortNameFeature;
 
             return annotatingElementInstance;
         }
@@ -191,18 +191,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<Guid> annotationFeature = (annotationObject as List<Guid>);
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
@@ -214,6 +202,12 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
+
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
@@ -227,15 +221,21 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             annotatingElementInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             annotatingElementInstance.Annotation = annotationFeature ?? new List<Guid>();
-            annotatingElementInstance.DeclaredName = declaredNameFeature;
-            annotatingElementInstance.DeclaredShortName = declaredShortNameFeature;
             annotatingElementInstance.ElementId = elementIdFeature;
             annotatingElementInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            annotatingElementInstance.Name = nameFeature;
             annotatingElementInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             annotatingElementInstance.OwningRelationship = owningRelationshipFeature;
+            annotatingElementInstance.ShortName = shortNameFeature;
 
             return annotatingElementInstance;
         }

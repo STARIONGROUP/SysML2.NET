@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property DocumentedElement
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        IElement QueryDocumentedElement();
+        Element QueryDocumentedElement();
 
     }
 }

@@ -32,23 +32,11 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A StateDefinition is the Definition of the Behavior of a system or part of a system in a certain
-    /// state condition.A StateDefinition may be related to up to three of its ownedFeatures by
-    /// StateBehaviorMembership Relationships, all of different kinds, corresponding to the entry, do and
-    /// exit actions of the StateDefinition.ownedGeneralization.general->selectByKind(StateDefinition)->   
-    /// forAll(g | g.isParallel = isParallel)specializesFromLibrary('States::StateAction')ownedMembership-> 
-    ///   selectByKind(StateSubactionMembership)->    isUnique(kind)state =
-    /// action->selectByKind(StateUsage)doAction =    let doMemberships : Sequence(StateSubactionMembership)
-    /// =        ownedMembership->            selectByKind(StateSubactionMembership)->           
-    /// select(kind = StateSubactionKind::do) in    if doMemberships->isEmpty() then null    else
-    /// doMemberships->at(1)    endifentryAction =    let entryMemberships :
-    /// Sequence(StateSubactionMembership) =        ownedMembership->           
-    /// selectByKind(StateSubactionMembership)->            select(kind = StateSubactionKind::entry) in   
-    /// if entryMemberships->isEmpty() then null    else entryMemberships->at(1)    endifisParallel implies 
-    ///   ownedAction.incomingTransition->isEmpty() and   
-    /// ownedAction.outgoingTransition->isEmpty()exitAction =     let exitMemberships :
-    /// Sequence(StateSubactionMembership) =        ownedMembership->           
-    /// selectByKind(StateSubactionMembership)->            select(kind = StateSubactionKind::exit) in    if
-    /// exitMemberships->isEmpty() then null    else exitMemberships->at(1)    endif
+    /// state condition.A State Definition must subclass, directly or indirectly, the base StateDefinition
+    /// StateAction from the Systems model library.A StateDefinition may be related to up to three of its
+    /// ownedFeatures by StateBehaviorMembership Relationships, all of different kinds, corresponding to the
+    /// entry, do and exit actions of the StateDefinition.ownedGeneralization.general->   
+    /// selectByKind(StateDefinition).isParallel->    forAll(p | p = isParallel)
     /// </summary>
     public partial interface IStateDefinition : IActionDefinition
     {
@@ -72,8 +60,8 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the ownedStates of this StateDefinition are to all be performed in parallel. If true, none
-        /// of the ownedActions (which includes ownedStates) may have any incoming or outgoing Transitions. If
-        /// false, only one ownedState may be performed at a time.
+        /// of the ownedStates may have any incoming or outgoing transitions. If false, only one ownedState may
+        /// be performed at a time.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsParallel { get; set; }

@@ -32,7 +32,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An AllocationUsage is a usage of an AllocationDefinition asserting the allocation of the source
-    /// feature to the target feature.specializesFromLibrary("Allocations::allocations")
+    /// feature to the target feature.An AllocationUsage must subset, directly or indirectly, the base
+    /// AllocatopnUsage allocations from the Systems model library.
     /// </summary>
     public partial interface IAllocationUsage : IConnectionUsage
     {

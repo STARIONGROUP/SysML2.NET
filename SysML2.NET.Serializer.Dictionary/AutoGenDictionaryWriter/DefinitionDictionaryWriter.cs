@@ -108,15 +108,15 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", definitionInstance.AliasIds);
-            dictionary.Add("declaredName", definitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", definitionInstance.DeclaredShortName);
             dictionary.Add("elementId", definitionInstance.ElementId);
             dictionary.Add("isAbstract", definitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", definitionInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", definitionInstance.IsSufficient);
             dictionary.Add("isVariation", definitionInstance.IsVariation);
+            dictionary.Add("name", definitionInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", definitionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", definitionInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", definitionInstance.ShortName);
 
             return dictionary;
         }
@@ -144,15 +144,15 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", definitionInstance.AliasIds);
-            dictionary.Add("declaredName", definitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", definitionInstance.DeclaredShortName);
             dictionary.Add("elementId", definitionInstance.ElementId);
             dictionary.Add("isAbstract", definitionInstance.IsAbstract);
             dictionary.Add("isImpliedIncluded", definitionInstance.IsImpliedIncluded);
             dictionary.Add("isSufficient", definitionInstance.IsSufficient);
             dictionary.Add("isVariation", definitionInstance.IsVariation);
+            dictionary.Add("name", definitionInstance.Name);
             dictionary.Add("ownedRelationship", definitionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", definitionInstance.OwningRelationship);
+            dictionary.Add("shortName", definitionInstance.ShortName);
 
             return dictionary;
         }

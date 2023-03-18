@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iDisjoining.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iDisjoining.DeclaredShortName);
             writer.WritePropertyName("disjoiningType");
             writer.WriteStringValue(iDisjoining.DisjoiningType);
 
@@ -86,6 +82,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isImpliedIncluded");
             writer.WriteBooleanValue(iDisjoining.IsImpliedIncluded);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iDisjoining.Name);
             writer.WriteStartArray("ownedRelatedElement");
             foreach (var item in iDisjoining.OwnedRelatedElement)
             {
@@ -118,6 +116,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iDisjoining.ShortName);
             writer.WriteStartArray("source");
             foreach (var item in iDisjoining.Source)
             {

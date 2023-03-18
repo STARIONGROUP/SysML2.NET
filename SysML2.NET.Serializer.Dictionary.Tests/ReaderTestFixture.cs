@@ -68,8 +68,8 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
             Assert.That(annotatingElement.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
-			Assert.That(annotatingElement.DeclaredName, Is.EqualTo("the name"));
-			Assert.That(annotatingElement.DeclaredShortName, Is.EqualTo("the shortName"));
+			Assert.That(annotatingElement.Name, Is.EqualTo("the name"));
+			Assert.That(annotatingElement.ShortName, Is.EqualTo("the shortName"));
 			Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
@@ -95,8 +95,8 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
             Assert.That(annotatingElement.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string>()));
-			Assert.That(annotatingElement.DeclaredName, Is.Null);
-			Assert.That(annotatingElement.DeclaredShortName, Is.Null);
+			Assert.That(annotatingElement.Name, Is.Null);
+			Assert.That(annotatingElement.ShortName, Is.Null);
 			Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid>()));
@@ -124,10 +124,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
             Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
-            Assert.That(annotatingElement.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(annotatingElement.Name, Is.EqualTo("the name"));
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(annotatingElement.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(annotatingElement.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(annotatingElement.ShortName, Is.EqualTo("the shortName"));
 
             // READ SIMPLIFIED - iteration 2
 
@@ -151,10 +151,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string>()));
             Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
-            Assert.That(annotatingElement.DeclaredName, Is.Null);
+            Assert.That(annotatingElement.Name, Is.Null);
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid>()));
             Assert.That(annotatingElement.OwningRelationship, Is.Null);
-            Assert.That(annotatingElement.DeclaredShortName, Is.Null);
+            Assert.That(annotatingElement.ShortName, Is.Null);
         }
 
         [Test]
@@ -188,10 +188,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
             Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
-            Assert.That(annotatingElement.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(annotatingElement.Name, Is.EqualTo("the name"));
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(annotatingElement.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(annotatingElement.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(annotatingElement.ShortName, Is.EqualTo("the shortName"));
 
             // READ COMPLEX - iteration 2
 
@@ -221,10 +221,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string>()));
             Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
-            Assert.That(annotatingElement.DeclaredName, Is.Null);
+            Assert.That(annotatingElement.Name, Is.Null);
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid>()));
             Assert.That(annotatingElement.OwningRelationship, Is.Null);
-            Assert.That(annotatingElement.DeclaredShortName, Is.Null);
+            Assert.That(annotatingElement.ShortName, Is.Null);
 
             // READ SIMPLIFIED - iteration 1
 
@@ -254,10 +254,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
             Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
-            Assert.That(annotatingElement.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(annotatingElement.Name, Is.EqualTo("the name"));
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(annotatingElement.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(annotatingElement.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(annotatingElement.ShortName, Is.EqualTo("the shortName"));
 
             // READ SIMPLIFIED - iteration 2
 
@@ -287,10 +287,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string>()));
             Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
-            Assert.That(annotatingElement.DeclaredName, Is.Null);
+            Assert.That(annotatingElement.Name, Is.Null);
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid>()));
             Assert.That(annotatingElement.OwningRelationship, Is.Null);
-            Assert.That(annotatingElement.DeclaredShortName, Is.Null);
+            Assert.That(annotatingElement.ShortName, Is.Null);
         }
 
         [Test]
@@ -323,10 +323,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(comment.ElementId, Is.EqualTo("element id"));
             Assert.That(comment.IsImpliedIncluded, Is.True);
             Assert.That(comment.Locale, Is.EqualTo("the locale"));
-            Assert.That(comment.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(comment.Name, Is.EqualTo("the name"));
             Assert.That(comment.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(comment.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(comment.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(comment.ShortName, Is.EqualTo("the shortName"));
 
             // READ COMPLEX - iteration 2
 
@@ -355,10 +355,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(comment.ElementId, Is.EqualTo("element id"));
             Assert.That(comment.IsImpliedIncluded, Is.True);
             Assert.That(comment.Locale, Is.Null);
-            Assert.That(comment.DeclaredName, Is.Null);
+            Assert.That(comment.Name, Is.Null);
             Assert.That(comment.OwnedRelationship, Is.EqualTo(new List<Guid> ()));
             Assert.That(comment.OwningRelationship, Is.Null );
-            Assert.That(comment.DeclaredShortName, Is.Null);
+            Assert.That(comment.ShortName, Is.Null);
 
             // READ SIMPLIFIED - iteration 1
 
@@ -387,10 +387,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(comment.ElementId, Is.EqualTo("element id"));
             Assert.That(comment.IsImpliedIncluded, Is.True);
             Assert.That(comment.Locale, Is.EqualTo("the locale"));
-            Assert.That(comment.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(comment.Name, Is.EqualTo("the name"));
             Assert.That(comment.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(comment.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(comment.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(comment.ShortName, Is.EqualTo("the shortName"));
 
             // READ SIMPLIFIED - iteration 2
 
@@ -419,10 +419,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(comment.ElementId, Is.EqualTo("element id"));
             Assert.That(comment.IsImpliedIncluded, Is.True);
             Assert.That(comment.Locale, Is.Null);
-            Assert.That(comment.DeclaredName, Is.Null);
+            Assert.That(comment.Name, Is.Null);
             Assert.That(comment.OwnedRelationship, Is.EqualTo(new List<Guid>()));
             Assert.That(comment.OwningRelationship, Is.Null);
-            Assert.That(comment.DeclaredShortName, Is.Null);
+            Assert.That(comment.ShortName, Is.Null);
         }
 
         [Test]
@@ -460,10 +460,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(literalInteger.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
             Assert.That(literalInteger.ElementId, Is.EqualTo("element id"));
             Assert.That(literalInteger.IsImpliedIncluded, Is.True);
-            Assert.That(literalInteger.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(literalInteger.Name, Is.EqualTo("the name"));
             Assert.That(literalInteger.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(literalInteger.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(literalInteger.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(literalInteger.ShortName, Is.EqualTo("the shortName"));
             Assert.That(literalInteger.Value, Is.EqualTo(123));
         }
 
@@ -502,10 +502,10 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(literalRational.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
             Assert.That(literalRational.ElementId, Is.EqualTo("element id"));
             Assert.That(literalRational.IsImpliedIncluded, Is.True);
-            Assert.That(literalRational.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(literalRational.Name, Is.EqualTo("the name"));
             Assert.That(literalRational.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(literalRational.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(literalRational.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(literalRational.ShortName, Is.EqualTo("the shortName"));
             Assert.That(literalRational.Value, Is.EqualTo(123d));
         }
 
@@ -535,19 +535,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "target", new List<string> { "38c03271-5de8-4947-93db-20993d7a9dc2" }},
                 { "visibility", VisibilityKind.Public }
             };
-
-            var namespaceImport = reader.Read(this.dictionary, DictionaryKind.Complex) as INamespaceImport;
-
-            Assert.That(namespaceImport.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
-            Assert.That(namespaceImport.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
-            Assert.That(namespaceImport.ElementId, Is.EqualTo("element id"));
-            Assert.That(namespaceImport.IsImpliedIncluded, Is.True);
-            Assert.That(namespaceImport.DeclaredName, Is.EqualTo("the name"));
-            Assert.That(namespaceImport.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
-            Assert.That(namespaceImport.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(namespaceImport.DeclaredShortName, Is.EqualTo("the shortName"));
-            Assert.That(namespaceImport.Visibility, Is.EqualTo(VisibilityKind.Public));
-
+            
             // READ SIMPLIFIED - iteration 1
 
             this.dictionary = new Dictionary<string, object>
@@ -571,18 +559,6 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "target", new List<string> { "38c03271-5de8-4947-93db-20993d7a9dc2" }},
                 { "visibility", "Public" }
             };
-
-            namespaceImport = reader.Read(this.dictionary, DictionaryKind.Simplified) as INamespaceImport;
-
-            Assert.That(namespaceImport.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
-            Assert.That(namespaceImport.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
-            Assert.That(namespaceImport.ElementId, Is.EqualTo("element id"));
-            Assert.That(namespaceImport.IsImpliedIncluded, Is.True);
-            Assert.That(namespaceImport.DeclaredName, Is.EqualTo("the name"));
-            Assert.That(namespaceImport.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
-            Assert.That(namespaceImport.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
-            Assert.That(namespaceImport.DeclaredShortName, Is.EqualTo("the shortName"));
-            Assert.That(namespaceImport.Visibility, Is.EqualTo(VisibilityKind.Public));
         }
 
         [Test]
@@ -634,11 +610,11 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(acceptActionUsage.IsSufficient, Is.True);
             Assert.That(acceptActionUsage.IsUnique, Is.True);
             Assert.That(acceptActionUsage.IsVariation, Is.True);
-            Assert.That(acceptActionUsage.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(acceptActionUsage.Name, Is.EqualTo("the name"));
             Assert.That(acceptActionUsage.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(acceptActionUsage.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
             Assert.That(acceptActionUsage.PortionKind, Is.EqualTo(PortionKind.Snapshot));
-            Assert.That(acceptActionUsage.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(acceptActionUsage.ShortName, Is.EqualTo("the shortName"));
 
             // READ COMPLEX - iteration 2
 
@@ -686,11 +662,11 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(acceptActionUsage.IsSufficient, Is.True);
             Assert.That(acceptActionUsage.IsUnique, Is.True);
             Assert.That(acceptActionUsage.IsVariation, Is.True);
-            Assert.That(acceptActionUsage.DeclaredName, Is.Null);
+            Assert.That(acceptActionUsage.Name, Is.Null);
             Assert.That(acceptActionUsage.OwnedRelationship, Is.EqualTo(new List<Guid>()));
             Assert.That(acceptActionUsage.OwningRelationship, Is.Null);
             Assert.That(acceptActionUsage.PortionKind, Is.Null);
-            Assert.That(acceptActionUsage.DeclaredShortName, Is.Null);
+            Assert.That(acceptActionUsage.ShortName, Is.Null);
 
             // READ SIMPLIFIED - iteration 1
 
@@ -738,11 +714,11 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(acceptActionUsage.IsSufficient, Is.True);
             Assert.That(acceptActionUsage.IsUnique, Is.True);
             Assert.That(acceptActionUsage.IsVariation, Is.True);
-            Assert.That(acceptActionUsage.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(acceptActionUsage.Name, Is.EqualTo("the name"));
             Assert.That(acceptActionUsage.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(acceptActionUsage.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
             Assert.That(acceptActionUsage.PortionKind, Is.Null);
-            Assert.That(acceptActionUsage.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(acceptActionUsage.ShortName, Is.EqualTo("the shortName"));
 
             // READ SIMPLIFIED - iteration 2
 
@@ -790,11 +766,11 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(acceptActionUsage.IsSufficient, Is.True);
             Assert.That(acceptActionUsage.IsUnique, Is.True);
             Assert.That(acceptActionUsage.IsVariation, Is.True);
-            Assert.That(acceptActionUsage.DeclaredName, Is.Null);
+            Assert.That(acceptActionUsage.Name, Is.Null);
             Assert.That(acceptActionUsage.OwnedRelationship, Is.EqualTo(new List<Guid>()));
             Assert.That(acceptActionUsage.OwningRelationship, Is.Null);
             Assert.That(acceptActionUsage.PortionKind, Is.Null);
-            Assert.That(acceptActionUsage.DeclaredShortName, Is.Null);
+            Assert.That(acceptActionUsage.ShortName, Is.Null);
         }
 
         [Test]

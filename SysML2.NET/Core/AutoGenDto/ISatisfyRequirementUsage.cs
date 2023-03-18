@@ -32,16 +32,9 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A SatisfyRequirementUsage is an AssertConstraintUsage that asserts, by default, that a satisfied
-    /// RequirementUsage is true for a specific satisfyingFeature, or, if isNegated = true, that the
+    /// RequirementUsage is true for a specific satisfyingSubject, or, if isNegated = true, that the
     /// RequirementUsage is false. The satisfied RequirementUsage is related to the SatisfyRequirementUsage
-    /// by a ReferenceSubsetting Relationship.satisfyingFeature =    let bindings: BindingConnector =
-    /// ownedMember->        selectByKind(BindingConnector)->        select(b |
-    /// b.relatedElement->includes(subjectParameter)) in    if bindings->isEmpty() or       
-    /// bindings->first().relatedElement->exits(r | r <> subjectParameter)     then null    else
-    /// bindings->first().relatedElement->any(r | r <> subjectParameter)   
-    /// endifownedMember->selectByKind(BindingConnector)->    select(b |       
-    /// b.relatedElement->includes(subjectParameter) and        b.relatedElement->exists(r | r <>
-    /// subjectParameter))->    size() = 1
+    /// by a Subsetting relationship.
     /// </summary>
     public partial interface ISatisfyRequirementUsage : IRequirementUsage, IAssertConstraintUsage
     {

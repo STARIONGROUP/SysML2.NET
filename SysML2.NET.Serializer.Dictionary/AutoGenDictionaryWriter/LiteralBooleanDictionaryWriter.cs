@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", literalBooleanInstance.AliasIds);
-            dictionary.Add("declaredName", literalBooleanInstance.DeclaredName);
-            dictionary.Add("declaredShortName", literalBooleanInstance.DeclaredShortName);
             dictionary.Add("direction", literalBooleanInstance.Direction);
             dictionary.Add("elementId", literalBooleanInstance.ElementId);
             dictionary.Add("isAbstract", literalBooleanInstance.IsAbstract);
@@ -122,8 +120,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", literalBooleanInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalBooleanInstance.IsSufficient);
             dictionary.Add("isUnique", literalBooleanInstance.IsUnique);
+            dictionary.Add("name", literalBooleanInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", literalBooleanInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", literalBooleanInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", literalBooleanInstance.ShortName);
             dictionary.Add("value", literalBooleanInstance.Value);
 
             return dictionary;
@@ -152,8 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", literalBooleanInstance.AliasIds);
-            dictionary.Add("declaredName", literalBooleanInstance.DeclaredName);
-            dictionary.Add("declaredShortName", literalBooleanInstance.DeclaredShortName);
             dictionary.Add("direction", literalBooleanInstance.Direction);
             dictionary.Add("elementId", literalBooleanInstance.ElementId);
             dictionary.Add("isAbstract", literalBooleanInstance.IsAbstract);
@@ -166,8 +164,10 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", literalBooleanInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalBooleanInstance.IsSufficient);
             dictionary.Add("isUnique", literalBooleanInstance.IsUnique);
+            dictionary.Add("name", literalBooleanInstance.Name);
             dictionary.Add("ownedRelationship", literalBooleanInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", literalBooleanInstance.OwningRelationship);
+            dictionary.Add("shortName", literalBooleanInstance.ShortName);
             dictionary.Add("value", literalBooleanInstance.Value);
 
             return dictionary;

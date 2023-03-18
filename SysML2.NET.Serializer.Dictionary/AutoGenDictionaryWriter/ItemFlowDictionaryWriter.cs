@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", itemFlowInstance.AliasIds);
-            dictionary.Add("declaredName", itemFlowInstance.DeclaredName);
-            dictionary.Add("declaredShortName", itemFlowInstance.DeclaredShortName);
             dictionary.Add("direction", itemFlowInstance.Direction);
             dictionary.Add("elementId", itemFlowInstance.ElementId);
             dictionary.Add("isAbstract", itemFlowInstance.IsAbstract);
@@ -124,10 +122,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", itemFlowInstance.IsReadOnly);
             dictionary.Add("isSufficient", itemFlowInstance.IsSufficient);
             dictionary.Add("isUnique", itemFlowInstance.IsUnique);
+            dictionary.Add("name", itemFlowInstance.Name);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", itemFlowInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", itemFlowInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelatedElement", itemFlowInstance.OwningRelatedElement.ToString());
             dictionary.Add("owningRelationship", itemFlowInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", itemFlowInstance.ShortName);
             dictionary.Add("source", $"[ {string.Join(",", itemFlowInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", itemFlowInstance.Target)} ]");
 
@@ -157,8 +157,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", itemFlowInstance.AliasIds);
-            dictionary.Add("declaredName", itemFlowInstance.DeclaredName);
-            dictionary.Add("declaredShortName", itemFlowInstance.DeclaredShortName);
             dictionary.Add("direction", itemFlowInstance.Direction);
             dictionary.Add("elementId", itemFlowInstance.ElementId);
             dictionary.Add("isAbstract", itemFlowInstance.IsAbstract);
@@ -173,10 +171,12 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isReadOnly", itemFlowInstance.IsReadOnly);
             dictionary.Add("isSufficient", itemFlowInstance.IsSufficient);
             dictionary.Add("isUnique", itemFlowInstance.IsUnique);
+            dictionary.Add("name", itemFlowInstance.Name);
             dictionary.Add("ownedRelatedElement", itemFlowInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", itemFlowInstance.OwnedRelationship);
             dictionary.Add("owningRelatedElement", itemFlowInstance.OwningRelatedElement);
             dictionary.Add("owningRelationship", itemFlowInstance.OwningRelationship);
+            dictionary.Add("shortName", itemFlowInstance.ShortName);
             dictionary.Add("source", itemFlowInstance.Source);
             dictionary.Add("target", itemFlowInstance.Target);
 

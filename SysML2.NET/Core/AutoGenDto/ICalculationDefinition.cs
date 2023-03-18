@@ -31,9 +31,9 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A CalculationDefinition is an <coed>ActionDefinition that also defines a Function producing a
-    /// result.</coed>specializesFromLibrary('Calculations::Calculation')calculation =
-    /// action->selectByKind(CalculationUsage)
+    /// A CalculationDefinition is an ActionDefinition that also defines a Function producing a result.A
+    /// CalculationDefinition must subclass, directly or indirectly, the base CalculationDefinition
+    /// Calculation from the Systems model library.
     /// </summary>
     public partial interface ICalculationDefinition : IActionDefinition, IFunction
     {

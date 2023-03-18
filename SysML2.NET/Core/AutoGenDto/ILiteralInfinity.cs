@@ -31,8 +31,9 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A LiteralInfinity is a LiteralExpression that provides the positive infinity value (*). It's result
-    /// must have the type Positive.
+    /// A LiteralInfinity is a LiteralExpression that provides the positive infinity value (&quot;*&quot;).
+    /// It must have an owned result parameter whose type is Positive.An Expression that provides a value
+    /// without a given bound as a result.
     /// </summary>
     public partial interface ILiteralInfinity : ILiteralExpression
     {

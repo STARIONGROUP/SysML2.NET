@@ -70,10 +70,6 @@ namespace SysML2.NET.Serializer.Json
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
-            writer.WriteStringValue(iMetaclass.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
-            writer.WriteStringValue(iMetaclass.DeclaredShortName);
             writer.WritePropertyName("elementId");
             writer.WriteStringValue(iMetaclass.ElementId);
 
@@ -86,6 +82,8 @@ namespace SysML2.NET.Serializer.Json
             writer.WritePropertyName("isSufficient");
             writer.WriteBooleanValue(iMetaclass.IsSufficient);
 
+            writer.WritePropertyName("name");
+            writer.WriteStringValue(iMetaclass.Name);
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iMetaclass.OwnedRelationship)
             {
@@ -102,6 +100,8 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
+            writer.WritePropertyName("shortName");
+            writer.WriteStringValue(iMetaclass.ShortName);
             writer.WriteEndObject();
         }
     }

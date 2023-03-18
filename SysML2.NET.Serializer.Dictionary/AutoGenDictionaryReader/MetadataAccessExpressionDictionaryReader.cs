@@ -110,18 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
-
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
                 throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
@@ -194,6 +182,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
@@ -212,10 +206,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid referencedElementFeature = Guid.Parse(Convert.ToString(referencedElementObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             metadataAccessExpressionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            metadataAccessExpressionInstance.DeclaredName = declaredNameFeature;
-            metadataAccessExpressionInstance.DeclaredShortName = declaredShortNameFeature;
             metadataAccessExpressionInstance.Direction = directionFeature;
             metadataAccessExpressionInstance.ElementId = elementIdFeature;
             metadataAccessExpressionInstance.IsAbstract = isAbstractFeature;
@@ -228,9 +226,11 @@ namespace SysML2.NET.Serializer.Dictionary
             metadataAccessExpressionInstance.IsReadOnly = isReadOnlyFeature;
             metadataAccessExpressionInstance.IsSufficient = isSufficientFeature;
             metadataAccessExpressionInstance.IsUnique = isUniqueFeature;
+            metadataAccessExpressionInstance.Name = nameFeature;
             metadataAccessExpressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             metadataAccessExpressionInstance.OwningRelationship = owningRelationshipFeature;
             metadataAccessExpressionInstance.ReferencedElement = referencedElementFeature;
+            metadataAccessExpressionInstance.ShortName = shortNameFeature;
 
             return metadataAccessExpressionInstance;
         }
@@ -254,18 +254,6 @@ namespace SysML2.NET.Serializer.Dictionary
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
-            {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
-            }
-            string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
-
-            if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
-            {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
-            }
-            string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
@@ -339,6 +327,12 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
+            if (!dictionary.TryGetValue("name", out object nameObject))
+            {
+                throw new ArgumentException("The name property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
+            }
+            string nameFeature = nameObject == null ? null : Convert.ToString(nameObject);
+
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
                 throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
@@ -357,10 +351,14 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             Guid referencedElementFeature = Guid.Parse(Convert.ToString(referencedElementObject));
 
+            if (!dictionary.TryGetValue("shortName", out object shortNameObject))
+            {
+                throw new ArgumentException("The shortName property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
+            }
+            string shortNameFeature = shortNameObject == null ? null : Convert.ToString(shortNameObject);
+
 
             metadataAccessExpressionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            metadataAccessExpressionInstance.DeclaredName = declaredNameFeature;
-            metadataAccessExpressionInstance.DeclaredShortName = declaredShortNameFeature;
             metadataAccessExpressionInstance.Direction = directionFeature;
             metadataAccessExpressionInstance.ElementId = elementIdFeature;
             metadataAccessExpressionInstance.IsAbstract = isAbstractFeature;
@@ -373,9 +371,11 @@ namespace SysML2.NET.Serializer.Dictionary
             metadataAccessExpressionInstance.IsReadOnly = isReadOnlyFeature;
             metadataAccessExpressionInstance.IsSufficient = isSufficientFeature;
             metadataAccessExpressionInstance.IsUnique = isUniqueFeature;
+            metadataAccessExpressionInstance.Name = nameFeature;
             metadataAccessExpressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             metadataAccessExpressionInstance.OwningRelationship = owningRelationshipFeature;
             metadataAccessExpressionInstance.ReferencedElement = referencedElementFeature;
+            metadataAccessExpressionInstance.ShortName = shortNameFeature;
 
             return metadataAccessExpressionInstance;
         }

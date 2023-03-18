@@ -131,24 +131,6 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the body Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("declaredName", out JsonElement declaredNameProperty))
-            {
-                dtoInstance.DeclaredName = declaredNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug($"the declaredName Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName", out JsonElement declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug($"the declaredShortName Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
-            }
-
             if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();
@@ -185,6 +167,15 @@ namespace SysML2.NET.Serializer.Json
             else
             {
                 logger.LogDebug($"the language Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            {
+                dtoInstance.Name = nameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
@@ -227,6 +218,15 @@ namespace SysML2.NET.Serializer.Json
             else
             {
                 logger.LogDebug($"the owningRelationship Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("shortName", out JsonElement shortNameProperty))
+            {
+                dtoInstance.ShortName = shortNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug($"the shortName Json property was not found in the TextualRepresentation: {dtoInstance.Id}");
             }
 
 

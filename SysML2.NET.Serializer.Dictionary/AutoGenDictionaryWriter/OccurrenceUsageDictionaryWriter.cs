@@ -108,8 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", occurrenceUsageInstance.AliasIds);
-            dictionary.Add("declaredName", occurrenceUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", occurrenceUsageInstance.DeclaredShortName);
             dictionary.Add("direction", occurrenceUsageInstance.Direction);
             dictionary.Add("elementId", occurrenceUsageInstance.ElementId);
             dictionary.Add("isAbstract", occurrenceUsageInstance.IsAbstract);
@@ -124,9 +122,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", occurrenceUsageInstance.IsSufficient);
             dictionary.Add("isUnique", occurrenceUsageInstance.IsUnique);
             dictionary.Add("isVariation", occurrenceUsageInstance.IsVariation);
+            dictionary.Add("name", occurrenceUsageInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", occurrenceUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", occurrenceUsageInstance.OwningRelationship.ToString());
             dictionary.Add("portionKind", occurrenceUsageInstance.PortionKind);
+            dictionary.Add("shortName", occurrenceUsageInstance.ShortName);
 
             return dictionary;
         }
@@ -154,8 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary
             };
 
             dictionary.Add("aliasIds", occurrenceUsageInstance.AliasIds);
-            dictionary.Add("declaredName", occurrenceUsageInstance.DeclaredName);
-            dictionary.Add("declaredShortName", occurrenceUsageInstance.DeclaredShortName);
             dictionary.Add("direction", occurrenceUsageInstance.Direction);
             dictionary.Add("elementId", occurrenceUsageInstance.ElementId);
             dictionary.Add("isAbstract", occurrenceUsageInstance.IsAbstract);
@@ -170,9 +168,11 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("isSufficient", occurrenceUsageInstance.IsSufficient);
             dictionary.Add("isUnique", occurrenceUsageInstance.IsUnique);
             dictionary.Add("isVariation", occurrenceUsageInstance.IsVariation);
+            dictionary.Add("name", occurrenceUsageInstance.Name);
             dictionary.Add("ownedRelationship", occurrenceUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", occurrenceUsageInstance.OwningRelationship);
             dictionary.Add("portionKind", occurrenceUsageInstance.PortionKind);
+            dictionary.Add("shortName", occurrenceUsageInstance.ShortName);
 
             return dictionary;
         }
