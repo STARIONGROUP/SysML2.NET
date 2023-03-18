@@ -21,15 +21,14 @@
 namespace SysML2.NET.CodeGenerator.Tests.Inspector
 {
     using System;
-    using System.Linq;
-
+    
     using ECoreNetto;
+    using ECoreNetto.Extensions;
 
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator;
-    using SysML2.NET.CodeGenerator.Inspector;
-
+    
     /// <summary>
     /// Suite of tests for the <see cref="ModelInspector"/> class.
     /// </summary>
@@ -38,28 +37,44 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
     {
         private ModelInspector modelInspector;
 
+        private EPackage rootPackage;
+
         [SetUp]
         public void SetUp()
         {
+            this.rootPackage = DataModelLoader.Load();
+
             this.modelInspector = new ModelInspector();
         }
 
         [Test]
         public void Verify_that_inspects_executes_as_expected()
         {
-            Assert.That(() => this.modelInspector.Inspect(), Throws.Nothing);
+            var report = this.modelInspector.Inspect(this.rootPackage, true);
+
+            Assert.That(report, Is.Not.Empty);
+
+            Console.WriteLine(report);
         }
 
         [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
         public void Verify_that_inspect_class_executes_as_expected(string className)
         {
-            Assert.That(() => ModelInspector.Inspect(className), Throws.Nothing);
+            var report = this.modelInspector.Inspect(this.rootPackage, className);
+
+            Assert.That(report, Is.Not.Empty);
+
+            Console.WriteLine(report);
         }
 
         [Test]
         public void Verify_that_analyze_docs_executes_as_expected()
         {
-            Assert.That(ModelInspector.AnalyzeDocumentation, Throws.Nothing);
+            var report = this.modelInspector.AnalyzeDocumentation(this.rootPackage, true);
+
+            Assert.That(report, Is.Not.Empty);
+
+            Console.WriteLine(report);
         }
     }
 }
