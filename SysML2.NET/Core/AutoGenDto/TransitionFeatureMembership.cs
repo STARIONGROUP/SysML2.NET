@@ -32,9 +32,14 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A TransitionFeatureMembership is a FeatureMembership for a trigger, guard or effect of a
-    /// TransitionUsage. The ownedMemberFeature must be a Step. For a trigger, the ownedMemberFeature must
-    /// more specifically be a Transfer, while for a guard it must be an Expression with a result type of
-    /// Boolean.
+    /// TransitionUsage, whose transitionFeature is a AcceptActionUsage, Boolean-valued Expression or
+    /// ActionUsage, depending on its kind. kind = TransitionFeatureKind::trigger implies   
+    /// transitionFeature.oclIsKindOf(AcceptActionUsage)owningType.oclIsKindOf(TransitionUsage)kind =
+    /// TransitionFeatureKind::guard implies    transitionFeature.oclIsKindOf(Expression) and    let guard :
+    /// Expression = transitionFeature.oclIsKindOf(Expression) in   
+    /// guard.result.specializesFromLibrary('ScalarValues::Boolean') and    guard.result.multiplicity <>
+    /// null and    guard.result.multiplicity.hasBounds(1,1)kind = TransitionFeatureKind::effect implies   
+    /// transitionFeature.oclIsKindOf(ActionUsage)
     /// </summary>
     public partial class TransitionFeatureMembership : ITransitionFeatureMembership
     {
@@ -111,7 +116,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// Whether this TransitionFeatureMembership is for a trigger, guard or effect.
+        /// Whether this TransitionFeatureMembership  is for a trigger, guard or effect.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public TransitionFeatureKind Kind { get; set; }

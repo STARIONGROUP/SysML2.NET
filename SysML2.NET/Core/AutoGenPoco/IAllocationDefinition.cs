@@ -36,10 +36,8 @@ namespace SysML2.NET.Core.POCO
     /// allocations define mappings across the various structures and hierarchies of a system model, perhaps
     /// as a precursor to more rigorous specifications and implementations. An AllocationDefinition can
     /// itself be refined using nested allocations that give a finer-grained decomposition of the containing
-    /// allocation mapping.An AllocationDefinition must subclass, directly or indirectly, the base
-    /// AllocationDefinition Allocation from the Systems model
-    /// library.specializesFromLibrary("Allocations::Allocation")allocation =
-    /// usage->selectAsKind(AllocationUsage)
+    /// allocation mapping.allocation =
+    /// usage->selectAsKind(AllocationUsage)specializesFromLibrary("Allocations::Allocation")
     /// </summary>
     public partial interface IAllocationDefinition : IConnectionDefinition
     {

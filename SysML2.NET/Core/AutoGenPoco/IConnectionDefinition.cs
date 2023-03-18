@@ -31,10 +31,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConnectionDefinition is a PartDefinition that is also an AssociationStructure, with two or more
-    /// end features. The associationEnds of a ConnectionDefinition must be Usages.A ConnectionDefinition
-    /// must subclass, directly or indirectly, the base ConnectionDefinition Connection from the Systems
-    /// model library.specializesFromLibrary("Connections::Connection")ownedEndFeature->size() = 2 implies  
+    /// A ConnectionDefinition is a PartDefinition that is also an AssociationStructure. The end Features of
+    /// a ConnectionDefinition must be
+    /// Usages.specializesFromLibrary("Connections::Connection")ownedEndFeature->size() = 2 implies   
     /// specializesFromLibrary("Connections::BinaryConnections")
     /// </summary>
     public partial interface IConnectionDefinition : IPartDefinition, IAssociationStructure

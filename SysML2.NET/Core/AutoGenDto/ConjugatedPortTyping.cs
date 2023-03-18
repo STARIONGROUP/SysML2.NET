@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A ConjugatedPortTyping is a FeatureTyping whose type is a ConjugatedPortDefinition. (This
-    /// relationship is intended to be an abstract syntax marker for a special surface notation for
-    /// conjugated typing of ports.)conjugatedPortDefinition = portDefinition.conjugatedPortDefinition
+    /// relationship is intended to be an abstract-syntax marker for a special surface notation for
+    /// conjugated typing of ports.)portDefinition = conjugatedPortDefinition.originalPortDefinition
     /// </summary>
     public partial class ConjugatedPortTyping : IConjugatedPortTyping
     {
@@ -164,7 +164,7 @@ namespace SysML2.NET.Core.DTO
         public Guid Type { get; set; }
 
         /// <summary>
-        /// The Feature that has its Type determined by this FeatureTyping.
+        /// The Feature that has a type determined by this FeatureTyping.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid TypedFeature { get; set; }

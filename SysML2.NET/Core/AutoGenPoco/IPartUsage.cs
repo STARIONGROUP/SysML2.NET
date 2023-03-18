@@ -36,7 +36,14 @@ namespace SysML2.NET.Core.POCO
     /// or indirectly, the base PartUsage parts from the Systems Model
     /// Library.itemDefinition->selectByKind(PartDefinition)partDefinition->notEmpty()specializesFromLibrary("Parts::parts")isComposite
     /// and owningType <> null and(owningType.oclIsKindOf(ItemDefinition) or
-    /// owningType.oclIsKindOf(ItemUsage)) implies    specializesFromLibrary("Items::Item::subparts")
+    /// owningType.oclIsKindOf(ItemUsage)) implies   
+    /// specializesFromLibrary("Items::Item::subparts")owningFeatureMembership <> null
+    /// andowningFeatureMembership.oclIsKindOf(ActorMembership) implies    if
+    /// owningType.oclIsKindOf(RequirementDefinition) or        owningType.oclIsKindOf(RequirementUsage)   
+    /// then specializesFromLibrary('Requirements::RequirementCheck::actors')    else
+    /// specializesFromLibrary('Cases::Case::actors')owningFeatureMembership <> null
+    /// andowningFeatureMembership.oclIsKindOf(StakeholderMembership) implies   
+    /// specializesFromLibrary('Requirements::RequirementCheck::stakeholders')
     /// </summary>
     public partial interface IPartUsage : IItemUsage
     {

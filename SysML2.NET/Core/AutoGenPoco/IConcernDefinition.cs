@@ -33,9 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A ConcernDefinition is a RequirementDefinition that one or more stakeholders may be interested in
     /// having addressed. These stakeholders are identified by the ownedStakeholdersof the
-    /// ConcernDefinition.A ConcernDefinition must subclass, directly or indirectly, the base
-    /// ConcernDefinition ConcernCheck from the Systems model library. The ownedStakeholder features of a
-    /// ConcernDefinition shall all subset the ConcernCheck::concernedStakeholders feature.
+    /// ConcernDefinition.specializesFromLibrary('Requirements::ConcernCheck')
     /// </summary>
     public partial interface IConcernDefinition : IRequirementDefinition
     {

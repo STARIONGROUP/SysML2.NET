@@ -31,9 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A VerificationCaseDefinition is a CaseDefinition for the purpose of verification of the subect of
-    /// the case against its requirements.A VerificationCaseDefinition must subclass, directly or
-    /// indirectly, the base VerificationCaseDefinition VerificationCase from the Systems model library.
+    /// A VerificationCaseDefinition is a CaseDefinition for the purpose of verification of the subject of
+    /// the case against its requirements.verifiedRequirement =    if objectiveRequirement = null then
+    /// OrderedSet{}    else         objectiveRequirement.featureMembership->           
+    /// selectByKind(RequirementVerificationMembership).            verifiedRequirement->asOrderedSet()   
+    /// endifspecializesFromLibrary('VerificationCases::VerificationCase')
     /// </summary>
     public partial interface IVerificationCaseDefinition : ICaseDefinition
     {

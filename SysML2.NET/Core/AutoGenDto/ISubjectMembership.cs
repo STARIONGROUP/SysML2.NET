@@ -32,8 +32,10 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A SubjectMembership is a ParameterMembership that indicates that its ownedSubjectParameter is the
-    /// subject Parameter for its owningType. The owningType of a SubjectMembership must be a
-    /// CaseDefinition, CaseUsage, RequirementDefinition or RequirementUsage.
+    /// subject of its owningType. The owningType of a SubjectMembership must be a RequirementDefinition,
+    /// RequirementUsage, CaseDefinition, or CaseUsage.owningType.oclIsType(RequirementDefinition)
+    /// orowningType.oclIsType(RequiremenCaseRequirementDefinition) orowningType.oclIsType(CaseDefinition)
+    /// orowningType.oclIsType(CaseUsage)
     /// </summary>
     public partial interface ISubjectMembership : IParameterMembership
     {

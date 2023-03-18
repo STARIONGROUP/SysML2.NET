@@ -31,15 +31,17 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// Subsetting is Generalization in which the specific and general Types that are Features. This means
-    /// all values of the subsettingFeature (on instances of its domain, i.e., the intersection of its
-    /// featuringTypes) are values of the subsettedFeature on instances of its domain.  To support
-    /// this, the domain of the subsettingFeature must be the same or specialize (at least
-    /// indirectly) the domain of the subsettedFeature (via Generalization), and the range
-    /// (intersection of a Feature&#39;s types) of the subsettingFeature must specialize the range of the
-    /// subsettedFeature. The subsettedFeature is imported into the owningNamespace of the
-    /// subsettingFeature (if it is not already in that namespace), requiring the names of the
-    /// subsettingFeature and subsettedFeature to be different.
+    /// Subsetting is Specialization in which the specific and general Types are Features. This means all
+    /// values of the subsettingFeature (on instances of its domain, i.e., the intersection of its
+    /// featuringTypes) are values of the subsettedFeature on instances of its domain. To support this the
+    /// domain of the subsettingFeature must be the same or specialize (at least indirectly) the domain of
+    /// the subsettedFeature (via Specialization), and the co-domain (intersection of the types) of the
+    /// subsettingFeature must specialize the co-domain of the subsettedFeature.let
+    /// subsettingFeaturingTypes: OrderedSet(Type) =    subsettingFeature.featuringTypes inlet
+    /// subsettedFeaturingTypes: OrderedSet(Type) =    subsettedFeature.featuringTypes inlet anythingType:
+    /// Element =    subsettingFeature.resolveGlobal('Base::Anything') in subsettedFeaturingTypes->forAll(t
+    /// |    subsettingFeaturingTypes->isEmpty() and t = anythingType or   
+    /// subsettingFeaturingTypes->exists(specializes(t))
     /// </summary>
     public partial interface ISubsetting : ISpecialization
     {

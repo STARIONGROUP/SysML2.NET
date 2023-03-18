@@ -31,21 +31,20 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Multiplicity is a Feature whose co-domain is a set of natural numbers that includes the
-    /// number of sequences determined below, based on the kind
-    /// of typeWithMultiplicity:<ul>	<li>Classifiers: minimal sequences (the single length sequences of
-    /// the Classifier).</li>	<li>Features: sequences with the same feature-pair head.  In the case of
-    /// Features with Classifiers as domain and co-domain, these sequences are pairs, with the first element
-    /// in a single-length sequence of the domain Classifier (head of the pair), and the number of
-    /// pairs with the same first element being among the Multiplicity co-domain
-    /// numbers.</li></ul>Multiplicity co-domains (in models) can be specified by Expression that might vary
-    /// in their results. If the typeWithMultiplicity is a Classifier, the domain of the Multiplicity shall
-    /// be Anything.  If the typeWithMultiplicity is a Feature,  the Multiplicity shall have the same domain
-    /// as the typeWithMultiplicity.if typeWithMultiplicity.oclIsKindOf(Feature) then    featuringType =    
-    ///     typeWithMultiplicity.oclAsType(Feature).featuringTypeelse    featuringType =
-    /// Sequence{resolveGlobal("Base::Anything"))}endifspecializesFromLibrary("Base::naturals")owningNamespace.oclIsKindOf(Type)
-    /// implies    owningNamespace.oclAsType(Type).ownedSpecialization.general.multiplicity->       
-    /// forAll(m | redefines(m))
+    /// A Multiplicity is a Feature whose co-domain is a set of natural numbers giving the allowed
+    /// cardinalities of each typeWithMultiplicity. The cardinality of a Type is defined as follows,
+    /// depending on whether the Type is a Classifier or Feature.<ul><li>Classifier – The number of basic
+    /// instances of the Classifier, that is, those instances representing things, which are not instances
+    /// of any subtypes of the Classifier that are Features.<li>Features – The number of instances with the
+    /// same featuring instances. In the case of a Feature with a Classifier as its featuringType, this is
+    /// the number of values of Feature for each basic instance of the Classifier. Note that, for non-unique
+    /// Features, all duplicate values are included in this count.</li></ul>Multiplicity co-domains (in
+    /// models) can be specified by Expression that might vary in their results. If the typeWithMultiplicity
+    /// is a Classifier, the domain of the Multiplicity shall be Base::Anything.  If the
+    /// typeWithMultiplicity is a Feature,  the Multiplicity shall have the same domain as the
+    /// typeWithMultiplicity.if owningType <> null and owningType.oclIsKindOf(Feature) then    featuringType
+    /// =         owningType.oclAsType(Feature).featuringTypeelse   
+    /// featuringType->isEmpty()endifspecializesFromLibrary("Base::naturals")
     /// </summary>
     public partial class Multiplicity : IMultiplicity
     {
@@ -123,7 +122,8 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
+        /// Indicates how values of this Feature are determined or used (as specified for the
+        /// FeatureDirectionKind).
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public FeatureDirectionKind? Direction { get; set; }
@@ -243,7 +243,7 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does.
+        /// cannot exist after its featuring instance no longer does.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
@@ -258,15 +258,15 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Features.
+        /// Whether the values of this Feature can always be computed from the values of other Feature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
 
         /// <summary>
         /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain entity to a
-        /// single co-domain entity, whether or not a Multiplicity is given for it. If a Multiplicity is given
+        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
+        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
         /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
         /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
         /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
@@ -311,8 +311,8 @@ namespace SysML2.NET.Core.POCO
         public bool IsOrdered { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the
-        /// Feature&#39;s domain.
+        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
+        /// the Feature and represent the same thing as those instances.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsPortion { get; set; }
@@ -328,7 +328,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

@@ -31,9 +31,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A SuccessionFlowConnectionUsage is a FlowConnectionUsage that is also a SuccessionItemFlow.A
-    /// FlowConnectionUsage must subset the base SuccessionFlowConnectionUsage successionFlowConnections
-    /// from the Systems model library.specializesFromLibrary("Connections::successionFlowConnections")
+    /// A SuccessionFlowConnectionUsage is a FlowConnectionUsage that is also a
+    /// SuccessionItemFlow.specializesFromLibrary("Connections::successionFlowConnections")
     /// </summary>
     public partial interface ISuccessionFlowConnectionUsage : IFlowConnectionUsage, ISuccessionItemFlow
     {

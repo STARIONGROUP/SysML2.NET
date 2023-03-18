@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.POCO
     /// A FeatureValue is a Membership that identifies a particular member Expression that provides the
     /// value of the Feature that owns the FeatureValue. The value is specified as either a bound value or
     /// an initial value, and as either a concrete or default value. A Feature can have at most one
-    /// FeatureValue.The result of the value expression is bound to the featureWithValue using a
+    /// FeatureValue.The result of the value Expression is bound to the featureWithValue using a
     /// BindingConnector. If isInitial = false, then the featuringType of the BindingConnector is the same
     /// as the featuringType of the featureWithValue. If isInitial = true, then the featuringType of the
     /// BindingConnector is restricted to its startShot.If isDefault = false, then the above semantics of
@@ -122,7 +122,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether this FeatureValue is a concrete specification of the bound of initial value of the
+        /// Whether this FeatureValue is a concrete specification of the bound or initial value of the
         /// featureWithValue, or just a default value that may be overridden.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

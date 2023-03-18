@@ -33,10 +33,10 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A MergeNode is a ControlNode that asserts the merging of its incoming Successions. A MergeNode may
     /// have at most one outgoing Successions.sourceConnector->selectAsKind(Succession)->size() <=
-    /// 1specializesFromLibrary("Actions::Action::merges")targetConnector->selectByKind(Succession)->   
-    /// collect(connectorEnd->at(1))->    forAll(sourceMult |        multiplicityHasBounds(sourceMult, 0,
-    /// 1))targetConnector->selectByKind(Succession)->    forAll(subsetsChain(this,        
-    /// resolveGlobal("ControlPerformances::MergePerformance::incomingHBLink")))
+    /// 1targetConnector->selectByKind(Succession)->    collect(connectorEnd->at(1))->    forAll(sourceMult
+    /// |        multiplicityHasBounds(sourceMult, 0, 1))targetConnector->selectByKind(Succession)->   
+    /// forAll(subsetsChain(this,        
+    /// resolveGlobal("ControlPerformances::MergePerformance::incomingHBLink")))specializesFromLibrary("Actions::Action::merges")
     /// </summary>
     public partial interface IMergeNode : IControlNode
     {

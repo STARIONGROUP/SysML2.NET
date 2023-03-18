@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="VisibilityKind.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -42,7 +42,7 @@ namespace SysML2.NET.Core
         /// An intermediate level of visibility between public and private. By default, it is equivalent to
         /// private for the purposes of normal access to and import of Elements from a Namespace. However, other
         /// Relationships may be specified to include Memberships with protected visibility in the list of
-        /// memberships for a Namespace (e.g., Generalization).
+        /// memberships for a Namespace (e.g., Specialization).
         /// </summary>
         Protected = 1,
 

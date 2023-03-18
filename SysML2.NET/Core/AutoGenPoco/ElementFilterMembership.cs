@@ -31,10 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// ElementFilterMembership is a Mambership between a Namespace and a model-level evaluable Boolean
-    /// Expression, asserting that imported members of the Namespace should be filtered using the condition
-    /// Expression. A general Namespace does not define any specific filtering behavior, but such behavior
-    /// may be defined for various specialized kinds of Namespaces.condition.isModelLevelEvaluable
+    /// ElementFilterMembership is a Membership between a Namespace and a model-level evaluable
+    /// Boolean-valued Expression, asserting that imported members of the Namespace should be filtered using
+    /// the condition Expression. A general Namespace does not define any specific filtering behavior, but
+    /// such behavior may be defined for various specialized kinds of
+    /// Namespaces.condition.isModelLevelEvaluablecondition.result.specializesFromLibrary('ScalarValues::Boolean')
     /// </summary>
     public partial class ElementFilterMembership : IElementFilterMembership
     {

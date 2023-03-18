@@ -31,8 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// specializesFromLibrary("Objects::ObjectLink")endFeature->size() = 2 implies   
-    /// specializesFromLibrary("Objects::BinaryLinkObject")
+    /// An AssociationStructure is an Association that is also a Structure, classifying link objects that
+    /// are both links and objects. As objects, link objects can be created and destroyed, and their non-end
+    /// Features can change over time. However, the values of the end Features of a link object are fixed
+    /// and cannot change over its lifetime.specializesFromLibrary("Objects::ObjectLink")endFeature->size()
+    /// = 2 implies    specializesFromLibrary("Objects::BinaryLinkObject")
     /// </summary>
     public partial class AssociationStructure : IAssociationStructure
     {
@@ -241,7 +244,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

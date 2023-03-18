@@ -34,7 +34,8 @@ namespace SysML2.NET.Core.DTO
     /// A ResultExpressionMembership is a FeatureMembership that indicates that the ownedResultExpression
     /// provides the result values for the Function or Expression that owns it. The owning Function or
     /// Expression must contain a BindingConnector between the result parameter of the ownedResultExpression
-    /// and the result parameter of the Function or Expression.
+    /// and the result parameter of the owning Function or Expression.owningType.oclIsKindOf(Function) or
+    /// owningType.oclIsKindOf(Expression)
     /// </summary>
     public partial class ResultExpressionMembership : IResultExpressionMembership
     {

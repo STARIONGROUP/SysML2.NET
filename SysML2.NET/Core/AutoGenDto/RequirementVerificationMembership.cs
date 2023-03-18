@@ -31,8 +31,11 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A RequirementVerificationMembership is a RequirementConstraintMembership used in the objective of a
-    /// VerificationCase to identify a Requirement that is verified by the VerificationCase.
+    /// A RequirementVerificationMembership is a RequirementConstraintMembership  used in the objective of a
+    /// VerificationCase to identify a RequirementUsage that is verified by the VerificationCase.kind =
+    /// RequirementConstraintKind::requirementowningType.oclIsKindOf(RequirementUsage)
+    /// andowningType.owningFeatureMembership <> null
+    /// andowningType.owningFeatureMembership.oclIsKindOf(ObjectiveMembership)
     /// </summary>
     public partial class RequirementVerificationMembership : IRequirementVerificationMembership
     {

@@ -33,8 +33,16 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A CaseDefinition is a CalculationDefinition for a process, often involving collecting evidence or
     /// data, relative to a subject, possibly involving the collaboration of one or more other actors,
-    /// producing a result that meets an objective.A CaseDefinition must subclass, directly or indirectly,
-    /// the base CaseDefinition Case from the Systems model library.
+    /// producing a result that meets an objective.objectiveRequirement =     let objectives:
+    /// OrderedSet(RequirementUsage) =         featureMembership->           
+    /// selectByKind(ObjectiveMembership).            ownedRequirement in    if objectives->isEmpty() then
+    /// null    else objectives->first().ownedObjectiveRequirement    endiffeatureMembership->   
+    /// selectByKind(ObjectiveMembership)->    size() <= 1subjectParameter =    let subjectMems :
+    /// OrderedSet(SubjectMembership) =         featureMembership->selectByKind(SubjectMembership) in    if
+    /// subjectMems->isEmpty() then null    else subjectMems->first().ownedSubjectParameter   
+    /// endifactorParameter = featureMembership->    selectByKind(ActorMembership).   
+    /// ownedActorParameterfeatureMembership->selectByKind(SubjectMembership)->size() <= 1input->notEmpty()
+    /// and input->first() = subjectParameterspecializesFromLibrary('Cases::Case')
     /// </summary>
     public partial class CaseDefinition : ICaseDefinition
     {
@@ -284,7 +292,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

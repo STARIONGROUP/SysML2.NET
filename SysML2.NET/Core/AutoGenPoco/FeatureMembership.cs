@@ -31,10 +31,10 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// FeatureMembership is an OwningMembership for a Feature in a Type that is also a Featuring
-    /// Relationship between the Feature and the Type, in which the featuringType is the source and the
-    /// featureOfType is the target. A FeatureMembership is always owned by its owningType, which is the
-    /// featuringType for the FeatureMembership considered as a Featuring.
+    /// A FeatureMembership is an OwningMembership between a Feature in an owningType that is also a
+    /// Featuring Relationship<code? between="" the=""></code?>Feature and the Type, in which the
+    /// featuringType is the source and the featureOfType is the target. A FeatureMembership is always owned
+    /// by its owningType, which is the featuringType for the FeatureMembership considered as a Featuring.
     /// </summary>
     public partial class FeatureMembership : IFeatureMembership
     {

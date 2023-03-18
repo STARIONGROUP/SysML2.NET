@@ -31,9 +31,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A MetadataDefinition is an ItemDefinition that is also a Metaclass.A MetadataDefinition must
-    /// subclassofy, directly or indirectly, the base MetadataDefinition MetadataItem from the Systems model
-    /// library.
+    /// A MetadataDefinition is an ItemDefinition that is also a
+    /// Metaclass.specializesFromLibrary('Metadata::MetadataItem')
     /// </summary>
     public partial interface IMetadataDefinition : IItemDefinition, IMetaclass
     {

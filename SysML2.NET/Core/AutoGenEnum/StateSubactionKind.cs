@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="StateSubactionKind.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -26,23 +26,22 @@ namespace SysML2.NET.Core
 {
     /// <summary>
     /// A StateSubactionKind indicates whether the action of a StateSubactionMembership is an entry, do or
-    /// exit action.A StateActionKind indicates whether a Action feature of a State is an entry, do or exit
-    /// Action.
+    /// exit action.
     /// </summary>
     public enum StateSubactionKind
     {
         /// <summary>
-        /// Indicates that a subaction of a StateUsage is an entry action.
+        /// Indicates that the action of a StateSubactionMembership is an entryAction.
         /// </summary>
         Entry = 0,
 
         /// <summary>
-        /// Indicates that a subaction of a StateUsage is a do action.
+        /// Indicates that the action of a StateSubactionMembership is a doAction.
         /// </summary>
         Do = 1,
 
         /// <summary>
-        /// Indicates that a subaction of a StateUsage is an exit action.
+        /// Indicates that the action of a StateSubactionMembership is an exitAction.
         /// </summary>
         Exit = 2,
 

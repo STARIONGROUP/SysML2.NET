@@ -32,7 +32,10 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An ActorMembership is a ParameterMembership that identifies a PartUsage as an actor parameter, which
-    /// specifies a role played by an entity external in interaction with the parametered element.
+    /// specifies a role played by an external entity in interaction with the owningType of the
+    /// ActorMembership.owningType.oclIsKindOf(RequirementUsage)
+    /// orowningType.oclIsKindOf(RequirementDefinition) orowningType.oclIsKindOf(CaseDefinition)
+    /// orowningType.oclIsKindOf(CaseUsage)
     /// </summary>
     public partial interface IActorMembership : IParameterMembership
     {

@@ -31,10 +31,8 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Binding Connector is a binary Connector that requires its relatedFeatures to identify the same
-    /// things (have the same values).  A BindingConnector must be directly or indirectly typed by the
-    /// SelfLink Association from the Links library model. Both end multiplicities must be 1..1 when the
-    /// relatedFeatures have unique values.specializesFromLibrary("Links::selfLinks")
+    /// A BindingConnector is a binary Connector that requires its relatedFeatures to identify the same
+    /// things (have the same values).specializesFromLibrary("Links::selfLinks")relatedFeature->size() = 2
     /// </summary>
     public partial interface IBindingConnector : IConnector
     {

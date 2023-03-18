@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DictionaryReaderProvider.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
@@ -152,7 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             { "PerformActionUsage", PerformActionUsageDictionaryReader.Read },
             { "PortConjugation", PortConjugationDictionaryReader.Read },
             { "PortDefinition", PortDefinitionDictionaryReader.Read },
-            { "PortioningFeature", PortioningFeatureDictionaryReader.Read },
             { "PortUsage", PortUsageDictionaryReader.Read },
             { "Predicate", PredicateDictionaryReader.Read },
             { "Redefinition", RedefinitionDictionaryReader.Read },

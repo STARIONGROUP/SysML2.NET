@@ -31,7 +31,7 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A NamespaceExpose is an Expose relationship that exposes a;; the Memberships of a specific
+    /// A NamespaceExpose is an Expose Relationship that exposes the Memberships of a specific
     /// importedNamespace and, if isRecursive = true, additional Memberships recursively.
     /// </summary>
     public partial interface INamespaceExpose : INamespaceImport, IExpose

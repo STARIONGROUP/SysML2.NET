@@ -31,13 +31,12 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Classifier is a Type for model elements that classify:<ul>	<li>Things (in the universe)
-    /// regardless of how Features relate them.  These are sequences of exactly one thing
-    /// (sequence of length 1).</li>	<li>How the above things are related by Features. These are
-    /// sequences of multiple things (length &gt; 1).</li></ul>Classifiers that classify relationships
-    /// (sequence length &gt; 1) must also classify the things at the end of those sequences (sequence
-    /// length =1).  Because of this, Classifiers specializing Features cannot classify anything (any
-    /// sequences).ownedSubclassification =    
+    /// A Classifier is a Type that classifies:<ul>	<li>Things (in the universe) regardless of how Features
+    /// relate them. (These are interpreted semantically as sequences of exactly one thing.)</li>	<li>How
+    /// the above things are related by Features. (These are interpreted semantically as sequences of
+    /// multiple things, such that the last thing in the sequence is also classified by the Classifier. Note
+    /// that his means that a Classifier modeled as specializing a Feature cannot classify
+    /// anything.)</li></ul>ownedSubclassification =    
     /// ownedSpecialization->selectByKind(Superclassification)multiplicity <> null implies
     /// multiplicity.featuringType->isEmpty()
     /// </summary>
@@ -228,7 +227,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

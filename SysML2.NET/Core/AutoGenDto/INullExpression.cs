@@ -31,8 +31,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A NullExpression is an Expression that results in a null value. It must be typed by a NullEvaluation
-    /// that results in an empty value.specializesFromLibrary("Performances::nullEvaluations")
+    /// A NullExpression is an Expression that results in a null
+    /// value.specializesFromLibrary("Performances::nullEvaluations")
     /// </summary>
     public partial interface INullExpression : IExpression
     {

@@ -32,9 +32,15 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A ViewDefinition is a PartDefinition that specifies how a view artifact is constructed to satisfy a
-    /// viewpoint. It specifies a viewConditions to define the model content to be presented and a rendering
-    /// to define how the model content is presented.A ViewDefinition must subclass, directly or indirectly,
-    /// the base ViewDefinition View from the Systems model library.
+    /// viewpoint. It specifies a viewConditions to define the model content to be presented and a
+    /// viewRendering to define how the model content is presented.view =
+    /// usage->selectByKind(ViewUsage)satisfiedViewpoint = ownedRequirement->   
+    /// selectByKind(ViewpointUsage)->    select(isComposite)viewRendering =    let renderings:
+    /// OrderedSet(ViewRenderingMembership) =       
+    /// featureMembership->selectByKind(ViewRenderingMembership) in    if renderings->isEmpty() then null   
+    /// else renderings->first().referencedRendering    endifviewCondition = featureMembership->   
+    /// selectByKind(ElementFilterMembership).    conditionfeatureMembership->   
+    /// selectByKind(ViewRenderingMembership)->    size() <= 1specializesFromLibrary('Views::View')
     /// </summary>
     public partial class ViewDefinition : IViewDefinition
     {
@@ -113,7 +119,7 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

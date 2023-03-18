@@ -33,7 +33,8 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A Package is a Namespace used to group Elements, without any instance-level semantics. It may have
     /// one or more model-level evaluable filterCondition Expressions used to filter its
-    /// importedMemberships. Any imported member must meet all of the filterConditions.
+    /// importedMemberships. Any imported member must meet all of the filterConditions.filterCondition =
+    /// ownedMembership->    selectByKind(ElementFilterMembership).condition
     /// </summary>
     public partial interface IPackage : INamespace
     {

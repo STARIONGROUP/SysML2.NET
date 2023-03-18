@@ -36,8 +36,8 @@ namespace SysML2.NET.Core.POCO
     /// some system quality or characteristic. However, other kinds of kernel DataTypes are also allowed, to
     /// permit use of DataTypes from the Kernel Model Libraries. An AttributeUsage itself as well as all its
     /// nested features must be referential (non-composite).An AttributeUsage must specialize, directly or
-    /// indirectly, the base Feature Base::dataValues from the Kernel Semantic Library.feature->forAll(not
-    /// isComposite)isReferencespecializesFromLibrary("Base::dataValues")
+    /// indirectly, the base Feature Base::dataValues from the Kernel Semantic
+    /// Library.isReferencefeature->forAll(not isComposite)specializesFromLibrary("Base::dataValues")
     /// </summary>
     public partial interface IAttributeUsage : IUsage
     {

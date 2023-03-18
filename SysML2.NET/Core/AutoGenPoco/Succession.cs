@@ -32,8 +32,19 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A Succession is a binary Connector that requires its relatedFeatures to happen separately in
-    /// time. A Succession must be typed by the Association HappensBefore from the Kernel Model Library (or
-    /// a specialization of it).specializesFromLibrary("Occurences::happensBeforeLinks")
+    /// time.specializesFromLibrary("Occurences::happensBeforeLinks")transitionStep =    if
+    /// owningNamespace.oclIsKindOf(Step) and         owningNamespace.oclAsType(Step).           
+    /// specializesFromLibrary('TransitionPerformances::TransitionPerformance') then       
+    /// owningNamespace.oclAsType(Step)    else null    endiftriggerStep =    if transitionStep = null or   
+    ///     transitionStep.ownedFeature.size() < 2 or       not
+    /// transitionStep.ownedFeature->at(2).oclIsKindOf(Step)     then Set{}    else
+    /// Set{transitionStep.ownedFeature->at(2).oclAsType(Step)}    endifeffectStep =    if transitionStep =
+    /// null or        transitionStep.ownedFeature.size() < 4 or       not
+    /// transitionStep.ownedFeature->at(4).oclIsKindOf(Step)     then Set{}    else
+    /// Set{transitionStep.ownedFeature->at(4).oclAsType(Step)}    endifguardExpression =    if
+    /// transitionStep = null or        transitionStep.ownedFeature.size() < 3 or       not
+    /// transitionStep.ownedFeature->at(3).oclIsKindOf(Expression)     then Set{}    else
+    /// Set{transitionStep.ownedFeature->at(3).oclAsType(Expression)}    endif
     /// </summary>
     public partial class Succession : ISuccession
     {
@@ -134,7 +145,8 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
+        /// Indicates how values of this Feature are determined or used (as specified for the
+        /// FeatureDirectionKind).
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public FeatureDirectionKind? Direction { get; set; }
@@ -272,7 +284,7 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does.
+        /// cannot exist after its featuring instance no longer does.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
@@ -287,22 +299,22 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Features.
+        /// Whether the values of this Feature can always be computed from the values of other Feature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
 
         /// <summary>
         /// For a binary Connector, whether or not the Connector should be considered to have a direction from
-        /// source to target.
+        /// sourceFeature to targetFeature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDirected { get; set; }
 
         /// <summary>
         /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain entity to a
-        /// single co-domain entity, whether or not a Multiplicity is given for it. If a Multiplicity is given
+        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
+        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
         /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
         /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
         /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
@@ -354,8 +366,8 @@ namespace SysML2.NET.Core.POCO
         public bool IsOrdered { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the
-        /// Feature&#39;s domain.
+        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
+        /// the Feature and represent the same thing as those instances.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsPortion { get; set; }
@@ -371,7 +383,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

@@ -31,12 +31,17 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A WhileLoopActionUsage is a LoopActionUsage that is typed, directly or indirectly, by the
-    /// ActionDefinition WhileLoopAction from the Systems model library. It specifies that the bodyClause
-    /// ActionUsage should be performed repeatedly while the result of the whileArgument Expression is true
-    /// or until the result of the untilArgument Expression (if provided) is true. The whileArgument
-    /// Expression is evaluated before each (possible) performance of the bodyClause, and the untilArgument
-    /// Expression is evaluated after each performance of the bodyClause.
+    /// A WhileLoopActionUsage is a LoopActionUsage that specifies that the bodyClause ActionUsage should be
+    /// performed repeatedly while the result of the whileArgument Expression is true or until the result of
+    /// the untilArgument Expression (if provided) is true. The whileArgument Expression is evaluated before
+    /// each (possible) performance of the bodyClause, and the untilArgument Expression is evaluated after
+    /// each performance of the bodyClause.isSubactionUsage() implies   
+    /// specializesFromLibrary('Actions::Action::whileLoops')untilArgument =    let parameter : Feature =
+    /// inputParameter(3) in    if parameter <> null and parameter.oclIsKindOf(Expression) then       
+    /// parameter.oclAsType(Expression)    else        null   
+    /// endifspecializesFromLibrary('Actions::whileLoopActions')whileArgument =    let parameter : Feature =
+    /// inputParameter(1) in    if parameter <> null and parameter.oclIsKindOf(Expression) then       
+    /// parameter.oclAsType(Expression)    else        null    endif
     /// </summary>
     public partial interface IWhileLoopActionUsage : ILoopActionUsage
     {

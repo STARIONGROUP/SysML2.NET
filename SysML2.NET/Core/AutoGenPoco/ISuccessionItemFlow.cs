@@ -33,8 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A SuccessionItemFlow is an ItemFlow that also provides temporal ordering. It classifies Transfers
     /// that cannot start until the source Occurrence has completed and that must complete before the target
-    /// Occurrence can start.A SuccessionItemFlow must be typed by the Interaction TransferBefore from the
-    /// Kernel Library, or a specialization of it.specializesFromLibrary("Transfers::flowTransfersBefore")
+    /// Occurrence can start.specializesFromLibrary("Transfers::flowTransfersBefore")
     /// </summary>
     public partial interface ISuccessionItemFlow : IItemFlow, ISuccession
     {

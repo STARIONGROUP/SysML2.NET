@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.DTO
     /// out in the originalType are considered to have an effective direction of in in the originalType.
     /// Features with direction inout, or with no direction, in the originalType, are inherited without
     /// change.A Type may participate as a conjugatedType in at most one Conjugation relationship, and such
-    /// a Type may not also be the specific Type in any Generalization relationship.
+    /// a Type may not also be the specific Type in any Specialization relationship.
     /// </summary>
     public partial interface IConjugation : IRelationship
     {

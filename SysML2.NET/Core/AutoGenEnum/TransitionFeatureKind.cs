@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TransitionFeatureKind.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -31,17 +31,17 @@ namespace SysML2.NET.Core
     public enum TransitionFeatureKind
     {
         /// <summary>
-        /// Indicates that a member Transfer of a TransitionUsage represents a trigger.
+        /// Indicates that the transitionFeature of a TransitionFeatureMembership is a triggerAction.
         /// </summary>
         Trigger = 0,
 
         /// <summary>
-        /// Indicates that a member Expression of a TransitionUsage represents a guard.
+        /// Indicates that the transitionFeature of a TransitionFeatureMembership is a guardExpression.
         /// </summary>
         Guard = 1,
 
         /// <summary>
-        /// Indicates that a member Step of a TransitionUsage represents an effect.
+        /// Indicates that the transitionFeature of a TransitionFeatureMembership is an effectAction.
         /// </summary>
         Effect = 2,
 

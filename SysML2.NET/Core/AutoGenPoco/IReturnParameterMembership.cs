@@ -31,8 +31,10 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ReturnParameterMembership is a ParameterMembership that indicates that the memberParameter is the
-    /// result parameter of a Function or Expression. The direction of the memberParameter must be out.
+    /// A ReturnParameterMembership is a ParameterMembership that indicates that the ownedMemberParameter is
+    /// the result parameter of a Function or Expression. The direction of the ownedMemberParameter must be
+    /// out.owningType.oclIsKindOf(Function) or
+    /// owningType.oclIsKindOf(Expression)ownedMemberParameter.direction = ParameterDirectionKind::out
     /// </summary>
     public partial interface IReturnParameterMembership : IParameterMembership
     {

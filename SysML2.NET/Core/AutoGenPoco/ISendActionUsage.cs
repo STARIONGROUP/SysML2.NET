@@ -36,11 +36,9 @@ namespace SysML2.NET.Core.POCO
     /// senderArgument Expression and whose target is given by the result of the receiverArgument
     /// Expression. If no senderArgument is provided, the default is the this context for the action. If no
     /// receiverArgument is given, then the receiver is to be determined by, e.g., outgoing Connections from
-    /// the sender. payloadArgument = argument(1)senderArgument = argument(2)receiverArgument =
-    /// argument(3)inputParameters->size() >= 3specializesFromLibrary("Actions::sendActions")isComposite and
-    /// owningType <> null and(owningType.oclIsKindOf(ActionDefinition) or
-    /// owningType.oclIsKindOf(ActionUsage)) implies   
-    /// specializesFromLibrary('Actions::Action::acceptSubactions')
+    /// the sender. senderArgument = argument(2)payloadArgument = argument(1)inputParameters()->size() >=
+    /// 3receiverArgument = argument(3)isSubactionUsage() implies   
+    /// specializesFromLibrary('Actions::Action::acceptSubactions')specializesFromLibrary("Actions::sendActions")
     /// </summary>
     public partial interface ISendActionUsage : IActionUsage
     {

@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A ConjugatedPortTyping is a FeatureTyping whose type is a ConjugatedPortDefinition. (This
-    /// relationship is intended to be an abstract syntax marker for a special surface notation for
-    /// conjugated typing of ports.)conjugatedPortDefinition = portDefinition.conjugatedPortDefinition
+    /// relationship is intended to be an abstract-syntax marker for a special surface notation for
+    /// conjugated typing of ports.)portDefinition = conjugatedPortDefinition.originalPortDefinition
     /// </summary>
     public partial interface IConjugatedPortTyping : IFeatureTyping
     {

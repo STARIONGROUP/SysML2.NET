@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="PortionKind.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -25,8 +25,8 @@
 namespace SysML2.NET.Core
 {
     /// <summary>
-    /// PortionKind is an enumeration of the possible special kinds of Occurrence portions that can be
-    /// represented by an OccurrenceUsage.
+    /// PortionKind is an enumeration of the specific kinds of Occurrence portions that can be represented
+    /// by an OccurrenceUsage.
     /// </summary>
     public enum PortionKind
     {

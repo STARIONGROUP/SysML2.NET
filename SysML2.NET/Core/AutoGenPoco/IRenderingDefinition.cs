@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A RenderingDefinition is a PartDefinition that defines a specific rendering of the content of a
-    /// model view (e.g., symbols, style, layout, etc.).A RenderingDefinition must subclass, directly or
-    /// indirectly, the base RenderingDefinition Rendering from the Systems model library.
+    /// model view (e.g., symbols, style, layout, etc.).rendering =
+    /// usages->selectByKind(RenderingUsage)specializesFromLibrary('Views::Rendering')
     /// </summary>
     public partial interface IRenderingDefinition : IPartDefinition
     {

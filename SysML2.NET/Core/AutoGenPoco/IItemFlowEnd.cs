@@ -31,10 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An ItemFlowEnd is a Feature that is one of the endFeatures giving the source or target of an
+    /// An ItemFlowEnd is a Feature that is one of the connectorEnds giving the source or target of an
     /// ItemFlow. For ItemFlows typed by FlowTransfer or its specializations, ItemFlowEnds must have exactly
     /// one ownedFeature, which redefines Transfer::source::sourceOutput or Transfer::target::targetInput
-    /// and redefines the corresponding feature of the relatedElement for its end.
+    /// and redefines the corresponding feature of the relatedElement for its end.isEndownedFeature->size()
+    /// = 1owningType <> null and owningType.oclIsKindOf(ItemFlow)
     /// </summary>
     public partial interface IItemFlowEnd : IFeature
     {

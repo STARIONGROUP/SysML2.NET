@@ -33,11 +33,14 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// An Association is a Relationship and a Classifier to enable classification of links between things
     /// (in the universe). The co-domains (types) of the associationEnd Features are the relatedTypes, as
-    /// co-domain and participants (linked things) of an Association identify each other.relatedTypes =
+    /// co-domain and participants (linked things) of an Association identify each other.relatedType =
     /// associationEnd.typespecializesFromLibrary("Links::Link")oclIsKindOf(Structure) =
     /// oclIsKindOf(AssociationStructure)ownedEndFeature->size() = 2 implies   
     /// specializesFromLibrary("Links::BinaryLink)not isAbstract implies relatedType->size() >=
-    /// 2associationEnds->size() > 2 implies    not specializesFromLibrary("Links::BinaryLink")
+    /// 2associationEnds->size() > 2 implies    not specializesFromLibrary("Links::BinaryLink")sourceType = 
+    ///   if relatedType->isEmpty() then null    else relatedType->first() endiftargetType =    if
+    /// relatedType->size() < 2 then OrderedSet{}    else         relatedType->            subSequence(2,
+    /// relatedType->size())->            asOrderedSet()     endif
     /// </summary>
     public partial interface IAssociation : IClassifier, IRelationship
     {

@@ -32,8 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A FramedConcernMembership is a RequirementConstraintMembership for a framed ConcernUsage of a
-    /// RequirementDefinition or RequirementUsage. The ownedConstraint of a FramedConcernMembership must be
-    /// a ConcernUsage.
+    /// RequirementDefinition or RequirementUsage.kind = RequirementConstraintKind::requirement
     /// </summary>
     public partial class FramedConcernMembership : IFramedConcernMembership
     {

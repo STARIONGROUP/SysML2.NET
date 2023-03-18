@@ -31,14 +31,17 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Function is a Behavior that has a single out parameter that is identified as its result. Any other
-    /// parameters of a Function than the result must have direction in. A Function represents the
-    /// performance of a calculation that produces the values of its result parameter. This calculation may
-    /// be decomposed into Expressions that are steps of the
-    /// Function.specializesFromLibrary("Performances::Evaluation")ownedMembership.selectByKind(ResultExpressionMembership)->
-    ///    forAll(mem | ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
+    /// A Function is a Behavior that has an out parameter that is identified as its result. A Function
+    /// represents the performance of a calculation that produces the values of its result parameter. This
+    /// calculation may be decomposed into Expressionssteps of the
+    /// Function.ownedMembership.selectByKind(ResultExpressionMembership)->    forAll(mem |
+    /// ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
     /// binding.relatedFeature->includes(result) and           
-    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))
+    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))specializesFromLibrary("Performances::Evaluation")result
+    /// =    let resultParams : Sequence(Feature) =        ownedFeatureMemberships->           
+    /// selectByKind(ReturnParameterMembership).            ownedParameterMember in    if
+    /// resultParams->notEmpty() then resultParams->first()    else null    endifownedFeatureMembership->   
+    /// selectByKind(ReturnParameterMembership)->    size() <= 1
     /// </summary>
     public partial interface IFunction : IBehavior
     {

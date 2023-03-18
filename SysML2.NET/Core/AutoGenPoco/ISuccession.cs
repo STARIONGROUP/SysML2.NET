@@ -32,8 +32,19 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A Succession is a binary Connector that requires its relatedFeatures to happen separately in
-    /// time. A Succession must be typed by the Association HappensBefore from the Kernel Model Library (or
-    /// a specialization of it).specializesFromLibrary("Occurences::happensBeforeLinks")
+    /// time.specializesFromLibrary("Occurences::happensBeforeLinks")transitionStep =    if
+    /// owningNamespace.oclIsKindOf(Step) and         owningNamespace.oclAsType(Step).           
+    /// specializesFromLibrary('TransitionPerformances::TransitionPerformance') then       
+    /// owningNamespace.oclAsType(Step)    else null    endiftriggerStep =    if transitionStep = null or   
+    ///     transitionStep.ownedFeature.size() < 2 or       not
+    /// transitionStep.ownedFeature->at(2).oclIsKindOf(Step)     then Set{}    else
+    /// Set{transitionStep.ownedFeature->at(2).oclAsType(Step)}    endifeffectStep =    if transitionStep =
+    /// null or        transitionStep.ownedFeature.size() < 4 or       not
+    /// transitionStep.ownedFeature->at(4).oclIsKindOf(Step)     then Set{}    else
+    /// Set{transitionStep.ownedFeature->at(4).oclAsType(Step)}    endifguardExpression =    if
+    /// transitionStep = null or        transitionStep.ownedFeature.size() < 3 or       not
+    /// transitionStep.ownedFeature->at(3).oclIsKindOf(Expression)     then Set{}    else
+    /// Set{transitionStep.ownedFeature->at(3).oclAsType(Expression)}    endif
     /// </summary>
     public partial interface ISuccession : IConnector
     {

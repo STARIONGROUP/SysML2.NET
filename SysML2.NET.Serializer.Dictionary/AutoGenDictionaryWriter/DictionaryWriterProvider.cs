@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DictionaryWriterProvider.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -152,7 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary
             { typeof(SysML2.NET.Core.DTO.PerformActionUsage), PerformActionUsageDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.PortConjugation), PortConjugationDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.PortDefinition), PortDefinitionDictionaryWriter.Write },
-            { typeof(SysML2.NET.Core.DTO.PortioningFeature), PortioningFeatureDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.PortUsage), PortUsageDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.Predicate), PredicateDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.Redefinition), RedefinitionDictionaryWriter.Write },

@@ -35,11 +35,11 @@ namespace SysML2.NET.Core.POCO
     /// Occurrence given by the result of its receiverArgument Expression. (If no receiverArgument is
     /// provided, the default is the this context of the AcceptActionUsage.) The payload of the accepted
     /// Transfer is output on its payloadParameter. Which Transfers may be accepted is determined by
-    /// conformance to the typing and (potentially) binding of the payloadParameter.receiverArgument =
-    /// argument(2)payloadArgument = argument(1)payloadParameter =  if parameter->isEmpty() then null else
-    /// parameter->at(1) endifinputParameters->size() >= 2not isTriggerAction() implies   
-    /// specializesFromLibrary('Actions::acceptActions')isComposite and owningType <> null
-    /// and(owningType.oclIsKindOf(ActionDefinition) or owningType.oclIsKindOf(ActionUsage)) implies   
+    /// conformance to the typing and (potentially) binding of the
+    /// payloadParameter.inputParameters()->size() >= 2receiverArgument = argument(2)payloadArgument =
+    /// argument(1)payloadParameter =  if parameter->isEmpty() then null else parameter->first() endifnot
+    /// isTriggerAction() implies    specializesFromLibrary('Actions::acceptActions')isSubactionUsage() and
+    /// not isTriggerAction() implies   
     /// specializesFromLibrary('Actions::Action::acceptSubactions')isTriggerAction() implies   
     /// specializesFromLibrary('Actions::TransitionAction::accepter')payloadArgument <> null
     /// andpayloadArgument.oclIsKindOf(TriggerInvocationExpression) implies    let invocation : Expression =

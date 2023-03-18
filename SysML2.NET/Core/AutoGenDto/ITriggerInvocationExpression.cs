@@ -39,8 +39,8 @@ namespace SysML2.NET.Core.DTO
     public partial interface ITriggerInvocationExpression : IInvocationExpression
     {
         /// <summary>
-        /// Indicates which of the Functions from the Kernel Triggers package is to be invoked by this
-        /// TriggerInvocationExpression.
+        /// Indicates which of the Functions from the Triggers model in the Kernel Semantic Library is to be
+        /// invoked by this TriggerInvocationExpression.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         TriggerKind Kind { get; set; }

@@ -40,10 +40,10 @@ namespace SysML2.NET.Core.POCO
     /// ownedReferenceSubsetting = null then self    else if
     /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(OccurrenceUsage) then        
     /// ownedReferenceSubsetting.referencedFeature.oclAsType(OccurrenceUsage)    else null    endif
-    /// endifisReferenceownedReferenceSubsetting <> null implies   
+    /// endifownedReferenceSubsetting <> null implies   
     /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(OccurrenceUsage)owningType <> null
     /// and(owningType.oclIsKindOf(OccurrenceDefinition) or owningType.oclIsKindOf(OccurrenceUsage)) implies
-    /// specializesFromLibrary("Occurrences::Occurrence::timeEnclosedOccurrences")
+    /// specializesFromLibrary("Occurrences::Occurrence::timeEnclosedOccurrences")isReference
     /// </summary>
     public partial interface IEventOccurrenceUsage : IOccurrenceUsage
     {

@@ -31,17 +31,28 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A RequirementDefinition is a ConstraintDefinition that defines a requirement as a constraint that is
-    /// used in the context of a specification of a that a valid solution must satisfy. The specification is
-    /// relative to a specified subject, possibly in collaboration with one or more external actors.A
-    /// RequirementDefinition must subclass, directly or indirectly, the base RequirementDefinition
-    /// RequirementCheck from the Systems model library.
+    /// A RequirementDefinition is a ConstraintDefinition that defines a requirement used in the context of
+    /// a specification as a constraint that a valid solution must satisfy. The specification is relative to
+    /// a specified subject, possibly in collaboration with one or more external actors.text =
+    /// documentation.bodyassumedConstraint = ownedFeatureMembership->   
+    /// selectByKind(RequirementConstraintMembership)->    select(kind =
+    /// RequirementConstraintKind::assumption).    ownedConstraintrequiredConstraint =
+    /// ownedFeatureMembership->    selectByKind(RequirementConstraintMembership)->    select(kind =
+    /// RequirementConstraintKind::requirement).    ownedConstraintsubjectParameter =    let subjects :
+    /// OrderedSet(SubjectMembership) =         featureMembership->selectByKind(SubjectMembership) in    if
+    /// subjects->isEmpty() then null    else subjects->first().ownedSubjectParameter    endifframedConcern
+    /// = featureMembership->    selectByKind(FramedConcernMembership).    ownedConcernactorParameter =
+    /// featureMembership->    selectByKind(ActorMembership).    ownedActorParameterstakeholderParameter =
+    /// featureMembership->    selectByKind(StakholderMembership).   
+    /// ownedStakeholderParameterfeatureMembership->	    selectByKind(SubjectMembership)->    size() <=
+    /// 1input->notEmpty() and input->first() =
+    /// subjectParameterspecializesFromLibrary('Requirements::RequirementCheck')
     /// </summary>
     public partial interface IRequirementDefinition : IConstraintDefinition
     {
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementDefinition (used, e.g., to link it to
-        /// an original requirement text in some source document), derived as the modeledId for the
+        /// an original requirement text in some source document), which is the declaredShortName for the
         /// RequirementDefinition.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

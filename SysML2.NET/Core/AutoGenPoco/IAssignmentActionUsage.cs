@@ -31,10 +31,25 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An AssignmentActionUsage is an ActionUsage that is typed, directly or indirectly, by the
-    /// ActionDefinition AssignmentAction from the Systems model library. It specifies that the value of the
+    /// An AssignmentActionUsage is an ActionUsage that is defined, directly or indirectly, by the
+    /// ActionDefinition AssignmentAction from the Systems Model Library. It specifies that the value of the
     /// referent Feature, relative to the target given by the result of the targetArgument Expression,
-    /// should be set to the result of the valueExpression.
+    /// should be set to the result of the
+    /// valueExpression.specializesFromLibrary('Actions::assignmentActions')let targetParameter : Feature =
+    /// inputParameter(1) intargetParameter <> null andtargetParameter.ownedFeature->notEmpty()
+    /// andtargetParameter.ownedFeature->first().   
+    /// redefines('AssignmentAction::target::startingAt')valueExpression = argument(2)targetArgument =
+    /// argument(1)isSubactionUsage() implies    specializesFromLibrary('Actions::Action::assignments')let
+    /// targetParameter : Feature = inputParameter(1) intargetParameter <> null
+    /// andtargetParameter.ownedFeature->notEmpty() andtargetParameter->first().ownedFeature->notEmpty()
+    /// andtargetParameter->first().ownedFeature->first().   
+    /// redefines('AssigmentAction::target::startingAt::accessedFeature')let targetParameter : Feature =
+    /// inputParameter(1) intargetParameter <> null andtargetParameter.ownedFeature->notEmpty()
+    /// andtargetParameter->first().ownedFeature->notEmpty()
+    /// andtargetParameter->first().ownedFeature->first().redefines(referent)referent =    let
+    /// unownedFeatures : Sequence(Feature) = ownedMembership->       
+    /// reject(oclIsKindOf(OwningMembership)).memberElement->        selectByKind(Feature) in    if
+    /// unownedFeatures->isEmpty() then null    else unownedFeatures->first().oclAsType(Feature)    endif
     /// </summary>
     public partial interface IAssignmentActionUsage : IActionUsage
     {

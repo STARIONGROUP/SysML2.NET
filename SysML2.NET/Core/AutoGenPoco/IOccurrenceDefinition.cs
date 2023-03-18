@@ -39,10 +39,10 @@ namespace SysML2.NET.Core.POCO
     /// Life of the individual. All other instances must be portions of the &quot;maximal portion&quot; that
     /// is single Life instance, capturing the conception that all of the instances represent one individual
     /// with a single &quot;identity&quot;.An OccurrenceDefinition must specialize, directly or indirectly,
-    /// the base Class Occurrence from the Kernel Semantic Library.(lifeClass <> null) =
-    /// isIndividuallifeClass =    let lifeClasses: Sequence(LifeClass) =        
-    /// ownedMember->selectByKind(LifeClass) in    if lifeClasses->isEmpty() then null    else
-    /// lifeClasses->at(1)    endif
+    /// the base Class Occurrence from the Kernel Semantic Library.let n : Integer =
+    /// ownedMember->selectByKind(LifeClass) inif isIndividual then n = 1 else n = 0 endiflifeClass =    let
+    /// lifeClasses: OrderedSet(LifeClass) =         ownedMember->selectByKind(LifeClass) in    if
+    /// lifeClasses->isEmpty() then null    else lifeClasses->first()    endif
     /// </summary>
     public partial interface IOccurrenceDefinition : IDefinition, IClass
     {

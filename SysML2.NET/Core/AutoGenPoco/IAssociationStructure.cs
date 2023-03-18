@@ -31,8 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// specializesFromLibrary("Objects::ObjectLink")endFeature->size() = 2 implies   
-    /// specializesFromLibrary("Objects::BinaryLinkObject")
+    /// An AssociationStructure is an Association that is also a Structure, classifying link objects that
+    /// are both links and objects. As objects, link objects can be created and destroyed, and their non-end
+    /// Features can change over time. However, the values of the end Features of a link object are fixed
+    /// and cannot change over its lifetime.specializesFromLibrary("Objects::ObjectLink")endFeature->size()
+    /// = 2 implies    specializesFromLibrary("Objects::BinaryLinkObject")
     /// </summary>
     public partial interface IAssociationStructure : IAssociation, IStructure
     {

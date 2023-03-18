@@ -31,9 +31,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Metaclass is a Structure used to type MetadataFeatures. It must subclassify, directly or
-    /// indirectly, the base type Metadata from the Kernel
-    /// Library.specializesFromLibrary("Metaobjects::Metaobject")
+    /// A Metaclass is a Structure used to type
+    /// MetadataFeatures.specializesFromLibrary("Metaobjects::Metaobject")
     /// </summary>
     public partial interface IMetaclass : IStructure
     {

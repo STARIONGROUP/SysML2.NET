@@ -32,8 +32,12 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A RequirementConstraintMembership is a FeatureMembership for an assumed or required ConstraintUsage
-    /// of a RequirementDefinition or RequirementUsage. The ownedMemberFeature of a
-    /// RequirementConstraintMembership must be a ConstraintUsage.
+    /// of a RequirementDefinition or RequirementUsage.referencedConstraint =    let reference :
+    /// ReferenceSubsetting =         ownedConstraint.ownedReferenceSubsetting in    if reference = null
+    /// then ownedConstraint    else if not reference.referencedFeature.oclIsKindOf(ConstraintUsage) then
+    /// null     else reference.referencedFeature.oclAsType(ConstraintUsage)    endif
+    /// endifowningType.oclIsKindOf(RequirementDefinition)
+    /// orowningType.oclIsKindOf(RequirementUsage)ownedConstraint.isComposite
     /// </summary>
     public partial class RequirementConstraintMembership : IRequirementConstraintMembership
     {

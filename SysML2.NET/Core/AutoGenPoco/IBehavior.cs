@@ -31,9 +31,9 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Behavior coordinates occurrences of other Behaviors, as well as changes in objects. Behaviors
-    /// can be decomposed into Steps and be characterized by
-    /// parameters.specializesFromLibrary("Performances::Performance")
+    /// A Behavior coordinates occurrences of other Behaviors, as well as changes in objects. Behaviors can
+    /// be decomposed into Steps and be characterized by
+    /// parameters.specializesFromLibrary("Performances::Performance")step = feature->selectByKind(Step)
     /// </summary>
     public partial interface IBehavior : IClass
     {

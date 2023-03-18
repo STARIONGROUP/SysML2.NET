@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="RequirementConstraintKind.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -37,7 +37,7 @@ namespace SysML2.NET.Core
         Assumption = 0,
 
         /// <summary>
-        /// Indicates that a member ConstraintUsage of a RequirementDefinition or RequirementUsage represents an
+        /// Indicates that a member ConstraintUsage of a RequirementDefinition or RequirementUsagerepresents an
         /// requirement.
         /// </summary>
         Requirement = 1,

@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A SelectExpression is an OperatorExpression whose operator is "select", which resolves to the
-    /// library Function ControlFunctions::select.
+    /// Function ControlFunctions::select from the Kernel Functions Library.
     /// </summary>
     public partial interface ISelectExpression : IOperatorExpression
     {

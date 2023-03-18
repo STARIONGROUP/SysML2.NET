@@ -32,9 +32,15 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A ViewDefinition is a PartDefinition that specifies how a view artifact is constructed to satisfy a
-    /// viewpoint. It specifies a viewConditions to define the model content to be presented and a rendering
-    /// to define how the model content is presented.A ViewDefinition must subclass, directly or indirectly,
-    /// the base ViewDefinition View from the Systems model library.
+    /// viewpoint. It specifies a viewConditions to define the model content to be presented and a
+    /// viewRendering to define how the model content is presented.view =
+    /// usage->selectByKind(ViewUsage)satisfiedViewpoint = ownedRequirement->   
+    /// selectByKind(ViewpointUsage)->    select(isComposite)viewRendering =    let renderings:
+    /// OrderedSet(ViewRenderingMembership) =       
+    /// featureMembership->selectByKind(ViewRenderingMembership) in    if renderings->isEmpty() then null   
+    /// else renderings->first().referencedRendering    endifviewCondition = featureMembership->   
+    /// selectByKind(ElementFilterMembership).    conditionfeatureMembership->   
+    /// selectByKind(ViewRenderingMembership)->    size() <= 1specializesFromLibrary('Views::View')
     /// </summary>
     public partial interface IViewDefinition : IPartDefinition
     {

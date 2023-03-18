@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A TypeFeaturing is a Featuring Relationship in which the featureOfType is the source and the
-    /// featuringType is the target. A TypeFeaturing may be owned by its featureOfType.
+    /// featuringType is the target.
     /// </summary>
     public partial class TypeFeaturing : ITypeFeaturing
     {
@@ -91,13 +91,13 @@ namespace SysML2.NET.Core.DTO
         public Guid Feature { get; set; }
 
         /// <summary>
-        /// The Feature that is featured by the featuringType. It is the source of the Relationship.
+        /// The Feature that is featured by the featuringType. It is the source of the TypeFeaturing.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid FeatureOfType { get; set; }
 
         /// <summary>
-        /// The Type that features the featureOfType. It is the target of the Relationship.
+        /// The Type that features the featureOfType. It is the target of the TypeFeaturing.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid FeaturingType { get; set; }

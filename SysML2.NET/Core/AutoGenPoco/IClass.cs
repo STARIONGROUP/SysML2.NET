@@ -34,8 +34,9 @@ namespace SysML2.NET.Core.POCO
     /// A Class is a Classifier of things (in the universe) that can be distinguished without regard to how
     /// they are related to other things (via Features). This means multiple things classified by the same
     /// Class can be distinguished, even when they are related other things in exactly the same
-    /// way.specializesFromLibrary("Occurrences::Occurrence")ownedGeneralization.general->    forAll(not
-    /// oclIsKindOf(DataType) and            not oclIsKindOf(Association))
+    /// way.specializesFromLibrary('Occurrences::Occurrence')ownedSpecialization.general->    forAll(not
+    /// oclIsKindOf(DataType)) andnot oclIsKindOf(AssociationStructure) implies   
+    /// ownedSpecialization.general->        forAll(not oclIsKindOf(Association))
     /// </summary>
     public partial interface IClass : IClassifier
     {

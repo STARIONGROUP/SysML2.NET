@@ -31,9 +31,9 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A CalculationDefinition is an ActionDefinition that also defines a Function producing a result.A
-    /// CalculationDefinition must subclass, directly or indirectly, the base CalculationDefinition
-    /// Calculation from the Systems model library.
+    /// A CalculationDefinition is an <coed>ActionDefinition that also defines a Function producing a
+    /// result.</coed>specializesFromLibrary('Calculations::Calculation')calculation =
+    /// action->selectByKind(CalculationUsage)
     /// </summary>
     public partial class CalculationDefinition : ICalculationDefinition
     {
@@ -112,7 +112,7 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

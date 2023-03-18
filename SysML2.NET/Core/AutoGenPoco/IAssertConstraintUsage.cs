@@ -33,11 +33,11 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// An AssertConstraintUsage is a ConstraintUsage that is also an Invariant and, so, is asserted to be
     /// true (by default). Unless it is the AssertConstraintUsage itself, the asserted ConstraintUsage is
-    /// related to the AssertConstraintUsage by a ReferenceSubsetting relationship.If the
-    /// AssertConstraintUsage is owned by a PartDefinition or PartUsage, then it also subsets the
-    /// assertedConstraints feature of the PartDefinition Part from the System Library model
-    /// Parts.assertedConstraint =    if ownedReferenceSubsetting = null then self    else
-    /// ownedReferenceSubsetting.referencedFeature.oclAsType(ConstraintUsage)    endif
+    /// related to the AssertConstraintUsage by a ReferenceSubsetting Relationship.assertedConstraint =   
+    /// if ownedReferenceSubsetting = null then self    else
+    /// ownedReferenceSubsetting.referencedFeature.oclAsType(ConstraintUsage)    endifif isNegated then   
+    /// specializesFromLibrary('Constraints::negatedConstraints')else   
+    /// specializesFromLibrary('Constraints::assertedConstraints')endif
     /// </summary>
     public partial interface IAssertConstraintUsage : IConstraintUsage, IInvariant
     {

@@ -31,8 +31,8 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A MembershipExpose is an Expose relationship that exposes a specific importedMembership and, if
-    /// isRecursive = true, additional Memberships recursively.
+    /// A MembershipExpose is an Expose <> that exposes a specific importedMembership and, if isRecursive =
+    /// true, additional Memberships recursively.
     /// </summary>
     public partial class MembershipExpose : IMembershipExpose
     {

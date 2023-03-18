@@ -32,11 +32,9 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An Invariant is a BooleanExpression that is asserted to have a specific Boolean result value. If
-    /// isNegated = false, then the Invariant must subset, directly or indirectly, the BooleanExpression
-    /// trueEvaluations from the Kernel library, meaning that the result is asserted to be true. If
-    /// isNegated = true, then the Invariant must subset, directly or indirectly, the BooleanExpression
-    /// falseEvaluations from the Kernel library, meaning that the result is asserted to be false.if
-    /// isNegated then    specializesFromLibrary("Performances::falseEvaluations")else   
+    /// isNegated = false, then the result is asserted to be true. If isNegated = true, then the result is
+    /// asserted to be false.if isNegated then   
+    /// specializesFromLibrary("Performances::falseEvaluations")else   
     /// specializesFromLibrary("Performances::trueEvaluations")endif
     /// </summary>
     public partial interface IInvariant : IBooleanExpression

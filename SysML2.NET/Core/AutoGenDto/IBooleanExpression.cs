@@ -32,11 +32,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A BooleanExpression is a Boolean-valued Expression whose type is a Predicate. It represents a
-    /// logical condition resulting from the evaluation of the Predicate.A BooleanExpression must subset,
-    /// directly or indirectly, the Expression booleanEvaluations from the Base model library, which is
-    /// typed by the base Predicate BooleanEvaluation. As a result, a BooleanExpression must always be typed
-    /// by BooleanEvaluation or a subclass of
-    /// BooleanEvaluation.specializesFromLibrary("Performances::booleanEvaluations")
+    /// logical condition resulting from the evaluation of the
+    /// Predicate.specializesFromLibrary("Performances::booleanEvaluations")
     /// </summary>
     public partial interface IBooleanExpression : IExpression
     {

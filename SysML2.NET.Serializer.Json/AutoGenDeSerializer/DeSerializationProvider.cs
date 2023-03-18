@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializationProvider.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -157,7 +157,6 @@ namespace SysML2.NET.Serializer.Json
             { "PerformActionUsage", PerformActionUsageDeSerializer.DeSerialize },
             { "PortConjugation", PortConjugationDeSerializer.DeSerialize },
             { "PortDefinition", PortDefinitionDeSerializer.DeSerialize },
-            { "PortioningFeature", PortioningFeatureDeSerializer.DeSerialize },
             { "PortUsage", PortUsageDeSerializer.DeSerialize },
             { "Predicate", PredicateDeSerializer.DeSerialize },
             { "Redefinition", RedefinitionDeSerializer.DeSerialize },

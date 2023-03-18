@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A Structure is a Class of objects in the modeled universe that are primarily structural in nature.
-    /// While an Object is not itself behavioral, it may be involved in and acted on by Behaviors, and it
-    /// may be the performer of some of them.specializesFromLibrary"Objects::Object")
+    /// While such an object is not itself behavioral, it may be involved in and acted on by Behaviors, and
+    /// it may be the performer of some of them.specializesFromLibrary('Objects::Object')
     /// </summary>
     public partial interface IStructure : IClass
     {

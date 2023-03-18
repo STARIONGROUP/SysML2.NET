@@ -31,11 +31,13 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConcernUsage is a Usage of a ConcernDefinition.A ConcernUsage must subset, directly or indirectly,
-    /// the base ConcernUsage concernChecks from the Systems model library. The ownedStakeholder features of
-    /// the ConcernUsage shall all subset the ConcernCheck::concernedStakeholders feature. If the
-    /// ConcernUsage is an ownedFeature of a StakeholderDefinition or StakeholderUsage, then the
-    /// ConcernUsage shall have an ownedStakeholder feature that is bound to the self feature of its owner.
+    /// A ConcernUsage is a Usage of a ConcernDefinition. The ownedStakeholder features of the ConcernUsage
+    /// shall all subset the ConcernCheck::concernedStakeholders feature. If the ConcernUsage is an
+    /// ownedFeature of a StakeholderDefinition or StakeholderUsage, then the ConcernUsage shall have an
+    /// ownedStakeholder feature that is bound to the self feature of its
+    /// owner.specializesFromLibrary('Requirements::concernChecks')owningFeatureMembership <> null
+    /// andowningFeatureMembership.oclIsKindOf(FramedConcernMembership) implies   
+    /// specializesFromLibrary('Requirements::RequirementCheck::concerns')
     /// </summary>
     public partial interface IConcernUsage : IRequirementUsage
     {

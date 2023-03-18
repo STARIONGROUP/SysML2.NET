@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An OperatorExpression is an InvocationExpression whose function is determined by resolving its
-    /// operator in the context of one of the standard Function packages from the Kernel Model Library.let
+    /// operator in the context of one of the standard packages from the Kernel Function Library.let
     /// libFunctions : Sequence(Element) =     Sequence{"BaseFunctions", "DataFunctions",
     /// "ControlFunctions"}->    collect(ns | resolveGlobal(ns + "::'" + operator + "'"))
     /// inlibFunctions->includes(function)
@@ -46,8 +46,8 @@ namespace SysML2.NET.Core.POCO
         List<Expression> QueryOperand();
 
         /// <summary>
-        /// An operator symbol that names a corresponding Function from one of the standard Function packages
-        /// from the Kernel Model Library .
+        /// An operator symbol that names a corresponding Function from one of the standard packages from the
+        /// Kernel Function Library .
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         string Operator { get; set; }

@@ -34,8 +34,7 @@ namespace SysML2.NET.Core.DTO
     /// An ItemUsage is a ItemUsage whose definition is a Structure. Nominally, if the definition is an
     /// ItemDefinition, an ItemUsage is a ItemUsage of that ItemDefinition within a system. However, other
     /// kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
-    /// Libraries.An ItemUsage must specialize, directly or indirectly, the base ItemUsage items from the
-    /// Systems Model Library.itemDefinition =
+    /// Libraries.itemDefinition =
     /// occurrenceDefinition->selectByKind(ItemDefinition)specializesFromLibrary("Items::items")isComposite
     /// and owningType <> null and(owningType.oclIsKindOf(ItemDefinition) or
     /// owningType.oclIsKindOf(ItemUsage)) implies    specializesFromLibrary("Items::Item::subitem")

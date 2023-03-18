@@ -31,9 +31,13 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A FeatureReferenceExpression is an Expression whose result is bound a referent Feature. The only
-    /// members allowed for a FeatureReferenceExpression are the referent, the result and the
-    /// BindingConnector between them.
+    /// A FeatureReferenceExpression is an Expression whose result is bound to a referent Feature.referent =
+    ///    let nonParameterMemberships : Sequence(Membership) = ownedMembership->       
+    /// reject(oclIsKindOf(ParameterMembership)) in    if nonParameterMemberships->isEmpty() or       not
+    /// nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)    then null    else
+    /// nonParameterMemberships->first().memberElement.oclAsType(Feature)   
+    /// endifownedMember->selectByKind(BindingConnector)->exists(b |   
+    /// b.relatedFeatures->includes(targetFeature) and    b.relatedFeatures->includes(result))
     /// </summary>
     public partial interface IFeatureReferenceExpression : IExpression
     {

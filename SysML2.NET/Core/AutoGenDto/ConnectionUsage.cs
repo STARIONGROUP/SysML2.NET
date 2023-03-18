@@ -34,10 +34,9 @@ namespace SysML2.NET.Core.DTO
     /// A ConnectionUsage is a ConnectorAsUsage that is also a PartUsage. Nominally, if its type is a
     /// ConnectionDefinition, then a ConnectionUsage is a Usage of that ConnectionDefinition, representing a
     /// connection between parts of a system. However, other kinds of kernel AssociationStructures are also
-    /// allowed, to permit use of AssociationStructures from the Kernel Library (such as the default
-    /// BinaryLinkObject).A ConnectionUsage must subset the base ConnectionUsage connections from the
-    /// Systems model library.specializesFromLibrary("Connections::connections")ownedEndFeature->size() = 2
-    /// implies    specializesFromLibrary("Connections::binaryConnections")
+    /// allowed, to permit use of AssociationStructures from the Kernel Model
+    /// Libraries.specializesFromLibrary("Connections::connections")ownedEndFeature->size() = 2 implies   
+    /// specializesFromLibrary("Connections::binaryConnections")
     /// </summary>
     public partial class ConnectionUsage : IConnectionUsage
     {
@@ -94,7 +93,8 @@ namespace SysML2.NET.Core.DTO
         public string DeclaredShortName { get; set; }
 
         /// <summary>
-        /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
+        /// Indicates how values of this Feature are determined or used (as specified for the
+        /// FeatureDirectionKind).
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public FeatureDirectionKind? Direction { get; set; }
@@ -115,28 +115,28 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does.
+        /// cannot exist after its featuring instance no longer does.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Features.
+        /// Whether the values of this Feature can always be computed from the values of other Feature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
 
         /// <summary>
         /// For a binary Connector, whether or not the Connector should be considered to have a direction from
-        /// source to target.
+        /// sourceFeature to targetFeature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDirected { get; set; }
 
         /// <summary>
         /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain entity to a
-        /// single co-domain entity, whether or not a Multiplicity is given for it. If a Multiplicity is given
+        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
+        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
         /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
         /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
         /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
@@ -177,8 +177,8 @@ namespace SysML2.NET.Core.DTO
         public bool IsOrdered { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the
-        /// Feature&#39;s domain.
+        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
+        /// the Feature and represent the same thing as those instances.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsPortion { get; set; }
@@ -194,7 +194,7 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -238,7 +238,7 @@ namespace SysML2.NET.Core.DTO
         public Guid? OwningRelationship { get; set; }
 
         /// <summary>
-        /// The kind of portion of the instances of the occurrenceDefinition represented by this
+        /// The kind of (temporal) portion of the life of the occurrenceDefinition represented by this
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

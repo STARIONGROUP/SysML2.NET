@@ -37,8 +37,8 @@ namespace SysML2.NET.Core.DTO
     public partial interface ILiteralRational : ILiteralExpression
     {
         /// <summary>
-        /// The value whose rational approximation is the result of evaluating this Expression.The Real value
-        /// that is the result of evaluating this Expression.
+        /// The value whose rational approximation is the result of evaluating this LiteralRational.The Real
+        /// value that is the result of evaluating this Expression.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         double Value { get; set; }

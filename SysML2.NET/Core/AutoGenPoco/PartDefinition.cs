@@ -33,8 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A PartDefinition is an ItemDefinition of a Class of systems or parts of systems. Note that all parts
     /// may be considered items for certain purposes, but not all items are parts that can perform actions
-    /// within a system.A PartDefinition must specialize, directly or indirectly, the base PartDefinition
-    /// Part from the Systems Model Library.specializesFromLibrary("Parts::Part")
+    /// within a system.specializesFromLibrary("Parts::Part")
     /// </summary>
     public partial class PartDefinition : IPartDefinition
     {
@@ -239,7 +238,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

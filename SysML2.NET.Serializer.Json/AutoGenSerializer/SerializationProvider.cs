@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="SerializationProvider.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
@@ -150,7 +150,6 @@ namespace SysML2.NET.Serializer.Json
             { typeof(Core.DTO.PerformActionUsage), PerformActionUsageSerializer.Serialize },
             { typeof(Core.DTO.PortConjugation), PortConjugationSerializer.Serialize },
             { typeof(Core.DTO.PortDefinition), PortDefinitionSerializer.Serialize },
-            { typeof(Core.DTO.PortioningFeature), PortioningFeatureSerializer.Serialize },
             { typeof(Core.DTO.PortUsage), PortUsageSerializer.Serialize },
             { typeof(Core.DTO.Predicate), PredicateSerializer.Serialize },
             { typeof(Core.DTO.Redefinition), RedefinitionSerializer.Serialize },

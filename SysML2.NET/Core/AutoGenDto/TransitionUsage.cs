@@ -31,18 +31,45 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A TransitionUsage is an ActionUsage that is a behavioral Step representing a transition between
-    /// ActionUsages or StateUsages.A TransitionUsage must subset, directly or indirectly, the base
-    /// TransitionUsage transitionActions, if it is not a composite feature, or the TransitionUsage
-    /// subtransitions inherited from its owner, if it is a composite feature.A TransitionUsage may by
-    /// related to some of its ownedFeatures using TransitionFeatureMembership Relationships, corresponding
-    /// to the triggers, guards and effects of the TransitionUsage.isComposite and owningType <> null
+    /// A TransitionUsage is an ActionUsage representing a triggered transition between ActionUsages or
+    /// StateUsages. When triggered by a triggerAction, when its guardExpression is true, the
+    /// TransitionUsage asserts that its source is exited, then its effectAction (if any) is performed, and
+    /// then its target is entered.A TransitionUsage can be related to some of its ownedFeatures using
+    /// TransitionFeatureMembership Relationships, corresponding to the triggerAction, guardExpression and
+    /// effectAction of the TransitionUsage.isComposite and owningType <> null
     /// and(owningType.oclIsKindOf(ActionDefinition) or  owningType.oclIsKindOf(ActionUsage)) andnot
     /// (owningType.oclIsKindOf(StateDefinition) or     owningType.oclIsKindOf(StateUsage)) implies   
-    /// specializesFromLibrary("Actions::Action::decisionTransitionActions")specializesFromLibrary("Actions::actions::transitionActions")isComposite
-    /// and owningType <> null and(owningType.oclIsKindOf(StateDefinition) or
-    /// owningType.oclIsKindOf(StateUsage)) implies   
-    /// specializesFromLibrary("States::State::stateTransitions")
+    /// specializesFromLibrary("Actions::Action::decisionTransitionActions")isComposite and owningType <>
+    /// null and(owningType.oclIsKindOf(StateDefinition) or owningType.oclIsKindOf(StateUsage)) implies   
+    /// specializesFromLibrary("States::State::stateTransitions")specializesFromLibrary("Actions::actions::transitionActions")source
+    /// =    if ownedMembership->isEmpty() then null    else        let member : Element =            
+    /// ownedMembership->at(1).memberElement in         if not member.oclIsKindOf(ActionUsage) then null    
+    ///    else member.oclAsKindOf(ActionUsage)        endif    endiftarget =    if
+    /// succession.targetFeature->isEmpty() then null    else        let targetFeature : Feature =          
+    ///   succession.targetFeature->at(1) in        if not targetFeature.oclIsKindOf(ActionUsage) then null 
+    ///       else targetFeature.oclAsType(ActionUsage)        endif    endiftriggerAction =
+    /// ownedFeatureMembership->    selectByKind(TransitionFeatureMembership)->    select(kind =
+    /// TransitionFeatureKind::trigger).transitionFeature->    selectByKind(AcceptActionUsage)let
+    /// successions : Sequence(Successions) =     ownedMember->selectByKind(Succession)
+    /// insuccessions->notEmpty() andsuccessions->at(1).targetFeature->   
+    /// forAll(oclIsKindOf(ActionUsage))guardExpression = ownedFeatureMembership->   
+    /// selectByKind(TransitionFeatureMembership)->    select(kind =
+    /// TransitionFeatureKind::trigger).transitionFeature->   
+    /// selectByKind(Expression)triggerAction->forAll(specializesFromLibrary('Actions::TransitionAction::accepter')
+    /// andguardExpression->forAll(specializesFromLibrary('Actions::TransitionAction::guard')
+    /// andeffectAction->forAll(specializesFromLibrary('Actions::TransitionAction::effect'))triggerAction =
+    /// ownedFeatureMembership->    selectByKind(TransitionFeatureMembership)->    select(kind =
+    /// TransitionFeatureKind::trigger).transitionFeatures->   
+    /// selectByKind(AcceptActionUsage)succession.sourceFeature =
+    /// sourceownedMember->selectByKind(BindingConnector)->exists(b |    b.relatedFeatures->includes(source)
+    /// and    b.relatedFeatures->includes(inputParameter(2)))triggerAction->notEmpty() implies    let
+    /// payloadParameter : Feature = inputParameter(2) in    payloadParameter <> null and   
+    /// payloadParameter.subsetsChain(triggerAction->at(1),
+    /// triggerPayloadParameter())ownedMember->selectByKind(BindingConnector)->exists(b |   
+    /// b.relatedFeatures->includes(succession) and    b.relatedFeatures->includes(resolveGlobal(       
+    /// 'TransitionPerformances::TransitionPerformance::transitionLink')))if triggerAction->isEmpty() then  
+    ///  inputParameters()->size() >= 1else    inputParameters()->size() >= 2endif    succession =
+    /// ownedMember->selectByKind(Succession)->at(1)
     /// </summary>
     public partial class TransitionUsage : ITransitionUsage
     {
@@ -94,7 +121,8 @@ namespace SysML2.NET.Core.DTO
         public string DeclaredShortName { get; set; }
 
         /// <summary>
-        /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
+        /// Indicates how values of this Feature are determined or used (as specified for the
+        /// FeatureDirectionKind).
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public FeatureDirectionKind? Direction { get; set; }
@@ -115,21 +143,21 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after the instance of the featuringType no longer does.
+        /// cannot exist after its featuring instance no longer does.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Features.
+        /// Whether the values of this Feature can always be computed from the values of other Feature.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
 
         /// <summary>
         /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain entity to a
-        /// single co-domain entity, whether or not a Multiplicity is given for it. If a Multiplicity is given
+        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
+        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
         /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
         /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
         /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
@@ -163,8 +191,8 @@ namespace SysML2.NET.Core.DTO
         public bool IsOrdered { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the
-        /// Feature&#39;s domain.
+        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
+        /// the Feature and represent the same thing as those instances.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsPortion { get; set; }
@@ -180,7 +208,7 @@ namespace SysML2.NET.Core.DTO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -212,7 +240,7 @@ namespace SysML2.NET.Core.DTO
         public Guid? OwningRelationship { get; set; }
 
         /// <summary>
-        /// The kind of portion of the instances of the occurrenceDefinition represented by this
+        /// The kind of (temporal) portion of the life of the occurrenceDefinition represented by this
         /// OccurrenceUsage, if it is so restricted.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

@@ -31,7 +31,7 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Predicate is a Function whose result Parameter has type Boolean and multiplicity
+    /// A Predicate is a Function whose result parameter has type Boolean and multiplicity
     /// 1..1.specializesFromLibrary("Performances::BooleanEvaluation")
     /// </summary>
     public partial interface IPredicate : IFunction

@@ -32,8 +32,9 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A ViewpointDefinition is a RequirementDefinition that specifies one or more stakeholder concerns
-    /// that to be satisfied by created a view of a model.A ViewpointDefinition must subclass, directly or
-    /// indirectly, the base ViewpointDefinition Viewpoint from the Systems model library.
+    /// that are to be satisfied by creating a view of a model.viewpointStakeholder =
+    /// framedConcern.featureMemberhsip->    selectByKind(StakeholderMembership).   
+    /// ownedStakeholderParameterspecializesFromLibrary('Views::Viewpoint')
     /// </summary>
     public partial class ViewpointDefinition : IViewpointDefinition
     {
@@ -283,7 +284,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -787,7 +788,7 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementDefinition (used, e.g., to link it to
-        /// an original requirement text in some source document), derived as the modeledId for the
+        /// an original requirement text in some source document), which is the declaredShortName for the
         /// RequirementDefinition.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

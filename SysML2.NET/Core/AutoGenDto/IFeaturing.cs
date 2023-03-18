@@ -31,12 +31,11 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// Featuring is a Relationship between a Type and a Feature that is featured by that Type. Every
-    /// instance in the domain of the feature must be classified by the type. This means that sequences that
-    /// are classified by the feature must have a prefix subsequence that is classified by the
-    /// type.Featuring is abstract and does not commit to which of feature or type are the source or target.
-    /// This commitment is made in the subclasses of Featuring, TypeFeaturing and FeatureMembership, which
-    /// are directed differently.
+    /// Featuring is a Relationship between a Type and a Feature that is featured by that Type. It asserts
+    /// that every instance in the domain of the feature must be classified by the type.Featuring is
+    /// abstract and does not commit to which of feature or type are the source or target of the
+    /// Relationship. This commitment is made in the subclasses of Featuring, TypeFeaturing and
+    /// FeatureMembership, which have opposite directions.
     /// </summary>
     public partial interface IFeaturing : IRelationship
     {

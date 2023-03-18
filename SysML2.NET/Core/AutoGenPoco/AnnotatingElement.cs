@@ -32,9 +32,9 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An AnnotatingElement is an Element that provides additional description of or metadata on some other
-    /// Element. An AnnotatingElement is attached to its annotatedElement by an Annotation
-    /// Relationship.annotatedElement =  if annotation->notEmpty() then annotation.annotatedElement else
-    /// owningNamespace endif
+    /// Element. An AnnotatingElement is either attached to its annotatedElements by Annotation
+    /// Relationships, or it implicitly annotates its owningNamespace.annotatedElement =  if
+    /// annotation->notEmpty() then annotation.annotatedElement else Sequence{owningNamespace} endif
     /// </summary>
     public partial class AnnotatingElement : IAnnotatingElement
     {

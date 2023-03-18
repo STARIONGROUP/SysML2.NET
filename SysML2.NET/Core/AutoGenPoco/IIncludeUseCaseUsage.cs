@@ -34,9 +34,10 @@ namespace SysML2.NET.Core.POCO
     /// An IncludeUseCaseUsage is a UseCaseUsage that represents the inclusion of a UseCaseUsage by a
     /// UseCaseDefinition or UseCaseUsage. Unless it is the IncludeUseCaseUsage itself, the UseCaseUsage to
     /// be included is related to the includedUseCase by a ReferenceSubsetting Relationship. An
-    /// IncludeUseCaseUsage is also a PerformActionUsage, with its includedUseCase as the performedAction.If
-    /// the IncludeUseCaseUsage is owned by a UseCaseDefinition or UseCaseUsage, then it also subsets the
-    /// UseCaseUsage UseCase::includedUseCases from the Systems model library.
+    /// IncludeUseCaseUsage is also a PerformActionUsage, with its useCaseIncluded as the
+    /// performedAction.owningType <> null and(owningType.oclIsKindOf(UseCaseDefinition) or
+    /// owningType.oclIsKindOf(UseCaseUsage) implies   
+    /// specializesFromLibrary('UseCases::UseCase::includedUseCases')
     /// </summary>
     public partial interface IIncludeUseCaseUsage : IUseCaseUsage, IPerformActionUsage
     {

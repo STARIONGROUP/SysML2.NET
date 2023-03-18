@@ -33,9 +33,10 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A DecisionNode is a ControlNode that makes a selection from its outgoing
     /// Successions.targetConnector->selectByKind(Succession)->size() <=
-    /// 1specializesFromLibrary("Actions::Action::decisions")sourceConnector->selectAsKind(Succession)->   
-    /// collect(connectorEnd->at(2))->    forAll(targetMult |        multiplicityHasBounds(targetMult, 0,
-    /// 1))sourceConnector->selectByKind(Succession)->    forAll(subsetsChain(this,        
+    /// 1sourceConnector->selectAsKind(Succession)->    collect(connectorEnd->at(2))->    forAll(targetMult
+    /// |        multiplicityHasBounds(targetMult, 0,
+    /// 1))specializesFromLibrary("Actions::Action::decisions")sourceConnector->selectByKind(Succession)->  
+    ///  forAll(subsetsChain(this,        
     /// resolveGlobal("ControlPerformances::MergePerformance::outgoingHBLink")))
     /// </summary>
     public partial interface IDecisionNode : IControlNode

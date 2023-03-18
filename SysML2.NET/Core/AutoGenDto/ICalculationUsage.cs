@@ -34,10 +34,10 @@ namespace SysML2.NET.Core.DTO
     /// A CalculationUsage is an ActionUsage that is also an Expression, and, so, is typed by a Function.
     /// Nominally, if the type is a CalculationDefinition, a CalculationUsage is a Usage of that
     /// CalculationDefinition within a system. However, other kinds of kernel Functions are also allowed, to
-    /// permit use of Functions from the Kernel Library.A CalculationUsage must subset, directly or
-    /// indirectly, either the base CalculationUsage calculations from the Systems model library, if it is
-    /// not a composite feature, or the CalculationUsage subcalculations inherited from its owner, if it is
-    /// a composite feature.
+    /// permit use of Functions from the Kernel Model
+    /// Libraries.specializesFromLibrary('Calculations::calculations')owningType <> null
+    /// and(owningType.oclIsKindOf(CalculationDefinition) or owningType.oclIsKindOf(CalculationUsage))
+    /// implies    specializesFromLibrary('Calculations::Calculation::subcalculations')
     /// </summary>
     public partial interface ICalculationUsage : IActionUsage, IExpression
     {

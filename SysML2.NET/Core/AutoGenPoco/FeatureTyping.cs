@@ -33,9 +33,8 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// FeatureTyping is Specialization in which the specific Type is a Feature. This means the set of
     /// instances of the (specific) typedFeature is a subset of the set of instances of the (general) type.
-    /// In the simplest case, the type is a Classifier, whereupon the typedFeature subset has instances
-    /// interpreted as sequences ending in things (in the modeled universe) that are instances of the
-    /// Classifier.
+    /// In the simplest case, the type is a Classifier, whereupon the typedFeature has values that are
+    /// instances of the Classifier.
     /// </summary>
     public partial class FeatureTyping : IFeatureTyping
     {
@@ -285,7 +284,7 @@ namespace SysML2.NET.Core.POCO
         public Type Type { get; set; }
 
         /// <summary>
-        /// The Feature that has its Type determined by this FeatureTyping.
+        /// The Feature that has a type determined by this FeatureTyping.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Feature TypedFeature { get; set; }

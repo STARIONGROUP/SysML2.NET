@@ -398,9 +398,6 @@ namespace SysML2.NET.Dal
                 case Core.DTO.PortDefinition portDefinitionDto:
                     var portDefinitionFactory = new PortDefinitionFactory();
                     return portDefinitionFactory.Create(portDefinitionDto);
-                case Core.DTO.PortioningFeature portioningFeatureDto:
-                    var portioningFeatureFactory = new PortioningFeatureFactory();
-                    return portioningFeatureFactory.Create(portioningFeatureDto);
                 case Core.DTO.PortUsage portUsageDto:
                     var portUsageFactory = new PortUsageFactory();
                     return portUsageFactory.Create(portUsageDto);

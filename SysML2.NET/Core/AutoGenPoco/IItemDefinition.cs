@@ -34,9 +34,8 @@ namespace SysML2.NET.Core.POCO
     /// An ItemDefinition is an OccurrenceDefinition of the Structure of things that may themselves be
     /// systems or parts of systems, but may also be things that are acted on by a system or parts of a
     /// system, but which do not necessarily perform actions themselves. This includes items that can be
-    /// exchanged between parts of a system, such as water or electrical signals.An ItemDefinition must
-    /// specialize, directly or indirectly, the base ItemDefinition Items::Item from the Systems Model
-    /// Library.specializesFromLibrary("Items::Item")
+    /// exchanged between parts of a system, such as water or electrical
+    /// signals.specializesFromLibrary("Items::Item")
     /// </summary>
     public partial interface IItemDefinition : IOccurrenceDefinition, IStructure
     {

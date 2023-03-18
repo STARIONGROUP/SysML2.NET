@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A StateSubactionMembership is a FeatureMembership for an entry, do or exit ActionUsage of a
-    /// StateDefinition or StateUsage. The ownedMemberFeature of a StateSubactionMembership must be an
-    /// ActionUsage.
+    /// StateDefinition or StateUsage.owningType.oclIsKindOf(StateDefinition)
+    /// orowningType.oclIsKindOf(StateUsage)
     /// </summary>
     public partial class StateSubactionMembership : IStateSubactionMembership
     {

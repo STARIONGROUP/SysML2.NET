@@ -33,8 +33,16 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A CaseDefinition is a CalculationDefinition for a process, often involving collecting evidence or
     /// data, relative to a subject, possibly involving the collaboration of one or more other actors,
-    /// producing a result that meets an objective.A CaseDefinition must subclass, directly or indirectly,
-    /// the base CaseDefinition Case from the Systems model library.
+    /// producing a result that meets an objective.objectiveRequirement =     let objectives:
+    /// OrderedSet(RequirementUsage) =         featureMembership->           
+    /// selectByKind(ObjectiveMembership).            ownedRequirement in    if objectives->isEmpty() then
+    /// null    else objectives->first().ownedObjectiveRequirement    endiffeatureMembership->   
+    /// selectByKind(ObjectiveMembership)->    size() <= 1subjectParameter =    let subjectMems :
+    /// OrderedSet(SubjectMembership) =         featureMembership->selectByKind(SubjectMembership) in    if
+    /// subjectMems->isEmpty() then null    else subjectMems->first().ownedSubjectParameter   
+    /// endifactorParameter = featureMembership->    selectByKind(ActorMembership).   
+    /// ownedActorParameterfeatureMembership->selectByKind(SubjectMembership)->size() <= 1input->notEmpty()
+    /// and input->first() = subjectParameterspecializesFromLibrary('Cases::Case')
     /// </summary>
     public partial interface ICaseDefinition : ICalculationDefinition
     {

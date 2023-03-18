@@ -33,10 +33,12 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A PortDefinition defines a point at which external entities can connect to and interact with a
     /// system or part of a system. Any ownedUsages of a PortDefinition, other than PortUsages, must not be
-    /// composite.A PortDefinition must subclass, directly or indirectly, the base Class Port from the
-    /// Systems model library.conjugatedPortDefinition =
-    /// ownedMember->select(oclIsKindOf(ConjugatedPortDefinition))ownedUsage->    select(not
-    /// oclIsKindOf(PortUsage))->    forAll(not isComposite)
+    /// composite.conjugatedPortDefinition = let conjugatedPortDefinitions :
+    /// OrderedSet(ConjugatedPortDefinition) =    ownedMember->selectByKind(ConjugatedPortDefinition) inif
+    /// conjugatedPortDefinitions->isEmpty() then nullelse
+    /// conjugatedPortDefinitions->first()endifownedUsage->    reject(oclIsKindOf(PortUsage))->   
+    /// forAll(not isComposite)not oclIsKindOf(ConjugatedPortDefinition) implies    ownedMember->       
+    /// selectByKind(ConjugatedPortDefinition)->        size() = 1specializeFromLibrary('Ports::Port')
     /// </summary>
     public partial interface IPortDefinition : IOccurrenceDefinition, IStructure
     {

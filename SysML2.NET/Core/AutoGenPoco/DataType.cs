@@ -36,8 +36,8 @@ namespace SysML2.NET.Core.POCO
     /// DataType<ul>	<li>Cannot be distinguished when they are related to other things in exactly the same
     /// way, even when they are intended to be about different things.</li>	<li>Can be distinguished when
     /// they are related to other things in different ways, even when they are intended to be about the same
-    /// thing.</li></ul>specializesFromLibrary("Base::DataValue")ownedGeneralization.general->    forAll(not
-    /// oclIsKindOf(Class))
+    /// thing.</li></ul>specializesFromLibrary('Base::DataValue')ownedSpecialization.general->    forAll(not
+    /// oclIsKindOf(Class) and            not oclIsKindOf(Association))
     /// </summary>
     public partial class DataType : IDataType
     {
@@ -226,7 +226,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

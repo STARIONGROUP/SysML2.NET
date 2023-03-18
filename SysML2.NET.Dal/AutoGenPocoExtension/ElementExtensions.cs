@@ -294,8 +294,6 @@ namespace SysML2.NET.Dal
                     return portConjugationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PortConjugation)dto);
                 case Core.POCO.PortDefinition portDefinitionPoco:
                     return portDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PortDefinition)dto);
-                case Core.POCO.PortioningFeature portioningFeaturePoco:
-                    return portioningFeaturePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PortioningFeature)dto);
                 case Core.POCO.PortUsage portUsagePoco:
                     return portUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PortUsage)dto);
                 case Core.POCO.Predicate predicatePoco:
@@ -777,9 +775,6 @@ namespace SysML2.NET.Dal
                     break;
                 case Core.POCO.PortDefinition portDefinitionPoco:
                     portDefinitionPoco.UpdateReferenceProperties((Core.DTO.PortDefinition)dto, cache);
-                    break;
-                case Core.POCO.PortioningFeature portioningFeaturePoco:
-                    portioningFeaturePoco.UpdateReferenceProperties((Core.DTO.PortioningFeature)dto, cache);
                     break;
                 case Core.POCO.PortUsage portUsagePoco:
                     portUsagePoco.UpdateReferenceProperties((Core.DTO.PortUsage)dto, cache);
