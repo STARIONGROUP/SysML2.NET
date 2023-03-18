@@ -37,11 +37,14 @@ namespace SysML2.NET.Core.POCO
     /// that it owns.ownedElement = ownedRelationship.ownedRelatedElementowner =
     /// owningRelationship.owningRelatedElementqualifiedName =    if owningNamespace = null then null   
     /// else if owningNamespace.owner = null then escapedName()    else if owningNamespace.qualifiedName =
-    /// null then null    else owningNamespace.qualifiedName + '::' + escapedName()    endif endif
-    /// endifdocumentation = ownedElement->selectByKind(Documentation)ownedAnnotation =
-    /// ownedRelationship->selectByKind(Annotation)->    select(a | a.annotatedElement = self)name =
+    /// null or             escapedName() = null then null    else owningNamespace.qualifiedName + '::' +
+    /// escapedName()    endif endif endifdocumentation =
+    /// ownedElement->selectByKind(Documentation)ownedAnnotation = ownedRelationship->   
+    /// selectByKind(Annotation)->    select(a | a.annotatedElement = self)name =
     /// effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =
-    /// libraryNamespace() <>nullshortName = effectiveShortName()
+    /// libraryNamespace() <>nullshortName = effectiveShortName()owningNamespace =    if owningMembership =
+    /// null then null    else owningMembership.membershipOwningNamespace    endiftextualRepresentation =
+    /// ownedElement->selectByKind(TextualRepresentation)
     /// </summary>
     public partial interface IElement
     {
