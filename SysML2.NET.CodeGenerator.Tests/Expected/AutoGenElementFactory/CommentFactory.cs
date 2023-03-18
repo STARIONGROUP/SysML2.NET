@@ -57,11 +57,11 @@ namespace SysML2.NET.Dal
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
                 Body = dto.Body,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
                 ElementId = dto.ElementId,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
                 Locale = dto.Locale,
+                Name = dto.Name,
+                ShortName = dto.ShortName,
             };
 
             return poco;

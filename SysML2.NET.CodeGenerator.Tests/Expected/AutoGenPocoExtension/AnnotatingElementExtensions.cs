@@ -75,13 +75,11 @@ namespace SysML2.NET.Dal
                 poco.Annotation.Remove(poco.Annotation.Single(x => x.Id == identifier));
             }
 
-            poco.DeclaredName = dto.DeclaredName;
-
-            poco.DeclaredShortName = dto.DeclaredShortName;
-
             poco.ElementId = dto.ElementId;
 
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+
+            poco.Name = dto.Name;
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
             foreach (var identifier in ownedRelationshipToDelete)
@@ -89,6 +87,8 @@ namespace SysML2.NET.Dal
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
+
+            poco.ShortName = dto.ShortName;
 
 
             return identifiersOfObjectsToDelete;
@@ -142,13 +142,13 @@ namespace SysML2.NET.Dal
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelationship.Add((IRelationship)lazyPoco.Value);
+                    poco.OwnedRelationship.Add((Core.POCO.Relationship)lazyPoco.Value);
                 }
             }
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
             {
-                poco.OwningRelationship = (IRelationship)lazyPoco.Value;
+                poco.OwningRelationship = (Core.POCO.Relationship)lazyPoco.Value;
             }
             else
             {
@@ -173,12 +173,12 @@ namespace SysML2.NET.Dal
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;
             dto.Annotation = poco.Annotation.Select(x => x.Id).ToList();
-            dto.DeclaredName = poco.DeclaredName;
-            dto.DeclaredShortName = poco.DeclaredShortName;
             dto.ElementId = poco.ElementId;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
+            dto.Name = poco.Name;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.ShortName = poco.ShortName;
 
             return dto;
         }

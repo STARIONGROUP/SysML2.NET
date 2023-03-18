@@ -37,14 +37,11 @@ namespace SysML2.NET.Core.DTO
     /// that it owns.ownedElement = ownedRelationship.ownedRelatedElementowner =
     /// owningRelationship.owningRelatedElementqualifiedName =    if owningNamespace = null then null   
     /// else if owningNamespace.owner = null then escapedName()    else if owningNamespace.qualifiedName =
-    /// null or             escapedName() = null then null    else owningNamespace.qualifiedName + '::' +
-    /// escapedName()    endif endif endifdocumentation =
-    /// ownedElement->selectByKind(Documentation)ownedAnnotation = ownedRelationship->   
-    /// selectByKind(Annotation)->    select(a | a.annotatedElement = self)name =
-    /// effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =
-    /// libraryNamespace() <>nullshortName = effectiveShortName()owningNamespace =    if owningMembership =
-    /// null then null    else owningMembership.membershipOwningNamespace    endiftextualRepresentation =
-    /// ownedElement->selectByKind(TextualRepresentation)
+    /// null then null    else owningNamespace.qualifiedName + '::' + escapedName()    endif endif
+    /// endifdocumentation = ownedElement->selectByKind(Documentation)ownedAnnotation =
+    /// ownedRelationship->selectByKind(Annotation)->    select(a | a.annotatedElement =
+    /// self)effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =
+    /// libraryNamespace() <>null
     /// </summary>
     public partial interface IElement
     {
@@ -53,21 +50,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -87,6 +69,12 @@ namespace SysML2.NET.Core.DTO
         bool IsImpliedIncluded { get; set; }
 
         /// <summary>
+        /// The primary name of this Element.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        string Name { get; set; }
+
+        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -97,6 +85,15 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        string ShortName { get; set; }
 
     }
 }

@@ -31,13 +31,15 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A LiteralInteger is a LiteralExpression that provides an Integer value as a result. Its result
-    /// parameter must have the type Integer.
+    /// A LiteralInteger is a LiteralExpression that provides an Integer value as a result. It must have an
+    /// owned result parameter whose type is Integer.An Expression that provides an Integer value as a
+    /// result.A LiteralInteger must be typed by a specialization of Evaluation with no input parameters and
+    /// a single Integer value as its result.
     /// </summary>
     public partial interface ILiteralInteger : ILiteralExpression
     {
         /// <summary>
-        /// The Integer value that is the result of evaluating this LiteralInteger.The Integer value that is the
+        /// The Integer value that is the result of evaluating this Expression.The Integer value that is the
         /// result of evaluating this Expression.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]

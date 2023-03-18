@@ -31,83 +31,34 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Feature is a Type that classifies relations between multiple things (in the universe). The domain
-    /// of the relation is the intersection of the featuringTypes of the Feature. (The domain of a Feature
-    /// with no featuringTyps is implicitly the most general Type Base::Anything from the Kernel Semantic
-    /// Library.) The co-domain of the relation is the intersection of the types of the Feature.In the
-    /// simplest cases, the featuringTypes and types are Classifiers and the Feature relates two things, one
-    /// from the domain and one from the range. Examples include cars paired with wheels, people paired with
-    /// other people, and cars paired with numbers representing the car length.Since Features are Types,
-    /// their featuringTypes and types can be Features. In this case, the Feature effectively classifies
-    /// relations between relations, which can be interpreted as the sequence of things related by the
-    /// domain Feature concatenated with the sequence of things related by the co-domain Feature.The values
-    /// of a Feature for a given instance of its domain are all the instances of its co-domain that are
-    /// related to that domain instance by the Feature. The values of a Feature with chainingFeatures are
-    /// the same as values of the last Feature in the chain, which can be found by starting with values of
-    /// the first Feature, then using those values as domain instances to obtain valus of the second
-    /// Feature, and so on, to values of the last Feature.ownedRedefinition =
+    /// A Feature is a Type that classifies sequences of multiple things (in the universe). These must
+    /// concatenate a sequence drawn from the intersection of the Feature&#39;s featuringTypes (domain) with
+    /// a sequence drawn from the intersection of its types (co-domain), treating (co)domains as sets of
+    /// sequences. The domain of Features that do not have any featuringTypes is the same as if it were the
+    /// library Type Anything. A Feature&#39;s types include at least Anything, which can be narrowed to
+    /// other Classifiers by Redefinition.In the simplest cases, a Feature&#39;s featuringTypes and types
+    /// are Classifiers, its sequences being pairs (length = 2), with the first element drawn from the
+    /// Feature&#39;s domain and the second element from its co-domain (the Feature &quot;value&quot;).
+    /// Examples include cars paired with wheels, people paired with other people, and cars paired with
+    /// numbers representing the car length.Since Features are Types, their featuringTypes and types
+    /// can be Features. When both are, Features classify sequences of at least four elements (length &gt;
+    /// 3), otherwise at least three (length &gt; 2). The featuringTypes of nested Features are Features.The
+    /// values of a Feature with chainingFeatures are the same as values of the last Feature in the chain,
+    /// which can be found by starting with values of the first Feature, then from those values to values of
+    /// the second feature, and so on, to values of the last feature.ownedRedefinition =
     /// ownedSubsetting->selectByKind(Redefinition)ownedTypeFeaturing =
     /// ownedRelationship->selectByKind(TypeFeaturing)->    select(tf | tf.featureOfType =
-    /// self)ownedSubsetting = ownedSpecialization->selectByKind(Subsetting)ownedTyping =
-    /// ownedGeneralization->selectByKind(FeatureTyping)type =    let types : OrderedSet(Type) =
-    /// typing.type->        union(subsetting.subsettedFeature.type)->        asOrderedSet() in    if
-    /// chainingFeature->isEmpty() then types    else         types->union(chainingFeature->last().type)->  
-    ///      asOrderedSet()    endifmultiplicity <> null implies multiplicity.featuringType = featuringType
-    /// specializesFromLibrary("Base::things")chainingFeatures->excludes(self)ownedFeatureChaining =
-    /// ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
-    /// ownedFeatureChaining.chainingFeaturechainingFeatures->size() <> 1isEnd and owningType <> null
-    /// implies    let i : Integer =         owningType.ownedFeature->select(isEnd) in   
-    /// owningType.ownedSpecialization.general->        forAll(supertype |            let ownedEndFeatures :
-    /// Sequence(Feature) =                 supertype.ownedFeature->select(isEnd) in           
-    /// ownedEndFeatures->size() >= i implies               
-    /// redefines(ownedEndFeatures->at(i))ownedMembership->    selectByKind(FeatureValue)->    forAll(fv |
-    /// specializes(fv.value.result))isEnd and owningType <> null andowningType.oclIsKindOf(Association)
-    /// implies    specializesFromLibrary("Links::Link::participants")isComposite
-    /// andownedTyping.type->includes(oclIsKindOf(Structure)) andowningType <> null
-    /// and(owningType.oclIsKindOf(Structure) or owningType.type->includes(oclIsKindOf(Structure))) implies 
-    ///   specializesFromLibrary("Occurrence::Occurrence::suboccurrences")owningType <> null
-    /// and(owningType.oclIsKindOf(LiteralExpression) or owningType.oclIsKindOf(FeatureReferenceExpression))
-    /// implies    if owningType.oclIsKindOf(LiteralString) then       
-    /// specializesFromLibrary("ScalarValues::String")    else if owningType.oclIsKindOf(LiteralBoolean)
-    /// then        specializesFromLibrary("ScalarValues::Boolean")    else if
-    /// owningType.oclIsKindOf(LiteralInteger) then        specializesFromLibrary("ScalarValues::Rational") 
-    ///   else if owningType.oclIsKindOf(LiteralBoolean) then       
-    /// specializesFromLibrary("ScalarValues::Rational")    else if owningType.oclIsKindOf(LiteralBoolean)
-    /// then        specializesFromLibrary("ScalarValues::Real")    else specializes(       
-    /// owningType.oclAsType(FeatureReferenceExpression).referent)    endif endif endif endif
-    /// endifownedTyping.type->exists(selectByKind(Class)) implies   
-    /// specializesFromLibrary("Occurrences::occurrences")isComposite
-    /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
-    /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
-    /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
-    /// specializesFromLibrary("Occurrence::Occurrence::suboccurrences")ownedTyping.type->exists(selectByKind(DataType))
-    /// implies    specializesFromLibary("Base::dataValues")owningType <> null
-    /// andowningType.oclIsKindOf(ItemFlowEnd) andowningType.ownedFeature->at(1) = self implies    let
-    /// flowType : Type = owningType.owningType in    flowType <> null implies        let i : Integer =     
-    ///        flowType.ownedFeature.indexOf(owningType) in        (i = 1 implies            
-    /// redefinesFromLibrary("Transfers::Transfer::source::sourceOutput")) and        (i = 2 implies        
-    ///    redefinesFromLibrary("Transfers::Transfer::source::targetInput"))                 owningType <>
-    /// null and(owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step)) implies    let i :
-    /// Integer =         owningType.ownedFeature->select(direction <> null) in   
-    /// owningType.ownedSpecialization.general->        forAll(supertype |            let ownedParameters :
-    /// Sequence(Feature) =                 supertype.ownedFeature->select(direction <> null) in           
-    /// ownedParameters->size() >= i implies               
-    /// redefines(ownedParameters->at(i))ownedTyping.type->exists(selectByKind(Structure)) implies   
-    /// specializesFromLibary("Objects::objects")owningType <> null and(owningType.oclIsKindOf(Function) and
-    ///    self = owningType.oclAsType(Function).result or owningType.oclIsKindOf(Expression) and    self =
-    /// owningType.oclAsType(Expression).result) implies    owningType.ownedSpecialization.general->       
-    /// select(oclIsKindOf(Function) or oclIsKindOf(Expression))->        forAll(supertype |           
-    /// redefines(                if superType.oclIsKindOf(Function) then                   
-    /// superType.oclAsType(Function).result                else                   
-    /// superType.oclAsType(Expression).result                endif)ownedFeatureInverting =
-    /// ownedRelationship->selectByKind(FeatureInverting)->    select(fi | fi.featureInverted =
-    /// self)featuringType =    let featuringTypes : OrderedSet(Type) =        
-    /// typeFeaturing.featuringType->asOrderedSet() in    if chainingFeature->isEmpty() then featuringTypes 
-    ///   else        featuringTypes->            union(chainingFeature->first().featuringType)->           
-    /// asOrderedSet()    endifownedReferenceSubsetting =    let referenceSubsettings :
-    /// OrderedSet(ReferenceSubsetting) =        ownedSubsetting->selectByKind(ReferenceSubsetting) in    if
-    /// referenceSubsettings->isEmpty() then null    else referenceSubsettings->first()
-    /// endifownedSubsetting->selectByKind(ReferenceSubsetting)->size() <= 1
+    /// self)ownedSubsetting = ownedGeneralization->selectByKind(Subsetting)isComposite =
+    /// owningFeatureMembership <> null and owningFeatureMembership.isCompositeownedTyping =
+    /// ownedGeneralization->selectByKind(FeatureTyping)isEnd = owningFeatureMembership <> null and
+    /// owningFeatureMembership.oclIsKindOf(EndFeatureMembership)multiplicity <> null implies
+    /// multiplicity.featuringType = featuringType
+    /// allSupertypes()->includes(KernelLibrary::things)chainingFeatures->excludes(self)ownedFeatureChaining
+    /// = ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
+    /// ownedFeatureChaining.chainingFeaturechainingfeatureChainings->notEmpty() implies
+    /// (owningFeatureMembership <> null implies owningFeatureMembership.isDerived)chainingFeatures->size()
+    /// <> 1inverseFeature = invertingFeatureInverting.featureInverseinvertedFeature =
+    /// invertedFeatureInverting.featureInverted
     /// </summary>
     public partial class Feature : IFeature
     {
@@ -127,7 +78,7 @@ namespace SysML2.NET.Core.POCO
             this.IsReadOnly = false;
             this.IsSufficient = false;
             this.IsUnique = true;
-            this.OwnedRelationship = new List<IRelationship>();
+            this.OwnedRelationship = new List<Relationship>();
         }
 
         /// <summary>
@@ -152,21 +103,6 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The declared name of this Element.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
-
-        /// <summary>
-        /// An optional alternative name for the Element that is intended to be shorter or in some way more
-        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
-        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
-        /// model or relative to some other context.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
-
-        /// <summary>
         /// Queries the derived property DifferencingType
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
@@ -185,8 +121,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Indicates how values of this Feature are determined or used (as specified for the
-        /// FeatureDirectionKind).
+        /// Determines how values of this Feature are determined or used (see FeatureDirectionKind).
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public FeatureDirectionKind? Direction { get; set; }
@@ -198,6 +133,15 @@ namespace SysML2.NET.Core.POCO
         public List<Documentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property EffectiveName
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string QueryEffectiveName()
+        {
+            throw new NotImplementedException("Derived property EffectiveName not yet supported");
         }
 
         /// <summary>
@@ -306,7 +250,7 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after the instance of the featuringType no longer does..
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
@@ -321,15 +265,15 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
 
         /// <summary>
         /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
+        /// multiplicity of the Feature.An end Feature is always considered to map each domain entity to a
+        /// single co-domain entity, whether or not a Multiplicity is given for it. If a Multiplicity is given
         /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
         /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
         /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
@@ -374,8 +318,8 @@ namespace SysML2.NET.Core.POCO
         public bool IsOrdered { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
-        /// the Feature and represent the same thing as those instances.
+        /// Whether the values of this Feature are contained in the space and time of instances of the
+        /// Feature&#39;s domain.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsPortion { get; set; }
@@ -391,7 +335,7 @@ namespace SysML2.NET.Core.POCO
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
         /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// all four wheeled things would need to be cars. However, if the type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -407,7 +351,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property Member
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryMember()
+        public List<Element> QueryMember()
         {
             throw new NotImplementedException("Derived property Member not yet supported");
         }
@@ -431,13 +375,10 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property Name
+        /// The primary name of this Element.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryName()
-        {
-            throw new NotImplementedException("Derived property Name not yet supported");
-        }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// Queries the derived property Output
@@ -488,7 +429,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedElement
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryOwnedElement()
+        public List<Element> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
@@ -542,7 +483,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedImport
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IImport> QueryOwnedImport()
+        public List<Import> QueryOwnedImport()
         {
             throw new NotImplementedException("Derived property OwnedImport not yet supported");
         }
@@ -560,7 +501,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedMember
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryOwnedMember()
+        public List<Element> QueryOwnedMember()
         {
             throw new NotImplementedException("Derived property OwnedMember not yet supported");
         }
@@ -596,7 +537,7 @@ namespace SysML2.NET.Core.POCO
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
-        public List<IRelationship> OwnedRelationship { get; set; }
+        public List<Relationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property OwnedSpecialization
@@ -647,7 +588,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property Owner
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement QueryOwner()
+        public Element QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
@@ -683,7 +624,7 @@ namespace SysML2.NET.Core.POCO
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IRelationship OwningRelationship { get; set; }
+        public Relationship OwningRelationship { get; set; }
 
         /// <summary>
         /// Queries the derived property OwningType
@@ -704,13 +645,13 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property ShortName
+        /// An optional alternative name for the Element that is intended to be shorter or in some way more
+        /// succinct than its primary name. It may act as a modeler-specified identifier for the Element, though
+        /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
+        /// model or relative to some other context.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryShortName()
-        {
-            throw new NotImplementedException("Derived property ShortName not yet supported");
-        }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ShortName { get; set; }
 
         /// <summary>
         /// Queries the derived property TextualRepresentation
@@ -724,7 +665,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Type
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Type> QueryType()
         {
             throw new NotImplementedException("Derived property Type not yet supported");

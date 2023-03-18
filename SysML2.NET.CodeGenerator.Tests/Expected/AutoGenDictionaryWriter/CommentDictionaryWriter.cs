@@ -110,13 +110,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("aliasIds", commentInstance.AliasIds);
             dictionary.Add("annotation", $"[ {string.Join(",", commentInstance.Annotation)} ]");
             dictionary.Add("body", commentInstance.Body);
-            dictionary.Add("declaredName", commentInstance.DeclaredName);
-            dictionary.Add("declaredShortName", commentInstance.DeclaredShortName);
             dictionary.Add("elementId", commentInstance.ElementId);
             dictionary.Add("isImpliedIncluded", commentInstance.IsImpliedIncluded);
             dictionary.Add("locale", commentInstance.Locale);
+            dictionary.Add("name", commentInstance.Name);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", commentInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", commentInstance.OwningRelationship.ToString());
+            dictionary.Add("shortName", commentInstance.ShortName);
 
             return dictionary;
         }
@@ -146,13 +146,13 @@ namespace SysML2.NET.Serializer.Dictionary
             dictionary.Add("aliasIds", commentInstance.AliasIds);
             dictionary.Add("annotation", commentInstance.Annotation);
             dictionary.Add("body", commentInstance.Body);
-            dictionary.Add("declaredName", commentInstance.DeclaredName);
-            dictionary.Add("declaredShortName", commentInstance.DeclaredShortName);
             dictionary.Add("elementId", commentInstance.ElementId);
             dictionary.Add("isImpliedIncluded", commentInstance.IsImpliedIncluded);
             dictionary.Add("locale", commentInstance.Locale);
+            dictionary.Add("name", commentInstance.Name);
             dictionary.Add("ownedRelationship", commentInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", commentInstance.OwningRelationship);
+            dictionary.Add("shortName", commentInstance.ShortName);
 
             return dictionary;
         }

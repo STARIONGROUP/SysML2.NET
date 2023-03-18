@@ -31,21 +31,32 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An Import is an Relationship between its importOwningNamespace and either a Membership (for a
-    /// MembershipImport) or another Namespace (for a NamespaceImport), which determines a set of
-    /// Memberships that become importedMemberships of the importOwningNamespace. If isImportAll = false
-    /// (the default), then only public Memberships are considered &quot;visible&quot;. If isImportAll =
-    /// true, then all Memberships are considered &quot;visible&quot;, regardless of their declared
-    /// visibility. If isRecursive = true, then visible Memberships are also recursively imported from owned
-    /// sub-Namespaces.
+    /// An Import is a Relationship between an importOwningNamespace in which one or more of the visible
+    /// Memberships of the importedNamespace become importedMemberships of the importOwningNamespace. If
+    /// isImportAll = false (the default), then only public Memberships are considered &quot;visible&quot;.
+    /// If isImportAll = true, then all Memberships are considered &quot;visible&quot;, regardless of their
+    /// declared visibility.If no importedMemberName is given, then all visible Memberships are imported
+    /// from the importedNamespace. If isRecursive = true, then visible Memberships are also recursively
+    /// imported from all visible ownedMembers of the Namespace that are also Namespaces.If an 
+    /// importedMemberName is given, then the Membership whose effectiveMemberName is that name is imported
+    /// from the importedNamespace, if it is visible. If isRecursive = true and the imported memberElement
+    /// is a Namespace, then visible Memberships are also recursively imported from that Namespace and its
+    /// owned sub-Namespaces.
     /// </summary>
     public partial interface IImport : IRelationship
     {
         /// <summary>
-        /// Queries the derived property ImportedElement
+        /// The effectiveMemberName of the Membership of the importedNamspace to be imported. If not given, all
+        /// public Memberships of the importedNamespace are imported.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        IElement QueryImportedElement();
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        string ImportedMemberName { get; set; }
+
+        /// <summary>
+        /// The Namespace whose visible members are imported by this Import.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Namespace ImportedNamespace { get; set; }
 
         /// <summary>
         /// Queries the derived property ImportOwningNamespace
@@ -60,7 +71,7 @@ namespace SysML2.NET.Core.POCO
         bool IsImportAll { get; set; }
 
         /// <summary>
-        /// Whether to recursively import Memberships from visible, owned sub-Namespaces.
+        /// Whether to recursively import Memberships from visible, owned sub-namespaces.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsRecursive { get; set; }
