@@ -1,6 +1,9 @@
-# SysML2.NET
+# SysML2.NET - GSEF
 
-SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release). SysML2.NET provides a number of libraries in the form on an SDK as well as reference implementation such as a web-application and REST API.
+SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release). SysML2.NET provides a number of libraries in the form on an SDK fixed
+on release 2022-09 to support the GSEF implementation
+
+> THIS BRANCH SHALL NOT BE MERGED INTO DEVELOPMENT OR MASTER. ITS PURPOSE IS TO SUPPORT GSEF
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
@@ -22,13 +25,8 @@ project                                                                         
 --------------------------------------------------------------------------------------------------- | ------------
 [SysML2.NET](https://www.nuget.org/packages/SysML2.NET)                                             | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET)](https://buildstats.info/nuget/SysML2.NET)
 [SysML2.NET.Serializer.Json](https://www.nuget.org/packages/SysML2.NET.Serializer.Json)             | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.Serializer.Json)](https://buildstats.info/nuget/SysML2.NET.Serializer.Json)
-[SysML2.NET.Serializer.Dictionary](https://www.nuget.org/packages/SysML2.NET.Serializer.Dictionary) | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.Serializer.Dictionary)](https://www.nuget.org/packages/SysML2.NET.Serializer.Dictionary#readme-body-tab)
 [SysML2.NET.REST](https://www.nuget.org/packages/SysML2.NET.REST)                                   | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.REST)](https://buildstats.info/nuget/SysML2.NET.REST)
 [SysML2.NET.DAL](https://www.nuget.org/packages/SysML2.NET.DAL)                                   | [![NuGet Badge](https://buildstats.info/nuget/SysML2.NET.DAL)](https://buildstats.info/nuget/SysML2.NET.DAL)
-
-The reference web-application is available on [docker-hub](https://hub.docker.com/r/rheagroup/sysml2.net.viewer). A demo-version is hosted at http://viewer.sysml2.net.
-
-The generated HTML based meta-model documentation is availabe on [docker-hub](https://hub.docker.com/r/rheagroup/sysml2.net.docs). A live version is available at https://modeldocs.sysml2.net. 
 
 ## Build Status
 
@@ -42,7 +40,3 @@ Development | ![Build Status](https://github.com/RHEAGROUP/SysML2.NET/actions/wo
 # License
 
 The SysML2.NET libraries and reference web-application are provided to the community under the Apache License 2.0. The solution contains files that contain information about the SysML2 metamodel which are distributed with the [GNU Lesser General Public License (LGPL) v3.0](https://opensource.org/licenses/LGPL-3.0).
-
-# Contributions
-
-Contributions to the code-base are welcome. However, before we can accept your contributions we ask any contributor to sign the Contributor License Agreement (CLA) and send this digitaly signed to s.gerene@rheagroup.com. You can find the CLA's in the CLA folder.
