@@ -73,18 +73,6 @@
 	  <None Update="Templates\dal-poco-extensions.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Templates\dto-serializer-dictionary-reader-provider-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serializer-dictionary-reader-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serializer-dictionary-writer-provider-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serializer-dictionary-writer-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
 	  <None Update="Templates\ecore-to-dot.hbs">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
