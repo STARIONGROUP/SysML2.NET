@@ -3,7 +3,7 @@
   <PropertyGroup>
       <TargetFramework>netstandard2.0</TargetFramework>
       <Version>0.10.0-GSEF</Version>
-      <Description>A .NET implementation of the OMG SysML v2 specification data-acces-layer.</Description>
+      <Description>A .NET implementation of the OMG SysML v2 specification data-acces-layer to support GSEF.</Description>
       <PackageId>SysML2.NET.Dal</PackageId>
       <Company>RHEA System S.A.</Company>
       <Copyright>Copyright 2022-2023 RHEA System S.A.</Copyright>

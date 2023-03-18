@@ -37,6 +37,17 @@ Branch | Build Status
 Master | ![Build Status](https://github.com/RHEAGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
 Development | ![Build Status](https://github.com/RHEAGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
 
+## RELEASE
+
+>NOTE: SPECIFIC DETAILS FOR THIS 2022-09 BRANCH TO SUPPORT GSEF DEVELOPMENT
+
+dotnet pack -c Release -o .
+
+dotnet nuget push SysML2.NET.0.10.0-GSEF.nupkg --source https://nuget.pkg.github.com/RHEAGROUP/index.json --api-key "your-api-key"
+dotnet nuget push SysML2.NET.Dal.0.10.0-GSEF.nupkg --source https://nuget.pkg.github.com/RHEAGROUP/index.json --api-key "your-api-key"
+dotnet nuget push SysML2.NET.REST.0.10.0-GSEF.nupkg --source https://nuget.pkg.github.com/RHEAGROUP/index.json --api-key "your-api-key"
+dotnet nuget push SysML2.NET.Serializer.Json.0.10.0-GSEF.nupkg --source https://nuget.pkg.github.com/RHEAGROUP/index.json --api-key "your-api-key"
+
 # License
 
 The SysML2.NET libraries and reference web-application are provided to the community under the Apache License 2.0. The solution contains files that contain information about the SysML2 metamodel which are distributed with the [GNU Lesser General Public License (LGPL) v3.0](https://opensource.org/licenses/LGPL-3.0).
