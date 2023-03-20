@@ -23,14 +23,16 @@ namespace SysML2.NET.API
     using System;
     using System.IO;
     using System.Threading.Tasks;
+	
     using Autofac.Extensions.DependencyInjection;
+	
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
 
     /// <summary>
     /// Command line application that servers as entry point for the application
     /// </summary>
-    public class Program
+    public static class Program
     {
         /// <summary>
         /// Entry point of the application
