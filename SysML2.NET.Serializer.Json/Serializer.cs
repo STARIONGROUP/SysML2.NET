@@ -20,14 +20,16 @@
 
 namespace SysML2.NET.Serializer.Json
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
-
+    
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO;
+    using SysML2.NET.Serializer.Json.PIM;
 
     /// <summary>
     /// The purpose of the <see cref="Serializer"/> is to write an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
@@ -58,9 +60,18 @@ namespace SysML2.NET.Serializer.Json
 
                 foreach (var element in elements)
                 {
-                    var serializationAction = SerializationProvider.Provide(element.GetType());
-                    serializationAction(element, writer, serializationModeKind);
-                    writer.Flush();
+                    try
+                    {
+                        var serializationAction = ApiSerializationProvider.Provide(element.GetType());
+                        serializationAction(element, writer, serializationModeKind);
+                        writer.Flush();
+                    }
+                    catch (NotSupportedException)
+                    {
+                        var serializationAction = SerializationProvider.Provide(element.GetType());
+                        serializationAction(element, writer, serializationModeKind);
+                        writer.Flush();
+                    }
                 }
 
                 writer.WriteEndArray();
@@ -88,9 +99,18 @@ namespace SysML2.NET.Serializer.Json
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
-                var serializationAction = SerializationProvider.Provide(element.GetType());
-                serializationAction(element, writer, serializationModeKind);
-                writer.Flush();
+                try
+                {
+                    var serializationAction = ApiSerializationProvider.Provide(element.GetType());
+                    serializationAction(element, writer, serializationModeKind);
+                    writer.Flush();
+                }
+                catch (NotSupportedException)
+                {
+                    var serializationAction = SerializationProvider.Provide(element.GetType());
+                    serializationAction(element, writer, serializationModeKind);
+                    writer.Flush();
+                }
             }
         }
 
@@ -120,9 +140,18 @@ namespace SysML2.NET.Serializer.Json
 
                 foreach (var element in elements)
                 {
-                    var serializationAction = SerializationProvider.Provide(element.GetType());
-                    serializationAction(element, writer, serializationModeKind);
-                    await writer.FlushAsync(cancellationToken);
+                    try
+                    {
+                        var serializationAction = ApiSerializationProvider.Provide(element.GetType());
+                        serializationAction(element, writer, serializationModeKind);
+                        await writer.FlushAsync(cancellationToken);
+                    }
+                    catch (NotSupportedException)
+                    {
+                        var serializationAction = SerializationProvider.Provide(element.GetType());
+                        serializationAction(element, writer, serializationModeKind);
+                        await writer.FlushAsync(cancellationToken);
+                    }
                 }
 
                 writer.WriteEndArray();
@@ -153,9 +182,18 @@ namespace SysML2.NET.Serializer.Json
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
-                var serializationAction = SerializationProvider.Provide(element.GetType());
-                serializationAction(element, writer, serializationModeKind);
-                await writer.FlushAsync(cancellationToken);
+                try
+                {
+                    var serializationAction = ApiSerializationProvider.Provide(element.GetType());
+                    serializationAction(element, writer, serializationModeKind);
+                    await writer.FlushAsync(cancellationToken);
+                }
+                catch (NotSupportedException)
+                {
+                    var serializationAction = SerializationProvider.Provide(element.GetType());
+                    serializationAction(element, writer, serializationModeKind);
+                    await writer.FlushAsync(cancellationToken);
+                }
             }
         }
     }

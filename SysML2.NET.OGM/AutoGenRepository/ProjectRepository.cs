@@ -109,9 +109,8 @@ namespace SysML2.NET.OGM.Repository
             var projects = this.CreateData();
 
             List<IData> things = new List<IData>();
-
-            //TODO: uncomment when serializer also supports API object
-            //things.AddRange(projects);
+            
+            things.AddRange(projects);
 
             this.logger.LogDebug("read {result} Project objects in {elapsed} [ms] from the graph", things.Count(), sw.ElapsedMilliseconds);
 
@@ -130,13 +129,19 @@ namespace SysML2.NET.OGM.Repository
         {
             var project_1 = new Project
             {
-                Id = Guid.Parse("6bd3c4cd-ba39-4cde-bcb1-0f16d95dfbcf"),
-                Name = "project 1"
+                Id = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
+                Alias = new List<string> { "project alias 1", "project alias 2" },
+                DefaultBranch = Guid.Parse("a910a705-7fbe-415f-9cbb-624bfadf6c20"),
+                Description = "this is a description",
+                Name = "test project",
             };
-
+            
             var project_2 = new Project
             {
                 Id = Guid.Parse("0cde5143-0ac1-47c8-950f-050f1cdef3a5"),
+                Alias = new List<string> { "project alias 1", "project alias 2" },
+                DefaultBranch = Guid.Parse("8c65591a-5024-4aee-bb8d-3458a113fe7c"),
+                Description = "this is a description",
                 Name = "project 2"
             };
 

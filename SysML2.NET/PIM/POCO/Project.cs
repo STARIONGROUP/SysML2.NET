@@ -45,6 +45,11 @@ namespace SysML2.NET.PIM.POCO
         }
 
         /// <summary>
+        /// Gets or sets the human readable name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets the set of <see cref="DataIdentity"/> records corresponding to the <see cref="IData"/>
         /// contained in the <see cref="Project"/>
         /// </summary>

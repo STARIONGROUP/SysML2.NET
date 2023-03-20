@@ -40,7 +40,7 @@ namespace SysML2.NET.Serializer.Json.Tests
 
         private PartDefinition partDefinitionWithNullProperties;
 
-		[SetUp]
+        [SetUp]
         public void SetUp()
         {
             this.serializer = new Serializer();
@@ -50,34 +50,34 @@ namespace SysML2.NET.Serializer.Json.Tests
 
         private void CreateTestData()
         {
-	        this.partDefinition = new PartDefinition
-	        {
-		        Id = Guid.NewGuid(),
-		        IsIndividual = true,
-		        IsVariation = false,
-		        IsAbstract = false,
-		        IsSufficient = false,
-		        AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-		        DeclaredName = "PartDefinition:DeclaredName",
-		        OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-		        OwningRelationship = Guid.NewGuid(),
-		        DeclaredShortName = "PartDefinition:DeclaredShortName"
-	        };
+            this.partDefinition = new PartDefinition
+            {
+                Id = Guid.NewGuid(),
+                IsIndividual = true,
+                IsVariation = false,
+                IsAbstract = false,
+                IsSufficient = false,
+                AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
+                DeclaredName = "PartDefinition:DeclaredName",
+                OwnedRelationship = new List<Guid> { Guid.NewGuid() },
+                OwningRelationship = Guid.NewGuid(),
+                DeclaredShortName = "PartDefinition:DeclaredShortName"
+            };
 
-	        this.partDefinitionWithNullProperties = new PartDefinition
-	        {
-		        Id = Guid.NewGuid(),
-		        IsIndividual = true,
-		        IsVariation = false,
-		        IsAbstract = false,
-		        IsSufficient = false,
-		        AliasIds = new List<string>(),
-		        DeclaredName = null,
-		        OwnedRelationship = new List<Guid>(),
-		        OwningRelationship = Guid.NewGuid(),
-		        DeclaredShortName = null
-	        };
-		}
+            this.partDefinitionWithNullProperties = new PartDefinition
+            {
+                Id = Guid.NewGuid(),
+                IsIndividual = true,
+                IsVariation = false,
+                IsAbstract = false,
+                IsSufficient = false,
+                AliasIds = new List<string>(),
+                DeclaredName = null,
+                OwnedRelationship = new List<Guid>(),
+                OwningRelationship = Guid.NewGuid(),
+                DeclaredShortName = null
+            };
+        }
 
         [Test]
         public void Verify_that_Elements_can_be_serialized()
@@ -104,7 +104,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             Console.WriteLine(json);
             
             stream = new MemoryStream();
-            Assert.That(() => this.serializer.Serialize(partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
+            Assert.That(() => this.serializer.Serialize(this.partDefinition, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
 
             json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);

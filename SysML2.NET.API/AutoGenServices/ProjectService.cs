@@ -86,9 +86,9 @@ namespace SysML2.NET.API.Services
                 return;
             }
 
-            this.AfterCreate(project);
+            await this.projectRepository.Create(project);
 
-            throw new NotImplementedException();
+            this.AfterCreate(project);
         }
 
         /// <summary>
