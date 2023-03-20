@@ -21,6 +21,7 @@
 namespace SysML2.NET.API
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Threading.Tasks;
 	
@@ -32,6 +33,7 @@ namespace SysML2.NET.API
     /// <summary>
     /// Command line application that servers as entry point for the application
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class Program
     {
         /// <summary>

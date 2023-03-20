@@ -20,13 +20,12 @@
 
 namespace SysML2.NET.API
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using Autofac;
 
     using Carter;
-    
-    using SysML2.NET.Serializer.Json;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -37,10 +36,12 @@ namespace SysML2.NET.API
 
     using SysML2.NET.API.Services;
     using SysML2.NET.OGM.Repository;
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// The <see cref="StartUp"/> used to configure the application
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class StartUp
     {
         /// <summary>
