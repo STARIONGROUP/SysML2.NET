@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+    
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Description>A .NET implementation of the REST/HTTP Platform-specific model (PSM) of the SysML v2 API and Services.</Description>
+        <Company>RHEA System S.A.</Company>
+        <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <Authors>Sam Gerené</Authors>
+        <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+         <ImplicitUsings>false</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Carter" Version="7.0.1" />
+        <PackageReference Include="FluentValidation" Version="11.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
+      <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="AutoGenModules\" />
+      <Folder Include="AutoGenRegistration\" />
+      <Folder Include="AutoGenServices\" />
+      <Folder Include="CachingService\" />
+      <Folder Include="Modules\" />
+      <Folder Include="RouteConstraints\" />
+    </ItemGroup>
+
+</Project>
