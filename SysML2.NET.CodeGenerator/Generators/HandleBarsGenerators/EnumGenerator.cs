@@ -32,7 +32,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     /// <summary>
     /// A Handlebars based enum code generator
     /// </summary>
-    public class EnumGenerator : HandleBarsGenerator
+    public class EnumGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EEnum"/> instances

@@ -34,7 +34,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     /// <summary>
     /// A Handlebars based POCO code generator
     /// </summary>
-    public class PocoGenerator : HandleBarsGenerator
+    public class PocoGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> POCO instances

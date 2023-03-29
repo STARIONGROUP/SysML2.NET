@@ -33,8 +33,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 	/// <summary>
 	/// A Handlebars based DAL Factory code generator
 	/// </summary>
-	public class DalFactoryGenerator : HandleBarsGenerator
-	{
+	public class DalFactoryGenerator : EcoreHandleBarsGenerator
+    {
 		/// <summary>
 		/// Generates the <see cref="EClass"/> static serializers
 		/// for each <see cref="EPackage"/>

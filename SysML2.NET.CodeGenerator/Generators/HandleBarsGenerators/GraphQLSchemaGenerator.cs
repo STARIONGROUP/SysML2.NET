@@ -32,8 +32,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 	/// <summary>
 	/// A Handlebars based GraphQL Schema generator
 	/// </summary>
-	public class GraphQLSchemaGenerator : HandleBarsGenerator
-	{
+	public class GraphQLSchemaGenerator : EcoreHandleBarsGenerator
+    {
 		/// <summary>
 		/// Generates the <see cref="EClass"/> static serializers
 		/// for each <see cref="EPackage"/>

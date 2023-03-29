@@ -34,7 +34,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     /// <summary>
     /// A Handlebars based DTO code generator
     /// </summary>
-    public class DtoGenerator : HandleBarsGenerator
+    public class DtoGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> instances

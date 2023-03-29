@@ -32,8 +32,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 	/// <summary>
 	/// A Handlebars based ecore to html docs generator
 	/// </summary>
-	public class HtmlDocsGenerator : HandleBarsGenerator
-	{
+	public class HtmlDocsGenerator : EcoreHandleBarsGenerator
+    {
 		/// <summary>
 		/// Generates the HTML docs of the datatypes, enums and classes
 		/// </summary>

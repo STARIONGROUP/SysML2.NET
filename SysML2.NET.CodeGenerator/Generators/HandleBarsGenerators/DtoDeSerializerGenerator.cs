@@ -33,7 +33,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     /// <summary>
     /// A Handlebars based DTO JSON deserializer code generator
     /// </summary>
-    public class DtoDeSerializerGenerator : HandleBarsGenerator
+    public class DtoDeSerializerGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> static serializers

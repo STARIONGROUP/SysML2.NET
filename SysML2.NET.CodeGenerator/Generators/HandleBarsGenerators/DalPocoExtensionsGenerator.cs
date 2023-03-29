@@ -33,7 +33,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     /// <summary>
     /// A Handlebars based DAL POCO Extensions code generator
     /// </summary>
-    public class DalPocoExtensionsGenerator : HandleBarsGenerator
+    public class DalPocoExtensionsGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> static poco extensions for the DAL library
