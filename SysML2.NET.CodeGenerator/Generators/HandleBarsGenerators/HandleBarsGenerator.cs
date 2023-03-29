@@ -22,7 +22,6 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
     using System.Collections.Generic;
     using System.IO;
-
     using HandlebarsDotNet;
     using HandlebarsDotNet.Helpers;
     

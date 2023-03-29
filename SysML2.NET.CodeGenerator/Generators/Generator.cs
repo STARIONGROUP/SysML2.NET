@@ -18,16 +18,14 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using System.Text;
-
 namespace SysML2.NET.CodeGenerator.Generators
 {
+    using System;
     using System.IO;
     using System.Reflection;
+    using System.Text;
     using System.Threading.Tasks;
-
-    using ECoreNetto;
-
+    
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Formatting;
@@ -50,21 +48,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// Gets the path where the template are stored
         /// </summary>
         public string TemplateFolderPath { get; private set; }
-
-        /// <summary>
-        /// Generates code specific to the concrete implementation
-        /// </summary>
-        /// <param name="package">
-        /// the <see cref="EPackage"/> that contains the Ecore data to generate from
-        /// </param>
-        /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
-        /// </param>
-        /// <returns>
-        /// an awaitable <see cref="Task"/>
-        /// </returns>
-        public abstract Task Generate(EPackage package, DirectoryInfo outputDirectory);
-
+        
         /// <summary>
         /// perform code cleanup
         /// </summary>

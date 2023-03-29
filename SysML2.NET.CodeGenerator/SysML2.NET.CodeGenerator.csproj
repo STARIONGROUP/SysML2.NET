@@ -22,9 +22,19 @@
 		<PackageReference Include="ECoreNetto.HandleBars" Version="1.0.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
+		<PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.3" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="datamodel\openapi-extensions.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="datamodel\openapi-x.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="datamodel\openapi.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="datamodel\SysML.ecore">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
