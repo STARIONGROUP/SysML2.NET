@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IProjectRepository.cs" company="RHEA System S.A.">
+// <copyright file="IBranchRepository.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,10 +18,6 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------
-
 namespace SysML2.NET.OGM.Repository
 {
     using System;
@@ -33,15 +29,15 @@ namespace SysML2.NET.OGM.Repository
     using SysML2.NET.PIM.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="IProjectRepository"/> is to interact with the DGraph database
+    /// The purpose of the <see cref="IBranchRepository"/> is to interact with the DGraph database
     /// </summary>
-    public interface IProjectRepository
+    public interface IBranchRepository
     {
         /// <summary>
-        /// Create a new instance of <see cref="Project"/> in the DGraph database
+        /// Create a new instance of <see cref="Branch"/> in the DGraph database
         /// </summary>
-        /// <param name="project">
-        /// The subject <see cref="Project"/> that is to be created.
+        /// <param name="branch">
+        /// The subject <see cref="Branch"/> that is to be created.
         /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> that can be used to cancel the operation
@@ -49,7 +45,7 @@ namespace SysML2.NET.OGM.Repository
         /// <returns>
         /// A <see cref="Task"/>
         /// </returns>
-        Task Create(Project project, CancellationToken cancellationToken);
+        Task Create(Branch branch, CancellationToken cancellationToken);
 
         /// <summary>
         /// Reads <see cref="IEnumerable{IData}"/> from the DGraph database
@@ -73,7 +69,3 @@ namespace SysML2.NET.OGM.Repository
         Task<List<IData>> Read(Guid identifier, int page, int count, CancellationToken cancellationToken);
     }
 }
-
-// ------------------------------------------------------------------------------------------------
-// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
-// ------------------------------------------------------------------------------------------------

@@ -30,6 +30,7 @@ namespace SysML2.NET.API.Services
     
     using SysML2.NET.Common;
     using SysML2.NET.PIM.DTO;
+    using System.Threading;
 
     /// <summary>
     /// The purpose of the <see cref="IProjectService"/> is to perform CRUD operations and to provide
@@ -43,10 +44,13 @@ namespace SysML2.NET.API.Services
         /// <param name="project">
         /// The subject <see cref="Project"/> that is to be created.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that can be used to cancel the operation
+        /// </param>
         /// <returns>
         /// A <see cref="Task"/>
         /// </returns>
-        Task Create(Project project);
+        Task Create(Project project, CancellationToken cancellationToken);
 
         /// <summary>
         /// Reads <see cref="IEnumerable{IData}"/>
@@ -61,10 +65,13 @@ namespace SysML2.NET.API.Services
         /// <param name="count">
         /// The number of results per page
         /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that can be used to cancel the operation
+        /// </param>
         /// <remarks>
         /// An <see cref="IEnumerable{IData}"/>
         /// </remarks>
-        Task<IEnumerable<IData>> Read(Guid identifier, int page, int count);
+        Task<List<IData>> Read(Guid identifier, int page, int count, CancellationToken cancellationToken);
     }
 }
 

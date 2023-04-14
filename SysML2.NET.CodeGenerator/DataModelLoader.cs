@@ -23,10 +23,13 @@ namespace SysML2.NET.CodeGenerator
     using System;
     using System.IO;
     using System.Linq;
+    using System.Net.Http;
     using System.Reflection;
 
     using ECoreNetto;
     using ECoreNetto.Resource;
+
+    using OpenApi.Model;
 
     /// <summary>
     /// The purpose of the <see cref="DataModelLoader"/> is to load the SysML data-model
@@ -79,6 +82,25 @@ namespace SysML2.NET.CodeGenerator
                 eClassifier.EOperations.Clear();
                 eClassifier.EOperations.AddRange(eOperations);
             }
+        }
+
+        /// <summary>
+        /// Loads the SysML v2 Open API.json specification
+        /// </summary>
+        /// <returns>
+        /// an instance of <see cref="OpenApiDocument"/>
+        /// </returns>
+        public static Document LoadOpenApi()
+        {
+            var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var ecoreFileName = Path.Combine(assemblyFolder, "datamodel", "openapi.json");
+
+            using var stream = new FileStream(ecoreFileName,  FileMode.Open, FileAccess.Read);
+
+            var deserializer = new OpenApi.DeSerializer();
+            var document = deserializer.DeSerialize(stream);
+
+            return document;
         }
     }
 }

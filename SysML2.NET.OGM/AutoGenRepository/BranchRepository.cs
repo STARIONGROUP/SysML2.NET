@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="ProjectService.cs" company="RHEA System S.A.">
+// <copyright file="BranchRepository.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -22,58 +22,44 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.Services
+namespace SysML2.NET.OGM.Repository
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
     using Microsoft.Extensions.Logging;
 
-    using OGM.Repository;
-
-    using SysML2.NET.API.DataService;
     using SysML2.NET.Common;
     using SysML2.NET.PIM.DTO;
+    
 
     /// <summary>
-    /// The purpose of the <see cref="ProjectService"/> is to perform CRUD operations and to provide
-    /// before and after hooks to inject custom service logic
+    /// The purpose of the <see cref="BranchRepository"/> is to interact with the DGraph database
     /// </summary>
-    public partial class ProjectService : DataService, IProjectService
+    public class BranchRepository : DataRepository, IBranchRepository
     {
-        /// <summary>
-        /// The (injected) <see cref="ILogger"/>
-        /// </summary>
-        private readonly ILogger<ProjectService> logger;
+        private readonly ILogger<BranchRepository> logger;
 
         /// <summary>
-        /// The (injected) <see cref="IProjectRepository"/> used to access the DGraph database
-        /// </summary>
-        private readonly IProjectRepository projectRepository;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectService"/> class
+        /// Initializes new instance of the <see cref="BranchRepository"/> class.
         /// </summary>
         /// <param name="logger">
-        /// The (injected) <see cref="ILogger{ProjectService}"/>
+        /// The (injected) <see cref="ILogger{BranchRepository}"/>
         /// </param>
-        /// <param name="projectRepository">
-        /// The (injected) <see cref="IProjectRepository"/> used to access the DGraph database
-        /// </param>
-        public ProjectService(ILogger<ProjectService> logger, IProjectRepository projectRepository)
+        public BranchRepository(ILogger<BranchRepository> logger)
         {
             this.logger = logger;
-            this.projectRepository = projectRepository;
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="Project"/>
+        /// Create a new instance of <see cref="Branch"/> in the DGraph database
         /// </summary>
-        /// <param name="project">
-        /// The subject <see cref="Project"/> that is to be created.
+        /// <param name="branch">
+        /// The subject <see cref="Branch"/> that is to be created.
         /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> that can be used to cancel the operation
@@ -81,22 +67,22 @@ namespace SysML2.NET.API.Services
         /// <returns>
         /// A <see cref="Task"/>
         /// </returns>
-        public async Task Create(Project project, CancellationToken cancellationToken)
+        public async Task Create(Branch branch, CancellationToken cancellationToken)
         {
-            var continueAfterHook = await this.BeforeCreate(project, cancellationToken);
-            
+            var continueAfterHook = await this.BeforeCreate(branch, cancellationToken);
+
             if (!continueAfterHook)
             {
                 return;
             }
 
-            await this.projectRepository.Create(project, cancellationToken);
+            throw new NotImplementedException("implement Branch create on DGraph");
 
-            await this.AfterCreate(project, cancellationToken);
+            await this.AfterCreate(branch, cancellationToken);
         }
 
         /// <summary>
-        /// Reads <see cref="List{IData}"/>
+        /// Reads <see cref="IEnumerable{IData}"/> from the DGraph database
         /// </summary>
         /// <param name="identifier">
         /// The list of <see cref="Guid"/> to read from the database (the list acts as a filter).
@@ -122,12 +108,61 @@ namespace SysML2.NET.API.Services
             {
                 return await Task.FromResult(Enumerable.Empty<IData>().ToList());
             }
-            
-            var dataItems = await this.projectRepository.Read(identifier, page, count, cancellationToken);
-            
-            await this.AfterRead(dataItems, identifier, page, count, cancellationToken);
 
-            return dataItems;
+            var sw = new Stopwatch();
+            this.logger.LogDebug("begin transaction to read Branch objects from the DGraph");
+
+            // open transaction
+
+            this.logger.LogDebug("start reading Branch objects from DGraph");
+
+            // read data from graph-db
+            var branches = this.CreateData();
+
+            List<IData> things = new List<IData>();
+
+            things.AddRange(branches);
+
+            this.logger.LogDebug("read {result} Project objects in {elapsed} [ms] from the graph", things.Count(), sw.ElapsedMilliseconds);
+
+            // close transaction
+
+            await this.AfterRead(things, identifier, page, count, cancellationToken);
+
+            return await Task.FromResult(things);
+        }
+
+        /// <summary>
+        /// Creates dummy data to test with until a proper DGraph connection can be made
+        /// </summary>
+        /// <returns>
+        /// a list of <see cref="Branch"/>
+        /// </returns>
+        private List<Branch> CreateData()
+        {
+            var branch_1 = new Branch
+            {
+                Id = Guid.Parse("a6ba210d32a94c2986fe3b9a92f88133"),
+                Alias = new List<string> { "branch alias 1", "branch alias 2" },
+                CreationTimestamp = new DateTime(1976, 08, 20),
+                //DefaultBranch = Guid.Parse("a910a705-7fbe-415f-9cbb-624bfadf6c20"),
+                Description = "this is a description for branch 1",
+                Name = "master",
+            };
+
+            var branch_2 = new Branch
+            {
+                Id = Guid.Parse("d9077028cf1e4845b8a2569ce8e31722"),
+                Alias = new List<string> { "branch alias 1", "branch alias 2" },
+                CreationTimestamp = new DateTime(1976, 08, 20),
+                //DefaultBranch = Guid.Parse("8c65591a-5024-4aee-bb8d-3458a113fe7c"),
+                Description = "this is a description for branch 2",
+                Name = "development"
+            };
+
+            List<Branch> branches = new List<Branch> { branch_1, branch_2 };
+
+            return branches;
         }
     }
 }

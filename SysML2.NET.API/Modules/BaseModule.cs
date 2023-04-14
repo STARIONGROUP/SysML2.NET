@@ -47,12 +47,12 @@ namespace SysML2.NET.API.Modules
         /// <summary>
         /// The (injected) <see cref="ISerializer"/>
         /// </summary>
-        private readonly ISerializer serializer;
+        protected readonly ISerializer serializer;
 
         /// <summary>
         /// The (injected) <see cref="ISerializer"/>
         /// </summary>
-        private readonly IDeSerializer deserializer;
+        protected readonly IDeSerializer deserializer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseModule"/>
@@ -88,14 +88,54 @@ namespace SysML2.NET.API.Modules
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> used for serialization
         /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that can be used to cancel the operation
+        /// </param>
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        protected async Task WriteResultsToResponse(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, HttpResponse response, JsonWriterOptions jsonWriterOptions)
+        protected async Task WriteResultsToResponse(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, HttpResponse response, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
-            var cts = new CancellationTokenSource();
-            var cancellationToken = cts.Token;
+            var sw = Stopwatch.StartNew();
 
+            var dtoTypeName = this.GetType().Name.Replace("Module", string.Empty);
+            
+            response.ContentType = "application/json";
+            this.logger.LogDebug("start serializing {dtoTypeName} objects to result Stream", dtoTypeName);
+
+            var resultStream = new MemoryStream();
+            await this.serializer.SerializeAsync(dataItems, serializationModeKind, resultStream, jsonWriterOptions, cancellationToken);
+
+            this.logger.LogDebug("{dtoTypeName} objects serialized to stream in {elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
+
+            resultStream.Seek(0, SeekOrigin.Begin);
+
+            await resultStream.CopyToAsync(response.Body, cancellationToken);
+        }
+
+        /// <summary>
+        /// Writes the <see cref="IEnumerable{IData}"/> to the <see cref="HttpResponse.Body"/>
+        /// </summary>
+        /// <param name="dataItem">
+        /// The <see cref="IEnumerable{IData}"/> to write to <see cref="HttpResponse"/>
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// The <see cref="SerializationModeKind"/> to use
+        /// </param>
+        /// <param name="response">
+        /// The <see cref="HttpResponse"/> to which the <see cref="IEnumerable{Thing}"/> are written
+        /// </param>
+        /// <param name="jsonWriterOptions">
+        /// The <see cref="JsonWriterOptions"/> used for serialization
+        /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that can be used to cancel the operation
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        protected async Task WriteResultToResponse(IData dataItem, SerializationModeKind serializationModeKind, HttpResponse response, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        {
             var sw = Stopwatch.StartNew();
 
             var dtoTypeName = this.GetType().Name.Replace("Module", string.Empty);
@@ -104,9 +144,9 @@ namespace SysML2.NET.API.Modules
             this.logger.LogDebug("start serializing {dtoTypeName} objects to result Stream", dtoTypeName);
 
             var resultStream = new MemoryStream();
-            await this.serializer.SerializeAsync(dataItems, serializationModeKind, resultStream, jsonWriterOptions, cancellationToken);
+            await this.serializer.SerializeAsync(dataItem, serializationModeKind, resultStream, jsonWriterOptions, cancellationToken);
 
-            this.logger.LogDebug("{dtoTypeName} objects serialized to stream in {elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
+            this.logger.LogDebug("{dtoTypeName} object serialized to stream in {elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
 
             resultStream.Seek(0, SeekOrigin.Begin);
 

@@ -1,0 +1,66 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="DtoPsmRestGenerator.cs" company="RHEA System S.A.">
+// 
+//   Copyright 2022-2023 RHEA System S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+// 
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
+{
+    using System.IO;
+    using System.Threading.Tasks;
+
+    using OpenApi.Model;
+
+    /// <summary>
+    /// The purpose of the <see cref="DtoPsmRestGenerator"/> is to generate DTO's as specified by the REST PSM
+    /// SysML v2 OpenOPI specification
+    /// </summary>
+    public class DtoPsmRestGenerator : OpenApiGenerator
+    {
+        /// <summary>
+        /// Generates code specific to the concrete implementation
+        /// </summary>
+        /// <param name="document">
+        /// the <see cref="OpenApiDocument"/> that contains the specification to generate from
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo"/>
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        public override Task Generate(Document document, DirectoryInfo outputDirectory)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Register the custom helpers
+        /// </summary>
+        protected override void RegisterHelpers()
+        {
+        }
+
+        /// <summary>
+        /// Register the code templates
+        /// </summary>
+        protected override void RegisterTemplates()
+        {
+            this.RegisterTemplate("dto-psm-rest-class-template");
+        }
+    }
+}

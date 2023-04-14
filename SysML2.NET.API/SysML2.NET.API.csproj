@@ -29,9 +29,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="AutoGenModules\" />
       <Folder Include="AutoGenRegistration\" />
       <Folder Include="CachingService\" />
-      <Folder Include="Modules\" />
       <Folder Include="DataService\" />
     </ItemGroup>
 

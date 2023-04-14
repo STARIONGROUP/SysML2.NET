@@ -28,6 +28,7 @@ namespace SysML2.NET.OGM.Repository
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     
     using Microsoft.Extensions.Logging;
@@ -54,26 +55,29 @@ namespace SysML2.NET.OGM.Repository
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="Project"/> in the Neo4j database
+        /// Create a new instance of <see cref="Project"/> in the DGraph database
         /// </summary>
         /// <param name="project">
         /// The subject <see cref="Project"/> that is to be created.
         /// </param>
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that can be used to cancel the operation
+        /// </param>
         /// <returns>
-        /// A <see cref="Task"/>
+        /// A awaitable <see cref="Task"/>
         /// </returns>
-        public async Task Create(Project project)
+        public async Task Create(Project project, CancellationToken cancellationToken)
         {
-            this.BeforeCreate(project, out var abortCreate);
+            var continueAfterHook = await this.BeforeCreate(project, cancellationToken);
 
-            if (abortCreate)
+            if (!continueAfterHook)
             {
                 return;
             }
+            
+            throw new NotImplementedException("implement Project create on DGraph");
 
-            this.AfterCreate(project);
-
-            throw new NotImplementedException();
+            await this.AfterCreate(project, cancellationToken);
         }
 
         /// <summary>
@@ -89,21 +93,27 @@ namespace SysML2.NET.OGM.Repository
         /// <param name="count">
         /// The number of results per page
         /// </param>
-        public async Task<IEnumerable<IData>> Read(Guid identifier, int page, int count)
+        /// <param name="cancellationToken">
+        /// The <see cref="CancellationToken"/> that can be used to cancel the operation
+        /// </param>
+        /// <remarks>
+        /// An <see cref="List{IData}"/>
+        /// </remarks>
+        public async Task<List<IData>> Read(Guid identifier, int page, int count, CancellationToken cancellationToken)
         {
-            this.BeforeRead(identifier, page, count, out var abortRead);
+            var continueAfterHook = await this.BeforeRead(identifier, page, count, cancellationToken);
 
-            if (abortRead)
+            if (!continueAfterHook)
             {
-                return await Task.FromResult(Enumerable.Empty<IData>());
+                return await Task.FromResult(Enumerable.Empty<IData>().ToList());
             }
-
+            
             var sw = new Stopwatch();
-            this.logger.LogDebug("begin transaction to read Project objects from the graph");
+            this.logger.LogDebug("begin transaction to read Project objects from the DGraph");
 
             // open transaction
 
-            this.logger.LogDebug("start reading Project objects from graph");
+            this.logger.LogDebug("start reading Project objects from DGraph");
 
             // read data from graph-db
             var projects = this.CreateData();
@@ -116,15 +126,17 @@ namespace SysML2.NET.OGM.Repository
 
             // close transaction
 
-            this.AfterRead(things, identifier, page, count);
+            await this.AfterRead(things, identifier, page, count, cancellationToken);
 
             return await Task.FromResult(things);
         }
 
         /// <summary>
-        /// Creates dummy data to test with until a proper dgraph connetion can be made
+        /// Creates dummy data to test with until a proper DGraph connection can be made
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// a list of <see cref="Project"/>
+        /// </returns>
         private List<Project> CreateData()
         {
             var project_1 = new Project
