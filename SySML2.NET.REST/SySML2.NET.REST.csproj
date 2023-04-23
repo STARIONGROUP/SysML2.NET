@@ -15,7 +15,7 @@
       <Authors>Sam Gerené</Authors>
       <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageReleaseNotes>
-          [Update] to SysML2.NET.Serializer.Json version 0.9.0
+          [Update] to SysML2.NET.Serializer.Json version 0.11.0
           [Add] PackageReadmeFile and PackageIcon
       </PackageReleaseNotes>
       <PackageIcon>cdp4-icon.png</PackageIcon>

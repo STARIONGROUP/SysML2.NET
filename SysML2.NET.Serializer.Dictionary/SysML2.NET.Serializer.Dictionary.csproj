@@ -14,10 +14,9 @@
       <Authors>Sam Gerené</Authors>
       <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageReleaseNotes>
-          [Update] folder structure
+          [Update] folder structure and Refactor namespaces
           [Update] to SysML2.NET version 0.11.0
           [Add] PackageReadmeFile and PackageIcon
-          [Refactor] namespaces
       </PackageReleaseNotes>
       <PackageIcon>cdp4-icon.png</PackageIcon>
       <PackageReadmeFile>README.md</PackageReadmeFile>
