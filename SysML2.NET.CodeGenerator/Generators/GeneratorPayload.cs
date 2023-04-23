@@ -20,49 +20,49 @@
 
 namespace SysML2.NET.CodeGenerator.Generators
 {
-	using System.Collections.Generic;
-	using System.Linq;
-	
-	using ECoreNetto;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	/// <summary>
-	/// represents the payload for the generators that require all <see cref="EEnum"/>,
-	/// <see cref="EDataType"/> and <see cref="EClass"/>
-	/// </summary>
-	public class GeneratorPayload
-	{
-		/// <summary>
-		/// initializes an instance of the <see cref="GeneratorPayload"/> class.
-		/// </summary>
-		/// <param name="enums">
-		/// the <see cref="EEnum"/>s in the data model
-		/// </param>
-		/// <param name="dataTypes">
-		/// the <see cref="EDataType"/>s in the data model
-		/// </param>
-		/// <param name="classes">
-		/// the <see cref="EClass"/>es in the data model
-		/// </param>
-		public GeneratorPayload(IEnumerable<EEnum> enums, IEnumerable<EDataType> dataTypes, IEnumerable<EClass> classes)
-		{
-			this.Enums = enums.ToArray();
-			this.DataTypes = dataTypes.ToArray();
-			this.Classes = classes.ToArray();
-		}
+    using ECoreNetto;
 
-		/// <summary>
-		/// Gets the array of <see cref="EEnum"/>
-		/// </summary>
-		public EEnum[] Enums { get; private set; }
+    /// <summary>
+    /// represents the payload for the generators that require all <see cref="EEnum"/>,
+    /// <see cref="EDataType"/> and <see cref="EClass"/>
+    /// </summary>
+    public class GeneratorPayload
+    {
+        /// <summary>
+        /// initializes an instance of the <see cref="GeneratorPayload"/> class.
+        /// </summary>
+        /// <param name="enums">
+        /// the <see cref="EEnum"/>s in the data model
+        /// </param>
+        /// <param name="dataTypes">
+        /// the <see cref="EDataType"/>s in the data model
+        /// </param>
+        /// <param name="classes">
+        /// the <see cref="EClass"/>es in the data model
+        /// </param>
+        public GeneratorPayload(IEnumerable<EEnum> enums, IEnumerable<EDataType> dataTypes, IEnumerable<EClass> classes)
+        {
+            this.Enums = enums.ToArray();
+            this.DataTypes = dataTypes.ToArray();
+            this.Classes = classes.ToArray();
+        }
 
-		/// <summary>
-		/// Gets the array of <see cref="EDataType"/>
-		/// </summary>
-		public EDataType[] DataTypes { get; private set; }
+        /// <summary>
+        /// Gets the array of <see cref="EEnum"/>
+        /// </summary>
+        public EEnum[] Enums { get; private set; }
 
-		/// <summary>
-		/// Gets the array of <see cref="EClass"/>
-		/// </summary>
-		public EClass[] Classes { get; private set; }
-	}
+        /// <summary>
+        /// Gets the array of <see cref="EDataType"/>
+        /// </summary>
+        public EDataType[] DataTypes { get; private set; }
+
+        /// <summary>
+        /// Gets the array of <see cref="EClass"/>
+        /// </summary>
+        public EClass[] Classes { get; private set; }
+    }
 }

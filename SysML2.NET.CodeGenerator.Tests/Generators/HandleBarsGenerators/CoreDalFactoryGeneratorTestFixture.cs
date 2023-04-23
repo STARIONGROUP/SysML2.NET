@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoGeneratorTestGenerator.cs" company="RHEA System S.A.">
+// <copyright file="CoreDalFactoryGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -29,12 +29,15 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
+    /// <summary>
+    /// Suite of tests for the <see cref="CoreDalFactoryGenerator"/> class
+    /// </summary>
     [TestFixture]
-    public class DtoGeneratorTestGenerator
+    public class CoreDalFactoryGeneratorTestFixture
     {
-        private DirectoryInfo dtoDirectoryInfo;
+        private DirectoryInfo dalFactoryDirectoryInfo;
 
-        private DtoGenerator dtoGenerator;
+        private CoreDalFactoryGenerator dalFactoryGenerator;
 
         private EPackage rootPackage;
 
@@ -43,43 +46,33 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenDto");
+            dalFactoryDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Dal.Core.AutoGenElementFactory");
 
             rootPackage = DataModelLoader.Load();
 
-            dtoGenerator = new DtoGenerator();
+            dalFactoryGenerator = new CoreDalFactoryGenerator();
         }
 
         [Test]
-        public void verify_dto_interfaces_are_generated()
+        public void Verify_that_POCO_Element_factory_is_generated()
         {
-            Assert.That(async () => await dtoGenerator.GenerateInterfaces(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await this.dalFactoryGenerator.GenerateElementDalFactory(rootPackage, dalFactoryDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test]
-        public void verify_dto_classes_are_generated()
+        public void Verify_that_POCO_factories_are_generated()
         {
-            Assert.That(async () => await dtoGenerator.GenerateClasses(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await this.dalFactoryGenerator.GeneratePocoFactories(rootPackage, dalFactoryDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
-        public async Task Verify_that_expected_dto_classes_are_generated_correctly(string className)
+        public async Task Verify_that_POCO_factories_are_generated_as_expected(string className)
         {
-            var generatedCode = await this.dtoGenerator.GenerateClass(rootPackage, dtoDirectoryInfo, className);
+            var generatedCode = await this.dalFactoryGenerator.GeneratePocoFactory(rootPackage, dalFactoryDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDto/{className}.cs"));
-
-            Assert.That(generatedCode, Is.EqualTo(expected));
-        }
-
-        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses)), Category("Expected")]
-        public async Task Verify_that_expected_dto_interfaces_are_generated_correctly(string className)
-        {
-            var generatedCode = await this.dtoGenerator.GenerateInterface(rootPackage, dtoDirectoryInfo, className);
-
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDto/I{className}.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenElementFactory/{className}Factory.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

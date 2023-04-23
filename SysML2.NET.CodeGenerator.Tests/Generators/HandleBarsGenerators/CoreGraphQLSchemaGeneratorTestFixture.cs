@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoSerializerGeneratorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="CoreGraphQLSchemaGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -29,11 +29,11 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
     [TestFixture]
-    public class DtoSerializerGeneratorTestFixture
+    public class CoreGraphQLSchemaGeneratorTestFixture
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private DtoSerializerGenerator dtoSerializerGenerator;
+        private CoreGraphQLSchemaGenerator graphQlSchemaGenerator;
 
         private EPackage rootPackage;
 
@@ -42,24 +42,17 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenSerializer");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.OGM.Core.AutoGenGraphQLSchema");
 
             rootPackage = DataModelLoader.Load();
 
-            dtoSerializerGenerator = new DtoSerializerGenerator();
+            this.graphQlSchemaGenerator = new CoreGraphQLSchemaGenerator();
         }
 
         [Test]
-        public void verify_dto_serializers_are_generated()
+        public void verify_GraphQL_Schema_Are_generated()
         {
-            Assert.That(async () => await dtoSerializerGenerator.GenerateSerializers(rootPackage, dtoDirectoryInfo),
-                Throws.Nothing);
-        }
-
-        [Test]
-        public void verify_SerializationProvider_is_generated()
-        {
-            Assert.That(async () => await dtoSerializerGenerator.GenerateSerializationProvider(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await graphQlSchemaGenerator.Generate(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
     }

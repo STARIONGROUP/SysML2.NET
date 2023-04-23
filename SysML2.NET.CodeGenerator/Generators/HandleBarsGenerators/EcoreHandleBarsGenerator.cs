@@ -24,6 +24,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using System.Threading.Tasks;
 
     using ECoreNetto;
+    using SysML2.NET.CodeGenerator.Generators;
 
     /// <summary>
     /// Abstract super class from which all ecore based <see cref="HandlebarsDotNet"/> generators

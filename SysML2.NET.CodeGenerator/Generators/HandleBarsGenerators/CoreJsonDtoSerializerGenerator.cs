@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoSerializerGenerator.cs" company="RHEA System S.A.">
+// <copyright file="CoreJsonDtoSerializerGenerator.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
 //
@@ -30,10 +30,10 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
-	/// <summary>
-	/// A Handlebars based DTO JSON serializer code generator
-	/// </summary>
-	public class DtoSerializerGenerator : EcoreHandleBarsGenerator
+    /// <summary>
+    /// A Handlebars based DTO JSON serializer code generator
+    /// </summary>
+    public class CoreJsonDtoSerializerGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> static serializers
@@ -68,7 +68,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public async Task GenerateSerializers(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-serializer-template"];
+            var template = this.Templates["core-json-dto-serializer-template"];
 
             foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
             {
@@ -96,7 +96,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public async Task GenerateSerializationProvider(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-serialization-provider-template"];
+            var template = this.Templates["core-json-dto-serialization-provider-template"];
 
             var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
 
@@ -128,8 +128,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("dto-serializer-template");
-            this.RegisterTemplate("dto-serialization-provider-template");
+            this.RegisterTemplate("core-json-dto-serializer-template");
+            this.RegisterTemplate("core-json-dto-serialization-provider-template");
         }
     }
 }

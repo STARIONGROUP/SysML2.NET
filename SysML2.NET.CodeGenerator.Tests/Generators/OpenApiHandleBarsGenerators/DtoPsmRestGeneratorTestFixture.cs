@@ -44,7 +44,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.OpenApiHandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenDto");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.PSM.REST.AutoGenDto");
 
             openApiDocument = DataModelLoader.LoadOpenApi();
 

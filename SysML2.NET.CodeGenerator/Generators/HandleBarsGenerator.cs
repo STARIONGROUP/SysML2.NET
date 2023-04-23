@@ -18,13 +18,13 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
+namespace SysML2.NET.CodeGenerator.Generators
 {
     using System.Collections.Generic;
     using System.IO;
     using HandlebarsDotNet;
     using HandlebarsDotNet.Helpers;
-    
+
     /// <summary>
     /// Abstract super class from which all <see cref="HandlebarsDotNet"/> generators
     /// need to derive
@@ -41,15 +41,15 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected HandleBarsGenerator()
         {
-            this.Templates = new Dictionary<string, HandlebarsTemplate<object, object>>();
+            Templates = new Dictionary<string, HandlebarsTemplate<object, object>>();
 
-            this.Handlebars = HandlebarsDotNet.Handlebars.CreateSharedEnvironment();
-            HandlebarsHelpers.Register(this.Handlebars);
+            Handlebars = HandlebarsDotNet.Handlebars.CreateSharedEnvironment();
+            HandlebarsHelpers.Register(Handlebars);
 
-            this.RegisterHelpers();
-            this.RegisterTemplates();
+            RegisterHelpers();
+            RegisterTemplates();
         }
-        
+
         /// <summary>
         /// Gets the registered <see cref="HandlebarsTemplate{TContext,TData}"/>
         /// </summary>
@@ -73,13 +73,13 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </param>
         protected void RegisterTemplate(string name)
         {
-            var templatePath = Path.Combine(this.TemplateFolderPath, $"{name}.hbs");
+            var templatePath = Path.Combine(TemplateFolderPath, $"{name}.hbs");
 
             var template = File.ReadAllText(templatePath);
 
             var compiledTemplate = Handlebars.Compile(template);
 
-            this.Templates.Add(name, compiledTemplate);
+            Templates.Add(name, compiledTemplate);
         }
     }
 }

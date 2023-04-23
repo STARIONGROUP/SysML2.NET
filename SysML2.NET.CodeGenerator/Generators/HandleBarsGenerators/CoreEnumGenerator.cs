@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="EnumGenerator.cs" company="RHEA System S.A.">
+// <copyright file="CoreEnumGenerator.cs" company="RHEA System S.A.">
 //
 //   Copyright 2022-2023 RHEA System S.A.
 //
@@ -32,7 +32,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     /// <summary>
     /// A Handlebars based enum code generator
     /// </summary>
-    public class EnumGenerator : EcoreHandleBarsGenerator
+    public class CoreEnumGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EEnum"/> instances
@@ -49,7 +49,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["enum-template"];
+            var template = this.Templates["core-enum-template"];
 
             foreach (var eEnum in package.EClassifiers.OfType<EEnum>())
             {
@@ -76,7 +76,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("enum-template");
+            this.RegisterTemplate("core-enum-template");
         }
     }
 }

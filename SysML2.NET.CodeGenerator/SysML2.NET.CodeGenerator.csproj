@@ -17,6 +17,7 @@
       <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
       <IsPackable>false</IsPackable>
       <PreserveCompilationContext>true</PreserveCompilationContext>
+      <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
   </PropertyGroup>
 
     <ItemGroup>
@@ -78,6 +79,51 @@
       <None Update="Resources\HtmlDocs\css\rheaclassdocs.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Templates\core-dal-element-extensions.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-dal-poco-extensions.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-dto-class-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-dto-interface-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-element-dal-factory.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-enum-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-json-dto-deserialization-provider-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-json-dto-deserializer-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-json-dto-serialization-provider-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-json-dto-serializer-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-json-enum-deserializer-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-ogm-graphql-schema.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-poco-class-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-poco-dal-factory.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-poco-interface-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Templates\dal-element-extensions.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -87,16 +133,16 @@
       <None Update="Templates\dto-psm-rest-class-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\dto-serializer-dictionary-reader-provider-template.hbs">
+      <None Update="Templates\core-dictionary-dto-serializer-reader-provider-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\dto-serializer-dictionary-reader-template.hbs">
+      <None Update="Templates\core-dictionary-dto-serializer-reader-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\dto-serializer-dictionary-writer-provider-template.hbs">
+      <None Update="Templates\core-dictionary-dto-serializer-writer-provider-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\dto-serializer-dictionary-writer-template.hbs">
+      <None Update="Templates\core-dictionary-dto-serializer-writer-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\ecore-to-dot.hbs">

@@ -20,16 +20,15 @@
 
 namespace SysML2.NET.CodeGenerator.Generators
 {
-    using System;
     using System.IO;
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
-    
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Formatting;
-    
+
     /// <summary>
     /// Abstract class from which all generators derive
     /// </summary>

@@ -22,8 +22,9 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
     using System.IO;
     using System.Threading.Tasks;
-    
+
     using OpenApi.Model;
+    using SysML2.NET.CodeGenerator.Generators;
 
     /// <summary>
     /// The purpose of the <see cref="OpenApiGenerator"/> is to generate ode as specified by the REST PSM

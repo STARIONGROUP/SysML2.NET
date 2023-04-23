@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="EnumHandlebarGeneratorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="DtoDeSerializerGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -29,11 +29,11 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
     [TestFixture]
-    public class EnumGeneratorTestFixture
+    public class CoreJsonDtoDeSerializerGeneratorTestFixture
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private EnumGenerator enumGenerator;
+        private CoreJsonDtoDeSerializerGenerator dtoDeSerializerGenerator;
 
         private EPackage rootPackage;
 
@@ -42,17 +42,31 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenEnum");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Serializer.Json.Core.AutoGenDeSerializer");
 
             rootPackage = DataModelLoader.Load();
 
-            enumGenerator = new EnumGenerator();
+            dtoDeSerializerGenerator = new CoreJsonDtoDeSerializerGenerator();
         }
 
         [Test]
-        public void verify_enum_are_generated()
+        public void verify_enum_deserializers_are_generated()
         {
-            Assert.That(async () => await enumGenerator.Generate(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await dtoDeSerializerGenerator.GenerateEnumDeSerializers(rootPackage, dtoDirectoryInfo),
+                Throws.Nothing);
+        }
+
+        [Test]
+        public void verify_dto_deserializers_are_generated()
+        {
+            Assert.That(async () => await dtoDeSerializerGenerator.GenerateDtoDeSerializers(rootPackage, dtoDirectoryInfo),
+                Throws.Nothing);
+        }
+
+        [Test]
+        public void verify_DeSerializationProvider_is_generated()
+        {
+            Assert.That(async () => await dtoDeSerializerGenerator.GenerateDeSerializationProvider(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
     }

@@ -20,40 +20,40 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
-	using System.IO;
+    using System.IO;
 
-	using ECoreNetto;
+    using ECoreNetto;
 
-	using NUnit.Framework;
+    using NUnit.Framework;
 
-	using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
-	[TestFixture]
-	public class HtmlDocsGeneratorTestFixture
-	{
-		private DirectoryInfo dtoDirectoryInfo;
+    [TestFixture]
+    public class HtmlDocsGeneratorTestFixture
+    {
+        private DirectoryInfo dtoDirectoryInfo;
 
-		private HtmlDocsGenerator htmlDocsGenerator;
-		 
-		private EPackage rootPackage;
+        private HtmlDocsGenerator htmlDocsGenerator;
+         
+        private EPackage rootPackage;
 
-		[SetUp]
-		public void SetUp()
-		{
-			var outputpath = TestContext.CurrentContext.TestDirectory;
-			var directoryInfo = new DirectoryInfo(outputpath);
-			dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenHtmlDocs");
+        [SetUp]
+        public void SetUp()
+        {
+            var outputpath = TestContext.CurrentContext.TestDirectory;
+            var directoryInfo = new DirectoryInfo(outputpath);
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Core.AutoGenHtmlDocs");
 
-			rootPackage = DataModelLoader.Load();
+            rootPackage = DataModelLoader.Load();
 
-			this.htmlDocsGenerator = new HtmlDocsGenerator();
-		}
+            this.htmlDocsGenerator = new HtmlDocsGenerator();
+        }
 
-		[Test]
-		public void verify_HTML_docs_Are_generated()
-		{
-			Assert.That(async () => await htmlDocsGenerator.Generate(rootPackage, dtoDirectoryInfo),
-				Throws.Nothing);
-		}
-	}
+        [Test]
+        public void verify_HTML_docs_Are_generated()
+        {
+            Assert.That(async () => await htmlDocsGenerator.Generate(rootPackage, dtoDirectoryInfo),
+                Throws.Nothing);
+        }
+    }
 }

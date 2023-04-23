@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="HtmlDocsGenerator.cs" company="RHEA System S.A.">
+// <copyright file="DalPocoExtensionsGenerator.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -27,15 +27,17 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
     using ECoreNetto;
 
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
     /// <summary>
-    /// A Handlebars based ecore to html docs generator
+    /// A Handlebars based DAL POCO Extensions code generator
     /// </summary>
-    public class HtmlDocsGenerator : EcoreHandleBarsGenerator
+    public class CoreDalPocoExtensionsGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
-        /// Generates the HTML docs of the datatypes, enums and classes
+        /// Generates the <see cref="EClass"/> static poco extensions for the DAL library
+        /// for each <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
         /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
@@ -48,12 +50,12 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
-            await this.GenerateHtmlDocs(package, outputDirectory);
-            await this.GenerateDotFile(package, outputDirectory);
+            await this.GenerateElementExtensions(package, outputDirectory);
+            await this.GenerateDalPocoExtensions(package, outputDirectory);
         }
 
         /// <summary>
-        /// Generates the HTML docs
+        /// Generates the DAL.ElementExtensions class/>
         /// </summary>
         /// <param name="package">
         /// the <see cref="EPackage"/> that contains the classes that need to be generated
@@ -64,25 +66,23 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task GenerateHtmlDocs(EPackage package, DirectoryInfo outputDirectory)
+        public async Task GenerateElementExtensions(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["ecore-to-html-docs"];
+            var template = this.Templates["core-dal-element-extensions"];
 
-            var enums = package.EClassifiers.OfType<EEnum>().OrderBy(x => x.Name);
-            var dataTypes = package.EClassifiers.OfType<EDataType>().OrderBy(x => x.Name);
-            var eClasses = package.EClassifiers.OfType<EClass>().OrderBy(x => x.Name);
+            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
 
-            var payload = new GeneratorPayload(enums, dataTypes, eClasses);
+            var generatedElementExtensions = template(eClasses);
 
-            var generatedHtml = template(payload);
+            generatedElementExtensions = CodeCleanup(generatedElementExtensions);
 
-            var fileName = "index.html";
+            var fileName = "ElementExtensions.cs";
 
-            await Write(generatedHtml, outputDirectory, fileName);
+            await Write(generatedElementExtensions, outputDirectory, fileName);
         }
 
         /// <summary>
-        /// Generates the dot file used by GraphViz to generate a uml diagram
+        /// Generates the Dal PocoFactory classes for each <see cref="EClass"/> in the provided <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
         /// the <see cref="EPackage"/> that contains the classes that need to be generated
@@ -93,21 +93,46 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task GenerateDotFile(EPackage package, DirectoryInfo outputDirectory)
+        public async Task GenerateDalPocoExtensions(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["ecore-to-dot"];
+            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
 
-            var enums = package.EClassifiers.OfType<EEnum>().OrderBy(x => x.Name);
-            var dataTypes = package.EClassifiers.OfType<EDataType>().OrderBy(x => x.Name);
-            var eClasses = package.EClassifiers.OfType<EClass>().OrderBy(x => x.Name);
+            foreach (var eClass in eClasses)
+            {
+                await this.GenerateDalPocoExtension(package, outputDirectory, eClass.Name);
+            }
+        }
 
-            var payload = new GeneratorPayload(enums, dataTypes, eClasses);
+        /// <summary>
+        /// Generates the Dal PocoFactory class for the <see cref="EClass"/> in the provided <see cref="EPackage"/>
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> that contains the classes that need to be generated
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo"/>
+        /// </param>
+        /// <param name="className">
+        /// name of tha <see cref="EClass"/> that is to be generated.
+        /// </param>
+        /// <returns>
+        /// string containing the generated code
+        /// </returns>
+        public async Task<string> GenerateDalPocoExtension(EPackage package, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates["core-dal-poco-extensions"];
 
-            var generatedDot = template(payload);
+            var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
 
-            var fileName = "sysml2-class-inheritance.dot";
+            var generatedPocoExtensions  = template(eClass);
 
-            await Write(generatedDot, outputDirectory, fileName);
+            generatedPocoExtensions = CodeCleanup(generatedPocoExtensions);
+
+            var fileName = $"{eClass.Name.CapitalizeFirstLetter()}Extensions.cs";
+
+            await Write(generatedPocoExtensions, outputDirectory, fileName);
+
+            return generatedPocoExtensions;
         }
 
         /// <summary>
@@ -129,8 +154,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("ecore-to-html-docs");
-            this.RegisterTemplate("ecore-to-dot");
+            this.RegisterTemplate("core-dal-element-extensions");
+            this.RegisterTemplate("core-dal-poco-extensions");
         }
     }
 }

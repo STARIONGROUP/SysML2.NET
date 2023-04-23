@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="PocoGeneratorTestGenerator.cs" company="RHEA System S.A.">
+// <copyright file="DtoDictionaryWriterGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -26,15 +26,18 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using ECoreNetto;
 
     using NUnit.Framework;
-
-    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
     
+    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
+
+    /// <summary>
+    /// Suite of tests for the <see cref="CoreDtoDictionaryWriterGenerator"/> class.
+    /// </summary>
     [TestFixture]
-    public class PocoGeneratorTestGenerator
+    public class CoreDtoDictionaryWriterGeneratorTestFixture
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private PocoGenerator pocoGenerator;
+        private CoreDtoDictionaryWriterGenerator dtoDictionaryWriterGenerator;
 
         private EPackage rootPackage;
 
@@ -43,43 +46,33 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutGenPoco");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Serializer.Dictionary.Core.AutoGenDictionaryWriter");
 
             rootPackage = DataModelLoader.Load();
 
-            this.pocoGenerator = new PocoGenerator();
+            this.dtoDictionaryWriterGenerator = new CoreDtoDictionaryWriterGenerator();
         }
 
         [Test]
-        public void verify_poco_interfaces_are_generated()
+        public void verify_dto_DictionaryWriters_are_generated()
         {
-            Assert.That(async () => await this.pocoGenerator.GenerateInterfaces(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await this.dtoDictionaryWriterGenerator.GenerateDtoDictionaryWriters(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test]
-        public void verify_poco_classes_are_generated()
+        public void verify_DictionaryWritersProvider_is_generated()
         {
-            Assert.That(async () => await this.pocoGenerator.GenerateClasses(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await this.dtoDictionaryWriterGenerator.GenerateDtoDictionaryWriterProvider(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
-
+        
         [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
-        public async Task Verify_that_expected_poco_classes_are_generated_correctly(string className)
+        public async Task Verify_that_expected_class_are_generated_correctly(string className)
         {
-            var generatedCode = await this.pocoGenerator.GenerateClass(rootPackage, dtoDirectoryInfo, className);
-
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutGenPoco/{className}.cs"));
-
-            Assert.That(generatedCode, Is.EqualTo(expected));
-        }
-
-        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses)), Category("Expected")]
-        public async Task Verify_that_expected_poco_interfaces_are_generated_correctly(string className)
-        {
-            var generatedCode = await this.pocoGenerator.GenerateInterface(rootPackage, dtoDirectoryInfo, className);
-
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutGenPoco/I{className}.cs"));
+            var generatedCode = await this.dtoDictionaryWriterGenerator.GenerateDtoDictionaryWriter(rootPackage, dtoDirectoryInfo, className);
+            
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDictionaryWriter/{className}DictionaryWriter.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

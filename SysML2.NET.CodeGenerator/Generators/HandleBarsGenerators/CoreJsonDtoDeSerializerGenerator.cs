@@ -1,20 +1,20 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoDictionaryWriterGenerator.cs" company="RHEA System S.A.">
-// 
+// <copyright file="CoreJsonDtoDeSerializerGenerator.cs" company="RHEA System S.A.">
+//
 //   Copyright 2022-2023 RHEA System S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
-//        http://www.apache.org/licenses/LICENSE-2.0
-// 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
-// 
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -31,9 +31,9 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
     /// <summary>
-    /// A Handlebars based Dictionary writer code generator
+    /// A Handlebars based DTO JSON deserializer code generator
     /// </summary>
-	public class DtoDictionaryWriterGenerator : EcoreHandleBarsGenerator
+    public class CoreJsonDtoDeSerializerGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> static serializers
@@ -50,8 +50,9 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
-            await this.GenerateDtoDictionaryWriters(package, outputDirectory);
-            await this.GenerateDtoDictionaryWriterProvider(package, outputDirectory);
+            await this.GenerateEnumDeSerializers(package, outputDirectory);
+            await this.GenerateDtoDeSerializers(package, outputDirectory);
+            await this.GenerateDeSerializationProvider(package, outputDirectory);
         }
 
         /// <summary>
@@ -66,53 +67,24 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task GenerateDtoDictionaryWriters(EPackage package, DirectoryInfo outputDirectory)
+        public async Task GenerateEnumDeSerializers(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-serializer-dictionary-writer-template"];
+            var template = this.Templates["core-json-enum-deserializer-template"];
 
-            foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
+            foreach (var eClass in package.EClassifiers.OfType<EEnum>())
             {
                 var generatedDeSerializer = template(eClass);
 
                 generatedDeSerializer = CodeCleanup(generatedDeSerializer);
 
-                var fileName = $"{eClass.Name.CapitalizeFirstLetter()}DictionaryWriter.cs";
+                var fileName = $"{eClass.Name.CapitalizeFirstLetter()}DeSerializer.cs";
 
                 await Write(generatedDeSerializer, outputDirectory, fileName);
             }
         }
 
         /// <summary>
-        /// Generates the DictionaryWriter for the specified class
-        /// </summary>
-        /// <param name="package">
-        /// the <see cref="EPackage"/> that contains the classes that need to be generated
-        /// </param>
-        /// <param name="className">
-        /// The name of the <see cref="EClass"/> that needs to be generated
-        /// </param>
-        /// <returns>
-        /// generated code
-        /// </returns>
-        public async Task<string> GenerateDtoDictionaryWriter(EPackage package, DirectoryInfo outputDirectory, string className)
-        {
-            var template = this.Templates["dto-serializer-dictionary-writer-template"];
-
-            var eClass = package.EClassifiers.OfType<EClass>().Single(x =>x.Name == className);
-
-            var generatedDictionaryWriter = template(eClass);
-
-            generatedDictionaryWriter = CodeCleanup(generatedDictionaryWriter);
-
-            var fileName = $"{eClass.Name.CapitalizeFirstLetter()}DictionaryWriter.cs";
-
-            await Write(generatedDictionaryWriter, outputDirectory, fileName);
-
-            return generatedDictionaryWriter;
-        }
-
-        /// <summary>
-        /// Generates the SerializationProvider class
+        /// Generates the DeSerializer classes for each <see cref="EClass"/> in the provided <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
         /// the <see cref="EPackage"/> that contains the classes that need to be generated
@@ -123,19 +95,47 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task GenerateDtoDictionaryWriterProvider(EPackage package, DirectoryInfo outputDirectory)
+        public async Task GenerateDtoDeSerializers(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-serializer-dictionary-writer-provider-template"];
+            var template = this.Templates["core-json-dto-deserializer-template"];
+
+            foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
+            {
+                var generatedDeSerializer = template(eClass);
+
+                generatedDeSerializer = CodeCleanup(generatedDeSerializer);
+
+                var fileName = $"{eClass.Name.CapitalizeFirstLetter()}DeSerializer.cs";
+
+                await Write(generatedDeSerializer, outputDirectory, fileName);
+            }
+        }
+
+        /// <summary>
+        /// Generates the DeSerializationProvider class
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> that contains the classes that need to be generated
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo"/>
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        public async Task GenerateDeSerializationProvider(EPackage package, DirectoryInfo outputDirectory)
+        {
+            var template = this.Templates["core-json-dto-deserialization-provider-template"];
 
             var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
+            
+            var generatedDeSerializationProvider = template(eClasses);
 
-            var generatedSerializationProvider = template(eClasses);
+            generatedDeSerializationProvider = CodeCleanup(generatedDeSerializationProvider);
 
-            generatedSerializationProvider = CodeCleanup(generatedSerializationProvider);
+            var fileName = "DeSerializationProvider.cs";
 
-            var fileName = "DictionaryWriterProvider.cs";
-
-            await Write(generatedSerializationProvider, outputDirectory, fileName);
+            await Write(generatedDeSerializationProvider, outputDirectory, fileName);
         }
 
         /// <summary>
@@ -157,8 +157,9 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("dto-serializer-dictionary-writer-template");
-            this.RegisterTemplate("dto-serializer-dictionary-writer-provider-template");
+            this.RegisterTemplate("core-json-enum-deserializer-template");
+            this.RegisterTemplate("core-json-dto-deserializer-template");
+            this.RegisterTemplate("core-json-dto-deserialization-provider-template");
         }
     }
 }

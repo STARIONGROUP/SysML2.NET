@@ -30,10 +30,10 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
-	/// <summary>
-	/// A Handlebars based Dictionary reader code generator
-	/// </summary>
-	public class DtoDictionaryReaderGenerator : EcoreHandleBarsGenerator
+    /// <summary>
+    /// A Handlebars based Dictionary reader code generator
+    /// </summary>
+    public class CoreDtoDictionaryReaderGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
         /// Generates the <see cref="EClass"/> static serializers
@@ -68,7 +68,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public async Task GenerateDtoDictionaryReaders(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-serializer-dictionary-reader-template"];
+            var template = this.Templates["core-dictionary-dto-serializer-reader-template"];
 
             foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
             {
@@ -96,7 +96,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public async Task<string> GenerateDtoDictionaryReader(EPackage package, DirectoryInfo outputDirectory, string className)
         {
-            var template = this.Templates["dto-serializer-dictionary-reader-template"];
+            var template = this.Templates["core-dictionary-dto-serializer-reader-template"];
 
             var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
 
@@ -125,7 +125,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public async Task GenerateDtoDictionaryReaderProvider(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dto-serializer-dictionary-reader-provider-template"];
+            var template = this.Templates["core-dictionary-dto-serializer-reader-provider-template"];
 
             var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
 
@@ -157,8 +157,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("dto-serializer-dictionary-reader-template");
-            this.RegisterTemplate("dto-serializer-dictionary-reader-provider-template");
+            this.RegisterTemplate("core-dictionary-dto-serializer-reader-template");
+            this.RegisterTemplate("core-dictionary-dto-serializer-reader-provider-template");
         }
     }
 }

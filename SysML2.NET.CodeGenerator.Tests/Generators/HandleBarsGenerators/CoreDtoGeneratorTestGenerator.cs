@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoDictionaryWriterGeneratorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="DtoGeneratorTestGenerator.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -26,18 +26,15 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using ECoreNetto;
 
     using NUnit.Framework;
-    
+
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
-    /// <summary>
-    /// Suite of tests for the <see cref="DtoDictionaryWriterGenerator"/> class.
-    /// </summary>
     [TestFixture]
-    public class DtoDictionaryWriterGeneratorTestFixture
+    public class CoreDtoGeneratorTestGenerator
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private DtoDictionaryWriterGenerator dtoDictionaryWriterGenerator;
+        private CoreDtoGenerator dtoGenerator;
 
         private EPackage rootPackage;
 
@@ -46,33 +43,43 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenDictionaryWriter");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Core.AutoGenDto");
 
             rootPackage = DataModelLoader.Load();
 
-            this.dtoDictionaryWriterGenerator = new DtoDictionaryWriterGenerator();
+            dtoGenerator = new CoreDtoGenerator();
         }
 
         [Test]
-        public void verify_dto_DictionaryWriters_are_generated()
+        public void verify_dto_interfaces_are_generated()
         {
-            Assert.That(async () => await this.dtoDictionaryWriterGenerator.GenerateDtoDictionaryWriters(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await dtoGenerator.GenerateInterfaces(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test]
-        public void verify_DictionaryWritersProvider_is_generated()
+        public void verify_dto_classes_are_generated()
         {
-            Assert.That(async () => await this.dtoDictionaryWriterGenerator.GenerateDtoDictionaryWriterProvider(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await dtoGenerator.GenerateClasses(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
-        
+
         [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
-        public async Task Verify_that_expected_class_are_generated_correctly(string className)
+        public async Task Verify_that_expected_dto_classes_are_generated_correctly(string className)
         {
-            var generatedCode = await this.dtoDictionaryWriterGenerator.GenerateDtoDictionaryWriter(rootPackage, dtoDirectoryInfo, className);
-            
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDictionaryWriter/{className}DictionaryWriter.cs"));
+            var generatedCode = await this.dtoGenerator.GenerateClass(rootPackage, dtoDirectoryInfo, className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDto/{className}.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
+        }
+
+        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses)), Category("Expected")]
+        public async Task Verify_that_expected_dto_interfaces_are_generated_correctly(string className)
+        {
+            var generatedCode = await this.dtoGenerator.GenerateInterface(rootPackage, dtoDirectoryInfo, className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDto/I{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

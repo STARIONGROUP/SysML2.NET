@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DalPocoExtensionsGenerator.cs" company="RHEA System S.A.">
+// <copyright file="DtoDictionaryWriterGenerator.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -31,12 +31,12 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
     /// <summary>
-    /// A Handlebars based DAL POCO Extensions code generator
+    /// A Handlebars based Dictionary writer code generator
     /// </summary>
-    public class DalPocoExtensionsGenerator : EcoreHandleBarsGenerator
+	public class CoreDtoDictionaryWriterGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
-        /// Generates the <see cref="EClass"/> static poco extensions for the DAL library
+        /// Generates the <see cref="EClass"/> static serializers
         /// for each <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
@@ -50,12 +50,12 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </returns>
         public override async Task Generate(EPackage package, DirectoryInfo outputDirectory)
         {
-            await this.GenerateElementExtensions(package, outputDirectory);
-            await this.GenerateDalPocoExtensions(package, outputDirectory);
+            await this.GenerateDtoDictionaryWriters(package, outputDirectory);
+            await this.GenerateDtoDictionaryWriterProvider(package, outputDirectory);
         }
 
         /// <summary>
-        /// Generates the DAL.ElementExtensions class/>
+        /// Generates the DeSerializer classes for each <see cref="EClass"/> in the provided <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
         /// the <see cref="EPackage"/> that contains the classes that need to be generated
@@ -66,45 +66,53 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// <returns>
         /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task GenerateElementExtensions(EPackage package, DirectoryInfo outputDirectory)
+        public async Task GenerateDtoDictionaryWriters(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dal-element-extensions"];
+            var template = this.Templates["core-dictionary-dto-serializer-writer-template"];
 
-            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
-
-            var generatedElementExtensions = template(eClasses);
-
-            generatedElementExtensions = CodeCleanup(generatedElementExtensions);
-
-            var fileName = "ElementExtensions.cs";
-
-            await Write(generatedElementExtensions, outputDirectory, fileName);
-        }
-
-        /// <summary>
-        /// Generates the Dal PocoFactory classes for each <see cref="EClass"/> in the provided <see cref="EPackage"/>
-        /// </summary>
-        /// <param name="package">
-        /// the <see cref="EPackage"/> that contains the classes that need to be generated
-        /// </param>
-        /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
-        /// </param>
-        /// <returns>
-        /// an awaitable <see cref="Task"/>
-        /// </returns>
-        public async Task GenerateDalPocoExtensions(EPackage package, DirectoryInfo outputDirectory)
-        {
-            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
-
-            foreach (var eClass in eClasses)
+            foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
             {
-                await this.GenerateDalPocoExtension(package, outputDirectory, eClass.Name);
+                var generatedDeSerializer = template(eClass);
+
+                generatedDeSerializer = CodeCleanup(generatedDeSerializer);
+
+                var fileName = $"{eClass.Name.CapitalizeFirstLetter()}DictionaryWriter.cs";
+
+                await Write(generatedDeSerializer, outputDirectory, fileName);
             }
         }
 
         /// <summary>
-        /// Generates the Dal PocoFactory class for the <see cref="EClass"/> in the provided <see cref="EPackage"/>
+        /// Generates the DictionaryWriter for the specified class
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> that contains the classes that need to be generated
+        /// </param>
+        /// <param name="className">
+        /// The name of the <see cref="EClass"/> that needs to be generated
+        /// </param>
+        /// <returns>
+        /// generated code
+        /// </returns>
+        public async Task<string> GenerateDtoDictionaryWriter(EPackage package, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates["core-dictionary-dto-serializer-writer-template"];
+
+            var eClass = package.EClassifiers.OfType<EClass>().Single(x =>x.Name == className);
+
+            var generatedDictionaryWriter = template(eClass);
+
+            generatedDictionaryWriter = CodeCleanup(generatedDictionaryWriter);
+
+            var fileName = $"{eClass.Name.CapitalizeFirstLetter()}DictionaryWriter.cs";
+
+            await Write(generatedDictionaryWriter, outputDirectory, fileName);
+
+            return generatedDictionaryWriter;
+        }
+
+        /// <summary>
+        /// Generates the SerializationProvider class
         /// </summary>
         /// <param name="package">
         /// the <see cref="EPackage"/> that contains the classes that need to be generated
@@ -112,27 +120,22 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// <param name="outputDirectory">
         /// The target <see cref="DirectoryInfo"/>
         /// </param>
-        /// <param name="className">
-        /// name of tha <see cref="EClass"/> that is to be generated.
-        /// </param>
         /// <returns>
-        /// string containing the generated code
+        /// an awaitable <see cref="Task"/>
         /// </returns>
-        public async Task<string> GenerateDalPocoExtension(EPackage package, DirectoryInfo outputDirectory, string className)
+        public async Task GenerateDtoDictionaryWriterProvider(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["dal-poco-extensions"];
+            var template = this.Templates["core-dictionary-dto-serializer-writer-provider-template"];
 
-            var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
+            var eClasses = package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract).OrderBy(x => x.Name).ToList();
 
-            var generatedPocoExtensions  = template(eClass);
+            var generatedSerializationProvider = template(eClasses);
 
-            generatedPocoExtensions = CodeCleanup(generatedPocoExtensions);
+            generatedSerializationProvider = CodeCleanup(generatedSerializationProvider);
 
-            var fileName = $"{eClass.Name.CapitalizeFirstLetter()}Extensions.cs";
+            var fileName = "DictionaryWriterProvider.cs";
 
-            await Write(generatedPocoExtensions, outputDirectory, fileName);
-
-            return generatedPocoExtensions;
+            await Write(generatedSerializationProvider, outputDirectory, fileName);
         }
 
         /// <summary>
@@ -154,8 +157,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("dal-element-extensions");
-            this.RegisterTemplate("dal-poco-extensions");
+            this.RegisterTemplate("core-dictionary-dto-serializer-writer-template");
+            this.RegisterTemplate("core-dictionary-dto-serializer-writer-provider-template");
         }
     }
 }

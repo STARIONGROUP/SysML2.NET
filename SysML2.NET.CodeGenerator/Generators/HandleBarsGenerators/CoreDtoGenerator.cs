@@ -1,27 +1,27 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="PocoGenerator.cs" company="RHEA System S.A.">
-// 
+// <copyright file="CoreDtoGenerator.cs" company="RHEA System S.A.">
+//
 //   Copyright 2022-2023 RHEA System S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
-//        http://www.apache.org/licenses/LICENSE-2.0
-// 
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
-// 
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
 namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
-	using System;
-	using System.Linq;
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using System.IO;
@@ -30,14 +30,14 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
-    
+
     /// <summary>
-    /// A Handlebars based POCO code generator
+    /// A Handlebars based DTO code generator
     /// </summary>
-    public class PocoGenerator : EcoreHandleBarsGenerator
+    public class CoreDtoGenerator : EcoreHandleBarsGenerator
     {
         /// <summary>
-        /// Generates the <see cref="EClass"/> POCO instances
+        /// Generates the <see cref="EClass"/> instances
         /// that are in the provided <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
@@ -56,20 +56,20 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         }
 
         /// <summary>
-        /// Generates POCO interfaces
+        /// Generates all the interfaces for <see cref="EClass"/> instances n the <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
-        /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
+        /// The <see cref="EPackage"/> that contains the <see cref="EClass"/> instances
         /// </param>
         /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
+        /// The directory where the output is to be generated
         /// </param>
         /// <returns>
-        /// an awaitable task
+        /// an awaitable <see cref="Task"/>
         /// </returns>
         public async Task GenerateInterfaces(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["poco-interface-template"];
+            var template = this.Templates["core-dto-interface-template"];
 
             foreach (var eClass in package.EClassifiers.OfType<EClass>())
             {
@@ -84,20 +84,23 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         }
 
         /// <summary>
-        /// Generates POCO interfaces
+        /// Generates the interface C# class file using the name of the class
         /// </summary>
         /// <param name="package">
-        /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
+        /// The <see cref="EPackage"/> that contains the <see cref="EClass"/> instances
         /// </param>
         /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
+        /// The directory where the output is to be generated
+        /// </param>
+        /// <param name="className">
+        /// The name of the class for which the interface is to be generated
         /// </param>
         /// <returns>
-        /// an awaitable task
+        /// an awaitable <see cref="Task"/>
         /// </returns>
         public async Task<string> GenerateInterface(EPackage package, DirectoryInfo outputDirectory, string className)
         {
-            var template = this.Templates["poco-interface-template"];
+            var template = this.Templates["core-dto-interface-template"];
 
             var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
             
@@ -113,65 +116,68 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         }
 
         /// <summary>
-        /// Generates POCO classes
+        /// Generates all the classes for <see cref="EClass"/> instances n the <see cref="EPackage"/>
         /// </summary>
         /// <param name="package">
-        /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
+        /// The <see cref="EPackage"/> that contains the <see cref="EClass"/> instances
         /// </param>
         /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
+        /// The directory where the output is to be generated
         /// </param>
         /// <returns>
-        /// an awaitable task
+        /// an awaitable <see cref="Task"/>
         /// </returns>
         public async Task GenerateClasses(EPackage package, DirectoryInfo outputDirectory)
         {
-            var template = this.Templates["poco-class-template"];
-
+            var template = this.Templates["core-dto-class-template"];
+            
             foreach (var eClass in package.EClassifiers.OfType<EClass>().Where(x => !x.Abstract))
             {
-                var generatedCode = template(eClass);
+                var generatedClass = template(eClass);
 
-                generatedCode = CodeCleanup(generatedCode);
+                generatedClass = CodeCleanup(generatedClass);
 
                 var fileName = $"{eClass.Name.CapitalizeFirstLetter()}.cs";
 
-                await Write(generatedCode, outputDirectory, fileName);
+                await Write(generatedClass, outputDirectory, fileName);
             }
         }
 
         /// <summary>
-        /// Generates a named POCO class
+        /// Generates the C# class file using the name of the <see cref="EClass"/>
         /// </summary>
         /// <param name="package">
-        /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
+        /// The <see cref="EPackage"/> that contains the <see cref="EClass"/> instances
         /// </param>
         /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
+        /// The directory where the output is to be generated
+        /// </param>
+        /// <param name="className">
+        /// The name of the class for which the interface is to be generated
         /// </param>
         /// <returns>
-        /// an awaitable task
+        /// an awaitable <see cref="Task"/>
         /// </returns>
         public async Task<string> GenerateClass(EPackage package, DirectoryInfo outputDirectory, string className)
         {
-            var template = this.Templates["poco-class-template"];
+            var template = this.Templates["core-dto-class-template"];
 
             var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
 
             if (eClass.Abstract)
             {
-                throw new InvalidOperationException("POCO should not be abstract");
+                throw new InvalidOperationException("DTO should not be abstract");
             }
 
-            var generatedCode = template(eClass);
+            var generatedClass = template(eClass);
 
-            generatedCode = CodeCleanup(generatedCode);
+            generatedClass = CodeCleanup(generatedClass);
 
             var fileName = $"{eClass.Name.CapitalizeFirstLetter()}.cs";
 
-            await Write(generatedCode, outputDirectory, fileName);
-            
-            return generatedCode;
+            await Write(generatedClass, outputDirectory, fileName);
+
+            return generatedClass;
         }
 
         /// <summary>
@@ -194,8 +200,8 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
         /// </summary>
         protected override void RegisterTemplates()
         {
-            this.RegisterTemplate("poco-interface-template");
-            this.RegisterTemplate("poco-class-template");
+            this.RegisterTemplate("core-dto-interface-template");
+            this.RegisterTemplate("core-dto-class-template");
         }
     }
 }

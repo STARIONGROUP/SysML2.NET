@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DtoDictionaryReaderGeneratorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="DtoSerializerGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -21,7 +21,6 @@
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
     using System.IO;
-    using System.Threading.Tasks;
 
     using ECoreNetto;
 
@@ -29,15 +28,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
-    /// <summary>
-    /// Suite of tests for the <see cref="DtoDictionaryReaderGenerator"/> class.
-    /// </summary>
     [TestFixture]
-    public class DtoDictionaryReaderGeneratorTestFixture
+    public class CoreJsonDtoSerializerGeneratorTestFixture
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private DtoDictionaryReaderGenerator dtoDictionaryReaderGenerator;
+        private CoreJsonDtoSerializerGenerator dtoSerializerGenerator;
 
         private EPackage rootPackage;
 
@@ -46,35 +42,25 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenDictionaryReader");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Serializer.Json.Core.AutoGenSerializer");
 
             rootPackage = DataModelLoader.Load();
 
-            this.dtoDictionaryReaderGenerator = new DtoDictionaryReaderGenerator();
+            dtoSerializerGenerator = new CoreJsonDtoSerializerGenerator();
         }
 
         [Test]
-        public void verify_dto_DictionaryReaders_are_generated()
+        public void verify_dto_serializers_are_generated()
         {
-            Assert.That(async () => await this.dtoDictionaryReaderGenerator.GenerateDtoDictionaryReaders(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await dtoSerializerGenerator.GenerateSerializers(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test]
-        public void verify_DictionaryReaderProvider_is_generated()
+        public void verify_SerializationProvider_is_generated()
         {
-            Assert.That(async () => await this.dtoDictionaryReaderGenerator.GenerateDtoDictionaryReaderProvider(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await dtoSerializerGenerator.GenerateSerializationProvider(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
-        }
-
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
-        public async Task Verify_that_expected_class_are_generated_correctly(string className)
-        {
-            var generatedCode = await this.dtoDictionaryReaderGenerator.GenerateDtoDictionaryReader(rootPackage, dtoDirectoryInfo, className);
-
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDictionaryReader/{className}DictionaryReader.cs"));
-
-            Assert.That(generatedCode, Is.EqualTo(expected));
         }
     }
 }

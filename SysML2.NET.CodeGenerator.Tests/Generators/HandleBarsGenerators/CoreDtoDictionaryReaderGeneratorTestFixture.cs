@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="DalPocoExtensionsGeneratorTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="DtoDictionaryReaderGeneratorTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -30,14 +30,14 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
     /// <summary>
-    /// Suite of tests for the <see cref="DalPocoExtensionsGenerator"/> class
+    /// Suite of tests for the <see cref="CoreDtoDictionaryReaderGenerator"/> class.
     /// </summary>
     [TestFixture]
-    public class DalPocoExtensionsGeneratorTestFixture
+    public class CoreDtoDictionaryReaderGeneratorTestFixture
     {
-        private DirectoryInfo dalFactoryDirectoryInfo;
+        private DirectoryInfo dtoDirectoryInfo;
 
-        private DalPocoExtensionsGenerator dalPocoExtensionsGenerator;
+        private CoreDtoDictionaryReaderGenerator dtoDictionaryReaderGenerator;
 
         private EPackage rootPackage;
 
@@ -46,33 +46,33 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dalFactoryDirectoryInfo = directoryInfo.CreateSubdirectory("AutoGenPocoExtension");
+            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Serializer.Dictionary.Core.AutoGenDictionaryReader");
 
             rootPackage = DataModelLoader.Load();
 
-            dalPocoExtensionsGenerator = new DalPocoExtensionsGenerator();
+            this.dtoDictionaryReaderGenerator = new CoreDtoDictionaryReaderGenerator();
         }
 
         [Test]
-        public void Verify_that_ElementExtensions_is_generated()
+        public void verify_dto_DictionaryReaders_are_generated()
         {
-            Assert.That(async () => await this.dalPocoExtensionsGenerator.GenerateElementExtensions(rootPackage, dalFactoryDirectoryInfo),
+            Assert.That(async () => await this.dtoDictionaryReaderGenerator.GenerateDtoDictionaryReaders(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test]
-        public void Verify_that_POCO_DalExtensions_are_generated()
+        public void verify_DictionaryReaderProvider_is_generated()
         {
-            Assert.That(async () => await this.dalPocoExtensionsGenerator.GenerateDalPocoExtensions(rootPackage, dalFactoryDirectoryInfo),
+            Assert.That(async () => await this.dtoDictionaryReaderGenerator.GenerateDtoDictionaryReaderProvider(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
-        public async Task Verify_that_POCO_DalExtensions_are_generated_as_expected(string className)
+        public async Task Verify_that_expected_class_are_generated_correctly(string className)
         {
-            var generatedCode = await this.dalPocoExtensionsGenerator.GenerateDalPocoExtension(rootPackage, dalFactoryDirectoryInfo, className);
+            var generatedCode = await this.dtoDictionaryReaderGenerator.GenerateDtoDictionaryReader(rootPackage, dtoDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenPocoExtension/{className}Extensions.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDictionaryReader/{className}DictionaryReader.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }
