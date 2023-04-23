@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Dictionary
+namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 {
     using System;
     using System.Collections.Generic;
@@ -464,7 +464,7 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             var id = Guid.Parse(Convert.ToString(idObject));
 
-            var stateUsageInstance = new Core.DTO.StateUsage
+            var stateUsageInstance = new SysML2.NET.Core.DTO.StateUsage
             {
                 Id = id
             };

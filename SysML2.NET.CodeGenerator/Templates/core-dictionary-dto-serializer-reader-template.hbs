@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Dictionary
+namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 {
     using System;
     using System.Collections.Generic;
@@ -273,7 +273,7 @@ namespace SysML2.NET.Serializer.Dictionary
                         {{/if}}
                     {{ else }}
                         {{String.LowerCaseFirstLetter EClass.Name}}Instance.{{ String.CapitalizeFirstLetter structuralFeature.Name }} = {{ structuralFeature.Name }}Feature;
-                    {{/if}}                    
+                    {{/if}}
                 {{/unless}}
             {{/unless}}
             {{/each}}
@@ -324,7 +324,7 @@ namespace SysML2.NET.Serializer.Dictionary
             }
             var id = Guid.Parse(Convert.ToString(idObject));
 
-            var {{String.LowerCaseFirstLetter this.Name}}Instance = new Core.DTO.{{this.Name}}
+            var {{String.LowerCaseFirstLetter this.Name}}Instance = new SysML2.NET.Core.DTO.{{this.Name}}
             {
                 Id = id
             };

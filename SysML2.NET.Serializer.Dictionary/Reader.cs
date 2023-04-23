@@ -65,7 +65,7 @@ namespace SysML2.NET.Serializer.Dictionary
 
             var type = Convert.ToString(typeObject);
 
-            var reader = DictionaryReaderProvider.Provide(type);
+            var reader = SysML2.NET.Serializer.Dictionary.Core.DTO.DictionaryReaderProvider.Provide(type);
 
             return reader (dictionary, dictionaryKind);
         }

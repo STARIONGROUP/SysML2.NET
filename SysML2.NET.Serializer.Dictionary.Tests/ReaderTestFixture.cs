@@ -56,9 +56,9 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "@id", Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e") },
                 { "aliasIds", new List<string> { "alias_1", "alias_2" } },
                 { "annotation", new List<Guid> { Guid.Parse("7f8c06c6-93cb-4193-9a0c-c6ca4dc1eec1") } },
-				{ "declaredName", "the name" },
-				{ "declaredShortName", "the shortName" },
-				{ "elementId", "element id" },
+                { "declaredName", "the name" },
+                { "declaredShortName", "the shortName" },
+                { "elementId", "element id" },
                 { "isImpliedIncluded", true },
                 { "ownedRelationship", new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") } },
                 { "owningRelationship", Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9") }
@@ -68,9 +68,9 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
             Assert.That(annotatingElement.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
-			Assert.That(annotatingElement.DeclaredName, Is.EqualTo("the name"));
-			Assert.That(annotatingElement.DeclaredShortName, Is.EqualTo("the shortName"));
-			Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
+            Assert.That(annotatingElement.DeclaredName, Is.EqualTo("the name"));
+            Assert.That(annotatingElement.DeclaredShortName, Is.EqualTo("the shortName"));
+            Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
             Assert.That(annotatingElement.OwningRelationship, Is.EqualTo(Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9")));
@@ -85,7 +85,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "annotation", new List<Guid>() },
                 { "declaredName", null },
                 { "declaredShortName", null },
-				{ "elementId", "element id" },
+                { "elementId", "element id" },
                 { "isImpliedIncluded", true },
                 { "ownedRelationship", new List<Guid>() },
                 { "owningRelationship", null }
@@ -95,9 +95,9 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
             Assert.That(annotatingElement.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(annotatingElement.AliasIds, Is.EqualTo(new List<string>()));
-			Assert.That(annotatingElement.DeclaredName, Is.Null);
-			Assert.That(annotatingElement.DeclaredShortName, Is.Null);
-			Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
+            Assert.That(annotatingElement.DeclaredName, Is.Null);
+            Assert.That(annotatingElement.DeclaredShortName, Is.Null);
+            Assert.That(annotatingElement.ElementId, Is.EqualTo("element id"));
             Assert.That(annotatingElement.IsImpliedIncluded, Is.True);
             Assert.That(annotatingElement.OwnedRelationship, Is.EqualTo(new List<Guid>()));
             Assert.That(annotatingElement.OwningRelationship, Is.Null);
@@ -110,9 +110,9 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "@id", "0b192c18-afa2-44b6-8de2-86e5e6ffa09e" },
                 { "aliasIds", new List<string> { "alias_1", "alias_2" } },
                 { "annotation", new List<string> { "7f8c06c6-93cb-4193-9a0c-c6ca4dc1eec1" } },
-				{ "declaredName", "the name" },
-				{ "declaredShortName", "the shortName" },
-				{ "elementId", "element id" },
+                { "declaredName", "the name" },
+                { "declaredShortName", "the shortName" },
+                { "elementId", "element id" },
                 { "isImpliedIncluded", true },
                 { "ownedRelationship", new List<string> { "9006ff06-43fe-4a4e-a4bc-402e82f84dde" } },
                 { "owningRelationship", "fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9" }

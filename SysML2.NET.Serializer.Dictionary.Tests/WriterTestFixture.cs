@@ -42,48 +42,48 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
         private PartDefinition partDefinitionWithNullProperties;
 
-		[SetUp]
+        [SetUp]
         public void SetUp()
         {
             this.writer = new Writer();
 
             this.CreateTestData();
-		}
+        }
 
         private void CreateTestData()
         {
-	        this.partDefinition = new PartDefinition
-	        {
-		        Id = Guid.NewGuid(),
-		        IsIndividual = true,
-		        IsVariation = false,
-		        IsAbstract = false,
-		        IsSufficient = false,
-		        AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
-		        DeclaredName = "PartDefinition:DeclaredName",
+            this.partDefinition = new PartDefinition
+            {
+                Id = Guid.NewGuid(),
+                IsIndividual = true,
+                IsVariation = false,
+                IsAbstract = false,
+                IsSufficient = false,
+                AliasIds = new List<string> { "PartDefinition:Alias_1", "PartDefinition:Alias_2" },
+                DeclaredName = "PartDefinition:DeclaredName",
                 ElementId = "PartDefinition:ElementId",
                 OwnedRelationship = new List<Guid> { Guid.NewGuid() },
-		        OwningRelationship = Guid.NewGuid(),
-		        DeclaredShortName = "PartDefinition:DeclaredShortName"
-	        };
+                OwningRelationship = Guid.NewGuid(),
+                DeclaredShortName = "PartDefinition:DeclaredShortName"
+            };
 
-	        this.partDefinitionWithNullProperties = new PartDefinition
-	        {
-		        Id = Guid.NewGuid(),
-		        IsIndividual = true,
-		        IsVariation = false,
-		        IsAbstract = false,
-		        IsSufficient = false,
-		        AliasIds = new List<string>(),
-		        DeclaredName = null,
-		        ElementId = "PartDefinition:ElementId",
-				OwnedRelationship = new List<Guid>(),
-		        OwningRelationship = Guid.NewGuid(),
-		        DeclaredShortName = null
-	        };
+            this.partDefinitionWithNullProperties = new PartDefinition
+            {
+                Id = Guid.NewGuid(),
+                IsIndividual = true,
+                IsVariation = false,
+                IsAbstract = false,
+                IsSufficient = false,
+                AliasIds = new List<string>(),
+                DeclaredName = null,
+                ElementId = "PartDefinition:ElementId",
+                OwnedRelationship = new List<Guid>(),
+                OwningRelationship = Guid.NewGuid(),
+                DeclaredShortName = null
+            };
         }
 
-		[Test]
+        [Test]
         public void Verify_that_the_writer_returns_a_dictionary_upon_write_Simplified_single_dataItem()
         {
             var dictionary = this.writer.Write(this.partDefinition, DictionaryKind.Simplified);

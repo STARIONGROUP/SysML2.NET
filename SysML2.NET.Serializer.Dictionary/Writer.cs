@@ -44,7 +44,7 @@ namespace SysML2.NET.Serializer.Dictionary
         /// </returns>
         public Dictionary<string, object> Write(IData dataItem, DictionaryKind dictionaryKind)
         {
-            var writer = DictionaryWriterProvider.Provide(dataItem.GetType());
+            var writer = SysML2.NET.Serializer.Dictionary.Core.DTO.DictionaryWriterProvider.Provide(dataItem.GetType());
 
             return writer(dataItem, dictionaryKind);
         }
