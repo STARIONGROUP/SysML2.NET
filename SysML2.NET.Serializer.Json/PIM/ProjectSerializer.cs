@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PIM.DTO.Serializer.Json
+namespace SysML2.NET.Serializer.Json.PIM.DTO
 {
     using System;
     using System.Text.Json;

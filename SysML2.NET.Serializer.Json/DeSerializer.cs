@@ -33,8 +33,8 @@ namespace SysML2.NET.Serializer.Json
     using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO.Serializer.Json;
-    using SysML2.NET.PIM.DTO.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Core.DTO;
+    using SysML2.NET.Serializer.Json.PIM.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="DeSerializer"/> is to deserialize a JSON <see cref="Stream"/> to

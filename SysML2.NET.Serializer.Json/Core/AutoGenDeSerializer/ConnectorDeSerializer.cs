@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO.Serializer.Json
+namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
     using System.Text.Json;
@@ -70,7 +70,7 @@ namespace SysML2.NET.Core.DTO.Serializer.Json
                 throw new InvalidOperationException($"The ConnectorDeSerializer can only be used to deserialize objects of type IConnector, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new Core.DTO.Connector();
+            var dtoInstance = new SysML2.NET.Core.DTO.Connector();
 
             if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {

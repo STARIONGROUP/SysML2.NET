@@ -28,8 +28,8 @@ namespace SysML2.NET.Serializer.Json
     
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO;
-    using SysML2.NET.PIM.DTO.Serializer.Json;
-    using SysML2.NET.Core.DTO.Serializer.Json;
+    using SysML2.NET.Serializer.Json.PIM.DTO;
+    using SysML2.NET.Serializer.Json.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="Serializer"/> is to write an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
@@ -148,7 +148,7 @@ namespace SysML2.NET.Serializer.Json
                     }
                     else
                     {
-                        var serializationAction = Core.DTO.Serializer.Json.SerializationProvider.Provide(element.GetType());
+                        var serializationAction = SerializationProvider.Provide(element.GetType());
                         serializationAction(element, writer, serializationModeKind);
                         await writer.FlushAsync(cancellationToken);
                     }

@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO.Serializer.Json
+namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
     using System.Text.Json;
@@ -70,7 +70,7 @@ namespace SysML2.NET.Core.DTO.Serializer.Json
                 throw new InvalidOperationException($"The ActionUsageDeSerializer can only be used to deserialize objects of type IActionUsage, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new Core.DTO.ActionUsage();
+            var dtoInstance = new SysML2.NET.Core.DTO.ActionUsage();
 
             if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {

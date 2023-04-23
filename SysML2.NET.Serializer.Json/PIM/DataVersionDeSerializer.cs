@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PIM.DTO.Serializer.Json
+namespace SysML2.NET.Serializer.Json.PIM.DTO
 {
     using System;
     using System.Text.Json;
@@ -26,7 +26,7 @@ namespace SysML2.NET.PIM.DTO.Serializer.Json
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.Core.DTO.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Core.DTO;
     using SysML2.NET.PIM.DTO;
     using SysML2.NET.Serializer.Json;
 
