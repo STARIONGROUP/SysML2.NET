@@ -2,38 +2,39 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-	  <Company>RHEA System S.A.</Company>
-	  <Authors>Sam Gerene</Authors>
-	  <Description>Nunit test suite for the SysML2.NET.REST project</Description>
-	  <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
-	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-	  <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
-	  <RepositoryType>Git</RepositoryType>
-	  <ImplicitUsings>false</ImplicitUsings>
-	  <Nullable>disable</Nullable>
-	  <IsPackable>false</IsPackable>
-	  <PreserveCompilationContext>true</PreserveCompilationContext>
+      <LangVersion>11.0</LangVersion>
+      <Company>RHEA System S.A.</Company>
+      <Authors>Sam Gerene</Authors>
+      <Description>Nunit test suite for the SysML2.NET.REST project</Description>
+      <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+      <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+      <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+      <RepositoryType>Git</RepositoryType>
+      <ImplicitUsings>false</ImplicitUsings>
+      <Nullable>disable</Nullable>
+      <IsPackable>false</IsPackable>
+      <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-		<PackageReference Include="NUnit" Version="3.13.3" />
-		<PackageReference Include="NUnit.Console" Version="3.16.3" />
-		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnit.Console" Version="3.16.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
 
-		<PackageReference Include="coverlet.collector" Version="3.2.0">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="coverlet.msbuild" Version="3.2.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="3.2.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.msbuild" Version="3.2.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\SySML2.NET.REST\SySML2.NET.REST.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\SySML2.NET.REST\SySML2.NET.REST.csproj" />
+    </ItemGroup>
 
 </Project>

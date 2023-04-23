@@ -1,155 +1,156 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net7.0</TargetFramework>
-	  <Version>0.8.0</Version>
-	  <Description>A Library to generate SysML v2 code.</Description>
-	  <PackageId>SysML2.NET</PackageId>
-	  <Company>RHEA System S.A.</Company>
-	  <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
-	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-	  <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
-	  <RepositoryType>Git</RepositoryType>
-	  <Authors>Sam Gerene</Authors>
-	  <ImplicitUsings>false</ImplicitUsings>
-	  <Nullable>disable</Nullable>
-	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-	  <IsPackable>false</IsPackable>
-	  <PreserveCompilationContext>true</PreserveCompilationContext>
+      <TargetFramework>net7.0</TargetFramework>
+      <LangVersion>11.0</LangVersion>
+      <Version>0.8.0</Version>
+      <Description>A Library to generate SysML v2 code.</Description>
+      <PackageId>SysML2.NET</PackageId>
+      <Company>RHEA System S.A.</Company>
+      <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+      <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+      <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+      <RepositoryType>Git</RepositoryType>
+      <Authors>Sam Gerene</Authors>
+      <ImplicitUsings>false</ImplicitUsings>
+      <Nullable>disable</Nullable>
+      <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+      <IsPackable>false</IsPackable>
+      <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="ECoreNetto.HandleBars" Version="1.0.0" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
-		<PackageReference Include="RHEA.OpenApi" Version="0.3.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="ECoreNetto.HandleBars" Version="1.0.0" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
+        <PackageReference Include="RHEA.OpenApi" Version="0.3.1" />
+    </ItemGroup>
 
-	<ItemGroup>
-	  <None Update="datamodel\openapi-extensions.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="datamodel\openapi-x.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="datamodel\openapi.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="datamodel\SysML.ecore">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="datamodel\types.ecore">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\bootstrap.min.css">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\font-awesome.min.css">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.eot">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.svg">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.ttf">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff2">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\fonts\FontAwesome.otf">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\images\rhea_logo_large_square.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\images\rhea_logo_small.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\HtmlDocs\css\rheaclassdocs.css">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dal-element-extensions.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dal-poco-extensions.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-psm-rest-class-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serializer-dictionary-reader-provider-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serializer-dictionary-reader-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serializer-dictionary-writer-provider-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serializer-dictionary-writer-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\ecore-to-dot.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\ecore-to-html-docs.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\element-dal-factory.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\graphql-schema.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\poco-dal-factory.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\poco-interface-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\poco-class-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-class-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-deserialization-provider-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-deserializer-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-interface-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serialization-provider-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serialization-provider-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\dto-serializer-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\enum-deserializer-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Templates\enum-template.hbs">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
+    <ItemGroup>
+      <None Update="datamodel\openapi-extensions.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="datamodel\openapi-x.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="datamodel\openapi.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="datamodel\SysML.ecore">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="datamodel\types.ecore">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\bootstrap.min.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\font-awesome.min.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.eot">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.svg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff2">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\fonts\FontAwesome.otf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\images\rhea_logo_large_square.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\images\rhea_logo_small.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\HtmlDocs\css\rheaclassdocs.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dal-element-extensions.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dal-poco-extensions.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-psm-rest-class-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-serializer-dictionary-reader-provider-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-serializer-dictionary-reader-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-serializer-dictionary-writer-provider-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-serializer-dictionary-writer-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\ecore-to-dot.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\ecore-to-html-docs.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\element-dal-factory.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\graphql-schema.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\poco-dal-factory.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\poco-interface-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\poco-class-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-class-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-deserialization-provider-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-deserializer-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-interface-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-serialization-provider-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-serialization-provider-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\dto-serializer-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\enum-deserializer-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\enum-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Resources\HtmlDocs\" />
-	</ItemGroup>
+    <ItemGroup>
+      <Folder Include="Resources\HtmlDocs\" />
+    </ItemGroup>
 
 </Project>

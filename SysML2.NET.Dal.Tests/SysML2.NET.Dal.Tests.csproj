@@ -2,6 +2,7 @@
 
   <PropertyGroup>
       <TargetFramework>net7.0</TargetFramework>
+      <LangVersion>11.0</LangVersion>
       <Company>RHEA System S.A.</Company>
       <Authors>Sam Gerene</Authors>
       <Description>Nunit test suite for the SysML2.NET.CodeGenerator</Description>
