@@ -7,7 +7,7 @@
       <Description>A .NET implementation of the OMG SysML v2 specification data-acces-layer.</Description>
       <PackageId>SysML2.NET.Dal</PackageId>
       <Company>RHEA System S.A.</Company>
-      <Copyright>Copyright 2022-2023 RHEA System S.A.</Copyright>
+       <Copyright>Copyright © RHEA System S.A.</Copyright>
       <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
       <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
       <RepositoryType>Git</RepositoryType>

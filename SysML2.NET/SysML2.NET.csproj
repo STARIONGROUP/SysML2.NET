@@ -9,7 +9,7 @@
         <Description>A .NET implementation of the OMG SysML v2 specification.</Description>
         <PackageId>SysML2.NET</PackageId>
         <Company>RHEA System S.A.</Company>
-        <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+        <Copyright>Copyright © RHEA System S.A.</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
