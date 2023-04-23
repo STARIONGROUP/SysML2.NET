@@ -20,22 +20,22 @@ limitations under the License.
 
 @if (isLoading)
 {
-	<RadzenHeading Size="H1" style="display: inline-block" Text="Projects"></RadzenHeading>
+    <RadzenHeading Size="H1" style="display: inline-block" Text="Projects"></RadzenHeading>
 
-	<RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Style="margin-bottom: 20px" />
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Style="margin-bottom: 20px" />
 }
 else
 {
-	<RadzenHeading Size="H1" style="display: inline-block" Text="Projects"></RadzenHeading>
+    <RadzenHeading Size="H1" style="display: inline-block" Text="Projects"></RadzenHeading>
 
-	<RadzenDataGrid Count="@count" PageSize="10" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowColumnResize="true" Data="@this.projects" TItem="Project">
-		<Columns>
-			<RadzenDataGridColumn TItem="Project" Title="Name">
-				<Template Context="project">
-					<a href="/projects/@project?.Id">@project.Name</a>
-				</Template>
-			</RadzenDataGridColumn>
-			<RadzenDataGridColumn TItem="Project" Property="Description" Title="Description" />
-		</Columns>
-	</RadzenDataGrid>
+    <RadzenDataGrid Count="@count" PageSize="10" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowColumnResize="true" Data="@this.projects" TItem="Project">
+        <Columns>
+            <RadzenDataGridColumn TItem="Project" Title="Name">
+                <Template Context="project">
+                    <a href="/projects/@project?.Id">@project.Name</a>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Project" Property="Description" Title="Description" />
+        </Columns>
+    </RadzenDataGrid>
 }

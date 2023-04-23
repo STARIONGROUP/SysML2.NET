@@ -22,11 +22,11 @@ namespace SysML2.NET.Viewer.Tests.Services.CommitHistory
 {
     using System;
     using System.Collections.Generic;
-    
+
     using NUnit.Framework;
 
     using SysML2.NET.PIM.DTO;
-    
+
     using SysML2.NET.Viewer.Services.CommitHistory;
 
     /// <summary>

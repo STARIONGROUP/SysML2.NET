@@ -21,102 +21,102 @@ limitations under the License.
 
 @if (isLoading)
 {
-	<RadzenHeading Size="H1" style="display: inline-block" Text="Project Details"></RadzenHeading>
+    <RadzenHeading Size="H1" style="display: inline-block" Text="Project Details"></RadzenHeading>
 
-	<RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Style="margin-bottom: 20px" />
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Style="margin-bottom: 20px" />
 }
 else
 {
-	<RadzenFieldset AllowCollapse="true" Style="margin-bottom: 10px;">
-		<HeaderTemplate>
-			<span class="d-inline-flex align-items-center align-middle">
-				<RadzenIcon Icon="stars" Class="mr-1" /><b>Project Details</b>
-			</span>
-		</HeaderTemplate>
-		
-		<ChildContent>
-			<div class="row">
-				<div class="col-md-6 col-xl-6 col-lg-6">
-					<div><b>Name:</b></div>
-					<div>@(string.IsNullOrEmpty(this.project?.Name) ? "NOT SET" : this.project.Name) </div>
-					
-					<div><b>Default Branch:</b></div>
-					<div>@(this.defaultBranch == null ? "NOT SET" : this.defaultBranch.Name)</div>
+    <RadzenFieldset AllowCollapse="true" Style="margin-bottom: 10px;">
+        <HeaderTemplate>
+            <span class="d-inline-flex align-items-center align-middle">
+                <RadzenIcon Icon="stars" Class="mr-1" /><b>Project Details</b>
+            </span>
+        </HeaderTemplate>
+        
+        <ChildContent>
+            <div class="row">
+                <div class="col-md-6 col-xl-6 col-lg-6">
+                    <div><b>Name:</b></div>
+                    <div>@(string.IsNullOrEmpty(this.project?.Name) ? "NOT SET" : this.project.Name) </div>
+                    
+                    <div><b>Default Branch:</b></div>
+                    <div>@(this.defaultBranch == null ? "NOT SET" : this.defaultBranch.Name)</div>
 
-					<div><b>Branches: </b>@(this.branches == null ? "0" : this.branches.Count())</div>
-					
-					<div><b>Tags: </b>@(this.tags == null ? "0" : this.tags.Count())</div>
-				</div>
+                    <div><b>Branches: </b>@(this.branches == null ? "0" : this.branches.Count())</div>
+                    
+                    <div><b>Tags: </b>@(this.tags == null ? "0" : this.tags.Count())</div>
+                </div>
 
-				<div class="col-md-6 col-xl-6 col-lg-6">
-					<div><b>Description:</b></div>
-					<div>@(string.IsNullOrEmpty(this.project?.Description) ? "NOT SET" : this.project.Description) </div>
-				</div>
-			</div>
-		</ChildContent>
-	</RadzenFieldset>
+                <div class="col-md-6 col-xl-6 col-lg-6">
+                    <div><b>Description:</b></div>
+                    <div>@(string.IsNullOrEmpty(this.project?.Description) ? "NOT SET" : this.project.Description) </div>
+                </div>
+            </div>
+        </ChildContent>
+    </RadzenFieldset>
 
-	<RadzenDataGrid Count="@this.branches.Count()" AllowFiltering="true" AllowColumnResize="true" Data="@this.branches" TItem="Branch" Style="margin-bottom: 10px;">
-		<Columns>
-			<RadzenDataGridColumn TItem="Branch" Title="Name">
-				<Template Context="branch">
-					<span>
-						<RadzenIcon Icon="alt_route"/>
-						<a href="/projects/@project?.Id">@branch.Name</a>
-						@if (branch.Id == this.defaultBranch.Id)
-						{
-							<BSBadge Style="margin-left: 5px" Color="BSColor.Primary" IsPill="true">default</BSBadge>
-						}
-					</span>
-				</Template>
-			</RadzenDataGridColumn>
-			<RadzenDataGridColumn TItem="Branch" Property="Description" Title="Description" />
-			<RadzenDataGridColumn TItem="Branch" Title="Head">
-				<Template Context="branch">
-					@branch.Head
-				</Template>
-			</RadzenDataGridColumn>
-			<RadzenDataGridColumn TItem="Branch" Title="TimeStamp">
-				<Template Context="branch">
-					@branch.TimeStamp.ToString("yyyy-MM-dd, HH:mm:ss", CultureInfo.InvariantCulture)
-				</Template>
-			</RadzenDataGridColumn>
-		</Columns>
-	</RadzenDataGrid>
-	
-	<RadzenDropDown @bind-Value="this.selectedBranchId" TValue="Guid"
-	                Multiple="false" Placeholder="Select Branch..."
-	                Data="@this.branches" TextProperty="Name" ValueProperty="Id"
-	                Change="@this.BranchSelectionChange">
-	</RadzenDropDown>
-	
-	<RadzenDataGrid Count="@this.commits.Count()" AllowSorting="true" AllowColumnResize="true" Data="@this.commitHistory" TItem="Commit">
-		<Columns>
-			<RadzenDataGridColumn TItem="Commit" Title="Identifier">
-				<Template Context="commit">
-					<span>
-						<div>@commit.Id</div>
-						@foreach (var tag in this.tags)
-						{
-							if (@tag.TaggedCommit == @commit.Id)
-							{
-								<BSBadge Style="margin-left: 5px" Color="BSColor.Info" IsPill="true">@tag.Name</BSBadge>
-							}
-						}
-					</span>
-				</Template>
-			</RadzenDataGridColumn>
-			<RadzenDataGridColumn TItem="Commit" Property="Description" Title="Description" />
-			<RadzenDataGridColumn TItem="Commit" Title="Previous Commit">
-				<Template Context="commit">
-					@commit.PreviousCommit
-				</Template>
-			</RadzenDataGridColumn>
-			<RadzenDataGridColumn TItem="Commit" Title="TimeStamp">
-				<Template Context="commit">
-					@commit.TimeStamp.ToString("yyyy-MM-dd, HH:mm:ss", CultureInfo.InvariantCulture)
-				</Template>
-			</RadzenDataGridColumn>
-		</Columns>
-	</RadzenDataGrid>
+    <RadzenDataGrid Count="@this.branches.Count()" AllowFiltering="true" AllowColumnResize="true" Data="@this.branches" TItem="Branch" Style="margin-bottom: 10px;">
+        <Columns>
+            <RadzenDataGridColumn TItem="Branch" Title="Name">
+                <Template Context="branch">
+                    <span>
+                        <RadzenIcon Icon="alt_route"/>
+                        <a href="/projects/@project?.Id">@branch.Name</a>
+                        @if (branch.Id == this.defaultBranch.Id)
+                        {
+                            <BSBadge Style="margin-left: 5px" Color="BSColor.Primary" IsPill="true">default</BSBadge>
+                        }
+                    </span>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Branch" Property="Description" Title="Description" />
+            <RadzenDataGridColumn TItem="Branch" Title="Head">
+                <Template Context="branch">
+                    @branch.Head
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Branch" Title="TimeStamp">
+                <Template Context="branch">
+                    @branch.TimeStamp.ToString("yyyy-MM-dd, HH:mm:ss", CultureInfo.InvariantCulture)
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+    
+    <RadzenDropDown @bind-Value="this.selectedBranchId" TValue="Guid"
+                    Multiple="false" Placeholder="Select Branch..."
+                    Data="@this.branches" TextProperty="Name" ValueProperty="Id"
+                    Change="@this.BranchSelectionChange">
+    </RadzenDropDown>
+    
+    <RadzenDataGrid Count="@this.commits.Count()" AllowSorting="true" AllowColumnResize="true" Data="@this.commitHistory" TItem="Commit">
+        <Columns>
+            <RadzenDataGridColumn TItem="Commit" Title="Identifier">
+                <Template Context="commit">
+                    <span>
+                        <div>@commit.Id</div>
+                        @foreach (var tag in this.tags)
+                        {
+                            if (@tag.TaggedCommit == @commit.Id)
+                            {
+                                <BSBadge Style="margin-left: 5px" Color="BSColor.Info" IsPill="true">@tag.Name</BSBadge>
+                            }
+                        }
+                    </span>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Commit" Property="Description" Title="Description" />
+            <RadzenDataGridColumn TItem="Commit" Title="Previous Commit">
+                <Template Context="commit">
+                    @commit.PreviousCommit
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Commit" Title="TimeStamp">
+                <Template Context="commit">
+                    @commit.TimeStamp.ToString("yyyy-MM-dd, HH:mm:ss", CultureInfo.InvariantCulture)
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
 }

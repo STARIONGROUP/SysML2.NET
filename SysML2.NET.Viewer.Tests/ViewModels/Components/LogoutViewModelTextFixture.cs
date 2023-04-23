@@ -20,65 +20,67 @@
 
 namespace SysML2.NET.Viewer.Tests.ViewModels.Components
 {
-	using System.Threading.Tasks;
+    using System.Threading.Tasks;
 
-	using Blazored.SessionStorage;
+    using Blazored.SessionStorage;
 
-	using Bunit;
-	using TestContext = Bunit.TestContext;
+    using Bunit;
+    using Bunit.TestDoubles;
+    
+    using TestContext = Bunit.TestContext;
 
-	using Moq;
+    using Microsoft.Extensions.DependencyInjection;
 
-	using NUnit.Framework;
+    using Moq;
 
-	using SySML2.NET.REST;
-	using SysML2.NET.Viewer.Services.Authentication;
-	using SysML2.NET.Viewer.ViewModels.Components;
-	using Bunit.TestDoubles;
-	using Microsoft.Extensions.DependencyInjection;
+    using NUnit.Framework;
 
-	/// <summary>
-	/// Suite of tests for the <see cref="LogoutViewModel"/>
-	/// </summary>
-	[TestFixture]
-	public class LogoutViewModelTextFixture
-	{
-		private TestContext context;
+    using SySML2.NET.REST;
+    using SysML2.NET.Viewer.Services.Authentication;
+    using SysML2.NET.Viewer.ViewModels.Components;
 
-		private FakeNavigationManager navigationManager;
+    /// <summary>
+    /// Suite of tests for the <see cref="LogoutViewModel"/>
+    /// </summary>
+    [TestFixture]
+    public class LogoutViewModelTextFixture
+    {
+        private TestContext context;
 
-		private LogoutViewModel logoutViewModel;
+        private FakeNavigationManager navigationManager;
 
-		private AuthenticationService authenticationService;
+        private LogoutViewModel logoutViewModel;
 
-		private AnonymousAuthenticationStateProvider authenticationStateProvider;
+        private AuthenticationService authenticationService;
 
-		private Mock<ISessionStorageService> sessionStorageService;
+        private AnonymousAuthenticationStateProvider authenticationStateProvider;
 
-		private Mock<IRestClient> restClient;
-		
-		[SetUp]
-		public void SetUp()
-		{
-			this.context = new TestContext();
+        private Mock<ISessionStorageService> sessionStorageService;
 
-			this.sessionStorageService = new Mock<ISessionStorageService>();
-			this.restClient = new Mock<IRestClient>();
-			this.authenticationStateProvider = new AnonymousAuthenticationStateProvider(this.sessionStorageService.Object);
-			
-			this.authenticationService = new AuthenticationService(this.restClient.Object, this.authenticationStateProvider, this.sessionStorageService.Object);
+        private Mock<IRestClient> restClient;
 
-			this.navigationManager = this.context.Services.GetRequiredService<FakeNavigationManager>();
+        [SetUp]
+        public void SetUp()
+        {
+            this.context = new TestContext();
 
-			this.logoutViewModel = new LogoutViewModel(this.authenticationService, this.navigationManager);
-		}
-		
-		[Test]
-		public async Task Verify_that_logout_works_as_expected()
-		{
-			await this.logoutViewModel.ExecuteLogout();
+            this.sessionStorageService = new Mock<ISessionStorageService>();
+            this.restClient = new Mock<IRestClient>();
+            this.authenticationStateProvider = new AnonymousAuthenticationStateProvider(this.sessionStorageService.Object);
+            
+            this.authenticationService = new AuthenticationService(this.restClient.Object, this.authenticationStateProvider, this.sessionStorageService.Object);
 
-			Assert.That(this.navigationManager.Uri, Is.EqualTo("http://localhost/"));
-		}
-	}
+            this.navigationManager = this.context.Services.GetRequiredService<FakeNavigationManager>();
+
+            this.logoutViewModel = new LogoutViewModel(this.authenticationService, this.navigationManager);
+        }
+
+        [Test]
+        public async Task Verify_that_logout_works_as_expected()
+        {
+            await this.logoutViewModel.ExecuteLogout();
+
+            Assert.That(this.navigationManager.Uri, Is.EqualTo("http://localhost/"));
+        }
+    }
 }

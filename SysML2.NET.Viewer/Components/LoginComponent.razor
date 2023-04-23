@@ -1,17 +1,17 @@
 ﻿<!------------------------------------------------------------------------------
-	Copyright 2022-2023 RHEA System S.A.
+    Copyright 2022-2023 RHEA System S.A.
 
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 ------------------------------------------------------------------------------->
 
 @using SySML2.NET.REST
@@ -19,62 +19,62 @@
 <div class="text-center">Connect to a Model Server</div>
 
 <EditForm Model="this.ViewModel.AuthenticationStatusKind" OnValidSubmit="this.ViewModel.ExecuteLogin">
-	
-	<DataAnnotationsValidator/>
-	
-	<div class="input-group row m-top-10px">
-		<label for="username" class="text-align-start">Username:</label>
-		<InputText disabled="true" id="username" class="form-control" @bind-Value="this.ViewModel.UserName"/>
-	</div>
-	
-	<div class="input-group row m-top-10px">
-		<label for="password" class="text-align-start">Password:</label>
-		<InputText disabled="true" id="password" type="password" class="form-control" @bind-Value="this.ViewModel.Password"/>
-	</div>
-	
-	<div class="input-group row m-top-10px">
-		<label for="password" class="text-align-start">Url:</label>
-		<InputText id="url" type="form-control" class="form-control" @bind-Value="this.ViewModel.Url" />
-	</div>
+    
+    <DataAnnotationsValidator/>
+    
+    <div class="input-group row m-top-10px">
+        <label for="username" class="text-align-start">Username:</label>
+        <InputText disabled="true" id="username" class="form-control" @bind-Value="this.ViewModel.UserName"/>
+    </div>
+    
+    <div class="input-group row m-top-10px">
+        <label for="password" class="text-align-start">Password:</label>
+        <InputText disabled="true" id="password" type="password" class="form-control" @bind-Value="this.ViewModel.Password"/>
+    </div>
+    
+    <div class="input-group row m-top-10px">
+        <label for="password" class="text-align-start">Url:</label>
+        <InputText id="url" type="form-control" class="form-control" @bind-Value="this.ViewModel.Url" />
+    </div>
 
-	<ValidationSummary/>
-	
-	@if (this.ViewModel.AuthenticationStatusKind == AuthenticationStatusKind.Fail)
-	{
-		<div class="input-group row m-top-10px">
-			<label class="text-danger">@this.ViewModel.ErrorMessage</label>
-		</div>
-	}
-	
-	<div class="container">
-		<div class="row justify-content-md-center">
-			<div class="col col-lg-2"></div>
-			<div class="col-md-auto">
-				@switch (this.ViewModel.AuthenticationStatusKind)
-					{
-						case AuthenticationStatusKind.None:
-						<button id="connectbtn" type="submit" class="btn btn-connect" style="margin: 5px">Connect</button>
-							break;
-						case AuthenticationStatusKind.Authenticating:
-							<button id="connectbtn" type="submit" class="btn btn-connect" style="margin: 5px" disabled>Connecting</button>
-							break;
-						case AuthenticationStatusKind.Fail:
-						<button id="connectbtn" type="submit" class="btn btn-connect" style="margin: 5px">Retry</button>
-							break;
-					}
-				
-					@switch (this.ViewModel.AuthenticationStatusKind)
-					{
-						case AuthenticationStatusKind.Authenticating:
-						<div id="cancelbtn" type="button" class="btn btn-secondary"  style="margin: 5px" margin="5px" @onclick="this.ViewModel.ExecuteCancelLogin">Cancel</div>
-							break;
-						default:
-						<div id="cancelbtn" type="label" class="btn btn-secondary" style="margin: 5px" disabled>Cancel</div>
-							break;
-					}
-			</div>
-			<div class="col col-lg-2"></div>
-		</div>
-	</div>
+    <ValidationSummary/>
+    
+    @if (this.ViewModel.AuthenticationStatusKind == AuthenticationStatusKind.Fail)
+    {
+        <div class="input-group row m-top-10px">
+            <label class="text-danger">@this.ViewModel.ErrorMessage</label>
+        </div>
+    }
+    
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-2"></div>
+            <div class="col-md-auto">
+                @switch (this.ViewModel.AuthenticationStatusKind)
+                    {
+                        case AuthenticationStatusKind.None:
+                        <button id="connectbtn" type="submit" class="btn btn-connect" style="margin: 5px">Connect</button>
+                            break;
+                        case AuthenticationStatusKind.Authenticating:
+                            <button id="connectbtn" type="submit" class="btn btn-connect" style="margin: 5px" disabled>Connecting</button>
+                            break;
+                        case AuthenticationStatusKind.Fail:
+                        <button id="connectbtn" type="submit" class="btn btn-connect" style="margin: 5px">Retry</button>
+                            break;
+                    }
+                
+                    @switch (this.ViewModel.AuthenticationStatusKind)
+                    {
+                        case AuthenticationStatusKind.Authenticating:
+                        <div id="cancelbtn" type="button" class="btn btn-secondary"  style="margin: 5px" margin="5px" @onclick="this.ViewModel.ExecuteCancelLogin">Cancel</div>
+                            break;
+                        default:
+                        <div id="cancelbtn" type="label" class="btn btn-secondary" style="margin: 5px" disabled>Cancel</div>
+                            break;
+                    }
+            </div>
+            <div class="col col-lg-2"></div>
+        </div>
+    </div>
 
 </EditForm>
