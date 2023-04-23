@@ -43,8 +43,6 @@ namespace SysML2.NET.Serializer.Json.Tests
 
         private Commit commit;
 
-        private Tag tag;
-
         [SetUp]
         public void SetUp()
         {
