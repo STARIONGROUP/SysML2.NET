@@ -14,13 +14,23 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
+            [Update] to SysML2.NET version 0.11.0
+            [Add] PackageReadmeFile and PackageIcon
+            [Update] folder structure and Refactor namespaces
             [Update] Json deserializer to use the u8 from C# 11 to improve performance; fixes #23
         </PackageReleaseNotes>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="System.Text.Json" Version="7.0.2" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>

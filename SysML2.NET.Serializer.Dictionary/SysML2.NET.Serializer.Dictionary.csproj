@@ -14,8 +14,13 @@
       <Authors>Sam Gerené</Authors>
       <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageReleaseNotes>
-          [Update] to SysML2.NET version 0.9.0
+          [Update] folder structure
+          [Update] to SysML2.NET version 0.11.0
+          [Add] PackageReadmeFile and PackageIcon
+          [Refactor] namespaces
       </PackageReleaseNotes>
+      <PackageIcon>cdp4-icon.png</PackageIcon>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,5 +31,10 @@
   <ItemGroup>
     <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
   </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
 </Project>

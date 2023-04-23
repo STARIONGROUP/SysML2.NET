@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+   <PropertyGroup>
       <TargetFramework>netstandard2.0</TargetFramework>
       <LangVersion>11.0</LangVersion>
       <Version>0.11.0</Version>
@@ -14,14 +14,23 @@
       <Authors>Sam Gerené</Authors>
       <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
       <PackageReleaseNotes>
-          [Initial] release of Dal project; fixes #8
+          [Update] folder structure
+          [Update] to SysML2.NET version 0.11.0
+          [Add] PackageReadmeFile and PackageIcon
       </PackageReleaseNotes>
-  </PropertyGroup>
+       <PackageIcon>cdp4-icon.png</PackageIcon>
+       <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
+    </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+    
   <ItemGroup>
     <Folder Include="PIM\" />
   </ItemGroup>

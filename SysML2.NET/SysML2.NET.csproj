@@ -16,13 +16,20 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Refactor] API namespace to PIM namespace
-            [Add] generated EFeature annotations to DTO and POCO; fixes #17
+            [Update] folder structure
+            [Add] PackageReadmeFile and PackageIcon
         </PackageReleaseNotes>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
