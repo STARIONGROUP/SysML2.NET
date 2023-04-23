@@ -15,6 +15,13 @@
         <Nullable>disable</Nullable>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
+    
+    <ItemGroup>
+      <Compile Remove="AutoGenModules\**" />
+      <Content Remove="AutoGenModules\**" />
+      <EmbeddedResource Remove="AutoGenModules\**" />
+      <None Remove="AutoGenModules\**" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
@@ -30,10 +37,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="AutoGenModules\" />
-      <Folder Include="AutoGenRegistration\" />
+      <Folder Include="PSM\AutoGenRegistration\" />
       <Folder Include="CachingService\" />
       <Folder Include="DataService\" />
+      <Folder Include="Core\" />
+      <Folder Include="PSM\AutoGenModules\" />
     </ItemGroup>
 
 </Project>

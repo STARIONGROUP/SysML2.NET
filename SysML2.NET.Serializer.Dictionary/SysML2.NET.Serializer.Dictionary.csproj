@@ -19,7 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AutoGenDictionaryWriter\" />
+    <Folder Include="Core\AutoGenDictionaryWriter\" />
+    <Folder Include="PIM\" />
   </ItemGroup>
 
   <ItemGroup>

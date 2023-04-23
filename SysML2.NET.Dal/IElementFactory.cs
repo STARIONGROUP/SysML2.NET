@@ -20,26 +20,26 @@
 
 namespace SysML2.NET.Dal
 {
-	using System; 
+    using System; 
 
-	/// <summary>
-	/// The purpose of the <see cref="IElementFactory"/> is to create a <see cref="Core.POCO.IElement"/> POCO
-	/// based on a <see cref="Core.DTO.IElement"/> DTO
-	/// </summary>
-	public interface IElementFactory
-	{
-		/// <summary>
-		/// Creates a <see cref="Core.POCO.IElement"/> POCO based on a <see cref="Core.DTO.IElement"/>
-		/// </summary>
-		/// <param name="dto">
-		/// the source <see cref="Core.DTO.IElement"/> DTO
-		/// </param>
-		/// <returns>
-		/// a <see cref="Core.POCO.IElement"/> POCO
-		/// </returns>
-		/// <exception cref="ArgumentNullException">
-		/// thrown when <paramref name="dto"/> is null
-		/// </exception>
-		Core.POCO.IElement Create(Core.DTO.IElement dto);
-	}
+    /// <summary>
+    /// The purpose of the <see cref="IElementFactory"/> is to create a <see cref="Core.POCO.IElement"/> POCO
+    /// based on a <see cref="Core.DTO.IElement"/> DTO
+    /// </summary>
+    public interface IElementFactory
+    {
+        /// <summary>
+        /// Creates a <see cref="Core.POCO.IElement"/> POCO based on a <see cref="Core.DTO.IElement"/>
+        /// </summary>
+        /// <param name="dto">
+        /// the source <see cref="Core.DTO.IElement"/> DTO
+        /// </param>
+        /// <returns>
+        /// a <see cref="Core.POCO.IElement"/> POCO
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// thrown when <paramref name="dto"/> is null
+        /// </exception>
+        Core.POCO.IElement Create(Core.DTO.IElement dto);
+    }
 }

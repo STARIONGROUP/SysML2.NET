@@ -107,7 +107,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.json");
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI);
+                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
 
                 Assert.That(data.Count(), Is.EqualTo(35));
 
@@ -125,7 +125,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.json");
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI);
+                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
 
                 Assert.That(data.Count(), Is.EqualTo(1));
 
@@ -143,7 +143,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.commits.json");
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI);
+                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
 
                 Assert.That(data.Count(), Is.EqualTo(3));
 
@@ -167,7 +167,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.commits.931978a2-e117-4408-96f4-02b861ddbedd.json");
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI);
+                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
 
                 Assert.That(data.Count(), Is.EqualTo(1));
 
@@ -185,7 +185,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.tags.json");
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI);
+                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
 
                 Assert.That(data.Count(), Is.EqualTo(2));
 
@@ -205,7 +205,7 @@ namespace SysML2.NET.Serializer.Json.Tests
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.branches.json");
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI);
+                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
 
                 Assert.That(data.Count(), Is.EqualTo(2));
 

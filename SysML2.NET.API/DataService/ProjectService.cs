@@ -26,6 +26,7 @@ namespace SysML2.NET.API.Services
     using Common;
 
     using PIM.DTO;
+    using SysML2.NET.API.PSM.AutoGenServices;
 
     /// <summary>
     /// The purpose of the <see cref="ProjectService"/> is to perform CRUD operations and to provide
@@ -70,8 +71,6 @@ namespace SysML2.NET.API.Services
                 Id = Guid.Parse("2deabbda92a140f5a2ff8af3e12f050e"),
                 OwningProject = project.Id
             };
-
-            
 
             project.Description = "this is an updated description updated in the before create";
             

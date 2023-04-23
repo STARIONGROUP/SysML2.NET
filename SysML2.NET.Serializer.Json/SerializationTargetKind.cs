@@ -36,6 +36,6 @@ namespace SysML2.NET.Serializer.Json
         /// <summary>
         /// (de)serialization to and from SysML Core concepts as well as REST API concepts
         /// </summary>
-        RESTAPI = 1,
+        PSM = 1,
     }
 }

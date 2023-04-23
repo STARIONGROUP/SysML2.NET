@@ -23,7 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AutoGenRepository\" />
+    <Folder Include="Core\" />
+    <Folder Include="PIM\AutoGenRepository\" />
   </ItemGroup>
 
 </Project>

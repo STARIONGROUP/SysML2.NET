@@ -33,7 +33,7 @@ namespace SysML2.NET.API
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-
+    using SysML2.NET.API.PSM.AutoGenServices;
     using SysML2.NET.API.Services;
     using SysML2.NET.OGM.Repository;
     using SysML2.NET.Serializer.Json;

@@ -34,7 +34,6 @@ namespace SysML2.NET.API.Modules
 
     using SysML2.NET.Core.DTO;
     using SysML2.NET.Serializer.Json;
-    using SysML2.NET.API.Services;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -43,6 +42,7 @@ namespace SysML2.NET.API.Modules
     using PIM;
     using PIM.DTO;
     using SysML2.NET.Serializer;
+    using SysML2.NET.API.PSM.AutoGenServices;
 
     /// <summary>
     /// Implements the routes of the ProjectService as defined in the Systems Modeling Application 1Programming Interface (API) and Services specification
@@ -140,7 +140,7 @@ namespace SysML2.NET.API.Modules
                     var stream = new MemoryStream();
                     await req.Body.CopyToAsync(stream, cancellationToken);
 
-                    var dataItems = await this.deserializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.RESTAPI, CancellationToken.None);
+                    var dataItems = await this.deserializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, CancellationToken.None);
 
                     var project = (Project)dataItems.Single();
                     

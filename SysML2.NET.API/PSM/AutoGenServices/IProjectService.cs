@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IBranchService.cs" company="RHEA System S.A.">
+// <copyright file="IProjectService.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.API.Services
+namespace SysML2.NET.API.PSM.AutoGenServices
 {
     using System.Collections.Generic;
     using System;
@@ -33,16 +33,16 @@ namespace SysML2.NET.API.Services
     using System.Threading;
 
     /// <summary>
-    /// The purpose of the <see cref="IBranchService"/> is to perform CRUD operations and to provide
+    /// The purpose of the <see cref="IProjectService"/> is to perform CRUD operations and to provide
     /// before and after hooks to inject custom service logic
     /// </summary>
-    public interface IBranchService
+    public interface IProjectService
     {
         /// <summary>
         /// Create a new instance of <see cref="Project"/>
         /// </summary>
-        /// <param name="branch">
-        /// The subject <see cref="Branch"/> that is to be created.
+        /// <param name="project">
+        /// The subject <see cref="Project"/> that is to be created.
         /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> that can be used to cancel the operation
@@ -50,7 +50,7 @@ namespace SysML2.NET.API.Services
         /// <returns>
         /// A <see cref="Task"/>
         /// </returns>
-        Task Create(Branch branch, CancellationToken cancellationToken);
+        Task Create(Project project, CancellationToken cancellationToken);
 
         /// <summary>
         /// Reads <see cref="IEnumerable{IData}"/>
@@ -71,7 +71,7 @@ namespace SysML2.NET.API.Services
         /// <remarks>
         /// An <see cref="IEnumerable{IData}"/>
         /// </remarks>
-        Task<IEnumerable<IData>> Read(Guid identifier, int page, int count, CancellationToken cancellationToken);
+        Task<List<IData>> Read(Guid identifier, int page, int count, CancellationToken cancellationToken);
     }
 }
 

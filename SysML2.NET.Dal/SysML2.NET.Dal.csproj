@@ -22,4 +22,8 @@
     <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PIM\" />
+  </ItemGroup>
+
 </Project>

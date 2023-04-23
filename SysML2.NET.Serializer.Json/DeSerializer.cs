@@ -184,7 +184,7 @@ namespace SysML2.NET.Serializer.Json
 
                 Func<JsonElement, SerializationModeKind, ILoggerFactory, IData> func;
 
-                if (serializationTargetKind == SerializationTargetKind.RESTAPI)
+                if (serializationTargetKind == SerializationTargetKind.PSM)
                 {
                     try
                     {

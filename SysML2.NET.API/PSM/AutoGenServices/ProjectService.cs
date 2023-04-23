@@ -35,6 +35,7 @@ namespace SysML2.NET.API.Services
     using OGM.Repository;
 
     using SysML2.NET.API.DataService;
+    using SysML2.NET.API.PSM.AutoGenServices;
     using SysML2.NET.Common;
     using SysML2.NET.PIM.DTO;
 
