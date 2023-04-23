@@ -32,7 +32,6 @@ namespace SysML2.NET.API.Modules
     using SysML2.NET.Serializer.Json;
 
     using Microsoft.Extensions.Logging;
-    using SysML2.NET.Serializer;
 
     /// <summary>
     /// Abstract super class from which all Modules need to derive

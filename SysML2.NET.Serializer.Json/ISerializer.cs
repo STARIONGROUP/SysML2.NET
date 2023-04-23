@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.Json
     using System.Threading.Tasks;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// The purpose of the <see cref="ISerializer"/> is to write an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>

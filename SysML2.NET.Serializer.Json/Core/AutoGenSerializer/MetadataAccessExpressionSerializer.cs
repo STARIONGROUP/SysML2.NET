@@ -22,13 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json
+namespace SysML2.NET.Core.DTO.Serializer.Json
 {
     using System;
     using System.Text.Json;
 
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO;
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// The purpose of the <see cref="MetadataAccessExpressionSerializer"/> is to provide serialization capabilities

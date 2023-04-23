@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="PimSerializationProvider.cs" company="RHEA System S.A.">
+// <copyright file="SerializationProvider.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,12 +18,14 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json.PIM
+namespace SysML2.NET.PIM.DTO.Serializer.Json
 {
     using System;
     using System.Collections.Generic;
     using System.Text.Json;
-    
+
+    using SysML2.NET.Serializer.Json;
+
     /// <summary>
     /// Delegate provider for the appropriate serialization method to serialize a <see cref="Type" />
     /// </summary>
@@ -60,6 +62,18 @@ namespace SysML2.NET.Serializer.Json.PIM
             }
 
             return action;
+        }
+
+        /// <summary>
+        /// Asserts whether the <paramref name="type"/> is supported by the provider
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the subject <see cref="System.Type"/> for which support is asserted
+        /// </param>
+        /// <returns></returns>
+        internal static bool IsTypeSupported(System.Type type)
+        {
+            return SerializerActionMap.ContainsKey(type);
         }
     }
 }

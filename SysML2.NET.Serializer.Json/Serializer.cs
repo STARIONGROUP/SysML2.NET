@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.Serializer.Json
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text.Json;
@@ -29,7 +28,8 @@ namespace SysML2.NET.Serializer.Json
     
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO;
-    using SysML2.NET.Serializer.Json.PIM;
+    using SysML2.NET.PIM.DTO.Serializer.Json;
+    using SysML2.NET.Core.DTO.Serializer.Json;
 
     /// <summary>
     /// The purpose of the <see cref="Serializer"/> is to write an <see cref="IElement"/> and <see cref="IEnumerable{IElement}"/>
@@ -60,13 +60,13 @@ namespace SysML2.NET.Serializer.Json
 
                 foreach (var element in elements)
                 {
-                    try
+                    if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
                     {
                         var serializationAction = ApiSerializationProvider.Provide(element.GetType());
                         serializationAction(element, writer, serializationModeKind);
                         writer.Flush();
                     }
-                    catch (NotSupportedException)
+                    else
                     {
                         var serializationAction = SerializationProvider.Provide(element.GetType());
                         serializationAction(element, writer, serializationModeKind);
@@ -99,13 +99,13 @@ namespace SysML2.NET.Serializer.Json
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
-                try
+                if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
                 {
                     var serializationAction = ApiSerializationProvider.Provide(element.GetType());
                     serializationAction(element, writer, serializationModeKind);
                     writer.Flush();
                 }
-                catch (NotSupportedException)
+                else 
                 {
                     var serializationAction = SerializationProvider.Provide(element.GetType());
                     serializationAction(element, writer, serializationModeKind);
@@ -140,15 +140,15 @@ namespace SysML2.NET.Serializer.Json
 
                 foreach (var element in elements)
                 {
-                    try
+                    if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
                     {
                         var serializationAction = ApiSerializationProvider.Provide(element.GetType());
                         serializationAction(element, writer, serializationModeKind);
                         await writer.FlushAsync(cancellationToken);
                     }
-                    catch (NotSupportedException)
+                    else
                     {
-                        var serializationAction = SerializationProvider.Provide(element.GetType());
+                        var serializationAction = Core.DTO.Serializer.Json.SerializationProvider.Provide(element.GetType());
                         serializationAction(element, writer, serializationModeKind);
                         await writer.FlushAsync(cancellationToken);
                     }
@@ -182,13 +182,13 @@ namespace SysML2.NET.Serializer.Json
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
-                try
+                if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
                 {
                     var serializationAction = ApiSerializationProvider.Provide(element.GetType());
                     serializationAction(element, writer, serializationModeKind);
                     await writer.FlushAsync(cancellationToken);
                 }
-                catch (NotSupportedException)
+                else
                 {
                     var serializationAction = SerializationProvider.Provide(element.GetType());
                     serializationAction(element, writer, serializationModeKind);

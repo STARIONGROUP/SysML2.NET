@@ -30,6 +30,7 @@ namespace SysML2.NET.Serializer.Json.Tests
     using NUnit.Framework;
 
     using SysML2.NET.Core.DTO;
+    using SysML2.NET.Serializer.Json;
 
     [TestFixture]
     public class SerializerTestFixture

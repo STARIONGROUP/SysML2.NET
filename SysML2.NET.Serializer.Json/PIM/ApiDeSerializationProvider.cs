@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json.PIM
+namespace SysML2.NET.PIM.DTO.Serializer.Json
 {
     using System;
     using System.Collections.Generic;
@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.Json.PIM
     using Microsoft.Extensions.Logging;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// Delegate provider for the appropriate deserialization method for <see cref="System.Type"/> from the 
@@ -69,6 +70,18 @@ namespace SysML2.NET.Serializer.Json.PIM
             }
 
             return func;
+        }
+
+        /// <summary>
+        /// Asserts whether the <paramref name="typeName"/> is supported by the provider
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the subject <see cref="System.Type"/> for which support is asserted
+        /// </param>
+        /// <returns></returns>
+        internal static bool IsTypeSupported(string typeName)
+        {
+            return DeSerializerActionMap.ContainsKey(typeName);
         }
     }
 }

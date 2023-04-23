@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer
+namespace SysML2.NET.Serializer.Json
 {
     /// <summary>
     /// an enumeration that denotes what kind of serialization shall be used

@@ -18,12 +18,13 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json.PIM
+namespace SysML2.NET.PIM.DTO.Serializer.Json
 {
     using System;
     using System.Text.Json;
 
     using SysML2.NET.PIM.DTO;
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// The purpose of the <see cref="DataVersionSerializer"/> is to provide serialization capabilities

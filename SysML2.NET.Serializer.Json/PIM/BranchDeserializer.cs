@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json.PIM
+namespace SysML2.NET.PIM.DTO.Serializer.Json
 {
     using System;
     using System.Text.Json;
@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.Json.PIM
     using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.PIM.DTO;
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// The purpose of the <see cref="BranchDeserializer"/> is to provide deserialization capabilities

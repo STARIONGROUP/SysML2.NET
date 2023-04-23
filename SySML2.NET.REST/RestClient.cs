@@ -35,7 +35,6 @@ namespace SySML2.NET.REST
     using SysML2.NET.Common;
     using SysML2.NET.Core.DTO;
     using SysML2.NET.Serializer.Json;
-    using SysML2.NET.Serializer;
 
     /// <summary>
     /// The purpose of the <see cref="RestClient"/> is to provide an abstraction over the SysML REST/HTTP PSM protocol

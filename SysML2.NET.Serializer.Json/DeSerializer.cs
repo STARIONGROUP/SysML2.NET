@@ -33,8 +33,8 @@ namespace SysML2.NET.Serializer.Json
     using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
-    using SysML2.NET.Serializer.Json.PIM;
+    using SysML2.NET.Core.DTO.Serializer.Json;
+    using SysML2.NET.PIM.DTO.Serializer.Json;
 
     /// <summary>
     /// The purpose of the <see cref="DeSerializer"/> is to deserialize a JSON <see cref="Stream"/> to
@@ -186,12 +186,12 @@ namespace SysML2.NET.Serializer.Json
 
                 if (serializationTargetKind == SerializationTargetKind.PSM)
                 {
-                    try
+                    if (ApiDeSerializationProvider.IsTypeSupported(typeName))
                     {
                         func = ApiDeSerializationProvider.Provide(typeName);
                         return func(jsonObject, serializationModeKind, this.loggerFactory);
                     }
-                    catch (NotSupportedException)
+                    else
                     {
                         func = DeSerializationProvider.Provide(typeName);
                         return func(jsonObject, serializationModeKind, this.loggerFactory);

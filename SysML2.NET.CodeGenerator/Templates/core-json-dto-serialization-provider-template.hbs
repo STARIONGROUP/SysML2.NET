@@ -22,11 +22,13 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json
+namespace SysML2.NET.Core.DTO.Serializer.Json
 {
     using System;
     using System.Collections.Generic;
     using System.Text.Json;
+
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// Delegate provider for the appropriate serialization method to serialize a <see cref="Type" />
@@ -61,6 +63,18 @@ namespace SysML2.NET.Serializer.Json
             }
 
             return action;
+        }
+
+        /// <summary>
+        /// Asserts whether the <paramref name="type"/> is supported by the provider
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the subject <see cref="System.Type"/> for which support is asserted
+        /// </param>
+        /// <returns></returns>
+        internal static bool IsTypeSupported(System.Type type)
+        {
+            return SerializerActionMap.ContainsKey(type);
         }
     }
 }

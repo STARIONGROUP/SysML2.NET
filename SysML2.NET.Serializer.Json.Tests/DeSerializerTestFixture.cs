@@ -30,7 +30,8 @@ namespace SysML2.NET.Serializer.Json.Tests
 
     using SysML2.NET.PIM.DTO;
     using SysML2.NET.Core.DTO;
-    
+    using SysML2.NET.Serializer.Json;
+
     /// <summary>
     /// Suite of tests for the <see cref="DeSerializer"/>
     /// </summary>

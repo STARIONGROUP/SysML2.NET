@@ -225,6 +225,18 @@ namespace SysML2.NET.Serializer.Dictionary
 
             return func;
         }
+
+        /// <summary>
+        /// Asserts whether the <paramref name="type"/> is supported by the provider
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the subject <see cref="System.Type"/> for which support is asserted
+        /// </param>
+        /// <returns></returns>
+        internal static bool IsTypeSupported(System.Type type)
+        {
+            return DictionaryWriterFuncMap.ContainsKey(type);
+        }
     }
 }
 

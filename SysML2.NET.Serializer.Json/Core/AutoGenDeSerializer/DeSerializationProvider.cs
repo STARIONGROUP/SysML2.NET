@@ -22,7 +22,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json
+namespace SysML2.NET.Core.DTO.Serializer.Json
 {
     using System;
     using System.Collections.Generic;
@@ -31,6 +31,7 @@ namespace SysML2.NET.Serializer.Json
     using Microsoft.Extensions.Logging;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// Delegate provider for the appropriate deserialization method to deserialize a <see cref="System.Type"/>
@@ -229,6 +230,18 @@ namespace SysML2.NET.Serializer.Json
             }
 
             return func;
+        }
+
+        /// <summary>
+        /// Asserts whether the <paramref name="typeName"/> is supported by the provider
+        /// </summary>
+        /// <param name="typeName">
+        /// The name of the subject <see cref="System.Type"/> for which support is asserted
+        /// </param>
+        /// <returns></returns>
+        internal static bool IsTypeSupported(string typeName)
+        {
+            return DeSerializerActionMap.ContainsKey(typeName);
         }
     }
 }
