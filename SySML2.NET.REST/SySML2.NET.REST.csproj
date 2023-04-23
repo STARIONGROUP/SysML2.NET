@@ -4,7 +4,7 @@
       <TargetFramework>netstandard2.0</TargetFramework>
       <LangVersion>11.0</LangVersion>
       <LangVersion>8</LangVersion>
-      <Version>0.10.0</Version>
+      <Version>0.11.0</Version>
       <Description>A .NET implementation of the OMG SysML v2 REST/HTTP PSM</Description>
       <PackageId>SysML2.NET.REST</PackageId>
       <Company>RHEA System S.A.</Company>

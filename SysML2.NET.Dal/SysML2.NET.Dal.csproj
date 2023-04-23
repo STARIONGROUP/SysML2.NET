@@ -3,7 +3,7 @@
   <PropertyGroup>
       <TargetFramework>netstandard2.0</TargetFramework>
       <LangVersion>11.0</LangVersion>
-      <Version>0.10.0</Version>
+      <Version>0.11.0</Version>
       <Description>A .NET implementation of the OMG SysML v2 specification data-acces-layer.</Description>
       <PackageId>SysML2.NET.Dal</PackageId>
       <Company>RHEA System S.A.</Company>

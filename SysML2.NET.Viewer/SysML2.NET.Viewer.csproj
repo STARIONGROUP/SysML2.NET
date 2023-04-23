@@ -5,7 +5,7 @@
       <LangVersion>11.0</LangVersion>
       <Company>RHEA System S.A.</Company>
       <Title>SysML2 Viewer</Title>
-      <Version>0.10.1</Version>
+      <Version>0.11.0</Version>
       <Description>Web Application to inspect SysML2 model server</Description>
       <Copyright>Copyright © RHEA System S.A.</Copyright>
       <Authors>Sam Gerené</Authors>
