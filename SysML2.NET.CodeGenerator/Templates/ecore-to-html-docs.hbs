@@ -121,7 +121,11 @@
                                 {{#each this.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
                                 <tr>
                                     <td>{{ structuralFeature.Name }}</td>
-                                    <td><a href="#{{StructuralFeature.TypeName structuralFeature}}">{{StructuralFeature.TypeName structuralFeature}}</a> [{{ structuralFeature.LowerBound }}..{{ structuralFeature.UpperBound }}]</td>
+                                    <td>
+                                        <a href="#{{StructuralFeature.TypeName structuralFeature}}">{{StructuralFeature.TypeName structuralFeature}}</a> [{{ structuralFeature.LowerBound }}..{{ structuralFeature.UpperBound }}]
+                                        {{#if structuralFeature.Derived }} {derived} {{/if}}
+                                        {{#if (StructuralFeature.QueryIsContainment structuralFeature) }} {composite} {{/if}}
+                                    </td>
                                     <td>{{ structuralFeature.DefaultValueLiteral }}</td>
                                     <td>{{ #RawDocumentation structuralFeature }}</td>
                                     <td><a href="#{{structuralFeature.EContainingClass.Name}}">{{structuralFeature.EContainingClass.Name}}</a></td>
