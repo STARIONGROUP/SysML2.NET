@@ -58,7 +58,7 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("AttributeDefinitionDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the AttributeDefinitionDeSerializer cannot be used to deserialize this JsonElement");
             }
@@ -70,7 +70,7 @@ namespace SysML2.NET.Serializer.Json
 
             var dtoInstance = new Core.DTO.AttributeDefinition();
 
-            if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.Json
                 }
             }
 
-            if (jsonElement.TryGetProperty("aliasIds", out JsonElement aliasIdsProperty))
+            if (jsonElement.TryGetProperty("aliasIds"u8, out JsonElement aliasIdsProperty))
             {
                 foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
                 {
@@ -99,7 +99,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the aliasIds Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("declaredName", out JsonElement declaredNameProperty))
+            if (jsonElement.TryGetProperty("declaredName"u8, out JsonElement declaredNameProperty))
             {
                 dtoInstance.DeclaredName = declaredNameProperty.GetString();
             }
@@ -108,7 +108,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the declaredName Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("declaredShortName", out JsonElement declaredShortNameProperty))
+            if (jsonElement.TryGetProperty("declaredShortName"u8, out JsonElement declaredShortNameProperty))
             {
                 dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
             }
@@ -117,7 +117,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the declaredShortName Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
+            if (jsonElement.TryGetProperty("elementId"u8, out JsonElement elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();
                 if (propertyValue != null)
@@ -130,7 +130,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the elementId Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isAbstract", out JsonElement isAbstractProperty))
+            if (jsonElement.TryGetProperty("isAbstract"u8, out JsonElement isAbstractProperty))
             {
                 if (isAbstractProperty.ValueKind != JsonValueKind.Null)
                 {
@@ -142,7 +142,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isAbstract Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
+            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out JsonElement isImpliedIncludedProperty))
             {
                 if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
                 {
@@ -154,7 +154,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isImpliedIncluded Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isSufficient", out JsonElement isSufficientProperty))
+            if (jsonElement.TryGetProperty("isSufficient"u8, out JsonElement isSufficientProperty))
             {
                 if (isSufficientProperty.ValueKind != JsonValueKind.Null)
                 {
@@ -166,7 +166,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isSufficient Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isVariation", out JsonElement isVariationProperty))
+            if (jsonElement.TryGetProperty("isVariation"u8, out JsonElement isVariationProperty))
             {
                 if (isVariationProperty.ValueKind != JsonValueKind.Null)
                 {
@@ -178,11 +178,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isVariation Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
+            if (jsonElement.TryGetProperty("ownedRelationship"u8, out JsonElement ownedRelationshipProperty))
             {
                 foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelationshipIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement ownedRelationshipIdProperty))
                     {
                         var propertyValue = ownedRelationshipIdProperty.GetString();
                         if (propertyValue != null)
@@ -197,7 +197,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the ownedRelationship Json property was not found in the AttributeDefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
+            if (jsonElement.TryGetProperty("owningRelationship"u8, out JsonElement owningRelationshipProperty))
             {
                 if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -205,7 +205,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out JsonElement owningRelationshipIdProperty))
                     {
                         var propertyValue = owningRelationshipIdProperty.GetString();
                         if (propertyValue != null)

@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ElementFilterMembershipSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="ElementFilterMembershipSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IElementFilterMembership"/> interface
     /// </summary>
     internal static class ElementFilterMembershipSerializer
     {
@@ -57,54 +57,54 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ElementFilterMembership");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("ElementFilterMembership"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iElementFilterMembership.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iElementFilterMembership.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iElementFilterMembership.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iElementFilterMembership.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iElementFilterMembership.ElementId);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iElementFilterMembership.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iElementFilterMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("memberElement");
+            writer.WritePropertyName("memberElement"u8);
             writer.WriteStringValue(iElementFilterMembership.MemberElement);
 
-            writer.WritePropertyName("memberName");
+            writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iElementFilterMembership.MemberName);
-            writer.WritePropertyName("memberShortName");
+            writer.WritePropertyName("memberShortName"u8);
             writer.WriteStringValue(iElementFilterMembership.MemberShortName);
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iElementFilterMembership.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iElementFilterMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iElementFilterMembership.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iElementFilterMembership.OwningRelatedElement.Value);
@@ -113,7 +113,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iElementFilterMembership.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iElementFilterMembership.OwningRelationship.Value);
@@ -122,21 +122,21 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iElementFilterMembership.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iElementFilterMembership.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("visibility");
+            writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iElementFilterMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();

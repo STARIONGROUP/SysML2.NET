@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ConstraintDefinitionSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="ConstraintDefinitionSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IConstraintDefinition"/> interface
     /// </summary>
     internal static class ConstraintDefinitionSerializer
     {
@@ -57,49 +57,49 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ConstraintDefinition");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("ConstraintDefinition"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConstraintDefinition.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iConstraintDefinition.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConstraintDefinition.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iConstraintDefinition.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iConstraintDefinition.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iConstraintDefinition.IsAbstract);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iConstraintDefinition.IsImpliedIncluded);
 
-            writer.WritePropertyName("isIndividual");
+            writer.WritePropertyName("isIndividual"u8);
             writer.WriteBooleanValue(iConstraintDefinition.IsIndividual);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iConstraintDefinition.IsSufficient);
 
-            writer.WritePropertyName("isVariation");
+            writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iConstraintDefinition.IsVariation);
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iConstraintDefinition.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iConstraintDefinition.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iConstraintDefinition.OwningRelationship.Value);

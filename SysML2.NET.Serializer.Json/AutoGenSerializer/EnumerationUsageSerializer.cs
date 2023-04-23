@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="EnumerationUsageSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="EnumerationUsageSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IEnumerationUsage"/> interface
     /// </summary>
     internal static class EnumerationUsageSerializer
     {
@@ -57,24 +57,24 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("EnumerationUsage");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("EnumerationUsage"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iEnumerationUsage.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iEnumerationUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iEnumerationUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iEnumerationUsage.DeclaredShortName);
-            writer.WritePropertyName("direction");
+            writer.WritePropertyName("direction"u8);
             if (iEnumerationUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iEnumerationUsage.Direction.Value.ToString().ToLower());
@@ -83,50 +83,50 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iEnumerationUsage.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsAbstract);
 
-            writer.WritePropertyName("isComposite");
+            writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsComposite);
 
-            writer.WritePropertyName("isDerived");
+            writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsDerived);
 
-            writer.WritePropertyName("isEnd");
+            writer.WritePropertyName("isEnd"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsEnd);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsImpliedIncluded);
 
-            writer.WritePropertyName("isOrdered");
+            writer.WritePropertyName("isOrdered"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsOrdered);
 
-            writer.WritePropertyName("isPortion");
+            writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsPortion);
 
-            writer.WritePropertyName("isReadOnly");
+            writer.WritePropertyName("isReadOnly"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsReadOnly);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsSufficient);
 
-            writer.WritePropertyName("isUnique");
+            writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsUnique);
 
-            writer.WritePropertyName("isVariation");
+            writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iEnumerationUsage.IsVariation);
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iEnumerationUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iEnumerationUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iEnumerationUsage.OwningRelationship.Value);

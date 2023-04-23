@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="LiteralIntegerSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="LiteralIntegerSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="ILiteralInteger"/> interface
     /// </summary>
     internal static class LiteralIntegerSerializer
     {
@@ -57,24 +57,24 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("LiteralInteger");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("LiteralInteger"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iLiteralInteger.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iLiteralInteger.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iLiteralInteger.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iLiteralInteger.DeclaredShortName);
-            writer.WritePropertyName("direction");
+            writer.WritePropertyName("direction"u8);
             if (iLiteralInteger.Direction.HasValue)
             {
                 writer.WriteStringValue(iLiteralInteger.Direction.Value.ToString().ToLower());
@@ -83,47 +83,47 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iLiteralInteger.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsAbstract);
 
-            writer.WritePropertyName("isComposite");
+            writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsComposite);
 
-            writer.WritePropertyName("isDerived");
+            writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsDerived);
 
-            writer.WritePropertyName("isEnd");
+            writer.WritePropertyName("isEnd"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsEnd);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsImpliedIncluded);
 
-            writer.WritePropertyName("isOrdered");
+            writer.WritePropertyName("isOrdered"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsOrdered);
 
-            writer.WritePropertyName("isPortion");
+            writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsPortion);
 
-            writer.WritePropertyName("isReadOnly");
+            writer.WritePropertyName("isReadOnly"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsReadOnly);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsSufficient);
 
-            writer.WritePropertyName("isUnique");
+            writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iLiteralInteger.IsUnique);
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iLiteralInteger.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iLiteralInteger.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iLiteralInteger.OwningRelationship.Value);
@@ -132,7 +132,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("value");
+            writer.WritePropertyName("value"u8);
             writer.WriteNumberValue(iLiteralInteger.Value);
 
             writer.WriteEndObject();

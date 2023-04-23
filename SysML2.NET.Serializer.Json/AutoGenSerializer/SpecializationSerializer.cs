@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="SpecializationSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="SpecializationSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="ISpecialization"/> interface
     /// </summary>
     internal static class SpecializationSerializer
     {
@@ -57,50 +57,50 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Specialization");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("Specialization"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSpecialization.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iSpecialization.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iSpecialization.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iSpecialization.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iSpecialization.ElementId);
 
-            writer.WritePropertyName("general");
+            writer.WritePropertyName("general"u8);
             writer.WriteStringValue(iSpecialization.General);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iSpecialization.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iSpecialization.IsImpliedIncluded);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iSpecialization.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iSpecialization.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iSpecialization.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iSpecialization.OwningRelatedElement.Value);
@@ -109,7 +109,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iSpecialization.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iSpecialization.OwningRelationship.Value);
@@ -118,17 +118,17 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iSpecialization.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("specific");
+            writer.WritePropertyName("specific"u8);
             writer.WriteStringValue(iSpecialization.Specific);
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iSpecialization.Target)
             {
                 writer.WriteStringValue(item);

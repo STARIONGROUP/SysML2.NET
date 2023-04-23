@@ -53,7 +53,7 @@ namespace SysML2.NET.Serializer.Json.PIM
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ProjectDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the ProjectDeSerializer cannot be used to deserialize this JsonElement");
             }
@@ -67,7 +67,7 @@ namespace SysML2.NET.Serializer.Json.PIM
 
             var dtoInstance = new SysML2.NET.PIM.DTO.Project();
 
-            if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
@@ -80,7 +80,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 }
             }
 
-            if (jsonElement.TryGetProperty("alias", out JsonElement aliasIdsProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out JsonElement aliasIdsProperty))
             {
                 foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
                 {
@@ -96,7 +96,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the alias Json property was not found in the Project: {dtoInstance.Id}");
             }
             
-            if (jsonElement.TryGetProperty("defaultBranch", out JsonElement defaultBranchProperty))
+            if (jsonElement.TryGetProperty("defaultBranch"u8, out JsonElement defaultBranchProperty))
             {
                 if (defaultBranchProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -104,7 +104,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 }
                 else
                 {
-                    if (defaultBranchProperty.TryGetProperty("@id", out JsonElement defaultBranchPropertyIdProperty))
+                    if (defaultBranchProperty.TryGetProperty("@id"u8, out JsonElement defaultBranchPropertyIdProperty))
                     {
                         var propertyValue = defaultBranchPropertyIdProperty.GetString();
                         if (propertyValue != null)
@@ -119,7 +119,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the defaultBranch Json property was not found in the Project: {dtoInstance.Id}");
             }
             
-            if (jsonElement.TryGetProperty("description", out JsonElement descriptionProperty))
+            if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
             {
                 var propertyValue = descriptionProperty.GetString();
                 if (propertyValue != null)
@@ -132,7 +132,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the name Json property was not found in the Project: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out JsonElement nameProperty))
             {
                 var propertyValue = nameProperty.GetString();
                 if (propertyValue != null)

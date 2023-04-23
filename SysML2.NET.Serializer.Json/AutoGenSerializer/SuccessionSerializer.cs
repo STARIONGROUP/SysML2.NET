@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="SuccessionSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="SuccessionSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="ISuccession"/> interface
     /// </summary>
     internal static class SuccessionSerializer
     {
@@ -57,24 +57,24 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Succession");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("Succession"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSuccession.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iSuccession.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iSuccession.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iSuccession.DeclaredShortName);
-            writer.WritePropertyName("direction");
+            writer.WritePropertyName("direction"u8);
             if (iSuccession.Direction.HasValue)
             {
                 writer.WriteStringValue(iSuccession.Direction.Value.ToString().ToLower());
@@ -83,60 +83,60 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iSuccession.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iSuccession.IsAbstract);
 
-            writer.WritePropertyName("isComposite");
+            writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iSuccession.IsComposite);
 
-            writer.WritePropertyName("isDerived");
+            writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iSuccession.IsDerived);
 
-            writer.WritePropertyName("isDirected");
+            writer.WritePropertyName("isDirected"u8);
             writer.WriteBooleanValue(iSuccession.IsDirected);
 
-            writer.WritePropertyName("isEnd");
+            writer.WritePropertyName("isEnd"u8);
             writer.WriteBooleanValue(iSuccession.IsEnd);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iSuccession.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iSuccession.IsImpliedIncluded);
 
-            writer.WritePropertyName("isOrdered");
+            writer.WritePropertyName("isOrdered"u8);
             writer.WriteBooleanValue(iSuccession.IsOrdered);
 
-            writer.WritePropertyName("isPortion");
+            writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iSuccession.IsPortion);
 
-            writer.WritePropertyName("isReadOnly");
+            writer.WritePropertyName("isReadOnly"u8);
             writer.WriteBooleanValue(iSuccession.IsReadOnly);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iSuccession.IsSufficient);
 
-            writer.WritePropertyName("isUnique");
+            writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iSuccession.IsUnique);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iSuccession.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iSuccession.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iSuccession.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iSuccession.OwningRelatedElement.Value);
@@ -145,7 +145,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iSuccession.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iSuccession.OwningRelationship.Value);
@@ -154,14 +154,14 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iSuccession.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iSuccession.Target)
             {
                 writer.WriteStringValue(item);

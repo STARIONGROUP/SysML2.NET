@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="InterfaceUsageSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="InterfaceUsageSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IInterfaceUsage"/> interface
     /// </summary>
     internal static class InterfaceUsageSerializer
     {
@@ -57,24 +57,24 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("InterfaceUsage");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("InterfaceUsage"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iInterfaceUsage.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iInterfaceUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iInterfaceUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iInterfaceUsage.DeclaredShortName);
-            writer.WritePropertyName("direction");
+            writer.WritePropertyName("direction"u8);
             if (iInterfaceUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iInterfaceUsage.Direction.Value.ToString().ToLower());
@@ -83,66 +83,66 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iInterfaceUsage.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsAbstract);
 
-            writer.WritePropertyName("isComposite");
+            writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsComposite);
 
-            writer.WritePropertyName("isDerived");
+            writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsDerived);
 
-            writer.WritePropertyName("isDirected");
+            writer.WritePropertyName("isDirected"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsDirected);
 
-            writer.WritePropertyName("isEnd");
+            writer.WritePropertyName("isEnd"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsEnd);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsImpliedIncluded);
 
-            writer.WritePropertyName("isIndividual");
+            writer.WritePropertyName("isIndividual"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsIndividual);
 
-            writer.WritePropertyName("isOrdered");
+            writer.WritePropertyName("isOrdered"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsOrdered);
 
-            writer.WritePropertyName("isPortion");
+            writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsPortion);
 
-            writer.WritePropertyName("isReadOnly");
+            writer.WritePropertyName("isReadOnly"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsReadOnly);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsSufficient);
 
-            writer.WritePropertyName("isUnique");
+            writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsUnique);
 
-            writer.WritePropertyName("isVariation");
+            writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsVariation);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iInterfaceUsage.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iInterfaceUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iInterfaceUsage.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iInterfaceUsage.OwningRelatedElement.Value);
@@ -151,7 +151,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iInterfaceUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iInterfaceUsage.OwningRelationship.Value);
@@ -160,7 +160,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("portionKind");
+            writer.WritePropertyName("portionKind"u8);
             if (iInterfaceUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iInterfaceUsage.PortionKind.Value.ToString().ToLower());
@@ -169,14 +169,14 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iInterfaceUsage.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iInterfaceUsage.Target)
             {
                 writer.WriteStringValue(item);

@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="DisjoiningSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="DisjoiningSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IDisjoining"/> interface
     /// </summary>
     internal static class DisjoiningSerializer
     {
@@ -57,50 +57,50 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Disjoining");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("Disjoining"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iDisjoining.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iDisjoining.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iDisjoining.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iDisjoining.DeclaredShortName);
-            writer.WritePropertyName("disjoiningType");
+            writer.WritePropertyName("disjoiningType"u8);
             writer.WriteStringValue(iDisjoining.DisjoiningType);
 
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iDisjoining.ElementId);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iDisjoining.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iDisjoining.IsImpliedIncluded);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iDisjoining.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iDisjoining.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iDisjoining.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iDisjoining.OwningRelatedElement.Value);
@@ -109,7 +109,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iDisjoining.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iDisjoining.OwningRelationship.Value);
@@ -118,21 +118,21 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iDisjoining.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iDisjoining.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("typeDisjoined");
+            writer.WritePropertyName("typeDisjoined"u8);
             writer.WriteStringValue(iDisjoining.TypeDisjoined);
 
             writer.WriteEndObject();

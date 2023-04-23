@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="PartDefinitionSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="PartDefinitionSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IPartDefinition"/> interface
     /// </summary>
     internal static class PartDefinitionSerializer
     {
@@ -57,49 +57,49 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("PartDefinition");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("PartDefinition"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iPartDefinition.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iPartDefinition.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iPartDefinition.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iPartDefinition.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iPartDefinition.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iPartDefinition.IsAbstract);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iPartDefinition.IsImpliedIncluded);
 
-            writer.WritePropertyName("isIndividual");
+            writer.WritePropertyName("isIndividual"u8);
             writer.WriteBooleanValue(iPartDefinition.IsIndividual);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iPartDefinition.IsSufficient);
 
-            writer.WritePropertyName("isVariation");
+            writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iPartDefinition.IsVariation);
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iPartDefinition.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iPartDefinition.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iPartDefinition.OwningRelationship.Value);

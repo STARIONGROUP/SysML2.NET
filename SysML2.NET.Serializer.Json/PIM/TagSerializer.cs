@@ -54,21 +54,21 @@ namespace SysML2.NET.Serializer.Json.PIM
                 case SerializationModeKind.JSON:
 
                     writer.WriteStartObject();
-                    writer.WriteString("@type", "Tag");
-                    writer.WriteString("@id", tag.Id);
+                    writer.WriteString("@type"u8, "Tag"u8);
+                    writer.WriteString("@id"u8, tag.Id);
 
-                    writer.WriteString("description", tag.Description);
-                    writer.WriteString("name", tag.Name);
-                    writer.WriteStartObject("owningProject");
-                    writer.WriteString("@id", tag.OwningProject);
+                    writer.WriteString("description"u8, tag.Description);
+                    writer.WriteString("name"u8, tag.Name);
+                    writer.WriteStartObject("owningProject"u8);
+                    writer.WriteString("@id"u8, tag.OwningProject);
                     writer.WriteEndObject();
-                    writer.WriteStartObject("referencedCommit");
-                    writer.WriteString("@id", tag.ReferencedCommit);
+                    writer.WriteStartObject("referencedCommit"u8);
+                    writer.WriteString("@id"u8, tag.ReferencedCommit);
                     writer.WriteEndObject();
-                    writer.WriteStartObject("taggedCommit");
-                    writer.WriteString("@id", tag.TaggedCommit);
+                    writer.WriteStartObject("taggedCommit"u8);
+                    writer.WriteString("@id"u8, tag.TaggedCommit);
                     writer.WriteEndObject();
-                    writer.WriteString("timestamp", tag.TimeStamp);
+                    writer.WriteString("timestamp"u8, tag.TimeStamp);
                     writer.WriteEndObject();
 
                     break;

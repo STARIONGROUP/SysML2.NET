@@ -53,7 +53,7 @@ namespace SysML2.NET.Serializer.Json.PIM
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("DataIdentityDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the DataIdentityDeSerializer cannot be used to deserialize this JsonElement");
             }
@@ -67,7 +67,7 @@ namespace SysML2.NET.Serializer.Json.PIM
 
             var dtoInstance = new SysML2.NET.PIM.DTO.DataIdentity();
             
-            if (jsonElement.TryGetProperty("@id", out JsonElement idPropertyVersionItem))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idPropertyVersionItem))
             {
                 var idPropertyVersionItemValue = idPropertyVersionItem.GetString();
                 if (idPropertyVersionItemValue == null)

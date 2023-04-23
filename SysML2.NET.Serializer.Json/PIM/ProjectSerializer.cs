@@ -54,20 +54,20 @@ namespace SysML2.NET.Serializer.Json.PIM
                 case SerializationModeKind.JSON:
 
                     writer.WriteStartObject();
-                    writer.WriteString("@type", "Project");
-                    writer.WriteString("@id", project.Id);
+                    writer.WriteString("@type"u8, "Project"u8);
+                    writer.WriteString("@id"u8, project.Id);
 
-                    writer.WriteStartArray("alias");
+                    writer.WriteStartArray("alias"u8);
                     foreach (var alias in project.Alias)
                     {
                         writer.WriteStringValue(alias);
                     }
                     writer.WriteEndArray();
-                    writer.WriteStartObject("defaultBranch");
-                    writer.WriteString("@id", project.DefaultBranch);
+                    writer.WriteStartObject("defaultBranch"u8);
+                    writer.WriteString("@id"u8, project.DefaultBranch);
                     writer.WriteEndObject();
-                    writer.WriteString("description", project.Description);
-                    writer.WriteString("name", project.Name);
+                    writer.WriteString("description"u8, project.Description);
+                    writer.WriteString("name"u8, project.Name);
                     writer.WriteEndObject();
 
                     break;

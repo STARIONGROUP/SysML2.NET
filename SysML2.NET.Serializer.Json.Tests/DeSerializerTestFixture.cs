@@ -53,23 +53,23 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE);
 
-				Assert.That(data.Count(), Is.EqualTo(100));
+                Assert.That(data.Count(), Is.EqualTo(100));
 
-				Assert.That(data.OfType<IFeature>().Count(), Is.EqualTo(40));
+                Assert.That(data.OfType<IFeature>().Count(), Is.EqualTo(40));
 
-				var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("0089a4a6-1abf-49c3-9806-1f0114662c13"));
+                var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("0089a4a6-1abf-49c3-9806-1f0114662c13"));
 
-				Assert.That(feature.AliasIds, Is.Empty);
-				Assert.That(feature.ElementId, Is.EqualTo("0089a4a6-1abf-49c3-9806-1f0114662c13"));
-				Assert.That(feature.IsAbstract, Is.False);
-				Assert.That(feature.IsComposite, Is.False);
-				Assert.That(feature.IsSufficient, Is.False);
-				Assert.That(feature.IsEnd, Is.True);
-				Assert.That(feature.DeclaredName, Is.Null);
-				Assert.That(feature.OwnedRelationship, Is.Empty);
-				Assert.That(feature.OwningRelationship, Is.EqualTo(Guid.Parse("4344ee51-05be-49a6-be59-4f6938614cd8")));
-				Assert.That(feature.DeclaredShortName, Is.Null);
-			}
+                Assert.That(feature.AliasIds, Is.Empty);
+                Assert.That(feature.ElementId, Is.EqualTo("0089a4a6-1abf-49c3-9806-1f0114662c13"));
+                Assert.That(feature.IsAbstract, Is.False);
+                Assert.That(feature.IsComposite, Is.False);
+                Assert.That(feature.IsSufficient, Is.False);
+                Assert.That(feature.IsEnd, Is.True);
+                Assert.That(feature.DeclaredName, Is.Null);
+                Assert.That(feature.OwnedRelationship, Is.Empty);
+                Assert.That(feature.OwningRelationship, Is.EqualTo(Guid.Parse("4344ee51-05be-49a6-be59-4f6938614cd8")));
+                Assert.That(feature.DeclaredShortName, Is.Null);
+            }
         }
 
         [Test]
@@ -84,22 +84,22 @@ namespace SysML2.NET.Serializer.Json.Tests
 
                 Assert.That(data.Count(), Is.EqualTo(100));
                 
-				Assert.That(data.OfType<IFeature>().Count(), Is.EqualTo(40));
+                Assert.That(data.OfType<IFeature>().Count(), Is.EqualTo(40));
 
-				var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("0089a4a6-1abf-49c3-9806-1f0114662c13"));
+                var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("0089a4a6-1abf-49c3-9806-1f0114662c13"));
 
-				Assert.That(feature.AliasIds, Is.Empty);
-				Assert.That(feature.ElementId, Is.EqualTo("0089a4a6-1abf-49c3-9806-1f0114662c13"));
-				Assert.That(feature.IsAbstract, Is.False);
-				Assert.That(feature.IsComposite, Is.False);
-				Assert.That(feature.IsSufficient, Is.False);
-				Assert.That(feature.IsEnd, Is.True);
-				Assert.That(feature.DeclaredName, Is.Null);
-				Assert.That(feature.OwnedRelationship, Is.Empty);
-				Assert.That(feature.OwningRelationship, Is.EqualTo(Guid.Parse("4344ee51-05be-49a6-be59-4f6938614cd8")));
-				Assert.That(feature.DeclaredShortName, Is.Null);
-			}
-		}
+                Assert.That(feature.AliasIds, Is.Empty);
+                Assert.That(feature.ElementId, Is.EqualTo("0089a4a6-1abf-49c3-9806-1f0114662c13"));
+                Assert.That(feature.IsAbstract, Is.False);
+                Assert.That(feature.IsComposite, Is.False);
+                Assert.That(feature.IsSufficient, Is.False);
+                Assert.That(feature.IsEnd, Is.True);
+                Assert.That(feature.DeclaredName, Is.Null);
+                Assert.That(feature.OwnedRelationship, Is.Empty);
+                Assert.That(feature.OwningRelationship, Is.EqualTo(Guid.Parse("4344ee51-05be-49a6-be59-4f6938614cd8")));
+                Assert.That(feature.DeclaredShortName, Is.Null);
+            }
+        }
 
         [Test]
         public void Verify_that_projects_from_restapi_json_can_be_deserialized()

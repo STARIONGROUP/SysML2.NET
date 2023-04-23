@@ -58,7 +58,7 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("DependencyDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the DependencyDeSerializer cannot be used to deserialize this JsonElement");
             }
@@ -70,7 +70,7 @@ namespace SysML2.NET.Serializer.Json
 
             var dtoInstance = new Core.DTO.Dependency();
 
-            if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.Json
                 }
             }
 
-            if (jsonElement.TryGetProperty("aliasIds", out JsonElement aliasIdsProperty))
+            if (jsonElement.TryGetProperty("aliasIds"u8, out JsonElement aliasIdsProperty))
             {
                 foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
                 {
@@ -99,11 +99,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the aliasIds Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("client", out JsonElement clientProperty))
+            if (jsonElement.TryGetProperty("client"u8, out JsonElement clientProperty))
             {
                 foreach (var arrayItem in clientProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement clientIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement clientIdProperty))
                     {
                         var propertyValue = clientIdProperty.GetString();
                         if (propertyValue != null)
@@ -118,7 +118,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the client Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("declaredName", out JsonElement declaredNameProperty))
+            if (jsonElement.TryGetProperty("declaredName"u8, out JsonElement declaredNameProperty))
             {
                 dtoInstance.DeclaredName = declaredNameProperty.GetString();
             }
@@ -127,7 +127,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the declaredName Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("declaredShortName", out JsonElement declaredShortNameProperty))
+            if (jsonElement.TryGetProperty("declaredShortName"u8, out JsonElement declaredShortNameProperty))
             {
                 dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
             }
@@ -136,7 +136,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the declaredShortName Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
+            if (jsonElement.TryGetProperty("elementId"u8, out JsonElement elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();
                 if (propertyValue != null)
@@ -149,7 +149,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the elementId Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isImplied", out JsonElement isImpliedProperty))
+            if (jsonElement.TryGetProperty("isImplied"u8, out JsonElement isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)
                 {
@@ -161,7 +161,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isImplied Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
+            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out JsonElement isImpliedIncludedProperty))
             {
                 if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
                 {
@@ -173,11 +173,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isImpliedIncluded Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("ownedRelatedElement", out JsonElement ownedRelatedElementProperty))
+            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out JsonElement ownedRelatedElementProperty))
             {
                 foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelatedElementIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement ownedRelatedElementIdProperty))
                     {
                         var propertyValue = ownedRelatedElementIdProperty.GetString();
                         if (propertyValue != null)
@@ -192,11 +192,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the ownedRelatedElement Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
+            if (jsonElement.TryGetProperty("ownedRelationship"u8, out JsonElement ownedRelationshipProperty))
             {
                 foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelationshipIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement ownedRelationshipIdProperty))
                     {
                         var propertyValue = ownedRelationshipIdProperty.GetString();
                         if (propertyValue != null)
@@ -211,7 +211,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the ownedRelationship Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
+            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out JsonElement owningRelatedElementProperty))
             {
                 if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -219,7 +219,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out JsonElement owningRelatedElementIdProperty))
                     {
                         var propertyValue = owningRelatedElementIdProperty.GetString();
                         if (propertyValue != null)
@@ -234,7 +234,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the owningRelatedElement Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
+            if (jsonElement.TryGetProperty("owningRelationship"u8, out JsonElement owningRelationshipProperty))
             {
                 if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -242,7 +242,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out JsonElement owningRelationshipIdProperty))
                     {
                         var propertyValue = owningRelationshipIdProperty.GetString();
                         if (propertyValue != null)
@@ -257,11 +257,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the owningRelationship Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("source", out JsonElement sourceProperty))
+            if (jsonElement.TryGetProperty("source"u8, out JsonElement sourceProperty))
             {
                 foreach (var arrayItem in sourceProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement sourceIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement sourceIdProperty))
                     {
                         var propertyValue = sourceIdProperty.GetString();
                         if (propertyValue != null)
@@ -276,11 +276,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the source Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("supplier", out JsonElement supplierProperty))
+            if (jsonElement.TryGetProperty("supplier"u8, out JsonElement supplierProperty))
             {
                 foreach (var arrayItem in supplierProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement supplierIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement supplierIdProperty))
                     {
                         var propertyValue = supplierIdProperty.GetString();
                         if (propertyValue != null)
@@ -295,11 +295,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the supplier Json property was not found in the Dependency: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("target", out JsonElement targetProperty))
+            if (jsonElement.TryGetProperty("target"u8, out JsonElement targetProperty))
             {
                 foreach (var arrayItem in targetProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement targetIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement targetIdProperty))
                     {
                         var propertyValue = targetIdProperty.GetString();
                         if (propertyValue != null)

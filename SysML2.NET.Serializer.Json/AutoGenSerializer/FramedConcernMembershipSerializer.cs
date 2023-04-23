@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="FramedConcernMembershipSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="FramedConcernMembershipSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IFramedConcernMembership"/> interface
     /// </summary>
     internal static class FramedConcernMembershipSerializer
     {
@@ -57,60 +57,60 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("FramedConcernMembership");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("FramedConcernMembership"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iFramedConcernMembership.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iFramedConcernMembership.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iFramedConcernMembership.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iFramedConcernMembership.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iFramedConcernMembership.ElementId);
 
-            writer.WritePropertyName("feature");
+            writer.WritePropertyName("feature"u8);
             writer.WriteStringValue(iFramedConcernMembership.Feature);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iFramedConcernMembership.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iFramedConcernMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("kind");
+            writer.WritePropertyName("kind"u8);
             writer.WriteStringValue(iFramedConcernMembership.Kind.ToString().ToLower());
 
-            writer.WritePropertyName("memberElement");
+            writer.WritePropertyName("memberElement"u8);
             writer.WriteStringValue(iFramedConcernMembership.MemberElement);
 
-            writer.WritePropertyName("memberName");
+            writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iFramedConcernMembership.MemberName);
-            writer.WritePropertyName("memberShortName");
+            writer.WritePropertyName("memberShortName"u8);
             writer.WriteStringValue(iFramedConcernMembership.MemberShortName);
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iFramedConcernMembership.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iFramedConcernMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iFramedConcernMembership.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iFramedConcernMembership.OwningRelatedElement.Value);
@@ -119,7 +119,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iFramedConcernMembership.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iFramedConcernMembership.OwningRelationship.Value);
@@ -128,24 +128,24 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iFramedConcernMembership.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iFramedConcernMembership.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("type");
+            writer.WritePropertyName("type"u8);
             writer.WriteStringValue(iFramedConcernMembership.Type);
 
-            writer.WritePropertyName("visibility");
+            writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iFramedConcernMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();

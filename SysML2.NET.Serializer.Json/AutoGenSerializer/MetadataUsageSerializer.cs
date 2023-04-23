@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="MetadataUsageSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="MetadataUsageSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IMetadataUsage"/> interface
     /// </summary>
     internal static class MetadataUsageSerializer
     {
@@ -57,31 +57,31 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("MetadataUsage");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("MetadataUsage"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iMetadataUsage.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iMetadataUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("annotation");
+            writer.WriteStartArray("annotation"u8);
             foreach (var item in iMetadataUsage.Annotation)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iMetadataUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iMetadataUsage.DeclaredShortName);
-            writer.WritePropertyName("direction");
+            writer.WritePropertyName("direction"u8);
             if (iMetadataUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iMetadataUsage.Direction.Value.ToString().ToLower());
@@ -90,53 +90,53 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iMetadataUsage.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsAbstract);
 
-            writer.WritePropertyName("isComposite");
+            writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsComposite);
 
-            writer.WritePropertyName("isDerived");
+            writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsDerived);
 
-            writer.WritePropertyName("isEnd");
+            writer.WritePropertyName("isEnd"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsEnd);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsImpliedIncluded);
 
-            writer.WritePropertyName("isIndividual");
+            writer.WritePropertyName("isIndividual"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsIndividual);
 
-            writer.WritePropertyName("isOrdered");
+            writer.WritePropertyName("isOrdered"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsOrdered);
 
-            writer.WritePropertyName("isPortion");
+            writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsPortion);
 
-            writer.WritePropertyName("isReadOnly");
+            writer.WritePropertyName("isReadOnly"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsReadOnly);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsSufficient);
 
-            writer.WritePropertyName("isUnique");
+            writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsUnique);
 
-            writer.WritePropertyName("isVariation");
+            writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsVariation);
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iMetadataUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iMetadataUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iMetadataUsage.OwningRelationship.Value);
@@ -145,7 +145,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("portionKind");
+            writer.WritePropertyName("portionKind"u8);
             if (iMetadataUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iMetadataUsage.PortionKind.Value.ToString().ToLower());

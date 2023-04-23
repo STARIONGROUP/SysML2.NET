@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="MembershipSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="MembershipSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IMembership"/> interface
     /// </summary>
     internal static class MembershipSerializer
     {
@@ -57,54 +57,54 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Membership");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("Membership"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iMembership.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iMembership.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iMembership.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iMembership.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iMembership.ElementId);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iMembership.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("memberElement");
+            writer.WritePropertyName("memberElement"u8);
             writer.WriteStringValue(iMembership.MemberElement);
 
-            writer.WritePropertyName("memberName");
+            writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iMembership.MemberName);
-            writer.WritePropertyName("memberShortName");
+            writer.WritePropertyName("memberShortName"u8);
             writer.WriteStringValue(iMembership.MemberShortName);
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iMembership.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iMembership.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iMembership.OwningRelatedElement.Value);
@@ -113,7 +113,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iMembership.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iMembership.OwningRelationship.Value);
@@ -122,21 +122,21 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iMembership.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iMembership.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("visibility");
+            writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();

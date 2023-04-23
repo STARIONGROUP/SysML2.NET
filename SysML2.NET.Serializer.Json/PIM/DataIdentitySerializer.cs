@@ -54,8 +54,8 @@ namespace SysML2.NET.Serializer.Json.PIM
                 case SerializationModeKind.JSON:
 
                     writer.WriteStartObject();
-                    writer.WriteString("@type", "DataIdentity");
-                    writer.WriteString("@id", dataIdentity.Id);
+                    writer.WriteString("@type"u8, "DataIdentity"u8);
+                    writer.WriteString("@id"u8, dataIdentity.Id);
                     writer.WriteEndObject();
 
                     break;

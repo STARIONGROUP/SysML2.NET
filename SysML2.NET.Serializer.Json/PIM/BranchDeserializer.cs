@@ -53,7 +53,7 @@ namespace SysML2.NET.Serializer.Json.PIM
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("BranchDeserializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the BranchDeserializer cannot be used to deserialize this JsonElement");
             }
@@ -67,7 +67,7 @@ namespace SysML2.NET.Serializer.Json.PIM
 
             var dtoInstance = new SysML2.NET.PIM.DTO.Branch();
 
-            if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
@@ -78,7 +78,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 dtoInstance.Id = Guid.Parse(propertyValue);
             }
 
-            if (jsonElement.TryGetProperty("creationTimestamp", out JsonElement creationTimestampProperty))
+            if (jsonElement.TryGetProperty("creationTimestamp"u8, out JsonElement creationTimestampProperty))
             {
                 dtoInstance.TimeStamp = creationTimestampProperty.GetDateTime();
             }
@@ -87,7 +87,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the creationTimestamp Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("deletionTimestamp", out JsonElement deletionTimestampProperty))
+            if (jsonElement.TryGetProperty("deletionTimestamp"u8, out JsonElement deletionTimestampProperty))
             {
                 dtoInstance.TimeStamp = deletionTimestampProperty.GetDateTime();
             }
@@ -96,7 +96,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the timestamp Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("description", out JsonElement descriptionProperty))
+            if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
             {
                 var propertyValue = descriptionProperty.GetString();
                 if (propertyValue != null)
@@ -109,7 +109,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the name Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("head", out JsonElement headProperty))
+            if (jsonElement.TryGetProperty("head"u8, out JsonElement headProperty))
             {
                 if (headProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -117,7 +117,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 }
                 else
                 {
-                    if (headProperty.TryGetProperty("@id", out JsonElement headIdProperty))
+                    if (headProperty.TryGetProperty("@id"u8, out JsonElement headIdProperty))
                     {
                         var propertyValue = headIdProperty.GetString();
                         if (propertyValue != null)
@@ -132,7 +132,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the referencedCommit Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out JsonElement nameProperty))
             {
                 var propertyValue = nameProperty.GetString();
                 if (propertyValue != null)
@@ -145,7 +145,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the name Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("owningProject", out JsonElement owningProjectProperty))
+            if (jsonElement.TryGetProperty("owningProject"u8, out JsonElement owningProjectProperty))
             {
                 if (owningProjectProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -168,7 +168,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the owningProject Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("referencedCommit", out JsonElement referencedCommitProperty))
+            if (jsonElement.TryGetProperty("referencedCommit"u8, out JsonElement referencedCommitProperty))
             {
                 if (referencedCommitProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -176,7 +176,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 }
                 else
                 {
-                    if (referencedCommitProperty.TryGetProperty("@id", out JsonElement referencedCommitIdProperty))
+                    if (referencedCommitProperty.TryGetProperty("@id"u8, out JsonElement referencedCommitIdProperty))
                     {
                         var propertyValue = referencedCommitIdProperty.GetString();
                         if (propertyValue != null)
@@ -191,7 +191,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the referencedCommit Json property was not found in the Branch: {dtoInstance.Id}");
             }
             
-            if (jsonElement.TryGetProperty("timestamp", out JsonElement timestampProperty))
+            if (jsonElement.TryGetProperty("timestamp"u8, out JsonElement timestampProperty))
             {
                 dtoInstance.TimeStamp = timestampProperty.GetDateTime();
             }

@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="AssignmentActionUsageSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="AssignmentActionUsageSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IAssignmentActionUsage"/> interface
     /// </summary>
     internal static class AssignmentActionUsageSerializer
     {
@@ -57,24 +57,24 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("AssignmentActionUsage");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("AssignmentActionUsage"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iAssignmentActionUsage.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iAssignmentActionUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iAssignmentActionUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iAssignmentActionUsage.DeclaredShortName);
-            writer.WritePropertyName("direction");
+            writer.WritePropertyName("direction"u8);
             if (iAssignmentActionUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iAssignmentActionUsage.Direction.Value.ToString().ToLower());
@@ -83,53 +83,53 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iAssignmentActionUsage.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsAbstract);
 
-            writer.WritePropertyName("isComposite");
+            writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsComposite);
 
-            writer.WritePropertyName("isDerived");
+            writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsDerived);
 
-            writer.WritePropertyName("isEnd");
+            writer.WritePropertyName("isEnd"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsEnd);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsImpliedIncluded);
 
-            writer.WritePropertyName("isIndividual");
+            writer.WritePropertyName("isIndividual"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsIndividual);
 
-            writer.WritePropertyName("isOrdered");
+            writer.WritePropertyName("isOrdered"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsOrdered);
 
-            writer.WritePropertyName("isPortion");
+            writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsPortion);
 
-            writer.WritePropertyName("isReadOnly");
+            writer.WritePropertyName("isReadOnly"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsReadOnly);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsSufficient);
 
-            writer.WritePropertyName("isUnique");
+            writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsUnique);
 
-            writer.WritePropertyName("isVariation");
+            writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsVariation);
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iAssignmentActionUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iAssignmentActionUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iAssignmentActionUsage.OwningRelationship.Value);
@@ -138,7 +138,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("portionKind");
+            writer.WritePropertyName("portionKind"u8);
             if (iAssignmentActionUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iAssignmentActionUsage.PortionKind.Value.ToString().ToLower());

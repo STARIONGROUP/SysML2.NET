@@ -57,7 +57,7 @@ namespace SysML2.NET.Serializer.Json.PIM
 
             var dtoInstance = new SysML2.NET.PIM.DTO.DataVersion();
 
-            if (jsonElement.TryGetProperty("@id", out JsonElement idPropertyVersionItem))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idPropertyVersionItem))
             {
                 var idPropertyVersionItemValue = idPropertyVersionItem.GetString();
                 if (idPropertyVersionItemValue == null)
@@ -68,7 +68,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 dtoInstance.Id = Guid.Parse(idPropertyVersionItemValue);
             }
             
-            if (jsonElement.TryGetProperty("identity", out JsonElement identityObject))
+            if (jsonElement.TryGetProperty("identity"u8, out JsonElement identityObject))
             {
                 dtoInstance.Identity = DataIdentityDeSerializer.DeSerialize(identityObject, serializationModeKind, loggerFactory);
             }
@@ -77,9 +77,9 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the identity property was not found in the DataVersion: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("payload", out JsonElement payloadObject))
+            if (jsonElement.TryGetProperty("payload"u8, out JsonElement payloadObject))
             {
-                if (payloadObject.TryGetProperty("@type", out var typeElement))
+                if (payloadObject.TryGetProperty("@type"u8, out var typeElement))
                 {
                     var typeName = typeElement.GetString();
 

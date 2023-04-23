@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="PortConjugationSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="PortConjugationSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IPortConjugation"/> interface
     /// </summary>
     internal static class PortConjugationSerializer
     {
@@ -57,56 +57,56 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("PortConjugation");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("PortConjugation"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iPortConjugation.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iPortConjugation.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("conjugatedType");
+            writer.WritePropertyName("conjugatedType"u8);
             writer.WriteStringValue(iPortConjugation.ConjugatedType);
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iPortConjugation.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iPortConjugation.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iPortConjugation.ElementId);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iPortConjugation.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iPortConjugation.IsImpliedIncluded);
 
-            writer.WritePropertyName("originalPortDefinition");
+            writer.WritePropertyName("originalPortDefinition"u8);
             writer.WriteStringValue(iPortConjugation.OriginalPortDefinition);
 
-            writer.WritePropertyName("originalType");
+            writer.WritePropertyName("originalType"u8);
             writer.WriteStringValue(iPortConjugation.OriginalType);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iPortConjugation.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iPortConjugation.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iPortConjugation.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iPortConjugation.OwningRelatedElement.Value);
@@ -115,7 +115,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iPortConjugation.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iPortConjugation.OwningRelationship.Value);
@@ -124,14 +124,14 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iPortConjugation.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iPortConjugation.Target)
             {
                 writer.WriteStringValue(item);

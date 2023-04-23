@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="AssertConstraintUsageSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="AssertConstraintUsageSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IAssertConstraintUsage"/> interface
     /// </summary>
     internal static class AssertConstraintUsageSerializer
     {
@@ -57,24 +57,24 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("AssertConstraintUsage");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("AssertConstraintUsage"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iAssertConstraintUsage.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iAssertConstraintUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iAssertConstraintUsage.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iAssertConstraintUsage.DeclaredShortName);
-            writer.WritePropertyName("direction");
+            writer.WritePropertyName("direction"u8);
             if (iAssertConstraintUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iAssertConstraintUsage.Direction.Value.ToString().ToLower());
@@ -83,56 +83,56 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iAssertConstraintUsage.ElementId);
 
-            writer.WritePropertyName("isAbstract");
+            writer.WritePropertyName("isAbstract"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsAbstract);
 
-            writer.WritePropertyName("isComposite");
+            writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsComposite);
 
-            writer.WritePropertyName("isDerived");
+            writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsDerived);
 
-            writer.WritePropertyName("isEnd");
+            writer.WritePropertyName("isEnd"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsEnd);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsImpliedIncluded);
 
-            writer.WritePropertyName("isIndividual");
+            writer.WritePropertyName("isIndividual"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsIndividual);
 
-            writer.WritePropertyName("isNegated");
+            writer.WritePropertyName("isNegated"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsNegated);
 
-            writer.WritePropertyName("isOrdered");
+            writer.WritePropertyName("isOrdered"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsOrdered);
 
-            writer.WritePropertyName("isPortion");
+            writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsPortion);
 
-            writer.WritePropertyName("isReadOnly");
+            writer.WritePropertyName("isReadOnly"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsReadOnly);
 
-            writer.WritePropertyName("isSufficient");
+            writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsSufficient);
 
-            writer.WritePropertyName("isUnique");
+            writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsUnique);
 
-            writer.WritePropertyName("isVariation");
+            writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iAssertConstraintUsage.IsVariation);
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iAssertConstraintUsage.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iAssertConstraintUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iAssertConstraintUsage.OwningRelationship.Value);
@@ -141,7 +141,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("portionKind");
+            writer.WritePropertyName("portionKind"u8);
             if (iAssertConstraintUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iAssertConstraintUsage.PortionKind.Value.ToString().ToLower());

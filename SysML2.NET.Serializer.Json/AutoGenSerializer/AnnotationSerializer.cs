@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="AnnotationSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="AnnotationSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IAnnotation"/> interface
     /// </summary>
     internal static class AnnotationSerializer
     {
@@ -57,53 +57,53 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Annotation");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("Annotation"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iAnnotation.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iAnnotation.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("annotatedElement");
+            writer.WritePropertyName("annotatedElement"u8);
             writer.WriteStringValue(iAnnotation.AnnotatedElement);
 
-            writer.WritePropertyName("annotatingElement");
+            writer.WritePropertyName("annotatingElement"u8);
             writer.WriteStringValue(iAnnotation.AnnotatingElement);
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iAnnotation.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iAnnotation.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iAnnotation.ElementId);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iAnnotation.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iAnnotation.IsImpliedIncluded);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iAnnotation.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iAnnotation.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iAnnotation.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iAnnotation.OwningRelatedElement.Value);
@@ -112,7 +112,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iAnnotation.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iAnnotation.OwningRelationship.Value);
@@ -121,14 +121,14 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iAnnotation.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iAnnotation.Target)
             {
                 writer.WriteStringValue(item);

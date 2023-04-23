@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="FeatureInvertingSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="FeatureInvertingSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IFeatureInverting"/> interface
     /// </summary>
     internal static class FeatureInvertingSerializer
     {
@@ -57,53 +57,53 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("FeatureInverting");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("FeatureInverting"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iFeatureInverting.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iFeatureInverting.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iFeatureInverting.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iFeatureInverting.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iFeatureInverting.ElementId);
 
-            writer.WritePropertyName("featureInverted");
+            writer.WritePropertyName("featureInverted"u8);
             writer.WriteStringValue(iFeatureInverting.FeatureInverted);
 
-            writer.WritePropertyName("invertingFeature");
+            writer.WritePropertyName("invertingFeature"u8);
             writer.WriteStringValue(iFeatureInverting.InvertingFeature);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iFeatureInverting.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iFeatureInverting.IsImpliedIncluded);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iFeatureInverting.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iFeatureInverting.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iFeatureInverting.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iFeatureInverting.OwningRelatedElement.Value);
@@ -112,7 +112,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iFeatureInverting.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iFeatureInverting.OwningRelationship.Value);
@@ -121,14 +121,14 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iFeatureInverting.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iFeatureInverting.Target)
             {
                 writer.WriteStringValue(item);

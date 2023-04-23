@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ReferenceSubsettingSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="ReferenceSubsettingSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IReferenceSubsetting"/> interface
     /// </summary>
     internal static class ReferenceSubsettingSerializer
     {
@@ -57,50 +57,50 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ReferenceSubsetting");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("ReferenceSubsetting"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iReferenceSubsetting.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iReferenceSubsetting.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iReferenceSubsetting.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iReferenceSubsetting.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iReferenceSubsetting.ElementId);
 
-            writer.WritePropertyName("general");
+            writer.WritePropertyName("general"u8);
             writer.WriteStringValue(iReferenceSubsetting.General);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iReferenceSubsetting.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iReferenceSubsetting.IsImpliedIncluded);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iReferenceSubsetting.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iReferenceSubsetting.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iReferenceSubsetting.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iReferenceSubsetting.OwningRelatedElement.Value);
@@ -109,7 +109,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iReferenceSubsetting.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iReferenceSubsetting.OwningRelationship.Value);
@@ -118,26 +118,26 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("referencedFeature");
+            writer.WritePropertyName("referencedFeature"u8);
             writer.WriteStringValue(iReferenceSubsetting.ReferencedFeature);
 
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iReferenceSubsetting.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("specific");
+            writer.WritePropertyName("specific"u8);
             writer.WriteStringValue(iReferenceSubsetting.Specific);
 
-            writer.WritePropertyName("subsettedFeature");
+            writer.WritePropertyName("subsettedFeature"u8);
             writer.WriteStringValue(iReferenceSubsetting.SubsettedFeature);
 
-            writer.WritePropertyName("subsettingFeature");
+            writer.WritePropertyName("subsettingFeature"u8);
             writer.WriteStringValue(iReferenceSubsetting.SubsettingFeature);
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iReferenceSubsetting.Target)
             {
                 writer.WriteStringValue(item);

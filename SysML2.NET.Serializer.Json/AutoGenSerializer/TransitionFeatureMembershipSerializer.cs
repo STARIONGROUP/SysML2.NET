@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="TransitionFeatureMembershipSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="TransitionFeatureMembershipSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="ITransitionFeatureMembership"/> interface
     /// </summary>
     internal static class TransitionFeatureMembershipSerializer
     {
@@ -57,60 +57,60 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("TransitionFeatureMembership");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("TransitionFeatureMembership"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iTransitionFeatureMembership.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.ElementId);
 
-            writer.WritePropertyName("feature");
+            writer.WritePropertyName("feature"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.Feature);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iTransitionFeatureMembership.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iTransitionFeatureMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("kind");
+            writer.WritePropertyName("kind"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.Kind.ToString().ToLower());
 
-            writer.WritePropertyName("memberElement");
+            writer.WritePropertyName("memberElement"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.MemberElement);
 
-            writer.WritePropertyName("memberName");
+            writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.MemberName);
-            writer.WritePropertyName("memberShortName");
+            writer.WritePropertyName("memberShortName"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.MemberShortName);
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iTransitionFeatureMembership.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iTransitionFeatureMembership.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iTransitionFeatureMembership.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iTransitionFeatureMembership.OwningRelatedElement.Value);
@@ -119,7 +119,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iTransitionFeatureMembership.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iTransitionFeatureMembership.OwningRelationship.Value);
@@ -128,24 +128,24 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iTransitionFeatureMembership.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iTransitionFeatureMembership.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("type");
+            writer.WritePropertyName("type"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.Type);
 
-            writer.WritePropertyName("visibility");
+            writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();

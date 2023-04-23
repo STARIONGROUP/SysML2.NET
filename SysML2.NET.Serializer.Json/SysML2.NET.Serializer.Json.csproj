@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>11.0</LangVersion>
-        <Version>0.10.0</Version>
+        <Version>0.10.1</Version>
         <Description>A .NET implementation of the OMG SysML v2 JSON serializer.</Description>
         <PackageId>SysML2.NET.Serializer.Json</PackageId>
         <Company>RHEA System S.A.</Company>
@@ -14,8 +14,7 @@
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
         <PackageReleaseNotes>
-            [Update] to SysML2.NET version 0.9.0
-            [Update] to System.Text.Json version 7.0.2
+            [Update] Json deserializer to use the u8 from C# 11 to improve performance; fixes #23
         </PackageReleaseNotes>
     </PropertyGroup>
 

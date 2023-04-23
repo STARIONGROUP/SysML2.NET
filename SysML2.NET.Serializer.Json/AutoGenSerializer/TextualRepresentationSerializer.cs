@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="TextualRepresentationSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="TextualRepresentationSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="ITextualRepresentation"/> interface
     /// </summary>
     internal static class TextualRepresentationSerializer
     {
@@ -57,50 +57,50 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("TextualRepresentation");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("TextualRepresentation"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iTextualRepresentation.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iTextualRepresentation.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("annotation");
+            writer.WriteStartArray("annotation"u8);
             foreach (var item in iTextualRepresentation.Annotation)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("body");
+            writer.WritePropertyName("body"u8);
             writer.WriteStringValue(iTextualRepresentation.Body);
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iTextualRepresentation.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iTextualRepresentation.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iTextualRepresentation.ElementId);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iTextualRepresentation.IsImpliedIncluded);
 
-            writer.WritePropertyName("language");
+            writer.WritePropertyName("language"u8);
             writer.WriteStringValue(iTextualRepresentation.Language);
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iTextualRepresentation.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iTextualRepresentation.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iTextualRepresentation.OwningRelationship.Value);

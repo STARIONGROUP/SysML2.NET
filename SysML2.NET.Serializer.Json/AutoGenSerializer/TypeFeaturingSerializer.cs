@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="TypeFeaturingSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="TypeFeaturingSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="ITypeFeaturing"/> interface
     /// </summary>
     internal static class TypeFeaturingSerializer
     {
@@ -57,56 +57,56 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("TypeFeaturing");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("TypeFeaturing"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iTypeFeaturing.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iTypeFeaturing.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iTypeFeaturing.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iTypeFeaturing.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iTypeFeaturing.ElementId);
 
-            writer.WritePropertyName("feature");
+            writer.WritePropertyName("feature"u8);
             writer.WriteStringValue(iTypeFeaturing.Feature);
 
-            writer.WritePropertyName("featureOfType");
+            writer.WritePropertyName("featureOfType"u8);
             writer.WriteStringValue(iTypeFeaturing.FeatureOfType);
 
-            writer.WritePropertyName("featuringType");
+            writer.WritePropertyName("featuringType"u8);
             writer.WriteStringValue(iTypeFeaturing.FeaturingType);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iTypeFeaturing.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iTypeFeaturing.IsImpliedIncluded);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iTypeFeaturing.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iTypeFeaturing.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iTypeFeaturing.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iTypeFeaturing.OwningRelatedElement.Value);
@@ -115,7 +115,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iTypeFeaturing.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iTypeFeaturing.OwningRelationship.Value);
@@ -124,21 +124,21 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iTypeFeaturing.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iTypeFeaturing.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("type");
+            writer.WritePropertyName("type"u8);
             writer.WriteStringValue(iTypeFeaturing.Type);
 
             writer.WriteEndObject();

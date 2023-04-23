@@ -53,7 +53,7 @@ namespace SysML2.NET.Serializer.Json.PIM
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("TagDeserializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the TagDeserializer cannot be used to deserialize this JsonElement");
             }
@@ -67,7 +67,7 @@ namespace SysML2.NET.Serializer.Json.PIM
 
             var dtoInstance = new SysML2.NET.PIM.DTO.Tag();
 
-            if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
@@ -78,7 +78,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 dtoInstance.Id = Guid.Parse(propertyValue);
             }
             
-            if (jsonElement.TryGetProperty("description", out JsonElement descriptionProperty))
+            if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
             {
                 var propertyValue = descriptionProperty.GetString();
                 if (propertyValue != null)
@@ -91,7 +91,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the name Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("name", out JsonElement nameProperty))
+            if (jsonElement.TryGetProperty("name"u8, out JsonElement nameProperty))
             {
                 var propertyValue = nameProperty.GetString();
                 if (propertyValue != null)
@@ -104,7 +104,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the name Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("owningProject", out JsonElement owningProjectProperty))
+            if (jsonElement.TryGetProperty("owningProject"u8, out JsonElement owningProjectProperty))
             {
                 if (owningProjectProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -112,7 +112,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 }
                 else
                 {
-                    if (owningProjectProperty.TryGetProperty("@id", out JsonElement owningProjectPropertyIdProperty))
+                    if (owningProjectProperty.TryGetProperty("@id"u8, out JsonElement owningProjectPropertyIdProperty))
                     {
                         var propertyValue = owningProjectPropertyIdProperty.GetString();
                         if (propertyValue != null)
@@ -127,9 +127,9 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the owningProject Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("referencedCommit", out JsonElement referencedCommitProperty))
+            if (jsonElement.TryGetProperty("referencedCommit"u8, out JsonElement referencedCommitProperty))
             {
-                if (referencedCommitProperty.TryGetProperty("@id", out JsonElement referencedCommitIdProperty))
+                if (referencedCommitProperty.TryGetProperty("@id"u8, out JsonElement referencedCommitIdProperty))
                 {
                     var propertyValue = referencedCommitIdProperty.GetString();
                     if (propertyValue != null)
@@ -143,9 +143,9 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the referencedCommit Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("taggedCommit", out JsonElement taggedCommitProperty))
+            if (jsonElement.TryGetProperty("taggedCommit"u8, out JsonElement taggedCommitProperty))
             {
-                if (taggedCommitProperty.TryGetProperty("@id", out JsonElement taggedCommitPropertyIdProperty))
+                if (taggedCommitProperty.TryGetProperty("@id"u8, out JsonElement taggedCommitPropertyIdProperty))
                 {
                     var propertyValue = taggedCommitPropertyIdProperty.GetString();
                     if (propertyValue != null)
@@ -159,7 +159,7 @@ namespace SysML2.NET.Serializer.Json.PIM
                 logger.LogDebug($"the taggedCommit Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("timestamp", out JsonElement timestampProjectProperty))
+            if (jsonElement.TryGetProperty("timestamp"u8, out JsonElement timestampProjectProperty))
             {
                 dtoInstance.TimeStamp = timestampProjectProperty.GetDateTime();
             }

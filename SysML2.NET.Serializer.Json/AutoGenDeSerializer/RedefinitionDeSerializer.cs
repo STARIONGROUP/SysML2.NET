@@ -58,7 +58,7 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("RedefinitionDeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the RedefinitionDeSerializer cannot be used to deserialize this JsonElement");
             }
@@ -70,7 +70,7 @@ namespace SysML2.NET.Serializer.Json
 
             var dtoInstance = new Core.DTO.Redefinition();
 
-            if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
@@ -83,7 +83,7 @@ namespace SysML2.NET.Serializer.Json
                 }
             }
 
-            if (jsonElement.TryGetProperty("aliasIds", out JsonElement aliasIdsProperty))
+            if (jsonElement.TryGetProperty("aliasIds"u8, out JsonElement aliasIdsProperty))
             {
                 foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
                 {
@@ -99,7 +99,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the aliasIds Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("declaredName", out JsonElement declaredNameProperty))
+            if (jsonElement.TryGetProperty("declaredName"u8, out JsonElement declaredNameProperty))
             {
                 dtoInstance.DeclaredName = declaredNameProperty.GetString();
             }
@@ -108,7 +108,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the declaredName Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("declaredShortName", out JsonElement declaredShortNameProperty))
+            if (jsonElement.TryGetProperty("declaredShortName"u8, out JsonElement declaredShortNameProperty))
             {
                 dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
             }
@@ -117,7 +117,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the declaredShortName Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("elementId", out JsonElement elementIdProperty))
+            if (jsonElement.TryGetProperty("elementId"u8, out JsonElement elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();
                 if (propertyValue != null)
@@ -130,7 +130,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the elementId Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("general", out JsonElement generalProperty))
+            if (jsonElement.TryGetProperty("general"u8, out JsonElement generalProperty))
             {
                 if (generalProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -139,7 +139,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (generalProperty.TryGetProperty("@id", out JsonElement generalIdProperty))
+                    if (generalProperty.TryGetProperty("@id"u8, out JsonElement generalIdProperty))
                     {
                         var propertyValue = generalIdProperty.GetString();
                         if (propertyValue != null)
@@ -154,7 +154,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the general Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isImplied", out JsonElement isImpliedProperty))
+            if (jsonElement.TryGetProperty("isImplied"u8, out JsonElement isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)
                 {
@@ -166,7 +166,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isImplied Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isImpliedIncluded", out JsonElement isImpliedIncludedProperty))
+            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out JsonElement isImpliedIncludedProperty))
             {
                 if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
                 {
@@ -178,11 +178,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the isImpliedIncluded Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("ownedRelatedElement", out JsonElement ownedRelatedElementProperty))
+            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out JsonElement ownedRelatedElementProperty))
             {
                 foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelatedElementIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement ownedRelatedElementIdProperty))
                     {
                         var propertyValue = ownedRelatedElementIdProperty.GetString();
                         if (propertyValue != null)
@@ -197,11 +197,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the ownedRelatedElement Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("ownedRelationship", out JsonElement ownedRelationshipProperty))
+            if (jsonElement.TryGetProperty("ownedRelationship"u8, out JsonElement ownedRelationshipProperty))
             {
                 foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement ownedRelationshipIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement ownedRelationshipIdProperty))
                     {
                         var propertyValue = ownedRelationshipIdProperty.GetString();
                         if (propertyValue != null)
@@ -216,7 +216,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the ownedRelationship Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("owningRelatedElement", out JsonElement owningRelatedElementProperty))
+            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out JsonElement owningRelatedElementProperty))
             {
                 if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -224,7 +224,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (owningRelatedElementProperty.TryGetProperty("@id", out JsonElement owningRelatedElementIdProperty))
+                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out JsonElement owningRelatedElementIdProperty))
                     {
                         var propertyValue = owningRelatedElementIdProperty.GetString();
                         if (propertyValue != null)
@@ -239,7 +239,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the owningRelatedElement Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("owningRelationship", out JsonElement owningRelationshipProperty))
+            if (jsonElement.TryGetProperty("owningRelationship"u8, out JsonElement owningRelationshipProperty))
             {
                 if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -247,7 +247,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id", out JsonElement owningRelationshipIdProperty))
+                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out JsonElement owningRelationshipIdProperty))
                     {
                         var propertyValue = owningRelationshipIdProperty.GetString();
                         if (propertyValue != null)
@@ -262,7 +262,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the owningRelationship Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("redefinedFeature", out JsonElement redefinedFeatureProperty))
+            if (jsonElement.TryGetProperty("redefinedFeature"u8, out JsonElement redefinedFeatureProperty))
             {
                 if (redefinedFeatureProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -271,7 +271,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (redefinedFeatureProperty.TryGetProperty("@id", out JsonElement redefinedFeatureIdProperty))
+                    if (redefinedFeatureProperty.TryGetProperty("@id"u8, out JsonElement redefinedFeatureIdProperty))
                     {
                         var propertyValue = redefinedFeatureIdProperty.GetString();
                         if (propertyValue != null)
@@ -286,7 +286,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the redefinedFeature Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("redefiningFeature", out JsonElement redefiningFeatureProperty))
+            if (jsonElement.TryGetProperty("redefiningFeature"u8, out JsonElement redefiningFeatureProperty))
             {
                 if (redefiningFeatureProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -295,7 +295,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (redefiningFeatureProperty.TryGetProperty("@id", out JsonElement redefiningFeatureIdProperty))
+                    if (redefiningFeatureProperty.TryGetProperty("@id"u8, out JsonElement redefiningFeatureIdProperty))
                     {
                         var propertyValue = redefiningFeatureIdProperty.GetString();
                         if (propertyValue != null)
@@ -310,11 +310,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the redefiningFeature Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("source", out JsonElement sourceProperty))
+            if (jsonElement.TryGetProperty("source"u8, out JsonElement sourceProperty))
             {
                 foreach (var arrayItem in sourceProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement sourceIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement sourceIdProperty))
                     {
                         var propertyValue = sourceIdProperty.GetString();
                         if (propertyValue != null)
@@ -329,7 +329,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the source Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("specific", out JsonElement specificProperty))
+            if (jsonElement.TryGetProperty("specific"u8, out JsonElement specificProperty))
             {
                 if (specificProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -338,7 +338,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (specificProperty.TryGetProperty("@id", out JsonElement specificIdProperty))
+                    if (specificProperty.TryGetProperty("@id"u8, out JsonElement specificIdProperty))
                     {
                         var propertyValue = specificIdProperty.GetString();
                         if (propertyValue != null)
@@ -353,7 +353,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the specific Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("subsettedFeature", out JsonElement subsettedFeatureProperty))
+            if (jsonElement.TryGetProperty("subsettedFeature"u8, out JsonElement subsettedFeatureProperty))
             {
                 if (subsettedFeatureProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -362,7 +362,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (subsettedFeatureProperty.TryGetProperty("@id", out JsonElement subsettedFeatureIdProperty))
+                    if (subsettedFeatureProperty.TryGetProperty("@id"u8, out JsonElement subsettedFeatureIdProperty))
                     {
                         var propertyValue = subsettedFeatureIdProperty.GetString();
                         if (propertyValue != null)
@@ -377,7 +377,7 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the subsettedFeature Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("subsettingFeature", out JsonElement subsettingFeatureProperty))
+            if (jsonElement.TryGetProperty("subsettingFeature"u8, out JsonElement subsettingFeatureProperty))
             {
                 if (subsettingFeatureProperty.ValueKind == JsonValueKind.Null)
                 {
@@ -386,7 +386,7 @@ namespace SysML2.NET.Serializer.Json
                 }
                 else
                 {
-                    if (subsettingFeatureProperty.TryGetProperty("@id", out JsonElement subsettingFeatureIdProperty))
+                    if (subsettingFeatureProperty.TryGetProperty("@id"u8, out JsonElement subsettingFeatureIdProperty))
                     {
                         var propertyValue = subsettingFeatureIdProperty.GetString();
                         if (propertyValue != null)
@@ -401,11 +401,11 @@ namespace SysML2.NET.Serializer.Json
                 logger.LogDebug($"the subsettingFeature Json property was not found in the Redefinition: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("target", out JsonElement targetProperty))
+            if (jsonElement.TryGetProperty("target"u8, out JsonElement targetProperty))
             {
                 foreach (var arrayItem in targetProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id", out JsonElement targetIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement targetIdProperty))
                     {
                         var propertyValue = targetIdProperty.GetString();
                         if (propertyValue != null)

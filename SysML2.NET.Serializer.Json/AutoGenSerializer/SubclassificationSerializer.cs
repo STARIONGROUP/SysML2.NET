@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="SubclassificationSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="SubclassificationSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="ISubclassification"/> interface
     /// </summary>
     internal static class SubclassificationSerializer
     {
@@ -57,50 +57,50 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("Subclassification");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("Subclassification"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubclassification.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iSubclassification.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iSubclassification.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iSubclassification.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iSubclassification.ElementId);
 
-            writer.WritePropertyName("general");
+            writer.WritePropertyName("general"u8);
             writer.WriteStringValue(iSubclassification.General);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iSubclassification.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iSubclassification.IsImpliedIncluded);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iSubclassification.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iSubclassification.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iSubclassification.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iSubclassification.OwningRelatedElement.Value);
@@ -109,7 +109,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iSubclassification.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iSubclassification.OwningRelationship.Value);
@@ -118,23 +118,23 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iSubclassification.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("specific");
+            writer.WritePropertyName("specific"u8);
             writer.WriteStringValue(iSubclassification.Specific);
 
-            writer.WritePropertyName("subclassifier");
+            writer.WritePropertyName("subclassifier"u8);
             writer.WriteStringValue(iSubclassification.Subclassifier);
 
-            writer.WritePropertyName("superclassifier");
+            writer.WritePropertyName("superclassifier"u8);
             writer.WriteStringValue(iSubclassification.Superclassifier);
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iSubclassification.Target)
             {
                 writer.WriteStringValue(item);

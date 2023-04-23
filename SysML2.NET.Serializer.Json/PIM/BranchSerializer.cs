@@ -54,21 +54,21 @@ namespace SysML2.NET.Serializer.Json.PIM
                 case SerializationModeKind.JSON:
 
                     writer.WriteStartObject();
-                    writer.WriteString("@type", "Branch");
-                    writer.WriteString("@id", branch.Id);
-                    writer.WriteString("creationTimestamp", branch.CreationTimestamp);
-                    writer.WriteString("description", branch.Description);
-                    writer.WriteStartObject("head");
-                    writer.WriteString("@id", branch.Head);
+                    writer.WriteString("@type"u8, "Branch"u8);
+                    writer.WriteString("@id"u8, branch.Id);
+                    writer.WriteString("creationTimestamp"u8, branch.CreationTimestamp);
+                    writer.WriteString("description"u8, branch.Description);
+                    writer.WriteStartObject("head"u8);
+                    writer.WriteString("@id"u8, branch.Head);
                     writer.WriteEndObject();
-                    writer.WriteString("name", branch.Name);
-                    writer.WriteStartObject("owningProject");
-                    writer.WriteString("@id", branch.OwningProject);
+                    writer.WriteString("name"u8, branch.Name);
+                    writer.WriteStartObject("owningProject"u8);
+                    writer.WriteString("@id"u8, branch.OwningProject);
                     writer.WriteEndObject();
-                    writer.WriteStartObject("referencedCommit");
-                    writer.WriteString("@id", branch.ReferencedCommit);
+                    writer.WriteStartObject("referencedCommit"u8);
+                    writer.WriteString("@id"u8, branch.ReferencedCommit);
                     writer.WriteEndObject();
-                    writer.WriteString("timestamp", branch.TimeStamp);
+                    writer.WriteString("timestamp"u8, branch.TimeStamp);
                     writer.WriteEndObject();
 
                     break;

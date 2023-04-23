@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="MembershipExposeSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="MembershipExposeSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IMembershipExpose"/> interface
     /// </summary>
     internal static class MembershipExposeSerializer
     {
@@ -57,56 +57,56 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("MembershipExpose");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("MembershipExpose"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iMembershipExpose.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iMembershipExpose.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iMembershipExpose.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iMembershipExpose.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iMembershipExpose.ElementId);
 
-            writer.WritePropertyName("importedMembership");
+            writer.WritePropertyName("importedMembership"u8);
             writer.WriteStringValue(iMembershipExpose.ImportedMembership);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iMembershipExpose.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iMembershipExpose.IsImpliedIncluded);
 
-            writer.WritePropertyName("isImportAll");
+            writer.WritePropertyName("isImportAll"u8);
             writer.WriteBooleanValue(iMembershipExpose.IsImportAll);
 
-            writer.WritePropertyName("isRecursive");
+            writer.WritePropertyName("isRecursive"u8);
             writer.WriteBooleanValue(iMembershipExpose.IsRecursive);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iMembershipExpose.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iMembershipExpose.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iMembershipExpose.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iMembershipExpose.OwningRelatedElement.Value);
@@ -115,7 +115,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iMembershipExpose.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iMembershipExpose.OwningRelationship.Value);
@@ -124,21 +124,21 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iMembershipExpose.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iMembershipExpose.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("visibility");
+            writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iMembershipExpose.Visibility.ToString().ToLower());
 
             writer.WriteEndObject();

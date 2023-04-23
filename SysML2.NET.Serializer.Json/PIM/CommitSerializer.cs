@@ -54,27 +54,27 @@ namespace SysML2.NET.Serializer.Json.PIM
                 case SerializationModeKind.JSON:
 
                     writer.WriteStartObject();
-                    writer.WriteString("@type", "Commit");
-                    writer.WriteString("@id", commit.Id);
+                    writer.WriteString("@type"u8, "Commit"u8);
+                    writer.WriteString("@id"u8, commit.Id);
 
                     //TODO: implement change property
                     //writer.WriteString("change", commit.Change.);
 
-                    writer.WriteString("description", commit.Description);
-                    writer.WriteStartObject("owningProject");
-                    writer.WriteString("@id", commit.OwningProject);
+                    writer.WriteString("description"u8, commit.Description);
+                    writer.WriteStartObject("owningProject"u8);
+                    writer.WriteString("@id"u8, commit.OwningProject);
                     writer.WriteEndObject();
-                    writer.WriteStartObject("previousCommit");
+                    writer.WriteStartObject("previousCommit"u8);
                     if (commit.PreviousCommit.HasValue)
                     {
-                        writer.WriteString("@id", commit.PreviousCommit.Value);
+                        writer.WriteString("@id"u8, commit.PreviousCommit.Value);
                     }
                     else
                     {
-                        writer.WriteNull("@id");
+                        writer.WriteNull("@id"u8);
                     }
                     writer.WriteEndObject();
-                    writer.WriteString("timestamp", commit.TimeStamp);
+                    writer.WriteString("timestamp"u8, commit.TimeStamp);
                     writer.WriteEndObject();
 
                     break;

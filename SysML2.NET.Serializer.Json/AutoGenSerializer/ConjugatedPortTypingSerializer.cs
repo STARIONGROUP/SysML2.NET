@@ -31,8 +31,8 @@ namespace SysML2.NET.Serializer.Json
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ConjugatedPortTypingSerializer"/> is to provide serialization
-    /// and deserialization capabilities
+    /// The purpose of the <see cref="ConjugatedPortTypingSerializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="IConjugatedPortTyping"/> interface
     /// </summary>
     internal static class ConjugatedPortTypingSerializer
     {
@@ -57,53 +57,53 @@ namespace SysML2.NET.Serializer.Json
 
             writer.WriteStartObject();
 
-            writer.WritePropertyName("@type");
-            writer.WriteStringValue("ConjugatedPortTyping");
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("ConjugatedPortTyping"u8);
 
-            writer.WritePropertyName("@id");
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConjugatedPortTyping.Id);
 
-            writer.WriteStartArray("aliasIds");
+            writer.WriteStartArray("aliasIds"u8);
             foreach (var item in iConjugatedPortTyping.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("conjugatedPortDefinition");
+            writer.WritePropertyName("conjugatedPortDefinition"u8);
             writer.WriteStringValue(iConjugatedPortTyping.ConjugatedPortDefinition);
 
-            writer.WritePropertyName("declaredName");
+            writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConjugatedPortTyping.DeclaredName);
-            writer.WritePropertyName("declaredShortName");
+            writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iConjugatedPortTyping.DeclaredShortName);
-            writer.WritePropertyName("elementId");
+            writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iConjugatedPortTyping.ElementId);
 
-            writer.WritePropertyName("general");
+            writer.WritePropertyName("general"u8);
             writer.WriteStringValue(iConjugatedPortTyping.General);
 
-            writer.WritePropertyName("isImplied");
+            writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iConjugatedPortTyping.IsImplied);
 
-            writer.WritePropertyName("isImpliedIncluded");
+            writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iConjugatedPortTyping.IsImpliedIncluded);
 
-            writer.WriteStartArray("ownedRelatedElement");
+            writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iConjugatedPortTyping.OwnedRelatedElement)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WriteStartArray("ownedRelationship");
+            writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iConjugatedPortTyping.OwnedRelationship)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("owningRelatedElement");
+            writer.WritePropertyName("owningRelatedElement"u8);
             if (iConjugatedPortTyping.OwningRelatedElement.HasValue)
             {
                 writer.WriteStringValue(iConjugatedPortTyping.OwningRelatedElement.Value);
@@ -112,7 +112,7 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("owningRelationship");
+            writer.WritePropertyName("owningRelationship"u8);
             if (iConjugatedPortTyping.OwningRelationship.HasValue)
             {
                 writer.WriteStringValue(iConjugatedPortTyping.OwningRelationship.Value);
@@ -121,27 +121,27 @@ namespace SysML2.NET.Serializer.Json
             {
                 writer.WriteNullValue();
             }
-            writer.WriteStartArray("source");
+            writer.WriteStartArray("source"u8);
             foreach (var item in iConjugatedPortTyping.Source)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("specific");
+            writer.WritePropertyName("specific"u8);
             writer.WriteStringValue(iConjugatedPortTyping.Specific);
 
-            writer.WriteStartArray("target");
+            writer.WriteStartArray("target"u8);
             foreach (var item in iConjugatedPortTyping.Target)
             {
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
 
-            writer.WritePropertyName("type");
+            writer.WritePropertyName("type"u8);
             writer.WriteStringValue(iConjugatedPortTyping.Type);
 
-            writer.WritePropertyName("typedFeature");
+            writer.WritePropertyName("typedFeature"u8);
             writer.WriteStringValue(iConjugatedPortTyping.TypedFeature);
 
             writer.WriteEndObject();

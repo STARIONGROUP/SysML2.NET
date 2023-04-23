@@ -58,7 +58,7 @@ namespace SysML2.NET.Serializer.Json
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("{{ this.Name }}DeSerializer");
 
-            if (!jsonElement.TryGetProperty("@type", out JsonElement @type))
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
                 throw new InvalidOperationException("The @type property is not available, the {{ this.Name }}DeSerializer cannot be used to deserialize this JsonElement");
             }
@@ -70,7 +70,7 @@ namespace SysML2.NET.Serializer.Json
 
             var dtoInstance = new Core.DTO.{{ this.Name }}();
 
-            if (jsonElement.TryGetProperty("@id", out JsonElement idProperty))
+            if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
@@ -87,13 +87,13 @@ namespace SysML2.NET.Serializer.Json
             {{#each EClass.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
             {{#unless structuralFeature.Derived }}
                 {{#unless structuralFeature.Transient }}
-                    if (jsonElement.TryGetProperty("{{ structuralFeature.Name }}", out JsonElement {{ structuralFeature.Name }}Property))
+                    if (jsonElement.TryGetProperty("{{ structuralFeature.Name }}"u8, out JsonElement {{ structuralFeature.Name }}Property))
                     {
                         {{#if (StructuralFeature.QueryIsReference structuralFeature)}}
                             {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}
                                 foreach (var arrayItem in {{ structuralFeature.Name }}Property.EnumerateArray())
                                 {
-                                    if (arrayItem.TryGetProperty("@id", out JsonElement {{ structuralFeature.Name }}IdProperty))
+                                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement {{ structuralFeature.Name }}IdProperty))
                                     {
                                         var propertyValue = {{ structuralFeature.Name }}IdProperty.GetString();
                                         if (propertyValue != null)
@@ -114,7 +114,7 @@ namespace SysML2.NET.Serializer.Json
                                 }
                                 else
                                 {
-                                    if ({{ structuralFeature.Name }}Property.TryGetProperty("@id", out JsonElement {{ structuralFeature.Name }}IdProperty))
+                                    if ({{ structuralFeature.Name }}Property.TryGetProperty("@id"u8, out JsonElement {{ structuralFeature.Name }}IdProperty))
                                     {
                                         var propertyValue = {{ structuralFeature.Name }}IdProperty.GetString();
                                         if (propertyValue != null)
