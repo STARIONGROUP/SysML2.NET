@@ -12,7 +12,6 @@ SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://gi
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/RHEAGROUP/SysML2.NET.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/RHEAGROUP/SysML2.NET/alerts/)
 
 ## Installation
 
