@@ -38,6 +38,11 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the reference to the <see cref="Commit"/> of the <see cref="Project"/> being used.
         /// </summary>
-        public Commit UsedProjectCommit { get; set; }
+        public Commit UsedCommit { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reference to the <see cref="Project"/> being used.
+        /// </summary>
+        public Project UsedProject { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Branch.cs" company="RHEA System S.A.">
+// <copyright file="CompositeConstraint.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,19 +18,27 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PIM.POCO
+namespace SysML2.NET.PIM.DTO
 {
+    using System.Collections.Generic;
+
     /// <summary>
-    /// A <see cref="Branch"/> is a type of <see cref="CommitReference"/>. A <see cref="Branch"/> is a pointer to a <see cref="Commit"/> (Branch.head).
-    /// The <see cref="Commit"/> history of a <see cref="Project"/> on a given <see cref="Branch"/> can be computed by recursively navigating
-    /// <see cref="Commit.PreviousCommit"/>, starting from the head <see cref="Commit"/> of the <see cref="Branch"/> (Branch.head)
+    /// a subtype of <see cref="Constraint"/> that represents complex conditions composed of two or more
+    /// <see cref="CompositeConstraint"/>s or <see cref="PrimitiveConstraint"/>s using logical AND or OR operators
     /// </summary>
-    public class Branch : CommitReference
+    public class CompositeConstraint : Constraint
     {
         /// <summary>
-        /// Gets or sets the commit to which the branch is currently pointing. It represents the latest state of the
-        /// <see cref="Project"/> on the given branch
+        /// Gets or sets the set of <see cref="Constraint"/>s being composed
         /// </summary>
-        public Commit Head { get; set; }
+        /// <remarks>
+        /// There must be at least 2
+        /// </remarks>
+        public List<Constraint> Constraint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the logical operator for composing the <see cref="Constraint"/>s
+        /// </summary>
+        public JoinOperator Operator { get; set; }
     }
 }

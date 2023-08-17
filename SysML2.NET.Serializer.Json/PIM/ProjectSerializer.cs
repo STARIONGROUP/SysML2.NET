@@ -57,18 +57,22 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteStartObject();
                     writer.WriteString("@type"u8, "Project"u8);
                     writer.WriteString("@id"u8, project.Id);
-
                     writer.WriteStartArray("alias"u8);
-                    foreach (var alias in project.Alias)
+                    if (project.Alias != null)
                     {
-                        writer.WriteStringValue(alias);
+                        foreach (var item in project.Alias)
+                        {
+                            writer.WriteStringValue(item);
+                        }
                     }
                     writer.WriteEndArray();
+                    writer.WriteString("created"u8, project.Created);
                     writer.WriteStartObject("defaultBranch"u8);
                     writer.WriteString("@id"u8, project.DefaultBranch);
                     writer.WriteEndObject();
                     writer.WriteString("description"u8, project.Description);
                     writer.WriteString("name"u8, project.Name);
+                    writer.WriteString("resourceIdentifier"u8, project.ResourceIdentifier);
                     writer.WriteEndObject();
 
                     break;

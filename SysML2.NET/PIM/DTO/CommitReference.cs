@@ -20,6 +20,8 @@
 
 namespace SysML2.NET.PIM.DTO
 {
+    using System;
+
     /// <summary>
     /// An abstract subclass of <see cref="Record"/> that references a specific <see cref="Commit"/> (Commit Reference.referencedCommit). Project.commit is the set of all the Commit records for a given Project.
     /// <see cref="Project.CommitRefererence"/> identifies specific <see cref="Commit"/> records in a <see cref="Project"/> that provide the context for navigating the
@@ -27,5 +29,19 @@ namespace SysML2.NET.PIM.DTO
     /// </summary>
     public abstract class CommitReference : Record
     {
+        /// <summary>
+        /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was created.
+        /// </summary>
+        public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the <see cref="CommitReference"/>
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Project that owns the given <see cref="CommitReference"/>
+        /// </summary>
+        public Guid OwningProject { get; set; }
     }
 }

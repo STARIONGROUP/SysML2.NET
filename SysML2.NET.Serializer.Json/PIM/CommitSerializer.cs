@@ -57,27 +57,34 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteStartObject();
                     writer.WriteString("@type"u8, "Commit"u8);
                     writer.WriteString("@id"u8, commit.Id);
-
-                    //TODO: implement change property
-                    //writer.WriteString("change", commit.Change.);
-
+                    writer.WriteStartArray("alias"u8);
+                    if (commit.Alias != null)
+                    {
+                        foreach (var item in commit.Alias)
+                        {
+                            writer.WriteStringValue(item);
+                        }
+                    }
+                    writer.WriteEndArray();
+                    writer.WriteString("created"u8, commit.Created);
                     writer.WriteString("description"u8, commit.Description);
                     writer.WriteStartObject("owningProject"u8);
                     writer.WriteString("@id"u8, commit.OwningProject);
                     writer.WriteEndObject();
-                    writer.WriteStartObject("previousCommit"u8);
-                    if (commit.PreviousCommit.HasValue)
+                    writer.WriteString("resourceIdentifier"u8, commit.ResourceIdentifier);
+                    writer.WriteStartArray("previousCommits"u8);
+                    if (commit.PreviousCommits != null)
                     {
-                        writer.WriteString("@id"u8, commit.PreviousCommit.Value);
+                        foreach (var previousCommitId in commit.PreviousCommits)
+                        {
+                            writer.WriteStartObject();
+                            writer.WriteString("@id"u8, previousCommitId);
+                            writer.WriteEndObject();
+                        }
                     }
-                    else
-                    {
-                        writer.WriteNull("@id"u8);
-                    }
+                    writer.WriteEndArray();
                     writer.WriteEndObject();
-                    writer.WriteString("timestamp"u8, commit.TimeStamp);
-                    writer.WriteEndObject();
-
+                        
                     break;
                 case SerializationModeKind.JSONLD:
 

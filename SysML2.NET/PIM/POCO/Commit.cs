@@ -42,18 +42,9 @@ namespace SysML2.NET.PIM.POCO
     public class Commit : Record
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Commit"/> class.
-        /// </summary>
-        public Commit()
-        {
-            this.Change = new List<DataVersion>();
-            this.VersionedData = new List<DataVersion>();
-        }
-
-        /// <summary>
         /// Gets or sets the timestamp at which the <see cref="Commit"/> was created
         /// </summary>
-        public DateTime TimeStamp { get; set; }
+        public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Project"/> that owns the <see cref="Commit"/>.
@@ -63,17 +54,20 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets the sets the set of immediately preceding <see cref="Commit"/>s
         /// </summary>
-        public Commit PreviousCommit { get; set; }
+        public List<Commit> PreviousCommits { get; set; } = new List<Commit>();
 
         /// <summary>
         /// Gets or sets the the set of <see cref="DataVersion"/> records representing <see cref="IData"/> that is
         /// created, updated, or deleted in the <see cref="Commit"/>
         /// </summary>
-        public List<DataVersion> Change { get; set; }
+        public List<DataVersion> Change { get; set; } = new List<DataVersion>();
 
         /// <summary>
-        /// Gets or sets the set of cumulative <see cref="DataVersion"/> records in a <see cref="Project"/> at the <see cref="Commit"/>
+        /// Queries the derived property VersionedData
         /// </summary>
-        public List<DataVersion> VersionedData { get; set; }
+        public List<DataVersion> QueryVersionedData()
+        {
+            throw new NotImplementedException("Derived property VersionedData not yet supported");
+        }
     }
 }

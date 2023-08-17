@@ -144,7 +144,7 @@ namespace SysML2.NET.OGM.Repository
             {
                 Id = Guid.Parse("a6ba210d32a94c2986fe3b9a92f88133"),
                 Alias = new List<string> { "branch alias 1", "branch alias 2" },
-                CreationTimestamp = new DateTime(1976, 08, 20),
+                //CreationTimestamp = new DateTime(1976, 08, 20),
                 //DefaultBranch = Guid.Parse("a910a705-7fbe-415f-9cbb-624bfadf6c20"),
                 Description = "this is a description for branch 1",
                 Name = "master",
@@ -154,7 +154,7 @@ namespace SysML2.NET.OGM.Repository
             {
                 Id = Guid.Parse("d9077028cf1e4845b8a2569ce8e31722"),
                 Alias = new List<string> { "branch alias 1", "branch alias 2" },
-                CreationTimestamp = new DateTime(1976, 08, 20),
+                //CreationTimestamp = new DateTime(1976, 08, 20),
                 //DefaultBranch = Guid.Parse("8c65591a-5024-4aee-bb8d-3458a113fe7c"),
                 Description = "this is a description for branch 2",
                 Name = "development"

@@ -42,17 +42,9 @@ namespace SysML2.NET.PIM.DTO
     public class Commit : Record
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Commit"/> class.
-        /// </summary>
-        public Commit()
-        {
-            this.Change = new List<DataVersion>();
-        }
-
-        /// <summary>
         /// Gets or sets the timestamp at which the <see cref="Commit"/> was created
         /// </summary>
-        public DateTime TimeStamp { get; set; }
+        public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Project"/> that owns the <see cref="Commit"/>.
@@ -62,12 +54,6 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the sets the set of immediately preceding <see cref="Commit"/>s
         /// </summary>
-        public Guid? PreviousCommit { get; set; }
-
-        /// <summary>
-        /// Gets or sets the the set of <see cref="DataVersion"/> records representing <see cref="IData"/> that is
-        /// created, updated, or deleted in the <see cref="Commit"/>
-        /// </summary>
-        public List<DataVersion> Change { get; set; }
+        public List<Guid> PreviousCommits { get; set; } = new List<Guid>();
     }
 }

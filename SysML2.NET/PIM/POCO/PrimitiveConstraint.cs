@@ -26,16 +26,8 @@ namespace SysML2.NET.PIM.POCO
     /// a subtype of Constraint that represents simple conditions that be modeled using the
     /// property-operator -value tuple. e.g. mass <= 4 kg, or type instanceOf Generalization
     /// </summary>
-    public class PrimitiveConstraint
+    public class PrimitiveConstraint : Constraint
     {
-        /// <summary>
-        /// Initializes a new instance of <see cref="PrimitiveConstraint"/>
-        /// </summary>
-        public PrimitiveConstraint()
-        {
-            this.Values = new List<object>();
-        }
-
         /// <summary>
         /// Gets or sets the name of a property of Element or its subtypes that is being constrained
         /// </summary>
@@ -49,7 +41,7 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets list of primitive objects, such as String, Boolean, Integer, Double, and UUID
         /// </summary>
-        public List<object> Values { get; set; }
+        public List<string> Value { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets a value indicating a logical NOT operator is applied to the <see cref="PrimitiveConstraint"/>

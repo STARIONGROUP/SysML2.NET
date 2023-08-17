@@ -32,19 +32,15 @@ namespace SysML2.NET.PIM.DTO
     public class Project : Record
     {
         /// <summary>
+        /// Gets or sets the <see cref="DateTime"/> when the project was created
+        /// </summary>
+        public DateTime Created { get; set; }
+
+        /// <summary>
         /// Gets or sets the human readable name
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets the set of <see cref="DataIdentity"/> records corresponding to the <see cref="IData"/>
-        /// contained in the <see cref="Project"/>
-        /// </summary>
-        /// <remarks>
-        /// this is a derived attribute
-        /// </remarks>
-        public IEnumerable<Guid> IdentifiedData => throw new NotImplementedException();
-        
         /// <summary>
         /// Gets or sets the default <see cref="Branch"/> in the <see cref="Project"/> which is a subset of <see cref="Branch"/>
         /// </summary>

@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="OrderBy.cs" company="RHEA System S.A.">
+// <copyright file="ExternalData.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -20,8 +20,24 @@
 
 namespace SysML2.NET.PIM.POCO
 {
-    public class OrderBy
+    using System;
+
+    using SysML2.NET.Common;
+
+    /// <summary>
+    /// ExternalData is a realization of Data, and represents a resource external to a given tool or
+    /// repository. ExternalData is defined only for the purpose of defining an ExternalRelationship
+    /// </summary>
+    public class ExternalData : IData
     {
-        
+        /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the string representation of the IRI of the resource represented by the ExternalData
+        /// </summary>
+        public string ResourceIdentifier { get; set; }
     }
 }

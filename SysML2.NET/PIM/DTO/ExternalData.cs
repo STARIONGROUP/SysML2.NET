@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Branch.cs" company="RHEA System S.A.">
+// <copyright file="ExternalData.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,19 +18,26 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PIM.POCO
+namespace SysML2.NET.PIM.DTO
 {
+    using System;
+
+    using SysML2.NET.Common;
+
     /// <summary>
-    /// A <see cref="Branch"/> is a type of <see cref="CommitReference"/>. A <see cref="Branch"/> is a pointer to a <see cref="Commit"/> (Branch.head).
-    /// The <see cref="Commit"/> history of a <see cref="Project"/> on a given <see cref="Branch"/> can be computed by recursively navigating
-    /// <see cref="Commit.PreviousCommit"/>, starting from the head <see cref="Commit"/> of the <see cref="Branch"/> (Branch.head)
+    /// ExternalData is a realization of Data, and represents a resource external to a given tool or
+    /// repository. ExternalData is defined only for the purpose of defining an ExternalRelationship
     /// </summary>
-    public class Branch : CommitReference
+    public class ExternalData : IData
     {
         /// <summary>
-        /// Gets or sets the commit to which the branch is currently pointing. It represents the latest state of the
-        /// <see cref="Project"/> on the given branch
+        /// Gets or sets the unique identifier
         /// </summary>
-        public Commit Head { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the string representation of the IRI of the resource represented by the ExternalData
+        /// </summary>
+        public string ResourceIdentifier { get; set; }
     }
 }

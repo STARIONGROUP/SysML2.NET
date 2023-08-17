@@ -25,6 +25,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
     using SysML2.NET.PIM.DTO;
     using SysML2.NET.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="DataVersionSerializer"/> is to provide serialization capabilities
@@ -57,10 +58,24 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteStartObject();
                     writer.WriteString("@type"u8, "DataVersion"u8);
                     writer.WriteString("@id"u8, dataVersion.Id);
-                    
-                    //identity
-                    //payload
-                    
+                    writer.WriteStartArray("alias"u8);
+                    if (dataVersion.Alias != null)
+                    {
+                        foreach (var item in dataVersion.Alias)
+                        {
+                            writer.WriteStringValue(item);
+                        }
+                    }
+                    writer.WriteEndArray();
+                    writer.WriteString("description"u8, dataVersion.Description);
+                    writer.WriteStartObject("identity"u8);
+                    DataIdentitySerializer.Serialize(dataVersion.Identity, writer, serializationModeKind);
+                    writer.WriteEndObject();
+                    writer.WriteStartObject("payload"u8);
+                    var func = SerializationProvider.Provide(dataVersion.Payload.GetType());
+                    func(dataVersion.Payload, writer, serializationModeKind);
+                    writer.WriteEndObject();
+                    writer.WriteString("resourceIdentifier"u8, dataVersion.ResourceIdentifier);
                     writer.WriteEndObject();
 
                     break;

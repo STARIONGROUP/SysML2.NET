@@ -79,6 +79,40 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 dtoInstance.Id = Guid.Parse(idPropertyVersionItemValue);
             }
 
+            if (jsonElement.TryGetProperty("alias"u8, out JsonElement aliasProperty))
+            {
+                foreach (var item in aliasProperty.EnumerateArray())
+                {
+                    dtoInstance.Alias.Add(item.GetString());
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the alias Json property was not found in the DataIdentity: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
+            {
+                var propertyValue = descriptionProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Description = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the DataIdentity: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
+            {
+                dtoInstance.ResourceIdentifier = resourceIdentifierProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug($"the resourceIdentifier Json property was not found in the DataIdentity: {dtoInstance.Id}");
+            }
+
             logger.Log(LogLevel.Trace, "finish deserialization: DataIdentity");
 
             return dtoInstance;

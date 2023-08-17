@@ -22,6 +22,7 @@ namespace SysML2.NET.PIM.POCO
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.PIM;
 
@@ -32,22 +33,14 @@ namespace SysML2.NET.PIM.POCO
     public class Project : Record
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Project"/> class.
-        /// </summary>
-        public Project()
-        {
-            this.Branch = new List<Branch>();
-            this.Commit = new List<Commit>();
-            this.CommitReference = new List<CommitReference>();
-            this.Tag = new List<Tag>();
-            this.Usage = new List<ProjectUsage>();
-            this.Queries = new List<Query>();
-        }
-
-        /// <summary>
         /// Gets or sets the human readable name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the timestamp at which the <see cref="Project"/> was created
+        /// </summary>
+        public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets the set of <see cref="DataIdentity"/> records corresponding to the <see cref="IData"/>
@@ -57,21 +50,21 @@ namespace SysML2.NET.PIM.POCO
         /// this is a derived attribute
         /// </remarks>
         public IEnumerable<DataIdentity> IdentifiedData => throw new NotImplementedException();
-        
+
         /// <summary>
-        /// Gets or sets the set of all <see cref="Commit"/>s in the <see cref="Project"/>
+        /// Gets all the <see cref="Commit"/>s in the <see cref="Project"/>
         /// </summary>
-        public List<Commit> Commit { get; set; }
+        public IEnumerable<Commit> Commits => this.CommitReference.OfType<Commit>();
 
         /// <summary>
         /// Gets or sets all <see cref="CommitReference"/>s in the <see cref="Project"/>
         /// </summary>
-        public List<CommitReference> CommitReference { get; set; }
+        public List<CommitReference> CommitReference { get; set; } = new List<CommitReference>();
 
         /// <summary>
         /// Gets or sets all the branches in the Project which is a subset of <see cref="CommitReference"/>
         /// </summary>
-        public List<Branch> Branch { get; set; }
+        public List<Branch> Branches { get; set; } = new List<Branch>();
 
         /// <summary>
         /// Gets or sets the default <see cref="Branch"/> in the <see cref="Project"/> which is a subset of <see cref="Branch"/>
@@ -79,19 +72,14 @@ namespace SysML2.NET.PIM.POCO
         public Branch DefaultBranch { get; set; }
 
         /// <summary>
-        /// Gets or sets the all the <see cref="Tag"/>s in the <see cref="Project"/> which is a subset of <see cref="CommitReference"/>
+        /// Gets all the <see cref="Tag"/>s in the <see cref="Project"/> which is a subset of <see cref="CommitReference"/>
         /// </summary>
-        public List<Tag> Tag { get; set; }
-
-        /// <summary>
-        /// Gets or sets <see cref="ProjectUsage"/> records representing all other <see cref="Project"/>s being used by the given <see cref="Project"/>
-        /// </summary>
-        public List<ProjectUsage> Usage { get; set; }
+        public IEnumerable<Tag> Tags => this.CommitReference.OfType<Tag>();
 
         /// <summary>
         /// Gets or sets the <see cref="Query"/> records owned by the <see cref="Project"/>. Each <see cref="Query"/> record represents a
         /// saved <see cref="Query"/> for the given <see cref="Project"/>.
         /// </summary>
-        public List<Query> Queries { get; set; }
+        public List<Query> Queries { get; set; } = new List<Query>();
     }
 }

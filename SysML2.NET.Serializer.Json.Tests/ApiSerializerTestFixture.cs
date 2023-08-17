@@ -58,28 +58,34 @@ namespace SysML2.NET.Serializer.Json.Tests
             {
                 Id = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
                 Alias = new List<string> { "project alias 1", "project alias 2"},
+                Created = new DateTime(1976, 8, 20),
                 DefaultBranch = Guid.Parse("a910a705-7fbe-415f-9cbb-624bfadf6c20"),
                 Description = "this is a description",
                 Name = "test project",
+                ResourceIdentifier = "http://www.rheagroup.com/project",
             };
 
             this.commit = new Commit
             {
                 Id = Guid.Parse("94e5b40e-741e-49ca-bd7f-f3138c071bf9"),
+                Alias = new List<string> { "commit alias 1", "commit alias 2" },
+                Created = new DateTime(1976, 8, 20),
                 Description = "",
                 OwningProject = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
-                PreviousCommit = null,
-                TimeStamp = new DateTime(1976, 8, 20),
+                PreviousCommits = null,
+                ResourceIdentifier = "http://www.rheagroup.com/commit",
             };
 
             this.branch = new Branch
             {
                 Id = Guid.Parse("a910a705-7fbe-415f-9cbb-624bfadf6c20"),
-                Alias = new List<string> { "branch alias 1"},
-                CreationTimestamp = new DateTime(1976, 8, 20),
+                Alias = null,
+                Created = new DateTime(1976, 8, 20),
                 Description = "branch description",
-                ReferencedCommit = Guid.Parse("94e5b40e-741e-49ca-bd7f-f3138c071bf9"),
-                TimeStamp = new DateTime(1976, 8, 20)
+                Head = Guid.Parse("94e5b40e-741e-49ca-bd7f-f3138c071bf9"),
+                Name = "branch name",
+                OwningProject = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
+                ResourceIdentifier = "http://www.rheagroup.com/branch",
             };
         }
 

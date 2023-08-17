@@ -57,6 +57,17 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteStartObject();
                     writer.WriteString("@type"u8, "DataIdentity"u8);
                     writer.WriteString("@id"u8, dataIdentity.Id);
+                    writer.WriteStartArray("alias"u8);
+                    if (dataIdentity.Alias != null)
+                    {
+                        foreach (var item in dataIdentity.Alias)
+                        {
+                            writer.WriteStringValue(item);
+                        }
+                    }
+                    writer.WriteEndArray();
+                    writer.WriteString("description"u8, dataIdentity.Description);
+                    writer.WriteString("resourceIdentifier"u8, dataIdentity.ResourceIdentifier);
                     writer.WriteEndObject();
 
                     break;

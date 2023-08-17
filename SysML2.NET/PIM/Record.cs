@@ -45,9 +45,9 @@ namespace SysML2.NET.PIM
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets an IRI for the <see cref="Record"/>
+        /// Gets or sets string representation of the IRI for the <see cref="Record"/>
         /// </summary>
-        public Uri ResourceIdentifier { get; set; }
+        public string ResourceIdentifier { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of other identifiers for this record, especially if the record was created or represented
@@ -56,9 +56,12 @@ namespace SysML2.NET.PIM
         public List<string> Alias { get; set; }
 
         /// <summary>
-        /// Gets or sets a human-friendly unique identifier for this <see cref="Record"/>
+        /// Gets a human-friendly unique identifier for this <see cref="Record"/>
         /// </summary>
-        public string HumanIdentifier { get; set; }
+        public string QueryHumanIdentifier()
+        {
+            throw new NotImplementedException("Derived property HumanIdentifier not yet supported");
+        }
 
         /// <summary>
         /// Gets or sets a statement that provides details about the <see cref="Record"/>.

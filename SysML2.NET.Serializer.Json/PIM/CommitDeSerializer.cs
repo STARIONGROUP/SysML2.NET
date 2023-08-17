@@ -79,17 +79,25 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 dtoInstance.Id = Guid.Parse(propertyValue);
             }
 
-            if (jsonElement.TryGetProperty("change"u8, out JsonElement changeProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out JsonElement aliasProperty))
             {
-                foreach (var versionItem in changeProperty.EnumerateArray())
+                foreach (var item in aliasProperty.EnumerateArray())
                 {
-                    var dataVersion = DataVersionDeSerializer.DeSerialize(versionItem, serializationModeKind, loggerFactory);
-                    dtoInstance.Change.Add(dataVersion);
+                    dtoInstance.Alias.Add(item.GetString());
                 }
             }
             else
             {
-                logger.LogDebug($"the change Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug($"the alias Json property was not found in the Commit: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
+            {
+                dtoInstance.Created = createdProperty.GetDateTime();
+            }
+            else
+            {
+                logger.LogDebug($"the created Json property was not found in the Commit: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
@@ -102,7 +110,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the name Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug($"the description Json property was not found in the Commit: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("owningProject"u8, out JsonElement owningProjectProperty))
@@ -132,16 +140,15 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             {
                 if (previousCommitProjectProperty.ValueKind == JsonValueKind.Null)
                 {
-                    dtoInstance.PreviousCommit = null;
+                    dtoInstance.PreviousCommits = null;
                 }
                 else
                 {
-                    if (previousCommitProjectProperty.TryGetProperty("@id"u8, out JsonElement previousCommitPropertyIdProperty))
+                    foreach (var item in previousCommitProjectProperty.EnumerateArray())
                     {
-                        var propertyValue = previousCommitPropertyIdProperty.GetString();
-                        if (propertyValue != null)
+                        if (item.TryGetProperty("@id"u8, out JsonElement itemIdProperty))
                         {
-                            dtoInstance.PreviousCommit = Guid.Parse(propertyValue);
+                            dtoInstance.PreviousCommits.Add(itemIdProperty.GetGuid());
                         }
                     }
                 }
@@ -151,13 +158,13 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 logger.LogDebug($"the previousCommit Json property was not found in the Commit: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("timestamp"u8, out JsonElement timestampProjectProperty))
+            if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
             {
-                dtoInstance.TimeStamp = timestampProjectProperty.GetDateTime();
+                dtoInstance.ResourceIdentifier = resourceIdentifierProperty.GetString();
             }
             else
             {
-                logger.LogDebug($"the timestamp Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug($"the resourceIdentifier Json property was not found in the Commit: {dtoInstance.Id}");
             }
 
             logger.Log(LogLevel.Trace, "finish deserialization: Commit");

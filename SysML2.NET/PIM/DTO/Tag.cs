@@ -33,25 +33,5 @@ namespace SysML2.NET.PIM.DTO
         /// Gets or sets a reference to the tagged <see cref="Commit"/>
         /// </summary>
         public Guid TaggedCommit { get; set; }
-        
-        /// <summary>
-        /// Gets or sets a reference to the referenced <see cref="Commit"/>
-        /// </summary>
-        public Guid ReferencedCommit { get; set; }
-
-        /// <summary>
-        /// Gets a human readable name for the <see cref="Tag"/>
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets a reference to the <see cref="Project"/> that owns the <see cref="Tag"/>
-        /// </summary>
-        public Guid OwningProject { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="DateTime"/> the <see cref="Tag"/> was created
-        /// </summary>
-        public DateTime TimeStamp { get; set; }
     }
 }

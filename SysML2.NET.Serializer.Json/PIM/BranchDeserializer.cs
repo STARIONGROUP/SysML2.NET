@@ -79,22 +79,25 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 dtoInstance.Id = Guid.Parse(propertyValue);
             }
 
-            if (jsonElement.TryGetProperty("creationTimestamp"u8, out JsonElement creationTimestampProperty))
+            if (jsonElement.TryGetProperty("alias"u8, out JsonElement aliasProperty))
             {
-                dtoInstance.TimeStamp = creationTimestampProperty.GetDateTime();
+                foreach (var item in aliasProperty.EnumerateArray())
+                {
+                    dtoInstance.Alias.Add(item.GetString());
+                }
             }
-            else
+            else 
             {
-                logger.LogDebug($"the creationTimestamp Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug($"the alias Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("deletionTimestamp"u8, out JsonElement deletionTimestampProperty))
+            if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
             {
-                dtoInstance.TimeStamp = deletionTimestampProperty.GetDateTime();
+                dtoInstance.Created = createdProperty.GetDateTime();
             }
             else
             {
-                logger.LogDebug($"the timestamp Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug($"the created Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
@@ -130,7 +133,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the referencedCommit Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug($"the head Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("name"u8, out JsonElement nameProperty))
@@ -169,36 +172,13 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 logger.LogDebug($"the owningProject Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("referencedCommit"u8, out JsonElement referencedCommitProperty))
+            if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
             {
-                if (referencedCommitProperty.ValueKind == JsonValueKind.Null)
-                {
-                    logger.LogWarning($"the referencedCommit Json property was null which should not be allowed: Branch {dtoInstance.Id}");
-                }
-                else
-                {
-                    if (referencedCommitProperty.TryGetProperty("@id"u8, out JsonElement referencedCommitIdProperty))
-                    {
-                        var propertyValue = referencedCommitIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.ReferencedCommit = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
+                dtoInstance.ResourceIdentifier = resourceIdentifierProperty.GetString();
             }
             else
             {
-                logger.LogDebug($"the referencedCommit Json property was not found in the Branch: {dtoInstance.Id}");
-            }
-            
-            if (jsonElement.TryGetProperty("timestamp"u8, out JsonElement timestampProperty))
-            {
-                dtoInstance.TimeStamp = timestampProperty.GetDateTime();
-            }
-            else
-            {
-                logger.LogDebug($"the timestamp Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug($"the resourceIdentifier Json property was not found in the Branch: {dtoInstance.Id}");
             }
 
             logger.Log(LogLevel.Trace, "finish deserialization: Branch");

@@ -57,19 +57,25 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteStartObject();
                     writer.WriteString("@type"u8, "Tag"u8);
                     writer.WriteString("@id"u8, tag.Id);
-
+                    writer.WriteStartArray("alias"u8);
+                    if (tag.Alias != null)
+                    {
+                        foreach (var item in tag.Alias)
+                        {
+                            writer.WriteStringValue(item);
+                        }
+                    }
+                    writer.WriteEndArray();
+                    writer.WriteString("created"u8, tag.Created);
                     writer.WriteString("description"u8, tag.Description);
                     writer.WriteString("name"u8, tag.Name);
                     writer.WriteStartObject("owningProject"u8);
                     writer.WriteString("@id"u8, tag.OwningProject);
                     writer.WriteEndObject();
-                    writer.WriteStartObject("referencedCommit"u8);
-                    writer.WriteString("@id"u8, tag.ReferencedCommit);
-                    writer.WriteEndObject();
                     writer.WriteStartObject("taggedCommit"u8);
                     writer.WriteString("@id"u8, tag.TaggedCommit);
                     writer.WriteEndObject();
-                    writer.WriteString("timestamp"u8, tag.TimeStamp);
+                    writer.WriteString("resourceIdentifier"u8, tag.ResourceIdentifier);
                     writer.WriteEndObject();
 
                     break;

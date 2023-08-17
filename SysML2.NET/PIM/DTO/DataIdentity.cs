@@ -20,6 +20,9 @@
 
 namespace SysML2.NET.PIM.DTO
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// A subclass of <see cref="Record"/> that represents a unique, version-independent representation of <see cref="IData"/>
     /// through its lifecycle. A <see cref="DataIdentity"/> is associated with 1 or more <see cref="IData"/> Version

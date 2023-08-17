@@ -20,8 +20,10 @@
 
 namespace SysML2.NET.PIM.POCO
 {
-    using SysML2.NET.Common;
+    using System;
 
+    using SysML2.NET.Common;
+    
     /// <summary>
     /// A subclass of <see cref="Record"/> that represents <see cref="IData"/> at a specific version in its lifecycle.
     /// A <see cref="DataVersion"/> record is associated with only one (1) <see cref="DataIdentity"/> record. <see cref="DataVersion"/>
@@ -43,5 +45,15 @@ namespace SysML2.NET.PIM.POCO
         /// Gets or sets the <see cref="IData"/> payload
         /// </summary>
         public IData Payload { get; set; }
+
+        /// <summary>
+        /// Queries the derived property <see cref="Project"/>
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Project QueryProject()
+        {
+            throw new NotImplementedException("Derived property Project not yet supported");
+        }
     }
 }

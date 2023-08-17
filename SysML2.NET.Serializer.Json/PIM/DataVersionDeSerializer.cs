@@ -26,9 +26,9 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.Serializer.Json.Core.DTO;
     using SysML2.NET.PIM.DTO;
     using SysML2.NET.Serializer.Json;
+    using SysML2.NET.Serializer.Json.Core.DTO;
 
     /// <summary>
     /// The purpose of the <see cref="DataVersionDeSerializer"/> is to provide deserialization capabilities
@@ -55,9 +55,19 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("DataVersionDeSerializer");
 
+            if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
+            {
+                throw new InvalidOperationException("The @type property is not available, the DataVersionDeSerializer cannot be used to deserialize this JsonElement");
+            }
+
+            if (@type.GetString() != "DataVersion")
+            {
+                throw new InvalidOperationException($"The DataVersionDeSerializer can only be used to deserialize objects of type DataVersion, a {@type.GetString()} was provided");
+            }
+
             logger.Log(LogLevel.Trace, "start deserialization: DataVersion");
 
-            var dtoInstance = new SysML2.NET.PIM.DTO.DataVersion();
+            var dtoInstance = new DataVersion();
 
             if (jsonElement.TryGetProperty("@id"u8, out JsonElement idPropertyVersionItem))
             {
@@ -69,7 +79,32 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
                 dtoInstance.Id = Guid.Parse(idPropertyVersionItemValue);
             }
-            
+
+            if (jsonElement.TryGetProperty("alias"u8, out JsonElement aliasProperty))
+            {
+                foreach (var item in aliasProperty.EnumerateArray())
+                {
+                    dtoInstance.Alias.Add(item.GetString());
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the alias Json property was not found in the DataVersion: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
+            {
+                var propertyValue = descriptionProperty.GetString();
+                if (propertyValue != null)
+                {
+                    dtoInstance.Description = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the name Json property was not found in the DataVersion: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("identity"u8, out JsonElement identityObject))
             {
                 dtoInstance.Identity = DataIdentityDeSerializer.DeSerialize(identityObject, serializationModeKind, loggerFactory);
@@ -92,6 +127,15 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             else
             {
                 logger.LogDebug($"the payload Json property was not found in the DataVersion: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
+            {
+                dtoInstance.ResourceIdentifier = resourceIdentifierProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug($"the resourceIdentifier Json property was not found in the DataVersion: {dtoInstance.Id}");
             }
 
             logger.Log(LogLevel.Trace, "finish deserialization: DataVersion");

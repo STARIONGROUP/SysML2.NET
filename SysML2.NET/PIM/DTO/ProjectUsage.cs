@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Branch.cs" company="RHEA System S.A.">
+// <copyright file="ProjectUsage.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,19 +18,31 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PIM.POCO
+namespace SysML2.NET.PIM.DTO
 {
+    using System;
+
+    using SysML2.NET.Common;
+
     /// <summary>
-    /// A <see cref="Branch"/> is a type of <see cref="CommitReference"/>. A <see cref="Branch"/> is a pointer to a <see cref="Commit"/> (Branch.head).
-    /// The <see cref="Commit"/> history of a <see cref="Project"/> on a given <see cref="Branch"/> can be computed by recursively navigating
-    /// <see cref="Commit.PreviousCommit"/>, starting from the head <see cref="Commit"/> of the <see cref="Branch"/> (Branch.head)
+    /// a realization of <see cref="IData"/> that represents the use of a <see cref="Project"/> in the context of another
+    /// <see cref="Project"/>.
     /// </summary>
-    public class Branch : CommitReference
+    public class ProjectUsage : IData
     {
         /// <summary>
-        /// Gets or sets the commit to which the branch is currently pointing. It represents the latest state of the
-        /// <see cref="Project"/> on the given branch
+        /// Gets or sets the unique identifier
         /// </summary>
-        public Commit Head { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reference to the <see cref="Commit"/> of the <see cref="Project"/> being used.
+        /// </summary>
+        public Guid UsedCommit { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reference to the <see cref="Projec"/> of the <see cref="Project"/> being used.
+        /// </summary>
+        public Guid UsedProject { get; set; }
     }
 }

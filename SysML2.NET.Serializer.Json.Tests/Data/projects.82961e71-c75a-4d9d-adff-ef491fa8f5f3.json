@@ -1,9 +1,0 @@
-{
-	"@id": "82961e71-c75a-4d9d-adff-ef491fa8f5f3",
-	"@type": "Project",
-	"defaultBranch": {
-		"@id": "b541c0f3-0b12-4073-a769-f58ec94ea3c3"
-	},
-	"description": "Spacecraft project with multiple commits, branches, and tags",
-	"name": "Spacecraft project with branches and tags - 2022-07-21 13:51:18.826380"
-}

@@ -26,8 +26,19 @@ namespace SysML2.NET.PIM.POCO
     /// a subtype of <see cref="Constraint"/> that represents complex conditions composed of two or more
     /// <see cref="CompositeConstraint"/>s or <see cref="PrimitiveConstraint"/>s using logical AND or OR operators
     /// </summary>
-    public class CompositeConstraint
+    public class CompositeConstraint : Constraint
     {
+        /// <summary>
+        /// Gets or sets the set of <see cref="Constraint"/>s being composed
+        /// </summary>
+        /// <remarks>
+        /// There must be at least 2
+        /// </remarks>
         public List<Constraint> Constraint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the logical operator for composing the <see cref="Constraint"/>s
+        /// </summary>
+        public JoinOperator Operator { get; set; }
     }
 }

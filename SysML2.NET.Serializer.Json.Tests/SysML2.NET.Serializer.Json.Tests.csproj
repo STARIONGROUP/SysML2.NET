@@ -39,22 +39,28 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.branches.json">
+      <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.branches.c294a463-6c9c-47a8-b592-01252c5ab2a7.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.commits.931978a2-e117-4408-96f4-02b861ddbedd.json">
+      <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.branches.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.commits.json">
+      <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.changes.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.json">
+      <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Data\projects.29845a29-b25b-4bab-b8cc-f46a021b7f5a.commits.ec39c63a-fdaa-4a47-98a5-8e8f56b3a986.elements.json">
+      <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.roots.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Data\projects.82961e71-c75a-4d9d-adff-ef491fa8f5f3.tags.json">
+      <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Data\projects.json">

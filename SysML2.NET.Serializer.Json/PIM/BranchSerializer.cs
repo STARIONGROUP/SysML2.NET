@@ -57,7 +57,16 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteStartObject();
                     writer.WriteString("@type"u8, "Branch"u8);
                     writer.WriteString("@id"u8, branch.Id);
-                    writer.WriteString("creationTimestamp"u8, branch.CreationTimestamp);
+                    writer.WriteStartArray("alias"u8);
+                    if (branch.Alias != null)
+                    {
+                        foreach (var item in branch.Alias)
+                        {
+                            writer.WriteStringValue(item);
+                        }
+                    }
+                    writer.WriteEndArray();
+                    writer.WriteString("created"u8, branch.Created);
                     writer.WriteString("description"u8, branch.Description);
                     writer.WriteStartObject("head"u8);
                     writer.WriteString("@id"u8, branch.Head);
@@ -66,10 +75,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteStartObject("owningProject"u8);
                     writer.WriteString("@id"u8, branch.OwningProject);
                     writer.WriteEndObject();
-                    writer.WriteStartObject("referencedCommit"u8);
-                    writer.WriteString("@id"u8, branch.ReferencedCommit);
-                    writer.WriteEndObject();
-                    writer.WriteString("timestamp"u8, branch.TimeStamp);
+                    writer.WriteString("resourceIdentifier"u8, branch.ResourceIdentifier);
                     writer.WriteEndObject();
 
                     break;

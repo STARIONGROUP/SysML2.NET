@@ -23,8 +23,7 @@ namespace SysML2.NET.PIM.POCO
     /// <summary>
     /// Constraint represents conditions that must be satisfied by Element objects in the query response
     /// </summary>
-    public class Constraint
+    public abstract class Constraint
     {
-        
     }
 }

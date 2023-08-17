@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="CommitReference.cs" company="RHEA System S.A.">
+// <copyright file="PrimitiveConstraint.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022-2023 RHEA System S.A.
 // 
@@ -18,30 +18,35 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.PIM.POCO
+namespace SysML2.NET.PIM.DTO
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
-    /// An abstract subclass of <see cref="Record"/> that references a specific <see cref="Commit"/> (Commit Reference.referencedCommit). Project.commit is the set of all the Commit records for a given Project.
-    /// <see cref="Project.CommitRefererence"/> identifies specific <see cref="Commit"/> records in a <see cref="Project"/> that provide the context for navigating the
-    /// <see cref="IData"/> in a Project. Two special types of <see cref="CommitReference"/> are <see cref="Branch"/> and <see cref="Tag"/>
+    /// a subtype of Constraint that represents simple conditions that be modeled using the
+    /// property-operator -value tuple. e.g. mass <= 4 kg, or type instanceOf Generalization
     /// </summary>
-    public abstract class CommitReference : Record
+    public class PrimitiveConstraint
     {
         /// <summary>
-        /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was created.
+        /// Gets or sets the name of a property of Element or its subtypes that is being constrained
         /// </summary>
-        public DateTime Created { get; set; }
+        public string Property { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the <see cref="CommitReference"/>
+        /// Gets or sets the mathematical operatores
         /// </summary>
-        public string Name { get; set; }
+        public Operator Operator { get; set; }
 
         /// <summary>
-        /// Gets or sets the Project that owns the given <see cref="CommitReference"/>
+        /// Gets or sets list of primitive objects, such as String, Boolean, Integer, Double, and UUID
         /// </summary>
-        public Project OwningProject { get; set; }
+        public List<string> Value { get; set;} = new List<string>();
+
+        /// <summary>
+        /// Gets or sets a value indicating a logical NOT operator is applied to the <see cref="PrimitiveConstraint"/>
+        /// </summary>
+        public bool Inverse { get; set; }
     }
 }

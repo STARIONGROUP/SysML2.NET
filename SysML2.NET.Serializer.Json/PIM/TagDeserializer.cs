@@ -78,7 +78,28 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
                 dtoInstance.Id = Guid.Parse(propertyValue);
             }
-            
+
+            if (jsonElement.TryGetProperty("alias"u8, out JsonElement aliasProperty))
+            {
+                foreach (var item in aliasProperty.EnumerateArray())
+                {
+                    dtoInstance.Alias.Add(item.GetString());
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the alias Json property was not found in the Branch: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
+            {
+                dtoInstance.Created = createdProperty.GetDateTime();
+            }
+            else
+            {
+                logger.LogDebug($"the created Json property was not found in the Tag: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
             {
                 var propertyValue = descriptionProperty.GetString();
@@ -128,20 +149,13 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 logger.LogDebug($"the owningProject Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("referencedCommit"u8, out JsonElement referencedCommitProperty))
+            if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
             {
-                if (referencedCommitProperty.TryGetProperty("@id"u8, out JsonElement referencedCommitIdProperty))
-                {
-                    var propertyValue = referencedCommitIdProperty.GetString();
-                    if (propertyValue != null)
-                    {
-                        dtoInstance.ReferencedCommit = Guid.Parse(propertyValue);
-                    }
-                }
+                dtoInstance.ResourceIdentifier = resourceIdentifierProperty.GetString();
             }
             else
             {
-                logger.LogDebug($"the referencedCommit Json property was not found in the Tag: {dtoInstance.Id}");
+                logger.LogDebug($"the resourceIdentifier Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("taggedCommit"u8, out JsonElement taggedCommitProperty))
@@ -158,15 +172,6 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             else
             {
                 logger.LogDebug($"the taggedCommit Json property was not found in the Tag: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("timestamp"u8, out JsonElement timestampProjectProperty))
-            {
-                dtoInstance.TimeStamp = timestampProjectProperty.GetDateTime();
-            }
-            else
-            {
-                logger.LogDebug($"the timestamp Json property was not found in the Tag: {dtoInstance.Id}");
             }
 
             logger.Log(LogLevel.Trace, "finish deserialization: Tag");
