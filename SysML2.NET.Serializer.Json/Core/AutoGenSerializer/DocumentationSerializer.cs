@@ -74,7 +74,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("annotation"u8);
             foreach (var item in iDocumentation.Annotation)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
@@ -96,14 +99,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iDocumentation.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
             if (iDocumentation.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iDocumentation.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {

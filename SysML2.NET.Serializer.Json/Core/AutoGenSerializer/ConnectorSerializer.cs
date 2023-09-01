@@ -126,21 +126,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iConnector.OwnedRelatedElement)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iConnector.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
             if (iConnector.OwningRelatedElement.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iConnector.OwningRelatedElement.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -149,7 +158,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("owningRelationship"u8);
             if (iConnector.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iConnector.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -158,14 +170,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
             foreach (var item in iConnector.Source)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
             foreach (var item in iConnector.Target)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 

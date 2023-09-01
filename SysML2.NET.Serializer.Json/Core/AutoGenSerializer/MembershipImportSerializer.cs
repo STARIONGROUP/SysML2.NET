@@ -79,7 +79,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iMembershipImport.ElementId);
 
             writer.WritePropertyName("importedMembership"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iMembershipImport.ImportedMembership);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iMembershipImport.IsImplied);
@@ -96,21 +99,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iMembershipImport.OwnedRelatedElement)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iMembershipImport.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
             if (iMembershipImport.OwningRelatedElement.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iMembershipImport.OwningRelatedElement.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -119,7 +131,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("owningRelationship"u8);
             if (iMembershipImport.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iMembershipImport.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -128,14 +143,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
             foreach (var item in iMembershipImport.Source)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
             foreach (var item in iMembershipImport.Target)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 

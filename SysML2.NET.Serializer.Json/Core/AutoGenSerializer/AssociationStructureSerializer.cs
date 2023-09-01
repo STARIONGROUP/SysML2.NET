@@ -93,21 +93,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iAssociationStructure.OwnedRelatedElement)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iAssociationStructure.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
             if (iAssociationStructure.OwningRelatedElement.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iAssociationStructure.OwningRelatedElement.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -116,7 +125,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("owningRelationship"u8);
             if (iAssociationStructure.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iAssociationStructure.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -125,14 +137,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
             foreach (var item in iAssociationStructure.Source)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
             foreach (var item in iAssociationStructure.Target)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 

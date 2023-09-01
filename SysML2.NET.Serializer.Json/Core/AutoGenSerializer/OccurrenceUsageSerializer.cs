@@ -126,14 +126,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iOccurrenceUsage.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
             if (iOccurrenceUsage.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iOccurrenceUsage.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {

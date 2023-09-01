@@ -72,7 +72,10 @@ namespace SysML2.NET.Serializer
             writer.WriteStartArray("ownedRelationship");
             foreach (var item in iElement.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 

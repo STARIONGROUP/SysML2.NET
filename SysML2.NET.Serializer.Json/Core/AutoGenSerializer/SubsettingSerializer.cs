@@ -79,7 +79,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iSubsetting.ElementId);
 
             writer.WritePropertyName("general"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubsetting.General);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iSubsetting.IsImplied);
@@ -90,21 +93,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iSubsetting.OwnedRelatedElement)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iSubsetting.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
             if (iSubsetting.OwningRelatedElement.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iSubsetting.OwningRelatedElement.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -113,7 +125,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("owningRelationship"u8);
             if (iSubsetting.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iSubsetting.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -122,23 +137,38 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
             foreach (var item in iSubsetting.Source)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("specific"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubsetting.Specific);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("subsettedFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubsetting.SubsettedFeature);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("subsettingFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubsetting.SubsettingFeature);
+            writer.WriteEndObject();
 
             writer.WriteStartArray("target"u8);
             foreach (var item in iSubsetting.Target)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 

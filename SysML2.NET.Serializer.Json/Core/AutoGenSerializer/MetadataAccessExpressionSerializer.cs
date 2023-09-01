@@ -120,21 +120,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iMetadataAccessExpression.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
             if (iMetadataAccessExpression.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iMetadataAccessExpression.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
                 writer.WriteNullValue();
             }
             writer.WritePropertyName("referencedElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iMetadataAccessExpression.ReferencedElement);
+            writer.WriteEndObject();
 
             writer.WriteEndObject();
         }

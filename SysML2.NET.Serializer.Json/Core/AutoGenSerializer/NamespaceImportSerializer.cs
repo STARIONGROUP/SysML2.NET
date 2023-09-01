@@ -79,7 +79,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iNamespaceImport.ElementId);
 
             writer.WritePropertyName("importedNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iNamespaceImport.ImportedNamespace);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iNamespaceImport.IsImplied);
@@ -96,21 +99,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iNamespaceImport.OwnedRelatedElement)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iNamespaceImport.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
             if (iNamespaceImport.OwningRelatedElement.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iNamespaceImport.OwningRelatedElement.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -119,7 +131,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("owningRelationship"u8);
             if (iNamespaceImport.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iNamespaceImport.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -128,14 +143,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
             foreach (var item in iNamespaceImport.Source)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
             foreach (var item in iNamespaceImport.Target)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 

@@ -99,7 +99,15 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
             if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
             {
-                dtoInstance.Created = createdProperty.GetDateTime();
+
+                if (createdProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.Created = createdProperty.GetDateTime();
+                }
+                else
+                {
+                    logger.LogDebug($"the created Json property was null in the Project: {dtoInstance.Id}");
+                }
             }
             else
             {

@@ -79,7 +79,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iRequirementVerificationMembership.ElementId);
 
             writer.WritePropertyName("feature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.Feature);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iRequirementVerificationMembership.IsImplied);
@@ -91,7 +94,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iRequirementVerificationMembership.Kind.ToString().ToLower());
 
             writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.MemberElement);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.MemberName);
@@ -100,21 +106,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iRequirementVerificationMembership.OwnedRelatedElement)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iRequirementVerificationMembership.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
             if (iRequirementVerificationMembership.OwningRelatedElement.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iRequirementVerificationMembership.OwningRelatedElement.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -123,7 +138,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("owningRelationship"u8);
             if (iRequirementVerificationMembership.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iRequirementVerificationMembership.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -132,19 +150,28 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
             foreach (var item in iRequirementVerificationMembership.Source)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
             foreach (var item in iRequirementVerificationMembership.Target)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("type"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.Type);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.Visibility.ToString().ToLower());

@@ -72,7 +72,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteEndArray();
 
             writer.WritePropertyName("conjugatedType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConjugation.ConjugatedType);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConjugation.DeclaredName);
@@ -88,26 +91,38 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iConjugation.IsImpliedIncluded);
 
             writer.WritePropertyName("originalType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConjugation.OriginalType);
+            writer.WriteEndObject();
 
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iConjugation.OwnedRelatedElement)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iConjugation.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
             if (iConjugation.OwningRelatedElement.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iConjugation.OwningRelatedElement.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -116,7 +131,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("owningRelationship"u8);
             if (iConjugation.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iConjugation.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -125,14 +143,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
             foreach (var item in iConjugation.Source)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
             foreach (var item in iConjugation.Target)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 

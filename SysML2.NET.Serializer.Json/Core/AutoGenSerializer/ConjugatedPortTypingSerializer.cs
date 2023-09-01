@@ -72,7 +72,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteEndArray();
 
             writer.WritePropertyName("conjugatedPortDefinition"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConjugatedPortTyping.ConjugatedPortDefinition);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConjugatedPortTyping.DeclaredName);
@@ -82,7 +85,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iConjugatedPortTyping.ElementId);
 
             writer.WritePropertyName("general"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConjugatedPortTyping.General);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iConjugatedPortTyping.IsImplied);
@@ -93,21 +99,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iConjugatedPortTyping.OwnedRelatedElement)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iConjugatedPortTyping.OwnedRelationship)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
             if (iConjugatedPortTyping.OwningRelatedElement.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iConjugatedPortTyping.OwningRelatedElement.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -116,7 +131,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("owningRelationship"u8);
             if (iConjugatedPortTyping.OwningRelationship.HasValue)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iConjugatedPortTyping.OwningRelationship.Value);
+                writer.WriteEndObject();
             }
             else
             {
@@ -125,25 +143,40 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
             foreach (var item in iConjugatedPortTyping.Source)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("specific"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConjugatedPortTyping.Specific);
+            writer.WriteEndObject();
 
             writer.WriteStartArray("target"u8);
             foreach (var item in iConjugatedPortTyping.Target)
             {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(item);
+                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 
             writer.WritePropertyName("type"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConjugatedPortTyping.Type);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("typedFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iConjugatedPortTyping.TypedFeature);
+            writer.WriteEndObject();
 
             writer.WriteEndObject();
         }

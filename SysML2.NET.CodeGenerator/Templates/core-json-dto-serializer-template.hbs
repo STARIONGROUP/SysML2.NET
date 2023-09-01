@@ -72,7 +72,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                         writer.WriteStartArray("{{String.LowerCaseFirstLetter structuralFeature.Name }}"u8);
                         foreach (var item in i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name}})
                         {
-                            {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
+                            {{#if (structuralFeature.QueryIsReference structuralFeature)}}
+                                writer.WriteStartObject();
+                                writer.WritePropertyName("@id"u8);
+                                writer.WriteStringValue(item);
+                                writer.WriteEndObject();
+                            {{else if (StructuralFeature.QueryIsBool structuralFeature )}}
                                 writer.WriteBooleanValue(item);
                             {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
                                 writer.WriteNumberValue(item);
@@ -91,7 +96,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                         {{ else }}
                             if (i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.HasValue)
                             {
-                                {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
+                                {{#if (structuralFeature.QueryIsReference structuralFeature)}}
+                                    writer.WriteStartObject();
+                                    writer.WritePropertyName("@id"u8);
+                                    writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
+                                    writer.WriteEndObject();
+                                {{else if (StructuralFeature.QueryIsBool structuralFeature )}}
                                     writer.WriteBooleanValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
                                 {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
                                     writer.WriteNumberValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
@@ -108,7 +118,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                         {{/if}}
                     {{ else if (StructuralFeature.QueryIsScalar structuralFeature)}}
                         writer.WritePropertyName("{{ String.LowerCaseFirstLetter structuralFeature.Name }}"u8);
-                        {{#if (StructuralFeature.QueryIsBool structuralFeature )}}
+                        {{#if (structuralFeature.QueryIsReference structuralFeature)}}
+                            writer.WriteStartObject();
+                            writer.WritePropertyName("@id"u8);
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                            writer.WriteEndObject();
+                        {{else if (StructuralFeature.QueryIsBool structuralFeature )}}
                             writer.WriteBooleanValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
                         {{else if (StructuralFeature.QueryIsString structuralFeature )}}
                             writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
