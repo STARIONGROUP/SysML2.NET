@@ -78,18 +78,14 @@ else
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Branch" Title="TimeStamp">
                 <Template Context="branch">
-                    @branch.TimeStamp.ToString("yyyy-MM-dd, HH:mm:ss", CultureInfo.InvariantCulture)
+                    @branch.Created.ToString("yyyy-MM-dd, HH:mm:ss", CultureInfo.InvariantCulture)
                 </Template>
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
     
-    <RadzenDropDown @bind-Value="this.selectedBranchId" TValue="Guid"
-                    Multiple="false" Placeholder="Select Branch..."
-                    Data="@this.branches" TextProperty="Name" ValueProperty="Id"
-                    Change="@this.BranchSelectionChange">
-    </RadzenDropDown>
     
+    <!--
     <RadzenDataGrid Count="@this.commits.Count()" AllowSorting="true" AllowColumnResize="true" Data="@this.commitHistory" TItem="Commit">
         <Columns>
             <RadzenDataGridColumn TItem="Commit" Title="Identifier">
@@ -109,14 +105,15 @@ else
             <RadzenDataGridColumn TItem="Commit" Property="Description" Title="Description" />
             <RadzenDataGridColumn TItem="Commit" Title="Previous Commit">
                 <Template Context="commit">
-                    @commit.PreviousCommit
+                    @commit.PreviousCommits.FirstOrDefault()
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Commit" Title="TimeStamp">
                 <Template Context="commit">
-                    @commit.TimeStamp.ToString("yyyy-MM-dd, HH:mm:ss", CultureInfo.InvariantCulture)
+                    @commit.Created.ToString("yyyy-MM-dd, HH:mm:ss", CultureInfo.InvariantCulture)
                 </Template>
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
+    -->
 }

@@ -33,8 +33,6 @@ namespace SysML2.NET.Viewer.Pages
     using SysML2.NET.PIM.DTO;
     using SySML2.NET.REST;
 
-    using SysML2.NET.Viewer.Services.CommitHistory;
-
     /// <summary>
     /// Code-behind for the <see cref="ProjectDetails"/> page
     /// </summary>
@@ -68,11 +66,6 @@ namespace SysML2.NET.Viewer.Pages
         /// selected <see cref="Project"/> loaded from the SysML2 model server
         /// </summary>
         private IEnumerable<Commit> commits;
-
-        /// <summary>
-        /// The <see cref="Commit"/> history for the selected Branch
-        /// </summary>
-        private Commit[] commitHistory;
 
         /// <summary>
         /// The <see cref="Tag"/>s that are contained by the
@@ -111,13 +104,6 @@ namespace SysML2.NET.Viewer.Pages
         public IRestClient RestClient { get; set; }
 
         /// <summary>
-        /// Gets or sets the injected <see cref="ICommitHistoryService"/> used to compute the <see cref="Commit"/>
-        /// history of a <see cref="Branch"/>
-        /// </summary>
-        [Inject]
-        public ICommitHistoryService CommitHistoryService { get; set; }
-
-        /// <summary>
         /// Load the data
         /// </summary>
         protected async Task LoadData()
@@ -145,8 +131,6 @@ namespace SysML2.NET.Viewer.Pages
                 
                 this.commits = await this.RestClient.RequestCommits(this.project.Id, null, null, cts.Token);
                 this.tags = await this.RestClient.RequestTags(this.project.Id, null, null, cts.Token);
-                
-                this.commitHistory = this.CommitHistoryService.QueryCommitHistory(this.branches.Single(x => x.Id == this.selectedBranchId), this.commits);
             }
             catch (Exception e)
             {
@@ -156,23 +140,6 @@ namespace SysML2.NET.Viewer.Pages
             {
                 isLoading = false;
                 StateHasChanged();
-            }
-        }
-
-        /// <summary>
-        /// event handler for the change event of the branch combo-box
-        /// </summary>
-        /// <param name="value">
-        /// The identifier of the selected <see cref="Branch"/>
-        /// </param>
-        private void BranchSelectionChange(object value)
-        {
-            var identifier = value.ToString();
-
-            if (!string.IsNullOrEmpty(identifier))
-            {
-                this.selectedBranchId = Guid.Parse(identifier);
-                this.commitHistory = this.CommitHistoryService.QueryCommitHistory(this.branches.Single(x => x.Id == this.selectedBranchId), this.commits);
             }
         }
     }
