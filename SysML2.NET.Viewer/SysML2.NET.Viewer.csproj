@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
       <LangVersion>11.0</LangVersion>
       <Company>RHEA System S.A.</Company>
       <Title>SysML2 Viewer</Title>
@@ -19,13 +19,13 @@
     <ItemGroup>
         <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
         <PackageReference Include="BlazorStrap.V5" Version="5.1.102.51723" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.2" PrivateAssets="all" />
         <PackageReference Include="ReactiveUI" Version="18.4.34" />
         <PackageReference Include="Radzen.Blazor" Version="4.15.3" />
-        <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
-        <PackageReference Include="Serilog.Sinks.BrowserConsole" Version="1.0.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Serilog.Sinks.BrowserConsole" Version="2.0.0" />
     </ItemGroup>
 
     <ItemGroup>

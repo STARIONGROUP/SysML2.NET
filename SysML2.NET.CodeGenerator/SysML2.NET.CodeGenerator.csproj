@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>net7.0</TargetFramework>
+      <TargetFramework>net8.0</TargetFramework>
       <LangVersion>11.0</LangVersion>
       <Version>0.8.0</Version>
       <Description>A Library to generate SysML v2 code.</Description>
@@ -21,9 +21,9 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ECoreNetto.HandleBars" Version="1.1.0" />
-        <PackageReference Include="HtmlAgilityPack" Version="1.11.52" />
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.7.0" />
+        <PackageReference Include="ECoreNetto.HandleBars" Version="1.2.1" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.58" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.8.0" />
         <PackageReference Include="RHEA.OpenApi" Version="0.5.0" />
     </ItemGroup>
 
