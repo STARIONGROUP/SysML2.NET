@@ -19,11 +19,11 @@
     <ItemGroup>
         <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
         <PackageReference Include="BlazorStrap.V5" Version="5.1.102.51723" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.2" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.3" PrivateAssets="all" />
         <PackageReference Include="ReactiveUI" Version="19.5.41" />
-        <PackageReference Include="Radzen.Blazor" Version="4.25.9" />
+        <PackageReference Include="Radzen.Blazor" Version="4.26.1" />
         <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
         <PackageReference Include="Serilog.Sinks.BrowserConsole" Version="2.0.0" />
     </ItemGroup>
