@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeatureReferenceExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -37,7 +37,9 @@ namespace SysML2.NET.Core.POCO
     /// nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)    then null    else
     /// nonParameterMemberships->first().memberElement.oclAsType(Feature)   
     /// endifownedMember->selectByKind(BindingConnector)->exists(b |   
-    /// b.relatedFeatures->includes(targetFeature) and    b.relatedFeatures->includes(result))
+    /// b.relatedFeatures->includes(targetFeature) and    b.relatedFeatures->includes(result))let membership
+    /// : Membership =     ownedMembership->reject(m | m.oclIsKindOf(ParameterMembership))
+    /// inmembership->notEmpty() andmembership->at(1).memberElement.oclIsKindOf(Feature)
     /// </summary>
     public partial interface IFeatureReferenceExpression : IExpression
     {

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ConnectorDeSerializer.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -175,18 +175,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug($"the isDerived Json property was not found in the Connector: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("isDirected"u8, out JsonElement isDirectedProperty))
-            {
-                if (isDirectedProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsDirected = isDirectedProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the isDirected Json property was not found in the Connector: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isEnd"u8, out JsonElement isEndProperty))

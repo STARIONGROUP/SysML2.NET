@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ExhibitStateUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -36,7 +36,8 @@ namespace SysML2.NET.Core.POCO
     /// ReferenceSubsetting Relationship. An ExhibitStateUsage is also a PerformActionUsage, with its
     /// exhibitedState as the performedAction.owningType <> null and(owningType.oclIsKindOf(PartDefinition)
     /// or owningType.oclIsKindOf(PartUsage)) implies   
-    /// specializesFromLibrary('Parts::Part::exhibitedStates')
+    /// specializesFromLibrary('Parts::Part::exhibitedStates')ownedReferenceSubsetting <> null implies   
+    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(StateUsage)
     /// </summary>
     public partial class ExhibitStateUsage : IExhibitStateUsage
     {
@@ -342,7 +343,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeatureChainExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -35,13 +35,14 @@ namespace SysML2.NET.Core.DTO
     /// Function ControlFunctions::'.' from the Kernel Functions Library. It evaluates to the result of
     /// chaining the result Feature of its single argument Expression with its targetFeature.let
     /// sourceParameter : Feature = sourceTargetFeature() insourceTargetFeature <> null
-    /// andsourceTargetFeature.redefinesFromLibrary("ControlFunctions::'.'::source::target")let
+    /// andsourceTargetFeature.redefinesFromLibrary('ControlFunctions::\'.\'::source::target')let
     /// sourceParameter : Feature = sourceTargetFeature() insourceTargetFeature <> null
     /// andsourceTargetFeature.redefines(targetFeature)targetFeature =    let nonParameterMemberships :
     /// Sequence(Membership) = ownedMembership->        reject(oclIsKindOf(ParameterMembership)) in    if
     /// nonParameterMemberships->isEmpty() or       not
     /// nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)    then null    else
-    /// nonParameterMemberships->first().memberElement.oclAsType(Feature)    endif
+    /// nonParameterMemberships->first().memberElement.oclAsType(Feature)    endifargument->notEmpty()
+    /// implies    targetFeature.featuringType->forAll(t |         t.specializes(argument->at(1).result))
     /// </summary>
     public partial interface IFeatureChainExpression : IOperatorExpression
     {

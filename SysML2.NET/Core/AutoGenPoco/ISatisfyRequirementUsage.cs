@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISatisfyRequirementUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -41,7 +41,8 @@ namespace SysML2.NET.Core.POCO
     /// bindings->first().relatedElement->any(r | r <> subjectParameter)   
     /// endifownedMember->selectByKind(BindingConnector)->    select(b |       
     /// b.relatedElement->includes(subjectParameter) and        b.relatedElement->exists(r | r <>
-    /// subjectParameter))->    size() = 1
+    /// subjectParameter))->    size() = 1ownedReferenceSubsetting <> null implies   
+    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(RequirementUsage)
     /// </summary>
     public partial interface ISatisfyRequirementUsage : IRequirementUsage, IAssertConstraintUsage
     {

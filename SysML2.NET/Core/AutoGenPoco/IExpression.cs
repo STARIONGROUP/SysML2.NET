@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.POCO
     /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
     /// as the results of other Expression in the tree.isModelLevelEvaluable =
-    /// modelLevelEvaluable(Set(Element){})specializesFromLibrary("Performances::evaluations")owningMembership
+    /// modelLevelEvaluable(Set(Element){})specializesFromLibrary('Performances::evaluations')owningMembership
     /// <> null and owningMembership.oclIsKindOf(FeatureValue) implies    let featureWithValue : Feature =  
     ///       owningMembership.oclAsType(FeatureValue).featureWithValue in    featuringType =
     /// featureWithValue.featuringTypeownedMembership.selectByKind(ResultExpressionMembership)->   
@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO
     /// selectByKind(ReturnParameterMembership).            ownedParameterMember in    if
     /// resultParams->notEmpty() then resultParams->first()    else if function <> null then function.result
     ///    else null    endif endifownedFeatureMembership->    selectByKind(ReturnParameterMembership)->   
-    /// size() <= 1
+    /// size() <= 1membership->selectByKind(ResultExpressionMembership)->size() <= 1
     /// </summary>
     public partial interface IExpression : IStep
     {

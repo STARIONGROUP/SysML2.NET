@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="OccurrenceUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -38,13 +38,13 @@ namespace SysML2.NET.Core.DTO
     /// OrderedSet(OccurrenceDefinition) =         occurrenceDefinition->           
     /// selectByKind(OccurrenceDefinition)->            select(isIndividual) in    if
     /// individualDefinitions->isEmpty() then null    else individualDefinitions->first() endifisIndividual
-    /// implies individualDefinition <> nullspecializesFromLibrary("Occurrences::occurrences")isComposite
+    /// implies individualDefinition <> nullspecializesFromLibrary('Occurrences::occurrences')isComposite
     /// andowningType <> null and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(OccurrenceUsage)
     /// or owningType.oclIsKindOf(Feature) and    owningType.oclAsType(Feature).type->       
     /// exists(oclIsKind(Class))) implies   
-    /// specializesFromLibrary("Occurrences::Occurrence::suboccurrences")occurrenceDefinition->select(isIndividual).size()
-    /// <= 1portionKind <> null implies    occurrenceDefinition->forAll(occ |        
-    /// featuringType->exists(specializes(occ)))
+    /// specializesFromLibrary('Occurrences::Occurrence::suboccurrences')occurrenceDefinition->   
+    /// selectByKind(OccurrenceDefinition)->    select(isIndividual).size() <= 1portionKind <> null implies 
+    /// occurrenceDefinition->forAll(occ |         featuringType->exists(specializes(occ)))
     /// </summary>
     public partial class OccurrenceUsage : IOccurrenceUsage
     {
@@ -124,7 +124,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

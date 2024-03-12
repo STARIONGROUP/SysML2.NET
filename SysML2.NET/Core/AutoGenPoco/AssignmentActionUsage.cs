@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AssignmentActionUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -48,8 +48,10 @@ namespace SysML2.NET.Core.POCO
     /// andtargetParameter->first().ownedFeature->notEmpty()
     /// andtargetParameter->first().ownedFeature->first().redefines(referent)referent =    let
     /// unownedFeatures : Sequence(Feature) = ownedMembership->       
-    /// reject(oclIsKindOf(OwningMembership)).memberElement->        selectByKind(Feature) in    if
-    /// unownedFeatures->isEmpty() then null    else unownedFeatures->first().oclAsType(Feature)    endif
+    /// reject(oclIsKindOf(FeatureMembership)).memberElement->        selectByKind(Feature) in    if
+    /// unownedFeatures->isEmpty() then null    else unownedFeatures->first().oclAsType(Feature)   
+    /// endifownedMembership->exists(    not oclIsKindOf(OwningMembership) and    
+    /// memberElement.oclIsKindOf(Feature))
     /// </summary>
     public partial class AssignmentActionUsage : IAssignmentActionUsage
     {
@@ -309,7 +311,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
@@ -1021,7 +1023,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property TargetArgument
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Expression QueryTargetArgument()
         {
             throw new NotImplementedException("Derived property TargetArgument not yet supported");
@@ -1066,7 +1068,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property ValueExpression
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Expression QueryValueExpression()
         {
             throw new NotImplementedException("Derived property ValueExpression not yet supported");

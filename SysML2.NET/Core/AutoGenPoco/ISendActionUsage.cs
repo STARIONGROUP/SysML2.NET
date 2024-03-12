@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISendActionUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.POCO
     /// receiverArgument is given, then the receiver is to be determined by, e.g., outgoing Connections from
     /// the sender. senderArgument = argument(2)payloadArgument = argument(1)inputParameters()->size() >=
     /// 3receiverArgument = argument(3)isSubactionUsage() implies   
-    /// specializesFromLibrary('Actions::Action::acceptSubactions')specializesFromLibrary("Actions::sendActions")
+    /// specializesFromLibrary('Actions::Action::acceptSubactions')specializesFromLibrary('Actions::sendActions')
     /// </summary>
     public partial interface ISendActionUsage : IActionUsage
     {

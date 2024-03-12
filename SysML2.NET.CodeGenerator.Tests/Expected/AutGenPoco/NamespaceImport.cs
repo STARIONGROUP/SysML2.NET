@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="NamespaceImport.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A NamespaceImport is an Import that imports Memberships from its importedNamespace into the
     /// importOwningNamespace. If  isRecursive = false, then only the visible Memberships of the
-    /// importOwningNamespace are imported. If  isRecursive = true, then, in addition, Memberships are
+    /// importedNamespace are imported. If  isRecursive = true, then, in addition, Memberships are
     /// recursively imported from any ownedMembers of the importedNamespace that are
     /// Namespaces.importedElement = importedNamespace
     /// </summary>

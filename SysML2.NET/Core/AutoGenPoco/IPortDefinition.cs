@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPortDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.POCO
     /// conjugatedPortDefinitions->isEmpty() then nullelse
     /// conjugatedPortDefinitions->first()endifownedUsage->    reject(oclIsKindOf(PortUsage))->   
     /// forAll(not isComposite)not oclIsKindOf(ConjugatedPortDefinition) implies    ownedMember->       
-    /// selectByKind(ConjugatedPortDefinition)->        size() = 1specializeFromLibrary('Ports::Port')
+    /// selectByKind(ConjugatedPortDefinition)->        size() = 1specializesFromLibrary('Ports::Port')
     /// </summary>
     public partial interface IPortDefinition : IOccurrenceDefinition, IStructure
     {

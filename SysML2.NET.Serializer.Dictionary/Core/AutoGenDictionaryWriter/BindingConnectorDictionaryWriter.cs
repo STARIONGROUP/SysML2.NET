@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="BindingConnectorDictionaryWriter.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -115,7 +115,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isAbstract", bindingConnectorInstance.IsAbstract);
             dictionary.Add("isComposite", bindingConnectorInstance.IsComposite);
             dictionary.Add("isDerived", bindingConnectorInstance.IsDerived);
-            dictionary.Add("isDirected", bindingConnectorInstance.IsDirected);
             dictionary.Add("isEnd", bindingConnectorInstance.IsEnd);
             dictionary.Add("isImplied", bindingConnectorInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", bindingConnectorInstance.IsImpliedIncluded);
@@ -164,7 +163,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isAbstract", bindingConnectorInstance.IsAbstract);
             dictionary.Add("isComposite", bindingConnectorInstance.IsComposite);
             dictionary.Add("isDerived", bindingConnectorInstance.IsDerived);
-            dictionary.Add("isDirected", bindingConnectorInstance.IsDirected);
             dictionary.Add("isEnd", bindingConnectorInstance.IsEnd);
             dictionary.Add("isImplied", bindingConnectorInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", bindingConnectorInstance.IsImpliedIncluded);

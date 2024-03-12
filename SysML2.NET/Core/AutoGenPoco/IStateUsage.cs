@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IStateUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,22 +34,20 @@ namespace SysML2.NET.Core.POCO
     /// A StateUsage is an ActionUsage that is nominally the Usage of a StateDefinition. However, other
     /// kinds of kernel Behaviors are also allowed as types, to permit use of BehaviorsA StateUsage may be
     /// related to up to three of its ownedFeatures by StateSubactionMembership Relationships, all of
-    /// different kinds, corresponding to the entry, do and exit actions of the StateUsage.let general :
-    /// Sequence(Type) = ownedGeneralization.general ingeneral->selectByKind(StateDefinition)->    forAll(g
-    /// | g.isParallel = isParallel) andgeneral->selectByKind(StateUsage)->    forAll(g | g.parallel =
-    /// isParallel)doAction =    let doMemberships : Sequence(StateSubactionMembership) =       
-    /// ownedMembership->            selectByKind(StateSubactionMembership)->            select(kind =
-    /// StateSubactionKind::do) in    if doMemberships->isEmpty() then null    else doMemberships->at(1)   
-    /// endifentryAction =    let entryMemberships : Sequence(StateSubactionMembership) =       
-    /// ownedMembership->            selectByKind(StateSubactionMembership)->            select(kind =
-    /// StateSubactionKind::entry) in    if entryMemberships->isEmpty() then null    else
-    /// entryMemberships->at(1)    endifisParallel implies    nestedAction.incomingTransition->isEmpty() and
-    ///    nestedAction.outgoingTransition->isEmpty()isSubstateUsage(true) implies   
+    /// different kinds, corresponding to the entry, do and exit actions of the StateUsage.doAction =    let
+    /// doMemberships : Sequence(StateSubactionMembership) =        ownedMembership->           
+    /// selectByKind(StateSubactionMembership)->            select(kind = StateSubactionKind::do) in    if
+    /// doMemberships->isEmpty() then null    else doMemberships->at(1)    endifentryAction =    let
+    /// entryMemberships : Sequence(StateSubactionMembership) =        ownedMembership->           
+    /// selectByKind(StateSubactionMembership)->            select(kind = StateSubactionKind::entry) in   
+    /// if entryMemberships->isEmpty() then null    else entryMemberships->at(1)    endifisParallel implies 
+    ///   nestedAction.incomingTransition->isEmpty() and   
+    /// nestedAction.outgoingTransition->isEmpty()isSubstateUsage(true) implies   
     /// specializesFromLibrary('States::State::substates')exitAction =    let exitMemberships :
     /// Sequence(StateSubactionMembership) =        ownedMembership->           
     /// selectByKind(StateSubactionMembership)->            select(kind = StateSubactionKind::exit) in    if
     /// exitMemberships->isEmpty() then null    else exitMemberships->at(1)   
-    /// endifspecializesFromLibrary('States::StateAction')ownedMembership->   
+    /// endifspecializesFromLibrary('States::stateActions')ownedMembership->   
     /// selectByKind(StateSubactionMembership)->    isUnique(kind)isSubstateUsage(false) implies   
     /// specializesFromLibrary('States::State::substates')
     /// </summary>

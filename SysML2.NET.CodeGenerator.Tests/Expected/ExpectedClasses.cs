@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ExpectedClasses.cs" company="RHEA System S.A.">
 // 
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Expected
             yield return "Annotation";
             yield return "Comment";
             yield return "Connector";
+            yield return "Definition";
             yield return "Dependency";
             yield return "Feature";
             yield return "NamespaceImport";
@@ -76,6 +77,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Expected
             yield return "Annotation";
             yield return "Comment";
             yield return "Connector";
+            yield return "Definition";
             yield return "Dependency";
             yield return "Element";
             yield return "Feature";

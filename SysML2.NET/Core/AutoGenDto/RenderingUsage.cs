@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="RenderingUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A RenderingUsage is the usage of a RenderingDefinition to specify the rendering of a specific model
-    /// view to produce a physical view artifact.specializeFromLibrary('Views::renderings')owningType <>
+    /// view to produce a physical view artifact.specializesFromLibrary('Views::renderings')owningType <>
     /// null and(owningType.oclIsKindOf(RenderingDefinition) or owningType.oclIsKindOf(RenderingUsage))
     /// implies    specializesFromLibrary('Views::Rendering::subrenderings')owningFeatureMembership <> null
     /// andowningFeatureMembership.oclIsKindOf(ViewRenderingMembership) implies   
@@ -116,7 +116,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

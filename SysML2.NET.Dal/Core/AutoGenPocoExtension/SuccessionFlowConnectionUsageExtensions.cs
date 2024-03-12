@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="SuccessionFlowConnectionUsageExtensions.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -82,8 +82,6 @@ namespace SysML2.NET.Dal
             poco.IsComposite = dto.IsComposite;
 
             poco.IsDerived = dto.IsDerived;
-
-            poco.IsDirected = dto.IsDirected;
 
             poco.IsEnd = dto.IsEnd;
 
@@ -249,7 +247,6 @@ namespace SysML2.NET.Dal
             dto.IsAbstract = poco.IsAbstract;
             dto.IsComposite = poco.IsComposite;
             dto.IsDerived = poco.IsDerived;
-            dto.IsDirected = poco.IsDirected;
             dto.IsEnd = poco.IsEnd;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;

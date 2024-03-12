@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IViewUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.POCO
     /// it can specialize the viewRendering specified by its definition.exposedElement =
     /// ownedImport->selectByKind(Expose).    importedMemberships(Set{}).memberElement->    select(elm |
     /// includeAsExposed(elm))->    asOrderedSet()satisfiedViewpoint = ownedRequirement->   
-    /// selectByKind(ViewpointUsage)->    select(isComposite)viewCondition = featureMembership->   
+    /// selectByKind(ViewpointUsage)->    select(isComposite)viewCondition = ownedMembership->   
     /// selectByKind(ElementFilterMembership).    conditionviewRendering =    let renderings:
     /// OrderedSet(ViewRenderingMembership) =       
     /// featureMembership->selectByKind(ViewRenderingMembership) in    if renderings->isEmpty() then null   

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="BindingConnectorAsUsageDictionaryReader.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -152,12 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isDerivedFeature = Convert.ToBoolean(isDerivedObject);
 
-            if (!dictionary.TryGetValue("isDirected", out object isDirectedObject))
-            {
-                throw new ArgumentException("The isDirected property is missing from the dictionary, the dictionary cannot be converted into a BindingConnectorAsUsage");
-            }
-            bool isDirectedFeature = Convert.ToBoolean(isDirectedObject);
-
             if (!dictionary.TryGetValue("isEnd", out object isEndObject))
             {
                 throw new ArgumentException("The isEnd property is missing from the dictionary, the dictionary cannot be converted into a BindingConnectorAsUsage");
@@ -257,7 +251,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             bindingConnectorAsUsageInstance.IsAbstract = isAbstractFeature;
             bindingConnectorAsUsageInstance.IsComposite = isCompositeFeature;
             bindingConnectorAsUsageInstance.IsDerived = isDerivedFeature;
-            bindingConnectorAsUsageInstance.IsDirected = isDirectedFeature;
             bindingConnectorAsUsageInstance.IsEnd = isEndFeature;
             bindingConnectorAsUsageInstance.IsImplied = isImpliedFeature;
             bindingConnectorAsUsageInstance.IsImpliedIncluded = isImpliedIncludedFeature;
@@ -338,12 +331,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a BindingConnectorAsUsage");
             }
             bool isDerivedFeature = Convert.ToBoolean(isDerivedObject);
-
-            if (!dictionary.TryGetValue("isDirected", out object isDirectedObject))
-            {
-                throw new ArgumentException("The isDirected property is missing from the dictionary, the dictionary cannot be converted into a BindingConnectorAsUsage");
-            }
-            bool isDirectedFeature = Convert.ToBoolean(isDirectedObject);
 
             if (!dictionary.TryGetValue("isEnd", out object isEndObject))
             {
@@ -444,7 +431,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             bindingConnectorAsUsageInstance.IsAbstract = isAbstractFeature;
             bindingConnectorAsUsageInstance.IsComposite = isCompositeFeature;
             bindingConnectorAsUsageInstance.IsDerived = isDerivedFeature;
-            bindingConnectorAsUsageInstance.IsDirected = isDirectedFeature;
             bindingConnectorAsUsageInstance.IsEnd = isEndFeature;
             bindingConnectorAsUsageInstance.IsImplied = isImpliedFeature;
             bindingConnectorAsUsageInstance.IsImpliedIncluded = isImpliedIncludedFeature;

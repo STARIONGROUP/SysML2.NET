@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ReturnParameterMembership.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,8 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A ReturnParameterMembership is a ParameterMembership that indicates that the ownedMemberParameter is
     /// the result parameter of a Function or Expression. The direction of the ownedMemberParameter must be
-    /// out.owningType.oclIsKindOf(Function) or
-    /// owningType.oclIsKindOf(Expression)ownedMemberParameter.direction = ParameterDirectionKind::out
+    /// out.owningType.oclIsKindOf(Function) or owningType.oclIsKindOf(Expression)
     /// </summary>
     public partial class ReturnParameterMembership : IReturnParameterMembership
     {

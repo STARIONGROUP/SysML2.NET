@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Definition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -40,11 +40,11 @@ namespace SysML2.NET.Core.POCO
     /// represents a variation point Definition. In this case, all of its members must be variant Usages,
     /// related to the Definition by VariantMembership Relationships. Rather than being features of the
     /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
-    /// an abstract Usage of the variation point Definition.isVariation implies variantMembership =
-    /// ownedMembershipvariant = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)not isVariation implies
-    /// variantMembership->isEmpty()isVariation implies    not
-    /// ownedSpecialization.specific->exists(isVariation)usage = feature->selectByKind(Usage)directedUsage =
+    /// an abstract Usage of the variation point Definition.isVariation implies
+    /// ownedFeatureMembership->isEmpty()variant = variantMembership.ownedVariantUsagevariantMembership =
+    /// ownedMembership->selectByKind(VariantMembership)isVariation implies    not
+    /// ownedSpecialization.specific->exists(        oclIsKindOf(Definition) and       
+    /// oclAsType(Definition).isVariation)usage = feature->selectByKind(Usage)directedUsage =
     /// directedFeature->selectByKind(Usage)ownedUsage = ownedFeature->selectByKind(Usage)ownedAttribute =
     /// ownedUsage->selectByKind(AttributeUsage)ownedReference =
     /// ownedUsage->selectByKind(ReferenceUsage)ownedEnumeration =
@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.POCO
     /// ownedUsage->selectByKind(OccurrenceUsage)ownedItem = ownedUsage->selectByKind(ItemUsage)ownedPart =
     /// ownedUsage->selectByKind(PartUsage)ownedPort = ownedUsage->selectByKind(PortUsage)ownedConnection =
     /// ownedUsage->selectByKind(ConnectorAsUsage)ownedFlow =
-    /// ownedUsage->selectByKind(FlowUsage)ownedInterface =
+    /// ownedUsage->selectByKind(FlowConnectionUsage)ownedInterface =
     /// ownedUsage->selectByKind(ReferenceUsage)ownedAllocation =
     /// ownedUsage->selectByKind(AllocationUsage)ownedAction =
     /// ownedUsage->selectByKind(ActionUsage)ownedState =
@@ -67,7 +67,8 @@ namespace SysML2.NET.Core.POCO
     /// ownedUsage->selectByKind(VerificationCaseUsage)ownedUseCase =
     /// ownedUsage->selectByKind(UseCaseUsage)ownedView = ownedUsage->selectByKind(ViewUsage)ownedViewpoint
     /// = ownedUsage->selectByKind(ViewpointUsage)ownedRendering =
-    /// ownedUsage->selectByKind(RenderingUsage)ownedMetadata = ownedUsage->selectByKind(MetadataUsage)
+    /// ownedUsage->selectByKind(RenderingUsage)ownedMetadata =
+    /// ownedUsage->selectByKind(MetadataUsage)isVariation implies isAbstract
     /// </summary>
     public partial class Definition : IDefinition
     {

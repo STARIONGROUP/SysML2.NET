@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IForkNode.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A ForkNode is a ControlNode that must be followed by successor Actions as given by all its outgoing
     /// Successions.targetConnector->selectByKind(Succession)->size() <=
-    /// 1specializesFromLibrary("Actions::Action::forks")
+    /// 1specializesFromLibrary('Actions::Action::forks')
     /// </summary>
     public partial interface IForkNode : IControlNode
     {

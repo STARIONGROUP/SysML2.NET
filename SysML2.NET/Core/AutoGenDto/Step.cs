@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Step.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,9 +34,8 @@ namespace SysML2.NET.Core.DTO
     /// A Step is a Feature that is typed by one or more Behaviors. Steps may be used by one Behavior to
     /// coordinate the performance of other Behaviors, supporting a steady refinement of behavioral
     /// descriptions. Steps can be ordered in time and can be connected using ItemFlows to specify things
-    /// flowing between their
-    /// parameters.allSupertypes()->includes(resolveGlobal("Performances::performances"))owningType <> null
-    /// and    (owningType.oclIsKindOf(Behavior) or     owningType.oclIsKindOf(Step)) implies   
+    /// flowing between their parameters.specializesFromLibrary('Performances::performances')owningType <>
+    /// null and    (owningType.oclIsKindOf(Behavior) or     owningType.oclIsKindOf(Step)) implies   
     /// specializesFromLibrary('Performances::Performance::enclosedPerformance')isComposite and owningType
     /// <> null and(owningType.oclIsKindOf(Structure) or owningType.oclIsKindOf(Feature) and
     /// owningType.oclAsType(Feature).type->    exists(oclIsKindOf(Structure)) implies   
@@ -122,7 +121,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

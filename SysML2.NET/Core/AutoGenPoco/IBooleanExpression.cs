@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IBooleanExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A BooleanExpression is a Boolean-valued Expression whose type is a Predicate. It represents a
     /// logical condition resulting from the evaluation of the
-    /// Predicate.specializesFromLibrary("Performances::booleanEvaluations")
+    /// Predicate.specializesFromLibrary('Performances::booleanEvaluations')
     /// </summary>
     public partial interface IBooleanExpression : IExpression
     {

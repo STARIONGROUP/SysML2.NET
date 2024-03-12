@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureValue.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -46,9 +46,12 @@ namespace SysML2.NET.Core.POCO
     /// and            if not isInitial then                 b.featuringType =
     /// featureWithValue.featuringType            else                 b.featuringType->exists(t |          
     ///          t.oclIsKindOf(Feature) and                    t.oclAsType(Feature).chainingFeature =       
-    ///                 Sequence{                            resolveGlobal("Base::things::that"),           
-    ///                 resolveGlobal("Occurrences::Occurrence::startShot")                        }        
-    /// )            endif)
+    ///                 Sequence{                            resolveGlobal('Base::things::that').           
+    ///                     memberElement,                           
+    /// resolveGlobal('Occurrences::Occurrence::startShot').                                memberElement   
+    ///                     }                )           
+    /// endif)featureWithValue.redefinition.redefinedFeature->   
+    /// closure(redefinition.redefinedFeature).valuation->    forAll(isDefault)
     /// </summary>
     public partial class FeatureValue : IFeatureValue
     {

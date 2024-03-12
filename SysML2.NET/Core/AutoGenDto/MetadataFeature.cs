@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="MetadataFeature.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,17 +34,31 @@ namespace SysML2.NET.Core.DTO
     /// A MetadataFeature is a Feature that is an AnnotatingElement used to annotate another Element with
     /// metadata. It is typed by a Metaclass. All its ownedFeatures must redefine features of its metaclass
     /// and any feature bindings must be model-level
-    /// evaluable.specializesFromLibrary("Metaobjects::metaobjects")isSemantic() implies    let
+    /// evaluable.specializesFromLibrary('Metaobjects::metaobjects')isSemantic() implies    let
     /// annotatedTypes : Sequence(Type) =         annotatedElement->selectAsKind(Type) in    let baseTypes :
     /// Sequence(MetadataFeature) =         evaluateFeature(resolveGlobal(           
-    /// 'Metaobjects::SemanticMetadata::baseType').            oclAsType(Feature))->       
-    /// selectAsKind(MetadataFeature) in    annotatedTypes->notEmpty() and     baseTypes()->notEmpty() and  
-    ///   baseTypes()->first().isSyntactic() implies        let annotatedType : Type =
-    /// annotatedTypes->first() in        let baseType : Element = baseTypes->first().syntaxElement() in    
-    ///    if annotatedType.oclIsKindOf(Classifier) and             baseType.oclIsKindOf(Feature) then      
-    ///      baseType.oclAsType(Feature).type->                forAll(t | annotatedType.specializes(t))     
-    ///   else if baseType.oclIsKindOf(Type) then           
-    /// annotatedType.specializes(baseType.oclAsType(Type))        else            true        endif
+    /// 'Metaobjects::SemanticMetadata::baseType').            memberElement.           
+    /// oclAsType(Feature))->        selectAsKind(MetadataFeature) in    annotatedTypes->notEmpty() and    
+    /// baseTypes()->notEmpty() and     baseTypes()->first().isSyntactic() implies        let annotatedType
+    /// : Type = annotatedTypes->first() in        let baseType : Element =
+    /// baseTypes->first().syntaxElement() in        if annotatedType.oclIsKindOf(Classifier) and           
+    ///  baseType.oclIsKindOf(Feature) then            baseType.oclAsType(Feature).type->               
+    /// forAll(t | annotatedType.specializes(t))        else if baseType.oclIsKindOf(Type) then           
+    /// annotatedType.specializes(baseType.oclAsType(Type))        else            true        endifnot
+    /// metaclass.isAbstractlet baseAnnotatedElementFeature : Feature =   
+    /// resolveGlobal('Metaobjects::Metaobject::annotatedElement').memberElement.    oclAsType(Feature)
+    /// inlet annotatedElementFeatures : OrderedSet(Feature) = feature->   
+    /// select(specializes(baseAnnotatedElementFeature))->    excluding(baseAnnotatedElementFeature)
+    /// inannotatedElementFeatures->notEmpty() implies    let annotatedElementTypes : Set(Feature) =       
+    /// annotatedElementFeatures.typing.type->asSet() in    let metaclasses : Set(Metaclass) =       
+    /// annotatedElement.oclType().qualifiedName->collect(qn |            
+    /// resolveGlobal(qn).memberElement.oclAsType(Metaclass)) in   metaclasses->forAll(m |
+    /// annotatedElementTypes->exists(t | m.specializes(t)))ownedFeature->closure(ownedFeature)->forAll(f | 
+    ///   f.declaredName = null and f.declaredShortName = null and    f.valuation <> null implies
+    /// f.valuation.value.isModelLevelEvaluable and    f.redefinition.redefinedFeature->size() = 1)metaclass
+    /// =     let metaclassTypes : Sequence(Type) = type->selectByKind(Metaclass) in    if
+    /// metaclassTypes->isEmpty() then null    else metaClassTypes->first()   
+    /// endiftype->selectByKind(Metaclass).size() = 1
     /// </summary>
     public partial class MetadataFeature : IMetadataFeature
     {
@@ -130,7 +144,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

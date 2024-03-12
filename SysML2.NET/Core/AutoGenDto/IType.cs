@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IType.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -37,25 +37,29 @@ namespace SysML2.NET.Core.DTO
     /// ownedRelationship->selectByKind(Specialization)->    select(s | s.special = self)    multiplicity = 
     ///    let ownedMultiplicities: Sequence(Multiplicity) =        ownedMember->selectByKind(Multiplicity)
     /// in    if ownedMultiplicities->isEmpty() then null    else ownedMultiplicities->first()   
-    /// endifownedFeatureMembership = ownedRelationship->selectByKind(FeatureMembership)let
-    /// ownedConjugators: Sequence(Conjugator) =     ownedRelationship->selectByKind(Conjugation) in   
-    /// ownedConjugator =         if ownedConjugators->isEmpty() then null         else
-    /// ownedConjugators->at(1) endifoutput =    if isConjugated then         conjugator.originalType.input 
-    ///   else         feature->select(direction = out or direction = inout)    endifinput =     if
-    /// isConjugated then         conjugator.originalType.output    else         feature->select(direction =
-    /// _'in' or direction = inout)    endifinheritedMembership =
+    /// endifownedFeatureMembership = ownedRelationship->selectByKind(FeatureMembership)ownedConjugator =   
+    /// let ownedConjugators: Sequence(Conjugator) =         ownedRelationship->selectByKind(Conjugation) in
+    ///    if ownedConjugators->isEmpty() then null     else ownedConjugators->at(1) endifoutput =
+    /// feature->select(f |     let direction: FeatureDirectionKind = directionOf(f) in    direction =
+    /// FeatureDirectionKind::out or    direction = FeatureDirectionKind::inout)input = feature->select(f | 
+    ///    let direction: FeatureDirectionKind = directionOf(f) in    direction =
+    /// FeatureDirectionKind::_'in' or    direction = FeatureDirectionKind::inout)inheritedMembership =
     /// inheritedMemberships(Set{})specializesFromLibrary('Base::Anything')directedFeature =
     /// feature->select(f | directionOf(f) <> null)feature =
-    /// featureMembership.ownedMemberFeaturefeatureMembership = ownedMembership->union(   
+    /// featureMembership.ownedMemberFeaturefeatureMembership = ownedFeatureMembership->union(   
     /// inheritedMembership->selectByKind(FeatureMembership))ownedFeature =
     /// ownedFeatureMembership.ownedMemberFeaturedifferencingType =
     /// ownedDifferencing.differencingTypeintersectingType->excludes(self)differencingType->excludes(self)unioningType
     /// = ownedUnioning.unioningTypeunioningType->excludes(self)intersectingType =
-    /// ownedIntersecting.intersectingTypeownedRelationship->selectByKind(Conjugator)->size() <=
+    /// ownedIntersecting.intersectingTypeownedRelationship->selectByKind(Conjugation)->size() <=
     /// 1ownedMember->selectByKind(Multiplicity)->size() <= 1endFeature =
-    /// feature->select(isEnd)ownedRelationship->selectByKind(Disjoining)ownedRelationship->selectByKind(Unioning)ownedRelationship->selectByKind(Intersecting)ownedRelationship->selectByKind(Differencing)ownedEndFeature
-    /// = ownedFeature->select(isEnd)inheritedFeature = inheritedMemberships->   
-    /// selectByKind(FeatureMembership).memberFeature
+    /// feature->select(isEnd)ownedDisjoining =    ownedRelationship->selectByKind(Disjoining)ownedUnioning
+    /// =   
+    /// ownedRelationship->selectByKind(Unioning)ownedRelationship->selectByKind(Intersecting)ownedDifferencing
+    /// =    ownedRelationship->selectByKind(Differencing)ownedEndFeature =
+    /// ownedFeature->select(isEnd)inheritedFeature = inheritedMemberships->   
+    /// selectByKind(FeatureMembership).memberFeatureownedUnioning->size() <> 1ownedIntersecting->size() <>
+    /// 1ownedDifferencing->size() <> 1
     /// </summary>
     public partial interface IType : INamespace
     {

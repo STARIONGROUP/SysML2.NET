@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ForLoopActionUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -31,16 +31,16 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ForLoopActionUsage is a LoopActionUsage that specifies that its bodyClause ActionUsage should be
+    /// A ForLoopActionUsage is a LoopActionUsage that specifies that its bodyAction ActionUsage should be
     /// performed once for each value, in order, from the sequence of values obtained as the result of the
-    /// seqArgument Expression, with the loopVariable set to the value for each iteration.seqArgument =   
-    /// let parameter : Feature = inputParameter(1) in    if parameter <> null and
-    /// parameter.oclIsKindOf(Expression) then        parameter.oclAsType(Expression)    else        null   
-    /// endifisSubactionUsage() implies    specializesFromLibrary('Actions::Action::forLoops')loopVariable
-    /// <> null
+    /// seqArgument Expression, with the loopVariable set to the value for each iteration.seqArgument =
+    /// argument(1)isSubactionUsage() implies   
+    /// specializesFromLibrary('Actions::Action::forLoops')loopVariable <> null
     /// andloopVariable.redefinesFromLibrary('Actions::ForLoopAction::var')specializesFromLibrary('Actions::forLoopActions')loopVariable
     /// =    if ownedFeature->isEmpty() or         not ownedFeature->first().oclIsKindOf(ReferenceUsage)
-    /// then         null    else         ownedFeature->first().oclAsType(ReferenceUsage)    endif
+    /// then         null    else         ownedFeature->first().oclAsType(ReferenceUsage)   
+    /// endifownedFeature->notEmpty()
+    /// andownedFeature->at(1).oclIsKindOf(ReferenceUsage)inputParameters()->size() = 2
     /// </summary>
     public partial class ForLoopActionUsage : IForLoopActionUsage
     {
@@ -120,7 +120,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IInvocationExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -36,7 +36,13 @@ namespace SysML2.NET.Core.DTO
     /// ownedSubsetting.subsettedFeature.type->exists(oclIsKindOf(Behavior)) implies   
     /// ownedFeature.selectByKind(BindingConnector)->exists(        relatedFeature->includes(self) and      
     ///  relatedFeature->includes(result))            TBDownedFeature->    select(direction =
-    /// _'in').valuation->    select(v | v <> null).value
+    /// _'in').valuation->    select(v | v <> null).valuelet features : Set(Feature) = type.feature->asSet()
+    /// ininput->forAll(inp |     inp.ownedRedefinition.redefinedFeature->       
+    /// intersection(features)->size() = 1)let features : Set(Feature) = type.feature->asSet()
+    /// ininput->forAll(inp1 | input->forAll(inp2 |    inp1 <> inp2 implies       
+    /// inp1.ownedRedefinition.redefinedFeature->           
+    /// intersection(inp2.ownedRedefinition.redefinedFeature)->           
+    /// intersection(features)->isEmpty()))
     /// </summary>
     public partial interface IInvocationExpression : IExpression
     {

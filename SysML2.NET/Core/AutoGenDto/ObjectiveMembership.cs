@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ObjectiveMembership.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An ObjectiveMembership is a FeatureMembership that indicates that its ownedObjectiveRequirement is
-    /// the objective RequirementUsage  for its owningType, which must be a CaseDefinition or
+    /// the objective RequirementUsage for its owningType, which must be a CaseDefinition or
     /// CaseUsage.owningType.oclIsType(CaseDefinition)
     /// orowningType.oclIsType(CaseUsage)ownedObjectiveRequirement.isComposite
     /// </summary>

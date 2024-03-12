@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AssociationStructure.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ namespace SysML2.NET.Core.DTO
     /// An AssociationStructure is an Association that is also a Structure, classifying link objects that
     /// are both links and objects. As objects, link objects can be created and destroyed, and their non-end
     /// Features can change over time. However, the values of the end Features of a link object are fixed
-    /// and cannot change over its lifetime.specializesFromLibrary("Objects::ObjectLink")endFeature->size()
-    /// = 2 implies    specializesFromLibrary("Objects::BinaryLinkObject")
+    /// and cannot change over its lifetime.specializesFromLibrary('Objects::LinkObject')endFeature->size()
+    /// = 2 implies    specializesFromLibrary('Objects::BinaryLinkObject')
     /// </summary>
     public partial class AssociationStructure : IAssociationStructure
     {

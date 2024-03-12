@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AllocationUsageDictionaryWriter.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -115,7 +115,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isAbstract", allocationUsageInstance.IsAbstract);
             dictionary.Add("isComposite", allocationUsageInstance.IsComposite);
             dictionary.Add("isDerived", allocationUsageInstance.IsDerived);
-            dictionary.Add("isDirected", allocationUsageInstance.IsDirected);
             dictionary.Add("isEnd", allocationUsageInstance.IsEnd);
             dictionary.Add("isImplied", allocationUsageInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", allocationUsageInstance.IsImpliedIncluded);
@@ -167,7 +166,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isAbstract", allocationUsageInstance.IsAbstract);
             dictionary.Add("isComposite", allocationUsageInstance.IsComposite);
             dictionary.Add("isDerived", allocationUsageInstance.IsDerived);
-            dictionary.Add("isDirected", allocationUsageInstance.IsDirected);
             dictionary.Add("isEnd", allocationUsageInstance.IsEnd);
             dictionary.Add("isImplied", allocationUsageInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", allocationUsageInstance.IsImpliedIncluded);

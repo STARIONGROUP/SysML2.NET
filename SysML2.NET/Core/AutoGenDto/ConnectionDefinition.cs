@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ConnectionDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A ConnectionDefinition is a PartDefinition that is also an AssociationStructure. The end Features of
     /// a ConnectionDefinition must be
-    /// Usages.specializesFromLibrary("Connections::Connection")ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Connections::BinaryConnections")
+    /// Usages.specializesFromLibrary('Connections::Connection')ownedEndFeature->size() = 2 implies   
+    /// specializesFromLibrary('Connections::BinaryConnections')
     /// </summary>
     public partial class ConnectionDefinition : IConnectionDefinition
     {

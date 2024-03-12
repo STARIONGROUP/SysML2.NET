@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Usage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -40,11 +40,12 @@ namespace SysML2.NET.Core.POCO
     /// VariantMembership Relationships. Rather than being features of the Usage, variant Usages model
     /// different concrete alternatives that can be chosen to fill in for the variation point Usage.variant
     /// = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)not isVariation implies
-    /// variantMembership->isEmpty()isVariation implies variantMembership = ownedMembershipisReference = not
-    /// isCompositeowningVariationUsage <> null implies    specializes(owningVariationUsage)isVariation
-    /// implies    not ownedSpecialization.specific->exists(isVariation)owningVariationDefinition <> null
-    /// implies    specializes(owningVariationDefinition)directedUsage =
+    /// ownedMembership->selectByKind(VariantMembership)isVariation implies
+    /// ownedFeatureMembership->isEmpty()isReference = not isCompositeowningVariationUsage <> null implies  
+    ///  specializes(owningVariationUsage)isVariation implies    not ownedSpecialization.specific->exists(  
+    ///      oclIsKindOf(Definition) and        oclAsType(Definition).isVariation or       
+    /// oclIsKindOf(Usage) and        oclAsType(Usage).isVariation)owningVariationDefinition <> null implies
+    ///    specializes(owningVariationDefinition)directedUsage =
     /// directedFeature->selectByKind(Usage)nestedAction =
     /// nestedUsage->selectByKind(ActionUsage)nestedAllocation =
     /// nestedUsage->selectByKind(AllocationUsage)nestedAnalysisCase =
@@ -56,7 +57,7 @@ namespace SysML2.NET.Core.POCO
     /// nestedUsage->selectByKind(ConnectorAsUsage)nestedConstraint =
     /// nestedUsage->selectByKind(ConstraintUsage)ownedNested =
     /// nestedUsage->selectByKind(EnumerationUsage)nestedFlow =
-    /// nestedUsage->selectByKind(FlowUsage)nestedInterface =
+    /// nestedUsage->selectByKind(FlowConnectionUsage)nestedInterface =
     /// nestedUsage->selectByKind(ReferenceUsage)nestedItem =
     /// nestedUsage->selectByKind(ItemUsage)nestedMetadata =
     /// nestedUsage->selectByKind(MetadataUsage)nestedOccurrence =
@@ -71,8 +72,8 @@ namespace SysML2.NET.Core.POCO
     /// nestedUsage->selectByKind(UseCaseUsage)nestedVerificationCase =
     /// nestedUsage->selectByKind(VerificationCaseUsage)nestedView =
     /// nestedUsage->selectByKind(ViewUsage)nestedViewpoint = nestedUsage->selectByKind(ViewpointUsage)usage
-    /// = feature->selectByKind(Usage)owningType <> null implies    (owningType.oclIsKindOf(Definition) or  
-    /// ownigType.oclIsKindOf(Usage))
+    /// = feature->selectByKind(Usage)direction <> null or isEnd or featuringType->isEmpty() implies   
+    /// isReferenceisVariation implies isAbstract
     /// </summary>
     public partial class Usage : IUsage
     {
@@ -304,7 +305,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

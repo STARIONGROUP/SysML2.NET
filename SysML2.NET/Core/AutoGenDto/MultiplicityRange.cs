@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="MultiplicityRange.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -38,8 +38,9 @@ namespace SysML2.NET.Core.DTO
     /// equal to the lowerBound value. If no lowerBound Expression, then the default is that the lower bound
     /// has the same value as the upper bound, except if the upperBound evaluates to *, in which case the
     /// default for the lower bound is 0.bound->forAll(b | b.featuringType =
-    /// self.featuringType)bound.result->forAll(specializesFromLibrary('ScalarValues::Natural'))lowerBound =
-    ///    let ownedMembers : Sequence(Element) =        
+    /// self.featuringType)bound->forAll(b |    b.result.specializesFromLibrary('ScalarValues::Integer') and
+    ///    let value : UnlimitedNatural = valueOf(b) in    value <> null implies value >= 0)lowerBound =   
+    /// let ownedMembers : Sequence(Element) =        
     /// ownedMembership->selectByKind(OwningMembership).ownedMember in    if ownedMembers->size() < 2 or    
     ///     not ownedMembers->first().oclIsKindOf(Expression) then null    else
     /// ownedMembers->first().oclAsType(Expression)    endifupperBound =    let ownedMembers :
@@ -124,7 +125,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

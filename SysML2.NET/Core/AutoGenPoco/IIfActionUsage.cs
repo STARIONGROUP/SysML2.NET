@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IIfActionUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -37,12 +37,12 @@ namespace SysML2.NET.Core.POCO
     /// let parameter : Feature = inputParameter(2) in    if parameter <> null and
     /// parameter.oclIsKindOf(ActionUsage) then        parameter.oclAsType(ActionUsage)    else        null 
     ///   endifisSubactionUsage() implies    specializesFromLibrary('Actions::Action::ifSubactions')if
-    /// elseAction = null then    specifiesFromLibrary('Actions::ifThenActions')else   
-    /// specifiesFromLibrary('Actions::ifThenElseActions')endififArgument =     let parameter : Feature =
+    /// elseAction = null then    specializesFromLibrary('Actions::ifThenActions')else   
+    /// specializesFromLibrary('Actions::ifThenElseActions')endififArgument =     let parameter : Feature =
     /// inputParameter(1) in    if parameter <> null and parameter.oclIsKindOf(Expression) then       
     /// parameter.oclAsType(Expression)    else        null    endifelseAction =     let parameter : Feature
     /// = inputParameter(3) in    if parameter <> null and parameter.oclIsKindOf(ActionUsage) then       
-    /// parameter.oclAsType(ActionUsage)    else        null    endif
+    /// parameter.oclAsType(ActionUsage)    else        null    endifinputParameters()->size() >= 2
     /// </summary>
     public partial interface IIfActionUsage : IActionUsage
     {

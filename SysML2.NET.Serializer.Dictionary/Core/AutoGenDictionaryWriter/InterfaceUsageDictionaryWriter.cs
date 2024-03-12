@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="InterfaceUsageDictionaryWriter.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -115,7 +115,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isAbstract", interfaceUsageInstance.IsAbstract);
             dictionary.Add("isComposite", interfaceUsageInstance.IsComposite);
             dictionary.Add("isDerived", interfaceUsageInstance.IsDerived);
-            dictionary.Add("isDirected", interfaceUsageInstance.IsDirected);
             dictionary.Add("isEnd", interfaceUsageInstance.IsEnd);
             dictionary.Add("isImplied", interfaceUsageInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", interfaceUsageInstance.IsImpliedIncluded);
@@ -167,7 +166,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isAbstract", interfaceUsageInstance.IsAbstract);
             dictionary.Add("isComposite", interfaceUsageInstance.IsComposite);
             dictionary.Add("isDerived", interfaceUsageInstance.IsDerived);
-            dictionary.Add("isDirected", interfaceUsageInstance.IsDirected);
             dictionary.Add("isEnd", interfaceUsageInstance.IsEnd);
             dictionary.Add("isImplied", interfaceUsageInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", interfaceUsageInstance.IsImpliedIncluded);

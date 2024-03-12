@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IIncludeUseCaseUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ namespace SysML2.NET.Core.POCO
     /// IncludeUseCaseUsage is also a PerformActionUsage, with its useCaseIncluded as the
     /// performedAction.owningType <> null and(owningType.oclIsKindOf(UseCaseDefinition) or
     /// owningType.oclIsKindOf(UseCaseUsage) implies   
-    /// specializesFromLibrary('UseCases::UseCase::includedUseCases')
+    /// specializesFromLibrary('UseCases::UseCase::includedUseCases')ownedReferenceSubsetting <> null
+    /// implies    ownedReferenceSubsetting.referencedFeature.oclIsKindOf(UseCaseUsage)
     /// </summary>
     public partial interface IIncludeUseCaseUsage : IUseCaseUsage, IPerformActionUsage
     {

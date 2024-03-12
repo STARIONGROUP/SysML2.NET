@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="SuccessionItemFlowDictionaryReader.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -152,12 +152,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isDerivedFeature = Convert.ToBoolean(isDerivedObject);
 
-            if (!dictionary.TryGetValue("isDirected", out object isDirectedObject))
-            {
-                throw new ArgumentException("The isDirected property is missing from the dictionary, the dictionary cannot be converted into a SuccessionItemFlow");
-            }
-            bool isDirectedFeature = Convert.ToBoolean(isDirectedObject);
-
             if (!dictionary.TryGetValue("isEnd", out object isEndObject))
             {
                 throw new ArgumentException("The isEnd property is missing from the dictionary, the dictionary cannot be converted into a SuccessionItemFlow");
@@ -251,7 +245,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             successionItemFlowInstance.IsAbstract = isAbstractFeature;
             successionItemFlowInstance.IsComposite = isCompositeFeature;
             successionItemFlowInstance.IsDerived = isDerivedFeature;
-            successionItemFlowInstance.IsDirected = isDirectedFeature;
             successionItemFlowInstance.IsEnd = isEndFeature;
             successionItemFlowInstance.IsImplied = isImpliedFeature;
             successionItemFlowInstance.IsImpliedIncluded = isImpliedIncludedFeature;
@@ -331,12 +324,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a SuccessionItemFlow");
             }
             bool isDerivedFeature = Convert.ToBoolean(isDerivedObject);
-
-            if (!dictionary.TryGetValue("isDirected", out object isDirectedObject))
-            {
-                throw new ArgumentException("The isDirected property is missing from the dictionary, the dictionary cannot be converted into a SuccessionItemFlow");
-            }
-            bool isDirectedFeature = Convert.ToBoolean(isDirectedObject);
 
             if (!dictionary.TryGetValue("isEnd", out object isEndObject))
             {
@@ -431,7 +418,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             successionItemFlowInstance.IsAbstract = isAbstractFeature;
             successionItemFlowInstance.IsComposite = isCompositeFeature;
             successionItemFlowInstance.IsDerived = isDerivedFeature;
-            successionItemFlowInstance.IsDirected = isDirectedFeature;
             successionItemFlowInstance.IsEnd = isEndFeature;
             successionItemFlowInstance.IsImplied = isImpliedFeature;
             successionItemFlowInstance.IsImpliedIncluded = isImpliedIncludedFeature;

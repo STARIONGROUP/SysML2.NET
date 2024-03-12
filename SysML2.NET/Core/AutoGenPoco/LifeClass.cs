@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="LifeClass.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -31,11 +31,11 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A <coed>LifeClass is a Class that specializes both the Class Occurrences::Life from the Kernel
-    /// Semantic Library and a single OccurrenceDefinition, and has a multiplicity of 0..1. This constrains
-    /// the OccurrenceDefinition being specialized to have at most one instance that is a complete
-    /// Life.</coed>specializesFromLibrary("Occurrences::Life")multiplicity <> null
-    /// andmultiplicity.specializesFromLibrary("Base::zeroOrOne")specializes(individualDefinition)isSufficient
+    /// A LifeClass is a Class that specializes both the Class Occurrences::Life from the Kernel Semantic
+    /// Library and a single OccurrenceDefinition, and has a multiplicity of 0..1. This constrains the
+    /// OccurrenceDefinition being specialized to have at most one instance that is a complete
+    /// Life.specializesFromLibrary('Occurrences::Life')multiplicity <> null
+    /// andmultiplicity.specializesFromLibrary('Base::zeroOrOne')specializes(individualDefinition)isSufficient
     /// </summary>
     public partial class LifeClass : ILifeClass
     {

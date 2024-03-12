@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A LiteralExpression is an Expression that provides a basic DataValue as a
-    /// result.isModelLevelEvaluable = truespecializesFromLibrary("Performances::literalEvaluations")
+    /// result.isModelLevelEvaluable = truespecializesFromLibrary('Performances::literalEvaluations')
     /// </summary>
     public partial interface ILiteralExpression : IExpression
     {

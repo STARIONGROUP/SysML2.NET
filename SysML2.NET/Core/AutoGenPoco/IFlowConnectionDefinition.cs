@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFlowConnectionDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A FlowConnectionDefinition is a ConnectionDefinition and ActionDefinition that is also an
     /// Interaction representing flows between
-    /// Usages.specializesFromLibrary("Connections::MessageConnection")
+    /// Usages.specializesFromLibrary('Connections::MessageConnection')
     /// </summary>
     public partial interface IFlowConnectionDefinition : IConnectionDefinition, IActionDefinition, IInteraction
     {

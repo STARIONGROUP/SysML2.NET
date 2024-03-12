@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="Feature.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -49,51 +49,46 @@ namespace SysML2.NET.Core.DTO
     /// ownedSubsetting->selectByKind(Redefinition)ownedTypeFeaturing =
     /// ownedRelationship->selectByKind(TypeFeaturing)->    select(tf | tf.featureOfType =
     /// self)ownedSubsetting = ownedSpecialization->selectByKind(Subsetting)ownedTyping =
-    /// ownedGeneralization->selectByKind(FeatureTyping)type =    let types : OrderedSet(Type) =
-    /// typing.type->        union(subsetting.subsettedFeature.type)->        asOrderedSet() in    if
-    /// chainingFeature->isEmpty() then types    else         types->union(chainingFeature->last().type)->  
-    ///      asOrderedSet()    endifmultiplicity <> null implies multiplicity.featuringType = featuringType
-    /// specializesFromLibrary("Base::things")chainingFeatures->excludes(self)ownedFeatureChaining =
+    /// ownedGeneralization->selectByKind(FeatureTyping)type =     let types : OrderedSet(Types) =
+    /// OrderedSet{self}->        -- Note: The closure operation automatically handles circular
+    /// relationships.        closure(typingFeatures()).typing.type->asOrderedSet() in    types->reject(t1 |
+    /// types->exist(t2 | t2 <> t1 and t2.specializes(t1)))multiplicity <> null implies
+    /// multiplicity.featuringType = featuringType
+    /// specializesFromLibrary('Base::things')chainingFeature->excludes(self)ownedFeatureChaining =
     /// ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
-    /// ownedFeatureChaining.chainingFeaturechainingFeatures->size() <> 1isEnd and owningType <> null
-    /// implies    let i : Integer =         owningType.ownedFeature->select(isEnd) in   
-    /// owningType.ownedSpecialization.general->        forAll(supertype |            let ownedEndFeatures :
-    /// Sequence(Feature) =                 supertype.ownedFeature->select(isEnd) in           
-    /// ownedEndFeatures->size() >= i implies               
-    /// redefines(ownedEndFeatures->at(i))ownedMembership->    selectByKind(FeatureValue)->    forAll(fv |
-    /// specializes(fv.value.result))isEnd and owningType <> null andowningType.oclIsKindOf(Association)
-    /// implies    specializesFromLibrary("Links::Link::participants")isComposite
+    /// ownedFeatureChaining.chainingFeaturechainingFeature->size() <> 1isEnd and owningType <> null implies
+    ///    let i : Integer =         owningType.ownedEndFeature->indexOf(self) in   
+    /// owningType.ownedSpecialization.general->        forAll(supertype |            
+    /// supertype.endFeature->size() >= i implies               
+    /// redefines(supertype.endFeature->at(i))direction = null andownedSpecializations->forAll(isImplied)
+    /// implies    ownedMembership->        selectByKind(FeatureValue)->        forAll(fv |
+    /// specializes(fv.value.result))isEnd and owningType <> null and(owningType.oclIsKindOf(Association) or
+    /// owningType.oclIsKindOf(Connector)) implies   
+    /// specializesFromLibrary('Links::Link::participant')isComposite
     /// andownedTyping.type->includes(oclIsKindOf(Structure)) andowningType <> null
     /// and(owningType.oclIsKindOf(Structure) or owningType.type->includes(oclIsKindOf(Structure))) implies 
-    ///   specializesFromLibrary("Occurrence::Occurrence::suboccurrences")owningType <> null
-    /// and(owningType.oclIsKindOf(LiteralExpression) or owningType.oclIsKindOf(FeatureReferenceExpression))
-    /// implies    if owningType.oclIsKindOf(LiteralString) then       
-    /// specializesFromLibrary("ScalarValues::String")    else if owningType.oclIsKindOf(LiteralBoolean)
-    /// then        specializesFromLibrary("ScalarValues::Boolean")    else if
-    /// owningType.oclIsKindOf(LiteralInteger) then        specializesFromLibrary("ScalarValues::Rational") 
-    ///   else if owningType.oclIsKindOf(LiteralBoolean) then       
-    /// specializesFromLibrary("ScalarValues::Rational")    else if owningType.oclIsKindOf(LiteralBoolean)
-    /// then        specializesFromLibrary("ScalarValues::Real")    else specializes(       
-    /// owningType.oclAsType(FeatureReferenceExpression).referent)    endif endif endif endif
-    /// endifownedTyping.type->exists(selectByKind(Class)) implies   
-    /// specializesFromLibrary("Occurrences::occurrences")isComposite
+    ///   specializesFromLibrary('Occurrence::Occurrence::suboccurrences')owningType <> null
+    /// andowningType.oclIsKindOf(FeatureReferenceExpression) andself =
+    /// owningType.oclAsType(FeatureReferenceExpression).result implies   
+    /// specializes(owningType.oclAsType(FeatureReferenceExpression).referent)ownedTyping.type->exists(selectByKind(Class))
+    /// implies    specializesFromLibrary('Occurrences::occurrences')isComposite
     /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
     /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
     /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
-    /// specializesFromLibrary("Occurrence::Occurrence::suboccurrences")ownedTyping.type->exists(selectByKind(DataType))
-    /// implies    specializesFromLibary("Base::dataValues")owningType <> null
+    /// specializesFromLibrary('Occurrence::Occurrence::suboccurrences')ownedTyping.type->exists(selectByKind(DataType))
+    /// implies    specializesFromLibrary('Base::dataValues')owningType <> null
     /// andowningType.oclIsKindOf(ItemFlowEnd) andowningType.ownedFeature->at(1) = self implies    let
     /// flowType : Type = owningType.owningType in    flowType <> null implies        let i : Integer =     
     ///        flowType.ownedFeature.indexOf(owningType) in        (i = 1 implies            
-    /// redefinesFromLibrary("Transfers::Transfer::source::sourceOutput")) and        (i = 2 implies        
-    ///    redefinesFromLibrary("Transfers::Transfer::source::targetInput"))                 owningType <>
+    /// redefinesFromLibrary('Transfers::Transfer::source::sourceOutput')) and        (i = 2 implies        
+    ///    redefinesFromLibrary('Transfers::Transfer::source::targetInput'))                 owningType <>
     /// null and(owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step)) implies    let i :
     /// Integer =         owningType.ownedFeature->select(direction <> null) in   
     /// owningType.ownedSpecialization.general->        forAll(supertype |            let ownedParameters :
     /// Sequence(Feature) =                 supertype.ownedFeature->select(direction <> null) in           
     /// ownedParameters->size() >= i implies               
     /// redefines(ownedParameters->at(i))ownedTyping.type->exists(selectByKind(Structure)) implies   
-    /// specializesFromLibary("Objects::objects")owningType <> null and(owningType.oclIsKindOf(Function) and
+    /// specializesFromLibary('Objects::objects')owningType <> null and(owningType.oclIsKindOf(Function) and
     ///    self = owningType.oclAsType(Function).result or owningType.oclIsKindOf(Expression) and    self =
     /// owningType.oclAsType(Expression).result) implies    owningType.ownedSpecialization.general->       
     /// select(oclIsKindOf(Function) or oclIsKindOf(Expression))->        forAll(supertype |           
@@ -102,12 +97,18 @@ namespace SysML2.NET.Core.DTO
     /// superType.oclAsType(Expression).result                endif)ownedFeatureInverting =
     /// ownedRelationship->selectByKind(FeatureInverting)->    select(fi | fi.featureInverted =
     /// self)featuringType =    let featuringTypes : OrderedSet(Type) =        
-    /// typeFeaturing.featuringType->asOrderedSet() in    if chainingFeature->isEmpty() then featuringTypes 
-    ///   else        featuringTypes->            union(chainingFeature->first().featuringType)->           
+    /// featuring.type->asOrderedSet() in    if chainingFeature->isEmpty() then featuringTypes    else      
+    ///  featuringTypes->            union(chainingFeature->first().featuringType)->           
     /// asOrderedSet()    endifownedReferenceSubsetting =    let referenceSubsettings :
     /// OrderedSet(ReferenceSubsetting) =        ownedSubsetting->selectByKind(ReferenceSubsetting) in    if
     /// referenceSubsettings->isEmpty() then null    else referenceSubsettings->first()
-    /// endifownedSubsetting->selectByKind(ReferenceSubsetting)->size() <= 1
+    /// endifownedSubsetting->selectByKind(ReferenceSubsetting)->size() <=
+    /// 1Sequence{1..chainingFeature->size() - 1}->forAll(i |    chainingFeature->at(i +
+    /// 1).featuringType->forAll(t |         chainingFeature->at(i).specializes(t)))isPortion
+    /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
+    /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
+    /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
+    /// specializesFromLibrary('Occurrence::Occurrence::portions')
     /// </summary>
     public partial class Feature : IFeature
     {
@@ -186,7 +187,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

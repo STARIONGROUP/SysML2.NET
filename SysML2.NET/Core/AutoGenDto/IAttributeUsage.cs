@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAttributeUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.DTO
     /// permit use of DataTypes from the Kernel Model Libraries. An AttributeUsage itself as well as all its
     /// nested features must be referential (non-composite).An AttributeUsage must specialize, directly or
     /// indirectly, the base Feature Base::dataValues from the Kernel Semantic
-    /// Library.isReferencefeature->forAll(not isComposite)specializesFromLibrary("Base::dataValues")
+    /// Library.isReferencefeature->forAll(not isComposite)specializesFromLibrary('Base::dataValues')
     /// </summary>
     public partial interface IAttributeUsage : IUsage
     {

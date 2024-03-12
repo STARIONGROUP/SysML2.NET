@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IParameterMembership.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A ParameterMembership is a FeatureMembership that identifies its memberFeature as a parameter, which
     /// is always owned, and must have a direction. A ParameterMembership must be owned by a Behavior or a
-    /// Step.ownedMemberParameter.direction <> nullowningType.oclIsKindOf(Behavior) or
+    /// Step.ownedMemberParameter.direction = parameterDirection()owningType.oclIsKindOf(Behavior) or
     /// owningType.oclIsKindOf(Step)
     /// </summary>
     public partial interface IParameterMembership : IFeatureMembership

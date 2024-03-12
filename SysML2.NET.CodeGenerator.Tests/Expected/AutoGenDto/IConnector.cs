@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="IConnector.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -36,27 +36,20 @@ namespace SysML2.NET.Core.DTO
     /// of things might be linked. The Connector further restricts these links to be between values of
     /// Features on instances of its domain.relatedFeature = connectorEnd.ownedReferenceSubsetting->   
     /// select(s | s <> null).subsettedFeaturerelatedFeature->forAll(f |     if featuringType->isEmpty()
-    /// then f.isFeaturedWithin(null)    else featuringType->exists(t | f.isFeaturedWithin(t))   
+    /// then f.isFeaturedWithin(null)    else featuringType->forAll(t | f.isFeaturedWithin(t))   
     /// endif)sourceFeature =     if relatedFeature->isEmpty() then null     else relatedFeature->first()   
     ///  endiftargetFeature =    if relatedFeature->size() < 2 then OrderedSet{}    else        
     /// relatedFeature->            subSequence(2, relatedFeature->size())->            asOrderedSet()   
     /// endifnot isAbstract implies relatedFeature->size() >=
-    /// 2specializesFromLibrary("Links::links")association->exists(oclIsKindOf(AssociationStructure))
-    /// implies    specializesFromLibrary("Objects::linkObjects")connectorEnds->size() = 2
+    /// 2specializesFromLibrary('Links::links')association->exists(oclIsKindOf(AssociationStructure))
+    /// implies    specializesFromLibrary('Objects::linkObjects')connectorEnds->size() = 2
     /// andassociation->exists(oclIsKindOf(AssocationStructure)) implies   
-    /// specializesFromLibrary("Objects::binaryLinkObjects")connectorEnd->size() = 2 implies   
-    /// specializesFromLibrary("Links::binaryLinks")connectorEnds->size() > 2 implies    not
-    /// specializesFromLibrary("Links::BinaryLink")
+    /// specializesFromLibrary('Objects::binaryLinkObjects')connectorEnd->size() = 2 implies   
+    /// specializesFromLibrary('Links::binaryLinks')connectorEnds->size() > 2 implies    not
+    /// specializesFromLibrary('Links::BinaryLink')
     /// </summary>
     public partial interface IConnector : IFeature, IRelationship
     {
-        /// <summary>
-        /// For a binary Connector, whether or not the Connector should be considered to have a direction from
-        /// sourceFeature to targetFeature.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        bool IsDirected { get; set; }
-
     }
 }
 

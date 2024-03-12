@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AllocationDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.DTO
     /// as a precursor to more rigorous specifications and implementations. An AllocationDefinition can
     /// itself be refined using nested allocations that give a finer-grained decomposition of the containing
     /// allocation mapping.allocation =
-    /// usage->selectAsKind(AllocationUsage)specializesFromLibrary("Allocations::Allocation")
+    /// usage->selectAsKind(AllocationUsage)specializesFromLibrary('Allocations::Allocation')
     /// </summary>
     public partial class AllocationDefinition : IAllocationDefinition
     {

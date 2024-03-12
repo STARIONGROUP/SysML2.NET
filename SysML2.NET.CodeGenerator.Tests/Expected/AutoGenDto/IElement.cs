@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="IElement.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.DTO
     /// ownedElement->selectByKind(Documentation)ownedAnnotation = ownedRelationship->   
     /// selectByKind(Annotation)->    select(a | a.annotatedElement = self)name =
     /// effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =
-    /// libraryNamespace() <>nullshortName = effectiveShortName()owningNamespace =    if owningMembership =
+    /// libraryNamespace() <> nullshortName = effectiveShortName()owningNamespace =    if owningMembership =
     /// null then null    else owningMembership.membershipOwningNamespace    endiftextualRepresentation =
     /// ownedElement->selectByKind(TextualRepresentation)
     /// </summary>

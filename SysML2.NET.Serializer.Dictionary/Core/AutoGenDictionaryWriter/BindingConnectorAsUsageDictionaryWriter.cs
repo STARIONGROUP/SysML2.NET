@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="BindingConnectorAsUsageDictionaryWriter.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -115,7 +115,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isAbstract", bindingConnectorAsUsageInstance.IsAbstract);
             dictionary.Add("isComposite", bindingConnectorAsUsageInstance.IsComposite);
             dictionary.Add("isDerived", bindingConnectorAsUsageInstance.IsDerived);
-            dictionary.Add("isDirected", bindingConnectorAsUsageInstance.IsDirected);
             dictionary.Add("isEnd", bindingConnectorAsUsageInstance.IsEnd);
             dictionary.Add("isImplied", bindingConnectorAsUsageInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", bindingConnectorAsUsageInstance.IsImpliedIncluded);
@@ -165,7 +164,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isAbstract", bindingConnectorAsUsageInstance.IsAbstract);
             dictionary.Add("isComposite", bindingConnectorAsUsageInstance.IsComposite);
             dictionary.Add("isDerived", bindingConnectorAsUsageInstance.IsDerived);
-            dictionary.Add("isDirected", bindingConnectorAsUsageInstance.IsDirected);
             dictionary.Add("isEnd", bindingConnectorAsUsageInstance.IsEnd);
             dictionary.Add("isImplied", bindingConnectorAsUsageInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", bindingConnectorAsUsageInstance.IsImpliedIncluded);

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IStateDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,9 +34,8 @@ namespace SysML2.NET.Core.POCO
     /// A StateDefinition is the Definition of the Behavior of a system or part of a system in a certain
     /// state condition.A StateDefinition may be related to up to three of its ownedFeatures by
     /// StateBehaviorMembership Relationships, all of different kinds, corresponding to the entry, do and
-    /// exit actions of the StateDefinition.ownedGeneralization.general->selectByKind(StateDefinition)->   
-    /// forAll(g | g.isParallel = isParallel)specializesFromLibrary('States::StateAction')ownedMembership-> 
-    ///   selectByKind(StateSubactionMembership)->    isUnique(kind)state =
+    /// exit actions of the StateDefinition.specializesFromLibrary('States::StateAction')ownedMembership->  
+    ///  selectByKind(StateSubactionMembership)->    isUnique(kind)state =
     /// action->selectByKind(StateUsage)doAction =    let doMemberships : Sequence(StateSubactionMembership)
     /// =        ownedMembership->            selectByKind(StateSubactionMembership)->           
     /// select(kind = StateSubactionKind::do) in    if doMemberships->isEmpty() then null    else

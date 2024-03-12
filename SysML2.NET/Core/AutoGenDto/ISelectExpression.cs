@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISelectExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A SelectExpression is an OperatorExpression whose operator is "select", which resolves to the
-    /// Function ControlFunctions::select from the Kernel Functions Library.
+    /// Function ControlFunctions::select from the Kernel Functions Library.operator = 'select'
     /// </summary>
     public partial interface ISelectExpression : IOperatorExpression
     {

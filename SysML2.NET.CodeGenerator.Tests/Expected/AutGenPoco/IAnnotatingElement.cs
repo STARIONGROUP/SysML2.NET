@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="IAnnotatingElement.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,7 +34,9 @@ namespace SysML2.NET.Core.POCO
     /// An AnnotatingElement is an Element that provides additional description of or metadata on some other
     /// Element. An AnnotatingElement is either attached to its annotatedElements by Annotation
     /// Relationships, or it implicitly annotates its owningNamespace.annotatedElement =  if
-    /// annotation->notEmpty() then annotation.annotatedElement else Sequence{owningNamespace} endif
+    /// annotation->notEmpty() then annotation.annotatedElement else Sequence{owningNamespace}
+    /// endifownedAnnotatingRelationship = ownedRelationship->    selectByKind(Annotation)->    select(a |
+    /// a.annotatingElement = self)
     /// </summary>
     public partial interface IAnnotatingElement : IElement
     {
@@ -49,6 +51,12 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Annotation> Annotation { get; set; }
+
+        /// <summary>
+        /// Queries the derived property OwnedAnnotatingRelationship
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        List<Annotation> QueryOwnedAnnotatingRelationship();
 
     }
 }

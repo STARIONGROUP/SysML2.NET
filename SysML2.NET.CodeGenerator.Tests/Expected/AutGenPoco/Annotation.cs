@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="Annotation.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -186,6 +186,15 @@ namespace SysML2.NET.Core.POCO
         public IElement QueryOwningAnnotatedElement()
         {
             throw new NotImplementedException("Derived property OwningAnnotatedElement not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwningAnnotatingElement
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public AnnotatingElement QueryOwningAnnotatingElement()
+        {
+            throw new NotImplementedException("Derived property OwningAnnotatingElement not yet supported");
         }
 
         /// <summary>

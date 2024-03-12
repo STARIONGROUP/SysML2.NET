@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Structure.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,9 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A Structure is a Class of objects in the modeled universe that are primarily structural in nature.
     /// While such an object is not itself behavioral, it may be involved in and acted on by Behaviors, and
-    /// it may be the performer of some of them.specializesFromLibrary('Objects::Object')
+    /// it may be the performer of some of
+    /// them.specializesFromLibrary('Objects::Object')ownedSpecialization.general->forAll(not
+    /// oclIsKindOf(Behavior))
     /// </summary>
     public partial class Structure : IStructure
     {

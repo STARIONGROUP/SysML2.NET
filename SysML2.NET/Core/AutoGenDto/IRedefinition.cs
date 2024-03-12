@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IRedefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -43,12 +43,16 @@ namespace SysML2.NET.Core.DTO
     /// different and the redefinedFeature to not be inherited into the owningNamespace of the
     /// redefiningFeature.This enables the redefiningFeature to have the same name as the redefinedFeature,
     /// if desired.let anythingType: Type =   
-    /// subsettingFeature.resolveGlobal('Base::Anything').oclAsType(Type) in -- Including "Anything"
-    /// accounts for implicit featuringType of Features-- with no explicit featuringType.let
-    /// subsettingFeaturingTypes: Set(Type) =   
-    /// subsettingFeature.featuringTypes->asSet()->including(anythingType) inlet subsettedFeaturingTypes:
-    /// Set(Type) =    subsettedFeature.featuringTypes->asSet()->including(anythingType)
-    /// insubsettingFeaturingTypes <> subsettedFeaturingType
+    /// redefiningFeature.resolveGlobal('Base::Anything').modelElement.oclAsType(Type) in -- Including
+    /// "Anything" accounts for implicit featuringType of Features-- with no explicit featuringType.let
+    /// redefiningFeaturingTypes: Set(Type) =   
+    /// redefiningFeature.featuringTypes->asSet()->including(anythingType) inlet redefinedFeaturingTypes:
+    /// Set(Type) =    redefinedFeature.featuringTypes->asSet()->including(anythingType)
+    /// inredefiningFeaturingTypes <> redefinedFeaturingTypefeaturingType->forAll(t |    let direction :
+    /// FeatureDirectionKind = t.directionOf(redefinedFeature) in    ((direction =
+    /// FeatureDirectionKind::_'in' or       direction = FeatureDirectionKind::out) implies        
+    /// redefiningFeature.direction = direction)    and     (direction = FeatureDirectionKind::inout implies
+    /// redefiningFeature.direction <> null))
     /// </summary>
     public partial interface IRedefinition : ISubsetting
     {

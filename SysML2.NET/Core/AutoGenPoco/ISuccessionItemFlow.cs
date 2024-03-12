@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISuccessionItemFlow.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A SuccessionItemFlow is an ItemFlow that also provides temporal ordering. It classifies Transfers
     /// that cannot start until the source Occurrence has completed and that must complete before the target
-    /// Occurrence can start.specializesFromLibrary("Transfers::flowTransfersBefore")
+    /// Occurrence can start.specializesFromLibrary('Transfers::flowTransfersBefore')
     /// </summary>
     public partial interface ISuccessionItemFlow : IItemFlow, ISuccession
     {

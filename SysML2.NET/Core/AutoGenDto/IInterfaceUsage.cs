@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IInterfaceUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An InterfaceUsage is a Usage of an InterfaceDefinition to represent an interface connecting parts of
     /// a system through specific ports.ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Interfaces::binaryInterfaces")specializesFromLibrary("Interfaces::interfaces")
+    /// specializesFromLibrary('Interfaces::binaryInterfaces')specializesFromLibrary('Interfaces::interfaces')
     /// </summary>
     public partial interface IInterfaceUsage : IConnectionUsage
     {

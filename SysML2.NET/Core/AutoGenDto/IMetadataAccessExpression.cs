@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMetadataAccessExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO
     /// representing all the MetadataFeature annotations of the referencedElement. In addition, the sequence
     /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
     /// referencedElement, with values for all the abstract syntax properties of the
-    /// referencedElement.specializesFromLibrary("Performances::metadataAccessEvaluations")
+    /// referencedElement.specializesFromLibrary('Performances::metadataAccessEvaluations')
     /// </summary>
     public partial interface IMetadataAccessExpression : IExpression
     {

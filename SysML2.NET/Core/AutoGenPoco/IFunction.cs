@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFunction.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,15 +33,16 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A Function is a Behavior that has an out parameter that is identified as its result. A Function
     /// represents the performance of a calculation that produces the values of its result parameter. This
-    /// calculation may be decomposed into Expressionssteps of the
+    /// calculation may be decomposed into Expressions that are steps of the
     /// Function.ownedMembership.selectByKind(ResultExpressionMembership)->    forAll(mem |
     /// ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
     /// binding.relatedFeature->includes(result) and           
-    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))specializesFromLibrary("Performances::Evaluation")result
+    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))specializesFromLibrary('Performances::Evaluation')result
     /// =    let resultParams : Sequence(Feature) =        ownedFeatureMemberships->           
     /// selectByKind(ReturnParameterMembership).            ownedParameterMember in    if
     /// resultParams->notEmpty() then resultParams->first()    else null    endifownedFeatureMembership->   
-    /// selectByKind(ReturnParameterMembership)->    size() <= 1
+    /// selectByKind(ReturnParameterMembership)->    size() <=
+    /// 1membership->selectByKind(ResultExpressionMembership)->size() <= 1
     /// </summary>
     public partial interface IFunction : IBehavior
     {

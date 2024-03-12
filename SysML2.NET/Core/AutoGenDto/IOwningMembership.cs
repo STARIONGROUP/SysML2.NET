@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IOwningMembership.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An OwningMembership is a Membership that owns its memberElement as a ownedRelatedElement. The
-    /// ownedMemberElementM becomes an ownedMember of the membershipOwningNamespace.ownedMemberName =
+    /// ownedMemberElement becomes an ownedMember of the membershipOwningNamespace.ownedMemberName =
     /// ownedMemberElement.nameownedMemberShortName = ownedMemberElement.shortName
     /// </summary>
     public partial interface IOwningMembership : IMembership

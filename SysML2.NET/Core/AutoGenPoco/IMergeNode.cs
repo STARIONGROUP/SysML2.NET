@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMergeNode.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@ namespace SysML2.NET.Core.POCO
     /// have at most one outgoing Successions.sourceConnector->selectAsKind(Succession)->size() <=
     /// 1targetConnector->selectByKind(Succession)->    collect(connectorEnd->at(1))->    forAll(sourceMult
     /// |        multiplicityHasBounds(sourceMult, 0, 1))targetConnector->selectByKind(Succession)->   
-    /// forAll(subsetsChain(this,        
-    /// resolveGlobal("ControlPerformances::MergePerformance::incomingHBLink")))specializesFromLibrary("Actions::Action::merges")
+    /// forAll(subsetsChain(self,        
+    /// resolveGlobal('ControlPerformances::MergePerformance::incomingHBLink')))specializesFromLibrary('Actions::Action::merges')
     /// </summary>
     public partial interface IMergeNode : IControlNode
     {

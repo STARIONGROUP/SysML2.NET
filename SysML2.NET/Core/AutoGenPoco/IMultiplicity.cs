@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMultiplicity.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.POCO
     /// typeWithMultiplicity is a Feature,  the Multiplicity shall have the same domain as the
     /// typeWithMultiplicity.if owningType <> null and owningType.oclIsKindOf(Feature) then    featuringType
     /// =         owningType.oclAsType(Feature).featuringTypeelse   
-    /// featuringType->isEmpty()endifspecializesFromLibrary("Base::naturals")
+    /// featuringType->isEmpty()endifspecializesFromLibrary('Base::naturals')
     /// </summary>
     public partial interface IMultiplicity : IFeature
     {

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="PartDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A PartDefinition is an ItemDefinition of a Class of systems or parts of systems. Note that all parts
     /// may be considered items for certain purposes, but not all items are parts that can perform actions
-    /// within a system.specializesFromLibrary("Parts::Part")
+    /// within a system.specializesFromLibrary('Parts::Part')
     /// </summary>
     public partial class PartDefinition : IPartDefinition
     {

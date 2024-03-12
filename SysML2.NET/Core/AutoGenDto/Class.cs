@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Class.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@ namespace SysML2.NET.Core.DTO
     /// they are related to other things (via Features). This means multiple things classified by the same
     /// Class can be distinguished, even when they are related other things in exactly the same
     /// way.specializesFromLibrary('Occurrences::Occurrence')ownedSpecialization.general->    forAll(not
-    /// oclIsKindOf(DataType)) andnot oclIsKindOf(AssociationStructure) implies   
-    /// ownedSpecialization.general->        forAll(not oclIsKindOf(Association))
+    /// oclIsKindOf(DataType)) andnot oclIsKindOf(Association) implies    ownedSpecialization.general->     
+    /// forAll(not oclIsKindOf(Association))
     /// </summary>
     public partial class Class : IClass
     {

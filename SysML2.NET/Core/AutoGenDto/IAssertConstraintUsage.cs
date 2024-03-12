@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAssertConstraintUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ namespace SysML2.NET.Core.DTO
     /// if ownedReferenceSubsetting = null then self    else
     /// ownedReferenceSubsetting.referencedFeature.oclAsType(ConstraintUsage)    endifif isNegated then   
     /// specializesFromLibrary('Constraints::negatedConstraints')else   
-    /// specializesFromLibrary('Constraints::assertedConstraints')endif
+    /// specializesFromLibrary('Constraints::assertedConstraints')endifownedReferenceSubsetting <> null
+    /// implies    ownedReferenceSubsetting.referencedFeature.oclIsKindOf(ConstraintUsage)
     /// </summary>
     public partial interface IAssertConstraintUsage : IConstraintUsage, IInvariant
     {

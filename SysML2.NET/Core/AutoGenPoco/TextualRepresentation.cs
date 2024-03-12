@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualRepresentation.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -165,6 +165,15 @@ namespace SysML2.NET.Core.POCO
         public string QueryName()
         {
             throw new NotImplementedException("Derived property Name not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwnedAnnotatingRelationship
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Annotation> QueryOwnedAnnotatingRelationship()
+        {
+            throw new NotImplementedException("Derived property OwnedAnnotatingRelationship not yet supported");
         }
 
         /// <summary>

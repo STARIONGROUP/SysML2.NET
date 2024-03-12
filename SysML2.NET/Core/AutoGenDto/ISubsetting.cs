@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISubsetting.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -39,9 +39,10 @@ namespace SysML2.NET.Core.DTO
     /// subsettingFeature must specialize the co-domain of the subsettedFeature.let
     /// subsettingFeaturingTypes: OrderedSet(Type) =    subsettingFeature.featuringTypes inlet
     /// subsettedFeaturingTypes: OrderedSet(Type) =    subsettedFeature.featuringTypes inlet anythingType:
-    /// Element =    subsettingFeature.resolveGlobal('Base::Anything') in subsettedFeaturingTypes->forAll(t
-    /// |    subsettingFeaturingTypes->isEmpty() and t = anythingType or   
-    /// subsettingFeaturingTypes->exists(specializes(t))
+    /// Element =    subsettingFeature.resolveGlobal('Base::Anything').memberElement in
+    /// subsettedFeaturingTypes->forAll(t |    subsettingFeaturingTypes->isEmpty() and t = anythingType or  
+    ///  subsettingFeaturingTypes->exists(specializes(t))subsettedFeature.isUnique implies
+    /// subsettingFeature.isUnique
     /// </summary>
     public partial interface ISubsetting : ISpecialization
     {

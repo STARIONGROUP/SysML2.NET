@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ViewDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.POCO
     /// selectByKind(ViewpointUsage)->    select(isComposite)viewRendering =    let renderings:
     /// OrderedSet(ViewRenderingMembership) =       
     /// featureMembership->selectByKind(ViewRenderingMembership) in    if renderings->isEmpty() then null   
-    /// else renderings->first().referencedRendering    endifviewCondition = featureMembership->   
+    /// else renderings->first().referencedRendering    endifviewCondition = ownedMembership->   
     /// selectByKind(ElementFilterMembership).    conditionfeatureMembership->   
     /// selectByKind(ViewRenderingMembership)->    size() <= 1specializesFromLibrary('Views::View')
     /// </summary>

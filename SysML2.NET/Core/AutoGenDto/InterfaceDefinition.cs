@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="InterfaceDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// An InterfaceDefinition is a ConnectionDefinition all of whose ends are PortUsages, defining an
     /// interface between elements that interact through such
-    /// ports.specializesFromLibrary("Interfaces::Interface")ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary("Interfaces::BinaryInterface")
+    /// ports.specializesFromLibrary('Interfaces::Interface')ownedEndFeature->size() = 2 implies   
+    /// specializesFromLibrary('Interfaces::BinaryInterface')
     /// </summary>
     public partial class InterfaceDefinition : IInterfaceDefinition
     {

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TransitionUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -39,9 +39,9 @@ namespace SysML2.NET.Core.POCO
     /// effectAction of the TransitionUsage.isComposite and owningType <> null
     /// and(owningType.oclIsKindOf(ActionDefinition) or  owningType.oclIsKindOf(ActionUsage)) andnot
     /// (owningType.oclIsKindOf(StateDefinition) or     owningType.oclIsKindOf(StateUsage)) implies   
-    /// specializesFromLibrary("Actions::Action::decisionTransitionActions")isComposite and owningType <>
-    /// null and(owningType.oclIsKindOf(StateDefinition) or owningType.oclIsKindOf(StateUsage)) implies   
-    /// specializesFromLibrary("States::State::stateTransitions")specializesFromLibrary("Actions::actions::transitionActions")source
+    /// specializesFromLibrary('Actions::Action::decisionTransitions')isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(StateDefinition) or owningType.oclIsKindOf(StateUsage)) implies   
+    /// specializesFromLibrary('States::State::stateTransitions')specializesFromLibrary('Actions::transitionActions')source
     /// =    if ownedMembership->isEmpty() then null    else        let member : Element =            
     /// ownedMembership->at(1).memberElement in         if not member.oclIsKindOf(ActionUsage) then null    
     ///    else member.oclAsKindOf(ActionUsage)        endif    endiftarget =    if
@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.POCO
     /// TransitionFeatureKind::trigger).transitionFeatures->   
     /// selectByKind(AcceptActionUsage)succession.sourceFeature =
     /// sourceownedMember->selectByKind(BindingConnector)->exists(b |    b.relatedFeatures->includes(source)
-    /// and    b.relatedFeatures->includes(inputParameter(2)))triggerAction->notEmpty() implies    let
+    /// and    b.relatedFeatures->includes(inputParameter(1)))triggerAction->notEmpty() implies    let
     /// payloadParameter : Feature = inputParameter(2) in    payloadParameter <> null and   
     /// payloadParameter.subsetsChain(triggerAction->at(1),
     /// triggerPayloadParameter())ownedMember->selectByKind(BindingConnector)->exists(b |   
@@ -347,7 +347,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

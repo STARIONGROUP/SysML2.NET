@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ItemUsage.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -35,9 +35,9 @@ namespace SysML2.NET.Core.DTO
     /// ItemDefinition, an ItemUsage is a ItemUsage of that ItemDefinition within a system. However, other
     /// kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
     /// Libraries.itemDefinition =
-    /// occurrenceDefinition->selectByKind(ItemDefinition)specializesFromLibrary("Items::items")isComposite
+    /// occurrenceDefinition->selectByKind(ItemDefinition)specializesFromLibrary('Items::items')isComposite
     /// and owningType <> null and(owningType.oclIsKindOf(ItemDefinition) or
-    /// owningType.oclIsKindOf(ItemUsage)) implies    specializesFromLibrary("Items::Item::subitem")
+    /// owningType.oclIsKindOf(ItemUsage)) implies    specializesFromLibrary('Items::Item::subitem')
     /// </summary>
     public partial class ItemUsage : IItemUsage
     {
@@ -117,7 +117,7 @@ namespace SysML2.NET.Core.DTO
         public bool IsComposite { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }

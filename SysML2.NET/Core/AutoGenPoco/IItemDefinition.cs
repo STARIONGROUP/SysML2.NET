@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IItemDefinition.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.POCO
     /// systems or parts of systems, but may also be things that are acted on by a system or parts of a
     /// system, but which do not necessarily perform actions themselves. This includes items that can be
     /// exchanged between parts of a system, such as water or electrical
-    /// signals.specializesFromLibrary("Items::Item")
+    /// signals.specializesFromLibrary('Items::Item')
     /// </summary>
     public partial interface IItemDefinition : IOccurrenceDefinition, IStructure
     {

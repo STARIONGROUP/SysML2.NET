@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TriggerInvocationExpression.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,7 +34,19 @@ namespace SysML2.NET.Core.POCO
     /// A TriggerInvocationExpression is an InvocationExpression that invokes one of the trigger Functions
     /// from the Kernel Semantic Library Triggers package, as indicated by its kind.specializesFromLibrary( 
     ///   if kind = TriggerKind::when then        'Triggers::TriggerWhen'    else if kind = TriggerKind::at
-    /// then        'Triggers::TriggerAt'    else         'Triggers::TriggerAfter'    endif endif)
+    /// then        'Triggers::TriggerAt'    else         'Triggers::TriggerAfter'    endif endif)kind =
+    /// TriggerKind::after implies    argument->notEmpty() and   
+    /// argument->at(1).result.specializesFromLibrary('Quantities::ScalarQuantityValue') and    let mRef :
+    /// Element =         resolveGlobal('Quantities::TensorQuantityValue::mRef').ownedMemberElement in   
+    /// argument->at(1).result.feature->        select(ownedRedefinition.redefinedFeature->          
+    /// closure(ownedRedefinition.redefinedFeature)->           includes(mRef))->       
+    /// exists(specializesFromLibrary('ISQBase::DurationUnit'))kind = TriggerKind::at implies   
+    /// argument->notEmpty() and   
+    /// argument->at(1).result.specializesFromLibrary('Time::TimeInstantValue')kind = TriggerKind::when
+    /// implies    argument->notEmpty() and    argument->at(1).oclIsKindOf(FeatureReferenceExpression) and  
+    ///  let referent : Feature =         argument->at(1).oclAsType(FeatureReferenceExpression).referent in 
+    ///   referent.oclIsKindOf(Expression) and   
+    /// referent.oclAsType(Expression).result.specializesFromLibrary('ScalarValues::Boolean')
     /// </summary>
     public partial class TriggerInvocationExpression : ITriggerInvocationExpression
     {
@@ -275,7 +287,7 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Feature.
+        /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsDerived { get; set; }
@@ -407,6 +419,15 @@ namespace SysML2.NET.Core.POCO
         public string QueryName()
         {
             throw new NotImplementedException("Derived property Name not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property Operand
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
+        public List<Expression> QueryOperand()
+        {
+            throw new NotImplementedException("Derived property Operand not yet supported");
         }
 
         /// <summary>

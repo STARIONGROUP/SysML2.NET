@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralInfinity.cs" company="RHEA System S.A.">
 //
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2024 RHEA System S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A LiteralInfinity is a LiteralExpression that provides the positive infinity value (*). It's result
-    /// must have the type Positive.
+    /// must have the type Positive.specializesFromLibrary('Performances::literalIntegerEvaluations')
     /// </summary>
     public partial interface ILiteralInfinity : ILiteralExpression
     {
