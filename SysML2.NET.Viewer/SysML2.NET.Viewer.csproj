@@ -22,8 +22,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.3" PrivateAssets="all" />
-        <PackageReference Include="ReactiveUI" Version="19.5.41" />
-        <PackageReference Include="Radzen.Blazor" Version="4.26.1" />
+        <PackageReference Include="ReactiveUI" Version="19.6.1" />
+        <PackageReference Include="Radzen.Blazor" Version="4.29.4" />
         <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
         <PackageReference Include="Serilog.Sinks.BrowserConsole" Version="2.0.0" />
     </ItemGroup>
