@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-	  <Company>RHEA System S.A.</Company>
+	  <Company>Starion Group S.A.</Company>
 	  <Authors>Sam Gerene</Authors>
 	  <Description>Nunit test suite for the SysML2.NET.Viewer project</Description>
-	  <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+	  <Copyright>Copyright 2022 Starion Group S.A.</Copyright>
 	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-	  <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+	  <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
 	  <RepositoryType>Git</RepositoryType>
 	  <ImplicitUsings>false</ImplicitUsings>
 	  <Nullable>disable</Nullable>

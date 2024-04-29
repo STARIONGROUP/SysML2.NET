@@ -2,16 +2,16 @@
 
 SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release). SysML2.NET provides a number of libraries in the form on an SDK as well as reference implementation such as a web-application and REST API.
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=coverage)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_SysML2.NET&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_SysML2.NET)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=coverage)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
 
 ## Installation
 
@@ -36,8 +36,8 @@ GitHub actions are used to build and test the library
 
 Branch | Build Status
 ------- | :------------
-Master | ![Build Status](https://github.com/RHEAGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
-Development | ![Build Status](https://github.com/RHEAGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
+Master | ![Build Status](https://github.com/STARIONGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
+Development | ![Build Status](https://github.com/STARIONGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
 
 # License
 
@@ -45,4 +45,4 @@ The SysML2.NET libraries and reference web-application are provided to the commu
 
 # Contributions
 
-Contributions to the code-base are welcome. However, before we can accept your contributions we ask any contributor to sign the Contributor License Agreement (CLA) and send this digitaly signed to s.gerene@rheagroup.com. You can find the CLA's in the CLA folder.
+Contributions to the code-base are welcome. However, before we can accept your contributions we ask any contributor to sign the Contributor License Agreement (CLA) and send this digitaly signed to s.gerene@stariongroup.eu. You can find the CLA's in the CLA folder.

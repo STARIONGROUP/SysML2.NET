@@ -1,0 +1,202 @@
+﻿body
+{
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 300;
+    font-size: 14px;
+}
+
+html, body {
+  height: 100%;
+}
+ 
+.wrap {
+  height: 100vh;
+  display: flex;
+}
+
+main {
+  flex: 1;
+  display: flex;
+}
+ 
+aside, article {
+  overflow-y: scroll;
+  padding: 2em;
+}
+
+aside h3{
+	font-size:15px;
+	font-weight: bold;
+}
+ 
+aside {
+  flex: 1;
+}
+ 
+article {
+  flex: 3;
+}
+
+/*
+	Ex Machina by TEMPLATED
+    templated.co @templatedco
+    Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+*/
+
+@charset 'UTF-8';
+
+@font-face{font-family:'FontAwesome';src:url('font/fontawesome-webfont.eot?v=4.0.1');src:url('font/fontawesome-webfont.eot?#iefix&v=4.0.1') format('embedded-opentype'),url('font/fontawesome-webfont.woff?v=4.0.1') format('woff'),url('font/fontawesome-webfont.ttf?v=4.0.1') format('truetype'),url('font/fontawesome-webfont.svg?v=4.0.1#fontawesomeregular') format('svg');font-weight:normal;font-style:normal}
+
+.starion-table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;    
+    text-align: left;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #69c;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+.starion-table th {
+    font-weight: bold;
+    color: #05A6E5;
+    padding: 15px 10px 10px;
+}
+
+.starion-table tbody {
+    background: #e8edff;
+}
+
+.starion-table tfoot {
+    font-size: 10px;
+}
+
+.starion-table td {
+    color: #669;
+    border-top: 1px solid #69c;
+    padding: 10px;
+	vertical-align: top;
+}
+
+.starion-table a {
+    color: #FF0505;
+	text-decoration: underline;
+}
+	
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ul {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+.rectangle-list li{
+    position: relative;
+    *padding: .4em;
+    margin: .5em 0 2.5em 0em;
+    color: #444;
+    text-decoration: none;
+    transition: all .3s ease-out;
+    letter-spacing: 1px;
+	/*text-transform: uppercase;*/
+	font-size: 6pt;
+}
+
+.rectangle-list a{
+    position: relative;
+    /*text-transform: uppercase;*/
+    padding: .4em .4em .4em .8em;
+    *padding: .4em;
+    margin: .5em 0 .5em 2.5em;
+    background: #fff;
+    color: #00A4E4;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all .3s ease-out;
+    font-size: 8pt;	
+}
+
+.rectangle-list a:hover{
+    background: #eee;
+}   
+
+.rectangle-list a:before{
+    content: counter(li);
+    counter-increment: li;
+    position: absolute; 
+    left: -2.5em;
+    top: 50%;
+    margin-top: -1em;
+    background: #BFD9FF;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    font-weight: bold;
+}
+
+ul.rectangle-list a:before{
+    content:"";
+	font-family: FontAwesome;
+    counter-increment: li;
+    position: absolute; 
+    left: -2.5em;
+    top: 50%;
+    margin-top: -1em;
+    background: #BFD9FF;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    font-weight: bold;
+	
+	text-decoration: none;
+	font-style: normal;
+
+    -webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale;
+}
+
+.rectangle-list a:after{
+    position: absolute; 
+    content: '';
+    border: .5em solid transparent;
+    left: -1em;
+    top: 50%;
+    margin-top: -.5em;
+    transition: all .3s ease-out;               
+}
+
+.rectangle-list a:hover:after{
+    left: -.5em;
+    border-left-color: #BFD9FF;             
+}
+
+h2 {
+    font-size: 1.8em;
+	font-weight: bold;
+}
+
+h3 {
+    font-size: 1.5em;
+	font-weight: bold;
+}
+
+h4 {
+    font-size: 1.2em;
+	font-weight: bold;
+}

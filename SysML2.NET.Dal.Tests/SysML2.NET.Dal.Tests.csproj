@@ -3,12 +3,12 @@
   <PropertyGroup>
       <TargetFramework>net8.0</TargetFramework>
       <LangVersion>11.0</LangVersion>
-      <Company>RHEA System S.A.</Company>
+      <Company>Starion Group S.A.</Company>
       <Authors>Sam Gerene</Authors>
       <Description>Nunit test suite for the SysML2.NET.CodeGenerator</Description>
-      <Copyright>Copyright © RHEA System S.A.</Copyright>
+      <Copyright>Copyright © Starion Group S.A.</Copyright>
       <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-      <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+      <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
       <RepositoryType>Git</RepositoryType>
       <ImplicitUsings>false</ImplicitUsings>
       <Nullable>disable</Nullable>

@@ -5,10 +5,10 @@
         <LangVersion>11.0</LangVersion>
         <Version>0.12.0</Version>
         <Description>A .NET implementation of the REST/HTTP Platform-specific model (PSM) of the SysML v2 API and Services.</Description>
-        <Company>RHEA System S.A.</Company>
-        <Copyright>Copyright © RHEA System S.A.</Copyright>
+        <Company>Starion Group S.A.</Company>
+        <Copyright>Copyright © Starion Group S.A.</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <Authors>Sam Gerené</Authors>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>

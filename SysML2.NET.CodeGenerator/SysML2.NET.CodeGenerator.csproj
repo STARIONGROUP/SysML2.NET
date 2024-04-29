@@ -6,10 +6,10 @@
       <Version>0.8.0</Version>
       <Description>A Library to generate SysML v2 code.</Description>
       <PackageId>SysML2.NET</PackageId>
-      <Company>RHEA System S.A.</Company>
-      <Copyright>Copyright © RHEA System S.A.</Copyright>
+      <Company>Starion Group S.A.</Company>
+      <Copyright>Copyright © Starion Group S.A.</Copyright>
       <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-      <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+      <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
       <RepositoryType>Git</RepositoryType>
       <Authors>Sam Gerene</Authors>
       <ImplicitUsings>false</ImplicitUsings>
@@ -75,7 +75,7 @@
       <None Update="Resources\HtmlDocs\css\images\rhea_logo_small.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Resources\HtmlDocs\css\rheaclassdocs.css">
+      <None Update="Resources\HtmlDocs\css\starionclassdocs.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\core-dal-element-extensions.hbs">

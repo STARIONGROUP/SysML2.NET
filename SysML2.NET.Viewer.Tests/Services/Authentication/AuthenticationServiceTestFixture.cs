@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="AuthenticationServiceTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="AuthenticationServiceTestFixture.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2023 RHEA System S.A.
+//   Copyright 2022-2023 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ namespace SysML2.NET.Viewer.Tests.Services.Authentication
         {
             var cts = new CancellationTokenSource();
             
-            var result = await this.authenticationService.Login("John", "Doe", "http:www.rheagroup.com", cts.Token);
+            var result = await this.authenticationService.Login("John", "Doe", "http://www.stariongroup.eu", cts.Token);
 
             Assert.That(result, Is.EqualTo(AuthenticationStatusKind.Success));
         }
@@ -76,7 +76,7 @@ namespace SysML2.NET.Viewer.Tests.Services.Authentication
                     x.Open(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Throws<Exception>();
 
-            var result = await this.authenticationService.Login("John", "Doe", "http:www.rheagroup.com", cts.Token);
+            var result = await this.authenticationService.Login("John", "Doe", "http://www.stariongroup.eu", cts.Token);
 
             Assert.That(result, Is.EqualTo(AuthenticationStatusKind.Fail));
         }

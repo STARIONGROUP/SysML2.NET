@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="ApiSerializerTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="ApiSerializerTestFixture.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2024 RHEA System S.A.
+//   Copyright 2022-2024 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 DefaultBranch = Guid.Parse("a910a705-7fbe-415f-9cbb-624bfadf6c20"),
                 Description = "this is a description",
                 Name = "test project",
-                ResourceIdentifier = "http://www.rheagroup.com/project",
+                ResourceIdentifier = "http://www.stariongroup.eu/project",
             };
 
             this.commit = new Commit
@@ -73,7 +73,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Description = "",
                 OwningProject = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
                 PreviousCommits = null,
-                ResourceIdentifier = "http://www.rheagroup.com/commit",
+                ResourceIdentifier = "http://www.stariongroup.eu/commit",
             };
 
             this.branch = new Branch
@@ -85,7 +85,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Head = Guid.Parse("94e5b40e-741e-49ca-bd7f-f3138c071bf9"),
                 Name = "branch name",
                 OwningProject = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
-                ResourceIdentifier = "http://www.rheagroup.com/branch",
+                ResourceIdentifier = "http://http://www.stariongroup.eu/branch",
             };
         }
 

@@ -3,14 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
       <LangVersion>11.0</LangVersion>
-      <Company>RHEA System S.A.</Company>
+      <Company>Starion Group S.A.</Company>
       <Title>SysML2 Viewer</Title>
       <Version>0.12.0</Version>
       <Description>Web Application to inspect SysML2 model server</Description>
-      <Copyright>Copyright © RHEA System S.A.</Copyright>
+      <Copyright>Copyright © Starion Group S.A.</Copyright>
       <Authors>Sam Gerené</Authors>
       <Confi1gurations>Debug;Release</Confi1gurations>
-      <RepositoryUrl>https://github.com/RHEAGROUP/SysML2.NET.git</RepositoryUrl>
+      <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
       <RepositoryType>Git</RepositoryType>
       <ImplicitUsings>false</ImplicitUsings>
       <Nullable>disable</Nullable>
