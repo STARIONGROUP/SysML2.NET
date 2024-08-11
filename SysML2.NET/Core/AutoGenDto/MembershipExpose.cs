@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.DTO
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
             this.Target = new List<Guid>();
-            this.Visibility = VisibilityKind.Public;
+            this.Visibility = VisibilityKind.Private;
         }
 
         /// <summary>
@@ -160,6 +160,7 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// The visibility level of the imported members from this Import relative to the importOwningNamespace.
+        /// The default is private.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public VisibilityKind Visibility { get; set; }

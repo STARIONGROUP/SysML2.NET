@@ -37,7 +37,8 @@ namespace SysML2.NET.Core.POCO
     /// (the default), then only public Memberships are considered &quot;visible&quot;. If isImportAll =
     /// true, then all Memberships are considered &quot;visible&quot;, regardless of their declared
     /// visibility. If isRecursive = true, then visible Memberships are also recursively imported from owned
-    /// sub-Namespaces.
+    /// sub-Namespaces.importOwningNamespace.owningNamespace = null implies     visibility =
+    /// VisibilityKind::private
     /// </summary>
     public partial interface IImport : IRelationship
     {
@@ -67,6 +68,7 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// The visibility level of the imported members from this Import relative to the importOwningNamespace.
+        /// The default is private.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         VisibilityKind Visibility { get; set; }

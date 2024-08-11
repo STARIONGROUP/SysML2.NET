@@ -221,6 +221,15 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property FeatureTarget
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Feature QueryFeatureTarget()
+        {
+            throw new NotImplementedException("Derived property FeatureTarget not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property FeaturingType
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]

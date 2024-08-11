@@ -108,7 +108,13 @@ namespace SysML2.NET.Core.DTO
     /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
     /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
     /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
-    /// specializesFromLibrary('Occurrence::Occurrence::portions')
+    /// specializesFromLibrary('Occurrence::Occurrence::portions')featureTarget = if
+    /// chainingFeature->isEmpty() then self else chainingFeature->last() endifowningType <> null
+    /// andowningType.oclIsKindOf(InvocationExpression) andlet owningInvocation: InvocationExpression =
+    /// owningType.oclAsType(InvocationExpression) inself = owningInvocation.result andnot
+    /// owningInvocation.ownedTyping->exists(oclIsKindOf(Function)) andnot
+    /// owningInvocation.ownedSubsetting->reject(isImplied).subsettedFeature.type->exists(oclIsKindOf(Function))
+    /// implies    owningInvocation.ownedTyping->forAll(type | self.specializes(type))
     /// </summary>
     public partial interface IFeature : IType
     {

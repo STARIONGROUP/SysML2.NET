@@ -53,7 +53,7 @@ namespace SysML2.NET.Core.POCO
             this.OwnedRelationship = new List<IRelationship>();
             this.Source = new List<IElement>();
             this.Target = new List<IElement>();
-            this.Visibility = VisibilityKind.Public;
+            this.Visibility = VisibilityKind.Private;
         }
 
         /// <summary>
@@ -289,6 +289,7 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// The visibility level of the imported members from this Import relative to the importOwningNamespace.
+        /// The default is private.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public VisibilityKind Visibility { get; set; }

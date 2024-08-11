@@ -44,12 +44,7 @@ namespace SysML2.NET.Core.POCO
     /// if kind = StateSubactionKind::entry then       
     /// redefinesFromLibrary('States::StateAction::entryAction')    else if kind = StateSubactionKind::do
     /// then        redefinesFromLibrary('States::StateAction::doAction')    else       
-    /// redefinesFromLibrary('States::StateAction::exitAction')    endif endifowningType <> null and   
-    /// (owningType.oclIsKindOf(AnalysisCaseDefinition) and       
-    /// owningType.oclAsType(AnalysisCaseDefinition).analysisAction->            includes(self) or    
-    /// owningType.oclIsKindOf(AnalysisCaseUsage) and       
-    /// owningType.oclAsType(AnalysisCaseUsage).analysisAction->            includes(self)) implies   
-    /// specializesFromLibrary('AnalysisCases::AnalysisCase::analysisSteps')
+    /// redefinesFromLibrary('States::StateAction::exitAction')    endif endif
     /// </summary>
     public partial interface IActionUsage : IOccurrenceUsage, IStep
     {

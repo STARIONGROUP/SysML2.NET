@@ -31,8 +31,7 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An AnalysisCaseUsage is a Usage of an AnalysisCaseDefinition.analysisAction = usage->select(   
-    /// isComposite and    specializes('AnalysisCases::AnalysisAction'))resultExpression =    let results :
+    /// An AnalysisCaseUsage is a Usage of an AnalysisCaseDefinition.resultExpression =    let results :
     /// OrderedSet(ResultExpressionMembership) =        featureMembersip->           
     /// selectByKind(ResultExpressionMembership) in    if results->isEmpty() then null    else
     /// results->first().ownedResultExpression   
@@ -42,12 +41,6 @@ namespace SysML2.NET.Core.POCO
     /// </summary>
     public partial interface IAnalysisCaseUsage : ICaseUsage
     {
-        /// <summary>
-        /// Queries the derived property AnalysisAction
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ActionUsage> QueryAnalysisAction();
-
         /// <summary>
         /// Queries the derived property AnalysisCaseDefinition
         /// </summary>

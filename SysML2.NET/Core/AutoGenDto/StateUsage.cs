@@ -42,14 +42,14 @@ namespace SysML2.NET.Core.DTO
     /// selectByKind(StateSubactionMembership)->            select(kind = StateSubactionKind::entry) in   
     /// if entryMemberships->isEmpty() then null    else entryMemberships->at(1)    endifisParallel implies 
     ///   nestedAction.incomingTransition->isEmpty() and   
-    /// nestedAction.outgoingTransition->isEmpty()isSubstateUsage(true) implies   
-    /// specializesFromLibrary('States::State::substates')exitAction =    let exitMemberships :
+    /// nestedAction.outgoingTransition->isEmpty()isSubstateUsage(false) implies   
+    /// specializesFromLibrary('States::StateAction::exclusiveStates')exitAction =    let exitMemberships :
     /// Sequence(StateSubactionMembership) =        ownedMembership->           
     /// selectByKind(StateSubactionMembership)->            select(kind = StateSubactionKind::exit) in    if
     /// exitMemberships->isEmpty() then null    else exitMemberships->at(1)   
     /// endifspecializesFromLibrary('States::stateActions')ownedMembership->   
-    /// selectByKind(StateSubactionMembership)->    isUnique(kind)isSubstateUsage(false) implies   
-    /// specializesFromLibrary('States::State::substates')
+    /// selectByKind(StateSubactionMembership)->    isUnique(kind)isSubstateUsage(true) implies   
+    /// specializesFromLibrary('States::StateAction::substates')
     /// </summary>
     public partial class StateUsage : IStateUsage
     {

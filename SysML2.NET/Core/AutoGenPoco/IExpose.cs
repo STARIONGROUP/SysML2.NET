@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// An Expose is an Import of Memberships into a ViewUsage that provide the Elements to be included in a
     /// view. Visibility is always ignored for an Expose (i.e., isImportAll =
-    /// true).isImportAllimportOwningNamespace.oclIsType(ViewUsage)
+    /// true).isImportAllimportOwningNamespace.oclIsType(ViewUsage)visibility = VisibilityKind::protected
     /// </summary>
     public partial interface IExpose : IImport
     {

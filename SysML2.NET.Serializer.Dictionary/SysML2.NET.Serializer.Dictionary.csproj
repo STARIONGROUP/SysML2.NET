@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
       <LangVersion>11.0</LangVersion>
-      <Version>0.13.0</Version>
+      <Version>0.14.0</Version>
       <Description>A .NET implementation of the OMG SysML v2 Dictionary serializer.</Description>
       <PackageId>SysML2.NET.Serializer.Dictionary</PackageId>
       <Company>Starion Group S.A.</Company>

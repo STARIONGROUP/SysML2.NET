@@ -32,11 +32,10 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An AnalysisCaseDefinition is a CaseDefinition for the case of carrying out an
-    /// analysis.analysisAction = action->select(    isComposite and    
-    /// specializes('AnalysisCases::AnalysisAction'))resultExpression =    let results :
-    /// OrderedSet(ResultExpressionMembership) =        featureMembersip->           
-    /// selectByKind(ResultExpressionMembership) in    if results->isEmpty() then null    else
-    /// results->first().ownedResultExpression    endifspecializesFromLibrary('AnalysisCases::AnalysisCase')
+    /// analysis.resultExpression =    let results : OrderedSet(ResultExpressionMembership) =       
+    /// featureMembersip->            selectByKind(ResultExpressionMembership) in    if results->isEmpty()
+    /// then null    else results->first().ownedResultExpression   
+    /// endifspecializesFromLibrary('AnalysisCases::AnalysisCase')
     /// </summary>
     public partial class AnalysisCaseDefinition : IAnalysisCaseDefinition
     {
@@ -82,15 +81,6 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// Queries the derived property AnalysisAction
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ActionUsage> QueryAnalysisAction()
-        {
-            throw new NotImplementedException("Derived property AnalysisAction not yet supported");
-        }
 
         /// <summary>
         /// Queries the derived property Calculation

@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.DTO
     /// FeatureDirectionKind::out or    direction = FeatureDirectionKind::inout)input = feature->select(f | 
     ///    let direction: FeatureDirectionKind = directionOf(f) in    direction =
     /// FeatureDirectionKind::_'in' or    direction = FeatureDirectionKind::inout)inheritedMembership =
-    /// inheritedMemberships(Set{})specializesFromLibrary('Base::Anything')directedFeature =
+    /// inheritedMemberships(Set{}, false)specializesFromLibrary('Base::Anything')directedFeature =
     /// feature->select(f | directionOf(f) <> null)feature =
     /// featureMembership.ownedMemberFeaturefeatureMembership = ownedFeatureMembership->union(   
     /// inheritedMembership->selectByKind(FeatureMembership))ownedFeature =

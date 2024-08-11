@@ -32,10 +32,10 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An InvocationExpression is an Expression each of whose input parameters are bound to the result of
-    /// an argument Expression.not ownedTyping->exists(oclIsKindOf(Behavior)) andnot
-    /// ownedSubsetting.subsettedFeature.type->exists(oclIsKindOf(Behavior)) implies   
-    /// ownedFeature.selectByKind(BindingConnector)->exists(        relatedFeature->includes(self) and      
-    ///  relatedFeature->includes(result))            TBDownedFeature->    select(direction =
+    /// an argument Expression.not ownedTyping->exists(oclIsKindOf(Function)) andnot
+    /// ownedSubsetting->reject(isImplied).subsettedFeature.type->    exists(oclIsKindOf(Function)) implies 
+    ///   ownedFeature.selectByKind(BindingConnector)->exists(        relatedFeature->includes(self) and    
+    ///    relatedFeature->includes(result))            TBDownedFeature->    select(direction =
     /// _'in').valuation->    select(v | v <> null).valuelet features : Set(Feature) = type.feature->asSet()
     /// ininput->forAll(inp |     inp.ownedRedefinition.redefinedFeature->       
     /// intersection(features)->size() = 1)let features : Set(Feature) = type.feature->asSet()

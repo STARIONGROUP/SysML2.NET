@@ -32,11 +32,10 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An AnalysisCaseDefinition is a CaseDefinition for the case of carrying out an
-    /// analysis.analysisAction = action->select(    isComposite and    
-    /// specializes('AnalysisCases::AnalysisAction'))resultExpression =    let results :
-    /// OrderedSet(ResultExpressionMembership) =        featureMembersip->           
-    /// selectByKind(ResultExpressionMembership) in    if results->isEmpty() then null    else
-    /// results->first().ownedResultExpression    endifspecializesFromLibrary('AnalysisCases::AnalysisCase')
+    /// analysis.resultExpression =    let results : OrderedSet(ResultExpressionMembership) =       
+    /// featureMembersip->            selectByKind(ResultExpressionMembership) in    if results->isEmpty()
+    /// then null    else results->first().ownedResultExpression   
+    /// endifspecializesFromLibrary('AnalysisCases::AnalysisCase')
     /// </summary>
     public partial interface IAnalysisCaseDefinition : ICaseDefinition
     {

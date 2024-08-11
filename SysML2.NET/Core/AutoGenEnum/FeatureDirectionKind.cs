@@ -31,20 +31,19 @@ namespace SysML2.NET.Core
     public enum FeatureDirectionKind
     {
         /// <summary>
-        /// Values of the Feature on each instance of its domain are determined externally
-        /// to that instance and used internally.
+        /// Values of the Feature on each instance of its domain are determined externally to that instance and
+        /// used internally.
         /// </summary>
         In = 0,
 
         /// <summary>
-        /// Values of the Feature on each instance are determined either as in or
-        /// out directions, or both.
+        /// Values of the Feature on each instance are determined either as in or out directions, or both.
         /// </summary>
         Inout = 1,
 
         /// <summary>
-        /// Values of the Feature on each instance of its domain are determined internally to that instance
-        /// and used externally.
+        /// Values of the Feature on each instance of its domain are determined internally to that instance and
+        /// used externally.
         /// </summary>
         Out = 2,
 

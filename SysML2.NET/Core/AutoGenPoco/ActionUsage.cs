@@ -44,12 +44,7 @@ namespace SysML2.NET.Core.POCO
     /// if kind = StateSubactionKind::entry then       
     /// redefinesFromLibrary('States::StateAction::entryAction')    else if kind = StateSubactionKind::do
     /// then        redefinesFromLibrary('States::StateAction::doAction')    else       
-    /// redefinesFromLibrary('States::StateAction::exitAction')    endif endifowningType <> null and   
-    /// (owningType.oclIsKindOf(AnalysisCaseDefinition) and       
-    /// owningType.oclAsType(AnalysisCaseDefinition).analysisAction->            includes(self) or    
-    /// owningType.oclIsKindOf(AnalysisCaseUsage) and       
-    /// owningType.oclAsType(AnalysisCaseUsage).analysisAction->            includes(self)) implies   
-    /// specializesFromLibrary('AnalysisCases::AnalysisCase::analysisSteps')
+    /// redefinesFromLibrary('States::StateAction::exitAction')    endif endif
     /// </summary>
     public partial class ActionUsage : IActionUsage
     {
@@ -220,6 +215,15 @@ namespace SysML2.NET.Core.POCO
         public List<FeatureMembership> QueryFeatureMembership()
         {
             throw new NotImplementedException("Derived property FeatureMembership not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property FeatureTarget
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Feature QueryFeatureTarget()
+        {
+            throw new NotImplementedException("Derived property FeatureTarget not yet supported");
         }
 
         /// <summary>
