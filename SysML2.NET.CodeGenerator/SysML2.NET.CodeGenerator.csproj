@@ -21,8 +21,8 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ECoreNetto.HandleBars" Version="3.0.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.10.0" />
+        <PackageReference Include="ECoreNetto.HandleBars" Version="5.2.1" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.11.0" />
         <PackageReference Include="RHEA.OpenApi" Version="0.5.0" />
     </ItemGroup>
 

@@ -23,7 +23,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using System;
 
     using ECoreNetto;
-
+    
     using HandlebarsDotNet;
 
     using SysML2.NET.CodeGenerator.Extensions;

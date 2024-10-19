@@ -24,6 +24,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
     
     using ECoreNetto;
     using ECoreNetto.Extensions;
+    using ECoreNetto.Reporting.Generators;
 
     using NUnit.Framework;
 

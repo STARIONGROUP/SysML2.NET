@@ -289,34 +289,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
-        /// returns the <see cref="ENamedElement"/> ordered by Name.
-        /// </summary>
-        /// <param name="namedElements">
-        /// the source <see cref="IEnumerable{ENamedElement}"/>
-        /// </param>
-        /// <returns>
-        /// the sorted <see cref="IEnumerable{ENamedElement}"/>
-        /// </returns>
-        public static IEnumerable<ENamedElement> QuerySortedByName(IEnumerable<ENamedElement> namedElements)
-        {
-            return namedElements.OrderBy(x => x.Name).ToList();
-        }
-        
-        /// <summary>
-        /// Queries whether the <see cref="EStructuralFeature"/> is nullable
-        /// </summary>
-        /// <param name="eStructuralFeature">
-        /// The subject <see cref="EStructuralFeature"/>
-        /// </param>
-        /// <returns>
-        /// true if <see cref="EStructuralFeature.LowerBound"/> = 0, false if not
-        /// </returns>
-        public static bool QueryIsNullable(this EStructuralFeature eStructuralFeature)
-        {
-            return eStructuralFeature.LowerBound == 0 && !eStructuralFeature.QueryIsEnumerable();
-        }
-
-        /// <summary>
         /// Queries whether the <see cref="EStructuralFeature"/> is a scalar
         /// </summary>
         /// <param name="eStructuralFeature">

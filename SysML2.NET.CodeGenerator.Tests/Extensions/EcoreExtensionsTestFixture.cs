@@ -20,11 +20,8 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     using ECoreNetto;
+    
     using NUnit.Framework;
     using SysML2.NET.CodeGenerator.Extensions;
 
