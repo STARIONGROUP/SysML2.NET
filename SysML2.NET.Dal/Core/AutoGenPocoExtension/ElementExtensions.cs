@@ -354,6 +354,8 @@ namespace SysML2.NET.Dal
                     return successionFlowConnectionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionFlowConnectionUsage)dto);
                 case Core.POCO.SuccessionItemFlow successionItemFlowPoco:
                     return successionItemFlowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionItemFlow)dto);
+                case Core.POCO.TerminateActionUsage terminateActionUsagePoco:
+                    return terminateActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TerminateActionUsage)dto);
                 case Core.POCO.TextualRepresentation textualRepresentationPoco:
                     return textualRepresentationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TextualRepresentation)dto);
                 case Core.POCO.TransitionFeatureMembership transitionFeatureMembershipPoco:
@@ -865,6 +867,9 @@ namespace SysML2.NET.Dal
                     break;
                 case Core.POCO.SuccessionItemFlow successionItemFlowPoco:
                     successionItemFlowPoco.UpdateReferenceProperties((Core.DTO.SuccessionItemFlow)dto, cache);
+                    break;
+                case Core.POCO.TerminateActionUsage terminateActionUsagePoco:
+                    terminateActionUsagePoco.UpdateReferenceProperties((Core.DTO.TerminateActionUsage)dto, cache);
                     break;
                 case Core.POCO.TextualRepresentation textualRepresentationPoco:
                     textualRepresentationPoco.UpdateReferenceProperties((Core.DTO.TextualRepresentation)dto, cache);

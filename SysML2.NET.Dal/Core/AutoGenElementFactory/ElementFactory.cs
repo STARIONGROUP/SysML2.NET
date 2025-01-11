@@ -488,6 +488,9 @@ namespace SysML2.NET.Dal
                 case Core.DTO.SuccessionItemFlow successionItemFlowDto:
                     var successionItemFlowFactory = new SuccessionItemFlowFactory();
                     return successionItemFlowFactory.Create(successionItemFlowDto);
+                case Core.DTO.TerminateActionUsage terminateActionUsageDto:
+                    var terminateActionUsageFactory = new TerminateActionUsageFactory();
+                    return terminateActionUsageFactory.Create(terminateActionUsageDto);
                 case Core.DTO.TextualRepresentation textualRepresentationDto:
                     var textualRepresentationFactory = new TextualRepresentationFactory();
                     return textualRepresentationFactory.Create(textualRepresentationDto);

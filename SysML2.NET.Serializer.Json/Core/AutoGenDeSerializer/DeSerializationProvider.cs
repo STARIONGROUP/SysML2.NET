@@ -188,6 +188,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             { "SuccessionAsUsage", SuccessionAsUsageDeSerializer.DeSerialize },
             { "SuccessionFlowConnectionUsage", SuccessionFlowConnectionUsageDeSerializer.DeSerialize },
             { "SuccessionItemFlow", SuccessionItemFlowDeSerializer.DeSerialize },
+            { "TerminateActionUsage", TerminateActionUsageDeSerializer.DeSerialize },
             { "TextualRepresentation", TextualRepresentationDeSerializer.DeSerialize },
             { "TransitionFeatureMembership", TransitionFeatureMembershipDeSerializer.DeSerialize },
             { "TransitionUsage", TransitionUsageDeSerializer.DeSerialize },

@@ -182,6 +182,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             { "SuccessionAsUsage", SuccessionAsUsageDictionaryReader.Read },
             { "SuccessionFlowConnectionUsage", SuccessionFlowConnectionUsageDictionaryReader.Read },
             { "SuccessionItemFlow", SuccessionItemFlowDictionaryReader.Read },
+            { "TerminateActionUsage", TerminateActionUsageDictionaryReader.Read },
             { "TextualRepresentation", TextualRepresentationDictionaryReader.Read },
             { "TransitionFeatureMembership", TransitionFeatureMembershipDictionaryReader.Read },
             { "TransitionUsage", TransitionUsageDictionaryReader.Read },

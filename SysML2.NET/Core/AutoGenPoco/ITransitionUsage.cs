@@ -42,13 +42,13 @@ namespace SysML2.NET.Core.POCO
     /// specializesFromLibrary('Actions::Action::decisionTransitions')isComposite and owningType <> null
     /// and(owningType.oclIsKindOf(StateDefinition) or owningType.oclIsKindOf(StateUsage)) implies   
     /// specializesFromLibrary('States::State::stateTransitions')specializesFromLibrary('Actions::transitionActions')source
-    /// =    if ownedMembership->isEmpty() then null    else        let member : Element =            
-    /// ownedMembership->at(1).memberElement in         if not member.oclIsKindOf(ActionUsage) then null    
-    ///    else member.oclAsKindOf(ActionUsage)        endif    endiftarget =    if
-    /// succession.targetFeature->isEmpty() then null    else        let targetFeature : Feature =          
-    ///   succession.targetFeature->at(1) in        if not targetFeature.oclIsKindOf(ActionUsage) then null 
-    ///       else targetFeature.oclAsType(ActionUsage)        endif    endiftriggerAction =
-    /// ownedFeatureMembership->    selectByKind(TransitionFeatureMembership)->    select(kind =
+    /// =    let sourceFeature : Feature = sourceFeature() in    if sourceFeature = null then null    else
+    /// sourceFeature.featureTarget.oclAsType(ActionUsage)target =    if succession.targetFeature->isEmpty()
+    /// then null    else        let targetFeature : Feature =           
+    /// succession.targetFeature->first().featureTarget in        if not
+    /// targetFeature.oclIsKindOf(ActionUsage) then null        else targetFeature.oclAsType(ActionUsage)   
+    ///     endif    endiftriggerAction = ownedFeatureMembership->   
+    /// selectByKind(TransitionFeatureMembership)->    select(kind =
     /// TransitionFeatureKind::trigger).transitionFeature->    selectByKind(AcceptActionUsage)let
     /// successions : Sequence(Successions) =     ownedMember->selectByKind(Succession)
     /// insuccessions->notEmpty() andsuccessions->at(1).targetFeature->   

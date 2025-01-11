@@ -182,6 +182,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             { typeof(SysML2.NET.Core.DTO.SuccessionAsUsage), SuccessionAsUsageSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.SuccessionFlowConnectionUsage), SuccessionFlowConnectionUsageSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.SuccessionItemFlow), SuccessionItemFlowSerializer.Serialize },
+            { typeof(SysML2.NET.Core.DTO.TerminateActionUsage), TerminateActionUsageSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.TextualRepresentation), TextualRepresentationSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.TransitionFeatureMembership), TransitionFeatureMembershipSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.TransitionUsage), TransitionUsageSerializer.Serialize },

@@ -182,6 +182,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             { typeof(SysML2.NET.Core.DTO.SuccessionAsUsage), SuccessionAsUsageDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.SuccessionFlowConnectionUsage), SuccessionFlowConnectionUsageDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.SuccessionItemFlow), SuccessionItemFlowDictionaryWriter.Write },
+            { typeof(SysML2.NET.Core.DTO.TerminateActionUsage), TerminateActionUsageDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.TextualRepresentation), TextualRepresentationDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.TransitionFeatureMembership), TransitionFeatureMembershipDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.TransitionUsage), TransitionUsageDictionaryWriter.Write },
