@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-      <LangVersion>11.0</LangVersion>
+      <LangVersion>12.0</LangVersion>
       <Company>Starion Group S.A.</Company>
       <Authors>Sam Gerene</Authors>
       <Description>Nunit test suite for the SysML2.NET.Serializer.Dictionary library</Description>
