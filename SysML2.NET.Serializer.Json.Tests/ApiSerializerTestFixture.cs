@@ -72,7 +72,7 @@ namespace SysML2.NET.Serializer.Json.Tests
                 Created = new DateTime(1976, 8, 20),
                 Description = "",
                 OwningProject = Guid.Parse("9b0e1914-3241-461e-b9ee-a3ff5120de4e"),
-                PreviousCommits = null,
+                PreviousCommit = Guid.Empty,
                 ResourceIdentifier = "http://www.stariongroup.eu/commit",
             };
 
