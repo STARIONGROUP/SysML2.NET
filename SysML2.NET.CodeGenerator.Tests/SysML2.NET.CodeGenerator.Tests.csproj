@@ -408,7 +408,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Generators\OpenApiHandleBarsGenerators\" />
       <Folder Include="Inspector\" />
     </ItemGroup>
 
