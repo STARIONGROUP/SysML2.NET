@@ -52,8 +52,8 @@ namespace SysML2.NET.PIM.DTO
         public Guid OwningProject { get; set; }
 
         /// <summary>
-        /// Gets or sets the sets the set of immediately preceding <see cref="Commit"/>s
+        /// Gets or sets the immediately preceding <see cref="Commit"/>s
         /// </summary>
-        public List<Guid> PreviousCommits { get; set; } = new List<Guid>();
+        public Guid PreviousCommit { get; set; }
     }
 }
