@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>net8.0</TargetFramework>
+      <TargetFramework>net9.0</TargetFramework>
       <LangVersion>12.0</LangVersion>
       <Version>0.14.0</Version>
       <Description>A Library to generate SysML v2 code.</Description>
@@ -21,8 +21,8 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ECoreNetto.HandleBars" Version="5.2.1" />
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.11.0" />
+        <PackageReference Include="ECoreNetto.HandleBars" Version="6.0.2" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" />
         <PackageReference Include="RHEA.OpenApi" Version="0.5.0" />
     </ItemGroup>
 
