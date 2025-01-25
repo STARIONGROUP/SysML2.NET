@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeature.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -67,10 +67,8 @@ namespace SysML2.NET.Core.POCO
     /// specializesFromLibrary('Links::Link::participant')isComposite
     /// andownedTyping.type->includes(oclIsKindOf(Structure)) andowningType <> null
     /// and(owningType.oclIsKindOf(Structure) or owningType.type->includes(oclIsKindOf(Structure))) implies 
-    ///   specializesFromLibrary('Occurrence::Occurrence::suboccurrences')owningType <> null
-    /// andowningType.oclIsKindOf(FeatureReferenceExpression) andself =
-    /// owningType.oclAsType(FeatureReferenceExpression).result implies   
-    /// specializes(owningType.oclAsType(FeatureReferenceExpression).referent)ownedTyping.type->exists(selectByKind(Class))
+    ///  
+    /// specializesFromLibrary('Occurrence::Occurrence::suboccurrences')ownedTyping.type->exists(selectByKind(Class))
     /// implies    specializesFromLibrary('Occurrences::occurrences')isComposite
     /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
     /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
@@ -114,7 +112,30 @@ namespace SysML2.NET.Core.POCO
     /// owningType.oclAsType(InvocationExpression) inself = owningInvocation.result andnot
     /// owningInvocation.ownedTyping->exists(oclIsKindOf(Function)) andnot
     /// owningInvocation.ownedSubsetting->reject(isImplied).subsettedFeature.type->exists(oclIsKindOf(Function))
-    /// implies    owningInvocation.ownedTyping->forAll(type | self.specializes(type))
+    /// implies    owningInvocation.ownedTyping->forAll(type | self.specializes(type))ownedCrossSubsetting =
+    ///    let crossSubsettings: Sequence(CrossSubsetting) =        
+    /// ownedSubsetting->selectByKind(CrossSubsetting) in    if crossSubsettings->isEmpty() then null   
+    /// else crossSubsettings->first()    endifisEnd implies    
+    /// multiplicities().allSuperTypes()->flatten()->   
+    /// selectByKind(MultiplicityRange)->exists(hasBounds(1,1))crossFeature <> null implies   
+    /// crossFeature.type->asSet() = type->asSet()ownedSubsetting->selectByKind(CrossSubsetting)->size() <=
+    /// 1crossFeature =    if ownedCrossSubsetting = null then null    else         let chainingFeatures:
+    /// Sequence(Feature) =             ownedCrossSubsetting.crossedFeature.chainingFeature in        if
+    /// chainingFeatures->size() < 2 then null        else chainingFeatures->at(2)   
+    /// endifisOwnedCrossFeature() implies    owner.oclAsType(Feature).type->forAll(t |
+    /// self.specializes(t))isOwnedCrossFeature() implies    ownedSubsetting.subsettedFeature->includesAll( 
+    ///       owner.oclAsType(Feature).ownedRedefinition.redefinedFeature->            select(crossFeature
+    /// <> null).crossFeature)crossFeature <> null implies   
+    /// ownedRedefinition.redefinedFeature.crossFeature->            forAll(f | f <> null implies
+    /// crossFeature.specializes(f))ownedCrossFeature() <> null implies    crossFeature =
+    /// ownedCrossFeature()isOwnedCrossFeature() implies    let otherEnds : OrderedSet(Feature) =        
+    /// owner.oclAsType(Feature).owningType.endFeature->excluding(self) in    if (otherEnds->size() = 1)
+    /// then        featuringType = otherEnds->first().type    else        featuringType->size() = 1 and    
+    ///    featuringType->first().isCartesianProduct() and       
+    /// featuringType->first().asCartesianProduct() = otherEnds.type and       
+    /// featuringType->first().allSupertypes()->includesAll(           
+    /// owner.oclAsType(Feature).ownedRedefinition.redefinedFeature->               select(crossFeature() <>
+    /// null).crossFeature().featuringType)          endif
     /// </summary>
     public partial interface IFeature : IType
     {
@@ -123,6 +144,12 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Feature> QueryChainingFeature();
+
+        /// <summary>
+        /// Queries the derived property CrossFeature
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Feature QueryCrossFeature();
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -163,14 +190,14 @@ namespace SysML2.NET.Core.POCO
         bool IsDerived { get; set; }
 
         /// <summary>
-        /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
-        /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
-        /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
-        /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
-        /// Features constrains the cardinality of the set of values of that Feature when the values of the
-        /// other n-1 end Features are held fixed.
+        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
+        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
+        /// which case values of the crossFeature must be the same as those found by navigation across instances
+        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
+        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
+        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
+        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
+        /// fixed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsEnd { get; set; }
@@ -205,6 +232,12 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsUnique { get; set; }
+
+        /// <summary>
+        /// Queries the derived property OwnedCrossSubsetting
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        CrossSubsetting QueryOwnedCrossSubsetting();
 
         /// <summary>
         /// Queries the derived property OwnedFeatureChaining

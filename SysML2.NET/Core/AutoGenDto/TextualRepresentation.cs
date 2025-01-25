@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualRepresentation.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -64,7 +64,6 @@ namespace SysML2.NET.Core.DTO
         public TextualRepresentation()
         {
             this.AliasIds = new List<string>();
-            this.Annotation = new List<Guid>();
             this.IsImpliedIncluded = false;
             this.OwnedRelationship = new List<Guid>();
         }
@@ -80,12 +79,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Guid> Annotation { get; set; }
 
         /// <summary>
         /// The textual representation of the representedElement in the given language.

@@ -32,7 +32,12 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An Annotation is a Relationship between an AnnotatingElement and the Element that is annotated by
-    /// that AnnotatingElement.
+    /// that AnnotatingElement.(owningAnnotatedElement <> null) = (ownedAnnotatingElement <>
+    /// null)ownedAnnotatingElement <> null xor owningAnnotatingElement <> nullownedAnnotatingElement =   
+    /// let ownedAnnotatingElements : Sequence(AnnotatingElement) =        
+    /// ownedRelatedElement->selectByKind(AnnotatingElement) in    if ownedAnnotatingElements->isEmpty()
+    /// then null    else ownedAnnotatingElements->first()    endifannotatingElement =    if
+    /// ownedAnnotatingElement <> null then ownedAnnotatingElement    else owningAnnotatingElement    endif
     /// </summary>
     public partial class Annotation : IAnnotation
     {
@@ -67,12 +72,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid AnnotatedElement { get; set; }
-
-        /// <summary>
-        /// The AnnotatingElement that annotates the annotatedElement of this Annotation.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Guid AnnotatingElement { get; set; }
 
         /// <summary>
         /// The declared name of this Element.

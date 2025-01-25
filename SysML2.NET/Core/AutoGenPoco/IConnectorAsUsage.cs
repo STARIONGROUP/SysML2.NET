@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConnectorAsUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A ConnectorAsUsage is both a Connector and a Usage. ConnectorAsUsage cannot itself be instantiated
-    /// in a SysML model, but it is the base class for the concrete classes BindingConnectorAsUsage,
-    /// SuccessionAsUsage and ConnectionUsage.
+    /// in a SysML model, but it is a base class for the concrete classes BindingConnectorAsUsage,
+    /// SuccessionAsUsage, ConnectionUsage and FlowConnectionUsage.
     /// </summary>
     public partial interface IConnectorAsUsage : IUsage, IConnector
     {

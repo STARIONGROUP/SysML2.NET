@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DictionaryWriterProvider.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -75,6 +75,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             { typeof(SysML2.NET.Core.DTO.Connector), ConnectorDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.ConstraintDefinition), ConstraintDefinitionDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.ConstraintUsage), ConstraintUsageDictionaryWriter.Write },
+            { typeof(SysML2.NET.Core.DTO.CrossSubsetting), CrossSubsettingDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.DataType), DataTypeDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.DecisionNode), DecisionNodeDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.Definition), DefinitionDictionaryWriter.Write },
@@ -105,6 +106,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             { typeof(SysML2.NET.Core.DTO.Function), FunctionDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.IfActionUsage), IfActionUsageDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.IncludeUseCaseUsage), IncludeUseCaseUsageDictionaryWriter.Write },
+            { typeof(SysML2.NET.Core.DTO.IndexExpression), IndexExpressionDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.Interaction), InteractionDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.InterfaceDefinition), InterfaceDefinitionDictionaryWriter.Write },
             { typeof(SysML2.NET.Core.DTO.InterfaceUsage), InterfaceUsageDictionaryWriter.Write },

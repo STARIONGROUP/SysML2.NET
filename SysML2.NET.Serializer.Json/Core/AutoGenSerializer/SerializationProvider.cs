@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="SerializationProvider.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -75,6 +75,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             { typeof(SysML2.NET.Core.DTO.Connector), ConnectorSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.ConstraintDefinition), ConstraintDefinitionSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.ConstraintUsage), ConstraintUsageSerializer.Serialize },
+            { typeof(SysML2.NET.Core.DTO.CrossSubsetting), CrossSubsettingSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.DataType), DataTypeSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.DecisionNode), DecisionNodeSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.Definition), DefinitionSerializer.Serialize },
@@ -105,6 +106,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             { typeof(SysML2.NET.Core.DTO.Function), FunctionSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.IfActionUsage), IfActionUsageSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.IncludeUseCaseUsage), IncludeUseCaseUsageSerializer.Serialize },
+            { typeof(SysML2.NET.Core.DTO.IndexExpression), IndexExpressionSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.Interaction), InteractionSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.InterfaceDefinition), InterfaceDefinitionSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.InterfaceUsage), InterfaceUsageSerializer.Serialize },

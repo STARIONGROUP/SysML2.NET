@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualRepresentationSerializer.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -68,16 +68,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             foreach (var item in iTextualRepresentation.AliasIds)
             {
                 writer.WriteStringValue(item);
-            }
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("annotation"u8);
-            foreach (var item in iTextualRepresentation.Annotation)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
             }
             writer.WriteEndArray();
 

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IBindingConnector.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A BindingConnector is a binary Connector that requires its relatedFeatures to identify the same
-    /// things (have the same values).specializesFromLibrary('Links::selfLinks')relatedFeature->size() = 2
+    /// things (have the same values).relatedFeature->size() = 2specializesFromLibrary('Links::selfLinks')
     /// </summary>
     public partial interface IBindingConnector : IConnector
     {

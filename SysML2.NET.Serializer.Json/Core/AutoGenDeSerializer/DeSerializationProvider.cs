@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializationProvider.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -81,6 +81,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             { "Connector", ConnectorDeSerializer.DeSerialize },
             { "ConstraintDefinition", ConstraintDefinitionDeSerializer.DeSerialize },
             { "ConstraintUsage", ConstraintUsageDeSerializer.DeSerialize },
+            { "CrossSubsetting", CrossSubsettingDeSerializer.DeSerialize },
             { "DataType", DataTypeDeSerializer.DeSerialize },
             { "DecisionNode", DecisionNodeDeSerializer.DeSerialize },
             { "Definition", DefinitionDeSerializer.DeSerialize },
@@ -111,6 +112,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             { "Function", FunctionDeSerializer.DeSerialize },
             { "IfActionUsage", IfActionUsageDeSerializer.DeSerialize },
             { "IncludeUseCaseUsage", IncludeUseCaseUsageDeSerializer.DeSerialize },
+            { "IndexExpression", IndexExpressionDeSerializer.DeSerialize },
             { "Interaction", InteractionDeSerializer.DeSerialize },
             { "InterfaceDefinition", InterfaceDefinitionDeSerializer.DeSerialize },
             { "InterfaceUsage", InterfaceUsageDeSerializer.DeSerialize },

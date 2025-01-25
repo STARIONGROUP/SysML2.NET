@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AnnotatingElementDictionaryReader.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -110,12 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("annotation", out object annotationObject))
-            {
-                throw new ArgumentException("The annotation property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
-            }
-            List<Guid> annotationFeature = (annotationObject as List<string>)?.Select(Guid.Parse).ToList();
-
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
                 throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
@@ -154,7 +148,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
 
             annotatingElementInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            annotatingElementInstance.Annotation = annotationFeature ?? new List<Guid>();
             annotatingElementInstance.DeclaredName = declaredNameFeature;
             annotatingElementInstance.DeclaredShortName = declaredShortNameFeature;
             annotatingElementInstance.ElementId = elementIdFeature;
@@ -184,12 +177,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("annotation", out object annotationObject))
-            {
-                throw new ArgumentException("The annotation property is missing from the dictionary, the dictionary cannot be converted into a AnnotatingElement");
-            }
-            List<Guid> annotationFeature = (annotationObject as List<Guid>);
 
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
@@ -229,7 +216,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
 
             annotatingElementInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            annotatingElementInstance.Annotation = annotationFeature ?? new List<Guid>();
             annotatingElementInstance.DeclaredName = declaredNameFeature;
             annotatingElementInstance.DeclaredShortName = declaredShortNameFeature;
             annotatingElementInstance.ElementId = elementIdFeature;

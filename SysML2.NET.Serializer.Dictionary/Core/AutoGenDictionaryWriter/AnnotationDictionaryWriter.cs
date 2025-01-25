@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AnnotationDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -109,7 +109,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
             dictionary.Add("aliasIds", annotationInstance.AliasIds);
             dictionary.Add("annotatedElement", annotationInstance.AnnotatedElement.ToString());
-            dictionary.Add("annotatingElement", annotationInstance.AnnotatingElement.ToString());
             dictionary.Add("declaredName", annotationInstance.DeclaredName);
             dictionary.Add("declaredShortName", annotationInstance.DeclaredShortName);
             dictionary.Add("elementId", annotationInstance.ElementId);
@@ -149,7 +148,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
             dictionary.Add("aliasIds", annotationInstance.AliasIds);
             dictionary.Add("annotatedElement", annotationInstance.AnnotatedElement);
-            dictionary.Add("annotatingElement", annotationInstance.AnnotatingElement);
             dictionary.Add("declaredName", annotationInstance.DeclaredName);
             dictionary.Add("declaredShortName", annotationInstance.DeclaredShortName);
             dictionary.Add("elementId", annotationInstance.ElementId);

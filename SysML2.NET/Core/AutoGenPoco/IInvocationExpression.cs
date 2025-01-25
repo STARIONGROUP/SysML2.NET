@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IInvocationExpression.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,17 +32,16 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An InvocationExpression is an Expression each of whose input parameters are bound to the result of
-    /// an argument Expression.not ownedTyping->exists(oclIsKindOf(Function)) andnot
-    /// ownedSubsetting->reject(isImplied).subsettedFeature.type->    exists(oclIsKindOf(Function)) implies 
-    ///   ownedFeature.selectByKind(BindingConnector)->exists(        relatedFeature->includes(self) and    
-    ///    relatedFeature->includes(result))            TBDownedFeature->    select(direction =
-    /// _'in').valuation->    select(v | v <> null).valuelet features : Set(Feature) = type.feature->asSet()
-    /// ininput->forAll(inp |     inp.ownedRedefinition.redefinedFeature->       
-    /// intersection(features)->size() = 1)let features : Set(Feature) = type.feature->asSet()
-    /// ininput->forAll(inp1 | input->forAll(inp2 |    inp1 <> inp2 implies       
+    /// an argument Expression.TBDlet features : Set(Feature) = type.feature->asSet() ininput->forAll(inp | 
+    ///    inp.ownedRedefinition.redefinedFeature->        intersection(features)->size() = 1)ownedFeature->
+    ///    select(direction = _'in').valuation->    select(v | v <> null).valuelet features : Set(Feature) =
+    /// type.feature->asSet() ininput->forAll(inp1 | input->forAll(inp2 |    inp1 <> inp2 implies       
     /// inp1.ownedRedefinition.redefinedFeature->           
     /// intersection(inp2.ownedRedefinition.redefinedFeature)->           
-    /// intersection(features)->isEmpty()))
+    /// intersection(features)->isEmpty()))not ownedTyping->exists(oclIsKindOf(Function)) andnot
+    /// ownedSubsetting->reject(isImplied).subsettedFeature.type->    exists(oclIsKindOf(Function)) implies 
+    ///   ownedFeature.selectByKind(BindingConnector)->exists(        relatedFeature->includes(self) and    
+    /// relatedFeature->includes(result))
     /// </summary>
     public partial interface IInvocationExpression : IExpression
     {

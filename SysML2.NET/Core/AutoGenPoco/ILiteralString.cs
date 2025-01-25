@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralString.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -37,8 +37,8 @@ namespace SysML2.NET.Core.POCO
     public partial interface ILiteralString : ILiteralExpression
     {
         /// <summary>
-        /// The String value that is the result of evaluating this LiteralString.The String value that is the
-        /// result of evaluating this Expression.
+        /// The String value that is the result of evaluating this Expression.The String value that is the
+        /// result of evaluating this LiteralString.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         string Value { get; set; }

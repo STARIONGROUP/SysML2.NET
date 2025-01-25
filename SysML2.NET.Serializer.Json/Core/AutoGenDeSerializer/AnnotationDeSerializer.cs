@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AnnotationDeSerializer.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -123,30 +123,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug($"the annotatedElement Json property was not found in the Annotation: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("annotatingElement"u8, out JsonElement annotatingElementProperty))
-            {
-                if (annotatingElementProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.AnnotatingElement = Guid.Empty;
-                    logger.LogDebug($"the Annotation.AnnotatingElement property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (annotatingElementProperty.TryGetProperty("@id"u8, out JsonElement annotatingElementIdProperty))
-                    {
-                        var propertyValue = annotatingElementIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.AnnotatingElement = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the annotatingElement Json property was not found in the Annotation: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out JsonElement declaredNameProperty))

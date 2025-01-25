@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="CommentDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -108,7 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             };
 
             dictionary.Add("aliasIds", commentInstance.AliasIds);
-            dictionary.Add("annotation", $"[ {string.Join(",", commentInstance.Annotation)} ]");
             dictionary.Add("body", commentInstance.Body);
             dictionary.Add("declaredName", commentInstance.DeclaredName);
             dictionary.Add("declaredShortName", commentInstance.DeclaredShortName);
@@ -144,7 +143,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             };
 
             dictionary.Add("aliasIds", commentInstance.AliasIds);
-            dictionary.Add("annotation", commentInstance.Annotation);
             dictionary.Add("body", commentInstance.Body);
             dictionary.Add("declaredName", commentInstance.DeclaredName);
             dictionary.Add("declaredShortName", commentInstance.DeclaredShortName);

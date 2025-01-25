@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="CommentDeSerializer.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -99,25 +99,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug($"the aliasIds Json property was not found in the Comment: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("annotation"u8, out JsonElement annotationProperty))
-            {
-                foreach (var arrayItem in annotationProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out JsonElement annotationIdProperty))
-                    {
-                        var propertyValue = annotationIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Annotation.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the annotation Json property was not found in the Comment: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("body"u8, out JsonElement bodyProperty))

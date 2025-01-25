@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualRepresentationDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -108,7 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             };
 
             dictionary.Add("aliasIds", textualRepresentationInstance.AliasIds);
-            dictionary.Add("annotation", $"[ {string.Join(",", textualRepresentationInstance.Annotation)} ]");
             dictionary.Add("body", textualRepresentationInstance.Body);
             dictionary.Add("declaredName", textualRepresentationInstance.DeclaredName);
             dictionary.Add("declaredShortName", textualRepresentationInstance.DeclaredShortName);
@@ -144,7 +143,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             };
 
             dictionary.Add("aliasIds", textualRepresentationInstance.AliasIds);
-            dictionary.Add("annotation", textualRepresentationInstance.Annotation);
             dictionary.Add("body", textualRepresentationInstance.Body);
             dictionary.Add("declaredName", textualRepresentationInstance.DeclaredName);
             dictionary.Add("declaredShortName", textualRepresentationInstance.DeclaredShortName);

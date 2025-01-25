@@ -318,7 +318,6 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
             Assert.That(comment.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(comment.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
-            Assert.That(comment.Annotation, Is.EqualTo(new List<Guid> { Guid.Parse("c18450a9-fd96-4dd6-83c4-de5e6e1bd2f7") }));
             Assert.That(comment.Body, Is.EqualTo("the body"));
             Assert.That(comment.ElementId, Is.EqualTo("element id"));
             Assert.That(comment.IsImpliedIncluded, Is.True);
@@ -350,7 +349,6 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
             Assert.That(comment.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(comment.AliasIds, Is.EqualTo(new List<string>() ));
-            Assert.That(comment.Annotation, Is.EqualTo(new List<Guid>()));
             Assert.That(comment.Body, Is.EqualTo("the body"));
             Assert.That(comment.ElementId, Is.EqualTo("element id"));
             Assert.That(comment.IsImpliedIncluded, Is.True);
@@ -382,7 +380,6 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
             Assert.That(comment.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(comment.AliasIds, Is.EqualTo(new List<string> { "alias_1", "alias_2" }));
-            Assert.That(comment.Annotation, Is.EqualTo(new List<Guid> { Guid.Parse("c18450a9-fd96-4dd6-83c4-de5e6e1bd2f7") }));
             Assert.That(comment.Body, Is.EqualTo("the body"));
             Assert.That(comment.ElementId, Is.EqualTo("element id"));
             Assert.That(comment.IsImpliedIncluded, Is.True);
@@ -414,7 +411,6 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
 
             Assert.That(comment.Id, Is.EqualTo(Guid.Parse("0b192c18-afa2-44b6-8de2-86e5e6ffa09e")));
             Assert.That(comment.AliasIds, Is.EqualTo(new List<string>()));
-            Assert.That(comment.Annotation, Is.EqualTo(new List<Guid>()));
             Assert.That(comment.Body, Is.EqualTo("the body"));
             Assert.That(comment.ElementId, Is.EqualTo("element id"));
             Assert.That(comment.IsImpliedIncluded, Is.True);

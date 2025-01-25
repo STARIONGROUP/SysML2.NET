@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IDataType.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -36,8 +36,8 @@ namespace SysML2.NET.Core.POCO
     /// DataType<ul>	<li>Cannot be distinguished when they are related to other things in exactly the same
     /// way, even when they are intended to be about different things.</li>	<li>Can be distinguished when
     /// they are related to other things in different ways, even when they are intended to be about the same
-    /// thing.</li></ul>specializesFromLibrary('Base::DataValue')ownedSpecialization.general->    forAll(not
-    /// oclIsKindOf(Class) and            not oclIsKindOf(Association))
+    /// thing.</li></ul>ownedSpecialization.general->    forAll(not oclIsKindOf(Class) and            not
+    /// oclIsKindOf(Association))specializesFromLibrary('Base::DataValue')
     /// </summary>
     public partial interface IDataType : IClassifier
     {

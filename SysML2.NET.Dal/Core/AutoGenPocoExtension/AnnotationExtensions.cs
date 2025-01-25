@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AnnotationExtensions.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -152,15 +152,6 @@ namespace SysML2.NET.Dal
                 poco.AnnotatedElement = null;
             }
 
-            if (cache.TryGetValue(dto.AnnotatingElement, out lazyPoco))
-            {
-                poco.AnnotatingElement = (Core.POCO.AnnotatingElement)lazyPoco.Value;
-            }
-            else
-            {
-                poco.AnnotatingElement = null;
-            }
-
             var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
             foreach (var identifier in ownedRelatedElementToAdd)
             {
@@ -233,7 +224,6 @@ namespace SysML2.NET.Dal
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;
             dto.AnnotatedElement = poco.AnnotatedElement.Id;
-            dto.AnnotatingElement = poco.AnnotatingElement.Id;
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
             dto.ElementId = poco.ElementId;

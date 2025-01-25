@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ElementFactory.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2025 Starion Group S.A.
@@ -167,6 +167,9 @@ namespace SysML2.NET.Dal
                 case Core.DTO.ConstraintUsage constraintUsageDto:
                     var constraintUsageFactory = new ConstraintUsageFactory();
                     return constraintUsageFactory.Create(constraintUsageDto);
+                case Core.DTO.CrossSubsetting crossSubsettingDto:
+                    var crossSubsettingFactory = new CrossSubsettingFactory();
+                    return crossSubsettingFactory.Create(crossSubsettingDto);
                 case Core.DTO.DataType dataTypeDto:
                     var dataTypeFactory = new DataTypeFactory();
                     return dataTypeFactory.Create(dataTypeDto);
@@ -257,6 +260,9 @@ namespace SysML2.NET.Dal
                 case Core.DTO.IncludeUseCaseUsage includeUseCaseUsageDto:
                     var includeUseCaseUsageFactory = new IncludeUseCaseUsageFactory();
                     return includeUseCaseUsageFactory.Create(includeUseCaseUsageDto);
+                case Core.DTO.IndexExpression indexExpressionDto:
+                    var indexExpressionFactory = new IndexExpressionFactory();
+                    return indexExpressionFactory.Create(indexExpressionDto);
                 case Core.DTO.Interaction interactionDto:
                     var interactionFactory = new InteractionFactory();
                     return interactionFactory.Create(interactionDto);

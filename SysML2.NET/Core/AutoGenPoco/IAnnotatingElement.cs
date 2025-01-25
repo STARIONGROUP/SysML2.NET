@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAnnotatingElement.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -36,7 +36,9 @@ namespace SysML2.NET.Core.POCO
     /// Relationships, or it implicitly annotates its owningNamespace.annotatedElement =  if
     /// annotation->notEmpty() then annotation.annotatedElement else Sequence{owningNamespace}
     /// endifownedAnnotatingRelationship = ownedRelationship->    selectByKind(Annotation)->    select(a |
-    /// a.annotatingElement = self)
+    /// a.annotatingElement = self)annotation =     if owningAnnotatingRelationship = null then
+    /// ownedAnnotatingRelationship    else
+    /// owningAnnotatingRelationship->prepend(owningAnnotatingRelationship)    endif
     /// </summary>
     public partial interface IAnnotatingElement : IElement
     {
@@ -47,16 +49,22 @@ namespace SysML2.NET.Core.POCO
         List<IElement> QueryAnnotatedElement();
 
         /// <summary>
-        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
+        /// Queries the derived property Annotation
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Annotation> Annotation { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        List<Annotation> QueryAnnotation();
 
         /// <summary>
         /// Queries the derived property OwnedAnnotatingRelationship
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         List<Annotation> QueryOwnedAnnotatingRelationship();
+
+        /// <summary>
+        /// Queries the derived property OwningAnnotatingRelationship
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Annotation QueryOwningAnnotatingRelationship();
 
     }
 }

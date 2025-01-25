@@ -36,7 +36,9 @@ namespace SysML2.NET.Core.DTO
     /// Relationships, or it implicitly annotates its owningNamespace.annotatedElement =  if
     /// annotation->notEmpty() then annotation.annotatedElement else Sequence{owningNamespace}
     /// endifownedAnnotatingRelationship = ownedRelationship->    selectByKind(Annotation)->    select(a |
-    /// a.annotatingElement = self)
+    /// a.annotatingElement = self)annotation =     if owningAnnotatingRelationship = null then
+    /// ownedAnnotatingRelationship    else
+    /// owningAnnotatingRelationship->prepend(owningAnnotatingRelationship)    endif
     /// </summary>
     public partial class AnnotatingElement : IAnnotatingElement
     {
@@ -46,7 +48,6 @@ namespace SysML2.NET.Core.DTO
         public AnnotatingElement()
         {
             this.AliasIds = new List<string>();
-            this.Annotation = new List<Guid>();
             this.IsImpliedIncluded = false;
             this.OwnedRelationship = new List<Guid>();
         }
@@ -62,12 +63,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Guid> Annotation { get; set; }
 
         /// <summary>
         /// The declared name of this Element.

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IStateUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -49,7 +49,9 @@ namespace SysML2.NET.Core.POCO
     /// exitMemberships->isEmpty() then null    else exitMemberships->at(1)   
     /// endifspecializesFromLibrary('States::stateActions')ownedMembership->   
     /// selectByKind(StateSubactionMembership)->    isUnique(kind)isSubstateUsage(true) implies   
-    /// specializesFromLibrary('States::StateAction::substates')
+    /// specializesFromLibrary('States::StateAction::substates')isComposite and owningType <> null
+    /// and(owningType.oclIsKindOf(PartDefinition) or owningType.oclIsKindOf(PartUsage)) implies   
+    /// specializesFromLibrary('Parts::Part::ownedStates')
     /// </summary>
     public partial interface IStateUsage : IActionUsage
     {

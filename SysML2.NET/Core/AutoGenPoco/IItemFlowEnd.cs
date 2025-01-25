@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IItemFlowEnd.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -34,8 +34,8 @@ namespace SysML2.NET.Core.POCO
     /// An ItemFlowEnd is a Feature that is one of the connectorEnds giving the source or target of an
     /// ItemFlow. For ItemFlows typed by FlowTransfer or its specializations, ItemFlowEnds must have exactly
     /// one ownedFeature, which redefines Transfer::source::sourceOutput or Transfer::target::targetInput
-    /// and redefines the corresponding feature of the relatedElement for its end.isEndownedFeature->size()
-    /// = 1owningType <> null and owningType.oclIsKindOf(ItemFlow)
+    /// and redefines the corresponding feature of the relatedElement for its end.owningType <> null and
+    /// owningType.oclIsKindOf(ItemFlow)isEndownedFeature->size() = 1
     /// </summary>
     public partial interface IItemFlowEnd : IFeature
     {

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeatureChainExpression.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -42,7 +42,11 @@ namespace SysML2.NET.Core.DTO
     /// nonParameterMemberships->isEmpty() or       not
     /// nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)    then null    else
     /// nonParameterMemberships->first().memberElement.oclAsType(Feature)    endifargument->notEmpty()
-    /// implies    targetFeature.featuringType->forAll(t |         t.specializes(argument->at(1).result))
+    /// implies    targetFeature.featuringType->forAll(t |        
+    /// t.specializes(argument->at(1).result))operator = '.'let inputParameters : Sequence(Feature) =    
+    /// ownedFeatures->select(direction = _'in') inlet sourceTargetFeature : Feature =    
+    /// owningExpression.sourceTargetFeature() insourceTargetFeature <> null
+    /// andresult.subsetsChain(inputParameters->first(), sourceTargetFeature) andresult.owningType = self
     /// </summary>
     public partial interface IFeatureChainExpression : IOperatorExpression
     {

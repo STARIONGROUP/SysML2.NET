@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IStep.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -34,15 +34,15 @@ namespace SysML2.NET.Core.POCO
     /// A Step is a Feature that is typed by one or more Behaviors. Steps may be used by one Behavior to
     /// coordinate the performance of other Behaviors, supporting a steady refinement of behavioral
     /// descriptions. Steps can be ordered in time and can be connected using ItemFlows to specify things
-    /// flowing between their parameters.specializesFromLibrary('Performances::performances')owningType <>
-    /// null and    (owningType.oclIsKindOf(Behavior) or     owningType.oclIsKindOf(Step)) implies   
-    /// specializesFromLibrary('Performances::Performance::enclosedPerformance')isComposite and owningType
-    /// <> null and(owningType.oclIsKindOf(Structure) or owningType.oclIsKindOf(Feature) and
-    /// owningType.oclAsType(Feature).type->    exists(oclIsKindOf(Structure)) implies   
-    /// specializesFromLibrary('Objects::Object::ownedPerformance')owningType <> null and   
+    /// flowing between their parameters.owningType <> null and    (owningType.oclIsKindOf(Behavior) or    
+    /// owningType.oclIsKindOf(Step)) implies   
+    /// specializesFromLibrary('Performances::Performance::enclosedPerformance')owningType <> null and   
     /// (owningType.oclIsKindOf(Behavior) or     owningType.oclIsKindOf(Step)) and    self.isComposite
     /// implies    specializesFromLibrary('Performances::Performance::subperformance')behavior =
-    /// type->selectByKind(Behavior)
+    /// type->selectByKind(Behavior)isComposite and owningType <> null and(owningType.oclIsKindOf(Structure)
+    /// or owningType.oclIsKindOf(Feature) and owningType.oclAsType(Feature).type->   
+    /// exists(oclIsKindOf(Structure)) implies   
+    /// specializesFromLibrary('Objects::Object::ownedPerformance')specializesFromLibrary('Performances::performances')
     /// </summary>
     public partial interface IStep : IFeature
     {

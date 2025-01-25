@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Annotation.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,7 +32,12 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An Annotation is a Relationship between an AnnotatingElement and the Element that is annotated by
-    /// that AnnotatingElement.
+    /// that AnnotatingElement.(owningAnnotatedElement <> null) = (ownedAnnotatingElement <>
+    /// null)ownedAnnotatingElement <> null xor owningAnnotatingElement <> nullownedAnnotatingElement =   
+    /// let ownedAnnotatingElements : Sequence(AnnotatingElement) =        
+    /// ownedRelatedElement->selectByKind(AnnotatingElement) in    if ownedAnnotatingElements->isEmpty()
+    /// then null    else ownedAnnotatingElements->first()    endifannotatingElement =    if
+    /// ownedAnnotatingElement <> null then ownedAnnotatingElement    else owningAnnotatingElement    endif
     /// </summary>
     public partial class Annotation : IAnnotation
     {
@@ -69,10 +74,13 @@ namespace SysML2.NET.Core.POCO
         public IElement AnnotatedElement { get; set; }
 
         /// <summary>
-        /// The AnnotatingElement that annotates the annotatedElement of this Annotation.
+        /// Queries the derived property AnnotatingElement
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public AnnotatingElement AnnotatingElement { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public AnnotatingElement QueryAnnotatingElement()
+        {
+            throw new NotImplementedException("Derived property AnnotatingElement not yet supported");
+        }
 
         /// <summary>
         /// The declared name of this Element.
@@ -138,6 +146,15 @@ namespace SysML2.NET.Core.POCO
         public string QueryName()
         {
             throw new NotImplementedException("Derived property Name not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwnedAnnotatingElement
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public AnnotatingElement QueryOwnedAnnotatingElement()
+        {
+            throw new NotImplementedException("Derived property OwnedAnnotatingElement not yet supported");
         }
 
         /// <summary>

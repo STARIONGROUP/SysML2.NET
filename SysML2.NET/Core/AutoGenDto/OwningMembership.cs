@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="OwningMembership.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,8 +32,8 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// An OwningMembership is a Membership that owns its memberElement as a ownedRelatedElement. The
-    /// ownedMemberElement becomes an ownedMember of the membershipOwningNamespace.ownedMemberName =
-    /// ownedMemberElement.nameownedMemberShortName = ownedMemberElement.shortName
+    /// ownedMemberElement becomes an ownedMember of the membershipOwningNamespace.ownedMemberShortName =
+    /// ownedMemberElement.shortNameownedMemberName = ownedMemberElement.name
     /// </summary>
     public partial class OwningMembership : IOwningMembership
     {

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IItemFlow.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,17 +32,17 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An ItemFlow is a Step that represents the transfer of objects or data values from one Feature to
-    /// another. ItemFlows can take non-zero time to complete.if itemFlowEnds->isEmpty() then   
+    /// another. ItemFlows can take non-zero time to complete.targetInputFeature =    if
+    /// connectorEnd->size() < 2 or         connectorEnd->at(2).ownedFeature->isEmpty()    then null    else
+    /// connectorEnd->at(2).ownedFeature->first()    endifif itemFlowEnds->isEmpty() then   
     /// specializesFromLibrary('Transfers::transfers')else   
     /// specializesFromLibrary('Transfers::flowTransfers')endifitemType =    if itemFeature = null then
-    /// Sequence{}    else itemFeature.type    endifsourceOutputFeature =    if connectorEnd->isEmpty() or  
-    ///       connectorEnd.ownedFeature->isEmpty()    then null    else connectorEnd.ownedFeature->first()  
-    ///  endiftargetInputFeature =    if connectorEnd->size() < 2 or        
-    /// connectorEnd->at(2).ownedFeature->isEmpty()    then null    else
-    /// connectorEnd->at(2).ownedFeature->first()    endifitemFlowEnd =
-    /// connectorEnd->selectByKind(ItemFlowEnd)itemFeature =    let itemFeatures : Sequence(ItemFeature) =  
-    ///       ownedFeature->selectByKind(ItemFeature) in    if itemFeatures->isEmpty() then null    else
-    /// itemFeatures->first()    endifownedFeature->selectByKind(ItemFeature)->size() <= 1
+    /// Sequence{}    else itemFeature.type    endifownedFeature->selectByKind(ItemFeature)->size() <=
+    /// 1sourceOutputFeature =    if connectorEnd->isEmpty() or         connectorEnd.ownedFeature->isEmpty()
+    ///    then null    else connectorEnd.ownedFeature->first()    endifitemFeature =    let itemFeatures :
+    /// Sequence(ItemFeature) =         ownedFeature->selectByKind(ItemFeature) in    if
+    /// itemFeatures->isEmpty() then null    else itemFeatures->first()    endifitemFlowEnd =
+    /// connectorEnd->selectByKind(ItemFlowEnd)
     /// </summary>
     public partial interface IItemFlow : IConnector, IStep
     {

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMetadataFeature.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -33,9 +33,22 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A MetadataFeature is a Feature that is an AnnotatingElement used to annotate another Element with
     /// metadata. It is typed by a Metaclass. All its ownedFeatures must redefine features of its metaclass
-    /// and any feature bindings must be model-level
-    /// evaluable.specializesFromLibrary('Metaobjects::metaobjects')isSemantic() implies    let
-    /// annotatedTypes : Sequence(Type) =         annotatedElement->selectAsKind(Type) in    let baseTypes :
+    /// and any feature bindings must be model-level evaluable.type->selectByKind(Metaclass).size() = 1not
+    /// metaclass.isAbstractspecializesFromLibrary('Metaobjects::metaobjects')ownedFeature->closure(ownedFeature)->forAll(f
+    /// |    f.declaredName = null and f.declaredShortName = null and    f.valuation <> null implies
+    /// f.valuation.value.isModelLevelEvaluable and    f.redefinition.redefinedFeature->size() = 1)metaclass
+    /// =     let metaclassTypes : Sequence(Type) = type->selectByKind(Metaclass) in    if
+    /// metaclassTypes->isEmpty() then null    else metaClassTypes->first()    endiflet
+    /// baseAnnotatedElementFeature : Feature =   
+    /// resolveGlobal('Metaobjects::Metaobject::annotatedElement').memberElement.    oclAsType(Feature)
+    /// inlet annotatedElementFeatures : OrderedSet(Feature) = feature->   
+    /// select(specializes(baseAnnotatedElementFeature))->    excluding(baseAnnotatedElementFeature)
+    /// inannotatedElementFeatures->notEmpty() implies    let annotatedElementTypes : Set(Feature) =       
+    /// annotatedElementFeatures.typing.type->asSet() in    let metaclasses : Set(Metaclass) =       
+    /// annotatedElement.oclType().qualifiedName->collect(qn |            
+    /// resolveGlobal(qn).memberElement.oclAsType(Metaclass)) in   metaclasses->forAll(m |
+    /// annotatedElementTypes->exists(t | m.specializes(t)))isSemantic() implies    let annotatedTypes :
+    /// Sequence(Type) =         annotatedElement->selectAsKind(Type) in    let baseTypes :
     /// Sequence(MetadataFeature) =         evaluateFeature(resolveGlobal(           
     /// 'Metaobjects::SemanticMetadata::baseType').            memberElement.           
     /// oclAsType(Feature))->        selectAsKind(MetadataFeature) in    annotatedTypes->notEmpty() and    
@@ -44,21 +57,7 @@ namespace SysML2.NET.Core.DTO
     /// baseTypes->first().syntaxElement() in        if annotatedType.oclIsKindOf(Classifier) and           
     ///  baseType.oclIsKindOf(Feature) then            baseType.oclAsType(Feature).type->               
     /// forAll(t | annotatedType.specializes(t))        else if baseType.oclIsKindOf(Type) then           
-    /// annotatedType.specializes(baseType.oclAsType(Type))        else            true        endifnot
-    /// metaclass.isAbstractlet baseAnnotatedElementFeature : Feature =   
-    /// resolveGlobal('Metaobjects::Metaobject::annotatedElement').memberElement.    oclAsType(Feature)
-    /// inlet annotatedElementFeatures : OrderedSet(Feature) = feature->   
-    /// select(specializes(baseAnnotatedElementFeature))->    excluding(baseAnnotatedElementFeature)
-    /// inannotatedElementFeatures->notEmpty() implies    let annotatedElementTypes : Set(Feature) =       
-    /// annotatedElementFeatures.typing.type->asSet() in    let metaclasses : Set(Metaclass) =       
-    /// annotatedElement.oclType().qualifiedName->collect(qn |            
-    /// resolveGlobal(qn).memberElement.oclAsType(Metaclass)) in   metaclasses->forAll(m |
-    /// annotatedElementTypes->exists(t | m.specializes(t)))ownedFeature->closure(ownedFeature)->forAll(f | 
-    ///   f.declaredName = null and f.declaredShortName = null and    f.valuation <> null implies
-    /// f.valuation.value.isModelLevelEvaluable and    f.redefinition.redefinedFeature->size() = 1)metaclass
-    /// =     let metaclassTypes : Sequence(Type) = type->selectByKind(Metaclass) in    if
-    /// metaclassTypes->isEmpty() then null    else metaClassTypes->first()   
-    /// endiftype->selectByKind(Metaclass).size() = 1
+    /// annotatedType.specializes(baseType.oclAsType(Type))        else            true        endif
     /// </summary>
     public partial interface IMetadataFeature : IFeature, IAnnotatingElement
     {

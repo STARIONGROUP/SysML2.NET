@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IBehavior.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,9 +32,9 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A Behavior coordinates occurrences of other Behaviors, as well as changes in objects. Behaviors can
-    /// be decomposed into Steps and be characterized by
-    /// parameters.specializesFromLibrary('Performances::Performance')step =
-    /// feature->selectByKind(Step)ownedSpecialization.general->forAll(not oclIsKindOf(Structure))
+    /// be decomposed into Steps and be characterized by parameters.ownedSpecialization.general->forAll(not
+    /// oclIsKindOf(Structure))specializesFromLibrary('Performances::Performance')step =
+    /// feature->selectByKind(Step)
     /// </summary>
     public partial interface IBehavior : IClass
     {

@@ -57,7 +57,6 @@ namespace SysML2.NET.Dal.Tests
 			{
 				Id = Guid.NewGuid(),
 				AliasIds = new List<string> { "alias_1", "alias_2" },
-				Annotation = new List<Annotation> { annotation },
 				DeclaredName = "declared name",
 				DeclaredShortName = "declared shortname",
 				ElementId = "element id",
@@ -70,7 +69,6 @@ namespace SysML2.NET.Dal.Tests
 
 			Assert.That(dto.Id, Is.EqualTo(poco.Id));
 			Assert.That(dto.AliasIds, Is.EquivalentTo(poco.AliasIds));
-			Assert.That(dto.Annotation.Single(),  Is.EqualTo(poco.Annotation.Single().Id));
 			Assert.That(dto.DeclaredName, Is.EqualTo(poco.DeclaredName));
 			Assert.That(dto.DeclaredShortName, Is.EqualTo(poco.DeclaredShortName));
 			Assert.That(dto.ElementId, Is.EqualTo(poco.ElementId));

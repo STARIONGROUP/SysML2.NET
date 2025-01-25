@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISelectExpression.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,7 +32,8 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A SelectExpression is an OperatorExpression whose operator is "select", which resolves to the
-    /// Function ControlFunctions::select from the Kernel Functions Library.operator = 'select'
+    /// Function ControlFunctions::select from the Kernel Functions Library.operator =
+    /// 'select'arguments->notEmpty() implies    result.specializes(arguments->first().result)
     /// </summary>
     public partial interface ISelectExpression : IOperatorExpression
     {

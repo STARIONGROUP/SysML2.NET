@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="MetadataFeature.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -33,9 +33,22 @@ namespace SysML2.NET.Core.POCO
     /// <summary>
     /// A MetadataFeature is a Feature that is an AnnotatingElement used to annotate another Element with
     /// metadata. It is typed by a Metaclass. All its ownedFeatures must redefine features of its metaclass
-    /// and any feature bindings must be model-level
-    /// evaluable.specializesFromLibrary('Metaobjects::metaobjects')isSemantic() implies    let
-    /// annotatedTypes : Sequence(Type) =         annotatedElement->selectAsKind(Type) in    let baseTypes :
+    /// and any feature bindings must be model-level evaluable.type->selectByKind(Metaclass).size() = 1not
+    /// metaclass.isAbstractspecializesFromLibrary('Metaobjects::metaobjects')ownedFeature->closure(ownedFeature)->forAll(f
+    /// |    f.declaredName = null and f.declaredShortName = null and    f.valuation <> null implies
+    /// f.valuation.value.isModelLevelEvaluable and    f.redefinition.redefinedFeature->size() = 1)metaclass
+    /// =     let metaclassTypes : Sequence(Type) = type->selectByKind(Metaclass) in    if
+    /// metaclassTypes->isEmpty() then null    else metaClassTypes->first()    endiflet
+    /// baseAnnotatedElementFeature : Feature =   
+    /// resolveGlobal('Metaobjects::Metaobject::annotatedElement').memberElement.    oclAsType(Feature)
+    /// inlet annotatedElementFeatures : OrderedSet(Feature) = feature->   
+    /// select(specializes(baseAnnotatedElementFeature))->    excluding(baseAnnotatedElementFeature)
+    /// inannotatedElementFeatures->notEmpty() implies    let annotatedElementTypes : Set(Feature) =       
+    /// annotatedElementFeatures.typing.type->asSet() in    let metaclasses : Set(Metaclass) =       
+    /// annotatedElement.oclType().qualifiedName->collect(qn |            
+    /// resolveGlobal(qn).memberElement.oclAsType(Metaclass)) in   metaclasses->forAll(m |
+    /// annotatedElementTypes->exists(t | m.specializes(t)))isSemantic() implies    let annotatedTypes :
+    /// Sequence(Type) =         annotatedElement->selectAsKind(Type) in    let baseTypes :
     /// Sequence(MetadataFeature) =         evaluateFeature(resolveGlobal(           
     /// 'Metaobjects::SemanticMetadata::baseType').            memberElement.           
     /// oclAsType(Feature))->        selectAsKind(MetadataFeature) in    annotatedTypes->notEmpty() and    
@@ -44,21 +57,7 @@ namespace SysML2.NET.Core.POCO
     /// baseTypes->first().syntaxElement() in        if annotatedType.oclIsKindOf(Classifier) and           
     ///  baseType.oclIsKindOf(Feature) then            baseType.oclAsType(Feature).type->               
     /// forAll(t | annotatedType.specializes(t))        else if baseType.oclIsKindOf(Type) then           
-    /// annotatedType.specializes(baseType.oclAsType(Type))        else            true        endifnot
-    /// metaclass.isAbstractlet baseAnnotatedElementFeature : Feature =   
-    /// resolveGlobal('Metaobjects::Metaobject::annotatedElement').memberElement.    oclAsType(Feature)
-    /// inlet annotatedElementFeatures : OrderedSet(Feature) = feature->   
-    /// select(specializes(baseAnnotatedElementFeature))->    excluding(baseAnnotatedElementFeature)
-    /// inannotatedElementFeatures->notEmpty() implies    let annotatedElementTypes : Set(Feature) =       
-    /// annotatedElementFeatures.typing.type->asSet() in    let metaclasses : Set(Metaclass) =       
-    /// annotatedElement.oclType().qualifiedName->collect(qn |            
-    /// resolveGlobal(qn).memberElement.oclAsType(Metaclass)) in   metaclasses->forAll(m |
-    /// annotatedElementTypes->exists(t | m.specializes(t)))ownedFeature->closure(ownedFeature)->forAll(f | 
-    ///   f.declaredName = null and f.declaredShortName = null and    f.valuation <> null implies
-    /// f.valuation.value.isModelLevelEvaluable and    f.redefinition.redefinedFeature->size() = 1)metaclass
-    /// =     let metaclassTypes : Sequence(Type) = type->selectByKind(Metaclass) in    if
-    /// metaclassTypes->isEmpty() then null    else metaClassTypes->first()   
-    /// endiftype->selectByKind(Metaclass).size() = 1
+    /// annotatedType.specializes(baseType.oclAsType(Type))        else            true        endif
     /// </summary>
     public partial class MetadataFeature : IMetadataFeature
     {
@@ -68,7 +67,6 @@ namespace SysML2.NET.Core.POCO
         public MetadataFeature()
         {
             this.AliasIds = new List<string>();
-            this.Annotation = new List<Annotation>();
             this.IsAbstract = false;
             this.IsComposite = false;
             this.IsDerived = false;
@@ -104,10 +102,13 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
+        /// Queries the derived property Annotation
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Annotation> Annotation { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Annotation> QueryAnnotation()
+        {
+            throw new NotImplementedException("Derived property Annotation not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property ChainingFeature
@@ -116,6 +117,15 @@ namespace SysML2.NET.Core.POCO
         public List<Feature> QueryChainingFeature()
         {
             throw new NotImplementedException("Derived property ChainingFeature not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property CrossFeature
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Feature QueryCrossFeature()
+        {
+            throw new NotImplementedException("Derived property CrossFeature not yet supported");
         }
 
         /// <summary>
@@ -303,14 +313,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsDerived { get; set; }
 
         /// <summary>
-        /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
-        /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
-        /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
-        /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
-        /// Features constrains the cardinality of the set of values of that Feature when the values of the
-        /// other n-1 end Features are held fixed.
+        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
+        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
+        /// which case values of the crossFeature must be the same as those found by navigation across instances
+        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
+        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
+        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
+        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
+        /// fixed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsEnd { get; set; }
@@ -436,7 +446,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedAnnotatingRelationship
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Annotation> QueryOwnedAnnotatingRelationship()
         {
             throw new NotImplementedException("Derived property OwnedAnnotatingRelationship not yet supported");
@@ -458,6 +468,15 @@ namespace SysML2.NET.Core.POCO
         public Conjugation QueryOwnedConjugator()
         {
             throw new NotImplementedException("Derived property OwnedConjugator not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwnedCrossSubsetting
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public CrossSubsetting QueryOwnedCrossSubsetting()
+        {
+            throw new NotImplementedException("Derived property OwnedCrossSubsetting not yet supported");
         }
 
         /// <summary>
@@ -644,6 +663,15 @@ namespace SysML2.NET.Core.POCO
         public IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwningAnnotatingRelationship
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Annotation QueryOwningAnnotatingRelationship()
+        {
+            throw new NotImplementedException("Derived property OwningAnnotatingRelationship not yet supported");
         }
 
         /// <summary>

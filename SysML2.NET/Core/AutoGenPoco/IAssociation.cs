@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAssociation.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO
     /// 2associationEnds->size() > 2 implies    not specializesFromLibrary('Links::BinaryLink')sourceType = 
     ///   if relatedType->isEmpty() then null    else relatedType->first() endiftargetType =    if
     /// relatedType->size() < 2 then OrderedSet{}    else         relatedType->            subSequence(2,
-    /// relatedType->size())->            asOrderedSet()     endif
+    /// relatedType->size())->            asOrderedSet()     endifownedEndFeature->forAll(type->size() = 1)
     /// </summary>
     public partial interface IAssociation : IClassifier, IRelationship
     {

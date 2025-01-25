@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeatureReferenceExpression.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -39,7 +39,8 @@ namespace SysML2.NET.Core.POCO
     /// endifownedMember->selectByKind(BindingConnector)->exists(b |   
     /// b.relatedFeatures->includes(targetFeature) and    b.relatedFeatures->includes(result))let membership
     /// : Membership =     ownedMembership->reject(m | m.oclIsKindOf(ParameterMembership))
-    /// inmembership->notEmpty() andmembership->at(1).memberElement.oclIsKindOf(Feature)
+    /// inmembership->notEmpty() andmembership->at(1).memberElement.oclIsKindOf(Feature)result.owningType()
+    /// = self and result.specializes(referent)
     /// </summary>
     public partial interface IFeatureReferenceExpression : IExpression
     {

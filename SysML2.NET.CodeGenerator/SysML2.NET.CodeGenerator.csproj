@@ -3,7 +3,7 @@
   <PropertyGroup>
       <TargetFramework>net9.0</TargetFramework>
       <LangVersion>12.0</LangVersion>
-      <Version>0.14.0</Version>
+      <Version>0.16.0</Version>
       <Description>A Library to generate SysML v2 code.</Description>
       <PackageId>SysML2.NET</PackageId>
       <Company>Starion Group S.A.</Company>

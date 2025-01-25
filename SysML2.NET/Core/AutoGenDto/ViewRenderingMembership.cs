@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ViewRenderingMembership.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,11 +32,11 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A ViewRenderingMembership is a <coed>FeatureMembership that identifies the viewRendering of a
-    /// ViewDefinition or ViewUsage.</coed>referencedRendering =    let reference: ReferenceSubsetting =    
-    ///     ownedRendering.ownedReferenceSubsetting in    if reference = null then ownedRendering    else if
-    /// not reference.referencedFeature.oclIsKindOf(RenderingUsage) then null    else
-    /// reference.referencedFeature.oclAsType(RenderingUsage)    endifowningType.oclIsKindOf(ViewDefinition)
-    /// orowningType.oclIsKindOf(ViewUsage)
+    /// ViewDefinition or ViewUsage.</coed>referencedRendering =    let referencedFeature : Feature =       
+    ///  ownedRendering.referencedFeatureTarget() in    if referencedFeature = null then ownedRendering   
+    /// else if referencedFeature.oclIsKindOf(RenderingUsage) then       
+    /// refrencedFeature.oclAsType(RenderingUsage)    else null    endif
+    /// endifowningType.oclIsKindOf(ViewDefinition) orowningType.oclIsKindOf(ViewUsage)
     /// </summary>
     public partial class ViewRenderingMembership : IViewRenderingMembership
     {

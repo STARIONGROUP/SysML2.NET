@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAssertConstraintUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -34,10 +34,11 @@ namespace SysML2.NET.Core.POCO
     /// An AssertConstraintUsage is a ConstraintUsage that is also an Invariant and, so, is asserted to be
     /// true (by default). Unless it is the AssertConstraintUsage itself, the asserted ConstraintUsage is
     /// related to the AssertConstraintUsage by a ReferenceSubsetting Relationship.assertedConstraint =   
-    /// if ownedReferenceSubsetting = null then self    else
-    /// ownedReferenceSubsetting.referencedFeature.oclAsType(ConstraintUsage)    endifif isNegated then   
-    /// specializesFromLibrary('Constraints::negatedConstraints')else   
-    /// specializesFromLibrary('Constraints::assertedConstraints')endifownedReferenceSubsetting <> null
+    /// if referencedFeatureTarget() = null then self    else if
+    /// referencedFeatureTarget().oclIsKindOf(ConstraintUsage) then       
+    /// referencedFeatureTarget().oclAsType(ConstraintUsage)    else null    endif endifif isNegated then   
+    /// specializesFromLibrary('Constraints::negatedConstraintChecks')else   
+    /// specializesFromLibrary('Constraints::assertedConstraintChecks')endifownedReferenceSubsetting <> null
     /// implies    ownedReferenceSubsetting.referencedFeature.oclIsKindOf(ConstraintUsage)
     /// </summary>
     public partial interface IAssertConstraintUsage : IConstraintUsage, IInvariant

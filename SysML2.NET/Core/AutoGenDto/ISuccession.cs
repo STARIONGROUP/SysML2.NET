@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISuccession.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,16 +32,16 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A Succession is a binary Connector that requires its relatedFeatures to happen separately in
-    /// time.specializesFromLibrary('Occurences::happensBeforeLinks')transitionStep =    if
+    /// time.effectStep =    if transitionStep = null or        transitionStep.ownedFeature.size() < 4 or   
+    ///    not transitionStep.ownedFeature->at(4).oclIsKindOf(Step)     then Set{}    else
+    /// Set{transitionStep.ownedFeature->at(4).oclAsType(Step)}   
+    /// endifspecializesFromLibrary('Occurrences::happensBeforeLinks')transitionStep =    if
     /// owningNamespace.oclIsKindOf(Step) and         owningNamespace.oclAsType(Step).           
     /// specializesFromLibrary('TransitionPerformances::TransitionPerformance') then       
     /// owningNamespace.oclAsType(Step)    else null    endiftriggerStep =    if transitionStep = null or   
     ///     transitionStep.ownedFeature.size() < 2 or       not
     /// transitionStep.ownedFeature->at(2).oclIsKindOf(Step)     then Set{}    else
-    /// Set{transitionStep.ownedFeature->at(2).oclAsType(Step)}    endifeffectStep =    if transitionStep =
-    /// null or        transitionStep.ownedFeature.size() < 4 or       not
-    /// transitionStep.ownedFeature->at(4).oclIsKindOf(Step)     then Set{}    else
-    /// Set{transitionStep.ownedFeature->at(4).oclAsType(Step)}    endifguardExpression =    if
+    /// Set{transitionStep.ownedFeature->at(2).oclAsType(Step)}    endifguardExpression =    if
     /// transitionStep = null or        transitionStep.ownedFeature.size() < 3 or       not
     /// transitionStep.ownedFeature->at(3).oclIsKindOf(Expression)     then Set{}    else
     /// Set{transitionStep.ownedFeature->at(3).oclAsType(Expression)}    endif

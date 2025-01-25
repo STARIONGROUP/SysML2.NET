@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IExhibitStateUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -36,8 +36,8 @@ namespace SysML2.NET.Core.DTO
     /// ReferenceSubsetting Relationship. An ExhibitStateUsage is also a PerformActionUsage, with its
     /// exhibitedState as the performedAction.owningType <> null and(owningType.oclIsKindOf(PartDefinition)
     /// or owningType.oclIsKindOf(PartUsage)) implies   
-    /// specializesFromLibrary('Parts::Part::exhibitedStates')ownedReferenceSubsetting <> null implies   
-    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(StateUsage)
+    /// specializesFromLibrary('Parts::Part::exhibitedStates')referencedFeatureTarget() <> null implies   
+    /// referencedFeatureTarget().oclIsKindOf(StateUsage)
     /// </summary>
     public partial interface IExhibitStateUsage : IStateUsage, IPerformActionUsage
     {

@@ -116,12 +116,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             Guid annotatedElementFeature = Guid.Parse(Convert.ToString(annotatedElementObject));
 
-            if (!dictionary.TryGetValue("annotatingElement", out object annotatingElementObject))
-            {
-                throw new ArgumentException("The annotatingElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
-            }
-            Guid annotatingElementFeature = Guid.Parse(Convert.ToString(annotatingElementObject));
-
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
                 throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
@@ -191,7 +185,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
             annotationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             annotationInstance.AnnotatedElement = annotatedElementFeature;
-            annotationInstance.AnnotatingElement = annotatingElementFeature;
             annotationInstance.DeclaredName = declaredNameFeature;
             annotationInstance.DeclaredShortName = declaredShortNameFeature;
             annotationInstance.ElementId = elementIdFeature;
@@ -232,12 +225,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The annotatedElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
             }
             Guid annotatedElementFeature = Guid.Parse(Convert.ToString(annotatedElementObject));
-
-            if (!dictionary.TryGetValue("annotatingElement", out object annotatingElementObject))
-            {
-                throw new ArgumentException("The annotatingElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
-            }
-            Guid annotatingElementFeature = Guid.Parse(Convert.ToString(annotatingElementObject));
 
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
@@ -308,7 +295,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
             annotationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             annotationInstance.AnnotatedElement = annotatedElementFeature;
-            annotationInstance.AnnotatingElement = annotatingElementFeature;
             annotationInstance.DeclaredName = declaredNameFeature;
             annotationInstance.DeclaredShortName = declaredShortNameFeature;
             annotationInstance.ElementId = elementIdFeature;

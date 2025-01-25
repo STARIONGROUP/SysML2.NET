@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISatisfyRequirementUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -42,7 +42,9 @@ namespace SysML2.NET.Core.POCO
     /// endifownedMember->selectByKind(BindingConnector)->    select(b |       
     /// b.relatedElement->includes(subjectParameter) and        b.relatedElement->exists(r | r <>
     /// subjectParameter))->    size() = 1ownedReferenceSubsetting <> null implies   
-    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(RequirementUsage)
+    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(RequirementUsage)if isNegated then   
+    /// specializesFromLibrary('Requirements::notSatisfiedRequirementChecks')else   
+    /// specializesFromLibrary('Requirements::satisfiedRequirementChecks')endif
     /// </summary>
     public partial interface ISatisfyRequirementUsage : IRequirementUsage, IAssertConstraintUsage
     {

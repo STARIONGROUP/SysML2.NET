@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FlowConnectionDefinition.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -31,9 +31,11 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A FlowConnectionDefinition is a ConnectionDefinition and ActionDefinition that is also an
-    /// Interaction representing flows between
-    /// Usages.specializesFromLibrary('Connections::MessageConnection')
+    /// A FlowConnectionDefinition is an ActionDefinition that is also an Interaction (which is both a KerML
+    /// Behavior and Association), representing flows between
+    /// Usages.specializesFromLibrary('FlowConnections::MessageConnection')flowConnectionEnd->size() = 2
+    /// implies   
+    /// specializesFromLibrary('FlowConnections::MessageTransferConnection')flowConnectionEnd->size() <= 2
     /// </summary>
     public partial class FlowConnectionDefinition : IFlowConnectionDefinition
     {

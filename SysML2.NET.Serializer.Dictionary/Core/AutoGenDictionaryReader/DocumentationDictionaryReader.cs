@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DocumentationDictionaryReader.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -110,12 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("annotation", out object annotationObject))
-            {
-                throw new ArgumentException("The annotation property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
-            }
-            List<Guid> annotationFeature = (annotationObject as List<string>)?.Select(Guid.Parse).ToList();
-
             if (!dictionary.TryGetValue("body", out object bodyObject))
             {
                 throw new ArgumentException("The body property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
@@ -166,7 +160,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
 
             documentationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            documentationInstance.Annotation = annotationFeature ?? new List<Guid>();
             documentationInstance.Body = bodyFeature;
             documentationInstance.DeclaredName = declaredNameFeature;
             documentationInstance.DeclaredShortName = declaredShortNameFeature;
@@ -198,12 +191,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("annotation", out object annotationObject))
-            {
-                throw new ArgumentException("The annotation property is missing from the dictionary, the dictionary cannot be converted into a Documentation");
-            }
-            List<Guid> annotationFeature = (annotationObject as List<Guid>);
 
             if (!dictionary.TryGetValue("body", out object bodyObject))
             {
@@ -255,7 +242,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
 
             documentationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            documentationInstance.Annotation = annotationFeature ?? new List<Guid>();
             documentationInstance.Body = bodyFeature;
             documentationInstance.DeclaredName = declaredNameFeature;
             documentationInstance.DeclaredShortName = declaredShortNameFeature;

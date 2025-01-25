@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ITransitionUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -37,11 +37,12 @@ namespace SysML2.NET.Core.POCO
     /// then its target is entered.A TransitionUsage can be related to some of its ownedFeatures using
     /// TransitionFeatureMembership Relationships, corresponding to the triggerAction, guardExpression and
     /// effectAction of the TransitionUsage.isComposite and owningType <> null
-    /// and(owningType.oclIsKindOf(ActionDefinition) or  owningType.oclIsKindOf(ActionUsage)) andnot
-    /// (owningType.oclIsKindOf(StateDefinition) or     owningType.oclIsKindOf(StateUsage)) implies   
+    /// and(owningType.oclIsKindOf(ActionDefinition) or owningType.oclIsKindOf(ActionUsage)) andsource <>
+    /// null and not source.oclIsKindOf(StateUsage) implies   
     /// specializesFromLibrary('Actions::Action::decisionTransitions')isComposite and owningType <> null
-    /// and(owningType.oclIsKindOf(StateDefinition) or owningType.oclIsKindOf(StateUsage)) implies   
-    /// specializesFromLibrary('States::State::stateTransitions')specializesFromLibrary('Actions::transitionActions')source
+    /// and(owningType.oclIsKindOf(StateDefinition) or owningType.oclIsKindOf(StateUsage)) andsource <> null
+    /// and source.oclIsKindOf(StateUsage) implies   
+    /// specializesFromLibrary('States::StateAction::stateTransitions')specializesFromLibrary('Actions::transitionActions')source
     /// =    let sourceFeature : Feature = sourceFeature() in    if sourceFeature = null then null    else
     /// sourceFeature.featureTarget.oclAsType(ActionUsage)target =    if succession.targetFeature->isEmpty()
     /// then null    else        let targetFeature : Feature =           
@@ -51,7 +52,7 @@ namespace SysML2.NET.Core.POCO
     /// selectByKind(TransitionFeatureMembership)->    select(kind =
     /// TransitionFeatureKind::trigger).transitionFeature->    selectByKind(AcceptActionUsage)let
     /// successions : Sequence(Successions) =     ownedMember->selectByKind(Succession)
-    /// insuccessions->notEmpty() andsuccessions->at(1).targetFeature->   
+    /// insuccessions->notEmpty() andsuccessions->at(1).targetFeature.featureTarget->   
     /// forAll(oclIsKindOf(ActionUsage))guardExpression = ownedFeatureMembership->   
     /// selectByKind(TransitionFeatureMembership)->    select(kind =
     /// TransitionFeatureKind::trigger).transitionFeature->   
@@ -69,7 +70,8 @@ namespace SysML2.NET.Core.POCO
     /// b.relatedFeatures->includes(succession) and    b.relatedFeatures->includes(resolveGlobal(       
     /// 'TransitionPerformances::TransitionPerformance::transitionLink')))if triggerAction->isEmpty() then  
     ///  inputParameters()->size() >= 1else    inputParameters()->size() >= 2endif    succession =
-    /// ownedMember->selectByKind(Succession)->at(1)
+    /// ownedMember->selectByKind(Succession)->at(1)source <> null and not source.oclIsKindOf(StateUsage)
+    /// implies    triggerAction->isEmpty()
     /// </summary>
     public partial interface ITransitionUsage : IActionUsage
     {

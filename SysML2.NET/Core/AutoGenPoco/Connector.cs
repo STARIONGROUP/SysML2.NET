@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Connector.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -34,19 +34,18 @@ namespace SysML2.NET.Core.POCO
     /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
     /// which they are used (domain of the Connector). The associations of the Connector restrict what kinds
     /// of things might be linked. The Connector further restricts these links to be between values of
-    /// Features on instances of its domain.relatedFeature = connectorEnd.ownedReferenceSubsetting->   
-    /// select(s | s <> null).subsettedFeaturerelatedFeature->forAll(f |     if featuringType->isEmpty()
-    /// then f.isFeaturedWithin(null)    else featuringType->forAll(t | f.isFeaturedWithin(t))   
-    /// endif)sourceFeature =     if relatedFeature->isEmpty() then null     else relatedFeature->first()   
-    ///  endiftargetFeature =    if relatedFeature->size() < 2 then OrderedSet{}    else        
-    /// relatedFeature->            subSequence(2, relatedFeature->size())->            asOrderedSet()   
-    /// endifnot isAbstract implies relatedFeature->size() >=
-    /// 2specializesFromLibrary('Links::links')association->exists(oclIsKindOf(AssociationStructure))
-    /// implies    specializesFromLibrary('Objects::linkObjects')connectorEnds->size() = 2
-    /// andassociation->exists(oclIsKindOf(AssocationStructure)) implies   
-    /// specializesFromLibrary('Objects::binaryLinkObjects')connectorEnd->size() = 2 implies   
-    /// specializesFromLibrary('Links::binaryLinks')connectorEnds->size() > 2 implies    not
-    /// specializesFromLibrary('Links::BinaryLink')
+    /// Features on instances of its domain.not isAbstract implies relatedFeature->size() >=
+    /// 2connectorEnds->size() = 2 andassociation->exists(oclIsKindOf(AssociationStructure)) implies   
+    /// specializesFromLibrary('Objects::binaryLinkObjects')sourceFeature =     if relatedFeature->isEmpty()
+    /// then null     else relatedFeature->first()     endifconnectorEnds->size() > 2 implies    not
+    /// specializesFromLibrary('Links::BinaryLink')relatedFeature->forAll(f |     if
+    /// featuringType->isEmpty() then f.isFeaturedWithin(null)    else featuringType->forAll(t |
+    /// f.isFeaturedWithin(t))    endif)relatedFeature = connectorEnd.ownedReferenceSubsetting->    select(s
+    /// | s <> null).subsettedFeaturespecializesFromLibrary('Links::links')connectorEnd->size() = 2 implies 
+    ///   specializesFromLibrary('Links::binaryLinks')association->exists(oclIsKindOf(AssociationStructure))
+    /// implies    specializesFromLibrary('Objects::linkObjects')targetFeature =    if
+    /// relatedFeature->size() < 2 then OrderedSet{}    else         relatedFeature->           
+    /// subSequence(2, relatedFeature->size())->            asOrderedSet()    endif
     /// </summary>
     public partial class Connector : IConnector
     {
@@ -110,6 +109,15 @@ namespace SysML2.NET.Core.POCO
         public List<Feature> QueryConnectorEnd()
         {
             throw new NotImplementedException("Derived property ConnectorEnd not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property CrossFeature
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Feature QueryCrossFeature()
+        {
+            throw new NotImplementedException("Derived property CrossFeature not yet supported");
         }
 
         /// <summary>
@@ -297,14 +305,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsDerived { get; set; }
 
         /// <summary>
-        /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
-        /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
-        /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
-        /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
-        /// Features constrains the cardinality of the set of values of that Feature when the values of the
-        /// other n-1 end Features are held fixed.
+        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
+        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
+        /// which case values of the crossFeature must be the same as those found by navigation across instances
+        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
+        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
+        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
+        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
+        /// fixed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsEnd { get; set; }
@@ -441,6 +449,15 @@ namespace SysML2.NET.Core.POCO
         public Conjugation QueryOwnedConjugator()
         {
             throw new NotImplementedException("Derived property OwnedConjugator not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwnedCrossSubsetting
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public CrossSubsetting QueryOwnedCrossSubsetting()
+        {
+            throw new NotImplementedException("Derived property OwnedCrossSubsetting not yet supported");
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPortUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -37,7 +37,8 @@ namespace SysML2.NET.Core.POCO
     /// and(owningType.oclIsKindOf(PortDefinition) or owningType.oclIsKindOf(PortUsage)) implies   
     /// specializesFromLibrary('Ports::Port::subports')owningType = null ornot
     /// owningType.oclIsKindOf(PortDefinition) andnot owningType.oclIsKindOf(PortUsage) implies   
-    /// isReference
+    /// isReferenceowningType <> null and(owningType.oclIsKindOf(PartDefinition) or
+    /// owningType.oclIsKindOf(PartUsage)) implies    specializesFromLibrary('Parts::Part::ownedPorts')
     /// </summary>
     public partial interface IPortUsage : IOccurrenceUsage
     {

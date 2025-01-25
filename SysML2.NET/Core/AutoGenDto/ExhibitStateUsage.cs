@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ExhibitStateUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -36,8 +36,8 @@ namespace SysML2.NET.Core.DTO
     /// ReferenceSubsetting Relationship. An ExhibitStateUsage is also a PerformActionUsage, with its
     /// exhibitedState as the performedAction.owningType <> null and(owningType.oclIsKindOf(PartDefinition)
     /// or owningType.oclIsKindOf(PartUsage)) implies   
-    /// specializesFromLibrary('Parts::Part::exhibitedStates')ownedReferenceSubsetting <> null implies   
-    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(StateUsage)
+    /// specializesFromLibrary('Parts::Part::exhibitedStates')referencedFeatureTarget() <> null implies   
+    /// referencedFeatureTarget().oclIsKindOf(StateUsage)
     /// </summary>
     public partial class ExhibitStateUsage : IExhibitStateUsage
     {
@@ -124,14 +124,14 @@ namespace SysML2.NET.Core.DTO
         public bool IsDerived { get; set; }
 
         /// <summary>
-        /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
-        /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
-        /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
-        /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
-        /// Features constrains the cardinality of the set of values of that Feature when the values of the
-        /// other n-1 end Features are held fixed.
+        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
+        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
+        /// which case values of the crossFeature must be the same as those found by navigation across instances
+        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
+        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
+        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
+        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
+        /// fixed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsEnd { get; set; }

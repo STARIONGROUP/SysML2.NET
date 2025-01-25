@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Expression.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -35,19 +35,19 @@ namespace SysML2.NET.Core.DTO
     /// featuringType is a computational step within that Function. An Expression always has a single result
     /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
-    /// as the results of other Expression in the tree.isModelLevelEvaluable =
-    /// modelLevelEvaluable(Set(Element){})specializesFromLibrary('Performances::evaluations')owningMembership
-    /// <> null and owningMembership.oclIsKindOf(FeatureValue) implies    let featureWithValue : Feature =  
-    ///       owningMembership.oclAsType(FeatureValue).featureWithValue in    featuringType =
-    /// featureWithValue.featuringTypeownedMembership.selectByKind(ResultExpressionMembership)->   
-    /// forAll(mem | ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
+    /// as the results of other Expression in the tree.featureMembership->   
+    /// selectByKind(ReturnParameterMembership)->    size() = 1isModelLevelEvaluable =
+    /// modelLevelEvaluable(Set(Element){})owningMembership <> null and
+    /// owningMembership.oclIsKindOf(FeatureValue) implies    let featureWithValue : Feature =        
+    /// owningMembership.oclAsType(FeatureValue).featureWithValue in    featuringType =
+    /// featureWithValue.featuringTyperesult =    let resultParams : Sequence(Feature) =       
+    /// featureMemberships->            selectByKind(ReturnParameterMembership).           
+    /// ownedParameterMember in    if resultParams->notEmpty() then resultParams->first()    else null   
+    /// endifownedMembership.selectByKind(ResultExpressionMembership)->    forAll(mem |
+    /// ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
     /// binding.relatedFeature->includes(result) and           
-    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))result =    let resultParams :
-    /// Sequence(Feature) =        ownedFeatureMemberships->           
-    /// selectByKind(ReturnParameterMembership).            ownedParameterMember in    if
-    /// resultParams->notEmpty() then resultParams->first()    else if function <> null then function.result
-    ///    else null    endif endifownedFeatureMembership->    selectByKind(ReturnParameterMembership)->   
-    /// size() <= 1membership->selectByKind(ResultExpressionMembership)->size() <= 1
+    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))membership->selectByKind(ResultExpressionMembership)->size()
+    /// <= 1specializesFromLibrary('Performances::evaluations')
     /// </summary>
     public partial class Expression : IExpression
     {
@@ -132,14 +132,14 @@ namespace SysML2.NET.Core.DTO
         public bool IsDerived { get; set; }
 
         /// <summary>
-        /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
-        /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
-        /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
-        /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
-        /// Features constrains the cardinality of the set of values of that Feature when the values of the
-        /// other n-1 end Features are held fixed.
+        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
+        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
+        /// which case values of the crossFeature must be the same as those found by navigation across instances
+        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
+        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
+        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
+        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
+        /// fixed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsEnd { get; set; }

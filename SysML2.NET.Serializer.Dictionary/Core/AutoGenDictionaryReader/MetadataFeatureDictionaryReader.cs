@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="MetadataFeatureDictionaryReader.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -110,12 +110,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("annotation", out object annotationObject))
-            {
-                throw new ArgumentException("The annotation property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
-            }
-            List<Guid> annotationFeature = (annotationObject as List<string>)?.Select(Guid.Parse).ToList();
-
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
                 throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
@@ -214,7 +208,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
 
             metadataFeatureInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            metadataFeatureInstance.Annotation = annotationFeature ?? new List<Guid>();
             metadataFeatureInstance.DeclaredName = declaredNameFeature;
             metadataFeatureInstance.DeclaredShortName = declaredShortNameFeature;
             metadataFeatureInstance.Direction = directionFeature;
@@ -254,12 +247,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
-
-            if (!dictionary.TryGetValue("annotation", out object annotationObject))
-            {
-                throw new ArgumentException("The annotation property is missing from the dictionary, the dictionary cannot be converted into a MetadataFeature");
-            }
-            List<Guid> annotationFeature = (annotationObject as List<Guid>);
 
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
@@ -359,7 +346,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
 
             metadataFeatureInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            metadataFeatureInstance.Annotation = annotationFeature ?? new List<Guid>();
             metadataFeatureInstance.DeclaredName = declaredNameFeature;
             metadataFeatureInstance.DeclaredShortName = declaredShortNameFeature;
             metadataFeatureInstance.Direction = directionFeature;

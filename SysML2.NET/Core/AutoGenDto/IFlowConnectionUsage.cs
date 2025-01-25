@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFlowConnectionUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -31,11 +31,11 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A FlowConnectionUsage is a ConnectionUsage that is also an ItemFlow.if ownedEndFeatures->isEmpty()
-    /// then    specializesFromLibrary('Connections::messageConnections')else   
-    /// specializesFromLibrary('Connections::flowConnections')endif
+    /// A FlowConnectionUsage is an ActionUsage that is also a ConnectorAsUsage and an
+    /// ItemFlow.specializesFromLibrary('FlowConnections::messageConnections')ownedEndFeatures->notEmpty()
+    /// implies    specializesFromLibrary('FlowConnections::flowConnections')
     /// </summary>
-    public partial interface IFlowConnectionUsage : IConnectionUsage, IActionUsage, IItemFlow
+    public partial interface IFlowConnectionUsage : IConnectorAsUsage, IActionUsage, IItemFlow
     {
     }
 }

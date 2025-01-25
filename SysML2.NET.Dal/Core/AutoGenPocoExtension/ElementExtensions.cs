@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ElementExtensions.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -140,6 +140,8 @@ namespace SysML2.NET.Dal
                     return constraintDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConstraintDefinition)dto);
                 case Core.POCO.ConstraintUsage constraintUsagePoco:
                     return constraintUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConstraintUsage)dto);
+                case Core.POCO.CrossSubsetting crossSubsettingPoco:
+                    return crossSubsettingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.CrossSubsetting)dto);
                 case Core.POCO.DataType dataTypePoco:
                     return dataTypePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.DataType)dto);
                 case Core.POCO.DecisionNode decisionNodePoco:
@@ -200,6 +202,8 @@ namespace SysML2.NET.Dal
                     return ifActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.IfActionUsage)dto);
                 case Core.POCO.IncludeUseCaseUsage includeUseCaseUsagePoco:
                     return includeUseCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.IncludeUseCaseUsage)dto);
+                case Core.POCO.IndexExpression indexExpressionPoco:
+                    return indexExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.IndexExpression)dto);
                 case Core.POCO.Interaction interactionPoco:
                     return interactionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Interaction)dto);
                 case Core.POCO.InterfaceDefinition interfaceDefinitionPoco:
@@ -547,6 +551,9 @@ namespace SysML2.NET.Dal
                 case Core.POCO.ConstraintUsage constraintUsagePoco:
                     constraintUsagePoco.UpdateReferenceProperties((Core.DTO.ConstraintUsage)dto, cache);
                     break;
+                case Core.POCO.CrossSubsetting crossSubsettingPoco:
+                    crossSubsettingPoco.UpdateReferenceProperties((Core.DTO.CrossSubsetting)dto, cache);
+                    break;
                 case Core.POCO.DataType dataTypePoco:
                     dataTypePoco.UpdateReferenceProperties((Core.DTO.DataType)dto, cache);
                     break;
@@ -636,6 +643,9 @@ namespace SysML2.NET.Dal
                     break;
                 case Core.POCO.IncludeUseCaseUsage includeUseCaseUsagePoco:
                     includeUseCaseUsagePoco.UpdateReferenceProperties((Core.DTO.IncludeUseCaseUsage)dto, cache);
+                    break;
+                case Core.POCO.IndexExpression indexExpressionPoco:
+                    indexExpressionPoco.UpdateReferenceProperties((Core.DTO.IndexExpression)dto, cache);
                     break;
                 case Core.POCO.Interaction interactionPoco:
                     interactionPoco.UpdateReferenceProperties((Core.DTO.Interaction)dto, cache);

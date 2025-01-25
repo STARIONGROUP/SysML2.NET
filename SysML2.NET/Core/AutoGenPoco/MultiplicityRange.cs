@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="MultiplicityRange.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -40,13 +40,15 @@ namespace SysML2.NET.Core.POCO
     /// default for the lower bound is 0.bound->forAll(b | b.featuringType =
     /// self.featuringType)bound->forAll(b |    b.result.specializesFromLibrary('ScalarValues::Integer') and
     ///    let value : UnlimitedNatural = valueOf(b) in    value <> null implies value >= 0)lowerBound =   
-    /// let ownedMembers : Sequence(Element) =        
-    /// ownedMembership->selectByKind(OwningMembership).ownedMember in    if ownedMembers->size() < 2 or    
-    ///     not ownedMembers->first().oclIsKindOf(Expression) then null    else
-    /// ownedMembers->first().oclAsType(Expression)    endifupperBound =    let ownedMembers :
-    /// Sequence(Element) =         ownedMembership->selectByKind(OwningMembership).ownedMember in    if
-    /// ownedMembers->isEmpty() or        not ownedMembers->last().oclIsKindOf(Expression)     then null   
-    /// else ownedMembers->last().oclAsType(Expression)    endif
+    /// let ownedExpressions : Sequence(Expression) =        ownedMember->selectByKind(Expression) in    if
+    /// ownedExpressions->size() < 2 then null    else ownedExpressions->first()    endifupperBound =    let
+    /// ownedExpressions : Sequence(Expression) =        ownedMember->selectByKind(Expression) in    if
+    /// ownedExpressions->isEmpty() then null    else if ownedExpressions->size() = 1 then
+    /// ownedExpressions->at(1)    else ownedExpressions->at(2)    endif endif bound =    if upperBound =
+    /// null then Sequence{}    else if lowerBound = null then Sequence{upperBound}    else
+    /// Sequence{lowerBound, upperBound}    endif endifif lowerBound = null then    ownedMember->notEmpty()
+    /// and    ownedMember->at(1) = upperBoundelse    ownedMember->size() > 1 and    ownedMember->at(1) =
+    /// lowerBound and    ownedMember->at(2) = upperBoundendif
     /// </summary>
     public partial class MultiplicityRange : IMultiplicityRange
     {
@@ -84,7 +86,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property Bound
         /// </summary>
-        [EFeature(isChangeable: false, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: 2, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: 2, isMany: false, isRequired: false, isContainment: false)]
         public List<Expression> QueryBound()
         {
             throw new NotImplementedException("Derived property Bound not yet supported");
@@ -97,6 +99,15 @@ namespace SysML2.NET.Core.POCO
         public List<Feature> QueryChainingFeature()
         {
             throw new NotImplementedException("Derived property ChainingFeature not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property CrossFeature
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Feature QueryCrossFeature()
+        {
+            throw new NotImplementedException("Derived property CrossFeature not yet supported");
         }
 
         /// <summary>
@@ -284,14 +295,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsDerived { get; set; }
 
         /// <summary>
-        /// Whether or not the this Feature is an end Feature, requiring a different interpretation of the
-        /// multiplicity of the Feature.An end Feature is always considered to map each domain instance to a
-        /// single co-domain instance, whether or not a Multiplicity is given for it. If a Multiplicity is given
-        /// for an end Feature, rather than giving the co-domain cardinality for the Feature as usual, it
-        /// specifies a cardinality constraint for navigating across the endFeatures of the featuringType of the
-        /// end Feature. That is, if a Type has n endFeatures, then the Multiplicity of any one of those end
-        /// Features constrains the cardinality of the set of values of that Feature when the values of the
-        /// other n-1 end Features are held fixed.
+        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
+        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
+        /// which case values of the crossFeature must be the same as those found by navigation across instances
+        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
+        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
+        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
+        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
+        /// fixed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsEnd { get; set; }
@@ -430,6 +441,15 @@ namespace SysML2.NET.Core.POCO
         public Conjugation QueryOwnedConjugator()
         {
             throw new NotImplementedException("Derived property OwnedConjugator not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwnedCrossSubsetting
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public CrossSubsetting QueryOwnedCrossSubsetting()
+        {
+            throw new NotImplementedException("Derived property OwnedCrossSubsetting not yet supported");
         }
 
         /// <summary>

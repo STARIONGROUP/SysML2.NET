@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ConnectionDefinition.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.POCO
     /// A ConnectionDefinition is a PartDefinition that is also an AssociationStructure. The end Features of
     /// a ConnectionDefinition must be
     /// Usages.specializesFromLibrary('Connections::Connection')ownedEndFeature->size() = 2 implies   
-    /// specializesFromLibrary('Connections::BinaryConnections')
+    /// specializesFromLibrary('Connections::BinaryConnections')isSufficient
     /// </summary>
     public partial class ConnectionDefinition : IConnectionDefinition
     {

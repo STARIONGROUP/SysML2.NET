@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFunction.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -33,16 +33,15 @@ namespace SysML2.NET.Core.DTO
     /// <summary>
     /// A Function is a Behavior that has an out parameter that is identified as its result. A Function
     /// represents the performance of a calculation that produces the values of its result parameter. This
-    /// calculation may be decomposed into Expressions that are steps of the
-    /// Function.ownedMembership.selectByKind(ResultExpressionMembership)->    forAll(mem |
-    /// ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
+    /// calculation may be decomposed into Expressions that are steps of the Function.featureMembership->   
+    /// selectByKind(ReturnParameterMembership)->    size() =
+    /// 1specializesFromLibrary('Performances::Evaluation')ownedMembership.selectByKind(ResultExpressionMembership)->
+    ///    forAll(mem | ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
     /// binding.relatedFeature->includes(result) and           
-    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))specializesFromLibrary('Performances::Evaluation')result
-    /// =    let resultParams : Sequence(Feature) =        ownedFeatureMemberships->           
-    /// selectByKind(ReturnParameterMembership).            ownedParameterMember in    if
-    /// resultParams->notEmpty() then resultParams->first()    else null    endifownedFeatureMembership->   
-    /// selectByKind(ReturnParameterMembership)->    size() <=
-    /// 1membership->selectByKind(ResultExpressionMembership)->size() <= 1
+    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))result =    let resultParams :
+    /// Sequence(Feature) =        featureMemberships->            selectByKind(ReturnParameterMembership). 
+    ///           ownedParameterMember in    if resultParams->notEmpty() then resultParams->first()    else
+    /// null    endifmembership->selectByKind(ResultExpressionMembership)->size() <= 1
     /// </summary>
     public partial interface IFunction : IBehavior
     {

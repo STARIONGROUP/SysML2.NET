@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IImport.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -37,8 +37,7 @@ namespace SysML2.NET.Core.POCO
     /// (the default), then only public Memberships are considered &quot;visible&quot;. If isImportAll =
     /// true, then all Memberships are considered &quot;visible&quot;, regardless of their declared
     /// visibility. If isRecursive = true, then visible Memberships are also recursively imported from owned
-    /// sub-Namespaces.importOwningNamespace.owningNamespace = null implies     visibility =
-    /// VisibilityKind::private
+    /// sub-Namespaces.importOwningNamespace.owner = null implies     visibility = VisibilityKind::private
     /// </summary>
     public partial interface IImport : IRelationship
     {

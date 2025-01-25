@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualRepresentationExtensions.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -69,12 +69,6 @@ namespace SysML2.NET.Dal
 
             poco.AliasIds = dto.AliasIds;
 
-            var annotationToDelete = poco.Annotation.Select(x => x.Id).Except(dto.Annotation);
-            foreach (var identifier in annotationToDelete)
-            {
-                poco.Annotation.Remove(poco.Annotation.Single(x => x.Id == identifier));
-            }
-
             poco.Body = dto.Body;
 
             poco.DeclaredName = dto.DeclaredName;
@@ -132,15 +126,6 @@ namespace SysML2.NET.Dal
 
             Lazy<Core.POCO.IElement> lazyPoco;
 
-            var annotationToAdd = dto.Annotation.Except(poco.Annotation.Select(x => x.Id));
-            foreach (var identifier in annotationToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Annotation.Add((Core.POCO.Annotation)lazyPoco.Value);
-                }
-            }
-
             var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
             foreach (var identifier in ownedRelationshipToAdd)
             {
@@ -176,7 +161,6 @@ namespace SysML2.NET.Dal
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;
-            dto.Annotation = poco.Annotation.Select(x => x.Id).ToList();
             dto.Body = poco.Body;
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;

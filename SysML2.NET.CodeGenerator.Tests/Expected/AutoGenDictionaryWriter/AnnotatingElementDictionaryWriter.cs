@@ -108,7 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             };
 
             dictionary.Add("aliasIds", annotatingElementInstance.AliasIds);
-            dictionary.Add("annotation", $"[ {string.Join(",", annotatingElementInstance.Annotation)} ]");
             dictionary.Add("declaredName", annotatingElementInstance.DeclaredName);
             dictionary.Add("declaredShortName", annotatingElementInstance.DeclaredShortName);
             dictionary.Add("elementId", annotatingElementInstance.ElementId);
@@ -142,7 +141,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             };
 
             dictionary.Add("aliasIds", annotatingElementInstance.AliasIds);
-            dictionary.Add("annotation", annotatingElementInstance.Annotation);
             dictionary.Add("declaredName", annotatingElementInstance.DeclaredName);
             dictionary.Add("declaredShortName", annotatingElementInstance.DeclaredShortName);
             dictionary.Add("elementId", annotatingElementInstance.ElementId);

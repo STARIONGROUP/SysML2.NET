@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="MetadataFeatureDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -108,7 +108,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             };
 
             dictionary.Add("aliasIds", metadataFeatureInstance.AliasIds);
-            dictionary.Add("annotation", $"[ {string.Join(",", metadataFeatureInstance.Annotation)} ]");
             dictionary.Add("declaredName", metadataFeatureInstance.DeclaredName);
             dictionary.Add("declaredShortName", metadataFeatureInstance.DeclaredShortName);
             dictionary.Add("direction", metadataFeatureInstance.Direction);
@@ -152,7 +151,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             };
 
             dictionary.Add("aliasIds", metadataFeatureInstance.AliasIds);
-            dictionary.Add("annotation", metadataFeatureInstance.Annotation);
             dictionary.Add("declaredName", metadataFeatureInstance.DeclaredName);
             dictionary.Add("declaredShortName", metadataFeatureInstance.DeclaredShortName);
             dictionary.Add("direction", metadataFeatureInstance.Direction);

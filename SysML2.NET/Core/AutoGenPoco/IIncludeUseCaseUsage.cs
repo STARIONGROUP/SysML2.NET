@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IIncludeUseCaseUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -37,8 +37,8 @@ namespace SysML2.NET.Core.POCO
     /// IncludeUseCaseUsage is also a PerformActionUsage, with its useCaseIncluded as the
     /// performedAction.owningType <> null and(owningType.oclIsKindOf(UseCaseDefinition) or
     /// owningType.oclIsKindOf(UseCaseUsage) implies   
-    /// specializesFromLibrary('UseCases::UseCase::includedUseCases')ownedReferenceSubsetting <> null
-    /// implies    ownedReferenceSubsetting.referencedFeature.oclIsKindOf(UseCaseUsage)
+    /// specializesFromLibrary('UseCases::UseCase::includedUseCases')referencedFeatureTarget() <> null
+    /// implies    referencedFeatureTarget().oclIsKindOf(UseCaseUsage)
     /// </summary>
     public partial interface IIncludeUseCaseUsage : IUseCaseUsage, IPerformActionUsage
     {

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IEventOccurrenceUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -37,11 +37,11 @@ namespace SysML2.NET.Core.POCO
     /// by a ReferenceSubsetting Relationship.If the EventOccurrenceUsage is owned by an
     /// OccurrenceDefinition or OccurrenceUsage, then it also subsets the timeEnclosedOccurrences property
     /// of the Class Occurrence from the Kernel Semantic Library model Occurrences.eventOccurrence =    if
-    /// ownedReferenceSubsetting = null then self    else if
-    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(OccurrenceUsage) then        
-    /// ownedReferenceSubsetting.referencedFeature.oclAsType(OccurrenceUsage)    else null    endif
-    /// endifownedReferenceSubsetting <> null implies   
-    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(OccurrenceUsage)owningType <> null
+    /// referencedFeatureTarget() = null then self    else if
+    /// referencedFeatureTarget().oclIsKindOf(OccurrenceUsage) then       
+    /// referencedFeatureTarget().oclAsType(OccurrenceUsage)    else null    endif
+    /// endifreferencedFeatureTarget() <> null implies   
+    /// referencedFeatureTarget().oclIsKindOf(OccurrenceUsage)owningType <> null
     /// and(owningType.oclIsKindOf(OccurrenceDefinition) or owningType.oclIsKindOf(OccurrenceUsage)) implies
     /// specializesFromLibrary('Occurrences::Occurrence::timeEnclosedOccurrences')isReference
     /// </summary>

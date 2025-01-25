@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ICollectExpression.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,7 +32,7 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A CollectExpression is an OperatorExpression whose operator is "collect", which resolves to the
-    /// Function ControlFunctions::collect from the Kernel Functions Library.operator = "collect"
+    /// Function ControlFunctions::collect from the Kernel Functions Library.operator = 'collect'
     /// </summary>
     public partial interface ICollectExpression : IOperatorExpression
     {

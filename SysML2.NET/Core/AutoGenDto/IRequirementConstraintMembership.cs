@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IRequirementConstraintMembership.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -32,10 +32,10 @@ namespace SysML2.NET.Core.DTO
 
     /// <summary>
     /// A RequirementConstraintMembership is a FeatureMembership for an assumed or required ConstraintUsage
-    /// of a RequirementDefinition or RequirementUsage.referencedConstraint =    let reference :
-    /// ReferenceSubsetting =         ownedConstraint.ownedReferenceSubsetting in    if reference = null
-    /// then ownedConstraint    else if not reference.referencedFeature.oclIsKindOf(ConstraintUsage) then
-    /// null     else reference.referencedFeature.oclAsType(ConstraintUsage)    endif
+    /// of a RequirementDefinition or RequirementUsage.referencedConstraint =    let referencedFeature :
+    /// Feature =         ownedConstraint.referencedFeatureTarget() in    if referencedFeature = null then
+    /// ownedConstraint    else if referencedFeature.oclIsKindOf(ConstraintUsage) then       
+    /// refrencedFeature.oclAsType(ConstraintUsage)    else null    endif
     /// endifowningType.oclIsKindOf(RequirementDefinition)
     /// orowningType.oclIsKindOf(RequirementUsage)ownedConstraint.isComposite
     /// </summary>

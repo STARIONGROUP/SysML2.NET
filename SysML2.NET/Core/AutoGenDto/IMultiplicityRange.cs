@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMultiplicityRange.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -40,13 +40,15 @@ namespace SysML2.NET.Core.DTO
     /// default for the lower bound is 0.bound->forAll(b | b.featuringType =
     /// self.featuringType)bound->forAll(b |    b.result.specializesFromLibrary('ScalarValues::Integer') and
     ///    let value : UnlimitedNatural = valueOf(b) in    value <> null implies value >= 0)lowerBound =   
-    /// let ownedMembers : Sequence(Element) =        
-    /// ownedMembership->selectByKind(OwningMembership).ownedMember in    if ownedMembers->size() < 2 or    
-    ///     not ownedMembers->first().oclIsKindOf(Expression) then null    else
-    /// ownedMembers->first().oclAsType(Expression)    endifupperBound =    let ownedMembers :
-    /// Sequence(Element) =         ownedMembership->selectByKind(OwningMembership).ownedMember in    if
-    /// ownedMembers->isEmpty() or        not ownedMembers->last().oclIsKindOf(Expression)     then null   
-    /// else ownedMembers->last().oclAsType(Expression)    endif
+    /// let ownedExpressions : Sequence(Expression) =        ownedMember->selectByKind(Expression) in    if
+    /// ownedExpressions->size() < 2 then null    else ownedExpressions->first()    endifupperBound =    let
+    /// ownedExpressions : Sequence(Expression) =        ownedMember->selectByKind(Expression) in    if
+    /// ownedExpressions->isEmpty() then null    else if ownedExpressions->size() = 1 then
+    /// ownedExpressions->at(1)    else ownedExpressions->at(2)    endif endif bound =    if upperBound =
+    /// null then Sequence{}    else if lowerBound = null then Sequence{upperBound}    else
+    /// Sequence{lowerBound, upperBound}    endif endifif lowerBound = null then    ownedMember->notEmpty()
+    /// and    ownedMember->at(1) = upperBoundelse    ownedMember->size() > 1 and    ownedMember->at(1) =
+    /// lowerBound and    ownedMember->at(2) = upperBoundendif
     /// </summary>
     public partial interface IMultiplicityRange : IMultiplicity
     {

@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AnnotatingElement.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
@@ -36,7 +36,9 @@ namespace SysML2.NET.Core.POCO
     /// Relationships, or it implicitly annotates its owningNamespace.annotatedElement =  if
     /// annotation->notEmpty() then annotation.annotatedElement else Sequence{owningNamespace}
     /// endifownedAnnotatingRelationship = ownedRelationship->    selectByKind(Annotation)->    select(a |
-    /// a.annotatingElement = self)
+    /// a.annotatingElement = self)annotation =     if owningAnnotatingRelationship = null then
+    /// ownedAnnotatingRelationship    else
+    /// owningAnnotatingRelationship->prepend(owningAnnotatingRelationship)    endif
     /// </summary>
     public partial class AnnotatingElement : IAnnotatingElement
     {
@@ -46,7 +48,6 @@ namespace SysML2.NET.Core.POCO
         public AnnotatingElement()
         {
             this.AliasIds = new List<string>();
-            this.Annotation = new List<Annotation>();
             this.IsImpliedIncluded = false;
             this.OwnedRelationship = new List<IRelationship>();
         }
@@ -73,10 +74,13 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The Annotations that relate this AnnotatingElement to its annotatedElements.
+        /// Queries the derived property Annotation
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Annotation> Annotation { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Annotation> QueryAnnotation()
+        {
+            throw new NotImplementedException("Derived property Annotation not yet supported");
+        }
 
         /// <summary>
         /// The declared name of this Element.
@@ -140,7 +144,7 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Queries the derived property OwnedAnnotatingRelationship
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Annotation> QueryOwnedAnnotatingRelationship()
         {
             throw new NotImplementedException("Derived property OwnedAnnotatingRelationship not yet supported");
@@ -177,6 +181,15 @@ namespace SysML2.NET.Core.POCO
         public IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwningAnnotatingRelationship
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Annotation QueryOwningAnnotatingRelationship()
+        {
+            throw new NotImplementedException("Derived property OwningAnnotatingRelationship not yet supported");
         }
 
         /// <summary>

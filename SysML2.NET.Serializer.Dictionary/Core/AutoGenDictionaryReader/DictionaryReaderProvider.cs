@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DictionaryReaderProvider.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2025 Starion Group S.A.
@@ -75,6 +75,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             { "Connector", ConnectorDictionaryReader.Read },
             { "ConstraintDefinition", ConstraintDefinitionDictionaryReader.Read },
             { "ConstraintUsage", ConstraintUsageDictionaryReader.Read },
+            { "CrossSubsetting", CrossSubsettingDictionaryReader.Read },
             { "DataType", DataTypeDictionaryReader.Read },
             { "DecisionNode", DecisionNodeDictionaryReader.Read },
             { "Definition", DefinitionDictionaryReader.Read },
@@ -105,6 +106,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             { "Function", FunctionDictionaryReader.Read },
             { "IfActionUsage", IfActionUsageDictionaryReader.Read },
             { "IncludeUseCaseUsage", IncludeUseCaseUsageDictionaryReader.Read },
+            { "IndexExpression", IndexExpressionDictionaryReader.Read },
             { "Interaction", InteractionDictionaryReader.Read },
             { "InterfaceDefinition", InterfaceDefinitionDictionaryReader.Read },
             { "InterfaceUsage", InterfaceUsageDictionaryReader.Read },
