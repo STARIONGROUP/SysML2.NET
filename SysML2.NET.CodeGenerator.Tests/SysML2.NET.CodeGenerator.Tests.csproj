@@ -97,6 +97,25 @@
       <Compile Remove="Expected\AutoGenElementFactory\LiteralRationalFactory.cs" />
       <Compile Remove="Expected\AutoGenElementFactory\NamespaceImportFactory.cs" />
       <Compile Remove="Expected\AutoGenEnum\VisibilityKind.cs" />
+      <Compile Remove="Expected\autoGenPimDto\Branch.cs" />
+      <Compile Remove="Expected\autoGenPimDto\Commit.cs" />
+      <Compile Remove="Expected\autoGenPimDto\CompositeConstraint.cs" />
+      <Compile Remove="Expected\autoGenPimDto\DataDifference.cs" />
+      <Compile Remove="Expected\autoGenPimDto\DataVersion.cs" />
+      <Compile Remove="Expected\autoGenPimDto\ExternalData.cs" />
+      <Compile Remove="Expected\autoGenPimDto\IBranch.cs" />
+      <Compile Remove="Expected\autoGenPimDto\ICommit.cs" />
+      <Compile Remove="Expected\autoGenPimDto\ICompositeConstraint.cs" />
+      <Compile Remove="Expected\autoGenPimDto\IDataDifference.cs" />
+      <Compile Remove="Expected\autoGenPimDto\IDataVersion.cs" />
+      <Compile Remove="Expected\autoGenPimDto\IExternalData.cs" />
+      <Compile Remove="Expected\autoGenPimDto\IExternalRelationship.cs" />
+      <Compile Remove="Expected\autoGenPimDto\IProject.cs" />
+      <Compile Remove="Expected\autoGenPimDto\IRecord.cs" />
+      <Compile Remove="Expected\autoGenPimDto\Project.cs" />
+      <Compile Remove="Expected\autoGenPimDto\Record.cs" />
+      <Compile Remove="Expected\AutoGenPimEnum\JoinOperator.cs" />
+      <Compile Remove="Expected\AutoGenPimEnum\Operator.cs" />
       <Compile Remove="Expected\AutoGenPocoExtension\AnnotatingElementExtensions.cs" />
       <Compile Remove="Expected\AutoGenPocoExtension\AnnotationExtensions.cs" />
       <Compile Remove="Expected\AutoGenPocoExtension\CommentExtensions.cs" />
@@ -141,6 +160,63 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Include="Expected\AutoGenElementFactory\ElementFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\Branch.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\Commit.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\CompositeConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\DataDifference.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\DataVersion.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\ExternalData.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\IBranch.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\ICommit.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\ICompositeConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\IDataDifference.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\IDataVersion.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\IExternalData.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\IExternalRelationship.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\IProject.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\IRecord.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\Project.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\autoGenPimDto\Record.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\AutoGenPimEnum\JoinOperator.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\AutoGenPimEnum\Operator.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Include="Expected\AutoGenPocoExtension\AnnotationExtensions.cs">
@@ -401,6 +477,9 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Serilog" Version="4.2.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>

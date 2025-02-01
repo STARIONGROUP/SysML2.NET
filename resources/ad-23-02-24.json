@@ -1,0 +1,2560 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Systems Modeling API and Services",
+    "description": "REST/HTTP platform specific model (PSM) for the Systems Modeling API and Services",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "Project"
+    },
+    {
+      "name": "Branch"
+    },
+    {
+      "name": "Tag"
+    },
+    {
+      "name": "Commit"
+    },
+    {
+      "name": "Element"
+    },
+    {
+      "name": "Relationship"
+    },
+    {
+      "name": "Diff & Merge"
+    },
+    {
+      "name": "Query"
+    },
+    {
+      "name": "Meta"
+    }
+  ],
+  "paths": {
+    "/projects": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "Get projects",
+        "operationId": "getProjects",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                },
+                "examples": {
+                  "Projects": {
+                    "$ref": "#/components/examples/Projects"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "Create project",
+        "operationId": "postProject",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRequest"
+              },
+              "examples": {
+                "ProjectRequest": {
+                  "$ref": "#/components/examples/ProjectRequest"
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                },
+                "examples": {
+                  "Project": {
+                    "$ref": "#/components/examples/Project"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "Get project by ID",
+        "operationId": "getProjectById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                },
+                "examples": {
+                  "Project": {
+                    "$ref": "#/components/examples/Project"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "Update project by ID",
+        "operationId": "putProjectById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRequest"
+              },
+              "examples": {
+                "ProjectRequest": {
+                  "$ref": "#/components/examples/ProjectRequest"
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                },
+                "examples": {
+                  "Project": {
+                    "$ref": "#/components/examples/Project"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "Delete project by ID",
+        "operationId": "deleteProjectById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                },
+                "examples": {
+                  "Project": {
+                    "$ref": "#/components/examples/Project"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/branches": {
+      "get": {
+        "tags": [
+          "Branch"
+        ],
+        "summary": "Get branches by project",
+        "operationId": "getBranchesByProject",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Branch"
+                  }
+                },
+                "examples": {
+                  "Branches": {
+                    "$ref": "#/components/examples/Branches"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Branch"
+        ],
+        "summary": "Create branch by project",
+        "operationId": "postBranchByProject",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BranchRequest"
+              },
+              "examples": {
+                "BranchRequest": {
+                  "$ref": "#/components/examples/BranchRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                },
+                "examples": {
+                  "Branch": {
+                    "$ref": "#/components/examples/Branch"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/branches/{branchId}": {
+      "get": {
+        "tags": [
+          "Branch"
+        ],
+        "summary": "Get branch by project and ID",
+        "operationId": "getBranchesByProjectAndId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/branchId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                },
+                "examples": {
+                  "Branch": {
+                    "$ref": "#/components/examples/Branch"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Branch"
+        ],
+        "summary": "Delete branch by project and ID",
+        "operationId": "deleteBranchByProjectAndId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/branchId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                },
+                "examples": {
+                  "Branch": {
+                    "$ref": "#/components/examples/Branch"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/tags": {
+      "get": {
+        "tags": [
+          "Tag"
+        ],
+        "summary": "Get tags by project",
+        "operationId": "getTagsByProject",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tag"
+                  }
+                },
+                "examples": {
+                  "Tags": {
+                    "$ref": "#/components/examples/Tags"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Tag"
+        ],
+        "summary": "Create tag by project",
+        "operationId": "postTagByProject",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagRequest"
+              },
+              "examples": {
+                "TagRequest": {
+                  "$ref": "#/components/examples/TagRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                },
+                "examples": {
+                  "Tag": {
+                    "$ref": "#/components/examples/Tag"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/tags/{tagId}": {
+      "get": {
+        "tags": [
+          "Tag"
+        ],
+        "summary": "Get tag by project and ID",
+        "operationId": "getTagByProjectAndId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/tagId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                },
+                "examples": {
+                  "Tag": {
+                    "$ref": "#/components/examples/Tag"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tag"
+        ],
+        "summary": "Delete tag by project and ID",
+        "operationId": "deleteTagByProjectAndId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/tagId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                },
+                "examples": {
+                  "Tag": {
+                    "$ref": "#/components/examples/Tag"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits": {
+      "get": {
+        "tags": [
+          "Commit"
+        ],
+        "summary": "Get commits by project",
+        "operationId": "getCommitsByProject",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Commit"
+                  }
+                },
+                "examples": {
+                  "Commits": {
+                    "$ref": "#/components/examples/Commits"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Commit"
+        ],
+        "summary": "Create commit by project",
+        "operationId": "postCommitByProject",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/defaultingBranchId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommitRequest"
+              },
+              "examples": {
+                "ElementCommitRequest": {
+                  "$ref": "#/components/examples/ElementCommitRequest"
+                },
+                "RelationshipCommitRequest": {
+                  "$ref": "#/components/examples/RelationshipCommitRequest"
+                },
+                "ProjectUsageCommitRequest": {
+                  "$ref": "#/components/examples/ProjectUsageCommitRequest"
+                },
+                "DeleteCommitRequest": {
+                  "$ref": "#/components/examples/DeleteCommitRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commit"
+                },
+                "examples": {
+                  "Commit": {
+                    "$ref": "#/components/examples/Commit"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{commitId}": {
+      "get": {
+        "tags": [
+          "Commit"
+        ],
+        "summary": "Get commit by project and ID",
+        "operationId": "getCommitByProjectAndId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/commitId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commit"
+                },
+                "examples": {
+                  "Commit": {
+                    "$ref": "#/components/examples/Commit"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{commitId}/changes": {
+      "get": {
+        "tags": [
+          "Commit"
+        ],
+        "summary": "Get changes by project and commit",
+        "operationId": "getChangesByProjectCommit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/commitId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataVersion"
+                  }
+                },
+                "examples": {
+                  "DataVersions": {
+                    "$ref": "#/components/examples/DataVersions"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{commitId}/changes/{changeId}": {
+      "get": {
+        "tags": [
+          "Commit"
+        ],
+        "summary": "Get change by project, commit and ID",
+        "operationId": "getChangeByProjectCommitId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/commitId"
+          },
+          {
+            "$ref": "#/components/parameters/changeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataVersion"
+                },
+                "examples": {
+                  "DataVersion": {
+                    "$ref": "#/components/examples/DataVersion"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{commitId}/elements": {
+      "get": {
+        "tags": [
+          "Element"
+        ],
+        "summary": "Get elements by project and commit",
+        "operationId": "getElementsByProjectCommit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/commitId"
+          },
+          {
+            "$ref": "#/components/parameters/excludeUsed"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Element"
+                  }
+                },
+                "examples": {
+                  "Elements": {
+                    "$ref": "#/components/examples/Elements"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{commitId}/elements/{elementId}": {
+      "get": {
+        "tags": [
+          "Element"
+        ],
+        "summary": "Get element by project, commit and ID",
+        "operationId": "getElementByProjectCommitId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/commitId"
+          },
+          {
+            "$ref": "#/components/parameters/elementId"
+          },
+          {
+            "$ref": "#/components/parameters/excludeUsed"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Element"
+                },
+                "examples": {
+                  "Element": {
+                    "$ref": "#/components/examples/Element"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{commitId}/elements/{elementId}/projectUsage": {
+      "get": {
+        "tags": [
+          "Element"
+        ],
+        "summary": "Get ProjectUsage that originates the provided element",
+        "operationId": "getProjectUsageByProjectCommitElement",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/commitId"
+          },
+          {
+            "$ref": "#/components/parameters/elementId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectUsage"
+                },
+                "examples": {
+                  "ProjectUsage": {
+                    "$ref": "#/components/examples/ProjectUsage"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{commitId}/roots": {
+      "get": {
+        "tags": [
+          "Element"
+        ],
+        "summary": "Get root elements by project and commit",
+        "operationId": "getRootsByProjectCommit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/commitId"
+          },
+          {
+            "$ref": "#/components/parameters/excludeUsed"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Element"
+                  }
+                },
+                "examples": {
+                  "Elements": {
+                    "$ref": "#/components/examples/Elements"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{commitId}/elements/{relatedElementId}/relationships": {
+      "get": {
+        "tags": [
+          "Relationship"
+        ],
+        "summary": "Get relationships by project, commit, and related element",
+        "operationId": "getRelationshipsByProjectCommitRelatedElement",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/commitId"
+          },
+          {
+            "$ref": "#/components/parameters/relatedElementId"
+          },
+          {
+            "$ref": "#/components/parameters/direction"
+          },
+          {
+            "$ref": "#/components/parameters/excludeUsed"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Relationship"
+                  }
+                },
+                "examples": {
+                  "Relationships": {
+                    "$ref": "#/components/examples/Relationships"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/commits/{compareCommitId}/diff": {
+      "get": {
+        "tags": [
+          "Diff & Merge"
+        ],
+        "summary": "Diff a base commit and compare commit",
+        "operationId": "diff",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/baseCommitId"
+          },
+          {
+            "$ref": "#/components/parameters/compareCommitId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataDifference"
+                  }
+                },
+                "examples": {
+                  "DataDifferences": {
+                    "$ref": "#/components/examples/DataDifferences"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/branches/{targetBranchId}/merge": {
+      "post": {
+        "tags": [
+          "Diff & Merge"
+        ],
+        "summary": "Merge source commit(s) into a target branch",
+        "operationId": "merge",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/sourceCommitId"
+          },
+          {
+            "$ref": "#/components/parameters/targetBranchId"
+          },
+          {
+            "$ref": "#/components/parameters/mergeDescription"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Data"
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "examples": {
+                "Without Resolutions": {
+                  "value": []
+                },
+                "With Resolutions": {
+                  "$ref": "#/components/examples/Elements"
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commit"
+                },
+                "examples": {
+                  "Merged": {
+                    "$ref": "#/components/examples/MergeCommit"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DataIdentity"
+                  }
+                },
+                "examples": {
+                  "Conflicting": {
+                    "$ref": "#/components/examples/MergeConflicting"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/queries": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Get queries by project",
+        "operationId": "getQueriesByProject",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Query"
+                  }
+                },
+                "examples": {
+                  "Queries": {
+                    "$ref": "#/components/examples/Queries"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Create query by project",
+        "operationId": "postQueryByProject",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              },
+              "examples": {
+                "QueryRequest": {
+                  "$ref": "#/components/examples/QueryRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Query"
+                },
+                "examples": {
+                  "Query": {
+                    "$ref": "#/components/examples/Query"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/queries/{queryId}": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Get query by project and ID",
+        "operationId": "getQueryByProjectAndId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/queryId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Query"
+                },
+                "examples": {
+                  "Query": {
+                    "$ref": "#/components/examples/Query"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Update project by project and ID",
+        "operationId": "putQueryByProjectAndId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/queryId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              },
+              "examples": {
+                "QueryRequest": {
+                  "$ref": "#/components/examples/QueryRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Query"
+                },
+                "examples": {
+                  "Query": {
+                    "$ref": "#/components/examples/Query"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Delete query by project and ID",
+        "operationId": "deleteQueryByProjectAndId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/queryId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Query"
+                },
+                "examples": {
+                  "Query": {
+                    "$ref": "#/components/examples/Query"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/queries/{queryId}/results": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Get query results by project and query",
+        "operationId": "getQueryResultsByProjectIdQueryId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/queryId"
+          },
+          {
+            "$ref": "#/components/parameters/defaultingCommitId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Data"
+                  }
+                },
+                "examples": {
+                  "Elements": {
+                    "$ref": "#/components/examples/Elements"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/query-results": {
+      "get": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Get query results by project and query definition",
+        "operationId": "getQueryResultsByProjectIdQuery",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/defaultingCommitId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              },
+              "examples": {
+                "QueryRequest": {
+                  "$ref": "#/components/examples/QueryRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Data"
+                  }
+                },
+                "examples": {
+                  "Elements": {
+                    "$ref": "#/components/examples/Elements"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Get query results by project and query definition via POST",
+        "description": "For compatibility with clients that don't support GET requests with a body",
+        "operationId": "getQueryResultsByProjectIdQueryPost",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/projectId"
+          },
+          {
+            "$ref": "#/components/parameters/defaultingCommitId"
+          },
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              },
+              "examples": {
+                "QueryRequest": {
+                  "$ref": "#/components/examples/QueryRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Data"
+                  }
+                },
+                "examples": {
+                  "Elements": {
+                    "$ref": "#/components/examples/Elements"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/meta/datatypes": {
+      "get": {
+        "tags": [
+          "Meta"
+        ],
+        "summary": "Get datatypes",
+        "operationId": "getDatatypes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pageAfter"
+          },
+          {
+            "$ref": "#/components/parameters/pageBefore"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "$schema": {
+                      "type": "string",
+                      "const": "https://json-schema.org/draft/2020-12/schema"
+                    },
+                    "$defs": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "required": [
+                    "$schema",
+                    "$defs"
+                  ],
+                  "additionalProperties": false
+                },
+                "examples": {
+                  "Datatypes": {
+                    "$ref": "#/components/examples/Datatypes"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/meta/datatypes/{datatypeId}": {
+      "get": {
+        "tags": [
+          "Meta"
+        ],
+        "summary": "Get datatype by ID",
+        "operationId": "getDatatypeById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/datatypeId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "$schema": {
+                      "type": "string",
+                      "const": "https://json-schema.org/draft/2020-12/schema"
+                    },
+                    "$id": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "$defs": {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "properties": {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "required": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "$schema",
+                    "$id",
+                    "title",
+                    "type",
+                    "properties"
+                  ],
+                  "additionalProperties": false
+                },
+                "examples": {
+                  "ExternalData": {
+                    "$ref": "#/components/examples/ExternalDataDatatype"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "projectId": {
+        "name": "projectId",
+        "in": "path",
+        "description": "ID of the project",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "branchId": {
+        "name": "branchId",
+        "in": "path",
+        "description": "ID of the branch",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "defaultingBranchId": {
+        "name": "branchId",
+        "in": "query",
+        "description": "ID of the branch - project's default branch if unspecified",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "tagId": {
+        "name": "tagId",
+        "in": "path",
+        "description": "ID of the tag",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "commitId": {
+        "name": "commitId",
+        "in": "path",
+        "description": "ID of the commit",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "defaultingCommitId": {
+        "name": "commitId",
+        "in": "query",
+        "description": "ID of the commit - defaults to head of project",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "changeId": {
+        "name": "changeId",
+        "in": "path",
+        "description": "ID of the change (DataVersion)",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "elementId": {
+        "name": "elementId",
+        "in": "path",
+        "description": "ID of the element",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "relatedElementId": {
+        "name": "relatedElementId",
+        "in": "path",
+        "description": "ID of the related element",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "direction": {
+        "name": "direction",
+        "in": "query",
+        "description": "Filter for relationships that are incoming (in), outgoing (out), or both relative to the related element",
+        "schema": {
+          "type": "string",
+          "default": "both",
+          "enum": [
+            "in",
+            "out",
+            "both"
+          ]
+        }
+      },
+      "baseCommitId": {
+        "name": "baseCommitId",
+        "in": "query",
+        "description": "ID of the base commit",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "compareCommitId": {
+        "name": "compareCommitId",
+        "in": "path",
+        "description": "ID of the compare commit",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "sourceCommitId": {
+        "name": "sourceCommitId",
+        "in": "query",
+        "description": "ID(s) of the source commit(s) - comma separated",
+        "required": true,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "style": "form",
+        "explode": false
+      },
+      "targetBranchId": {
+        "name": "targetBranchId",
+        "in": "path",
+        "description": "ID of the target branch",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "mergeDescription": {
+        "name": "description",
+        "in": "query",
+        "description": "Description of merge commit - in case one is created",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "queryId": {
+        "name": "queryId",
+        "in": "path",
+        "description": "ID of the query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "datatypeId": {
+        "name": "datatypeId",
+        "in": "path",
+        "description": "ID of the datatype",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "excludeUsed": {
+        "name": "excludeUsed",
+        "in": "query",
+        "description": "Exclude Data from ProjectUsages",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "pageAfter": {
+        "name": "page[after]",
+        "in": "query",
+        "description": "Page after",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "pageBefore": {
+        "name": "page[before]",
+        "in": "query",
+        "description": "Page before",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "pageSize": {
+        "name": "page[size]",
+        "in": "query",
+        "description": "Page size",
+        "schema": {
+          "type": "integer"
+        }
+      }
+    },
+    "schemas": {
+    },
+    "examples": {
+      "Project": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "Project",
+          "created": "1970-01-01T00:00:00.000Z",
+          "defaultBranch": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "description": "string",
+          "name": "string"
+        }
+      },
+      "Projects": {
+        "value": [
+          {
+            "$ref": "#/components/examples/Project/value"
+          }
+        ]
+      },
+      "ProjectRequest": {
+        "value": {
+          "@type": "Project",
+          "defaultBranch": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "description": "string",
+          "name": "string"
+        }
+      },
+      "Branch": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "Branch",
+          "created": "1970-01-01T00:00:00.000Z",
+          "head": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "name": "string",
+          "owningProject": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "referencedCommit": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        }
+      },
+      "Branches": {
+        "value": [
+          {
+            "$ref": "#/components/examples/Branch/value"
+          }
+        ]
+      },
+      "BranchRequest": {
+        "value": {
+          "@type": "Branch",
+          "head": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "name": "string"
+        }
+      },
+      "Tag": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "Tag",
+          "created": "1970-01-01T00:00:00.000Z",
+          "name": "string",
+          "owningProject": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "referencedCommit": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "taggedCommit": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        }
+      },
+      "Tags": {
+        "value": [
+          {
+            "$ref": "#/components/examples/Tag/value"
+          }
+        ]
+      },
+      "TagRequest": {
+        "value": {
+          "@type": "Tag",
+          "name": "string",
+          "taggedCommit": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        }
+      },
+      "Commit": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "Commit",
+          "created": "1970-01-01T00:00:00.000Z",
+          "description": "string",
+          "owningProject": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "previousCommit": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ]
+        }
+      },
+      "Commits": {
+        "value": [
+          {
+            "$ref": "#/components/examples/Commit"
+          }
+        ]
+      },
+      "ElementCommitRequest": {
+        "value": {
+          "@type": "Commit",
+          "change": [
+            {
+              "@type": "DataVersion",
+              "payload": {
+                "$ref": "#/components/examples/Element/value"
+              }
+            }
+          ]
+        }
+      },
+      "RelationshipCommitRequest": {
+        "value": {
+          "@type": "Commit",
+          "change": [
+            {
+              "@type": "DataVersion",
+              "payload": {
+                "$ref": "#/components/examples/Relationship/value"
+              }
+            }
+          ]
+        }
+      },
+      "ProjectUsageCommitRequest": {
+        "value": {
+          "@type": "Commit",
+          "change": [
+            {
+              "@type": "DataVersion",
+              "payload": {
+                "$ref": "#/components/examples/ProjectUsageRequest/value"
+              }
+            }
+          ]
+        }
+      },
+      "DeleteCommitRequest": {
+        "value": {
+          "@type": "Commit",
+          "change": [
+            {
+              "@type": "DataVersion",
+              "identity": {
+                "$ref": "#/components/examples/DataIdentity/value"
+              },
+              "payload": null
+            }
+          ]
+        }
+      },
+      "Element": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "Element",
+          "aliasIds": [
+            "string"
+          ],
+          "documentation": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "effectiveName": "string",
+          "elementId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "isImpliedIncluded": false,
+          "isLibraryElement": false,
+          "name": "string",
+          "ownedAnnotation": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "ownedElement": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "ownedRelationship": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "owner": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "owningMembership": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "owningNamespace": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "owningRelationship": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "qualifiedName": "string",
+          "shortName": "string",
+          "textualRepresentation": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ]
+        }
+      },
+      "Elements": {
+        "value": [
+          {
+            "$ref": "#/components/examples/Element/value"
+          }
+        ]
+      },
+      "Relationship": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "Relationship",
+          "aliasIds": [
+            "string"
+          ],
+          "documentation": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "effectiveName": "string",
+          "elementId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "isImplied": false,
+          "isImpliedIncluded": false,
+          "isLibraryElement": false,
+          "name": "string",
+          "ownedAnnotation": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "ownedElement": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "ownedRelatedElement": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "ownedRelationship": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "owner": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "owningMembership": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "owningNamespace": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "owningRelatedElement": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "owningRelationship": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "qualifiedName": "string",
+          "relatedElement": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "shortName": "string",
+          "source": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "target": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ],
+          "textualRepresentation": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ]
+        }
+      },
+      "Relationships": {
+        "value": [
+          {
+            "$ref": "#/components/examples/Relationship/value"
+          }
+        ]
+      },
+      "ProjectUsageRequest": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "ProjectUsage",
+          "usedCommit": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        }
+      },
+      "ProjectUsage": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "ProjectUsage",
+          "usedCommit": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "usedProject": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+        }
+      },
+      "DataVersion": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "DataVersion",
+          "identity": {
+            "$ref": "#/components/examples/DataIdentity/value"
+          },
+          "payload": {
+            "$ref": "#/components/examples/Element/value"
+          }
+        }
+      },
+      "DataVersions": {
+        "value": [
+          {
+            "$ref": "#/components/examples/DataVersion/value"
+          }
+        ]
+      },
+      "DataIdentity": {
+        "value": {
+          "@type": "DataIdentity",
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        }
+      },
+      "DataDifference": {
+        "value": {
+          "@type": "DataDifference",
+          "baseData": {
+            "$ref": "#/components/examples/DataVersion/value"
+          },
+          "compareData": {
+            "$ref": "#/components/examples/DataVersion/value"
+          }
+        }
+      },
+      "DataDifferences": {
+        "value": [
+          {
+            "$ref": "#/components/examples/DataDifference/value"
+          }
+        ]
+      },
+      "MergeCommit": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "Commit",
+          "created": "1970-01-01T00:00:00.000Z",
+          "description": "string",
+          "owningProject": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "previousCommit": [
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            },
+            {
+              "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+          ]
+        }
+      },
+      "MergeConflicting": {
+        "value": [
+          {
+            "$ref": "#/components/examples/DataIdentity/value"
+          }
+        ]
+      },
+      "Query": {
+        "value": {
+          "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "@type": "Query",
+          "owningProject": {
+            "@id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "select": [
+            "@id"
+          ],
+          "where": {
+            "@type": "PrimitiveConstraint",
+            "inverse": false,
+            "operator": "=",
+            "property": "@type",
+            "value": "Element"
+          }
+        }
+      },
+      "Queries": {
+        "value": [
+          {
+            "$ref": "#/components/examples/Query/value"
+          }
+        ]
+      },
+      "QueryRequest": {
+        "value": {
+          "@type": "Query",
+          "select": [
+            "@id"
+          ],
+          "where": {
+            "@type": "PrimitiveConstraint",
+            "operator": "=",
+            "property": "@type",
+            "value": "Element"
+          }
+        }
+      },
+      "ExternalDataDatatype": {
+        "value": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://www.omg.org/spec/SystemsModelingAPI/20230201/ExternalData",
+          "type": "object",
+          "properties": {
+            "@id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "@type": {
+              "type": "string",
+              "const": "ExternalData"
+            },
+            "resourceIdentifier": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "@id",
+            "@type",
+            "resourceIdentifier"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "Datatypes": {
+        "value": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$defs": {
+            "https://www.omg.org/spec/SystemsModelingAPI/20230201/ExternalData": {
+              "$ref": "#/components/examples/ExternalDataDatatype"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "404": {
+                "value": {
+                  "@type": "Error",
+                  "description": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "204": {
+        "description": "No Content",
+        "content": {
+          "*/*": {
+            "schema": {
+              "type": "null"
+            },
+            "examples": {
+              "204": {
+                "value": null
+              }
+            }
+          }
+        }
+      },
+      "default": {
+        "description": "Unexpected Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "@type": "Error",
+                  "description": "Unexpected error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

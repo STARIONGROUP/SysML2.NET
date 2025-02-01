@@ -20,6 +20,7 @@
 
 namespace SysML2.NET.CodeGenerator.Generators
 {
+    using System;
     using System.IO;
     using System.Reflection;
     using System.Text;
@@ -86,6 +87,40 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// </returns>
         protected static async Task Write(string generatedCode, DirectoryInfo outputDirectory, string fileName)
         {
+            var filePath = Path.Combine(outputDirectory.FullName, fileName);
+
+            await File.WriteAllTextAsync(filePath, generatedCode, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Writes the generated code to disk
+        /// </summary>
+        /// <param name="generatedCode">
+        /// he generated code that needs to be written to disk
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo"/>
+        /// </param>
+        /// <param name="fileName">
+        /// The name of the file
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task"/>
+        /// </returns>
+        protected static async Task WriteAsync(string generatedCode, DirectoryInfo outputDirectory, string fileName)
+        {
+            if (string.IsNullOrEmpty(generatedCode))
+            {
+                throw new ArgumentException(nameof(generatedCode));
+            }
+
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentException(nameof(fileName));
+            }
+
             var filePath = Path.Combine(outputDirectory.FullName, fileName);
 
             await File.WriteAllTextAsync(filePath, generatedCode, Encoding.UTF8);

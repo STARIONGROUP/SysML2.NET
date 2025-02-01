@@ -35,6 +35,10 @@
       <Folder Include="Core\AutoGenDto\" />
       <Folder Include="Core\AutoGenEnum\" />
       <Folder Include="Core\AutoGenPoco\" />
+      <Folder Include="PIM\AutoGenDto\" />
+      <Folder Include="PIM\AutoGenEnum\" />
+      <Folder Include="PIM\AutoGenPoco\" />
+      <Folder Include="PIM\DTO\" />
     </ItemGroup>
 
 </Project>
