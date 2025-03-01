@@ -23,18 +23,17 @@
     <ItemGroup>
         <PackageReference Include="ECoreNetto.HandleBars" Version="6.0.2" />
         <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" />
+
+        <!--
+        <PackageReference Include="uml4net.HandleBars" Version="2.0.1" />
+        <PackageReference Include="uml4net.xmi" Version="2.0.1" />
+        -->
+
+        <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.HandleBars\uml4net.HandleBars.csproj" />
+        <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.xmi\uml4net.xmi.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="datamodel\openapi-extensions.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="datamodel\openapi-x.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="datamodel\openapi.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="datamodel\SysML.ecore">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -194,6 +193,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Generators\UmlHandleBarsGenerators\" />
       <Folder Include="Resources\HtmlDocs\" />
     </ItemGroup>
 
