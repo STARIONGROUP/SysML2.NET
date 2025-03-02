@@ -21,7 +21,7 @@
 namespace SysML2.NET.CodeGenerator.Tests.Inspector
 {
     using System;
-    
+
     using ECoreNetto;
     using ECoreNetto.Extensions;
     using ECoreNetto.Reporting.Generators;
@@ -29,7 +29,8 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator;
-    
+    using SysML2.NET.CodeGenerator.Tests.Expected.Core;
+
     /// <summary>
     /// Suite of tests for the <see cref="ModelInspector"/> class.
     /// </summary>
@@ -58,7 +59,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
             Console.WriteLine(report);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
         public void Verify_that_inspect_class_executes_as_expected(string className)
         {
             var report = this.modelInspector.Inspect(this.rootPackage, className);

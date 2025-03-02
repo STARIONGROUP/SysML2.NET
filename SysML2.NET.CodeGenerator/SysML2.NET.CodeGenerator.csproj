@@ -24,13 +24,9 @@
         <PackageReference Include="ECoreNetto.HandleBars" Version="6.0.2" />
         <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" />
 
-        <!--
         <PackageReference Include="uml4net.HandleBars" Version="2.0.1" />
         <PackageReference Include="uml4net.xmi" Version="2.0.1" />
-        -->
-
-        <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.HandleBars\uml4net.HandleBars.csproj" />
-        <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.xmi\uml4net.xmi.csproj" />
+        
     </ItemGroup>
 
     <ItemGroup>
@@ -92,6 +88,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\core-enum-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-enumeration-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\core-json-dto-deserialization-provider-template.hbs">
@@ -193,8 +192,22 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Generators\UmlHandleBarsGenerators\" />
       <Folder Include="Resources\HtmlDocs\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\Resources\KerML_only_xmi.uml" Link="datamodel\KerML_only_xmi.uml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\Resources\PrimitiveTypes.xmi" Link="datamodel\PrimitiveTypes.xmi">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\Resources\SysML_only_xmi.uml" Link="datamodel\SysML_only_xmi.uml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="..\Resources\SysML_xmi.uml" Link="datamodel\SysML_xmi.uml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
