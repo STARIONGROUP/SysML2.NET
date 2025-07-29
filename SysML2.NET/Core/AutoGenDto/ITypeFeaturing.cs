@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.DTO
     /// A TypeFeaturing is a Featuring Relationship in which the featureOfType is the source and the
     /// featuringType is the target.
     /// </summary>
-    public partial interface ITypeFeaturing : IFeaturing
+    public partial interface ITypeFeaturing : IRelationship
     {
         /// <summary>
         /// The Feature that is featured by the featuringType. It is the source of the TypeFeaturing.

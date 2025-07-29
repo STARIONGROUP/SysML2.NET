@@ -36,13 +36,10 @@ namespace SysML2.NET.Core.POCO
     /// featuringTypes) are values of the subsettedFeature on instances of its domain. To support this the
     /// domain of the subsettingFeature must be the same or specialize (at least indirectly) the domain of
     /// the subsettedFeature (via Specialization), and the co-domain (intersection of the types) of the
-    /// subsettingFeature must specialize the co-domain of the subsettedFeature.let
-    /// subsettingFeaturingTypes: OrderedSet(Type) =    subsettingFeature.featuringTypes inlet
-    /// subsettedFeaturingTypes: OrderedSet(Type) =    subsettedFeature.featuringTypes inlet anythingType:
-    /// Element =    subsettingFeature.resolveGlobal('Base::Anything').memberElement in
-    /// subsettedFeaturingTypes->forAll(t |    subsettingFeaturingTypes->isEmpty() and t = anythingType or  
-    ///  subsettingFeaturingTypes->exists(specializes(t))subsettedFeature.isUnique implies
-    /// subsettingFeature.isUnique
+    /// subsettingFeature must specialize the co-domain of the
+    /// subsettedFeature.subsettingFeature.canAccess(subsettedFeature)subsettedFeature.isUnique implies
+    /// subsettingFeature.isUniquesubsettedFeature.isConstant and subsettingFeature.isVariable implies    
+    /// subsettingFeature.isConstant
     /// </summary>
     public partial interface ISubsetting : ISpecialization
     {

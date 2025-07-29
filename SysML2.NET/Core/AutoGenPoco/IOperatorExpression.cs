@@ -32,10 +32,7 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// An OperatorExpression is an InvocationExpression whose function is determined by resolving its
-    /// operator in the context of one of the standard packages from the Kernel Function Library.let
-    /// libFunctions : Sequence(Element) =     Sequence{'BaseFunctions', 'DataFunctions',
-    /// 'ControlFunctions'}->    collect(ns | resolveGlobal(ns + "::'" + operator + "'").    memberElement)
-    /// inlibFunctions->includes(function)
+    /// operator in the context of one of the standard packages from the Kernel Function Library.
     /// </summary>
     public partial interface IOperatorExpression : IInvocationExpression
     {

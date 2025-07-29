@@ -255,7 +255,7 @@ namespace SysML2.NET.Core.POCO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// Whether this OccurrenceDefinition is constrained to represent single individual.
+        /// Whether this OccurrenceDefinition is constrained to represent at most one thing.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsIndividual { get; set; }
@@ -295,15 +295,6 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsVariation { get; set; }
-
-        /// <summary>
-        /// Queries the derived property LifeClass
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public LifeClass QueryLifeClass()
-        {
-            throw new NotImplementedException("Derived property LifeClass not yet supported");
-        }
 
         /// <summary>
         /// Queries the derived property Member
@@ -516,7 +507,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property OwnedFlow
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<FlowConnectionUsage> QueryOwnedFlow()
+        public List<FlowUsage> QueryOwnedFlow()
         {
             throw new NotImplementedException("Derived property OwnedFlow not yet supported");
         }

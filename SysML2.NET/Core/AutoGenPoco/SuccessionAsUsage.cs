@@ -43,15 +43,16 @@ namespace SysML2.NET.Core.POCO
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
             this.IsComposite = false;
+            this.IsConstant = false;
             this.IsDerived = false;
             this.IsEnd = false;
             this.IsImplied = false;
             this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
-            this.IsReadOnly = false;
             this.IsSufficient = false;
             this.IsUnique = true;
+            this.IsVariable = false;
             this.OwnedRelatedElement = new List<IElement>();
             this.OwnedRelationship = new List<IRelationship>();
             this.Source = new List<IElement>();
@@ -122,6 +123,15 @@ namespace SysML2.NET.Core.POCO
         public string DeclaredShortName { get; set; }
 
         /// <summary>
+        /// Queries the derived property DefaultFeaturingType
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Type QueryDefaultFeaturingType()
+        {
+            throw new NotImplementedException("Derived property DefaultFeaturingType not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property Definition
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
@@ -171,15 +181,6 @@ namespace SysML2.NET.Core.POCO
         public List<Documentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property EffectStep
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Step> QueryEffectStep()
-        {
-            throw new NotImplementedException("Derived property EffectStep not yet supported");
         }
 
         /// <summary>
@@ -244,15 +245,6 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property GuardExpression
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Expression> QueryGuardExpression()
-        {
-            throw new NotImplementedException("Derived property GuardExpression not yet supported");
-        }
-
-        /// <summary>
         /// Queries the derived property ImportedMembership
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
@@ -306,7 +298,8 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
@@ -319,6 +312,13 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property IsConjugated not yet supported");
         }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
@@ -388,12 +388,6 @@ namespace SysML2.NET.Core.POCO
         public bool IsPortion { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsReadOnly { get; set; }
-
-        /// <summary>
         /// Queries the derived property IsReference
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -420,11 +414,27 @@ namespace SysML2.NET.Core.POCO
         public bool IsUnique { get; set; }
 
         /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariable { get; set; }
+
+        /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
         /// must be VariantMemberships.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsVariation { get; set; }
+
+        /// <summary>
+        /// Queries the derived property MayTimeVary
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool QueryMayTimeVary()
+        {
+            throw new NotImplementedException("Derived property MayTimeVary not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property Member
@@ -556,7 +566,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property NestedFlow
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<FlowConnectionUsage> QueryNestedFlow()
+        public List<FlowUsage> QueryNestedFlow()
         {
             throw new NotImplementedException("Derived property NestedFlow not yet supported");
         }
@@ -1072,24 +1082,6 @@ namespace SysML2.NET.Core.POCO
         public List<TextualRepresentation> QueryTextualRepresentation()
         {
             throw new NotImplementedException("Derived property TextualRepresentation not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property TransitionStep
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Step QueryTransitionStep()
-        {
-            throw new NotImplementedException("Derived property TransitionStep not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property TriggerStep
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Step> QueryTriggerStep()
-        {
-            throw new NotImplementedException("Derived property TriggerStep not yet supported");
         }
 
         /// <summary>

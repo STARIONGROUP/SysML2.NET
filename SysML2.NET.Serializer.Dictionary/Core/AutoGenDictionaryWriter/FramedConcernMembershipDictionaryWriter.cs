@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", framedConcernMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", framedConcernMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", framedConcernMembershipInstance.ElementId);
-            dictionary.Add("feature", framedConcernMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", framedConcernMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", framedConcernMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", framedConcernMembershipInstance.Kind);
@@ -124,7 +123,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", framedConcernMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", framedConcernMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", framedConcernMembershipInstance.Target)} ]");
-            dictionary.Add("type", framedConcernMembershipInstance.Type.ToString());
             dictionary.Add("visibility", framedConcernMembershipInstance.Visibility);
 
             return dictionary;
@@ -156,7 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", framedConcernMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", framedConcernMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", framedConcernMembershipInstance.ElementId);
-            dictionary.Add("feature", framedConcernMembershipInstance.Feature);
             dictionary.Add("isImplied", framedConcernMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", framedConcernMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", framedConcernMembershipInstance.Kind);
@@ -169,7 +166,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", framedConcernMembershipInstance.OwningRelationship);
             dictionary.Add("source", framedConcernMembershipInstance.Source);
             dictionary.Add("target", framedConcernMembershipInstance.Target);
-            dictionary.Add("type", framedConcernMembershipInstance.Type);
             dictionary.Add("visibility", framedConcernMembershipInstance.Visibility);
 
             return dictionary;

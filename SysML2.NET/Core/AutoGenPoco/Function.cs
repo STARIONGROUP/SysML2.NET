@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO
     /// binding.relatedFeature->includes(result) and           
     /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))result =    let resultParams :
     /// Sequence(Feature) =        featureMemberships->            selectByKind(ReturnParameterMembership). 
-    ///           ownedParameterMember in    if resultParams->notEmpty() then resultParams->first()    else
+    ///           ownedMemberParameter in    if resultParams->notEmpty() then resultParams->first()    else
     /// null    endifmembership->selectByKind(ResultExpressionMembership)->size() <= 1
     /// </summary>
     public partial class Function : IFunction

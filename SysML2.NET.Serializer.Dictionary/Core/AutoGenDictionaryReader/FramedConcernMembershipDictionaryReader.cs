@@ -128,12 +128,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
 
-            if (!dictionary.TryGetValue("feature", out object featureObject))
-            {
-                throw new ArgumentException("The feature property is missing from the dictionary, the dictionary cannot be converted into a FramedConcernMembership");
-            }
-            Guid featureFeature = Guid.Parse(Convert.ToString(featureObject));
-
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
                 throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a FramedConcernMembership");
@@ -206,12 +200,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<Guid> targetFeature = (targetObject as List<string>)?.Select(Guid.Parse).ToList();
 
-            if (!dictionary.TryGetValue("type", out object typeObject))
-            {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a FramedConcernMembership");
-            }
-            Guid typeFeature = Guid.Parse(Convert.ToString(typeObject));
-
             if (!dictionary.TryGetValue("visibility", out object visibilityObject))
             {
                 throw new ArgumentException("The visibility property is missing from the dictionary, the dictionary cannot be converted into a FramedConcernMembership");
@@ -223,7 +211,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             framedConcernMembershipInstance.DeclaredName = declaredNameFeature;
             framedConcernMembershipInstance.DeclaredShortName = declaredShortNameFeature;
             framedConcernMembershipInstance.ElementId = elementIdFeature;
-            framedConcernMembershipInstance.Feature = featureFeature;
             framedConcernMembershipInstance.IsImplied = isImpliedFeature;
             framedConcernMembershipInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             framedConcernMembershipInstance.Kind = kindFeature;
@@ -236,7 +223,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             framedConcernMembershipInstance.OwningRelationship = owningRelationshipFeature;
             framedConcernMembershipInstance.Source = sourceFeature ?? new List<Guid>();
             framedConcernMembershipInstance.Target = targetFeature ?? new List<Guid>();
-            framedConcernMembershipInstance.Type = typeFeature;
             framedConcernMembershipInstance.Visibility = visibilityFeature;
 
             return framedConcernMembershipInstance;
@@ -279,12 +265,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a FramedConcernMembership");
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
-
-            if (!dictionary.TryGetValue("feature", out object featureObject))
-            {
-                throw new ArgumentException("The feature property is missing from the dictionary, the dictionary cannot be converted into a FramedConcernMembership");
-            }
-            Guid featureFeature = Guid.Parse(Convert.ToString(featureObject));
 
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
@@ -358,12 +338,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<Guid> targetFeature = (targetObject as List<Guid>);
 
-            if (!dictionary.TryGetValue("type", out object typeObject))
-            {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a FramedConcernMembership");
-            }
-            Guid typeFeature = Guid.Parse(Convert.ToString(typeObject));
-
             if (!dictionary.TryGetValue("visibility", out object visibilityObject))
             {
                 throw new ArgumentException("The visibility property is missing from the dictionary, the dictionary cannot be converted into a FramedConcernMembership");
@@ -375,7 +349,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             framedConcernMembershipInstance.DeclaredName = declaredNameFeature;
             framedConcernMembershipInstance.DeclaredShortName = declaredShortNameFeature;
             framedConcernMembershipInstance.ElementId = elementIdFeature;
-            framedConcernMembershipInstance.Feature = featureFeature;
             framedConcernMembershipInstance.IsImplied = isImpliedFeature;
             framedConcernMembershipInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             framedConcernMembershipInstance.Kind = kindFeature;
@@ -388,7 +361,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             framedConcernMembershipInstance.OwningRelationship = owningRelationshipFeature;
             framedConcernMembershipInstance.Source = sourceFeature ?? new List<Guid>();
             framedConcernMembershipInstance.Target = targetFeature ?? new List<Guid>();
-            framedConcernMembershipInstance.Type = typeFeature;
             framedConcernMembershipInstance.Visibility = visibilityFeature;
 
             return framedConcernMembershipInstance;

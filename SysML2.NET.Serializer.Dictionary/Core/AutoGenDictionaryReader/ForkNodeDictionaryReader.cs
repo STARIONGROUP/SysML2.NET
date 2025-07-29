@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
@@ -182,12 +188,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
@@ -199,6 +199,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("isVariation", out object isVariationObject))
             {
@@ -232,15 +238,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             forkNodeInstance.ElementId = elementIdFeature;
             forkNodeInstance.IsAbstract = isAbstractFeature;
             forkNodeInstance.IsComposite = isCompositeFeature;
+            forkNodeInstance.IsConstant = isConstantFeature;
             forkNodeInstance.IsDerived = isDerivedFeature;
             forkNodeInstance.IsEnd = isEndFeature;
             forkNodeInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             forkNodeInstance.IsIndividual = isIndividualFeature;
             forkNodeInstance.IsOrdered = isOrderedFeature;
             forkNodeInstance.IsPortion = isPortionFeature;
-            forkNodeInstance.IsReadOnly = isReadOnlyFeature;
             forkNodeInstance.IsSufficient = isSufficientFeature;
             forkNodeInstance.IsUnique = isUniqueFeature;
+            forkNodeInstance.IsVariable = isVariableFeature;
             forkNodeInstance.IsVariation = isVariationFeature;
             forkNodeInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             forkNodeInstance.OwningRelationship = owningRelationshipFeature;
@@ -305,6 +312,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
@@ -341,12 +354,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
@@ -358,6 +365,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a ForkNode");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("isVariation", out object isVariationObject))
             {
@@ -391,15 +404,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             forkNodeInstance.ElementId = elementIdFeature;
             forkNodeInstance.IsAbstract = isAbstractFeature;
             forkNodeInstance.IsComposite = isCompositeFeature;
+            forkNodeInstance.IsConstant = isConstantFeature;
             forkNodeInstance.IsDerived = isDerivedFeature;
             forkNodeInstance.IsEnd = isEndFeature;
             forkNodeInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             forkNodeInstance.IsIndividual = isIndividualFeature;
             forkNodeInstance.IsOrdered = isOrderedFeature;
             forkNodeInstance.IsPortion = isPortionFeature;
-            forkNodeInstance.IsReadOnly = isReadOnlyFeature;
             forkNodeInstance.IsSufficient = isSufficientFeature;
             forkNodeInstance.IsUnique = isUniqueFeature;
+            forkNodeInstance.IsVariable = isVariableFeature;
             forkNodeInstance.IsVariation = isVariationFeature;
             forkNodeInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             forkNodeInstance.OwningRelationship = owningRelationshipFeature;

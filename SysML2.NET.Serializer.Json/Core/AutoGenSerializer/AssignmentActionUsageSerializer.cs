@@ -93,6 +93,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsComposite);
 
+            writer.WritePropertyName("isConstant"u8);
+            writer.WriteBooleanValue(iAssignmentActionUsage.IsConstant);
+
             writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsDerived);
 
@@ -111,14 +114,14 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsPortion);
 
-            writer.WritePropertyName("isReadOnly"u8);
-            writer.WriteBooleanValue(iAssignmentActionUsage.IsReadOnly);
-
             writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsSufficient);
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsUnique);
+
+            writer.WritePropertyName("isVariable"u8);
+            writer.WriteBooleanValue(iAssignmentActionUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iAssignmentActionUsage.IsVariation);

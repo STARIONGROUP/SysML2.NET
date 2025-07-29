@@ -75,16 +75,21 @@ namespace SysML2.NET.Core.DTO
     /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
     /// specializesFromLibrary('Occurrence::Occurrence::suboccurrences')ownedTyping.type->exists(selectByKind(DataType))
     /// implies    specializesFromLibrary('Base::dataValues')owningType <> null
-    /// andowningType.oclIsKindOf(ItemFlowEnd) andowningType.ownedFeature->at(1) = self implies    let
-    /// flowType : Type = owningType.owningType in    flowType <> null implies        let i : Integer =     
-    ///        flowType.ownedFeature.indexOf(owningType) in        (i = 1 implies            
+    /// andowningType.oclIsKindOf(FlowEnd) andowningType.ownedFeature->at(1) = self implies    let flowType
+    /// : Type = owningType.owningType in    flowType <> null implies        let i : Integer =            
+    /// flowType.ownedFeature.indexOf(owningType) in        (i = 1 implies            
     /// redefinesFromLibrary('Transfers::Transfer::source::sourceOutput')) and        (i = 2 implies        
     ///    redefinesFromLibrary('Transfers::Transfer::source::targetInput'))                 owningType <>
-    /// null and(owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step)) implies    let i :
-    /// Integer =         owningType.ownedFeature->select(direction <> null) in   
-    /// owningType.ownedSpecialization.general->        forAll(supertype |            let ownedParameters :
-    /// Sequence(Feature) =                 supertype.ownedFeature->select(direction <> null) in           
-    /// ownedParameters->size() >= i implies               
+    /// null andnot owningFeatureMembership.    oclIsKindOf(ReturnParameterMembership)
+    /// and(owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step) and   
+    /// (owningType.oclIsKindOf(InvocationExpression) implies      not ownedRedefinition->exists(not
+    /// isImplied)) implies    let i : Integer =        owningType.ownedFeature->select(direction <> null)->
+    ///            reject(owningFeatureMembership.                oclIsKindOf(ReturnParameterMembership))-> 
+    ///           indexOf(self) in    owningType.ownedSpecialization.general->        forAll(supertype |    
+    ///        let ownedParameters : Sequence(Feature) =               
+    /// supertype.ownedFeature->select(direction <> null)->                    
+    /// reject(owningFeatureMembership.                         oclIsKindOf(ReturnParameterMembership)) in  
+    ///          ownedParameters->size() >= i implies               
     /// redefines(ownedParameters->at(i))ownedTyping.type->exists(selectByKind(Structure)) implies   
     /// specializesFromLibary('Objects::objects')owningType <> null and(owningType.oclIsKindOf(Function) and
     ///    self = owningType.oclAsType(Function).result or owningType.oclIsKindOf(Expression) and    self =
@@ -101,22 +106,16 @@ namespace SysML2.NET.Core.DTO
     /// OrderedSet(ReferenceSubsetting) =        ownedSubsetting->selectByKind(ReferenceSubsetting) in    if
     /// referenceSubsettings->isEmpty() then null    else referenceSubsettings->first()
     /// endifownedSubsetting->selectByKind(ReferenceSubsetting)->size() <=
-    /// 1Sequence{1..chainingFeature->size() - 1}->forAll(i |    chainingFeature->at(i +
-    /// 1).featuringType->forAll(t |         chainingFeature->at(i).specializes(t)))isPortion
+    /// 1Sequence{2..chainingFeature->size()}->forAll(i |   
+    /// chainingFeature->at(i).isFeaturedWithin(chainingFeature->at(i-1)))isPortion
     /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
     /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
     /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
     /// specializesFromLibrary('Occurrence::Occurrence::portions')featureTarget = if
-    /// chainingFeature->isEmpty() then self else chainingFeature->last() endifowningType <> null
-    /// andowningType.oclIsKindOf(InvocationExpression) andlet owningInvocation: InvocationExpression =
-    /// owningType.oclAsType(InvocationExpression) inself = owningInvocation.result andnot
-    /// owningInvocation.ownedTyping->exists(oclIsKindOf(Function)) andnot
-    /// owningInvocation.ownedSubsetting->reject(isImplied).subsettedFeature.type->exists(oclIsKindOf(Function))
-    /// implies    owningInvocation.ownedTyping->forAll(type | self.specializes(type))ownedCrossSubsetting =
-    ///    let crossSubsettings: Sequence(CrossSubsetting) =        
-    /// ownedSubsetting->selectByKind(CrossSubsetting) in    if crossSubsettings->isEmpty() then null   
-    /// else crossSubsettings->first()    endifisEnd implies    
-    /// multiplicities().allSuperTypes()->flatten()->   
+    /// chainingFeature->isEmpty() then self else chainingFeature->last() endifownedCrossSubsetting =    let
+    /// crossSubsettings: Sequence(CrossSubsetting) =         ownedSubsetting->selectByKind(CrossSubsetting)
+    /// in    if crossSubsettings->isEmpty() then null    else crossSubsettings->first()    endifisEnd
+    /// implies     multiplicities().allSuperTypes()->flatten()->   
     /// selectByKind(MultiplicityRange)->exists(hasBounds(1,1))crossFeature <> null implies   
     /// crossFeature.type->asSet() = type->asSet()ownedSubsetting->selectByKind(CrossSubsetting)->size() <=
     /// 1crossFeature =    if ownedCrossSubsetting = null then null    else         let chainingFeatures:
@@ -135,7 +134,11 @@ namespace SysML2.NET.Core.DTO
     /// featuringType->first().asCartesianProduct() = otherEnds.type and       
     /// featuringType->first().allSupertypes()->includesAll(           
     /// owner.oclAsType(Feature).ownedRedefinition.redefinedFeature->               select(crossFeature() <>
-    /// null).crossFeature().featuringType)          endif
+    /// null).crossFeature().featuringType)          endifisPortion implies not isVariableisEnd implied
+    /// direction = nullowningFeatureMembership <> null implies    featuringTypes->exists(t |
+    /// isFeaturingType(t))isConstant implies isVariableisVariable implies    owningType <> null and    
+    /// owningType.specializes('Occurrences::Occurrence')isEnd implies not (isDerived or isAbstract or
+    /// isComposite or isPortion)isEnd and isVariable implies isConstant
     /// </summary>
     public partial interface IFeature : IType
     {
@@ -148,10 +151,18 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsComposite { get; set; }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
@@ -186,16 +197,17 @@ namespace SysML2.NET.Core.DTO
         bool IsPortion { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        bool IsReadOnly { get; set; }
-
-        /// <summary>
         /// Whether or not values for this Feature must have no duplicates or not.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsUnique { get; set; }
+
+        /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        bool IsVariable { get; set; }
 
     }
 }

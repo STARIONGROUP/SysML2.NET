@@ -93,6 +93,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iBindingConnector.IsComposite);
 
+            writer.WritePropertyName("isConstant"u8);
+            writer.WriteBooleanValue(iBindingConnector.IsConstant);
+
             writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iBindingConnector.IsDerived);
 
@@ -111,14 +114,14 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iBindingConnector.IsPortion);
 
-            writer.WritePropertyName("isReadOnly"u8);
-            writer.WriteBooleanValue(iBindingConnector.IsReadOnly);
-
             writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iBindingConnector.IsSufficient);
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iBindingConnector.IsUnique);
+
+            writer.WritePropertyName("isVariable"u8);
+            writer.WriteBooleanValue(iBindingConnector.IsVariable);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
             foreach (var item in iBindingConnector.OwnedRelatedElement)

@@ -128,12 +128,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
 
-            if (!dictionary.TryGetValue("feature", out object featureObject))
-            {
-                throw new ArgumentException("The feature property is missing from the dictionary, the dictionary cannot be converted into a TypeFeaturing");
-            }
-            Guid featureFeature = Guid.Parse(Convert.ToString(featureObject));
-
             if (!dictionary.TryGetValue("featureOfType", out object featureOfTypeObject))
             {
                 throw new ArgumentException("The featureOfType property is missing from the dictionary, the dictionary cannot be converted into a TypeFeaturing");
@@ -194,18 +188,11 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<Guid> targetFeature = (targetObject as List<string>)?.Select(Guid.Parse).ToList();
 
-            if (!dictionary.TryGetValue("type", out object typeObject))
-            {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a TypeFeaturing");
-            }
-            Guid typeFeature = Guid.Parse(Convert.ToString(typeObject));
-
 
             typeFeaturingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             typeFeaturingInstance.DeclaredName = declaredNameFeature;
             typeFeaturingInstance.DeclaredShortName = declaredShortNameFeature;
             typeFeaturingInstance.ElementId = elementIdFeature;
-            typeFeaturingInstance.Feature = featureFeature;
             typeFeaturingInstance.FeatureOfType = featureOfTypeFeature;
             typeFeaturingInstance.FeaturingType = featuringTypeFeature;
             typeFeaturingInstance.IsImplied = isImpliedFeature;
@@ -216,7 +203,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             typeFeaturingInstance.OwningRelationship = owningRelationshipFeature;
             typeFeaturingInstance.Source = sourceFeature ?? new List<Guid>();
             typeFeaturingInstance.Target = targetFeature ?? new List<Guid>();
-            typeFeaturingInstance.Type = typeFeature;
 
             return typeFeaturingInstance;
         }
@@ -258,12 +244,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a TypeFeaturing");
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
-
-            if (!dictionary.TryGetValue("feature", out object featureObject))
-            {
-                throw new ArgumentException("The feature property is missing from the dictionary, the dictionary cannot be converted into a TypeFeaturing");
-            }
-            Guid featureFeature = Guid.Parse(Convert.ToString(featureObject));
 
             if (!dictionary.TryGetValue("featureOfType", out object featureOfTypeObject))
             {
@@ -325,18 +305,11 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<Guid> targetFeature = (targetObject as List<Guid>);
 
-            if (!dictionary.TryGetValue("type", out object typeObject))
-            {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a TypeFeaturing");
-            }
-            Guid typeFeature = Guid.Parse(Convert.ToString(typeObject));
-
 
             typeFeaturingInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             typeFeaturingInstance.DeclaredName = declaredNameFeature;
             typeFeaturingInstance.DeclaredShortName = declaredShortNameFeature;
             typeFeaturingInstance.ElementId = elementIdFeature;
-            typeFeaturingInstance.Feature = featureFeature;
             typeFeaturingInstance.FeatureOfType = featureOfTypeFeature;
             typeFeaturingInstance.FeaturingType = featuringTypeFeature;
             typeFeaturingInstance.IsImplied = isImpliedFeature;
@@ -347,7 +320,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             typeFeaturingInstance.OwningRelationship = owningRelationshipFeature;
             typeFeaturingInstance.Source = sourceFeature ?? new List<Guid>();
             typeFeaturingInstance.Target = targetFeature ?? new List<Guid>();
-            typeFeaturingInstance.Type = typeFeature;
 
             return typeFeaturingInstance;
         }

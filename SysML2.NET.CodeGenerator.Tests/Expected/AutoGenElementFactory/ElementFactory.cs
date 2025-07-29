@@ -167,6 +167,12 @@ namespace SysML2.NET.Dal
                 case Core.DTO.ConstraintUsage constraintUsageDto:
                     var constraintUsageFactory = new ConstraintUsageFactory();
                     return constraintUsageFactory.Create(constraintUsageDto);
+                case Core.DTO.ConstructorExpression constructorExpressionDto:
+                    var constructorExpressionFactory = new ConstructorExpressionFactory();
+                    return constructorExpressionFactory.Create(constructorExpressionDto);
+                case Core.DTO.CrossSubsetting crossSubsettingDto:
+                    var crossSubsettingFactory = new CrossSubsettingFactory();
+                    return crossSubsettingFactory.Create(crossSubsettingDto);
                 case Core.DTO.DataType dataTypeDto:
                     var dataTypeFactory = new DataTypeFactory();
                     return dataTypeFactory.Create(dataTypeDto);
@@ -233,12 +239,18 @@ namespace SysML2.NET.Dal
                 case Core.DTO.FeatureValue featureValueDto:
                     var featureValueFactory = new FeatureValueFactory();
                     return featureValueFactory.Create(featureValueDto);
-                case Core.DTO.FlowConnectionDefinition flowConnectionDefinitionDto:
-                    var flowConnectionDefinitionFactory = new FlowConnectionDefinitionFactory();
-                    return flowConnectionDefinitionFactory.Create(flowConnectionDefinitionDto);
-                case Core.DTO.FlowConnectionUsage flowConnectionUsageDto:
-                    var flowConnectionUsageFactory = new FlowConnectionUsageFactory();
-                    return flowConnectionUsageFactory.Create(flowConnectionUsageDto);
+                case Core.DTO.Flow flowDto:
+                    var flowFactory = new FlowFactory();
+                    return flowFactory.Create(flowDto);
+                case Core.DTO.FlowDefinition flowDefinitionDto:
+                    var flowDefinitionFactory = new FlowDefinitionFactory();
+                    return flowDefinitionFactory.Create(flowDefinitionDto);
+                case Core.DTO.FlowEnd flowEndDto:
+                    var flowEndFactory = new FlowEndFactory();
+                    return flowEndFactory.Create(flowEndDto);
+                case Core.DTO.FlowUsage flowUsageDto:
+                    var flowUsageFactory = new FlowUsageFactory();
+                    return flowUsageFactory.Create(flowUsageDto);
                 case Core.DTO.ForkNode forkNodeDto:
                     var forkNodeFactory = new ForkNodeFactory();
                     return forkNodeFactory.Create(forkNodeDto);
@@ -257,6 +269,9 @@ namespace SysML2.NET.Dal
                 case Core.DTO.IncludeUseCaseUsage includeUseCaseUsageDto:
                     var includeUseCaseUsageFactory = new IncludeUseCaseUsageFactory();
                     return includeUseCaseUsageFactory.Create(includeUseCaseUsageDto);
+                case Core.DTO.IndexExpression indexExpressionDto:
+                    var indexExpressionFactory = new IndexExpressionFactory();
+                    return indexExpressionFactory.Create(indexExpressionDto);
                 case Core.DTO.Interaction interactionDto:
                     var interactionFactory = new InteractionFactory();
                     return interactionFactory.Create(interactionDto);
@@ -278,15 +293,6 @@ namespace SysML2.NET.Dal
                 case Core.DTO.ItemDefinition itemDefinitionDto:
                     var itemDefinitionFactory = new ItemDefinitionFactory();
                     return itemDefinitionFactory.Create(itemDefinitionDto);
-                case Core.DTO.ItemFeature itemFeatureDto:
-                    var itemFeatureFactory = new ItemFeatureFactory();
-                    return itemFeatureFactory.Create(itemFeatureDto);
-                case Core.DTO.ItemFlow itemFlowDto:
-                    var itemFlowFactory = new ItemFlowFactory();
-                    return itemFlowFactory.Create(itemFlowDto);
-                case Core.DTO.ItemFlowEnd itemFlowEndDto:
-                    var itemFlowEndFactory = new ItemFlowEndFactory();
-                    return itemFlowEndFactory.Create(itemFlowEndDto);
                 case Core.DTO.ItemUsage itemUsageDto:
                     var itemUsageFactory = new ItemUsageFactory();
                     return itemUsageFactory.Create(itemUsageDto);
@@ -296,9 +302,6 @@ namespace SysML2.NET.Dal
                 case Core.DTO.LibraryPackage libraryPackageDto:
                     var libraryPackageFactory = new LibraryPackageFactory();
                     return libraryPackageFactory.Create(libraryPackageDto);
-                case Core.DTO.LifeClass lifeClassDto:
-                    var lifeClassFactory = new LifeClassFactory();
-                    return lifeClassFactory.Create(lifeClassDto);
                 case Core.DTO.LiteralBoolean literalBooleanDto:
                     var literalBooleanFactory = new LiteralBooleanFactory();
                     return literalBooleanFactory.Create(literalBooleanDto);
@@ -389,6 +392,9 @@ namespace SysML2.NET.Dal
                 case Core.DTO.PartUsage partUsageDto:
                     var partUsageFactory = new PartUsageFactory();
                     return partUsageFactory.Create(partUsageDto);
+                case Core.DTO.PayloadFeature payloadFeatureDto:
+                    var payloadFeatureFactory = new PayloadFeatureFactory();
+                    return payloadFeatureFactory.Create(payloadFeatureDto);
                 case Core.DTO.PerformActionUsage performActionUsageDto:
                     var performActionUsageFactory = new PerformActionUsageFactory();
                     return performActionUsageFactory.Create(performActionUsageDto);
@@ -482,12 +488,15 @@ namespace SysML2.NET.Dal
                 case Core.DTO.SuccessionAsUsage successionAsUsageDto:
                     var successionAsUsageFactory = new SuccessionAsUsageFactory();
                     return successionAsUsageFactory.Create(successionAsUsageDto);
-                case Core.DTO.SuccessionFlowConnectionUsage successionFlowConnectionUsageDto:
-                    var successionFlowConnectionUsageFactory = new SuccessionFlowConnectionUsageFactory();
-                    return successionFlowConnectionUsageFactory.Create(successionFlowConnectionUsageDto);
-                case Core.DTO.SuccessionItemFlow successionItemFlowDto:
-                    var successionItemFlowFactory = new SuccessionItemFlowFactory();
-                    return successionItemFlowFactory.Create(successionItemFlowDto);
+                case Core.DTO.SuccessionFlow successionFlowDto:
+                    var successionFlowFactory = new SuccessionFlowFactory();
+                    return successionFlowFactory.Create(successionFlowDto);
+                case Core.DTO.SuccessionFlowUsage successionFlowUsageDto:
+                    var successionFlowUsageFactory = new SuccessionFlowUsageFactory();
+                    return successionFlowUsageFactory.Create(successionFlowUsageDto);
+                case Core.DTO.TerminateActionUsage terminateActionUsageDto:
+                    var terminateActionUsageFactory = new TerminateActionUsageFactory();
+                    return terminateActionUsageFactory.Create(terminateActionUsageDto);
                 case Core.DTO.TextualRepresentation textualRepresentationDto:
                     var textualRepresentationFactory = new TextualRepresentationFactory();
                     return textualRepresentationFactory.Create(textualRepresentationDto);

@@ -140,6 +140,8 @@ namespace SysML2.NET.Dal
                     return constraintDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConstraintDefinition)dto);
                 case Core.POCO.ConstraintUsage constraintUsagePoco:
                     return constraintUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConstraintUsage)dto);
+                case Core.POCO.ConstructorExpression constructorExpressionPoco:
+                    return constructorExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConstructorExpression)dto);
                 case Core.POCO.CrossSubsetting crossSubsettingPoco:
                     return crossSubsettingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.CrossSubsetting)dto);
                 case Core.POCO.DataType dataTypePoco:
@@ -186,10 +188,14 @@ namespace SysML2.NET.Dal
                     return featureTypingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureTyping)dto);
                 case Core.POCO.FeatureValue featureValuePoco:
                     return featureValuePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureValue)dto);
-                case Core.POCO.FlowConnectionDefinition flowConnectionDefinitionPoco:
-                    return flowConnectionDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FlowConnectionDefinition)dto);
-                case Core.POCO.FlowConnectionUsage flowConnectionUsagePoco:
-                    return flowConnectionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FlowConnectionUsage)dto);
+                case Core.POCO.Flow flowPoco:
+                    return flowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Flow)dto);
+                case Core.POCO.FlowDefinition flowDefinitionPoco:
+                    return flowDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FlowDefinition)dto);
+                case Core.POCO.FlowEnd flowEndPoco:
+                    return flowEndPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FlowEnd)dto);
+                case Core.POCO.FlowUsage flowUsagePoco:
+                    return flowUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FlowUsage)dto);
                 case Core.POCO.ForkNode forkNodePoco:
                     return forkNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ForkNode)dto);
                 case Core.POCO.ForLoopActionUsage forLoopActionUsagePoco:
@@ -218,20 +224,12 @@ namespace SysML2.NET.Dal
                     return invocationExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.InvocationExpression)dto);
                 case Core.POCO.ItemDefinition itemDefinitionPoco:
                     return itemDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ItemDefinition)dto);
-                case Core.POCO.ItemFeature itemFeaturePoco:
-                    return itemFeaturePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ItemFeature)dto);
-                case Core.POCO.ItemFlow itemFlowPoco:
-                    return itemFlowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ItemFlow)dto);
-                case Core.POCO.ItemFlowEnd itemFlowEndPoco:
-                    return itemFlowEndPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ItemFlowEnd)dto);
                 case Core.POCO.ItemUsage itemUsagePoco:
                     return itemUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ItemUsage)dto);
                 case Core.POCO.JoinNode joinNodePoco:
                     return joinNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.JoinNode)dto);
                 case Core.POCO.LibraryPackage libraryPackagePoco:
                     return libraryPackagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LibraryPackage)dto);
-                case Core.POCO.LifeClass lifeClassPoco:
-                    return lifeClassPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LifeClass)dto);
                 case Core.POCO.LiteralBoolean literalBooleanPoco:
                     return literalBooleanPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LiteralBoolean)dto);
                 case Core.POCO.LiteralExpression literalExpressionPoco:
@@ -292,6 +290,8 @@ namespace SysML2.NET.Dal
                     return partDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PartDefinition)dto);
                 case Core.POCO.PartUsage partUsagePoco:
                     return partUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PartUsage)dto);
+                case Core.POCO.PayloadFeature payloadFeaturePoco:
+                    return payloadFeaturePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PayloadFeature)dto);
                 case Core.POCO.PerformActionUsage performActionUsagePoco:
                     return performActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PerformActionUsage)dto);
                 case Core.POCO.PortConjugation portConjugationPoco:
@@ -354,10 +354,10 @@ namespace SysML2.NET.Dal
                     return successionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Succession)dto);
                 case Core.POCO.SuccessionAsUsage successionAsUsagePoco:
                     return successionAsUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionAsUsage)dto);
-                case Core.POCO.SuccessionFlowConnectionUsage successionFlowConnectionUsagePoco:
-                    return successionFlowConnectionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionFlowConnectionUsage)dto);
-                case Core.POCO.SuccessionItemFlow successionItemFlowPoco:
-                    return successionItemFlowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionItemFlow)dto);
+                case Core.POCO.SuccessionFlow successionFlowPoco:
+                    return successionFlowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionFlow)dto);
+                case Core.POCO.SuccessionFlowUsage successionFlowUsagePoco:
+                    return successionFlowUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionFlowUsage)dto);
                 case Core.POCO.TerminateActionUsage terminateActionUsagePoco:
                     return terminateActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TerminateActionUsage)dto);
                 case Core.POCO.TextualRepresentation textualRepresentationPoco:
@@ -551,6 +551,9 @@ namespace SysML2.NET.Dal
                 case Core.POCO.ConstraintUsage constraintUsagePoco:
                     constraintUsagePoco.UpdateReferenceProperties((Core.DTO.ConstraintUsage)dto, cache);
                     break;
+                case Core.POCO.ConstructorExpression constructorExpressionPoco:
+                    constructorExpressionPoco.UpdateReferenceProperties((Core.DTO.ConstructorExpression)dto, cache);
+                    break;
                 case Core.POCO.CrossSubsetting crossSubsettingPoco:
                     crossSubsettingPoco.UpdateReferenceProperties((Core.DTO.CrossSubsetting)dto, cache);
                     break;
@@ -620,11 +623,17 @@ namespace SysML2.NET.Dal
                 case Core.POCO.FeatureValue featureValuePoco:
                     featureValuePoco.UpdateReferenceProperties((Core.DTO.FeatureValue)dto, cache);
                     break;
-                case Core.POCO.FlowConnectionDefinition flowConnectionDefinitionPoco:
-                    flowConnectionDefinitionPoco.UpdateReferenceProperties((Core.DTO.FlowConnectionDefinition)dto, cache);
+                case Core.POCO.Flow flowPoco:
+                    flowPoco.UpdateReferenceProperties((Core.DTO.Flow)dto, cache);
                     break;
-                case Core.POCO.FlowConnectionUsage flowConnectionUsagePoco:
-                    flowConnectionUsagePoco.UpdateReferenceProperties((Core.DTO.FlowConnectionUsage)dto, cache);
+                case Core.POCO.FlowDefinition flowDefinitionPoco:
+                    flowDefinitionPoco.UpdateReferenceProperties((Core.DTO.FlowDefinition)dto, cache);
+                    break;
+                case Core.POCO.FlowEnd flowEndPoco:
+                    flowEndPoco.UpdateReferenceProperties((Core.DTO.FlowEnd)dto, cache);
+                    break;
+                case Core.POCO.FlowUsage flowUsagePoco:
+                    flowUsagePoco.UpdateReferenceProperties((Core.DTO.FlowUsage)dto, cache);
                     break;
                 case Core.POCO.ForkNode forkNodePoco:
                     forkNodePoco.UpdateReferenceProperties((Core.DTO.ForkNode)dto, cache);
@@ -668,15 +677,6 @@ namespace SysML2.NET.Dal
                 case Core.POCO.ItemDefinition itemDefinitionPoco:
                     itemDefinitionPoco.UpdateReferenceProperties((Core.DTO.ItemDefinition)dto, cache);
                     break;
-                case Core.POCO.ItemFeature itemFeaturePoco:
-                    itemFeaturePoco.UpdateReferenceProperties((Core.DTO.ItemFeature)dto, cache);
-                    break;
-                case Core.POCO.ItemFlow itemFlowPoco:
-                    itemFlowPoco.UpdateReferenceProperties((Core.DTO.ItemFlow)dto, cache);
-                    break;
-                case Core.POCO.ItemFlowEnd itemFlowEndPoco:
-                    itemFlowEndPoco.UpdateReferenceProperties((Core.DTO.ItemFlowEnd)dto, cache);
-                    break;
                 case Core.POCO.ItemUsage itemUsagePoco:
                     itemUsagePoco.UpdateReferenceProperties((Core.DTO.ItemUsage)dto, cache);
                     break;
@@ -685,9 +685,6 @@ namespace SysML2.NET.Dal
                     break;
                 case Core.POCO.LibraryPackage libraryPackagePoco:
                     libraryPackagePoco.UpdateReferenceProperties((Core.DTO.LibraryPackage)dto, cache);
-                    break;
-                case Core.POCO.LifeClass lifeClassPoco:
-                    lifeClassPoco.UpdateReferenceProperties((Core.DTO.LifeClass)dto, cache);
                     break;
                 case Core.POCO.LiteralBoolean literalBooleanPoco:
                     literalBooleanPoco.UpdateReferenceProperties((Core.DTO.LiteralBoolean)dto, cache);
@@ -778,6 +775,9 @@ namespace SysML2.NET.Dal
                     break;
                 case Core.POCO.PartUsage partUsagePoco:
                     partUsagePoco.UpdateReferenceProperties((Core.DTO.PartUsage)dto, cache);
+                    break;
+                case Core.POCO.PayloadFeature payloadFeaturePoco:
+                    payloadFeaturePoco.UpdateReferenceProperties((Core.DTO.PayloadFeature)dto, cache);
                     break;
                 case Core.POCO.PerformActionUsage performActionUsagePoco:
                     performActionUsagePoco.UpdateReferenceProperties((Core.DTO.PerformActionUsage)dto, cache);
@@ -872,11 +872,11 @@ namespace SysML2.NET.Dal
                 case Core.POCO.SuccessionAsUsage successionAsUsagePoco:
                     successionAsUsagePoco.UpdateReferenceProperties((Core.DTO.SuccessionAsUsage)dto, cache);
                     break;
-                case Core.POCO.SuccessionFlowConnectionUsage successionFlowConnectionUsagePoco:
-                    successionFlowConnectionUsagePoco.UpdateReferenceProperties((Core.DTO.SuccessionFlowConnectionUsage)dto, cache);
+                case Core.POCO.SuccessionFlow successionFlowPoco:
+                    successionFlowPoco.UpdateReferenceProperties((Core.DTO.SuccessionFlow)dto, cache);
                     break;
-                case Core.POCO.SuccessionItemFlow successionItemFlowPoco:
-                    successionItemFlowPoco.UpdateReferenceProperties((Core.DTO.SuccessionItemFlow)dto, cache);
+                case Core.POCO.SuccessionFlowUsage successionFlowUsagePoco:
+                    successionFlowUsagePoco.UpdateReferenceProperties((Core.DTO.SuccessionFlowUsage)dto, cache);
                     break;
                 case Core.POCO.TerminateActionUsage terminateActionUsagePoco:
                     terminateActionUsagePoco.UpdateReferenceProperties((Core.DTO.TerminateActionUsage)dto, cache);

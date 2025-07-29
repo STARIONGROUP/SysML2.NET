@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", nullExpressionInstance.ElementId);
             dictionary.Add("isAbstract", nullExpressionInstance.IsAbstract);
             dictionary.Add("isComposite", nullExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", nullExpressionInstance.IsConstant);
             dictionary.Add("isDerived", nullExpressionInstance.IsDerived);
             dictionary.Add("isEnd", nullExpressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", nullExpressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", nullExpressionInstance.IsOrdered);
             dictionary.Add("isPortion", nullExpressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", nullExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", nullExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", nullExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", nullExpressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", nullExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", nullExpressionInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", nullExpressionInstance.ElementId);
             dictionary.Add("isAbstract", nullExpressionInstance.IsAbstract);
             dictionary.Add("isComposite", nullExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", nullExpressionInstance.IsConstant);
             dictionary.Add("isDerived", nullExpressionInstance.IsDerived);
             dictionary.Add("isEnd", nullExpressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", nullExpressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", nullExpressionInstance.IsOrdered);
             dictionary.Add("isPortion", nullExpressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", nullExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", nullExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", nullExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", nullExpressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", nullExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", nullExpressionInstance.OwningRelationship);
 

@@ -51,7 +51,7 @@ namespace SysML2.NET.Core.POCO
     /// reject(oclIsKindOf(FeatureMembership)).memberElement->        selectByKind(Feature) in    if
     /// unownedFeatures->isEmpty() then null    else unownedFeatures->first().oclAsType(Feature)   
     /// endifownedMembership->exists(    not oclIsKindOf(OwningMembership) and    
-    /// memberElement.oclIsKindOf(Feature))
+    /// memberElement.oclIsKindOf(Feature))referent <> null implies referent.featureTarget.mayTimeVary
     /// </summary>
     public partial interface IAssignmentActionUsage : IActionUsage
     {

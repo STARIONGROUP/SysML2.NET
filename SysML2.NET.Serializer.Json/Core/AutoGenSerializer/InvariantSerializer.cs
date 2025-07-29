@@ -93,6 +93,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isComposite"u8);
             writer.WriteBooleanValue(iInvariant.IsComposite);
 
+            writer.WritePropertyName("isConstant"u8);
+            writer.WriteBooleanValue(iInvariant.IsConstant);
+
             writer.WritePropertyName("isDerived"u8);
             writer.WriteBooleanValue(iInvariant.IsDerived);
 
@@ -111,14 +114,14 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isPortion"u8);
             writer.WriteBooleanValue(iInvariant.IsPortion);
 
-            writer.WritePropertyName("isReadOnly"u8);
-            writer.WriteBooleanValue(iInvariant.IsReadOnly);
-
             writer.WritePropertyName("isSufficient"u8);
             writer.WriteBooleanValue(iInvariant.IsSufficient);
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iInvariant.IsUnique);
+
+            writer.WritePropertyName("isVariable"u8);
+            writer.WriteBooleanValue(iInvariant.IsVariable);
 
             writer.WriteStartArray("ownedRelationship"u8);
             foreach (var item in iInvariant.OwnedRelationship)

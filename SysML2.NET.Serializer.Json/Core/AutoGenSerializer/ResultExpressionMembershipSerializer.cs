@@ -78,12 +78,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iResultExpressionMembership.ElementId);
 
-            writer.WritePropertyName("feature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iResultExpressionMembership.Feature);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iResultExpressionMembership.IsImplied);
 
@@ -163,12 +157,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteEndObject();
             }
             writer.WriteEndArray();
-
-            writer.WritePropertyName("type"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iResultExpressionMembership.Type);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iResultExpressionMembership.Visibility.ToString().ToLower());

@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", objectiveMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", objectiveMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", objectiveMembershipInstance.ElementId);
-            dictionary.Add("feature", objectiveMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", objectiveMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", objectiveMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", objectiveMembershipInstance.MemberElement.ToString());
@@ -123,7 +122,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", objectiveMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", objectiveMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", objectiveMembershipInstance.Target)} ]");
-            dictionary.Add("type", objectiveMembershipInstance.Type.ToString());
             dictionary.Add("visibility", objectiveMembershipInstance.Visibility);
 
             return dictionary;
@@ -155,7 +153,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", objectiveMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", objectiveMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", objectiveMembershipInstance.ElementId);
-            dictionary.Add("feature", objectiveMembershipInstance.Feature);
             dictionary.Add("isImplied", objectiveMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", objectiveMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", objectiveMembershipInstance.MemberElement);
@@ -167,7 +164,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", objectiveMembershipInstance.OwningRelationship);
             dictionary.Add("source", objectiveMembershipInstance.Source);
             dictionary.Add("target", objectiveMembershipInstance.Target);
-            dictionary.Add("type", objectiveMembershipInstance.Type);
             dictionary.Add("visibility", objectiveMembershipInstance.Visibility);
 
             return dictionary;

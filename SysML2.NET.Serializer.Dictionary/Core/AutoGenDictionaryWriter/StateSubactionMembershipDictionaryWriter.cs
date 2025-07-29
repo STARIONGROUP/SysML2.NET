@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", stateSubactionMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", stateSubactionMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", stateSubactionMembershipInstance.ElementId);
-            dictionary.Add("feature", stateSubactionMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", stateSubactionMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", stateSubactionMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", stateSubactionMembershipInstance.Kind);
@@ -124,7 +123,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", stateSubactionMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", stateSubactionMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", stateSubactionMembershipInstance.Target)} ]");
-            dictionary.Add("type", stateSubactionMembershipInstance.Type.ToString());
             dictionary.Add("visibility", stateSubactionMembershipInstance.Visibility);
 
             return dictionary;
@@ -156,7 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", stateSubactionMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", stateSubactionMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", stateSubactionMembershipInstance.ElementId);
-            dictionary.Add("feature", stateSubactionMembershipInstance.Feature);
             dictionary.Add("isImplied", stateSubactionMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", stateSubactionMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", stateSubactionMembershipInstance.Kind);
@@ -169,7 +166,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", stateSubactionMembershipInstance.OwningRelationship);
             dictionary.Add("source", stateSubactionMembershipInstance.Source);
             dictionary.Add("target", stateSubactionMembershipInstance.Target);
-            dictionary.Add("type", stateSubactionMembershipInstance.Type);
             dictionary.Add("visibility", stateSubactionMembershipInstance.Visibility);
 
             return dictionary;

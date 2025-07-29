@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
@@ -176,12 +182,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
@@ -193,6 +193,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("operator", out object operatorObject))
             {
@@ -220,14 +226,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             featureChainExpressionInstance.ElementId = elementIdFeature;
             featureChainExpressionInstance.IsAbstract = isAbstractFeature;
             featureChainExpressionInstance.IsComposite = isCompositeFeature;
+            featureChainExpressionInstance.IsConstant = isConstantFeature;
             featureChainExpressionInstance.IsDerived = isDerivedFeature;
             featureChainExpressionInstance.IsEnd = isEndFeature;
             featureChainExpressionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             featureChainExpressionInstance.IsOrdered = isOrderedFeature;
             featureChainExpressionInstance.IsPortion = isPortionFeature;
-            featureChainExpressionInstance.IsReadOnly = isReadOnlyFeature;
             featureChainExpressionInstance.IsSufficient = isSufficientFeature;
             featureChainExpressionInstance.IsUnique = isUniqueFeature;
+            featureChainExpressionInstance.IsVariable = isVariableFeature;
             featureChainExpressionInstance.Operator = operatorFeature;
             featureChainExpressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             featureChainExpressionInstance.OwningRelationship = owningRelationshipFeature;
@@ -291,6 +298,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
@@ -321,12 +334,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
@@ -338,6 +345,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a FeatureChainExpression");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("operator", out object operatorObject))
             {
@@ -365,14 +378,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             featureChainExpressionInstance.ElementId = elementIdFeature;
             featureChainExpressionInstance.IsAbstract = isAbstractFeature;
             featureChainExpressionInstance.IsComposite = isCompositeFeature;
+            featureChainExpressionInstance.IsConstant = isConstantFeature;
             featureChainExpressionInstance.IsDerived = isDerivedFeature;
             featureChainExpressionInstance.IsEnd = isEndFeature;
             featureChainExpressionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             featureChainExpressionInstance.IsOrdered = isOrderedFeature;
             featureChainExpressionInstance.IsPortion = isPortionFeature;
-            featureChainExpressionInstance.IsReadOnly = isReadOnlyFeature;
             featureChainExpressionInstance.IsSufficient = isSufficientFeature;
             featureChainExpressionInstance.IsUnique = isUniqueFeature;
+            featureChainExpressionInstance.IsVariable = isVariableFeature;
             featureChainExpressionInstance.Operator = operatorFeature;
             featureChainExpressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             featureChainExpressionInstance.OwningRelationship = owningRelationshipFeature;

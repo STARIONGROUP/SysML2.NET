@@ -40,7 +40,8 @@ namespace SysML2.NET.Core.POCO
     /// (owningType.oclIsKindOf(ActionDefinition) or
     /// owningType.oclIsKindOf(ActionUsage))targetConnector->selectByKind(Succession)->   
     /// collect(connectorEnd->at(2).multiplicity)->    forAll(targetMult |        
-    /// multiplicityHasBounds(targetMult, 1, 1))specializesFromLibrary('Action::Action::controls')
+    /// multiplicityHasBounds(targetMult, 1,
+    /// 1))specializesFromLibrary('Action::Action::controls')isComposite
     /// </summary>
     public partial interface IControlNode : IActionUsage
     {

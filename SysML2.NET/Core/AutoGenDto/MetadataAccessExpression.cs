@@ -35,7 +35,10 @@ namespace SysML2.NET.Core.DTO
     /// representing all the MetadataFeature annotations of the referencedElement. In addition, the sequence
     /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
     /// referencedElement, with values for all the abstract syntax properties of the
-    /// referencedElement.specializesFromLibrary('Performances::metadataAccessEvaluations')
+    /// referencedElement.specializesFromLibrary('Performances::metadataAccessEvaluations')ownedMembership->exists(not
+    /// oclIsKindOf(FeatureMembership))referencedElement =    let elements : Sequence(Element) =
+    /// ownedMembership->        reject(oclIsKindOf(FeatureMembership)).memberElement in    if
+    /// elements->isEmpty() then null    else elements->first()    endif
     /// </summary>
     public partial class MetadataAccessExpression : IMetadataAccessExpression
     {
@@ -47,14 +50,15 @@ namespace SysML2.NET.Core.DTO
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
             this.IsComposite = false;
+            this.IsConstant = false;
             this.IsDerived = false;
             this.IsEnd = false;
             this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
-            this.IsReadOnly = false;
             this.IsSufficient = false;
             this.IsUnique = true;
+            this.IsVariable = false;
             this.OwnedRelationship = new List<Guid>();
         }
 
@@ -108,10 +112,18 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
@@ -156,12 +168,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsPortion { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsReadOnly { get; set; }
-
-        /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
@@ -179,6 +185,13 @@ namespace SysML2.NET.Core.DTO
         public bool IsUnique { get; set; }
 
         /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariable { get; set; }
+
+        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -189,12 +202,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// The Element whose metadata is being accessed.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Guid ReferencedElement { get; set; }
 
     }
 }

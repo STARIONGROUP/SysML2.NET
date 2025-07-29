@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", literalInfinityInstance.ElementId);
             dictionary.Add("isAbstract", literalInfinityInstance.IsAbstract);
             dictionary.Add("isComposite", literalInfinityInstance.IsComposite);
+            dictionary.Add("isConstant", literalInfinityInstance.IsConstant);
             dictionary.Add("isDerived", literalInfinityInstance.IsDerived);
             dictionary.Add("isEnd", literalInfinityInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", literalInfinityInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", literalInfinityInstance.IsOrdered);
             dictionary.Add("isPortion", literalInfinityInstance.IsPortion);
-            dictionary.Add("isReadOnly", literalInfinityInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalInfinityInstance.IsSufficient);
             dictionary.Add("isUnique", literalInfinityInstance.IsUnique);
+            dictionary.Add("isVariable", literalInfinityInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", literalInfinityInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", literalInfinityInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", literalInfinityInstance.ElementId);
             dictionary.Add("isAbstract", literalInfinityInstance.IsAbstract);
             dictionary.Add("isComposite", literalInfinityInstance.IsComposite);
+            dictionary.Add("isConstant", literalInfinityInstance.IsConstant);
             dictionary.Add("isDerived", literalInfinityInstance.IsDerived);
             dictionary.Add("isEnd", literalInfinityInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", literalInfinityInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", literalInfinityInstance.IsOrdered);
             dictionary.Add("isPortion", literalInfinityInstance.IsPortion);
-            dictionary.Add("isReadOnly", literalInfinityInstance.IsReadOnly);
             dictionary.Add("isSufficient", literalInfinityInstance.IsSufficient);
             dictionary.Add("isUnique", literalInfinityInstance.IsUnique);
+            dictionary.Add("isVariable", literalInfinityInstance.IsVariable);
             dictionary.Add("ownedRelationship", literalInfinityInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", literalInfinityInstance.OwningRelationship);
 

@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
@@ -182,12 +188,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
@@ -199,6 +199,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -244,15 +250,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             bindingConnectorInstance.ElementId = elementIdFeature;
             bindingConnectorInstance.IsAbstract = isAbstractFeature;
             bindingConnectorInstance.IsComposite = isCompositeFeature;
+            bindingConnectorInstance.IsConstant = isConstantFeature;
             bindingConnectorInstance.IsDerived = isDerivedFeature;
             bindingConnectorInstance.IsEnd = isEndFeature;
             bindingConnectorInstance.IsImplied = isImpliedFeature;
             bindingConnectorInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             bindingConnectorInstance.IsOrdered = isOrderedFeature;
             bindingConnectorInstance.IsPortion = isPortionFeature;
-            bindingConnectorInstance.IsReadOnly = isReadOnlyFeature;
             bindingConnectorInstance.IsSufficient = isSufficientFeature;
             bindingConnectorInstance.IsUnique = isUniqueFeature;
+            bindingConnectorInstance.IsVariable = isVariableFeature;
             bindingConnectorInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             bindingConnectorInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             bindingConnectorInstance.OwningRelatedElement = owningRelatedElementFeature;
@@ -319,6 +326,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
@@ -355,12 +368,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
@@ -372,6 +379,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a BindingConnector");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -417,15 +430,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             bindingConnectorInstance.ElementId = elementIdFeature;
             bindingConnectorInstance.IsAbstract = isAbstractFeature;
             bindingConnectorInstance.IsComposite = isCompositeFeature;
+            bindingConnectorInstance.IsConstant = isConstantFeature;
             bindingConnectorInstance.IsDerived = isDerivedFeature;
             bindingConnectorInstance.IsEnd = isEndFeature;
             bindingConnectorInstance.IsImplied = isImpliedFeature;
             bindingConnectorInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             bindingConnectorInstance.IsOrdered = isOrderedFeature;
             bindingConnectorInstance.IsPortion = isPortionFeature;
-            bindingConnectorInstance.IsReadOnly = isReadOnlyFeature;
             bindingConnectorInstance.IsSufficient = isSufficientFeature;
             bindingConnectorInstance.IsUnique = isUniqueFeature;
+            bindingConnectorInstance.IsVariable = isVariableFeature;
             bindingConnectorInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             bindingConnectorInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             bindingConnectorInstance.OwningRelatedElement = owningRelatedElementFeature;

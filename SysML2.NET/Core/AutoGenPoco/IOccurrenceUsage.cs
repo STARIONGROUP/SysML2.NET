@@ -43,8 +43,12 @@ namespace SysML2.NET.Core.POCO
     /// or owningType.oclIsKindOf(Feature) and    owningType.oclAsType(Feature).type->       
     /// exists(oclIsKind(Class))) implies   
     /// specializesFromLibrary('Occurrences::Occurrence::suboccurrences')occurrenceDefinition->   
-    /// selectByKind(OccurrenceDefinition)->    select(isIndividual).size() <= 1portionKind <> null implies 
-    /// occurrenceDefinition->forAll(occ |         featuringType->exists(specializes(occ)))
+    /// selectByKind(OccurrenceDefinition)->    select(isIndividual).size() <= 1portionKind =
+    /// PortionKind::snapshot implies   
+    /// specializesFromLibrary('Occurrences::Occurrence::snapshots')portionKind = PortionKind::timeslice
+    /// implies     specializesFromLibrary('Occurrences::Occurrence::timeSlices')portionKind <> null implies
+    ///    owningType <> null and    (owningType.oclIsKindOf(OccurrenceDefinition) or    
+    /// owningType.oclIsKindOf(OccurrenceUsage))portionKind <> null implies isPortion
     /// </summary>
     public partial interface IOccurrenceUsage : IUsage
     {
@@ -55,8 +59,8 @@ namespace SysML2.NET.Core.POCO
         OccurrenceDefinition QueryIndividualDefinition();
 
         /// <summary>
-        /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)
-        /// represented by its individualDefinition.
+        /// Whether this OccurrenceUsage represents the usage of the specific individual represented by its
+        /// individualDefinition.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsIndividual { get; set; }
@@ -68,8 +72,9 @@ namespace SysML2.NET.Core.POCO
         List<Class> QueryOccurrenceDefinition();
 
         /// <summary>
-        /// The kind of (temporal) portion of the life of the occurrenceDefinition represented by this
-        /// OccurrenceUsage, if it is so restricted.
+        /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
+        /// portionKind is not null, then the owningType of the OccurrenceUsage must be non-null, and the
+        /// OccurrenceUsage represents portions of the featuring instance of the owningType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         PortionKind? PortionKind { get; set; }

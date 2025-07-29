@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", featureInstance.ElementId);
             dictionary.Add("isAbstract", featureInstance.IsAbstract);
             dictionary.Add("isComposite", featureInstance.IsComposite);
+            dictionary.Add("isConstant", featureInstance.IsConstant);
             dictionary.Add("isDerived", featureInstance.IsDerived);
             dictionary.Add("isEnd", featureInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", featureInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", featureInstance.IsOrdered);
             dictionary.Add("isPortion", featureInstance.IsPortion);
-            dictionary.Add("isReadOnly", featureInstance.IsReadOnly);
             dictionary.Add("isSufficient", featureInstance.IsSufficient);
             dictionary.Add("isUnique", featureInstance.IsUnique);
+            dictionary.Add("isVariable", featureInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", featureInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", featureInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", featureInstance.ElementId);
             dictionary.Add("isAbstract", featureInstance.IsAbstract);
             dictionary.Add("isComposite", featureInstance.IsComposite);
+            dictionary.Add("isConstant", featureInstance.IsConstant);
             dictionary.Add("isDerived", featureInstance.IsDerived);
             dictionary.Add("isEnd", featureInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", featureInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", featureInstance.IsOrdered);
             dictionary.Add("isPortion", featureInstance.IsPortion);
-            dictionary.Add("isReadOnly", featureInstance.IsReadOnly);
             dictionary.Add("isSufficient", featureInstance.IsSufficient);
             dictionary.Add("isUnique", featureInstance.IsUnique);
+            dictionary.Add("isVariable", featureInstance.IsVariable);
             dictionary.Add("ownedRelationship", featureInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", featureInstance.OwningRelationship);
 

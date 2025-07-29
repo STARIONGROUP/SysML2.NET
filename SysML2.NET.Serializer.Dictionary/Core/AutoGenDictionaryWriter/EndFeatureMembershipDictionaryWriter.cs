@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", endFeatureMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", endFeatureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", endFeatureMembershipInstance.ElementId);
-            dictionary.Add("feature", endFeatureMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", endFeatureMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", endFeatureMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", endFeatureMembershipInstance.MemberElement.ToString());
@@ -123,7 +122,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", endFeatureMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", endFeatureMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", endFeatureMembershipInstance.Target)} ]");
-            dictionary.Add("type", endFeatureMembershipInstance.Type.ToString());
             dictionary.Add("visibility", endFeatureMembershipInstance.Visibility);
 
             return dictionary;
@@ -155,7 +153,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", endFeatureMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", endFeatureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", endFeatureMembershipInstance.ElementId);
-            dictionary.Add("feature", endFeatureMembershipInstance.Feature);
             dictionary.Add("isImplied", endFeatureMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", endFeatureMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", endFeatureMembershipInstance.MemberElement);
@@ -167,7 +164,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", endFeatureMembershipInstance.OwningRelationship);
             dictionary.Add("source", endFeatureMembershipInstance.Source);
             dictionary.Add("target", endFeatureMembershipInstance.Target);
-            dictionary.Add("type", endFeatureMembershipInstance.Type);
             dictionary.Add("visibility", endFeatureMembershipInstance.Visibility);
 
             return dictionary;

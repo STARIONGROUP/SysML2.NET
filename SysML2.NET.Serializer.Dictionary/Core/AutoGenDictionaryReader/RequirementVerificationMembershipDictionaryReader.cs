@@ -128,12 +128,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
 
-            if (!dictionary.TryGetValue("feature", out object featureObject))
-            {
-                throw new ArgumentException("The feature property is missing from the dictionary, the dictionary cannot be converted into a RequirementVerificationMembership");
-            }
-            Guid featureFeature = Guid.Parse(Convert.ToString(featureObject));
-
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
                 throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a RequirementVerificationMembership");
@@ -206,12 +200,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<Guid> targetFeature = (targetObject as List<string>)?.Select(Guid.Parse).ToList();
 
-            if (!dictionary.TryGetValue("type", out object typeObject))
-            {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a RequirementVerificationMembership");
-            }
-            Guid typeFeature = Guid.Parse(Convert.ToString(typeObject));
-
             if (!dictionary.TryGetValue("visibility", out object visibilityObject))
             {
                 throw new ArgumentException("The visibility property is missing from the dictionary, the dictionary cannot be converted into a RequirementVerificationMembership");
@@ -223,7 +211,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             requirementVerificationMembershipInstance.DeclaredName = declaredNameFeature;
             requirementVerificationMembershipInstance.DeclaredShortName = declaredShortNameFeature;
             requirementVerificationMembershipInstance.ElementId = elementIdFeature;
-            requirementVerificationMembershipInstance.Feature = featureFeature;
             requirementVerificationMembershipInstance.IsImplied = isImpliedFeature;
             requirementVerificationMembershipInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             requirementVerificationMembershipInstance.Kind = kindFeature;
@@ -236,7 +223,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             requirementVerificationMembershipInstance.OwningRelationship = owningRelationshipFeature;
             requirementVerificationMembershipInstance.Source = sourceFeature ?? new List<Guid>();
             requirementVerificationMembershipInstance.Target = targetFeature ?? new List<Guid>();
-            requirementVerificationMembershipInstance.Type = typeFeature;
             requirementVerificationMembershipInstance.Visibility = visibilityFeature;
 
             return requirementVerificationMembershipInstance;
@@ -279,12 +265,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a RequirementVerificationMembership");
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
-
-            if (!dictionary.TryGetValue("feature", out object featureObject))
-            {
-                throw new ArgumentException("The feature property is missing from the dictionary, the dictionary cannot be converted into a RequirementVerificationMembership");
-            }
-            Guid featureFeature = Guid.Parse(Convert.ToString(featureObject));
 
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
@@ -358,12 +338,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<Guid> targetFeature = (targetObject as List<Guid>);
 
-            if (!dictionary.TryGetValue("type", out object typeObject))
-            {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a RequirementVerificationMembership");
-            }
-            Guid typeFeature = Guid.Parse(Convert.ToString(typeObject));
-
             if (!dictionary.TryGetValue("visibility", out object visibilityObject))
             {
                 throw new ArgumentException("The visibility property is missing from the dictionary, the dictionary cannot be converted into a RequirementVerificationMembership");
@@ -375,7 +349,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             requirementVerificationMembershipInstance.DeclaredName = declaredNameFeature;
             requirementVerificationMembershipInstance.DeclaredShortName = declaredShortNameFeature;
             requirementVerificationMembershipInstance.ElementId = elementIdFeature;
-            requirementVerificationMembershipInstance.Feature = featureFeature;
             requirementVerificationMembershipInstance.IsImplied = isImpliedFeature;
             requirementVerificationMembershipInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             requirementVerificationMembershipInstance.Kind = kindFeature;
@@ -388,7 +361,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             requirementVerificationMembershipInstance.OwningRelationship = owningRelationshipFeature;
             requirementVerificationMembershipInstance.Source = sourceFeature ?? new List<Guid>();
             requirementVerificationMembershipInstance.Target = targetFeature ?? new List<Guid>();
-            requirementVerificationMembershipInstance.Type = typeFeature;
             requirementVerificationMembershipInstance.Visibility = visibilityFeature;
 
             return requirementVerificationMembershipInstance;

@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", multiplicityRangeInstance.ElementId);
             dictionary.Add("isAbstract", multiplicityRangeInstance.IsAbstract);
             dictionary.Add("isComposite", multiplicityRangeInstance.IsComposite);
+            dictionary.Add("isConstant", multiplicityRangeInstance.IsConstant);
             dictionary.Add("isDerived", multiplicityRangeInstance.IsDerived);
             dictionary.Add("isEnd", multiplicityRangeInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", multiplicityRangeInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", multiplicityRangeInstance.IsOrdered);
             dictionary.Add("isPortion", multiplicityRangeInstance.IsPortion);
-            dictionary.Add("isReadOnly", multiplicityRangeInstance.IsReadOnly);
             dictionary.Add("isSufficient", multiplicityRangeInstance.IsSufficient);
             dictionary.Add("isUnique", multiplicityRangeInstance.IsUnique);
+            dictionary.Add("isVariable", multiplicityRangeInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", multiplicityRangeInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", multiplicityRangeInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", multiplicityRangeInstance.ElementId);
             dictionary.Add("isAbstract", multiplicityRangeInstance.IsAbstract);
             dictionary.Add("isComposite", multiplicityRangeInstance.IsComposite);
+            dictionary.Add("isConstant", multiplicityRangeInstance.IsConstant);
             dictionary.Add("isDerived", multiplicityRangeInstance.IsDerived);
             dictionary.Add("isEnd", multiplicityRangeInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", multiplicityRangeInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", multiplicityRangeInstance.IsOrdered);
             dictionary.Add("isPortion", multiplicityRangeInstance.IsPortion);
-            dictionary.Add("isReadOnly", multiplicityRangeInstance.IsReadOnly);
             dictionary.Add("isSufficient", multiplicityRangeInstance.IsSufficient);
             dictionary.Add("isUnique", multiplicityRangeInstance.IsUnique);
+            dictionary.Add("isVariable", multiplicityRangeInstance.IsVariable);
             dictionary.Add("ownedRelationship", multiplicityRangeInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", multiplicityRangeInstance.OwningRelationship);
 

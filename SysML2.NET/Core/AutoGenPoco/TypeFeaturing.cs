@@ -94,12 +94,6 @@ namespace SysML2.NET.Core.POCO
         public string ElementId { get; set; }
 
         /// <summary>
-        /// The Feature that is featured by the featuringType.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Feature Feature { get; set; }
-
-        /// <summary>
         /// The Feature that is featured by the featuringType. It is the source of the TypeFeaturing.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -271,12 +265,6 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property TextualRepresentation not yet supported");
         }
-
-        /// <summary>
-        /// The Type that features the featureOfType.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Type Type { get; set; }
 
     }
 }

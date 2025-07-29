@@ -34,18 +34,24 @@ namespace SysML2.NET.Core.DTO
     /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
     /// which they are used (domain of the Connector). The associations of the Connector restrict what kinds
     /// of things might be linked. The Connector further restricts these links to be between values of
-    /// Features on instances of its domain.not isAbstract implies relatedFeature->size() >=
-    /// 2connectorEnds->size() = 2 andassociation->exists(oclIsKindOf(AssociationStructure)) implies   
-    /// specializesFromLibrary('Objects::binaryLinkObjects')sourceFeature =     if relatedFeature->isEmpty()
-    /// then null     else relatedFeature->first()     endifconnectorEnds->size() > 2 implies    not
-    /// specializesFromLibrary('Links::BinaryLink')relatedFeature->forAll(f |     if
-    /// featuringType->isEmpty() then f.isFeaturedWithin(null)    else featuringType->forAll(t |
-    /// f.isFeaturedWithin(t))    endif)relatedFeature = connectorEnd.ownedReferenceSubsetting->    select(s
-    /// | s <> null).subsettedFeaturespecializesFromLibrary('Links::links')connectorEnd->size() = 2 implies 
-    ///   specializesFromLibrary('Links::binaryLinks')association->exists(oclIsKindOf(AssociationStructure))
-    /// implies    specializesFromLibrary('Objects::linkObjects')targetFeature =    if
-    /// relatedFeature->size() < 2 then OrderedSet{}    else         relatedFeature->           
-    /// subSequence(2, relatedFeature->size())->            asOrderedSet()    endif
+    /// Features on instances of its domain.relatedFeature = connectorEnd.ownedReferenceSubsetting->   
+    /// select(s | s <> null).subsettedFeaturerelatedFeature->forAll(f |     if featuringType->isEmpty()
+    /// then f.isFeaturedWithin(null)    else featuringType->forAll(t | f.isFeaturedWithin(t))   
+    /// endif)sourceFeature =     if relatedFeature->isEmpty() then null     else relatedFeature->first()   
+    ///  endiftargetFeature =    if relatedFeature->size() < 2 then OrderedSet{}    else        
+    /// relatedFeature->            subSequence(2, relatedFeature->size())->            asOrderedSet()   
+    /// endifnot isAbstract implies relatedFeature->size() >=
+    /// 2specializesFromLibrary('Links::links')association->exists(oclIsKindOf(AssociationStructure))
+    /// implies    specializesFromLibrary('Objects::linkObjects')connectorEnds->size() = 2
+    /// andassociation->exists(oclIsKindOf(AssociationStructure)) implies   
+    /// specializesFromLibrary('Objects::binaryLinkObjects')connectorEnd->size() = 2 implies   
+    /// specializesFromLibrary('Links::binaryLinks')connectorEnds->size() > 2 implies    not
+    /// specializesFromLibrary('Links::BinaryLink')let commonFeaturingTypes : OrderedSet(Type) =    
+    /// relatedFeature->closure(featuringType)->select(t |         relatedFeature->forAll(f |
+    /// f.isFeaturedWithin(t))    ) inlet nearestCommonFeaturingTypes : OrderedSet(Type) =   
+    /// commonFeaturingTypes->reject(t1 |         commonFeaturingTypes->exists(t2 |             t2 <> t1 and
+    /// t2->closure(featuringType)->contains(t1)    )) inif nearestCommonFeaturingTypes->isEmpty() then
+    /// nullelse nearestCommonFeaturingTypes->first()endif
     /// </summary>
     public partial class Connector : IConnector
     {
@@ -57,15 +63,16 @@ namespace SysML2.NET.Core.DTO
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
             this.IsComposite = false;
+            this.IsConstant = false;
             this.IsDerived = false;
             this.IsEnd = false;
             this.IsImplied = false;
             this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
-            this.IsReadOnly = false;
             this.IsSufficient = false;
             this.IsUnique = true;
+            this.IsVariable = false;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
@@ -122,10 +129,18 @@ namespace SysML2.NET.Core.DTO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
@@ -177,12 +192,6 @@ namespace SysML2.NET.Core.DTO
         public bool IsPortion { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsReadOnly { get; set; }
-
-        /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
@@ -198,6 +207,13 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsUnique { get; set; }
+
+        /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariable { get; set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.

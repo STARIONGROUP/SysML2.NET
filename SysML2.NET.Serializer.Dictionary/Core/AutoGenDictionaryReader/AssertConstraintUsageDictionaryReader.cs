@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
@@ -188,12 +194,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
@@ -205,6 +205,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("isVariation", out object isVariationObject))
             {
@@ -238,6 +244,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             assertConstraintUsageInstance.ElementId = elementIdFeature;
             assertConstraintUsageInstance.IsAbstract = isAbstractFeature;
             assertConstraintUsageInstance.IsComposite = isCompositeFeature;
+            assertConstraintUsageInstance.IsConstant = isConstantFeature;
             assertConstraintUsageInstance.IsDerived = isDerivedFeature;
             assertConstraintUsageInstance.IsEnd = isEndFeature;
             assertConstraintUsageInstance.IsImpliedIncluded = isImpliedIncludedFeature;
@@ -245,9 +252,9 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             assertConstraintUsageInstance.IsNegated = isNegatedFeature;
             assertConstraintUsageInstance.IsOrdered = isOrderedFeature;
             assertConstraintUsageInstance.IsPortion = isPortionFeature;
-            assertConstraintUsageInstance.IsReadOnly = isReadOnlyFeature;
             assertConstraintUsageInstance.IsSufficient = isSufficientFeature;
             assertConstraintUsageInstance.IsUnique = isUniqueFeature;
+            assertConstraintUsageInstance.IsVariable = isVariableFeature;
             assertConstraintUsageInstance.IsVariation = isVariationFeature;
             assertConstraintUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             assertConstraintUsageInstance.OwningRelationship = owningRelationshipFeature;
@@ -312,6 +319,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
@@ -354,12 +367,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
@@ -371,6 +378,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a AssertConstraintUsage");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("isVariation", out object isVariationObject))
             {
@@ -404,6 +417,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             assertConstraintUsageInstance.ElementId = elementIdFeature;
             assertConstraintUsageInstance.IsAbstract = isAbstractFeature;
             assertConstraintUsageInstance.IsComposite = isCompositeFeature;
+            assertConstraintUsageInstance.IsConstant = isConstantFeature;
             assertConstraintUsageInstance.IsDerived = isDerivedFeature;
             assertConstraintUsageInstance.IsEnd = isEndFeature;
             assertConstraintUsageInstance.IsImpliedIncluded = isImpliedIncludedFeature;
@@ -411,9 +425,9 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             assertConstraintUsageInstance.IsNegated = isNegatedFeature;
             assertConstraintUsageInstance.IsOrdered = isOrderedFeature;
             assertConstraintUsageInstance.IsPortion = isPortionFeature;
-            assertConstraintUsageInstance.IsReadOnly = isReadOnlyFeature;
             assertConstraintUsageInstance.IsSufficient = isSufficientFeature;
             assertConstraintUsageInstance.IsUnique = isUniqueFeature;
+            assertConstraintUsageInstance.IsVariable = isVariableFeature;
             assertConstraintUsageInstance.IsVariation = isVariationFeature;
             assertConstraintUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             assertConstraintUsageInstance.OwningRelationship = owningRelationshipFeature;

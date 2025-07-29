@@ -78,12 +78,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.ElementId);
 
-            writer.WritePropertyName("feature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iRequirementVerificationMembership.Feature);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iRequirementVerificationMembership.IsImplied);
 
@@ -166,12 +160,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteEndObject();
             }
             writer.WriteEndArray();
-
-            writer.WritePropertyName("type"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iRequirementVerificationMembership.Type);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.Visibility.ToString().ToLower());

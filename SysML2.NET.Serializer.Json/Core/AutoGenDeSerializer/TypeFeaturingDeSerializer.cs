@@ -132,30 +132,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug($"the elementId Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("feature"u8, out JsonElement featureProperty))
-            {
-                if (featureProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.Feature = Guid.Empty;
-                    logger.LogDebug($"the TypeFeaturing.Feature property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (featureProperty.TryGetProperty("@id"u8, out JsonElement featureIdProperty))
-                    {
-                        var propertyValue = featureIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Feature = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the feature Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
-            }
-
             if (jsonElement.TryGetProperty("featureOfType"u8, out JsonElement featureOfTypeProperty))
             {
                 if (featureOfTypeProperty.ValueKind == JsonValueKind.Null)
@@ -348,30 +324,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug($"the target Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("type"u8, out JsonElement typeProperty))
-            {
-                if (typeProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.Type = Guid.Empty;
-                    logger.LogDebug($"the TypeFeaturing.Type property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (typeProperty.TryGetProperty("@id"u8, out JsonElement typeIdProperty))
-                    {
-                        var propertyValue = typeIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Type = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the type Json property was not found in the TypeFeaturing: {dtoInstance.Id}");
             }
 
 

@@ -32,9 +32,7 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A TriggerInvocationExpression is an InvocationExpression that invokes one of the trigger Functions
-    /// from the Kernel Semantic Library Triggers package, as indicated by its kind.specializesFromLibrary( 
-    ///   if kind = TriggerKind::when then        'Triggers::TriggerWhen'    else if kind = TriggerKind::at
-    /// then        'Triggers::TriggerAt'    else         'Triggers::TriggerAfter'    endif endif)kind =
+    /// from the Kernel Semantic Library Triggers package, as indicated by its kind.kind =
     /// TriggerKind::after implies    argument->notEmpty() and   
     /// argument->at(1).result.specializesFromLibrary('Quantities::ScalarQuantityValue') and    let mRef :
     /// Element =         resolveGlobal('Quantities::TensorQuantityValue::mRef').ownedMemberElement in   

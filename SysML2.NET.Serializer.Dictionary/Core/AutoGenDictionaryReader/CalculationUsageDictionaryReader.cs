@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
@@ -182,12 +188,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
@@ -199,6 +199,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("isVariation", out object isVariationObject))
             {
@@ -232,15 +238,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             calculationUsageInstance.ElementId = elementIdFeature;
             calculationUsageInstance.IsAbstract = isAbstractFeature;
             calculationUsageInstance.IsComposite = isCompositeFeature;
+            calculationUsageInstance.IsConstant = isConstantFeature;
             calculationUsageInstance.IsDerived = isDerivedFeature;
             calculationUsageInstance.IsEnd = isEndFeature;
             calculationUsageInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             calculationUsageInstance.IsIndividual = isIndividualFeature;
             calculationUsageInstance.IsOrdered = isOrderedFeature;
             calculationUsageInstance.IsPortion = isPortionFeature;
-            calculationUsageInstance.IsReadOnly = isReadOnlyFeature;
             calculationUsageInstance.IsSufficient = isSufficientFeature;
             calculationUsageInstance.IsUnique = isUniqueFeature;
+            calculationUsageInstance.IsVariable = isVariableFeature;
             calculationUsageInstance.IsVariation = isVariationFeature;
             calculationUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             calculationUsageInstance.OwningRelationship = owningRelationshipFeature;
@@ -305,6 +312,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
@@ -341,12 +354,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
@@ -358,6 +365,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a CalculationUsage");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("isVariation", out object isVariationObject))
             {
@@ -391,15 +404,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             calculationUsageInstance.ElementId = elementIdFeature;
             calculationUsageInstance.IsAbstract = isAbstractFeature;
             calculationUsageInstance.IsComposite = isCompositeFeature;
+            calculationUsageInstance.IsConstant = isConstantFeature;
             calculationUsageInstance.IsDerived = isDerivedFeature;
             calculationUsageInstance.IsEnd = isEndFeature;
             calculationUsageInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             calculationUsageInstance.IsIndividual = isIndividualFeature;
             calculationUsageInstance.IsOrdered = isOrderedFeature;
             calculationUsageInstance.IsPortion = isPortionFeature;
-            calculationUsageInstance.IsReadOnly = isReadOnlyFeature;
             calculationUsageInstance.IsSufficient = isSufficientFeature;
             calculationUsageInstance.IsUnique = isUniqueFeature;
+            calculationUsageInstance.IsVariable = isVariableFeature;
             calculationUsageInstance.IsVariation = isVariationFeature;
             calculationUsageInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             calculationUsageInstance.OwningRelationship = owningRelationshipFeature;

@@ -165,6 +165,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug($"the isComposite Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
+            if (jsonElement.TryGetProperty("isConstant"u8, out JsonElement isConstantProperty))
+            {
+                if (isConstantProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsConstant = isConstantProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isConstant Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("isDerived"u8, out JsonElement isDerivedProperty))
             {
                 if (isDerivedProperty.ValueKind != JsonValueKind.Null)
@@ -225,18 +237,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug($"the isPortion Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isReadOnly"u8, out JsonElement isReadOnlyProperty))
-            {
-                if (isReadOnlyProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsReadOnly = isReadOnlyProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the isReadOnly Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
-            }
-
             if (jsonElement.TryGetProperty("isSufficient"u8, out JsonElement isSufficientProperty))
             {
                 if (isSufficientProperty.ValueKind != JsonValueKind.Null)
@@ -259,6 +259,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug($"the isUnique Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isVariable"u8, out JsonElement isVariableProperty))
+            {
+                if (isVariableProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isVariable Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out JsonElement ownedRelationshipProperty))
@@ -301,30 +313,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug($"the owningRelationship Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
-            }
-
-            if (jsonElement.TryGetProperty("referencedElement"u8, out JsonElement referencedElementProperty))
-            {
-                if (referencedElementProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.ReferencedElement = Guid.Empty;
-                    logger.LogDebug($"the MetadataAccessExpression.ReferencedElement property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (referencedElementProperty.TryGetProperty("@id"u8, out JsonElement referencedElementIdProperty))
-                    {
-                        var propertyValue = referencedElementIdProperty.GetString();
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.ReferencedElement = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the referencedElement Json property was not found in the MetadataAccessExpression: {dtoInstance.Id}");
             }
 
 

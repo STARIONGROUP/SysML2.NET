@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", typeFeaturingInstance.DeclaredName);
             dictionary.Add("declaredShortName", typeFeaturingInstance.DeclaredShortName);
             dictionary.Add("elementId", typeFeaturingInstance.ElementId);
-            dictionary.Add("feature", typeFeaturingInstance.Feature.ToString());
             dictionary.Add("featureOfType", typeFeaturingInstance.FeatureOfType.ToString());
             dictionary.Add("featuringType", typeFeaturingInstance.FeaturingType.ToString());
             dictionary.Add("isImplied", typeFeaturingInstance.IsImplied);
@@ -122,7 +121,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", typeFeaturingInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", typeFeaturingInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", typeFeaturingInstance.Target)} ]");
-            dictionary.Add("type", typeFeaturingInstance.Type.ToString());
 
             return dictionary;
         }
@@ -153,7 +151,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", typeFeaturingInstance.DeclaredName);
             dictionary.Add("declaredShortName", typeFeaturingInstance.DeclaredShortName);
             dictionary.Add("elementId", typeFeaturingInstance.ElementId);
-            dictionary.Add("feature", typeFeaturingInstance.Feature);
             dictionary.Add("featureOfType", typeFeaturingInstance.FeatureOfType);
             dictionary.Add("featuringType", typeFeaturingInstance.FeaturingType);
             dictionary.Add("isImplied", typeFeaturingInstance.IsImplied);
@@ -164,7 +161,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", typeFeaturingInstance.OwningRelationship);
             dictionary.Add("source", typeFeaturingInstance.Source);
             dictionary.Add("target", typeFeaturingInstance.Target);
-            dictionary.Add("type", typeFeaturingInstance.Type);
 
             return dictionary;
         }

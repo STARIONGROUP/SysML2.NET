@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.DTO
     /// b.relatedFeatures->includes(targetFeature) and    b.relatedFeatures->includes(result))let membership
     /// : Membership =     ownedMembership->reject(m | m.oclIsKindOf(ParameterMembership))
     /// inmembership->notEmpty() andmembership->at(1).memberElement.oclIsKindOf(Feature)result.owningType()
-    /// = self and result.specializes(referent)
+    /// = self and result.specializes(referent)result.owningType = self
     /// </summary>
     public partial interface IFeatureReferenceExpression : IExpression
     {

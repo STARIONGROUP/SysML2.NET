@@ -31,15 +31,14 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Usage is a usage of a Definition. A Usage may only be an ownedFeature of a Definition or another
-    /// Usage.A Usage may have nestedUsages that model features that apply in the context of the
-    /// owningUsage. A Usage may also have Definitions nested in it, but this has no semantic significance,
-    /// other than the nested scoping resulting from the Usage being considered as a Namespace for any
-    /// nested Definitions.However, if a Usage has isVariation = true, then it represents a variation point
-    /// Usage. In this case, all of its members must be variant Usages, related to the Usage by
-    /// VariantMembership Relationships. Rather than being features of the Usage, variant Usages model
-    /// different concrete alternatives that can be chosen to fill in for the variation point Usage.variant
-    /// = variantMembership.ownedVariantUsagevariantMembership =
+    /// A Usage is a usage of a Definition.A Usage may have nestedUsages that model features that apply in
+    /// the context of the owningUsage. A Usage may also have Definitions nested in it, but this has no
+    /// semantic significance, other than the nested scoping resulting from the Usage being considered as a
+    /// Namespace for any nested Definitions.However, if a Usage has isVariation = true, then it represents
+    /// a variation point Usage. In this case, all of its members must be variant Usages, related to the
+    /// Usage by VariantMembership Relationships. Rather than being features of the Usage, variant Usages
+    /// model different concrete alternatives that can be chosen to fill in for the variation point
+    /// Usage.variant = variantMembership.ownedVariantUsagevariantMembership =
     /// ownedMembership->selectByKind(VariantMembership)isVariation implies
     /// ownedFeatureMembership->isEmpty()isReference = not isCompositeowningVariationUsage <> null implies  
     ///  specializes(owningVariationUsage)isVariation implies    not ownedSpecialization.specific->exists(  
@@ -73,7 +72,12 @@ namespace SysML2.NET.Core.DTO
     /// nestedUsage->selectByKind(VerificationCaseUsage)nestedView =
     /// nestedUsage->selectByKind(ViewUsage)nestedViewpoint = nestedUsage->selectByKind(ViewpointUsage)usage
     /// = feature->selectByKind(Usage)direction <> null or isEnd or featuringType->isEmpty() implies   
-    /// isReferenceisVariation implies isAbstract
+    /// isReferenceisVariation implies isAbstractmayTimeVary =    owningType <> null and   
+    /// owningType.specializesFromLibrary('Occurrences::Occurrence') and    not (        isPortion or       
+    /// specializesFromLibrary('Links::SelfLink') or       
+    /// specializesFromLibrary('Occurrences::HappensLink') or        isComposite and
+    /// specializesFromLibrary('Actions::Action')    )owningVariationUsage <> null implies   
+    /// featuringType->asSet() = owningVariationUsage.featuringType->asSet()
     /// </summary>
     public partial interface IUsage : IFeature
     {

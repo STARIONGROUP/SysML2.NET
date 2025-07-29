@@ -35,19 +35,18 @@ namespace SysML2.NET.Core.POCO
     /// featuringType is a computational step within that Function. An Expression always has a single result
     /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
-    /// as the results of other Expression in the tree.featureMembership->   
-    /// selectByKind(ReturnParameterMembership)->    size() = 1isModelLevelEvaluable =
-    /// modelLevelEvaluable(Set(Element){})owningMembership <> null and
-    /// owningMembership.oclIsKindOf(FeatureValue) implies    let featureWithValue : Feature =        
-    /// owningMembership.oclAsType(FeatureValue).featureWithValue in    featuringType =
-    /// featureWithValue.featuringTyperesult =    let resultParams : Sequence(Feature) =       
-    /// featureMemberships->            selectByKind(ReturnParameterMembership).           
-    /// ownedParameterMember in    if resultParams->notEmpty() then resultParams->first()    else null   
-    /// endifownedMembership.selectByKind(ResultExpressionMembership)->    forAll(mem |
-    /// ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
+    /// as the results of other Expression in the tree.isModelLevelEvaluable =
+    /// modelLevelEvaluable(Set(Element){})specializesFromLibrary('Performances::evaluations')owningMembership
+    /// <> null and owningMembership.oclIsKindOf(FeatureValue) implies    let featureWithValue : Feature =  
+    ///       owningMembership.oclAsType(FeatureValue).featureWithValue in    featuringType =
+    /// featureWithValue.featuringTypeownedMembership.selectByKind(ResultExpressionMembership)->   
+    /// forAll(mem | ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
     /// binding.relatedFeature->includes(result) and           
-    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))membership->selectByKind(ResultExpressionMembership)->size()
-    /// <= 1specializesFromLibrary('Performances::evaluations')
+    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))result =    let resultParams :
+    /// Sequence(Feature) =        featureMemberships->            selectByKind(ReturnParameterMembership). 
+    ///           ownedMemberParameter in    if resultParams->notEmpty() then resultParams->first()    else
+    /// null    endiffeatureMembership->    selectByKind(ReturnParameterMembership)->    size() =
+    /// 1membership->selectByKind(ResultExpressionMembership)->size() <= 1
     /// </summary>
     public partial class Expression : IExpression
     {
@@ -59,14 +58,15 @@ namespace SysML2.NET.Core.POCO
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
             this.IsComposite = false;
+            this.IsConstant = false;
             this.IsDerived = false;
             this.IsEnd = false;
             this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
-            this.IsReadOnly = false;
             this.IsSufficient = false;
             this.IsUnique = true;
+            this.IsVariable = false;
             this.OwnedRelationship = new List<IRelationship>();
         }
 
@@ -282,7 +282,8 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
@@ -295,6 +296,13 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property IsConjugated not yet supported");
         }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
@@ -366,12 +374,6 @@ namespace SysML2.NET.Core.POCO
         public bool IsPortion { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsReadOnly { get; set; }
-
-        /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
@@ -387,6 +389,13 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsUnique { get; set; }
+
+        /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariable { get; set; }
 
         /// <summary>
         /// Queries the derived property Member

@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", booleanExpressionInstance.ElementId);
             dictionary.Add("isAbstract", booleanExpressionInstance.IsAbstract);
             dictionary.Add("isComposite", booleanExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", booleanExpressionInstance.IsConstant);
             dictionary.Add("isDerived", booleanExpressionInstance.IsDerived);
             dictionary.Add("isEnd", booleanExpressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", booleanExpressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", booleanExpressionInstance.IsOrdered);
             dictionary.Add("isPortion", booleanExpressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", booleanExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", booleanExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", booleanExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", booleanExpressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", booleanExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", booleanExpressionInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", booleanExpressionInstance.ElementId);
             dictionary.Add("isAbstract", booleanExpressionInstance.IsAbstract);
             dictionary.Add("isComposite", booleanExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", booleanExpressionInstance.IsConstant);
             dictionary.Add("isDerived", booleanExpressionInstance.IsDerived);
             dictionary.Add("isEnd", booleanExpressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", booleanExpressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", booleanExpressionInstance.IsOrdered);
             dictionary.Add("isPortion", booleanExpressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", booleanExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", booleanExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", booleanExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", booleanExpressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", booleanExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", booleanExpressionInstance.OwningRelationship);
 

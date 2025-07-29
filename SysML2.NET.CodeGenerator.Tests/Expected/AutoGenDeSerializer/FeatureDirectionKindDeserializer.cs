@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="FeatureDirectionKindDeserializer.cs" company="Starion Group S.A.">
+// <copyright file="FeatureDirectionKindDeSerializer.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022 Starion Group S.A.
+//   Copyright 2022-2025 Starion Group S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -22,18 +22,20 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json
+namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
 
+    using SysML2.NET.Core;
+
     /// <summary>
-    /// The purpose of the <see cref="FeatureDirectionKindDeserializer"/> is to provide deserialization capabilities
+    /// The purpose of the <see cref="FeatureDirectionKindDeSerializer"/> is to provide deserialization capabilities
     /// for the <see cref="FeatureDirectionKind"/> Enum
     /// </summary>
-    internal static class FeatureDirectionKindDeserializer
+    internal static class FeatureDirectionKindDeSerializer
     {
         /// <summary>
-        /// Deserializes a string value to a 
+        /// Deserializes a string value to a <see cref="FeatureDirectionKind"/>
         /// </summary>
         /// <param name="value">
         /// The string representation of the <see cref="FeatureDirectionKind"/>
@@ -43,6 +45,39 @@ namespace SysML2.NET.Serializer.Json
         /// </returns>
         internal static FeatureDirectionKind Deserialize(string value)
         {
+            value = value.ToUpper();
+
+            switch (value)
+            {
+                case "IN":
+                    return FeatureDirectionKind.In;
+                case "INOUT":
+                    return FeatureDirectionKind.Inout;
+                case "OUT":
+                    return FeatureDirectionKind.Out;
+                default:
+                    throw new ArgumentException($"{value} is not a valid FeatureDirectionKind", nameof(value));
+            }
+        }
+
+        /// <summary>
+        /// Deserializes a string value to a nullable <see cref="FeatureDirectionKind"/>
+        /// </summary>
+        /// <param name="value">
+        /// The string representation of the <see cref="FeatureDirectionKind"/>
+        /// </param>
+        /// <returns>
+        /// The value of the nullable <see cref="FeatureDirectionKind"/>
+        /// </returns>
+        internal static FeatureDirectionKind? DeserializeNullable(string value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            value = value.ToUpper();
+
             switch (value)
             {
                 case "IN":

@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", featureReferenceExpressionInstance.ElementId);
             dictionary.Add("isAbstract", featureReferenceExpressionInstance.IsAbstract);
             dictionary.Add("isComposite", featureReferenceExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", featureReferenceExpressionInstance.IsConstant);
             dictionary.Add("isDerived", featureReferenceExpressionInstance.IsDerived);
             dictionary.Add("isEnd", featureReferenceExpressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", featureReferenceExpressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", featureReferenceExpressionInstance.IsOrdered);
             dictionary.Add("isPortion", featureReferenceExpressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", featureReferenceExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", featureReferenceExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", featureReferenceExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", featureReferenceExpressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", featureReferenceExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", featureReferenceExpressionInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", featureReferenceExpressionInstance.ElementId);
             dictionary.Add("isAbstract", featureReferenceExpressionInstance.IsAbstract);
             dictionary.Add("isComposite", featureReferenceExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", featureReferenceExpressionInstance.IsConstant);
             dictionary.Add("isDerived", featureReferenceExpressionInstance.IsDerived);
             dictionary.Add("isEnd", featureReferenceExpressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", featureReferenceExpressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", featureReferenceExpressionInstance.IsOrdered);
             dictionary.Add("isPortion", featureReferenceExpressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", featureReferenceExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", featureReferenceExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", featureReferenceExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", featureReferenceExpressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", featureReferenceExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", featureReferenceExpressionInstance.OwningRelationship);
 

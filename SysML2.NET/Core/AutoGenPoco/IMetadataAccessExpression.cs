@@ -35,15 +35,18 @@ namespace SysML2.NET.Core.POCO
     /// representing all the MetadataFeature annotations of the referencedElement. In addition, the sequence
     /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
     /// referencedElement, with values for all the abstract syntax properties of the
-    /// referencedElement.specializesFromLibrary('Performances::metadataAccessEvaluations')
+    /// referencedElement.specializesFromLibrary('Performances::metadataAccessEvaluations')ownedMembership->exists(not
+    /// oclIsKindOf(FeatureMembership))referencedElement =    let elements : Sequence(Element) =
+    /// ownedMembership->        reject(oclIsKindOf(FeatureMembership)).memberElement in    if
+    /// elements->isEmpty() then null    else elements->first()    endif
     /// </summary>
     public partial interface IMetadataAccessExpression : IExpression
     {
         /// <summary>
-        /// The Element whose metadata is being accessed.
+        /// Queries the derived property ReferencedElement
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        IElement ReferencedElement { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        IElement QueryReferencedElement();
 
     }
 }

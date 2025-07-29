@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", transitionFeatureMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", transitionFeatureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", transitionFeatureMembershipInstance.ElementId);
-            dictionary.Add("feature", transitionFeatureMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", transitionFeatureMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", transitionFeatureMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", transitionFeatureMembershipInstance.Kind);
@@ -124,7 +123,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", transitionFeatureMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", transitionFeatureMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", transitionFeatureMembershipInstance.Target)} ]");
-            dictionary.Add("type", transitionFeatureMembershipInstance.Type.ToString());
             dictionary.Add("visibility", transitionFeatureMembershipInstance.Visibility);
 
             return dictionary;
@@ -156,7 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", transitionFeatureMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", transitionFeatureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", transitionFeatureMembershipInstance.ElementId);
-            dictionary.Add("feature", transitionFeatureMembershipInstance.Feature);
             dictionary.Add("isImplied", transitionFeatureMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", transitionFeatureMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", transitionFeatureMembershipInstance.Kind);
@@ -169,7 +166,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", transitionFeatureMembershipInstance.OwningRelationship);
             dictionary.Add("source", transitionFeatureMembershipInstance.Source);
             dictionary.Add("target", transitionFeatureMembershipInstance.Target);
-            dictionary.Add("type", transitionFeatureMembershipInstance.Type);
             dictionary.Add("visibility", transitionFeatureMembershipInstance.Visibility);
 
             return dictionary;

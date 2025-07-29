@@ -37,9 +37,9 @@ namespace SysML2.NET.Core.POCO
     /// names for its members via the memberNames and memberShortNames specified by the Memberships in the
     /// Namespace. If a Membership specifies a memberName and/or memberShortName, then those are names of
     /// the corresponding memberElement relative to the Namespace. For an OwningMembership, the
-    /// owningMemberName and owningMemberShortName are given by the Element name and shortName. Note that
-    /// the same Element may be the memberElement of multiple Memberships in a Namespace (though it may be
-    /// owned at most once), each of which may define a separate alias for the Element relative to the
+    /// ownedMemberName and ownedMemberShortName are given by the Element name and shortName. Note that the
+    /// same Element may be the memberElement of multiple Memberships in a Namespace (though it may be owned
+    /// at most once), each of which may define a separate alias for the Element relative to the
     /// Namespace.membership->forAll(m1 |     membership->forAll(m2 |         m1 <> m2 implies
     /// m1.isDistinguishableFrom(m2)))member = membership.memberElementownedMember =
     /// ownedMembership->selectByKind(OwningMembership).ownedMemberElementimportedMembership =

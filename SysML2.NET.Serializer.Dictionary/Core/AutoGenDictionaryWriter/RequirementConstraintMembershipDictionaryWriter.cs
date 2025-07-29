@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", requirementConstraintMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", requirementConstraintMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementConstraintMembershipInstance.ElementId);
-            dictionary.Add("feature", requirementConstraintMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", requirementConstraintMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", requirementConstraintMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", requirementConstraintMembershipInstance.Kind);
@@ -124,7 +123,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", requirementConstraintMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", requirementConstraintMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", requirementConstraintMembershipInstance.Target)} ]");
-            dictionary.Add("type", requirementConstraintMembershipInstance.Type.ToString());
             dictionary.Add("visibility", requirementConstraintMembershipInstance.Visibility);
 
             return dictionary;
@@ -156,7 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", requirementConstraintMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", requirementConstraintMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementConstraintMembershipInstance.ElementId);
-            dictionary.Add("feature", requirementConstraintMembershipInstance.Feature);
             dictionary.Add("isImplied", requirementConstraintMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", requirementConstraintMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", requirementConstraintMembershipInstance.Kind);
@@ -169,7 +166,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", requirementConstraintMembershipInstance.OwningRelationship);
             dictionary.Add("source", requirementConstraintMembershipInstance.Source);
             dictionary.Add("target", requirementConstraintMembershipInstance.Target);
-            dictionary.Add("type", requirementConstraintMembershipInstance.Type);
             dictionary.Add("visibility", requirementConstraintMembershipInstance.Visibility);
 
             return dictionary;

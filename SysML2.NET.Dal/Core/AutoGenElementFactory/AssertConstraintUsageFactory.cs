@@ -62,6 +62,7 @@ namespace SysML2.NET.Dal
                 ElementId = dto.ElementId,
                 IsAbstract = dto.IsAbstract,
                 IsComposite = dto.IsComposite,
+                IsConstant = dto.IsConstant,
                 IsDerived = dto.IsDerived,
                 IsEnd = dto.IsEnd,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
@@ -69,9 +70,9 @@ namespace SysML2.NET.Dal
                 IsNegated = dto.IsNegated,
                 IsOrdered = dto.IsOrdered,
                 IsPortion = dto.IsPortion,
-                IsReadOnly = dto.IsReadOnly,
                 IsSufficient = dto.IsSufficient,
                 IsUnique = dto.IsUnique,
+                IsVariable = dto.IsVariable,
                 IsVariation = dto.IsVariation,
                 PortionKind = dto.PortionKind,
             };

@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", stakeholderMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", stakeholderMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", stakeholderMembershipInstance.ElementId);
-            dictionary.Add("feature", stakeholderMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", stakeholderMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", stakeholderMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", stakeholderMembershipInstance.MemberElement.ToString());
@@ -123,7 +122,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", stakeholderMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", stakeholderMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", stakeholderMembershipInstance.Target)} ]");
-            dictionary.Add("type", stakeholderMembershipInstance.Type.ToString());
             dictionary.Add("visibility", stakeholderMembershipInstance.Visibility);
 
             return dictionary;
@@ -155,7 +153,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", stakeholderMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", stakeholderMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", stakeholderMembershipInstance.ElementId);
-            dictionary.Add("feature", stakeholderMembershipInstance.Feature);
             dictionary.Add("isImplied", stakeholderMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", stakeholderMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", stakeholderMembershipInstance.MemberElement);
@@ -167,7 +164,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", stakeholderMembershipInstance.OwningRelationship);
             dictionary.Add("source", stakeholderMembershipInstance.Source);
             dictionary.Add("target", stakeholderMembershipInstance.Target);
-            dictionary.Add("type", stakeholderMembershipInstance.Type);
             dictionary.Add("visibility", stakeholderMembershipInstance.Visibility);
 
             return dictionary;

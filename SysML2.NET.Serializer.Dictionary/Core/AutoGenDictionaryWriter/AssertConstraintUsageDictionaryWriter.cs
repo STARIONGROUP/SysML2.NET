@@ -114,6 +114,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", assertConstraintUsageInstance.ElementId);
             dictionary.Add("isAbstract", assertConstraintUsageInstance.IsAbstract);
             dictionary.Add("isComposite", assertConstraintUsageInstance.IsComposite);
+            dictionary.Add("isConstant", assertConstraintUsageInstance.IsConstant);
             dictionary.Add("isDerived", assertConstraintUsageInstance.IsDerived);
             dictionary.Add("isEnd", assertConstraintUsageInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", assertConstraintUsageInstance.IsImpliedIncluded);
@@ -121,9 +122,9 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isNegated", assertConstraintUsageInstance.IsNegated);
             dictionary.Add("isOrdered", assertConstraintUsageInstance.IsOrdered);
             dictionary.Add("isPortion", assertConstraintUsageInstance.IsPortion);
-            dictionary.Add("isReadOnly", assertConstraintUsageInstance.IsReadOnly);
             dictionary.Add("isSufficient", assertConstraintUsageInstance.IsSufficient);
             dictionary.Add("isUnique", assertConstraintUsageInstance.IsUnique);
+            dictionary.Add("isVariable", assertConstraintUsageInstance.IsVariable);
             dictionary.Add("isVariation", assertConstraintUsageInstance.IsVariation);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", assertConstraintUsageInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", assertConstraintUsageInstance.OwningRelationship.ToString());
@@ -161,6 +162,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", assertConstraintUsageInstance.ElementId);
             dictionary.Add("isAbstract", assertConstraintUsageInstance.IsAbstract);
             dictionary.Add("isComposite", assertConstraintUsageInstance.IsComposite);
+            dictionary.Add("isConstant", assertConstraintUsageInstance.IsConstant);
             dictionary.Add("isDerived", assertConstraintUsageInstance.IsDerived);
             dictionary.Add("isEnd", assertConstraintUsageInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", assertConstraintUsageInstance.IsImpliedIncluded);
@@ -168,9 +170,9 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isNegated", assertConstraintUsageInstance.IsNegated);
             dictionary.Add("isOrdered", assertConstraintUsageInstance.IsOrdered);
             dictionary.Add("isPortion", assertConstraintUsageInstance.IsPortion);
-            dictionary.Add("isReadOnly", assertConstraintUsageInstance.IsReadOnly);
             dictionary.Add("isSufficient", assertConstraintUsageInstance.IsSufficient);
             dictionary.Add("isUnique", assertConstraintUsageInstance.IsUnique);
+            dictionary.Add("isVariable", assertConstraintUsageInstance.IsVariable);
             dictionary.Add("isVariation", assertConstraintUsageInstance.IsVariation);
             dictionary.Add("ownedRelationship", assertConstraintUsageInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", assertConstraintUsageInstance.OwningRelationship);

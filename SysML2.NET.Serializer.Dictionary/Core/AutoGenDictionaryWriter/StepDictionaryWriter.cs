@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", stepInstance.ElementId);
             dictionary.Add("isAbstract", stepInstance.IsAbstract);
             dictionary.Add("isComposite", stepInstance.IsComposite);
+            dictionary.Add("isConstant", stepInstance.IsConstant);
             dictionary.Add("isDerived", stepInstance.IsDerived);
             dictionary.Add("isEnd", stepInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", stepInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", stepInstance.IsOrdered);
             dictionary.Add("isPortion", stepInstance.IsPortion);
-            dictionary.Add("isReadOnly", stepInstance.IsReadOnly);
             dictionary.Add("isSufficient", stepInstance.IsSufficient);
             dictionary.Add("isUnique", stepInstance.IsUnique);
+            dictionary.Add("isVariable", stepInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", stepInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", stepInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", stepInstance.ElementId);
             dictionary.Add("isAbstract", stepInstance.IsAbstract);
             dictionary.Add("isComposite", stepInstance.IsComposite);
+            dictionary.Add("isConstant", stepInstance.IsConstant);
             dictionary.Add("isDerived", stepInstance.IsDerived);
             dictionary.Add("isEnd", stepInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", stepInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", stepInstance.IsOrdered);
             dictionary.Add("isPortion", stepInstance.IsPortion);
-            dictionary.Add("isReadOnly", stepInstance.IsReadOnly);
             dictionary.Add("isSufficient", stepInstance.IsSufficient);
             dictionary.Add("isUnique", stepInstance.IsUnique);
+            dictionary.Add("isVariable", stepInstance.IsVariable);
             dictionary.Add("ownedRelationship", stepInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", stepInstance.OwningRelationship);
 

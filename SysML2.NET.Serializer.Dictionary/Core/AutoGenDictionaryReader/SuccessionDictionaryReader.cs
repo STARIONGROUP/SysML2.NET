@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a Succession");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a Succession");
@@ -182,12 +188,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a Succession");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a Succession");
@@ -199,6 +199,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a Succession");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a Succession");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -244,15 +250,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             successionInstance.ElementId = elementIdFeature;
             successionInstance.IsAbstract = isAbstractFeature;
             successionInstance.IsComposite = isCompositeFeature;
+            successionInstance.IsConstant = isConstantFeature;
             successionInstance.IsDerived = isDerivedFeature;
             successionInstance.IsEnd = isEndFeature;
             successionInstance.IsImplied = isImpliedFeature;
             successionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             successionInstance.IsOrdered = isOrderedFeature;
             successionInstance.IsPortion = isPortionFeature;
-            successionInstance.IsReadOnly = isReadOnlyFeature;
             successionInstance.IsSufficient = isSufficientFeature;
             successionInstance.IsUnique = isUniqueFeature;
+            successionInstance.IsVariable = isVariableFeature;
             successionInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             successionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             successionInstance.OwningRelatedElement = owningRelatedElementFeature;
@@ -319,6 +326,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a Succession");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a Succession");
@@ -355,12 +368,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a Succession");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a Succession");
@@ -372,6 +379,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a Succession");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a Succession");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
@@ -417,15 +430,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             successionInstance.ElementId = elementIdFeature;
             successionInstance.IsAbstract = isAbstractFeature;
             successionInstance.IsComposite = isCompositeFeature;
+            successionInstance.IsConstant = isConstantFeature;
             successionInstance.IsDerived = isDerivedFeature;
             successionInstance.IsEnd = isEndFeature;
             successionInstance.IsImplied = isImpliedFeature;
             successionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             successionInstance.IsOrdered = isOrderedFeature;
             successionInstance.IsPortion = isPortionFeature;
-            successionInstance.IsReadOnly = isReadOnlyFeature;
             successionInstance.IsSufficient = isSufficientFeature;
             successionInstance.IsUnique = isUniqueFeature;
+            successionInstance.IsVariable = isVariableFeature;
             successionInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
             successionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             successionInstance.OwningRelatedElement = owningRelatedElementFeature;

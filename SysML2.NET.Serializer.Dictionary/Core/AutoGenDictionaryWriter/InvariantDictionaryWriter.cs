@@ -114,15 +114,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", invariantInstance.ElementId);
             dictionary.Add("isAbstract", invariantInstance.IsAbstract);
             dictionary.Add("isComposite", invariantInstance.IsComposite);
+            dictionary.Add("isConstant", invariantInstance.IsConstant);
             dictionary.Add("isDerived", invariantInstance.IsDerived);
             dictionary.Add("isEnd", invariantInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", invariantInstance.IsImpliedIncluded);
             dictionary.Add("isNegated", invariantInstance.IsNegated);
             dictionary.Add("isOrdered", invariantInstance.IsOrdered);
             dictionary.Add("isPortion", invariantInstance.IsPortion);
-            dictionary.Add("isReadOnly", invariantInstance.IsReadOnly);
             dictionary.Add("isSufficient", invariantInstance.IsSufficient);
             dictionary.Add("isUnique", invariantInstance.IsUnique);
+            dictionary.Add("isVariable", invariantInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", invariantInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", invariantInstance.OwningRelationship.ToString());
 
@@ -158,15 +159,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", invariantInstance.ElementId);
             dictionary.Add("isAbstract", invariantInstance.IsAbstract);
             dictionary.Add("isComposite", invariantInstance.IsComposite);
+            dictionary.Add("isConstant", invariantInstance.IsConstant);
             dictionary.Add("isDerived", invariantInstance.IsDerived);
             dictionary.Add("isEnd", invariantInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", invariantInstance.IsImpliedIncluded);
             dictionary.Add("isNegated", invariantInstance.IsNegated);
             dictionary.Add("isOrdered", invariantInstance.IsOrdered);
             dictionary.Add("isPortion", invariantInstance.IsPortion);
-            dictionary.Add("isReadOnly", invariantInstance.IsReadOnly);
             dictionary.Add("isSufficient", invariantInstance.IsSufficient);
             dictionary.Add("isUnique", invariantInstance.IsUnique);
+            dictionary.Add("isVariable", invariantInstance.IsVariable);
             dictionary.Add("ownedRelationship", invariantInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", invariantInstance.OwningRelationship);
 

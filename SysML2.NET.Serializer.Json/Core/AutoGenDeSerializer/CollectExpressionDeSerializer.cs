@@ -165,6 +165,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug($"the isComposite Json property was not found in the CollectExpression: {dtoInstance.Id}");
             }
 
+            if (jsonElement.TryGetProperty("isConstant"u8, out JsonElement isConstantProperty))
+            {
+                if (isConstantProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsConstant = isConstantProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isConstant Json property was not found in the CollectExpression: {dtoInstance.Id}");
+            }
+
             if (jsonElement.TryGetProperty("isDerived"u8, out JsonElement isDerivedProperty))
             {
                 if (isDerivedProperty.ValueKind != JsonValueKind.Null)
@@ -225,18 +237,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug($"the isPortion Json property was not found in the CollectExpression: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isReadOnly"u8, out JsonElement isReadOnlyProperty))
-            {
-                if (isReadOnlyProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsReadOnly = isReadOnlyProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug($"the isReadOnly Json property was not found in the CollectExpression: {dtoInstance.Id}");
-            }
-
             if (jsonElement.TryGetProperty("isSufficient"u8, out JsonElement isSufficientProperty))
             {
                 if (isSufficientProperty.ValueKind != JsonValueKind.Null)
@@ -259,6 +259,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug($"the isUnique Json property was not found in the CollectExpression: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isVariable"u8, out JsonElement isVariableProperty))
+            {
+                if (isVariableProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isVariable Json property was not found in the CollectExpression: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("operator"u8, out JsonElement operatorProperty))

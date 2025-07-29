@@ -36,9 +36,10 @@ namespace SysML2.NET.Core.POCO
     /// other Elements, which means that if an Element is deleted from a model, then so are all the Elements
     /// that it owns.ownedElement = ownedRelationship.ownedRelatedElementowner =
     /// owningRelationship.owningRelatedElementqualifiedName =    if owningNamespace = null then null   
-    /// else if owningNamespace.owner = null then escapedName()    else if owningNamespace.qualifiedName =
-    /// null or             escapedName() = null then null    else owningNamespace.qualifiedName + '::' +
-    /// escapedName()    endif endif endifdocumentation =
+    /// else if name <> null and         owningNamespace.ownedMember->        select(m | m.name =
+    /// name).indexOf(self) <> 1 then null    else if owningNamespace.owner = null then escapedName()   
+    /// else if owningNamespace.qualifiedName = null or             escapedName() = null then null    else
+    /// owningNamespace.qualifiedName + '::' + escapedName()    endif endif endif endifdocumentation =
     /// ownedElement->selectByKind(Documentation)ownedAnnotation = ownedRelationship->   
     /// selectByKind(Annotation)->    select(a | a.annotatedElement = self)name =
     /// effectiveName()ownedRelationship->exists(isImplied) implies isImpliedIncludedisLibraryElement =

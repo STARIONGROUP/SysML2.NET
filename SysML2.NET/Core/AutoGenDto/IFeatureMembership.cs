@@ -31,12 +31,13 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A FeatureMembership is an OwningMembership between a Feature in an owningType that is also a
-    /// Featuring Relationship between the Feature and the Type, in which the featuringType is the source
-    /// and the featureOfType is the target. A FeatureMembership is always owned by its owningType, which is
-    /// the featuringType for the FeatureMembership considered as a Featuring.
+    /// A FeatureMembership is an OwningMembership between an ownedMemberFeature and an owningType. If the
+    /// ownedMemberFeature has isVariable = false, then the FeatureMembership implies that the owningType is
+    /// also a featuringType of the ownedMemberFeature. If the ownedMemberFeature has isVariable = true,
+    /// then the FeatureMembership implies that the ownedMemberFeature is featured by the snapshots of the
+    /// owningType, which must specialize the Kernel Semantic Library base class Occurrence.
     /// </summary>
-    public partial interface IFeatureMembership : IOwningMembership, IFeaturing
+    public partial interface IFeatureMembership : IOwningMembership
     {
     }
 }

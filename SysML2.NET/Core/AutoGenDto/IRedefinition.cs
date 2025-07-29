@@ -42,17 +42,22 @@ namespace SysML2.NET.Core.DTO
     /// Redefinition to require the owningTypes of the redefiningFeature and redefinedFeature to be
     /// different and the redefinedFeature to not be inherited into the owningNamespace of the
     /// redefiningFeature.This enables the redefiningFeature to have the same name as the redefinedFeature,
-    /// if desired.featuringType->forAll(t |    let direction : FeatureDirectionKind =
-    /// t.directionOf(redefinedFeature) in    ((direction = FeatureDirectionKind::_'in' or       direction =
-    /// FeatureDirectionKind::out) implies         redefiningFeature.direction = direction)    and    
-    /// (direction = FeatureDirectionKind::inout implies        redefiningFeature.direction <> null))let
-    /// anythingType: Type =   
+    /// if desired.let anythingType: Type =   
     /// redefiningFeature.resolveGlobal('Base::Anything').modelElement.oclAsType(Type) in -- Including
     /// "Anything" accounts for implicit featuringType of Features-- with no explicit featuringType.let
-    /// redefiningFeaturingTypes: Set(Type) =   
-    /// redefiningFeature.featuringTypes->asSet()->including(anythingType) inlet redefinedFeaturingTypes:
-    /// Set(Type) =    redefinedFeature.featuringTypes->asSet()->including(anythingType)
-    /// inredefiningFeaturingTypes <> redefinedFeaturingType
+    /// redefiningFeaturingTypes: Set(Type) =    if redefiningFeature.isVariable then
+    /// Set{redefiningFeature.owningType}    else
+    /// redefiningFeature.featuringTypes->asSet()->including(anythingType)     endif inlet
+    /// redefinedFeaturingTypes: Set(Type) =    if redefinedFeature.isVariable then
+    /// Set{redefinedFeature.owningType}    else
+    /// redefinedFeature.featuringTypes->asSet()->including(anythingType)    endif
+    /// inredefiningFeaturingTypes <> redefinedFeaturingTypelet featuringTypes : Sequence(Type) =    if
+    /// redefiningFeature.isVariable then Sequence{redefiningFeature.owningType}    else
+    /// redefiningFeature.featuringType    endif infeaturingTypes->forAll(t |    let direction :
+    /// FeatureDirectionKind = t.directionOf(redefinedFeature) in    ((direction =
+    /// FeatureDirectionKind::_'in' or       direction = FeatureDirectionKind::out) implies        
+    /// redefiningFeature.direction = direction)    and     (direction = FeatureDirectionKind::inout implies
+    /// redefiningFeature.direction <> null))redefinedFeature.isEnd implies redefiningFeature.isEnd
     /// </summary>
     public partial interface IRedefinition : ISubsetting
     {

@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", featureMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", featureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", featureMembershipInstance.ElementId);
-            dictionary.Add("feature", featureMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", featureMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", featureMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", featureMembershipInstance.MemberElement.ToString());
@@ -123,7 +122,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", featureMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", featureMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", featureMembershipInstance.Target)} ]");
-            dictionary.Add("type", featureMembershipInstance.Type.ToString());
             dictionary.Add("visibility", featureMembershipInstance.Visibility);
 
             return dictionary;
@@ -155,7 +153,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", featureMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", featureMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", featureMembershipInstance.ElementId);
-            dictionary.Add("feature", featureMembershipInstance.Feature);
             dictionary.Add("isImplied", featureMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", featureMembershipInstance.IsImpliedIncluded);
             dictionary.Add("memberElement", featureMembershipInstance.MemberElement);
@@ -167,7 +164,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", featureMembershipInstance.OwningRelationship);
             dictionary.Add("source", featureMembershipInstance.Source);
             dictionary.Add("target", featureMembershipInstance.Target);
-            dictionary.Add("type", featureMembershipInstance.Type);
             dictionary.Add("visibility", featureMembershipInstance.Visibility);
 
             return dictionary;

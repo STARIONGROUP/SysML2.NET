@@ -35,9 +35,9 @@ namespace SysML2.NET.Core.POCO
     /// ItemDefinition, an ItemUsage is a ItemUsage of that ItemDefinition within a system. However, other
     /// kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
     /// Libraries.itemDefinition =
-    /// occurrenceDefinition->selectByKind(ItemDefinition)specializesFromLibrary('Items::items')isComposite
-    /// and owningType <> null and(owningType.oclIsKindOf(ItemDefinition) or
-    /// owningType.oclIsKindOf(ItemUsage)) implies    specializesFromLibrary('Items::Item::subitem')
+    /// occurrenceDefinition->selectByKind(Structure)specializesFromLibrary('Items::items')isComposite and
+    /// owningType <> null and(owningType.oclIsKindOf(ItemDefinition) or owningType.oclIsKindOf(ItemUsage))
+    /// implies    specializesFromLibrary('Items::Item::subitem')
     /// </summary>
     public partial class ItemUsage : IItemUsage
     {
@@ -49,15 +49,16 @@ namespace SysML2.NET.Core.POCO
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
             this.IsComposite = false;
+            this.IsConstant = false;
             this.IsDerived = false;
             this.IsEnd = false;
             this.IsImpliedIncluded = false;
             this.IsIndividual = false;
             this.IsOrdered = false;
             this.IsPortion = false;
-            this.IsReadOnly = false;
             this.IsSufficient = false;
             this.IsUnique = true;
+            this.IsVariable = false;
             this.OwnedRelationship = new List<IRelationship>();
         }
 
@@ -282,7 +283,8 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
@@ -295,6 +297,13 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property IsConjugated not yet supported");
         }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
@@ -326,8 +335,8 @@ namespace SysML2.NET.Core.POCO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// Whether this OccurrenceUsage represents the usage of the specific individual (or portion of it)
-        /// represented by its individualDefinition.
+        /// Whether this OccurrenceUsage represents the usage of the specific individual represented by its
+        /// individualDefinition.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsIndividual { get; set; }
@@ -364,12 +373,6 @@ namespace SysML2.NET.Core.POCO
         public bool IsPortion { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsReadOnly { get; set; }
-
-        /// <summary>
         /// Queries the derived property IsReference
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -396,6 +399,13 @@ namespace SysML2.NET.Core.POCO
         public bool IsUnique { get; set; }
 
         /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariable { get; set; }
+
+        /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
         /// must be VariantMemberships.
         /// </summary>
@@ -409,6 +419,15 @@ namespace SysML2.NET.Core.POCO
         public List<Structure> QueryItemDefinition()
         {
             throw new NotImplementedException("Derived property ItemDefinition not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property MayTimeVary
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool QueryMayTimeVary()
+        {
+            throw new NotImplementedException("Derived property MayTimeVary not yet supported");
         }
 
         /// <summary>
@@ -541,7 +560,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property NestedFlow
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<FlowConnectionUsage> QueryNestedFlow()
+        public List<FlowUsage> QueryNestedFlow()
         {
             throw new NotImplementedException("Derived property NestedFlow not yet supported");
         }
@@ -982,8 +1001,9 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The kind of (temporal) portion of the life of the occurrenceDefinition represented by this
-        /// OccurrenceUsage, if it is so restricted.
+        /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
+        /// portionKind is not null, then the owningType of the OccurrenceUsage must be non-null, and the
+        /// OccurrenceUsage represents portions of the featuring instance of the owningType.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public PortionKind? PortionKind { get; set; }

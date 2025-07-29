@@ -143,15 +143,6 @@ namespace SysML2.NET.Dal
 
             Lazy<Core.POCO.IElement> lazyPoco;
 
-            if (cache.TryGetValue(dto.Feature, out lazyPoco))
-            {
-                poco.Feature = (Core.POCO.Feature)lazyPoco.Value;
-            }
-            else
-            {
-                poco.Feature = null;
-            }
-
             if (cache.TryGetValue(dto.FeatureOfType, out lazyPoco))
             {
                 poco.FeatureOfType = (Core.POCO.Feature)lazyPoco.Value;
@@ -224,15 +215,6 @@ namespace SysML2.NET.Dal
                 }
             }
 
-            if (cache.TryGetValue(dto.Type, out lazyPoco))
-            {
-                poco.Type = (Core.POCO.Type)lazyPoco.Value;
-            }
-            else
-            {
-                poco.Type = null;
-            }
-
         }
 
         /// <summary>
@@ -253,7 +235,6 @@ namespace SysML2.NET.Dal
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
             dto.ElementId = poco.ElementId;
-            dto.Feature = poco.Feature.Id;
             dto.FeatureOfType = poco.FeatureOfType.Id;
             dto.FeaturingType = poco.FeaturingType.Id;
             dto.IsImplied = poco.IsImplied;
@@ -264,7 +245,6 @@ namespace SysML2.NET.Dal
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             dto.Source = poco.Source.Select(x => x.Id).ToList();
             dto.Target = poco.Target.Select(x => x.Id).ToList();
-            dto.Type = poco.Type.Id;
 
             return dto;
         }

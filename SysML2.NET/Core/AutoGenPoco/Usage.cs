@@ -31,15 +31,14 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Usage is a usage of a Definition. A Usage may only be an ownedFeature of a Definition or another
-    /// Usage.A Usage may have nestedUsages that model features that apply in the context of the
-    /// owningUsage. A Usage may also have Definitions nested in it, but this has no semantic significance,
-    /// other than the nested scoping resulting from the Usage being considered as a Namespace for any
-    /// nested Definitions.However, if a Usage has isVariation = true, then it represents a variation point
-    /// Usage. In this case, all of its members must be variant Usages, related to the Usage by
-    /// VariantMembership Relationships. Rather than being features of the Usage, variant Usages model
-    /// different concrete alternatives that can be chosen to fill in for the variation point Usage.variant
-    /// = variantMembership.ownedVariantUsagevariantMembership =
+    /// A Usage is a usage of a Definition.A Usage may have nestedUsages that model features that apply in
+    /// the context of the owningUsage. A Usage may also have Definitions nested in it, but this has no
+    /// semantic significance, other than the nested scoping resulting from the Usage being considered as a
+    /// Namespace for any nested Definitions.However, if a Usage has isVariation = true, then it represents
+    /// a variation point Usage. In this case, all of its members must be variant Usages, related to the
+    /// Usage by VariantMembership Relationships. Rather than being features of the Usage, variant Usages
+    /// model different concrete alternatives that can be chosen to fill in for the variation point
+    /// Usage.variant = variantMembership.ownedVariantUsagevariantMembership =
     /// ownedMembership->selectByKind(VariantMembership)isVariation implies
     /// ownedFeatureMembership->isEmpty()isReference = not isCompositeowningVariationUsage <> null implies  
     ///  specializes(owningVariationUsage)isVariation implies    not ownedSpecialization.specific->exists(  
@@ -73,7 +72,12 @@ namespace SysML2.NET.Core.POCO
     /// nestedUsage->selectByKind(VerificationCaseUsage)nestedView =
     /// nestedUsage->selectByKind(ViewUsage)nestedViewpoint = nestedUsage->selectByKind(ViewpointUsage)usage
     /// = feature->selectByKind(Usage)direction <> null or isEnd or featuringType->isEmpty() implies   
-    /// isReferenceisVariation implies isAbstract
+    /// isReferenceisVariation implies isAbstractmayTimeVary =    owningType <> null and   
+    /// owningType.specializesFromLibrary('Occurrences::Occurrence') and    not (        isPortion or       
+    /// specializesFromLibrary('Links::SelfLink') or       
+    /// specializesFromLibrary('Occurrences::HappensLink') or        isComposite and
+    /// specializesFromLibrary('Actions::Action')    )owningVariationUsage <> null implies   
+    /// featuringType->asSet() = owningVariationUsage.featuringType->asSet()
     /// </summary>
     public partial class Usage : IUsage
     {
@@ -85,14 +89,15 @@ namespace SysML2.NET.Core.POCO
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
             this.IsComposite = false;
+            this.IsConstant = false;
             this.IsDerived = false;
             this.IsEnd = false;
             this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
-            this.IsReadOnly = false;
             this.IsSufficient = false;
             this.IsUnique = true;
+            this.IsVariable = false;
             this.OwnedRelationship = new List<IRelationship>();
         }
 
@@ -308,7 +313,8 @@ namespace SysML2.NET.Core.POCO
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does.
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsComposite { get; set; }
@@ -321,6 +327,13 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property IsConjugated not yet supported");
         }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
@@ -383,12 +396,6 @@ namespace SysML2.NET.Core.POCO
         public bool IsPortion { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature can change over the lifetime of an instance of the domain.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsReadOnly { get; set; }
-
-        /// <summary>
         /// Queries the derived property IsReference
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -415,11 +422,27 @@ namespace SysML2.NET.Core.POCO
         public bool IsUnique { get; set; }
 
         /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariable { get; set; }
+
+        /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
         /// must be VariantMemberships.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsVariation { get; set; }
+
+        /// <summary>
+        /// Queries the derived property MayTimeVary
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool QueryMayTimeVary()
+        {
+            throw new NotImplementedException("Derived property MayTimeVary not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property Member
@@ -551,7 +574,7 @@ namespace SysML2.NET.Core.POCO
         /// Queries the derived property NestedFlow
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<FlowConnectionUsage> QueryNestedFlow()
+        public List<FlowUsage> QueryNestedFlow()
         {
             throw new NotImplementedException("Derived property NestedFlow not yet supported");
         }

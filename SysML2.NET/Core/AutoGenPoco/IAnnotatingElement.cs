@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.POCO
     /// Relationships, or it implicitly annotates its owningNamespace.annotatedElement =  if
     /// annotation->notEmpty() then annotation.annotatedElement else Sequence{owningNamespace}
     /// endifownedAnnotatingRelationship = ownedRelationship->    selectByKind(Annotation)->    select(a |
-    /// a.annotatingElement = self)annotation =     if owningAnnotatingRelationship = null then
+    /// a.annotatedElement <> self)annotation =     if owningAnnotatingRelationship = null then
     /// ownedAnnotatingRelationship    else
     /// owningAnnotatingRelationship->prepend(owningAnnotatingRelationship)    endif
     /// </summary>

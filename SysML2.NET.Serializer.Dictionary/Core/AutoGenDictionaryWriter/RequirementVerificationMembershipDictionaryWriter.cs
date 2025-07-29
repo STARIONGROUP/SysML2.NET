@@ -111,7 +111,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", requirementVerificationMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", requirementVerificationMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementVerificationMembershipInstance.ElementId);
-            dictionary.Add("feature", requirementVerificationMembershipInstance.Feature.ToString());
             dictionary.Add("isImplied", requirementVerificationMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", requirementVerificationMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", requirementVerificationMembershipInstance.Kind);
@@ -124,7 +123,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", requirementVerificationMembershipInstance.OwningRelationship.ToString());
             dictionary.Add("source", $"[ {string.Join(",", requirementVerificationMembershipInstance.Source)} ]");
             dictionary.Add("target", $"[ {string.Join(",", requirementVerificationMembershipInstance.Target)} ]");
-            dictionary.Add("type", requirementVerificationMembershipInstance.Type.ToString());
             dictionary.Add("visibility", requirementVerificationMembershipInstance.Visibility);
 
             return dictionary;
@@ -156,7 +154,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("declaredName", requirementVerificationMembershipInstance.DeclaredName);
             dictionary.Add("declaredShortName", requirementVerificationMembershipInstance.DeclaredShortName);
             dictionary.Add("elementId", requirementVerificationMembershipInstance.ElementId);
-            dictionary.Add("feature", requirementVerificationMembershipInstance.Feature);
             dictionary.Add("isImplied", requirementVerificationMembershipInstance.IsImplied);
             dictionary.Add("isImpliedIncluded", requirementVerificationMembershipInstance.IsImpliedIncluded);
             dictionary.Add("kind", requirementVerificationMembershipInstance.Kind);
@@ -169,7 +166,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("owningRelationship", requirementVerificationMembershipInstance.OwningRelationship);
             dictionary.Add("source", requirementVerificationMembershipInstance.Source);
             dictionary.Add("target", requirementVerificationMembershipInstance.Target);
-            dictionary.Add("type", requirementVerificationMembershipInstance.Type);
             dictionary.Add("visibility", requirementVerificationMembershipInstance.Visibility);
 
             return dictionary;

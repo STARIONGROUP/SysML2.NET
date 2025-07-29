@@ -35,19 +35,18 @@ namespace SysML2.NET.Core.DTO
     /// featuringType is a computational step within that Function. An Expression always has a single result
     /// parameter, which redefines the result parameter of its defining function. This allows Expressions to
     /// be interconnected in tree structures, in which inputs to each Expression in the tree are determined
-    /// as the results of other Expression in the tree.featureMembership->   
-    /// selectByKind(ReturnParameterMembership)->    size() = 1isModelLevelEvaluable =
-    /// modelLevelEvaluable(Set(Element){})owningMembership <> null and
-    /// owningMembership.oclIsKindOf(FeatureValue) implies    let featureWithValue : Feature =        
-    /// owningMembership.oclAsType(FeatureValue).featureWithValue in    featuringType =
-    /// featureWithValue.featuringTyperesult =    let resultParams : Sequence(Feature) =       
-    /// featureMemberships->            selectByKind(ReturnParameterMembership).           
-    /// ownedParameterMember in    if resultParams->notEmpty() then resultParams->first()    else null   
-    /// endifownedMembership.selectByKind(ResultExpressionMembership)->    forAll(mem |
-    /// ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
+    /// as the results of other Expression in the tree.isModelLevelEvaluable =
+    /// modelLevelEvaluable(Set(Element){})specializesFromLibrary('Performances::evaluations')owningMembership
+    /// <> null and owningMembership.oclIsKindOf(FeatureValue) implies    let featureWithValue : Feature =  
+    ///       owningMembership.oclAsType(FeatureValue).featureWithValue in    featuringType =
+    /// featureWithValue.featuringTypeownedMembership.selectByKind(ResultExpressionMembership)->   
+    /// forAll(mem | ownedFeature.selectByKind(BindingConnector)->        exists(binding |           
     /// binding.relatedFeature->includes(result) and           
-    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))membership->selectByKind(ResultExpressionMembership)->size()
-    /// <= 1specializesFromLibrary('Performances::evaluations')
+    /// binding.relatedFeature->includes(mem.ownedResultExpression.result)))result =    let resultParams :
+    /// Sequence(Feature) =        featureMemberships->            selectByKind(ReturnParameterMembership). 
+    ///           ownedMemberParameter in    if resultParams->notEmpty() then resultParams->first()    else
+    /// null    endiffeatureMembership->    selectByKind(ReturnParameterMembership)->    size() =
+    /// 1membership->selectByKind(ResultExpressionMembership)->size() <= 1
     /// </summary>
     public partial interface IExpression : IStep
     {

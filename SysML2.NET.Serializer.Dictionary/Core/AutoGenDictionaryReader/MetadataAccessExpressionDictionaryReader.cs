@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
@@ -176,12 +182,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
@@ -193,6 +193,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
@@ -206,12 +212,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
-            if (!dictionary.TryGetValue("referencedElement", out object referencedElementObject))
-            {
-                throw new ArgumentException("The referencedElement property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
-            }
-            Guid referencedElementFeature = Guid.Parse(Convert.ToString(referencedElementObject));
-
 
             metadataAccessExpressionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             metadataAccessExpressionInstance.DeclaredName = declaredNameFeature;
@@ -220,17 +220,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             metadataAccessExpressionInstance.ElementId = elementIdFeature;
             metadataAccessExpressionInstance.IsAbstract = isAbstractFeature;
             metadataAccessExpressionInstance.IsComposite = isCompositeFeature;
+            metadataAccessExpressionInstance.IsConstant = isConstantFeature;
             metadataAccessExpressionInstance.IsDerived = isDerivedFeature;
             metadataAccessExpressionInstance.IsEnd = isEndFeature;
             metadataAccessExpressionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             metadataAccessExpressionInstance.IsOrdered = isOrderedFeature;
             metadataAccessExpressionInstance.IsPortion = isPortionFeature;
-            metadataAccessExpressionInstance.IsReadOnly = isReadOnlyFeature;
             metadataAccessExpressionInstance.IsSufficient = isSufficientFeature;
             metadataAccessExpressionInstance.IsUnique = isUniqueFeature;
+            metadataAccessExpressionInstance.IsVariable = isVariableFeature;
             metadataAccessExpressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             metadataAccessExpressionInstance.OwningRelationship = owningRelationshipFeature;
-            metadataAccessExpressionInstance.ReferencedElement = referencedElementFeature;
 
             return metadataAccessExpressionInstance;
         }
@@ -291,6 +291,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
@@ -321,12 +327,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
@@ -338,6 +338,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
@@ -351,12 +357,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
-            if (!dictionary.TryGetValue("referencedElement", out object referencedElementObject))
-            {
-                throw new ArgumentException("The referencedElement property is missing from the dictionary, the dictionary cannot be converted into a MetadataAccessExpression");
-            }
-            Guid referencedElementFeature = Guid.Parse(Convert.ToString(referencedElementObject));
-
 
             metadataAccessExpressionInstance.AliasIds = aliasIdsFeature ?? new List<string>();
             metadataAccessExpressionInstance.DeclaredName = declaredNameFeature;
@@ -365,17 +365,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             metadataAccessExpressionInstance.ElementId = elementIdFeature;
             metadataAccessExpressionInstance.IsAbstract = isAbstractFeature;
             metadataAccessExpressionInstance.IsComposite = isCompositeFeature;
+            metadataAccessExpressionInstance.IsConstant = isConstantFeature;
             metadataAccessExpressionInstance.IsDerived = isDerivedFeature;
             metadataAccessExpressionInstance.IsEnd = isEndFeature;
             metadataAccessExpressionInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             metadataAccessExpressionInstance.IsOrdered = isOrderedFeature;
             metadataAccessExpressionInstance.IsPortion = isPortionFeature;
-            metadataAccessExpressionInstance.IsReadOnly = isReadOnlyFeature;
             metadataAccessExpressionInstance.IsSufficient = isSufficientFeature;
             metadataAccessExpressionInstance.IsUnique = isUniqueFeature;
+            metadataAccessExpressionInstance.IsVariable = isVariableFeature;
             metadataAccessExpressionInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             metadataAccessExpressionInstance.OwningRelationship = owningRelationshipFeature;
-            metadataAccessExpressionInstance.ReferencedElement = referencedElementFeature;
 
             return metadataAccessExpressionInstance;
         }

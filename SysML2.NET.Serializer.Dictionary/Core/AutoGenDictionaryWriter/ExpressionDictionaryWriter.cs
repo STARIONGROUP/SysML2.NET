@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", expressionInstance.ElementId);
             dictionary.Add("isAbstract", expressionInstance.IsAbstract);
             dictionary.Add("isComposite", expressionInstance.IsComposite);
+            dictionary.Add("isConstant", expressionInstance.IsConstant);
             dictionary.Add("isDerived", expressionInstance.IsDerived);
             dictionary.Add("isEnd", expressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", expressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", expressionInstance.IsOrdered);
             dictionary.Add("isPortion", expressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", expressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", expressionInstance.IsSufficient);
             dictionary.Add("isUnique", expressionInstance.IsUnique);
+            dictionary.Add("isVariable", expressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", expressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", expressionInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", expressionInstance.ElementId);
             dictionary.Add("isAbstract", expressionInstance.IsAbstract);
             dictionary.Add("isComposite", expressionInstance.IsComposite);
+            dictionary.Add("isConstant", expressionInstance.IsConstant);
             dictionary.Add("isDerived", expressionInstance.IsDerived);
             dictionary.Add("isEnd", expressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", expressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", expressionInstance.IsOrdered);
             dictionary.Add("isPortion", expressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", expressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", expressionInstance.IsSufficient);
             dictionary.Add("isUnique", expressionInstance.IsUnique);
+            dictionary.Add("isVariable", expressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", expressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", expressionInstance.OwningRelationship);
 

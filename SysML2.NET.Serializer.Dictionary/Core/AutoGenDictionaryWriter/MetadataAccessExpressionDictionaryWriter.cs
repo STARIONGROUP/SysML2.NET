@@ -114,17 +114,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", metadataAccessExpressionInstance.ElementId);
             dictionary.Add("isAbstract", metadataAccessExpressionInstance.IsAbstract);
             dictionary.Add("isComposite", metadataAccessExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", metadataAccessExpressionInstance.IsConstant);
             dictionary.Add("isDerived", metadataAccessExpressionInstance.IsDerived);
             dictionary.Add("isEnd", metadataAccessExpressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", metadataAccessExpressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", metadataAccessExpressionInstance.IsOrdered);
             dictionary.Add("isPortion", metadataAccessExpressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", metadataAccessExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", metadataAccessExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", metadataAccessExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", metadataAccessExpressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", metadataAccessExpressionInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", metadataAccessExpressionInstance.OwningRelationship.ToString());
-            dictionary.Add("referencedElement", metadataAccessExpressionInstance.ReferencedElement.ToString());
 
             return dictionary;
         }
@@ -158,17 +158,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", metadataAccessExpressionInstance.ElementId);
             dictionary.Add("isAbstract", metadataAccessExpressionInstance.IsAbstract);
             dictionary.Add("isComposite", metadataAccessExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", metadataAccessExpressionInstance.IsConstant);
             dictionary.Add("isDerived", metadataAccessExpressionInstance.IsDerived);
             dictionary.Add("isEnd", metadataAccessExpressionInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", metadataAccessExpressionInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", metadataAccessExpressionInstance.IsOrdered);
             dictionary.Add("isPortion", metadataAccessExpressionInstance.IsPortion);
-            dictionary.Add("isReadOnly", metadataAccessExpressionInstance.IsReadOnly);
             dictionary.Add("isSufficient", metadataAccessExpressionInstance.IsSufficient);
             dictionary.Add("isUnique", metadataAccessExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", metadataAccessExpressionInstance.IsVariable);
             dictionary.Add("ownedRelationship", metadataAccessExpressionInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", metadataAccessExpressionInstance.OwningRelationship);
-            dictionary.Add("referencedElement", metadataAccessExpressionInstance.ReferencedElement);
 
             return dictionary;
         }

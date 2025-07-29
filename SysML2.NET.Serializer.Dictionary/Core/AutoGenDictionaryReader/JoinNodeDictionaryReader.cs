@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
@@ -182,12 +188,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
@@ -199,6 +199,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("isVariation", out object isVariationObject))
             {
@@ -232,15 +238,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             joinNodeInstance.ElementId = elementIdFeature;
             joinNodeInstance.IsAbstract = isAbstractFeature;
             joinNodeInstance.IsComposite = isCompositeFeature;
+            joinNodeInstance.IsConstant = isConstantFeature;
             joinNodeInstance.IsDerived = isDerivedFeature;
             joinNodeInstance.IsEnd = isEndFeature;
             joinNodeInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             joinNodeInstance.IsIndividual = isIndividualFeature;
             joinNodeInstance.IsOrdered = isOrderedFeature;
             joinNodeInstance.IsPortion = isPortionFeature;
-            joinNodeInstance.IsReadOnly = isReadOnlyFeature;
             joinNodeInstance.IsSufficient = isSufficientFeature;
             joinNodeInstance.IsUnique = isUniqueFeature;
+            joinNodeInstance.IsVariable = isVariableFeature;
             joinNodeInstance.IsVariation = isVariationFeature;
             joinNodeInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             joinNodeInstance.OwningRelationship = owningRelationshipFeature;
@@ -305,6 +312,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
@@ -341,12 +354,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
@@ -358,6 +365,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a JoinNode");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("isVariation", out object isVariationObject))
             {
@@ -391,15 +404,16 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             joinNodeInstance.ElementId = elementIdFeature;
             joinNodeInstance.IsAbstract = isAbstractFeature;
             joinNodeInstance.IsComposite = isCompositeFeature;
+            joinNodeInstance.IsConstant = isConstantFeature;
             joinNodeInstance.IsDerived = isDerivedFeature;
             joinNodeInstance.IsEnd = isEndFeature;
             joinNodeInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             joinNodeInstance.IsIndividual = isIndividualFeature;
             joinNodeInstance.IsOrdered = isOrderedFeature;
             joinNodeInstance.IsPortion = isPortionFeature;
-            joinNodeInstance.IsReadOnly = isReadOnlyFeature;
             joinNodeInstance.IsSufficient = isSufficientFeature;
             joinNodeInstance.IsUnique = isUniqueFeature;
+            joinNodeInstance.IsVariable = isVariableFeature;
             joinNodeInstance.IsVariation = isVariationFeature;
             joinNodeInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             joinNodeInstance.OwningRelationship = owningRelationshipFeature;

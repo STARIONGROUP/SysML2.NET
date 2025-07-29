@@ -128,12 +128,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
 
-            if (!dictionary.TryGetValue("feature", out object featureObject))
-            {
-                throw new ArgumentException("The feature property is missing from the dictionary, the dictionary cannot be converted into a SubjectMembership");
-            }
-            Guid featureFeature = Guid.Parse(Convert.ToString(featureObject));
-
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
                 throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a SubjectMembership");
@@ -200,12 +194,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<Guid> targetFeature = (targetObject as List<string>)?.Select(Guid.Parse).ToList();
 
-            if (!dictionary.TryGetValue("type", out object typeObject))
-            {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a SubjectMembership");
-            }
-            Guid typeFeature = Guid.Parse(Convert.ToString(typeObject));
-
             if (!dictionary.TryGetValue("visibility", out object visibilityObject))
             {
                 throw new ArgumentException("The visibility property is missing from the dictionary, the dictionary cannot be converted into a SubjectMembership");
@@ -217,7 +205,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             subjectMembershipInstance.DeclaredName = declaredNameFeature;
             subjectMembershipInstance.DeclaredShortName = declaredShortNameFeature;
             subjectMembershipInstance.ElementId = elementIdFeature;
-            subjectMembershipInstance.Feature = featureFeature;
             subjectMembershipInstance.IsImplied = isImpliedFeature;
             subjectMembershipInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             subjectMembershipInstance.MemberElement = memberElementFeature;
@@ -229,7 +216,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             subjectMembershipInstance.OwningRelationship = owningRelationshipFeature;
             subjectMembershipInstance.Source = sourceFeature ?? new List<Guid>();
             subjectMembershipInstance.Target = targetFeature ?? new List<Guid>();
-            subjectMembershipInstance.Type = typeFeature;
             subjectMembershipInstance.Visibility = visibilityFeature;
 
             return subjectMembershipInstance;
@@ -272,12 +258,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a SubjectMembership");
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
-
-            if (!dictionary.TryGetValue("feature", out object featureObject))
-            {
-                throw new ArgumentException("The feature property is missing from the dictionary, the dictionary cannot be converted into a SubjectMembership");
-            }
-            Guid featureFeature = Guid.Parse(Convert.ToString(featureObject));
 
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
@@ -345,12 +325,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             List<Guid> targetFeature = (targetObject as List<Guid>);
 
-            if (!dictionary.TryGetValue("type", out object typeObject))
-            {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a SubjectMembership");
-            }
-            Guid typeFeature = Guid.Parse(Convert.ToString(typeObject));
-
             if (!dictionary.TryGetValue("visibility", out object visibilityObject))
             {
                 throw new ArgumentException("The visibility property is missing from the dictionary, the dictionary cannot be converted into a SubjectMembership");
@@ -362,7 +336,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             subjectMembershipInstance.DeclaredName = declaredNameFeature;
             subjectMembershipInstance.DeclaredShortName = declaredShortNameFeature;
             subjectMembershipInstance.ElementId = elementIdFeature;
-            subjectMembershipInstance.Feature = featureFeature;
             subjectMembershipInstance.IsImplied = isImpliedFeature;
             subjectMembershipInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             subjectMembershipInstance.MemberElement = memberElementFeature;
@@ -374,7 +347,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             subjectMembershipInstance.OwningRelationship = owningRelationshipFeature;
             subjectMembershipInstance.Source = sourceFeature ?? new List<Guid>();
             subjectMembershipInstance.Target = targetFeature ?? new List<Guid>();
-            subjectMembershipInstance.Type = typeFeature;
             subjectMembershipInstance.Visibility = visibilityFeature;
 
             return subjectMembershipInstance;

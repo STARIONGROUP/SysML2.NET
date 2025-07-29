@@ -114,6 +114,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", allocationUsageInstance.ElementId);
             dictionary.Add("isAbstract", allocationUsageInstance.IsAbstract);
             dictionary.Add("isComposite", allocationUsageInstance.IsComposite);
+            dictionary.Add("isConstant", allocationUsageInstance.IsConstant);
             dictionary.Add("isDerived", allocationUsageInstance.IsDerived);
             dictionary.Add("isEnd", allocationUsageInstance.IsEnd);
             dictionary.Add("isImplied", allocationUsageInstance.IsImplied);
@@ -121,9 +122,9 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isIndividual", allocationUsageInstance.IsIndividual);
             dictionary.Add("isOrdered", allocationUsageInstance.IsOrdered);
             dictionary.Add("isPortion", allocationUsageInstance.IsPortion);
-            dictionary.Add("isReadOnly", allocationUsageInstance.IsReadOnly);
             dictionary.Add("isSufficient", allocationUsageInstance.IsSufficient);
             dictionary.Add("isUnique", allocationUsageInstance.IsUnique);
+            dictionary.Add("isVariable", allocationUsageInstance.IsVariable);
             dictionary.Add("isVariation", allocationUsageInstance.IsVariation);
             dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", allocationUsageInstance.OwnedRelatedElement)} ]");
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", allocationUsageInstance.OwnedRelationship)} ]");
@@ -165,6 +166,7 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", allocationUsageInstance.ElementId);
             dictionary.Add("isAbstract", allocationUsageInstance.IsAbstract);
             dictionary.Add("isComposite", allocationUsageInstance.IsComposite);
+            dictionary.Add("isConstant", allocationUsageInstance.IsConstant);
             dictionary.Add("isDerived", allocationUsageInstance.IsDerived);
             dictionary.Add("isEnd", allocationUsageInstance.IsEnd);
             dictionary.Add("isImplied", allocationUsageInstance.IsImplied);
@@ -172,9 +174,9 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("isIndividual", allocationUsageInstance.IsIndividual);
             dictionary.Add("isOrdered", allocationUsageInstance.IsOrdered);
             dictionary.Add("isPortion", allocationUsageInstance.IsPortion);
-            dictionary.Add("isReadOnly", allocationUsageInstance.IsReadOnly);
             dictionary.Add("isSufficient", allocationUsageInstance.IsSufficient);
             dictionary.Add("isUnique", allocationUsageInstance.IsUnique);
+            dictionary.Add("isVariable", allocationUsageInstance.IsVariable);
             dictionary.Add("isVariation", allocationUsageInstance.IsVariation);
             dictionary.Add("ownedRelatedElement", allocationUsageInstance.OwnedRelatedElement);
             dictionary.Add("ownedRelationship", allocationUsageInstance.OwnedRelationship);

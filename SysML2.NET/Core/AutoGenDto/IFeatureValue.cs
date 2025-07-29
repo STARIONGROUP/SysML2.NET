@@ -42,16 +42,17 @@ namespace SysML2.NET.Core.DTO
     /// for any individual of the featuringType of the featureWithValue, unless another value is explicitly
     /// given for the featureWithValue for that individual.not isDefault implies   
     /// featureWithValue.ownedMember->        selectByKind(BindingConnector)->exists(b |           
-    /// b.relatedFeature->includes(featureWithValue) and            b.relatedFeature->includes(value.result)
-    /// and            if not isInitial then                 b.featuringType =
-    /// featureWithValue.featuringType            else                 b.featuringType->exists(t |          
-    ///          t.oclIsKindOf(Feature) and                    t.oclAsType(Feature).chainingFeature =       
-    ///                 Sequence{                            resolveGlobal('Base::things::that').           
-    ///                     memberElement,                           
-    /// resolveGlobal('Occurrences::Occurrence::startShot').                                memberElement   
-    ///                     }                )           
+    /// b.relatedFeature->includes(featureWithValue) and            b.relatedFeature->exists(f |            
+    ///     f.chainingFeature = Sequence{value, value.result}) and            if not isInitial then         
+    ///        b.featuringType = featureWithValue.featuringType            else                
+    /// b.featuringType->exists(t |                    t.oclIsKindOf(Feature) and                   
+    /// t.oclAsType(Feature).chainingFeature =                        Sequence{                           
+    /// resolveGlobal('Base::things::that').                                memberElement,                  
+    ///          resolveGlobal('Occurrences::Occurrence::startShot').                               
+    /// memberElement                        }                )           
     /// endif)featureWithValue.redefinition.redefinedFeature->   
-    /// closure(redefinition.redefinedFeature).valuation->    forAll(isDefault)
+    /// closure(redefinition.redefinedFeature).valuation->    forAll(isDefault)isInitial implies
+    /// featureWithValue.isVariable
     /// </summary>
     public partial interface IFeatureValue : IOwningMembership
     {

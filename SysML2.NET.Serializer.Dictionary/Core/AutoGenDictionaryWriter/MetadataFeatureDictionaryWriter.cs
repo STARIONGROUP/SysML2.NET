@@ -114,14 +114,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", metadataFeatureInstance.ElementId);
             dictionary.Add("isAbstract", metadataFeatureInstance.IsAbstract);
             dictionary.Add("isComposite", metadataFeatureInstance.IsComposite);
+            dictionary.Add("isConstant", metadataFeatureInstance.IsConstant);
             dictionary.Add("isDerived", metadataFeatureInstance.IsDerived);
             dictionary.Add("isEnd", metadataFeatureInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", metadataFeatureInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", metadataFeatureInstance.IsOrdered);
             dictionary.Add("isPortion", metadataFeatureInstance.IsPortion);
-            dictionary.Add("isReadOnly", metadataFeatureInstance.IsReadOnly);
             dictionary.Add("isSufficient", metadataFeatureInstance.IsSufficient);
             dictionary.Add("isUnique", metadataFeatureInstance.IsUnique);
+            dictionary.Add("isVariable", metadataFeatureInstance.IsVariable);
             dictionary.Add("ownedRelationship", $"[ {string.Join(",", metadataFeatureInstance.OwnedRelationship)} ]");
             dictionary.Add("owningRelationship", metadataFeatureInstance.OwningRelationship.ToString());
 
@@ -157,14 +158,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             dictionary.Add("elementId", metadataFeatureInstance.ElementId);
             dictionary.Add("isAbstract", metadataFeatureInstance.IsAbstract);
             dictionary.Add("isComposite", metadataFeatureInstance.IsComposite);
+            dictionary.Add("isConstant", metadataFeatureInstance.IsConstant);
             dictionary.Add("isDerived", metadataFeatureInstance.IsDerived);
             dictionary.Add("isEnd", metadataFeatureInstance.IsEnd);
             dictionary.Add("isImpliedIncluded", metadataFeatureInstance.IsImpliedIncluded);
             dictionary.Add("isOrdered", metadataFeatureInstance.IsOrdered);
             dictionary.Add("isPortion", metadataFeatureInstance.IsPortion);
-            dictionary.Add("isReadOnly", metadataFeatureInstance.IsReadOnly);
             dictionary.Add("isSufficient", metadataFeatureInstance.IsSufficient);
             dictionary.Add("isUnique", metadataFeatureInstance.IsUnique);
+            dictionary.Add("isVariable", metadataFeatureInstance.IsVariable);
             dictionary.Add("ownedRelationship", metadataFeatureInstance.OwnedRelationship);
             dictionary.Add("owningRelationship", metadataFeatureInstance.OwningRelationship);
 

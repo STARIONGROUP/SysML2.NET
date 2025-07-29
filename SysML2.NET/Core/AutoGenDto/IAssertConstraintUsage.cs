@@ -38,8 +38,8 @@ namespace SysML2.NET.Core.DTO
     /// referencedFeatureTarget().oclIsKindOf(ConstraintUsage) then       
     /// referencedFeatureTarget().oclAsType(ConstraintUsage)    else null    endif endifif isNegated then   
     /// specializesFromLibrary('Constraints::negatedConstraintChecks')else   
-    /// specializesFromLibrary('Constraints::assertedConstraintChecks')endifownedReferenceSubsetting <> null
-    /// implies    ownedReferenceSubsetting.referencedFeature.oclIsKindOf(ConstraintUsage)
+    /// specializesFromLibrary('Constraints::assertedConstraintChecks')endifreferencedFeaureTarget() <> null
+    /// implies    referencedFeatureTarget().oclIsKindOf(ConstraintUsage)
     /// </summary>
     public partial interface IAssertConstraintUsage : IConstraintUsage, IInvariant
     {

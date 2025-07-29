@@ -435,6 +435,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "elementId", "element id" },
                 { "isAbstract", true },
                 { "isComposite", true },
+                { "isConstant", true },
                 { "isDerived", true },
                 { "isEnd", true },
                 { "isImpliedIncluded", true },
@@ -443,6 +444,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "isReadOnly", true },
                 { "isSufficient", true },
                 { "isUnique", true },
+                { "isVariable", true },
                 { "declaredName", "the name" },
                 { "ownedRelationship", new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") } },
                 { "owningRelationship", Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9") },
@@ -477,6 +479,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "elementId", "element id" },
                 { "isAbstract", true },
                 { "isComposite", true },
+                { "isConstant", true },
                 { "isDerived", true },
                 { "isEnd", true },
                 { "isImpliedIncluded", true },
@@ -485,6 +488,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "isReadOnly", true },
                 { "isSufficient", true },
                 { "isUnique", true },
+                { "isVariable", true },
                 { "declaredName", "the name" },
                 { "ownedRelationship", new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") } },
                 { "owningRelationship", Guid.Parse("fe6d7f0c-6e7b-4ce9-acbe-25d2537f08d9") },
@@ -595,6 +599,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "elementId", "element id" },
                 { "isAbstract", true },
                 { "isComposite", true },
+                { "isConstant", true},
                 { "isDerived", true },
                 { "isEnd", true },
                 { "isImpliedIncluded", true },
@@ -604,6 +609,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "isReadOnly", true },
                 { "isSufficient", true },
                 { "isUnique", true },
+                { "isVariable", true},
                 { "isVariation", true },
                 { "declaredName", "the name" },
                 { "ownedRelationship", new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") } },
@@ -620,15 +626,16 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(acceptActionUsage.ElementId, Is.EqualTo("element id"));
             Assert.That(acceptActionUsage.IsAbstract, Is.True);
             Assert.That(acceptActionUsage.IsComposite, Is.True);
+            Assert.That(acceptActionUsage.IsConstant, Is.True);
             Assert.That(acceptActionUsage.IsDerived, Is.True);
             Assert.That(acceptActionUsage.IsEnd, Is.True);
             Assert.That(acceptActionUsage.IsImpliedIncluded, Is.True);
             Assert.That(acceptActionUsage.IsIndividual, Is.True);
             Assert.That(acceptActionUsage.IsOrdered, Is.True);
             Assert.That(acceptActionUsage.IsPortion, Is.True);
-            Assert.That(acceptActionUsage.IsReadOnly, Is.True);
             Assert.That(acceptActionUsage.IsSufficient, Is.True);
             Assert.That(acceptActionUsage.IsUnique, Is.True);
+            Assert.That(acceptActionUsage.IsVariable, Is.True);
             Assert.That(acceptActionUsage.IsVariation, Is.True);
             Assert.That(acceptActionUsage.DeclaredName, Is.EqualTo("the name"));
             Assert.That(acceptActionUsage.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
@@ -647,6 +654,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "elementId", "element id" },
                 { "isAbstract", true },
                 { "isComposite", true },
+                { "isConstant", true},
                 { "isDerived", true },
                 { "isEnd", true },
                 { "isImpliedIncluded", true },
@@ -656,6 +664,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "isReadOnly", true },
                 { "isSufficient", true },
                 { "isUnique", true },
+                { "isVariable", true},
                 { "isVariation", true },
                 { "declaredName", null },
                 { "ownedRelationship", new List<Guid>() },
@@ -672,15 +681,16 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(acceptActionUsage.ElementId, Is.EqualTo("element id"));
             Assert.That(acceptActionUsage.IsAbstract, Is.True);
             Assert.That(acceptActionUsage.IsComposite, Is.True);
+            Assert.That(acceptActionUsage.IsConstant, Is.True);
             Assert.That(acceptActionUsage.IsDerived, Is.True);
             Assert.That(acceptActionUsage.IsEnd, Is.True);
             Assert.That(acceptActionUsage.IsImpliedIncluded, Is.True);
             Assert.That(acceptActionUsage.IsIndividual, Is.True);
             Assert.That(acceptActionUsage.IsOrdered, Is.True);
             Assert.That(acceptActionUsage.IsPortion, Is.True);
-            Assert.That(acceptActionUsage.IsReadOnly, Is.True);
             Assert.That(acceptActionUsage.IsSufficient, Is.True);
             Assert.That(acceptActionUsage.IsUnique, Is.True);
+            Assert.That(acceptActionUsage.IsVariable, Is.True);
             Assert.That(acceptActionUsage.IsVariation, Is.True);
             Assert.That(acceptActionUsage.DeclaredName, Is.Null);
             Assert.That(acceptActionUsage.OwnedRelationship, Is.EqualTo(new List<Guid>()));
@@ -699,6 +709,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "elementId", "element id" },
                 { "isAbstract", true },
                 { "isComposite", true },
+                { "isConstant", true },
                 { "isDerived", true },
                 { "isEnd", true },
                 { "isImpliedIncluded", true },
@@ -708,6 +719,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "isReadOnly", true },
                 { "isSufficient", true },
                 { "isUnique", true },
+                { "isVariable", true },
                 { "isVariation", true },
                 { "declaredName", "the name" },
                 { "ownedRelationship", new List<string> { "9006ff06-43fe-4a4e-a4bc-402e82f84dde" } },
@@ -724,15 +736,16 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(acceptActionUsage.ElementId, Is.EqualTo("element id"));
             Assert.That(acceptActionUsage.IsAbstract, Is.True);
             Assert.That(acceptActionUsage.IsComposite, Is.True);
+            Assert.That(acceptActionUsage.IsConstant, Is.True);
             Assert.That(acceptActionUsage.IsDerived, Is.True);
             Assert.That(acceptActionUsage.IsEnd, Is.True);
             Assert.That(acceptActionUsage.IsImpliedIncluded, Is.True);
             Assert.That(acceptActionUsage.IsIndividual, Is.True);
             Assert.That(acceptActionUsage.IsOrdered, Is.True);
             Assert.That(acceptActionUsage.IsPortion, Is.True);
-            Assert.That(acceptActionUsage.IsReadOnly, Is.True);
             Assert.That(acceptActionUsage.IsSufficient, Is.True);
             Assert.That(acceptActionUsage.IsUnique, Is.True);
+            Assert.That(acceptActionUsage.IsVariable, Is.True);
             Assert.That(acceptActionUsage.IsVariation, Is.True);
             Assert.That(acceptActionUsage.DeclaredName, Is.EqualTo("the name"));
             Assert.That(acceptActionUsage.OwnedRelationship, Is.EqualTo(new List<Guid> { Guid.Parse("9006ff06-43fe-4a4e-a4bc-402e82f84dde") }));
@@ -751,6 +764,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "elementId", "element id" },
                 { "isAbstract", true },
                 { "isComposite", true },
+                { "isConstant", true },
                 { "isDerived", true },
                 { "isEnd", true },
                 { "isImpliedIncluded", true },
@@ -760,6 +774,7 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
                 { "isReadOnly", true },
                 { "isSufficient", true },
                 { "isUnique", true },
+                { "isVariable", true },
                 { "isVariation", true },
                 { "declaredName", null },
                 { "ownedRelationship", new List<string>() },
@@ -776,15 +791,16 @@ namespace SysML2.NET.Serializer.Dictionary.Tests
             Assert.That(acceptActionUsage.ElementId, Is.EqualTo("element id"));
             Assert.That(acceptActionUsage.IsAbstract, Is.True);
             Assert.That(acceptActionUsage.IsComposite, Is.True);
+            Assert.That(acceptActionUsage.IsConstant, Is.True);
             Assert.That(acceptActionUsage.IsDerived, Is.True);
             Assert.That(acceptActionUsage.IsEnd, Is.True);
             Assert.That(acceptActionUsage.IsImpliedIncluded, Is.True);
             Assert.That(acceptActionUsage.IsIndividual, Is.True);
             Assert.That(acceptActionUsage.IsOrdered, Is.True);
             Assert.That(acceptActionUsage.IsPortion, Is.True);
-            Assert.That(acceptActionUsage.IsReadOnly, Is.True);
             Assert.That(acceptActionUsage.IsSufficient, Is.True);
             Assert.That(acceptActionUsage.IsUnique, Is.True);
+            Assert.That(acceptActionUsage.IsVariable, Is.True);
             Assert.That(acceptActionUsage.IsVariation, Is.True);
             Assert.That(acceptActionUsage.DeclaredName, Is.Null);
             Assert.That(acceptActionUsage.OwnedRelationship, Is.EqualTo(new List<Guid>()));

@@ -41,8 +41,8 @@ namespace SysML2.NET.Core.POCO
     /// bindings->first().relatedElement->any(r | r <> subjectParameter)   
     /// endifownedMember->selectByKind(BindingConnector)->    select(b |       
     /// b.relatedElement->includes(subjectParameter) and        b.relatedElement->exists(r | r <>
-    /// subjectParameter))->    size() = 1ownedReferenceSubsetting <> null implies   
-    /// ownedReferenceSubsetting.referencedFeature.oclIsKindOf(RequirementUsage)if isNegated then   
+    /// subjectParameter))->    size() = 1referencedFeatureTarget() <> null implies   
+    /// referencedFeatureTarget().oclIsKindOf(RequirementUsage)if isNegated then   
     /// specializesFromLibrary('Requirements::notSatisfiedRequirementChecks')else   
     /// specializesFromLibrary('Requirements::satisfiedRequirementChecks')endif
     /// </summary>

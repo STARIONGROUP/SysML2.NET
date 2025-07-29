@@ -146,6 +146,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
@@ -176,12 +182,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
@@ -193,6 +193,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
@@ -220,14 +226,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             literalIntegerInstance.ElementId = elementIdFeature;
             literalIntegerInstance.IsAbstract = isAbstractFeature;
             literalIntegerInstance.IsComposite = isCompositeFeature;
+            literalIntegerInstance.IsConstant = isConstantFeature;
             literalIntegerInstance.IsDerived = isDerivedFeature;
             literalIntegerInstance.IsEnd = isEndFeature;
             literalIntegerInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             literalIntegerInstance.IsOrdered = isOrderedFeature;
             literalIntegerInstance.IsPortion = isPortionFeature;
-            literalIntegerInstance.IsReadOnly = isReadOnlyFeature;
             literalIntegerInstance.IsSufficient = isSufficientFeature;
             literalIntegerInstance.IsUnique = isUniqueFeature;
+            literalIntegerInstance.IsVariable = isVariableFeature;
             literalIntegerInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             literalIntegerInstance.OwningRelationship = owningRelationshipFeature;
             literalIntegerInstance.Value = valueFeature;
@@ -291,6 +298,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
+            if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
+            {
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
+            }
+            bool isConstantFeature = Convert.ToBoolean(isConstantObject);
+
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
                 throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
@@ -321,12 +334,6 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
-            if (!dictionary.TryGetValue("isReadOnly", out object isReadOnlyObject))
-            {
-                throw new ArgumentException("The isReadOnly property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
-            }
-            bool isReadOnlyFeature = Convert.ToBoolean(isReadOnlyObject);
-
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
                 throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
@@ -338,6 +345,12 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
                 throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
+
+            if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
+            {
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a LiteralInteger");
+            }
+            bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
@@ -365,14 +378,15 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
             literalIntegerInstance.ElementId = elementIdFeature;
             literalIntegerInstance.IsAbstract = isAbstractFeature;
             literalIntegerInstance.IsComposite = isCompositeFeature;
+            literalIntegerInstance.IsConstant = isConstantFeature;
             literalIntegerInstance.IsDerived = isDerivedFeature;
             literalIntegerInstance.IsEnd = isEndFeature;
             literalIntegerInstance.IsImpliedIncluded = isImpliedIncludedFeature;
             literalIntegerInstance.IsOrdered = isOrderedFeature;
             literalIntegerInstance.IsPortion = isPortionFeature;
-            literalIntegerInstance.IsReadOnly = isReadOnlyFeature;
             literalIntegerInstance.IsSufficient = isSufficientFeature;
             literalIntegerInstance.IsUnique = isUniqueFeature;
+            literalIntegerInstance.IsVariable = isVariableFeature;
             literalIntegerInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
             literalIntegerInstance.OwningRelationship = owningRelationshipFeature;
             literalIntegerInstance.Value = valueFeature;

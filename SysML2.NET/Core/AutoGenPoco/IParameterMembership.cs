@@ -32,9 +32,11 @@ namespace SysML2.NET.Core.POCO
 
     /// <summary>
     /// A ParameterMembership is a FeatureMembership that identifies its memberFeature as a parameter, which
-    /// is always owned, and must have a direction. A ParameterMembership must be owned by a Behavior or a
-    /// Step.ownedMemberParameter.direction = parameterDirection()owningType.oclIsKindOf(Behavior) or
-    /// owningType.oclIsKindOf(Step)
+    /// is always owned, and must have a direction. A ParameterMembership must be owned by a Behavior, a
+    /// Step, or the result parameter of a ConstructorExpression.ownedMemberParameter.direction =
+    /// parameterDirection()owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step)
+    /// orowningType.owningMembership.oclIsKindOf(ReturnParameterMembership) and   
+    /// owningType.owningNamespace.oclIsKindOf(ConstructorExpression)
     /// </summary>
     public partial interface IParameterMembership : IFeatureMembership
     {
