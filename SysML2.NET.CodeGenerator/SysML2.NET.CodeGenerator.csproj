@@ -26,15 +26,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="datamodel\openapi-extensions.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="datamodel\openapi-x.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="datamodel\openapi.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="datamodel\SysML.ecore">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
