@@ -31,6 +31,8 @@ namespace SysML2.NET.PIM.DTO
     /// </summary>
     public class Project : Record
     {
+        public List<Guid> Commits { get; set; } = new List<Guid>();
+
         /// <summary>
         /// Gets or sets the <see cref="DateTime"/> when the project was created
         /// </summary>
@@ -45,5 +47,7 @@ namespace SysML2.NET.PIM.DTO
         /// Gets or sets the default <see cref="Branch"/> in the <see cref="Project"/> which is a subset of <see cref="Branch"/>
         /// </summary>
         public Guid DefaultBranch { get; set; }
+
+        public List<Guid> Queries { get; set; } = [];
     }
 }

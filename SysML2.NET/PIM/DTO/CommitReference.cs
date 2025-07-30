@@ -35,13 +35,18 @@ namespace SysML2.NET.PIM.DTO
         public DateTime Created { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the <see cref="CommitReference"/>
+        /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was deleted
         /// </summary>
-        public string Name { get; set; }
+        public DateTime Deleted { get; set; }
 
         /// <summary>
         /// Gets or sets the Project that owns the given <see cref="CommitReference"/>
         /// </summary>
         public Guid OwningProject { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the <see cref="CommitReference"/>
+        /// </summary>
+        public new string Name { get; set; }
     }
 }

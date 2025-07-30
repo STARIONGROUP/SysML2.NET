@@ -1,4 +1,4 @@
-// -------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------
 // <copyright file="Record.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2025 Starion Group S.A.
@@ -56,16 +56,14 @@ namespace SysML2.NET.PIM
         public List<string> Alias { get; set; }
 
         /// <summary>
-        /// Gets a human-friendly unique identifier for this <see cref="Record"/>
-        /// </summary>
-        public string QueryHumanIdentifier()
-        {
-            throw new NotImplementedException("Derived property HumanIdentifier not yet supported");
-        }
-
-        /// <summary>
         /// Gets or sets a statement that provides details about the <see cref="Record"/>.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets an optional human-friendly identifier for a record. The value assigned to the name for a given
+        /// record must be in the set of values assigned to alias for that record
+        /// </summary>
+        public string Name { get; set; }
     }
 }

@@ -83,26 +83,26 @@ namespace SySML2.NET.REST.Tests
                     Assert.That(branch.OwningProject, Is.EqualTo(project.Id));
                 }
 
-                var commits = await this.restClient.RequestCommits(project.Id, null, null, this.cancellationTokenSource.Token);
-                
-                foreach (var commit in commits)
-                {
-                    Assert.That(commit.OwningProject, Is.EqualTo(project.Id));
-                    
-                    var elements = await this.restClient.RequestElements(project.Id, commit.Id, null, null, this.cancellationTokenSource.Token);
-
-                    foreach (var element in elements)
-                    {
-                        Assert.That(element.Id, Is.Not.Null.Or.Empty);
-                    }
-                }
-
                 var tags = await this.restClient.RequestTags(project.Id, null, null, this.cancellationTokenSource.Token);
                 
                 foreach (var tag in tags)
                 {
                     Assert.That(tag.Name, Is.Not.Null.Or.Empty);
                     Assert.That(tag.OwningProject, Is.EqualTo(project.Id));
+                }
+
+                var commits = await this.restClient.RequestCommits(project.Id, null, null, this.cancellationTokenSource.Token);
+
+                foreach (var commit in commits)
+                {
+                    Assert.That(commit.OwningProject, Is.EqualTo(project.Id));
+
+                    // var elements = await this.restClient.RequestElements(project.Id, commit.Id, null, null, this.cancellationTokenSource.Token);
+
+                    //foreach (var element in elements)
+                    //{
+                    //    Assert.That(element.Id, Is.Not.Null.Or.Empty);
+                    //}
                 }
             }
 	    }

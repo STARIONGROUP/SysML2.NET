@@ -33,9 +33,9 @@ namespace SysML2.NET.PIM.POCO
     public class Project : Record
     {
         /// <summary>
-        /// Gets or sets the human readable name
+        /// Gets or sets a human-friendly identifier for a Project
         /// </summary>
-        public string Name { get; set; }
+        public new string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp at which the <see cref="Project"/> was created
@@ -54,7 +54,7 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets all the <see cref="Commit"/>s in the <see cref="Project"/>
         /// </summary>
-        public IEnumerable<Commit> Commits => this.CommitReference.OfType<Commit>();
+        public List<Commit> Commits { get; set; } = new List<Commit>();
 
         /// <summary>
         /// Gets or sets all <see cref="CommitReference"/>s in the <see cref="Project"/>
@@ -64,7 +64,7 @@ namespace SysML2.NET.PIM.POCO
         /// <summary>
         /// Gets or sets all the branches in the Project which is a subset of <see cref="CommitReference"/>
         /// </summary>
-        public List<Branch> Branches { get; set; } = new List<Branch>();
+        public IEnumerable<Branch> Branches => this.CommitReference.OfType<Branch>();
 
         /// <summary>
         /// Gets or sets the default <see cref="Branch"/> in the <see cref="Project"/> which is a subset of <see cref="Branch"/>

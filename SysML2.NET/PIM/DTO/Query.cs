@@ -31,20 +31,26 @@ namespace SysML2.NET.PIM.DTO
     public class Query : Record
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the owning <see cref="Project"/>
+        /// Gets or sets the name of the Query
         /// </summary>
-        public Guid OwningProject { get; set; }
+        public new string Name { get; set; }
 
         /// <summary>
         /// list of properties of Element or its subtypes that will be included for each Element object in the
         /// query response. Element is the root-metaclass in KerML. If no properties are specified, then all the
         /// properties will be included for each Element in the query response
         /// </summary>
-        public List<string> Select { get; set; }
+        public List<string> Select { get; set; } = [];
 
         /// <summary>
         /// represents the conditions that Elements in the query response must satisfy
         /// </summary>
         public Constraint Where { get; set; }
+
+        /// <summary>
+        /// list of Data objects that define the scope context for query execution. The default scope of a
+        /// Query is the owning Project
+        /// </summary>
+        public List<Guid> Scope { get; set; } = [];
     }
 }

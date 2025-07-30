@@ -52,9 +52,9 @@ namespace SysML2.NET.PIM.POCO
         public Project OwningProject { get; set; }
 
         /// <summary>
-        /// Gets or sets the sets the set of immediately preceding <see cref="Commit"/>s
+        /// Gets or sets the set of immediately preceding <see cref="Commit"/>s
         /// </summary>
-        public List<Commit> PreviousCommits { get; set; } = new List<Commit>();
+        public List<Commit> PreviousCommit { get; set; } = new List<Commit>();
 
         /// <summary>
         /// Gets or sets the the set of <see cref="DataVersion"/> records representing <see cref="IData"/> that is

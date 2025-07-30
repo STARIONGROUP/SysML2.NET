@@ -34,7 +34,7 @@ namespace SysML2.NET.PIM.DTO
         /// <remarks>
         /// There must be at least 2
         /// </remarks>
-        public List<Constraint> Constraint { get; set; }
+        public List<Constraint> Constraint { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the logical operator for composing the <see cref="Constraint"/>s

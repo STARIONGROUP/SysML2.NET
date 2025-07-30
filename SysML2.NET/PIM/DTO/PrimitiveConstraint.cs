@@ -20,7 +20,6 @@
 
 namespace SysML2.NET.PIM.DTO
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -35,14 +34,14 @@ namespace SysML2.NET.PIM.DTO
         public string Property { get; set; }
 
         /// <summary>
-        /// Gets or sets the mathematical operatores
+        /// Gets or sets the mathematical operators
         /// </summary>
         public Operator Operator { get; set; }
 
         /// <summary>
         /// Gets or sets list of primitive objects, such as String, Boolean, Integer, Double, and UUID
         /// </summary>
-        public List<string> Value { get; set;} = new List<string>();
+        public List<string> Value { get; set;} = [];
 
         /// <summary>
         /// Gets or sets a value indicating a logical NOT operator is applied to the <see cref="PrimitiveConstraint"/>

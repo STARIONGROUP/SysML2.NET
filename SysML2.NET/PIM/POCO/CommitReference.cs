@@ -35,9 +35,14 @@ namespace SysML2.NET.PIM.POCO
         public DateTime Created { get; set; }
 
         /// <summary>
+        /// Gets or sets the timestamp at which the <see cref="CommitReference"/> was deleted
+        /// </summary>
+        public DateTime Deleted { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the <see cref="CommitReference"/>
         /// </summary>
-        public string Name { get; set; }
+        public new string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the Project that owns the given <see cref="CommitReference"/>
