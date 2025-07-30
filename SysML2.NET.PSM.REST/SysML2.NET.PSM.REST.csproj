@@ -17,6 +17,7 @@
             [Update] to SysML2.NET version 0.17.0
             [Update] SysML.ecore from source git repos - [TAG: 2025-06] (regenerate code)
         </PackageReleaseNotes>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
 </Project>
