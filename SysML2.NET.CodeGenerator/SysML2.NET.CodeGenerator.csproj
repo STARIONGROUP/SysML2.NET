@@ -21,8 +21,8 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ECoreNetto.HandleBars" Version="6.0.2" />
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" />
+        <PackageReference Include="ECoreNetto.HandleBars" Version="7.0.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.14.0" />
     </ItemGroup>
 
     <ItemGroup>
