@@ -25,7 +25,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
     using ECoreNetto;
     using ECoreNetto.Extensions;
     using ECoreNetto.Reporting.Generators;
-
+    using Expected.Ecore.Core;
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator;
@@ -58,7 +58,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
             Console.WriteLine(report);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
         public void Verify_that_inspect_class_executes_as_expected(string className)
         {
             var report = this.modelInspector.Inspect(this.rootPackage, className);

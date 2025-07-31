@@ -20,14 +20,12 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
+    using ECoreNetto;
+    using NUnit.Framework;
+    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
     using System.IO;
     using System.Threading.Tasks;
-
-    using ECoreNetto;
-
-    using NUnit.Framework;
-
-    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
     /// <summary>
     /// Suite of tests for the <see cref="CoreDalPocoExtensionsGeneratorTestFixture"/> class
@@ -46,11 +44,14 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dalFactoryDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Dal.Core.AutoGenPocoExtension");
 
-            rootPackage = DataModelLoader.Load();
+            var path = Path.Combine("ECore", "_SysML2.NET.Dal.Core.AutoGenPocoExtension");
 
-            dalPocoExtensionsGenerator = new CoreDalPocoExtensionsGenerator();
+            this.dalFactoryDirectoryInfo = directoryInfo.CreateSubdirectory(path);
+
+            this.rootPackage = DataModelLoader.Load();
+
+            this.dalPocoExtensionsGenerator = new CoreDalPocoExtensionsGenerator();
         }
 
         [Test]
@@ -67,12 +68,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
                 Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
         public async Task Verify_that_POCO_DalExtensions_are_generated_as_expected(string className)
         {
             var generatedCode = await this.dalPocoExtensionsGenerator.GenerateDalPocoExtension(rootPackage, dalFactoryDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenPocoExtension/{className}Extensions.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/ECore/Core/AutoGenPocoExtension/{className}Extensions.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

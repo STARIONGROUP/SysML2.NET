@@ -42,11 +42,14 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Serializer.Json.Core.AutoGenSerializer");
 
-            rootPackage = DataModelLoader.Load();
+            var path = Path.Combine("ECore", "_SysML2.NET.Serializer.Json.Core.AutoGenSerializer");
 
-            dtoSerializerGenerator = new CoreJsonDtoSerializerGenerator();
+            this.dtoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
+
+            this.rootPackage = DataModelLoader.Load();
+
+            this.dtoSerializerGenerator = new CoreJsonDtoSerializerGenerator();
         }
 
         [Test]

@@ -20,14 +20,12 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
+    using ECoreNetto;
+    using NUnit.Framework;
+    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
     using System.IO;
     using System.Threading.Tasks;
-
-    using ECoreNetto;
-
-    using NUnit.Framework;
-
-    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
     [TestFixture]
     public class CoreDtoGeneratorTestGenerator
@@ -43,11 +41,14 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Core.AutoGenDto");
 
-            rootPackage = DataModelLoader.Load();
+            var path = Path.Combine("ECore", "_SysML2.NET.Core.AutoGenDto");
 
-            dtoGenerator = new CoreDtoGenerator();
+            this.dtoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
+
+            this.rootPackage = DataModelLoader.Load();
+
+            this.dtoGenerator = new CoreDtoGenerator();
         }
 
         [Test]
@@ -64,22 +65,22 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
                 Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
         public async Task Verify_that_expected_dto_classes_are_generated_correctly(string className)
         {
             var generatedCode = await this.dtoGenerator.GenerateClass(rootPackage, dtoDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDto/{className}.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/ECore/Core/AutoGenDto/{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedAllClasses)), Category("Expected")]
         public async Task Verify_that_expected_dto_interfaces_are_generated_correctly(string className)
         {
             var generatedCode = await this.dtoGenerator.GenerateInterface(rootPackage, dtoDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDto/I{className}.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/ECore/Core/AutoGenDto/I{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

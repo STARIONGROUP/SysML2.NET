@@ -28,7 +28,8 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
-    
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+
     [TestFixture]
     public class CorePocoGeneratorTestGenerator
     {
@@ -43,9 +44,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Core.AutoGenPoco");
 
-            rootPackage = DataModelLoader.Load();
+            var path = Path.Combine("ECore", "_SysML2.NET.Core.AutoGenPoco");
+
+            this.dtoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
+
+            this.rootPackage = DataModelLoader.Load();
 
             this.pocoGenerator = new CorePocoGenerator();
         }
@@ -64,22 +68,22 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
                 Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
         public async Task Verify_that_expected_poco_classes_are_generated_correctly(string className)
         {
             var generatedCode = await this.pocoGenerator.GenerateClass(rootPackage, dtoDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutGenPoco/{className}.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/Ecore/Core/AutGenPoco/{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedAllClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedAllClasses)), Category("Expected")]
         public async Task Verify_that_expected_poco_interfaces_are_generated_correctly(string className)
         {
             var generatedCode = await this.pocoGenerator.GenerateInterface(rootPackage, dtoDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutGenPoco/I{className}.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/Ecore/Core/AutGenPoco/I{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

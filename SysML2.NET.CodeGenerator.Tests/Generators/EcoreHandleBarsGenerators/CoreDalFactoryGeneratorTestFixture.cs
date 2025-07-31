@@ -28,6 +28,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
 
     /// <summary>
     /// Suite of tests for the <see cref="CoreDalFactoryGenerator"/> class
@@ -46,11 +47,14 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dalFactoryDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Dal.Core.AutoGenElementFactory");
 
-            rootPackage = DataModelLoader.Load();
+            var path = Path.Combine("ECore", "_SysML2.NET.Dal.Core.AutoGenElementFactory");
 
-            dalFactoryGenerator = new CoreDalFactoryGenerator();
+            this.dalFactoryDirectoryInfo = directoryInfo.CreateSubdirectory(path);
+
+            this.rootPackage = DataModelLoader.Load();
+
+            this.dalFactoryGenerator = new CoreDalFactoryGenerator();
         }
 
         [Test]
@@ -67,12 +71,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
                 Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
         public async Task Verify_that_POCO_factories_are_generated_as_expected(string className)
         {
             var generatedCode = await this.dalFactoryGenerator.GeneratePocoFactory(rootPackage, dalFactoryDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenElementFactory/{className}Factory.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/ECore/Core/AutoGenElementFactory/{className}Factory.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

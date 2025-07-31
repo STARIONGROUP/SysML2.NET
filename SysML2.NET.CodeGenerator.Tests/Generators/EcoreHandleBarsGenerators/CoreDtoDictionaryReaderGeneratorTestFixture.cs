@@ -20,14 +20,12 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
+    using ECoreNetto;
+    using NUnit.Framework;
+    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
     using System.IO;
     using System.Threading.Tasks;
-
-    using ECoreNetto;
-
-    using NUnit.Framework;
-
-    using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
 
     /// <summary>
     /// Suite of tests for the <see cref="CoreDtoDictionaryReaderGenerator"/> class.
@@ -46,9 +44,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             var outputpath = TestContext.CurrentContext.TestDirectory;
             var directoryInfo = new DirectoryInfo(outputpath);
-            dtoDirectoryInfo = directoryInfo.CreateSubdirectory("_SysML2.NET.Serializer.Dictionary.Core.AutoGenDictionaryReader");
 
-            rootPackage = DataModelLoader.Load();
+            var path = Path.Combine("ECore", "_SysML2.NET.Serializer.Dictionary.Core.AutoGenDictionaryReader");
+
+            this.dtoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
+
+            this.rootPackage = DataModelLoader.Load();
 
             this.dtoDictionaryReaderGenerator = new CoreDtoDictionaryReaderGenerator();
         }
@@ -67,12 +68,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
                 Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(Expected.ExpectedConcreteClasses)), Category("Expected")]
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
         public async Task Verify_that_expected_class_are_generated_correctly(string className)
         {
             var generatedCode = await this.dtoDictionaryReaderGenerator.GenerateDtoDictionaryReader(rootPackage, dtoDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/AutoGenDictionaryReader/{className}DictionaryReader.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/ECore/Core/AutoGenDictionaryReader/{className}DictionaryReader.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }
