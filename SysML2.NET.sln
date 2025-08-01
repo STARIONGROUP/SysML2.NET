@@ -57,6 +57,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.OGM", "SysML2.NE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.PSM.REST", "SysML2.NET.PSM.REST\SysML2.NET.PSM.REST.csproj", "{609B337B-52FC-47C4-BB28-54EA93600013}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Extensions", "SysML2.NET.Extensions\SysML2.NET.Extensions.csproj", "{3D15714B-3133-45F2-8C79-9BD4F5F05190}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Extensions.Tests", "SysML2.NET.Extensions.Tests\SysML2.NET.Extensions.Tests.csproj", "{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +131,14 @@ Global
 		{609B337B-52FC-47C4-BB28-54EA93600013}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{609B337B-52FC-47C4-BB28-54EA93600013}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{609B337B-52FC-47C4-BB28-54EA93600013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D15714B-3133-45F2-8C79-9BD4F5F05190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D15714B-3133-45F2-8C79-9BD4F5F05190}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D15714B-3133-45F2-8C79-9BD4F5F05190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D15714B-3133-45F2-8C79-9BD4F5F05190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

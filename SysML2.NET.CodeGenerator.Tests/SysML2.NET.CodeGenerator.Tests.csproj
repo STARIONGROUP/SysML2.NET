@@ -110,6 +110,10 @@
       <Compile Remove="Expected\Ecore\Core\AutoGenPocoExtension\NamespaceImportExtensions.cs" />
       <Compile Remove="Expected\Ecore\Core\AutoGenSerializer\ElementSerializer.cs" />
       <Compile Remove="Expected\Ecore\Core\AutoGenSerializer\TriggerInvocationExpressionSerializer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -383,6 +387,15 @@
       <None Include="Expected\Ecore\Core\AutoGenPocoExtension\NamespaceImportExtensions.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Include="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -401,6 +414,9 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Serilog" Version="4.2.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -409,6 +425,12 @@
 
     <ItemGroup>
       <Folder Include="Inspector\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

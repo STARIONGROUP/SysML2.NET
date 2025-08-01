@@ -7,13 +7,13 @@
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
 //
-//        http://www.apache.org/licenses/LICENSE-2.0
+//       http://www.apache.org/licenses/LICENSE-2.0
 //
-//    Unless required by applicable law or agreed to in writing, software
-//    distributed under the License is distributed on an "AS IS" BASIS,
-//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//    See the License for the specific language governing permissions and
-//    limitations under the License.
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
 //
 // </copyright>
 // ------------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core
         /// <summary>
         /// Indicates a Membership is not visible outside its owning Namespace.
         /// </summary>
-        Private = 0,
+        Private,
 
         /// <summary>
         /// An intermediate level of visibility between public and private. By default, it is equivalent to
@@ -44,12 +44,12 @@ namespace SysML2.NET.Core
         /// Relationships may be specified to include Memberships with protected visibility in the list of
         /// memberships for a Namespace (e.g., Specialization).
         /// </summary>
-        Protected = 1,
+        Protected,
 
         /// <summary>
         /// Indicates that a Membership is publicly visible outside its owning Namespace.
         /// </summary>
-        Public = 2,
+        Public,
 
     }
 }
