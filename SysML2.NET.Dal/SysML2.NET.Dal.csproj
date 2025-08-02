@@ -20,10 +20,12 @@
        <PackageIcon>cdp4-icon.png</PackageIcon>
        <PackageReadmeFile>README.md</PackageReadmeFile>
        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+       <GenerateSBOM>true</GenerateSBOM>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj" />
+      <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.0" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
