@@ -1,3 +1,4 @@
+# ─── 1. Restore & build ────────────────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
 WORKDIR /src
@@ -10,10 +11,16 @@ COPY SysML2.NET.Viewer SysML2.NET.Viewer
 RUN dotnet restore --configfile Nuget.Config SysML2.NET.Viewer
 RUN dotnet build SysML2.NET.Viewer -c Release -o /app/build
 
+# ─── 2. Publish the Blazor WASM app ─────────────────────────────────────────────
 FROM build AS publish
-RUN dotnet publish SysML2.NET.Viewer -c Release -o /app/publish
+RUN dotnet publish SysML2.NET.Viewer -c Release -o /app/publish \
+    -p:GenerateRuntimeConfigurationFiles=true \
+    -p:GeneratePackageOnBuild=false
 
+# ─── 3. Final container ────────────────────────────────────────────────────────
 FROM nginx:alpine AS final
+
 WORKDIR /usr/share/nginx/html
 COPY --from=publish /app/publish/wwwroot .
+
 COPY SysML2.NET.Viewer/nginx.conf /etc/nginx/nginx.conf
