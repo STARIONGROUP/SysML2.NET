@@ -74,8 +74,13 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
                     Path.Combine(this.rootDirectory, "PrimitiveTypes.xmi")
             };
 
+
+
             this.modelFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
                 "SysML_xmi.uml"));
+
+            Directory.CreateDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, "UML",
+                "_SysML2.NET.Core.AutoGenHtmlDocs"));
 
             this.outputFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "UML", "_SysML2.NET.Core.AutoGenHtmlDocs", "index.html"));
 
