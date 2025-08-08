@@ -27,9 +27,10 @@
 
         <!--
          -->
-        <PackageReference Include="uml4net.HandleBars" Version="5.1.0" />
-        <PackageReference Include="uml4net.xmi" Version="4.0.2" />
-        
+        <PackageReference Include="uml4net.HandleBars" Version="5.2.0" />
+        <PackageReference Include="uml4net.Reporting" Version="5.1.0" />
+        <PackageReference Include="uml4net.xmi" Version="4.0.3" />
+
         <!--
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.HandleBars\uml4net.HandleBars.csproj" />
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.xmi\uml4net.xmi.csproj" />
@@ -149,12 +150,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\core-dictionary-dto-serializer-writer-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\ecore-to-dot.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\ecore-to-html-docs.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\element-dal-factory.hbs">

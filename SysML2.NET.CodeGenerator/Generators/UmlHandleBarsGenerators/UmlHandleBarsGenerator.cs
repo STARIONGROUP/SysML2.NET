@@ -20,9 +20,15 @@
 
 namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 {
+    using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
+    using uml4net.Extensions;
+    using uml4net.SimpleClassifiers;
+    using uml4net.StructuredClassifiers;
     using uml4net.xmi.Readers;
 
     /// <summary>
@@ -44,5 +50,58 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// an awaitable <see cref="Task"/>
         /// </returns>
         public abstract Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory);
+
+        /// <summary>
+        /// Creates a <see cref="HandlebarsPayload"/> based on the provided root <see cref="XmiReaderResult"/>
+        /// </summary>
+        /// <param name="xmiReaderResult">
+        /// the subject <see cref="XmiReaderResult"/>
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="HandlebarsPayload"/>
+        /// </returns>
+        protected static HandlebarsPayload CreateHandlebarsPayload(XmiReaderResult xmiReaderResult)
+        {
+            if (xmiReaderResult == null)
+            {
+                throw new ArgumentNullException(nameof(xmiReaderResult));
+            }
+
+            var enumerations = new List<IEnumeration>();
+            var primitiveTypes = new List<IPrimitiveType>();
+            var dataTypes = new List<IDataType>();
+            var classes = new List<IClass>();
+            var interfaces = new List<IInterface>();
+
+            foreach (var package in xmiReaderResult.Packages)
+            {
+                var containedPackages = package.QueryPackages();
+
+                foreach (var containedPackage in containedPackages)
+                {
+                    enumerations.AddRange(containedPackage.PackagedElement.OfType<IEnumeration>());
+
+                    primitiveTypes.AddRange(containedPackage.PackagedElement.OfType<IPrimitiveType>());
+
+                    dataTypes.AddRange(containedPackage.PackagedElement
+                        .OfType<IDataType>()
+                        .Where(x => x is not IEnumeration && x is not IPrimitiveType));
+
+                    classes.AddRange(containedPackage.PackagedElement.OfType<IClass>());
+
+                    interfaces.AddRange(containedPackage.PackagedElement.OfType<IInterface>());
+                }
+            }
+
+            var orderedEnumerations = enumerations.OrderBy(x => x.Name);
+            var orderedPrimitiveTypes = primitiveTypes.OrderBy(x => x.Name);
+            var orderedDataTypes = dataTypes.OrderBy(x => x.Name);
+            var orderedClasses = classes.OrderBy(x => x.Name);
+            var orderedInterfaces = interfaces.OrderBy(x => x.Name);
+
+            var payload = new HandlebarsPayload(xmiReaderResult.Root, xmiReaderResult.Packages, orderedEnumerations, orderedPrimitiveTypes, orderedDataTypes, orderedClasses, orderedInterfaces);
+
+            return payload;
+        }
     }
 }
