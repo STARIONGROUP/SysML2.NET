@@ -39,6 +39,28 @@ Branch | Build Status
 Master | ![Build Status](https://github.com/STARIONGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=master)
 Development | ![Build Status](https://github.com/STARIONGROUP/SysML2.NET/actions/workflows/CodeQuality.yml/badge.svg?branch=development)
 
+# Software Bill of Materials (SBOM) and Provenance
+
+As part of our commitment to security, transparency, and traceability the docker images and nuget packaves Software Bill of Materials (SBOM), the docker containers also contain Provenance information. These are automatically generated during the build process, providing detailed insights into the components, their licenses, versions, and the integrity of the nugets and docker images. What is Included:
+
+## SBOM (Software Bill of Materials):
+
+  - A comprehensive list of all open-source and third-party components included in the Docker images and nugets.
+  - Tracks software dependencies, licenses, and versions.
+  - Helps with vulnerability management by allowing users to quickly identify potential risks tied to specific components.
+
+## Provenance:
+
+  - A record of the image's origin and build process, providing traceability and assurance regarding the integrity of the image.
+  - This ensures that the image was built using the declared sources and under the specified conditions, helping verify its authenticity and consistency.
+
+## Why SBOM and Provenance?
+
+  - Improved Transparency: Provides full visibility into the open-source and third-party components included in the image.
+  - Security Assurance: Enables easier tracking of vulnerabilities associated with specific components, promoting proactive security measures.
+  - Compliance: Ensures adherence to licensing requirements and simplifies audits of dependencies and build processes.
+  - Image Integrity: Provenance guarantees that the image is built as expected, without unauthorized modifications.
+  
 # License
 
 The SysML2.NET libraries and reference web-application are provided to the community under the Apache License 2.0. The solution contains files that contain information about the SysML2 metamodel which are distributed with the [GNU Lesser General Public License (LGPL) v3.0](https://opensource.org/licenses/LGPL-3.0).
