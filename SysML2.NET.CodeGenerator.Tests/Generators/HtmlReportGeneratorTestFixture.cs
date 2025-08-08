@@ -91,7 +91,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
                              <H1>OMG SysML&#174; Version 2 <a href="https://github.com/Systems-Modeling/SysML-v2-Pilot-Implementation/blob/master/org.omg.sysml/model/SysML_xmi.uml" target="_blank" rel="noopener noreferrer">UML based Meta Model Documentation</a></H1>
                              <H3><a href="https://github.com/Systems-Modeling/SysML-v2-Pilot-Implementation/releases/tag/2025-07" target="_blank" rel="noopener noreferrer">Release 2025-07</a></H3>
                              <p class="small">Powered By <a href="https://www.stariongroup.eu" target="_blank" rel="noopener noreferrer">Starion Group</a>, 2022-2025</p>
-                             <div>
+                             </div>
                              """;
 
             Assert.That(() => this.htmlReportGenerator.GenerateReport(this.modelFileInfo, this.rootDirectoryInfo, false, this.pathMaps,
