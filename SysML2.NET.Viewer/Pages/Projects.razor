@@ -32,7 +32,7 @@ else
         <Columns>
             <RadzenDataGridColumn TItem="Project" Title="Name">
                 <Template Context="project">
-                    <a href="/projects/@project?.Id">@project.Name</a>
+                    <a href="/projects/@project?.Id">@project?.Name</a>
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Project" Property="Description" Title="Description" />
