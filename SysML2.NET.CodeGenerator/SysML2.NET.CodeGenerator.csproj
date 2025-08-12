@@ -22,14 +22,14 @@
 
     <ItemGroup>
         
-        <PackageReference Include="ECoreNetto.HandleBars" Version="7.0.0" />
+        <PackageReference Include="ECoreNetto.HandleBars" Version="7.0.2" />
         <PackageReference Include="Microsoft.CodeAnalysis" Version="4.14.0" />
 
         <!--
          -->
-        <PackageReference Include="uml4net.HandleBars" Version="5.2.0" />
-        <PackageReference Include="uml4net.Reporting" Version="5.1.0" />
-        <PackageReference Include="uml4net.xmi" Version="4.0.3" />
+        <PackageReference Include="uml4net.HandleBars" Version="5.2.1" />
+        <PackageReference Include="uml4net.Reporting" Version="5.1.1" />
+        <PackageReference Include="uml4net.xmi" Version="4.0.4" />
 
         <!--
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.HandleBars\uml4net.HandleBars.csproj" />
