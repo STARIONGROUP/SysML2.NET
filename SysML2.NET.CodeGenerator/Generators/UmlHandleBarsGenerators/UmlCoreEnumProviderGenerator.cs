@@ -158,8 +158,6 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                 .SelectMany(x => x.PackagedElement.OfType<IEnumeration>())
                 .ToList();
 
-            var enumNames = enumerations.Select(x => x.Name);
-
             var enumeration = enumerations.Single(x => x.Name == name);
 
             var generatedProviderEnumeration = template(enumeration);

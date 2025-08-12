@@ -132,16 +132,16 @@ namespace SySML2.NET.REST
         Task<IEnumerable<Tag>> RequestTags(Guid project, Guid? tag, QueryParameters queryParameters, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Requests the <see cref="Element"/>s in a <see cref="Branch"/> of a <see cref="Project"/> from the SysML2 model server REST API
+        /// Requests the <see cref="IElement"/>s in a <see cref="Branch"/> of a <see cref="Project"/> from the SysML2 model server REST API
         /// </summary>
         /// <param name="project">
-        /// The unique identifier of the <see cref="Project"/> that contains the requested <see cref="Element"/>s
+        /// The unique identifier of the <see cref="Project"/> that contains the requested <see cref="IElement"/>s
         /// </param>
         /// <param name="commit">
-        /// The unique identifier of the <see cref="Commit"/> that contains the requested <see cref="Element"/>s
+        /// The unique identifier of the <see cref="Commit"/> that contains the requested <see cref="IElement"/>s
         /// </param>
         /// <param name="element">
-        /// The unique identifier of the <see cref="Element"/> to read. In case this is null all <see cref="Element"/>s are read.
+        /// The unique identifier of the <see cref="IElement"/> to read. In case this is null all <see cref="IElement"/>s are read.
         /// </param>
         /// <param name="queryParameters">
         /// The <see cref="QueryParameters"/> used to filter the response on the SysML2 model server REST API
@@ -150,18 +150,18 @@ namespace SySML2.NET.REST
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
-        /// A list of <see cref="Element"/>s that are contained by the specified <see cref="Project"/> and <see cref="Commit"/>, or a single <see cref="Element"/> if so requested
+        /// A list of <see cref="IElement"/>s that are contained by the specified <see cref="Project"/> and <see cref="Commit"/>, or a single <see cref="IElement"/> if so requested
         /// </returns>
         Task<IEnumerable<IElement>> RequestElements(Guid project, Guid commit, Guid? element, QueryParameters queryParameters, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Requests the root <see cref="Element"/>s in a <see cref="Commit"/> of a <see cref="Project"/> from the SysML2 model server REST API
+        /// Requests the root <see cref="IElement"/>s in a <see cref="Commit"/> of a <see cref="Project"/> from the SysML2 model server REST API
         /// </summary>
         /// <param name="project">
-        /// The unique identifier of the <see cref="Project"/> that contains the requested <see cref="Element"/>s
+        /// The unique identifier of the <see cref="Project"/> that contains the requested <see cref="IElement"/>s
         /// </param>
         /// <param name="commit">
-        /// The unique identifier of the <see cref="Commit"/> that contains the requested <see cref="Element"/>s
+        /// The unique identifier of the <see cref="Commit"/> that contains the requested <see cref="IElement"/>s
         /// </param>
         /// <param name="queryParameters">
         /// The <see cref="QueryParameters"/> used to filter the response on the SysML2 model server REST API
@@ -170,7 +170,7 @@ namespace SySML2.NET.REST
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
-        /// A list of <see cref="Element"/>s that are contained by the specified <see cref="Project"/> and <see cref="Commit"/>, or a single <see cref="Element"/> if so requested
+        /// A list of <see cref="IElement"/>s that are contained by the specified <see cref="Project"/> and <see cref="Commit"/>, or a single <see cref="IElement"/> if so requested
         /// </returns>
         Task<IEnumerable<IElement>> RequestRootElements(Guid project, Guid commit, QueryParameters queryParameters, CancellationToken cancellationToken);
     }

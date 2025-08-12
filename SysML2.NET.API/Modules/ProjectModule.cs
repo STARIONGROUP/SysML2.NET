@@ -94,9 +94,9 @@ namespace SysML2.NET.API.Modules
                     await WriteResultsToResponse(dataItems, SerializationModeKind.JSON, res, jsonWriterOptions,
                         cancellationToken);
                 }
-                catch (TaskCanceledException)
+                catch (TaskCanceledException taskCanceledException)
                 {
-                    this.logger.LogInformation("request cancelled");
+                    this.logger.LogInformation(taskCanceledException, "request cancelled");
                     res.StatusCode = 202;
                 }
                 catch (Exception exception)
@@ -121,9 +121,9 @@ namespace SysML2.NET.API.Modules
                     res.StatusCode = 200;
                     await WriteResultsToResponse(dataItems, SerializationModeKind.JSON, res, jsonWriterOptions, cancellationToken);
                 }
-                catch (TaskCanceledException)
+                catch (TaskCanceledException taskCanceledException)
                 {
-                    this.logger.LogInformation("request cancelled");
+                    this.logger.LogInformation(taskCanceledException,"request cancelled");
                     res.StatusCode = 202;
                 }
                 catch (Exception exception)
@@ -155,9 +155,9 @@ namespace SysML2.NET.API.Modules
                     res.StatusCode = 200;
                     await WriteResultToResponse(project, SerializationModeKind.JSON, res, jsonWriterOptions, cancellationToken);
                 }
-                catch (TaskCanceledException)
+                catch (TaskCanceledException taskCanceledException)
                 {
-                    this.logger.LogInformation("request cancelled");
+                    this.logger.LogInformation(taskCanceledException, "request cancelled");
                     res.StatusCode = 202;
                 }
                 catch (Exception exception)

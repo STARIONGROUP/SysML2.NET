@@ -60,12 +60,6 @@ namespace SysML2.NET.API.Services
                 throw new ArgumentException("This is not a Project", nameof(data));
             }
 
-            var commit = new Commit
-            {
-                Id = Guid.Parse("04969904ad5b4cc695042f0fba68fb3b"),
-
-            };
-
             var branch = new Branch
             {
                 Id = Guid.Parse("2deabbda92a140f5a2ff8af3e12f050e"),

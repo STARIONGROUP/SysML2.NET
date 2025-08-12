@@ -38,10 +38,10 @@ namespace SysML2.NET.Serializer.Json
     public class Serializer : ISerializer
     {
         /// <summary>
-        /// Serialize an <see cref="IEnumerable{IElement}"/> as JSON to a target <see cref="Stream"/>
+        /// Serialize an <see cref="IEnumerable{IData}"/> as JSON to a target <see cref="Stream"/>
         /// </summary>
-        /// <param name="elements">
-        /// The <see cref="IEnumerable{IElement}"/> that shall be serialized
+        /// <param name="dataItems">
+        /// The <see cref="IEnumerable{IElIDataement}"/> that shall be serialized
         /// </param>
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
@@ -52,24 +52,24 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        public void Serialize(IEnumerable<IData> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void Serialize(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
                 writer.WriteStartArray();
 
-                foreach (var element in elements)
+                foreach (var dataItem in dataItems)
                 {
-                    if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
+                    if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
                     {
-                        var serializationAction = ApiSerializationProvider.Provide(element.GetType());
-                        serializationAction(element, writer, serializationModeKind);
+                        var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
+                        serializationAction(dataItem, writer, serializationModeKind);
                         writer.Flush();
                     }
                     else
                     {
-                        var serializationAction = SerializationProvider.Provide(element.GetType());
-                        serializationAction(element, writer, serializationModeKind);
+                        var serializationAction = SerializationProvider.Provide(dataItem.GetType());
+                        serializationAction(dataItem, writer, serializationModeKind);
                         writer.Flush();
                     }
                 }
@@ -81,10 +81,10 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
-        /// Serialize an <see cref="IElement"/> as JSON to a target <see cref="Stream"/>
+        /// Serialize an <see cref="IData"/> as JSON to a target <see cref="Stream"/>
         /// </summary>
-        /// <param name="element">
-        /// The <see cref="IElement"/> that shall be serialized
+        /// <param name="dataItem">
+        /// The <see cref="IData"/> that shall be serialized
         /// </param>
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
@@ -95,30 +95,30 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        public void Serialize(IData element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void Serialize(IData dataItem, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
-                if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
+                if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
                 {
-                    var serializationAction = ApiSerializationProvider.Provide(element.GetType());
-                    serializationAction(element, writer, serializationModeKind);
+                    var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
+                    serializationAction(dataItem, writer, serializationModeKind);
                     writer.Flush();
                 }
                 else 
                 {
-                    var serializationAction = SerializationProvider.Provide(element.GetType());
-                    serializationAction(element, writer, serializationModeKind);
+                    var serializationAction = SerializationProvider.Provide(dataItem.GetType());
+                    serializationAction(dataItem, writer, serializationModeKind);
                     writer.Flush();
                 }
             }
         }
 
         /// <summary>
-        /// Asynchronously serialize an <see cref="IEnumerable{IElement}"/> as JSON to a target <see cref="Stream"/>
+        /// Asynchronously serialize an <see cref="IEnumerable{IData}"/> as JSON to a target <see cref="Stream"/>
         /// </summary>
-        /// <param name="elements">
-        /// The <see cref="IEnumerable{IElement}"/> that shall be serialized
+        /// <param name="dataItems">
+        /// The <see cref="IEnumerable{IData}"/> that shall be serialized
         /// </param>
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
@@ -132,13 +132,13 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public async Task SerializeAsync(IEnumerable<IData> elements, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeAsync(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
                 writer.WriteStartArray();
 
-                foreach (var element in elements)
+                foreach (var element in dataItems)
                 {
                     if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
                     {
@@ -161,10 +161,10 @@ namespace SysML2.NET.Serializer.Json
         }
 
         /// <summary>
-        /// Asynchronously serialize an <see cref="IElement"/> as JSON to a target <see cref="Stream"/>
+        /// Asynchronously serialize an <see cref="IData"/> as JSON to a target <see cref="Stream"/>
         /// </summary>
-        /// <param name="element">
-        /// The <see cref="IElement"/> that shall be serialized
+        /// <param name="dataItem">
+        /// The <see cref="IData"/> that shall be serialized
         /// </param>
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
@@ -178,20 +178,20 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public async Task SerializeAsync(IData element, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeAsync(IData dataItem, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
             using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
             {
-                if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
+                if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
                 {
-                    var serializationAction = ApiSerializationProvider.Provide(element.GetType());
-                    serializationAction(element, writer, serializationModeKind);
+                    var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
+                    serializationAction(dataItem, writer, serializationModeKind);
                     await writer.FlushAsync(cancellationToken);
                 }
                 else
                 {
-                    var serializationAction = SerializationProvider.Provide(element.GetType());
-                    serializationAction(element, writer, serializationModeKind);
+                    var serializationAction = SerializationProvider.Provide(dataItem.GetType());
+                    serializationAction(dataItem, writer, serializationModeKind);
                     await writer.FlushAsync(cancellationToken);
                 }
             }

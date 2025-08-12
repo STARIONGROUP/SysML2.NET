@@ -100,12 +100,12 @@ namespace SysML2.NET.API.Modules
             var dtoTypeName = this.GetType().Name.Replace("Module", string.Empty);
             
             response.ContentType = "application/json";
-            this.logger.LogDebug("start serializing {dtoTypeName} objects to result Stream", dtoTypeName);
+            this.logger.LogDebug("start serializing {DtoTypeName} objects to result Stream", dtoTypeName);
 
             var resultStream = new MemoryStream();
             await this.serializer.SerializeAsync(dataItems, serializationModeKind, resultStream, jsonWriterOptions, cancellationToken);
 
-            this.logger.LogDebug("{dtoTypeName} objects serialized to stream in {elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
+            this.logger.LogDebug("{DtoTypeName} objects serialized to stream in {Elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
 
             resultStream.Seek(0, SeekOrigin.Begin);
 
@@ -140,12 +140,12 @@ namespace SysML2.NET.API.Modules
             var dtoTypeName = this.GetType().Name.Replace("Module", string.Empty);
 
             response.ContentType = "application/json";
-            this.logger.LogDebug("start serializing {dtoTypeName} objects to result Stream", dtoTypeName);
+            this.logger.LogDebug("start serializing {DtoTypeName} objects to result Stream", dtoTypeName);
 
             var resultStream = new MemoryStream();
             await this.serializer.SerializeAsync(dataItem, serializationModeKind, resultStream, jsonWriterOptions, cancellationToken);
 
-            this.logger.LogDebug("{dtoTypeName} object serialized to stream in {elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
+            this.logger.LogDebug("{DtoTypeName} object serialized to stream in {Elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
 
             resultStream.Seek(0, SeekOrigin.Begin);
 
