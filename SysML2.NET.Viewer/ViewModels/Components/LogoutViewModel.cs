@@ -88,7 +88,7 @@ namespace SysML2.NET.Viewer.ViewModels.Components
             {
                 this.cancellationTokenSource.Dispose();
 
-                this.logger.LogError("Logout failed", e);
+                this.logger.LogError(e, "Logout failed");
             }
         }
     }

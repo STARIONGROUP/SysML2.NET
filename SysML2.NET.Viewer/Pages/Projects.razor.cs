@@ -78,11 +78,11 @@ namespace SysML2.NET.Viewer.Pages
         /// </summary>
         protected async Task LoadData()
         {
+            var cts = new CancellationTokenSource();
+
             try
             {
                 isLoading = true;
-
-                var cts = new CancellationTokenSource();
 
                 this.projects = await this.RestClient.RequestProjects(null, null, cts.Token);
 
@@ -94,6 +94,7 @@ namespace SysML2.NET.Viewer.Pages
             }
             finally
             {
+                cts.Dispose();
                 isLoading = false;
                 StateHasChanged();
             }

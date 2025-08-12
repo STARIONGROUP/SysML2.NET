@@ -176,7 +176,7 @@ namespace SysML2.NET.Viewer.ViewModels.Components
                 this.AuthenticationStatusKind = AuthenticationStatusKind.Fail;
                 this.ErrorMessage = e.Message;
 
-                this.logger.LogError("Login Failed", e);
+                this.logger.LogError(e, "Login Failed");
             }
         }
 
