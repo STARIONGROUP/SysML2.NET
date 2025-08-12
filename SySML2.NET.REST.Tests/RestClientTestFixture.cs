@@ -38,7 +38,7 @@ namespace SySML2.NET.REST.Tests
         
         private CancellationTokenSource cancellationTokenSource;
 
-        private IRestClient restClient;
+        private RestClient restClient;
         
         [SetUp]
 		public void Setup()

@@ -112,13 +112,11 @@ ol ol {
     text-decoration: none;
     transition: all .3s ease-out;
     letter-spacing: 1px;
-	/*text-transform: uppercase;*/
 	font-size: 6pt;
 }
 
 .rectangle-list a{
     position: relative;
-    /*text-transform: uppercase;*/
     padding: .4em .4em .4em .8em;
     *padding: .4em;
     margin: .5em 0 .5em 2.5em;
@@ -178,12 +176,12 @@ ul.rectangle-list a:before{
     left: -1em;
     top: 50%;
     margin-top: -.5em;
-    transition: all .3s ease-out;               
+    transition: all .3s ease-out;
 }
 
 .rectangle-list a:hover:after{
     left: -.5em;
-    border-left-color: #BFD9FF;             
+    border-left-color: #BFD9FF;
 }
 
 h2 {

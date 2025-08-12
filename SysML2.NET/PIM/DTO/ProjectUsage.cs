@@ -41,7 +41,7 @@ namespace SysML2.NET.PIM.DTO
         public Guid UsedCommit { get; set; }
 
         /// <summary>
-        /// Gets or sets the reference to the <see cref="Projec"/> of the <see cref="Project"/> being used.
+        /// Gets or sets the reference to the <see cref="Project"/> of the <see cref="Project"/> being used.
         /// </summary>
         public Guid UsedProject { get; set; }
     }

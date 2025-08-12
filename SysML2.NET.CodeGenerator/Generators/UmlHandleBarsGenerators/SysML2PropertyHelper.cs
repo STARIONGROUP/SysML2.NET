@@ -54,7 +54,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var sb = new StringBuilder();
                 sb.Append(property.Visibility.ToString().ToLower());
-                sb.Append(" ");
+                sb.Append(' ');
 
                 if (property.RedefinedProperty.Any())
                 {
@@ -66,12 +66,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (property.QueryIsReferenceProperty())
                     {
                         sb.Append($"List<Guid>");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                     else
                     {
                         sb.Append($"List<{property.QueryCSharpTypeName()}>");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                 }
                 else
@@ -79,19 +79,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (property.QueryIsReferenceProperty())
                     {
                         sb.Append($"Guid");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                     else
                     {
                         sb.Append($"{property.QueryCSharpTypeName()}");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                 }
 
                 var propertyName = property.Name.Trim().CapitalizeFirstLetter();
 
                 sb.Append(propertyName);
-                sb.Append(" ");
+                sb.Append(' ');
 
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
@@ -122,7 +122,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (!isRedefinedByProperty)
                 {
                     sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
-                    sb.Append(" ");
+                    sb.Append(' ');
                 }
 
                 if (property.RedefinedProperty.Any())
@@ -135,12 +135,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (property.QueryIsReferenceProperty())
                     {
                         sb.Append($"List<Guid>");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                     else
                     {
                         sb.Append($"List<{property.QueryCSharpTypeName()}>");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                 }
                 else
@@ -148,12 +148,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (property.QueryIsReferenceProperty())
                     {
                         sb.Append($"Guid");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                     else
                     {
                         sb.Append($"{property.QueryCSharpTypeName()}");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                 }
 
@@ -167,7 +167,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var propertyName = property.Name.Trim().CapitalizeFirstLetter();
 
                 sb.Append(propertyName);
-                sb.Append(" ");
+                sb.Append(' ');
 
                 if (!isRedefinedByProperty)
                 {
@@ -192,7 +192,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     sb.AppendLine("{");
                     sb.AppendLine($"    get => throw new InvalidOperationException(\"Redefined by property I{owningClass.Name}.{redefiningProperty.Name.CapitalizeFirstLetter()}\");");
                     sb.AppendLine($"    set => throw new InvalidOperationException(\"Redefined by property I{owningClass.Name}.{redefiningProperty.Name.CapitalizeFirstLetter()}\");");
-                    sb.Append("}");
+                    sb.Append('}');
                 }
 
                 writer.WriteSafeString(sb + Environment.NewLine);

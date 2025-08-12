@@ -409,7 +409,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             HtmlNodeCollection tryGetNodes = document.DocumentNode.SelectNodes("./*|./text()");
 
-            if (tryGetNodes == null || !tryGetNodes.Any())
+            if (tryGetNodes == null || tryGetNodes.Count == 0)
             {
                 return html;
             }

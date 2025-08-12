@@ -64,7 +64,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 throw new InvalidOperationException($"The BranchDeserializer can only be used to deserialize objects of type Branch, a {@type.GetString()} was provided");
             }
 
-            logger.Log(LogLevel.Trace, "start deserialization: Branch");
+            logger.LogTrace("start deserialization: Branch");
 
             var dtoInstance = new SysML2.NET.PIM.DTO.Branch();
 
@@ -88,7 +88,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else 
             {
-                logger.LogDebug($"the alias Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug("the alias Json property was not found in the Branch: {Identifier}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
@@ -97,7 +97,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the created Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug("the created Json property was not found in the Branch: {Identifier}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))
@@ -110,14 +110,14 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the name Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug("the name Json property was not found in the Branch: {Identifier}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("head"u8, out JsonElement headProperty))
             {
                 if (headProperty.ValueKind == JsonValueKind.Null)
                 {
-                    logger.LogWarning($"the head Json property was null which should not be allowed: Branch {dtoInstance.Id}");
+                    logger.LogWarning("the head Json property was null which should not be allowed: Branch {Identifier}", dtoInstance.Id);
                 }
                 else
                 {
@@ -133,7 +133,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the head Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug("the head Json property was not found in the Branch: {Identifier}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("name"u8, out JsonElement nameProperty))
@@ -146,7 +146,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the name Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug("the name Json property was not found in the Branch: {Identifier}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningProject"u8, out JsonElement owningProjectProperty))
@@ -169,7 +169,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the owningProject Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug("the owningProject Json property was not found in the Branch: {Identifier}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
@@ -178,10 +178,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the resourceIdentifier Json property was not found in the Branch: {dtoInstance.Id}");
+                logger.LogDebug("the resourceIdentifier Json property was not found in the Branch: {Identifier}", dtoInstance.Id);
             }
 
-            logger.Log(LogLevel.Trace, "finish deserialization: Branch");
+            logger.LogTrace("finish deserialization: Branch");
 
             return dtoInstance;
         }

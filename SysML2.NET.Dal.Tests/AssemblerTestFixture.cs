@@ -33,7 +33,7 @@ namespace SysML2.NET.Dal.Tests
 	[TestFixture]
 	public class AssemblerTestFixture
 	{
-		private IAssembler assembler;
+		private Assembler assembler;
 
         private Lazy<Core.POCO.IElement> lazyPoco;
 

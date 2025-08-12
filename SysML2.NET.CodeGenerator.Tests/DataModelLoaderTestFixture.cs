@@ -44,7 +44,7 @@ namespace SysML2.NET.CodeGenerator.Tests
             
             var classes = ePacakge.EClassifiers.OfType<EClass>();
             
-            var rootClass = classes.Single(x => !x.ESuperTypes.Any());
+            var rootClass = classes.Single(x => x.ESuperTypes.Count == 0);
 
             Assert.That(rootClass.Name, Is.EqualTo("Element"));
 

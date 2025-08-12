@@ -112,6 +112,6 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// <summary>
         /// Gets the version of the reporting library
         /// </summary>
-        public string Version => Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+        public static string Version => Assembly.GetExecutingAssembly().GetName().Version?.ToString();
     }
 }
