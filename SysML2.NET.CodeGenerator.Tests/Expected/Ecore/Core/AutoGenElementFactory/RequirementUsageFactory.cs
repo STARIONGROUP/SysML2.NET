@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="AnnotatingElementFactory.cs" company="Starion Group S.A.">
+// <copyright file="RequirementUsageFactory.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -27,39 +27,54 @@ namespace SysML2.NET.Dal
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="AnnotatingElementFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.AnnotatingElement"/> based on a <see cref="Core.DTO.AnnotatingElement"/>
+    /// The purpose of the <see cref="RequirementUsageFactory"/> is to create a new instance of a
+    /// <see cref="Core.POCO.RequirementUsage"/> based on a <see cref="Core.DTO.RequirementUsage"/>
     /// </summary>
-    public class AnnotatingElementFactory
+    public class RequirementUsageFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.AnnotatingElement"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.RequirementUsage"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.AnnotatingElement"/>
+        /// The instance of the <see cref="Core.DTO.RequirementUsage"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.AnnotatingElement"/>
+        /// an instance of <see cref="Core.POCO.RequirementUsage"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.AnnotatingElement Create(Core.DTO.AnnotatingElement dto)
+        public Core.POCO.RequirementUsage Create(Core.DTO.RequirementUsage dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.AnnotatingElement
+            var poco = new Core.POCO.RequirementUsage
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
                 DeclaredName = dto.DeclaredName,
                 DeclaredShortName = dto.DeclaredShortName,
+                Direction = dto.Direction,
                 ElementId = dto.ElementId,
+                IsAbstract = dto.IsAbstract,
+                IsComposite = dto.IsComposite,
+                IsConstant = dto.IsConstant,
+                IsDerived = dto.IsDerived,
+                IsEnd = dto.IsEnd,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
+                IsIndividual = dto.IsIndividual,
+                IsOrdered = dto.IsOrdered,
+                IsPortion = dto.IsPortion,
+                IsSufficient = dto.IsSufficient,
+                IsUnique = dto.IsUnique,
+                IsVariable = dto.IsVariable,
+                IsVariation = dto.IsVariation,
+                PortionKind = dto.PortionKind,
+                ReqId = dto.ReqId,
             };
 
             return poco;

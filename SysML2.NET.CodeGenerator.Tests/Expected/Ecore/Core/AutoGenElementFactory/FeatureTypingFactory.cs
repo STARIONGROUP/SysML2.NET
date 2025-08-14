@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="NamespaceImportFactory.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="FeatureTypingFactory.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -27,32 +27,32 @@ namespace SysML2.NET.Dal
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="NamespaceImportFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.NamespaceImport"/> based on a <see cref="Core.DTO.NamespaceImport"/>
+    /// The purpose of the <see cref="FeatureTypingFactory"/> is to create a new instance of a
+    /// <see cref="Core.POCO.FeatureTyping"/> based on a <see cref="Core.DTO.FeatureTyping"/>
     /// </summary>
-    public class NamespaceImportFactory
+    public class FeatureTypingFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.NamespaceImport"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.FeatureTyping"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.NamespaceImport"/>
+        /// The instance of the <see cref="Core.DTO.FeatureTyping"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.NamespaceImport"/>
+        /// an instance of <see cref="Core.POCO.FeatureTyping"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.NamespaceImport Create(Core.DTO.NamespaceImport dto)
+        public Core.POCO.FeatureTyping Create(Core.DTO.FeatureTyping dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.NamespaceImport
+            var poco = new Core.POCO.FeatureTyping
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
@@ -61,9 +61,6 @@ namespace SysML2.NET.Dal
                 ElementId = dto.ElementId,
                 IsImplied = dto.IsImplied,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsImportAll = dto.IsImportAll,
-                IsRecursive = dto.IsRecursive,
-                Visibility = dto.Visibility,
             };
 
             return poco;

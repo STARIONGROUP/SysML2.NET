@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="CommentFactory.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="FlowFactory.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -27,41 +27,51 @@ namespace SysML2.NET.Dal
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="CommentFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Comment"/> based on a <see cref="Core.DTO.Comment"/>
+    /// The purpose of the <see cref="FlowFactory"/> is to create a new instance of a
+    /// <see cref="Core.POCO.Flow"/> based on a <see cref="Core.DTO.Flow"/>
     /// </summary>
-    public class CommentFactory
+    public class FlowFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Comment"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Flow"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Comment"/>
+        /// The instance of the <see cref="Core.DTO.Flow"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Comment"/>
+        /// an instance of <see cref="Core.POCO.Flow"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Comment Create(Core.DTO.Comment dto)
+        public Core.POCO.Flow Create(Core.DTO.Flow dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Comment
+            var poco = new Core.POCO.Flow
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
-                Body = dto.Body,
                 DeclaredName = dto.DeclaredName,
                 DeclaredShortName = dto.DeclaredShortName,
+                Direction = dto.Direction,
                 ElementId = dto.ElementId,
+                IsAbstract = dto.IsAbstract,
+                IsComposite = dto.IsComposite,
+                IsConstant = dto.IsConstant,
+                IsDerived = dto.IsDerived,
+                IsEnd = dto.IsEnd,
+                IsImplied = dto.IsImplied,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
-                Locale = dto.Locale,
+                IsOrdered = dto.IsOrdered,
+                IsPortion = dto.IsPortion,
+                IsSufficient = dto.IsSufficient,
+                IsUnique = dto.IsUnique,
+                IsVariable = dto.IsVariable,
             };
 
             return poco;

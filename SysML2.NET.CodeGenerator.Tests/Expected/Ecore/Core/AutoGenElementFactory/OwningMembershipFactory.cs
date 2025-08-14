@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="AnnotatingElementFactory.cs" company="Starion Group S.A.">
+// <copyright file="OwningMembershipFactory.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -27,39 +27,43 @@ namespace SysML2.NET.Dal
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="AnnotatingElementFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.AnnotatingElement"/> based on a <see cref="Core.DTO.AnnotatingElement"/>
+    /// The purpose of the <see cref="OwningMembershipFactory"/> is to create a new instance of a
+    /// <see cref="Core.POCO.OwningMembership"/> based on a <see cref="Core.DTO.OwningMembership"/>
     /// </summary>
-    public class AnnotatingElementFactory
+    public class OwningMembershipFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.AnnotatingElement"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.OwningMembership"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.AnnotatingElement"/>
+        /// The instance of the <see cref="Core.DTO.OwningMembership"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.AnnotatingElement"/>
+        /// an instance of <see cref="Core.POCO.OwningMembership"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.AnnotatingElement Create(Core.DTO.AnnotatingElement dto)
+        public Core.POCO.OwningMembership Create(Core.DTO.OwningMembership dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.AnnotatingElement
+            var poco = new Core.POCO.OwningMembership
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
                 DeclaredName = dto.DeclaredName,
                 DeclaredShortName = dto.DeclaredShortName,
                 ElementId = dto.ElementId,
+                IsImplied = dto.IsImplied,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
+                MemberName = dto.MemberName,
+                MemberShortName = dto.MemberShortName,
+                Visibility = dto.Visibility,
             };
 
             return poco;

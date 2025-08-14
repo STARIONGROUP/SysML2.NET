@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="ConnectorFactory.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="TextualRepresentationFactory.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -27,51 +27,41 @@ namespace SysML2.NET.Dal
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="ConnectorFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Connector"/> based on a <see cref="Core.DTO.Connector"/>
+    /// The purpose of the <see cref="TextualRepresentationFactory"/> is to create a new instance of a
+    /// <see cref="Core.POCO.TextualRepresentation"/> based on a <see cref="Core.DTO.TextualRepresentation"/>
     /// </summary>
-    public class ConnectorFactory
+    public class TextualRepresentationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Connector"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.TextualRepresentation"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Connector"/>
+        /// The instance of the <see cref="Core.DTO.TextualRepresentation"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Connector"/>
+        /// an instance of <see cref="Core.POCO.TextualRepresentation"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Connector Create(Core.DTO.Connector dto)
+        public Core.POCO.TextualRepresentation Create(Core.DTO.TextualRepresentation dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Connector
+            var poco = new Core.POCO.TextualRepresentation
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
+                Body = dto.Body,
                 DeclaredName = dto.DeclaredName,
                 DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
                 ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImplied = dto.IsImplied,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
+                Language = dto.Language,
             };
 
             return poco;

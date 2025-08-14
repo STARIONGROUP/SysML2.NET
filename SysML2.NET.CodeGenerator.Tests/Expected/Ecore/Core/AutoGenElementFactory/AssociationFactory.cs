@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="AnnotatingElementFactory.cs" company="Starion Group S.A.">
+// <copyright file="AssociationFactory.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -27,39 +27,42 @@ namespace SysML2.NET.Dal
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="AnnotatingElementFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.AnnotatingElement"/> based on a <see cref="Core.DTO.AnnotatingElement"/>
+    /// The purpose of the <see cref="AssociationFactory"/> is to create a new instance of a
+    /// <see cref="Core.POCO.Association"/> based on a <see cref="Core.DTO.Association"/>
     /// </summary>
-    public class AnnotatingElementFactory
+    public class AssociationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.AnnotatingElement"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Association"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.AnnotatingElement"/>
+        /// The instance of the <see cref="Core.DTO.Association"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.AnnotatingElement"/>
+        /// an instance of <see cref="Core.POCO.Association"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.AnnotatingElement Create(Core.DTO.AnnotatingElement dto)
+        public Core.POCO.Association Create(Core.DTO.Association dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.AnnotatingElement
+            var poco = new Core.POCO.Association
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
                 DeclaredName = dto.DeclaredName,
                 DeclaredShortName = dto.DeclaredShortName,
                 ElementId = dto.ElementId,
+                IsAbstract = dto.IsAbstract,
+                IsImplied = dto.IsImplied,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
+                IsSufficient = dto.IsSufficient,
             };
 
             return poco;

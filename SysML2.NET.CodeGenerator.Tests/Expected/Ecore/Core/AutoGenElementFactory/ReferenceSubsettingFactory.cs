@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="AnnotationFactory.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="ReferenceSubsettingFactory.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -27,32 +27,32 @@ namespace SysML2.NET.Dal
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="AnnotationFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Annotation"/> based on a <see cref="Core.DTO.Annotation"/>
+    /// The purpose of the <see cref="ReferenceSubsettingFactory"/> is to create a new instance of a
+    /// <see cref="Core.POCO.ReferenceSubsetting"/> based on a <see cref="Core.DTO.ReferenceSubsetting"/>
     /// </summary>
-    public class AnnotationFactory
+    public class ReferenceSubsettingFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Annotation"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.ReferenceSubsetting"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Annotation"/>
+        /// The instance of the <see cref="Core.DTO.ReferenceSubsetting"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Annotation"/>
+        /// an instance of <see cref="Core.POCO.ReferenceSubsetting"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Annotation Create(Core.DTO.Annotation dto)
+        public Core.POCO.ReferenceSubsetting Create(Core.DTO.ReferenceSubsetting dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Annotation
+            var poco = new Core.POCO.ReferenceSubsetting
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,

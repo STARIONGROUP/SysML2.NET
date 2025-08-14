@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="DefinitionFactory.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="SubclassificationFactory.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -27,42 +27,40 @@ namespace SysML2.NET.Dal
     using System;
 
     /// <summary>
-    /// The purpose of the <see cref="DefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Definition"/> based on a <see cref="Core.DTO.Definition"/>
+    /// The purpose of the <see cref="SubclassificationFactory"/> is to create a new instance of a
+    /// <see cref="Core.POCO.Subclassification"/> based on a <see cref="Core.DTO.Subclassification"/>
     /// </summary>
-    public class DefinitionFactory
+    public class SubclassificationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Definition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Subclassification"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Definition"/>
+        /// The instance of the <see cref="Core.DTO.Subclassification"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Definition"/>
+        /// an instance of <see cref="Core.POCO.Subclassification"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Definition Create(Core.DTO.Definition dto)
+        public Core.POCO.Subclassification Create(Core.DTO.Subclassification dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Definition
+            var poco = new Core.POCO.Subclassification
             {
                 Id = dto.Id,
                 AliasIds = dto.AliasIds,
                 DeclaredName = dto.DeclaredName,
                 DeclaredShortName = dto.DeclaredShortName,
                 ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
+                IsImplied = dto.IsImplied,
                 IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
             };
 
             return poco;
