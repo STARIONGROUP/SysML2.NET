@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IDependency.cs" company="Starion Group S.A.">
+// <copyright file="IFeatureTyping.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,24 +31,30 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Dependency is a Relationship that indicates that one or more client Elements require one more
-    /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
-    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
+    /// FeatureTyping is Specialization in which the specific Type is a Feature. This means the set of
+    /// instances of the (specific) typedFeature is a subset of the set of instances of the (general) type.
+    /// In the simplest case, the type is a Classifier, whereupon the typedFeature has values that are
+    /// instances of the Classifier.
     /// </summary>
-    public partial interface IDependency : IRelationship
+    public partial interface IFeatureTyping : ISpecialization
     {
         /// <summary>
-        /// The Element or Elements dependent on the supplier Elements.
+        /// Queries the derived property OwningFeature
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<IElement> Client { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Feature QueryOwningFeature();
 
         /// <summary>
-        /// The Element or Elements on which the client Elements depend in some respect.
+        /// The Type that is being applied by this FeatureTyping.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<IElement> Supplier { get; set; }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Type Type { get; set; }
+
+        /// <summary>
+        /// The Feature that has a type determined by this FeatureTyping.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Feature TypedFeature { get; set; }
 
     }
 }

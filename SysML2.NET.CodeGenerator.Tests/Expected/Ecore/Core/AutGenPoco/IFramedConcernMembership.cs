@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="IComment.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="IFramedConcernMembership.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,23 +31,22 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Comment is an AnnotatingElement whose body in some way describes its annotatedElements.
+    /// A FramedConcernMembership is a RequirementConstraintMembership for a framed ConcernUsage of a
+    /// RequirementDefinition or RequirementUsage.kind = RequirementConstraintKind::requirement
     /// </summary>
-    public partial interface IComment : IAnnotatingElement
+    public partial interface IFramedConcernMembership : IRequirementConstraintMembership
     {
         /// <summary>
-        /// The annotation text for the Comment.
+        /// Queries the derived property OwnedConcern
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        string Body { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        ConcernUsage QueryOwnedConcern();
 
         /// <summary>
-        /// Identification of the language of the body text and, optionally, the region and/or encoding. The
-        /// format shall be a POSIX locale conformant to ISO/IEC 15897, with the format
-        /// [language[_territory][.codeset][@modifier]].
+        /// Queries the derived property ReferencedConcern
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        string Locale { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        ConcernUsage QueryReferencedConcern();
 
     }
 }

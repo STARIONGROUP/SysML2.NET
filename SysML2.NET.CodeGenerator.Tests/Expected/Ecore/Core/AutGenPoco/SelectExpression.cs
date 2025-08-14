@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="Connector.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="SelectExpression.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,34 +31,16 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
-    /// which they are used (domain of the Connector). The associations of the Connector restrict what kinds
-    /// of things might be linked. The Connector further restricts these links to be between values of
-    /// Features on instances of its domain.relatedFeature = connectorEnd.ownedReferenceSubsetting->   
-    /// select(s | s <> null).subsettedFeaturerelatedFeature->forAll(f |     if featuringType->isEmpty()
-    /// then f.isFeaturedWithin(null)    else featuringType->forAll(t | f.isFeaturedWithin(t))   
-    /// endif)sourceFeature =     if relatedFeature->isEmpty() then null     else relatedFeature->first()   
-    ///  endiftargetFeature =    if relatedFeature->size() < 2 then OrderedSet{}    else        
-    /// relatedFeature->            subSequence(2, relatedFeature->size())->            asOrderedSet()   
-    /// endifnot isAbstract implies relatedFeature->size() >=
-    /// 2specializesFromLibrary('Links::links')association->exists(oclIsKindOf(AssociationStructure))
-    /// implies    specializesFromLibrary('Objects::linkObjects')connectorEnds->size() = 2
-    /// andassociation->exists(oclIsKindOf(AssociationStructure)) implies   
-    /// specializesFromLibrary('Objects::binaryLinkObjects')connectorEnd->size() = 2 implies   
-    /// specializesFromLibrary('Links::binaryLinks')connectorEnds->size() > 2 implies    not
-    /// specializesFromLibrary('Links::BinaryLink')let commonFeaturingTypes : OrderedSet(Type) =    
-    /// relatedFeature->closure(featuringType)->select(t |         relatedFeature->forAll(f |
-    /// f.isFeaturedWithin(t))    ) inlet nearestCommonFeaturingTypes : OrderedSet(Type) =   
-    /// commonFeaturingTypes->reject(t1 |         commonFeaturingTypes->exists(t2 |             t2 <> t1 and
-    /// t2->closure(featuringType)->contains(t1)    )) inif nearestCommonFeaturingTypes->isEmpty() then
-    /// nullelse nearestCommonFeaturingTypes->first()endif
+    /// A SelectExpression is an OperatorExpression whose operator is "select", which resolves to the
+    /// Function ControlFunctions::select from the Kernel Functions Library.operator =
+    /// 'select'arguments->notEmpty() implies    result.specializes(arguments->first().result)
     /// </summary>
-    public partial class Connector : IConnector
+    public partial class SelectExpression : ISelectExpression
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Connector"/> class.
+        /// Initializes a new instance of the <see cref="SelectExpression"/> class.
         /// </summary>
-        public Connector()
+        public SelectExpression()
         {
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
@@ -66,17 +48,13 @@ namespace SysML2.NET.Core.POCO
             this.IsConstant = false;
             this.IsDerived = false;
             this.IsEnd = false;
-            this.IsImplied = false;
             this.IsImpliedIncluded = false;
             this.IsOrdered = false;
             this.IsPortion = false;
             this.IsSufficient = false;
             this.IsUnique = true;
             this.IsVariable = false;
-            this.OwnedRelatedElement = new List<IElement>();
             this.OwnedRelationship = new List<IRelationship>();
-            this.Source = new List<IElement>();
-            this.Target = new List<IElement>();
         }
 
         /// <summary>
@@ -92,12 +70,21 @@ namespace SysML2.NET.Core.POCO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
-        /// Queries the derived property Association
+        /// Queries the derived property Argument
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Association> QueryAssociation()
+        public List<Expression> QueryArgument()
         {
-            throw new NotImplementedException("Derived property Association not yet supported");
+            throw new NotImplementedException("Derived property Argument not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property Behavior
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Behavior> QueryBehavior()
+        {
+            throw new NotImplementedException("Derived property Behavior not yet supported");
         }
 
         /// <summary>
@@ -107,15 +94,6 @@ namespace SysML2.NET.Core.POCO
         public List<Feature> QueryChainingFeature()
         {
             throw new NotImplementedException("Derived property ChainingFeature not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property ConnectorEnd
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryConnectorEnd()
-        {
-            throw new NotImplementedException("Derived property ConnectorEnd not yet supported");
         }
 
         /// <summary>
@@ -141,15 +119,6 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public string DeclaredShortName { get; set; }
-
-        /// <summary>
-        /// Queries the derived property DefaultFeaturingType
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Type QueryDefaultFeaturingType()
-        {
-            throw new NotImplementedException("Derived property DefaultFeaturingType not yet supported");
-        }
 
         /// <summary>
         /// Queries the derived property DifferencingType
@@ -247,6 +216,15 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property Function
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Function QueryFunction()
+        {
+            throw new NotImplementedException("Derived property Function not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property ImportedMembership
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
@@ -280,6 +258,15 @@ namespace SysML2.NET.Core.POCO
         public List<Feature> QueryInput()
         {
             throw new NotImplementedException("Derived property Input not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property InstantiatedType
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Type QueryInstantiatedType()
+        {
+            throw new NotImplementedException("Derived property InstantiatedType not yet supported");
         }
 
         /// <summary>
@@ -342,13 +329,6 @@ namespace SysML2.NET.Core.POCO
         public bool IsEnd { get; set; }
 
         /// <summary>
-        /// Whether this Relationship was generated by tooling to meet semantic rules, rather than being
-        /// directly created by a modeler.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsImplied { get; set; }
-
-        /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
         /// Element. This property may be true, even if there are not actually any ownedRelationships with
         /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
@@ -365,6 +345,15 @@ namespace SysML2.NET.Core.POCO
         public bool QueryIsLibraryElement()
         {
             throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property IsModelLevelEvaluable
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool QueryIsModelLevelEvaluable()
+        {
+            throw new NotImplementedException("Derived property IsModelLevelEvaluable not yet supported");
         }
 
         /// <summary>
@@ -448,6 +437,22 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property Name not yet supported");
         }
+
+        /// <summary>
+        /// Queries the derived property Operand
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
+        public List<Expression> QueryOperand()
+        {
+            throw new NotImplementedException("Derived property Operand not yet supported");
+        }
+
+        /// <summary>
+        /// An operator symbol that names a corresponding Function from one of the standard packages from the
+        /// Kernel Function Library .
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Operator { get; set; }
 
         /// <summary>
         /// Queries the derived property Output
@@ -612,12 +617,6 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The relatedElements of this Relationship that are owned by the Relationship.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
-        public List<IElement> OwnedRelatedElement { get; set; }
-
-        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -705,12 +704,6 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// The relatedElement of this Relationship that owns the Relationship, if any.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement OwningRelatedElement { get; set; }
-
-        /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -726,6 +719,15 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property Parameter
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Feature> QueryParameter()
+        {
+            throw new NotImplementedException("Derived property Parameter not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property QualifiedName
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -735,21 +737,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property RelatedElement
+        /// Queries the derived property Result
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryRelatedElement()
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Feature QueryResult()
         {
-            throw new NotImplementedException("Derived property RelatedElement not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property RelatedFeature
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryRelatedFeature()
-        {
-            throw new NotImplementedException("Derived property RelatedFeature not yet supported");
+            throw new NotImplementedException("Derived property Result not yet supported");
         }
 
         /// <summary>
@@ -759,36 +752,6 @@ namespace SysML2.NET.Core.POCO
         public string QueryShortName()
         {
             throw new NotImplementedException("Derived property ShortName not yet supported");
-        }
-
-        /// <summary>
-        /// The relatedElements from which this Relationship is considered to be directed.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> Source { get; set; }
-
-        /// <summary>
-        /// Queries the derived property SourceFeature
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Feature QuerySourceFeature()
-        {
-            throw new NotImplementedException("Derived property SourceFeature not yet supported");
-        }
-
-        /// <summary>
-        /// The relatedElements to which this Relationship is considered to be directed.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> Target { get; set; }
-
-        /// <summary>
-        /// Queries the derived property TargetFeature
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryTargetFeature()
-        {
-            throw new NotImplementedException("Derived property TargetFeature not yet supported");
         }
 
         /// <summary>

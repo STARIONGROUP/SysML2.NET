@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="IAnnotation.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="IOwningMembership.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,45 +31,35 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An Annotation is a Relationship between an AnnotatingElement and the Element that is annotated by
-    /// that AnnotatingElement.(owningAnnotatedElement <> null) = (ownedAnnotatingElement <>
-    /// null)ownedAnnotatingElement <> null xor owningAnnotatingElement <> nullownedAnnotatingElement =   
-    /// let ownedAnnotatingElements : Sequence(AnnotatingElement) =        
-    /// ownedRelatedElement->selectByKind(AnnotatingElement) in    if ownedAnnotatingElements->isEmpty()
-    /// then null    else ownedAnnotatingElements->first()    endifannotatingElement =    if
-    /// ownedAnnotatingElement <> null then ownedAnnotatingElement    else owningAnnotatingElement    endif
+    /// An OwningMembership is a Membership that owns its memberElement as a ownedRelatedElement. The
+    /// ownedMemberElement becomes an ownedMember of the membershipOwningNamespace.ownedMemberName =
+    /// ownedMemberElement.nameownedMemberShortName = ownedMemberElement.shortName
     /// </summary>
-    public partial interface IAnnotation : IRelationship
+    public partial interface IOwningMembership : IMembership
     {
         /// <summary>
-        /// The Element that is annotated by the annotatingElement of this Annotation.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        IElement AnnotatedElement { get; set; }
-
-        /// <summary>
-        /// Queries the derived property AnnotatingElement
+        /// Queries the derived property OwnedMemberElement
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        AnnotatingElement QueryAnnotatingElement();
+        IElement QueryOwnedMemberElement();
 
         /// <summary>
-        /// Queries the derived property OwnedAnnotatingElement
+        /// Queries the derived property OwnedMemberElementId
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        AnnotatingElement QueryOwnedAnnotatingElement();
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        string QueryOwnedMemberElementId();
 
         /// <summary>
-        /// Queries the derived property OwningAnnotatedElement
+        /// Queries the derived property OwnedMemberName
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        IElement QueryOwningAnnotatedElement();
+        string QueryOwnedMemberName();
 
         /// <summary>
-        /// Queries the derived property OwningAnnotatingElement
+        /// Queries the derived property OwnedMemberShortName
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        AnnotatingElement QueryOwningAnnotatingElement();
+        string QueryOwnedMemberShortName();
 
     }
 }

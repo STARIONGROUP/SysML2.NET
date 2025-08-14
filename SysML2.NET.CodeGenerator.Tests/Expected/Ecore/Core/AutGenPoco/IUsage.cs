@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="IDefinition.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="IUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,47 +31,62 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Definition is a Classifier of Usages. The actual kinds of Definition that may appear in a model
-    /// are given by the subclasses of Definition (possibly as extended with user-defined
-    /// SemanticMetadata).Normally, a Definition has owned Usages that model features of the thing being
-    /// defined. A Definition may also have other Definitions nested in it, but this has no semantic
-    /// significance, other than the nested scoping resulting from the Definition being considered as a
-    /// Namespace for any nested Definitions.However, if a Definition has isVariation = true, then it
-    /// represents a variation point Definition. In this case, all of its members must be variant Usages,
-    /// related to the Definition by VariantMembership Relationships. Rather than being features of the
-    /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
-    /// an abstract Usage of the variation point Definition.isVariation implies
-    /// ownedFeatureMembership->isEmpty()variant = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)isVariation implies    not
-    /// ownedSpecialization.specific->exists(        oclIsKindOf(Definition) and       
-    /// oclAsType(Definition).isVariation)usage = feature->selectByKind(Usage)directedUsage =
-    /// directedFeature->selectByKind(Usage)ownedUsage = ownedFeature->selectByKind(Usage)ownedAttribute =
-    /// ownedUsage->selectByKind(AttributeUsage)ownedReference =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedEnumeration =
-    /// ownedUsage->selectByKind(EnumerationUsage)ownedOccurrence =
-    /// ownedUsage->selectByKind(OccurrenceUsage)ownedItem = ownedUsage->selectByKind(ItemUsage)ownedPart =
-    /// ownedUsage->selectByKind(PartUsage)ownedPort = ownedUsage->selectByKind(PortUsage)ownedConnection =
-    /// ownedUsage->selectByKind(ConnectorAsUsage)ownedFlow =
-    /// ownedUsage->selectByKind(FlowConnectionUsage)ownedInterface =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedAllocation =
-    /// ownedUsage->selectByKind(AllocationUsage)ownedAction =
-    /// ownedUsage->selectByKind(ActionUsage)ownedState =
-    /// ownedUsage->selectByKind(StateUsage)ownedTransition =
-    /// ownedUsage->selectByKind(TransitionUsage)ownedCalculation =
-    /// ownedUsage->selectByKind(CalculationUsage)ownedConstraint =
-    /// ownedUsage->selectByKind(ConstraintUsage)ownedRequirement =
-    /// ownedUsage->selectByKind(RequirementUsage)ownedConcern =
-    /// ownedUsage->selectByKind(ConcernUsage)ownedCase =
-    /// ownedUsage->selectByKind(CaseUsage)ownedAnalysisCase =
-    /// ownedUsage->selectByKind(AnalysisCaseUsage)ownedVerificationCase =
-    /// ownedUsage->selectByKind(VerificationCaseUsage)ownedUseCase =
-    /// ownedUsage->selectByKind(UseCaseUsage)ownedView = ownedUsage->selectByKind(ViewUsage)ownedViewpoint
-    /// = ownedUsage->selectByKind(ViewpointUsage)ownedRendering =
-    /// ownedUsage->selectByKind(RenderingUsage)ownedMetadata =
-    /// ownedUsage->selectByKind(MetadataUsage)isVariation implies isAbstract
+    /// A Usage is a usage of a Definition.A Usage may have nestedUsages that model features that apply in
+    /// the context of the owningUsage. A Usage may also have Definitions nested in it, but this has no
+    /// semantic significance, other than the nested scoping resulting from the Usage being considered as a
+    /// Namespace for any nested Definitions.However, if a Usage has isVariation = true, then it represents
+    /// a variation point Usage. In this case, all of its members must be variant Usages, related to the
+    /// Usage by VariantMembership Relationships. Rather than being features of the Usage, variant Usages
+    /// model different concrete alternatives that can be chosen to fill in for the variation point
+    /// Usage.variant = variantMembership.ownedVariantUsagevariantMembership =
+    /// ownedMembership->selectByKind(VariantMembership)isVariation implies
+    /// ownedFeatureMembership->isEmpty()isReference = not isCompositeowningVariationUsage <> null implies  
+    ///  specializes(owningVariationUsage)isVariation implies    not ownedSpecialization.specific->exists(  
+    ///      oclIsKindOf(Definition) and        oclAsType(Definition).isVariation or       
+    /// oclIsKindOf(Usage) and        oclAsType(Usage).isVariation)owningVariationDefinition <> null implies
+    ///    specializes(owningVariationDefinition)directedUsage =
+    /// directedFeature->selectByKind(Usage)nestedAction =
+    /// nestedUsage->selectByKind(ActionUsage)nestedAllocation =
+    /// nestedUsage->selectByKind(AllocationUsage)nestedAnalysisCase =
+    /// nestedUsage->selectByKind(AnalysisCaseUsage)nestedAttribute =
+    /// nestedUsage->selectByKind(AttributeUsage)nestedCalculation =
+    /// nestedUsage->selectByKind(CalculationUsage)nestedCase =
+    /// nestedUsage->selectByKind(CaseUsage)nestedConcern =
+    /// nestedUsage->selectByKind(ConcernUsage)nestedConnection =
+    /// nestedUsage->selectByKind(ConnectorAsUsage)nestedConstraint =
+    /// nestedUsage->selectByKind(ConstraintUsage)ownedNested =
+    /// nestedUsage->selectByKind(EnumerationUsage)nestedFlow =
+    /// nestedUsage->selectByKind(FlowConnectionUsage)nestedInterface =
+    /// nestedUsage->selectByKind(ReferenceUsage)nestedItem =
+    /// nestedUsage->selectByKind(ItemUsage)nestedMetadata =
+    /// nestedUsage->selectByKind(MetadataUsage)nestedOccurrence =
+    /// nestedUsage->selectByKind(OccurrenceUsage)nestedPart =
+    /// nestedUsage->selectByKind(PartUsage)nestedPort = nestedUsage->selectByKind(PortUsage)nestedReference
+    /// = nestedUsage->selectByKind(ReferenceUsage)nestedRendering =
+    /// nestedUsage->selectByKind(RenderingUsage)nestedRequirement =
+    /// nestedUsage->selectByKind(RequirementUsage)nestedState =
+    /// nestedUsage->selectByKind(StateUsage)nestedTransition =
+    /// nestedUsage->selectByKind(TransitionUsage)nestedUsage =
+    /// ownedFeature->selectByKind(Usage)nestedUseCase =
+    /// nestedUsage->selectByKind(UseCaseUsage)nestedVerificationCase =
+    /// nestedUsage->selectByKind(VerificationCaseUsage)nestedView =
+    /// nestedUsage->selectByKind(ViewUsage)nestedViewpoint = nestedUsage->selectByKind(ViewpointUsage)usage
+    /// = feature->selectByKind(Usage)direction <> null or isEnd or featuringType->isEmpty() implies   
+    /// isReferenceisVariation implies isAbstractmayTimeVary =    owningType <> null and   
+    /// owningType.specializesFromLibrary('Occurrences::Occurrence') and    not (        isPortion or       
+    /// specializesFromLibrary('Links::SelfLink') or       
+    /// specializesFromLibrary('Occurrences::HappensLink') or        isComposite and
+    /// specializesFromLibrary('Actions::Action')    )owningVariationUsage <> null implies   
+    /// featuringType->asSet() = owningVariationUsage.featuringType->asSet()
     /// </summary>
-    public partial interface IDefinition : IClassifier
+    public partial interface IUsage : IFeature
     {
+        /// <summary>
+        /// Queries the derived property Definition
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        List<Classifier> QueryDefinition();
+
         /// <summary>
         /// Queries the derived property DirectedUsage
         /// </summary>
@@ -79,173 +94,197 @@ namespace SysML2.NET.Core.POCO
         List<Usage> QueryDirectedUsage();
 
         /// <summary>
-        /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
-        /// Definition must be VariantMemberships.
+        /// Queries the derived property IsReference
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        bool QueryIsReference();
+
+        /// <summary>
+        /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
+        /// must be VariantMemberships.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         bool IsVariation { get; set; }
 
         /// <summary>
-        /// Queries the derived property OwnedAction
+        /// Queries the derived property MayTimeVary
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ActionUsage> QueryOwnedAction();
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        bool QueryMayTimeVary();
 
         /// <summary>
-        /// Queries the derived property OwnedAllocation
+        /// Queries the derived property NestedAction
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AllocationUsage> QueryOwnedAllocation();
+        List<ActionUsage> QueryNestedAction();
 
         /// <summary>
-        /// Queries the derived property OwnedAnalysisCase
+        /// Queries the derived property NestedAllocation
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AnalysisCaseUsage> QueryOwnedAnalysisCase();
+        List<AllocationUsage> QueryNestedAllocation();
 
         /// <summary>
-        /// Queries the derived property OwnedAttribute
+        /// Queries the derived property NestedAnalysisCase
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AttributeUsage> QueryOwnedAttribute();
+        List<AnalysisCaseUsage> QueryNestedAnalysisCase();
 
         /// <summary>
-        /// Queries the derived property OwnedCalculation
+        /// Queries the derived property NestedAttribute
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<CalculationUsage> QueryOwnedCalculation();
+        List<AttributeUsage> QueryNestedAttribute();
 
         /// <summary>
-        /// Queries the derived property OwnedCase
+        /// Queries the derived property NestedCalculation
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<CaseUsage> QueryOwnedCase();
+        List<CalculationUsage> QueryNestedCalculation();
 
         /// <summary>
-        /// Queries the derived property OwnedConcern
+        /// Queries the derived property NestedCase
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        List<CaseUsage> QueryNestedCase();
+
+        /// <summary>
+        /// Queries the derived property NestedConcern
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ConcernUsage> QueryOwnedConcern();
+        List<ConcernUsage> QueryNestedConcern();
 
         /// <summary>
-        /// Queries the derived property OwnedConnection
+        /// Queries the derived property NestedConnection
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<IConnectorAsUsage> QueryOwnedConnection();
+        List<IConnectorAsUsage> QueryNestedConnection();
 
         /// <summary>
-        /// Queries the derived property OwnedConstraint
+        /// Queries the derived property NestedConstraint
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ConstraintUsage> QueryOwnedConstraint();
+        List<ConstraintUsage> QueryNestedConstraint();
 
         /// <summary>
-        /// Queries the derived property OwnedEnumeration
+        /// Queries the derived property NestedEnumeration
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<EnumerationUsage> QueryOwnedEnumeration();
+        List<EnumerationUsage> QueryNestedEnumeration();
 
         /// <summary>
-        /// Queries the derived property OwnedFlow
+        /// Queries the derived property NestedFlow
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<FlowUsage> QueryOwnedFlow();
+        List<FlowUsage> QueryNestedFlow();
 
         /// <summary>
-        /// Queries the derived property OwnedInterface
+        /// Queries the derived property NestedInterface
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<InterfaceUsage> QueryOwnedInterface();
+        List<InterfaceUsage> QueryNestedInterface();
 
         /// <summary>
-        /// Queries the derived property OwnedItem
+        /// Queries the derived property NestedItem
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ItemUsage> QueryOwnedItem();
+        List<ItemUsage> QueryNestedItem();
 
         /// <summary>
-        /// Queries the derived property OwnedMetadata
+        /// Queries the derived property NestedMetadata
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<MetadataUsage> QueryOwnedMetadata();
+        List<MetadataUsage> QueryNestedMetadata();
 
         /// <summary>
-        /// Queries the derived property OwnedOccurrence
+        /// Queries the derived property NestedOccurrence
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<OccurrenceUsage> QueryOwnedOccurrence();
+        List<OccurrenceUsage> QueryNestedOccurrence();
 
         /// <summary>
-        /// Queries the derived property OwnedPart
+        /// Queries the derived property NestedPart
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<PartUsage> QueryOwnedPart();
+        List<PartUsage> QueryNestedPart();
 
         /// <summary>
-        /// Queries the derived property OwnedPort
+        /// Queries the derived property NestedPort
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<PortUsage> QueryOwnedPort();
+        List<PortUsage> QueryNestedPort();
 
         /// <summary>
-        /// Queries the derived property OwnedReference
+        /// Queries the derived property NestedReference
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ReferenceUsage> QueryOwnedReference();
+        List<ReferenceUsage> QueryNestedReference();
 
         /// <summary>
-        /// Queries the derived property OwnedRendering
+        /// Queries the derived property NestedRendering
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<RenderingUsage> QueryOwnedRendering();
+        List<RenderingUsage> QueryNestedRendering();
 
         /// <summary>
-        /// Queries the derived property OwnedRequirement
+        /// Queries the derived property NestedRequirement
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<RequirementUsage> QueryOwnedRequirement();
+        List<RequirementUsage> QueryNestedRequirement();
 
         /// <summary>
-        /// Queries the derived property OwnedState
+        /// Queries the derived property NestedState
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<StateUsage> QueryOwnedState();
+        List<StateUsage> QueryNestedState();
 
         /// <summary>
-        /// Queries the derived property OwnedTransition
+        /// Queries the derived property NestedTransition
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<TransitionUsage> QueryOwnedTransition();
+        List<TransitionUsage> QueryNestedTransition();
 
         /// <summary>
-        /// Queries the derived property OwnedUsage
+        /// Queries the derived property NestedUsage
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryOwnedUsage();
+        List<Usage> QueryNestedUsage();
 
         /// <summary>
-        /// Queries the derived property OwnedUseCase
+        /// Queries the derived property NestedUseCase
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<UseCaseUsage> QueryOwnedUseCase();
+        List<UseCaseUsage> QueryNestedUseCase();
 
         /// <summary>
-        /// Queries the derived property OwnedVerificationCase
+        /// Queries the derived property NestedVerificationCase
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<VerificationCaseUsage> QueryOwnedVerificationCase();
+        List<VerificationCaseUsage> QueryNestedVerificationCase();
 
         /// <summary>
-        /// Queries the derived property OwnedView
+        /// Queries the derived property NestedView
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ViewUsage> QueryOwnedView();
+        List<ViewUsage> QueryNestedView();
 
         /// <summary>
-        /// Queries the derived property OwnedViewpoint
+        /// Queries the derived property NestedViewpoint
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ViewpointUsage> QueryOwnedViewpoint();
+        List<ViewpointUsage> QueryNestedViewpoint();
+
+        /// <summary>
+        /// Queries the derived property OwningDefinition
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Definition QueryOwningDefinition();
+
+        /// <summary>
+        /// Queries the derived property OwningUsage
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Usage QueryOwningUsage();
 
         /// <summary>
         /// Queries the derived property Usage

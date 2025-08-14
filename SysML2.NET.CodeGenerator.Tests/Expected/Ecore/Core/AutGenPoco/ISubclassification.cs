@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IDependency.cs" company="Starion Group S.A.">
+// <copyright file="ISubclassification.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,24 +31,28 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Dependency is a Relationship that indicates that one or more client Elements require one more
-    /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
-    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
+    /// Subclassification is Specialization in which both the specific and general Types are Classifier.
+    /// This means all instances of the specific Classifier are also instances of the general Classifier.
     /// </summary>
-    public partial interface IDependency : IRelationship
+    public partial interface ISubclassification : ISpecialization
     {
         /// <summary>
-        /// The Element or Elements dependent on the supplier Elements.
+        /// Queries the derived property OwningClassifier
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<IElement> Client { get; set; }
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Classifier QueryOwningClassifier();
 
         /// <summary>
-        /// The Element or Elements on which the client Elements depend in some respect.
+        /// The more specific Classifier in this Subclassification.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<IElement> Supplier { get; set; }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Classifier Subclassifier { get; set; }
+
+        /// <summary>
+        /// The more general Classifier in this Subclassification.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        Classifier Superclassifier { get; set; }
 
     }
 }

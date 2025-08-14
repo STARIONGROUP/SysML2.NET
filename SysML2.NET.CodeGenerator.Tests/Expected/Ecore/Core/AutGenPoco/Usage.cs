@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="Definition.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="Usage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,56 +31,73 @@ namespace SysML2.NET.Core.POCO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Definition is a Classifier of Usages. The actual kinds of Definition that may appear in a model
-    /// are given by the subclasses of Definition (possibly as extended with user-defined
-    /// SemanticMetadata).Normally, a Definition has owned Usages that model features of the thing being
-    /// defined. A Definition may also have other Definitions nested in it, but this has no semantic
-    /// significance, other than the nested scoping resulting from the Definition being considered as a
-    /// Namespace for any nested Definitions.However, if a Definition has isVariation = true, then it
-    /// represents a variation point Definition. In this case, all of its members must be variant Usages,
-    /// related to the Definition by VariantMembership Relationships. Rather than being features of the
-    /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
-    /// an abstract Usage of the variation point Definition.isVariation implies
-    /// ownedFeatureMembership->isEmpty()variant = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)isVariation implies    not
-    /// ownedSpecialization.specific->exists(        oclIsKindOf(Definition) and       
-    /// oclAsType(Definition).isVariation)usage = feature->selectByKind(Usage)directedUsage =
-    /// directedFeature->selectByKind(Usage)ownedUsage = ownedFeature->selectByKind(Usage)ownedAttribute =
-    /// ownedUsage->selectByKind(AttributeUsage)ownedReference =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedEnumeration =
-    /// ownedUsage->selectByKind(EnumerationUsage)ownedOccurrence =
-    /// ownedUsage->selectByKind(OccurrenceUsage)ownedItem = ownedUsage->selectByKind(ItemUsage)ownedPart =
-    /// ownedUsage->selectByKind(PartUsage)ownedPort = ownedUsage->selectByKind(PortUsage)ownedConnection =
-    /// ownedUsage->selectByKind(ConnectorAsUsage)ownedFlow =
-    /// ownedUsage->selectByKind(FlowConnectionUsage)ownedInterface =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedAllocation =
-    /// ownedUsage->selectByKind(AllocationUsage)ownedAction =
-    /// ownedUsage->selectByKind(ActionUsage)ownedState =
-    /// ownedUsage->selectByKind(StateUsage)ownedTransition =
-    /// ownedUsage->selectByKind(TransitionUsage)ownedCalculation =
-    /// ownedUsage->selectByKind(CalculationUsage)ownedConstraint =
-    /// ownedUsage->selectByKind(ConstraintUsage)ownedRequirement =
-    /// ownedUsage->selectByKind(RequirementUsage)ownedConcern =
-    /// ownedUsage->selectByKind(ConcernUsage)ownedCase =
-    /// ownedUsage->selectByKind(CaseUsage)ownedAnalysisCase =
-    /// ownedUsage->selectByKind(AnalysisCaseUsage)ownedVerificationCase =
-    /// ownedUsage->selectByKind(VerificationCaseUsage)ownedUseCase =
-    /// ownedUsage->selectByKind(UseCaseUsage)ownedView = ownedUsage->selectByKind(ViewUsage)ownedViewpoint
-    /// = ownedUsage->selectByKind(ViewpointUsage)ownedRendering =
-    /// ownedUsage->selectByKind(RenderingUsage)ownedMetadata =
-    /// ownedUsage->selectByKind(MetadataUsage)isVariation implies isAbstract
+    /// A Usage is a usage of a Definition.A Usage may have nestedUsages that model features that apply in
+    /// the context of the owningUsage. A Usage may also have Definitions nested in it, but this has no
+    /// semantic significance, other than the nested scoping resulting from the Usage being considered as a
+    /// Namespace for any nested Definitions.However, if a Usage has isVariation = true, then it represents
+    /// a variation point Usage. In this case, all of its members must be variant Usages, related to the
+    /// Usage by VariantMembership Relationships. Rather than being features of the Usage, variant Usages
+    /// model different concrete alternatives that can be chosen to fill in for the variation point
+    /// Usage.variant = variantMembership.ownedVariantUsagevariantMembership =
+    /// ownedMembership->selectByKind(VariantMembership)isVariation implies
+    /// ownedFeatureMembership->isEmpty()isReference = not isCompositeowningVariationUsage <> null implies  
+    ///  specializes(owningVariationUsage)isVariation implies    not ownedSpecialization.specific->exists(  
+    ///      oclIsKindOf(Definition) and        oclAsType(Definition).isVariation or       
+    /// oclIsKindOf(Usage) and        oclAsType(Usage).isVariation)owningVariationDefinition <> null implies
+    ///    specializes(owningVariationDefinition)directedUsage =
+    /// directedFeature->selectByKind(Usage)nestedAction =
+    /// nestedUsage->selectByKind(ActionUsage)nestedAllocation =
+    /// nestedUsage->selectByKind(AllocationUsage)nestedAnalysisCase =
+    /// nestedUsage->selectByKind(AnalysisCaseUsage)nestedAttribute =
+    /// nestedUsage->selectByKind(AttributeUsage)nestedCalculation =
+    /// nestedUsage->selectByKind(CalculationUsage)nestedCase =
+    /// nestedUsage->selectByKind(CaseUsage)nestedConcern =
+    /// nestedUsage->selectByKind(ConcernUsage)nestedConnection =
+    /// nestedUsage->selectByKind(ConnectorAsUsage)nestedConstraint =
+    /// nestedUsage->selectByKind(ConstraintUsage)ownedNested =
+    /// nestedUsage->selectByKind(EnumerationUsage)nestedFlow =
+    /// nestedUsage->selectByKind(FlowConnectionUsage)nestedInterface =
+    /// nestedUsage->selectByKind(ReferenceUsage)nestedItem =
+    /// nestedUsage->selectByKind(ItemUsage)nestedMetadata =
+    /// nestedUsage->selectByKind(MetadataUsage)nestedOccurrence =
+    /// nestedUsage->selectByKind(OccurrenceUsage)nestedPart =
+    /// nestedUsage->selectByKind(PartUsage)nestedPort = nestedUsage->selectByKind(PortUsage)nestedReference
+    /// = nestedUsage->selectByKind(ReferenceUsage)nestedRendering =
+    /// nestedUsage->selectByKind(RenderingUsage)nestedRequirement =
+    /// nestedUsage->selectByKind(RequirementUsage)nestedState =
+    /// nestedUsage->selectByKind(StateUsage)nestedTransition =
+    /// nestedUsage->selectByKind(TransitionUsage)nestedUsage =
+    /// ownedFeature->selectByKind(Usage)nestedUseCase =
+    /// nestedUsage->selectByKind(UseCaseUsage)nestedVerificationCase =
+    /// nestedUsage->selectByKind(VerificationCaseUsage)nestedView =
+    /// nestedUsage->selectByKind(ViewUsage)nestedViewpoint = nestedUsage->selectByKind(ViewpointUsage)usage
+    /// = feature->selectByKind(Usage)direction <> null or isEnd or featuringType->isEmpty() implies   
+    /// isReferenceisVariation implies isAbstractmayTimeVary =    owningType <> null and   
+    /// owningType.specializesFromLibrary('Occurrences::Occurrence') and    not (        isPortion or       
+    /// specializesFromLibrary('Links::SelfLink') or       
+    /// specializesFromLibrary('Occurrences::HappensLink') or        isComposite and
+    /// specializesFromLibrary('Actions::Action')    )owningVariationUsage <> null implies   
+    /// featuringType->asSet() = owningVariationUsage.featuringType->asSet()
     /// </summary>
-    public partial class Definition : IDefinition
+    public partial class Usage : IUsage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Definition"/> class.
+        /// Initializes a new instance of the <see cref="Usage"/> class.
         /// </summary>
-        public Definition()
+        public Usage()
         {
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
+            this.IsComposite = false;
+            this.IsConstant = false;
+            this.IsDerived = false;
+            this.IsEnd = false;
             this.IsImpliedIncluded = false;
+            this.IsOrdered = false;
+            this.IsPortion = false;
             this.IsSufficient = false;
+            this.IsUnique = true;
+            this.IsVariable = false;
             this.OwnedRelationship = new List<IRelationship>();
         }
 
@@ -97,6 +114,24 @@ namespace SysML2.NET.Core.POCO
         public List<string> AliasIds { get; set; }
 
         /// <summary>
+        /// Queries the derived property ChainingFeature
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Feature> QueryChainingFeature()
+        {
+            throw new NotImplementedException("Derived property ChainingFeature not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property CrossFeature
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Feature QueryCrossFeature()
+        {
+            throw new NotImplementedException("Derived property CrossFeature not yet supported");
+        }
+
+        /// <summary>
         /// The declared name of this Element.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -110,6 +145,15 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public string DeclaredShortName { get; set; }
+
+        /// <summary>
+        /// Queries the derived property Definition
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Classifier> QueryDefinition()
+        {
+            throw new NotImplementedException("Derived property Definition not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property DifferencingType
@@ -139,6 +183,13 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Indicates how values of this Feature are determined or used (as specified for the
+        /// FeatureDirectionKind).
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public FeatureDirectionKind? Direction { get; set; }
+
+        /// <summary>
         /// Queries the derived property Documentation
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
@@ -164,6 +215,15 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property EndOwningType
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Type QueryEndOwningType()
+        {
+            throw new NotImplementedException("Derived property EndOwningType not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property Feature
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
@@ -179,6 +239,24 @@ namespace SysML2.NET.Core.POCO
         public List<FeatureMembership> QueryFeatureMembership()
         {
             throw new NotImplementedException("Derived property FeatureMembership not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property FeatureTarget
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Feature QueryFeatureTarget()
+        {
+            throw new NotImplementedException("Derived property FeatureTarget not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property FeaturingType
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Type> QueryFeaturingType()
+        {
+            throw new NotImplementedException("Derived property FeaturingType not yet supported");
         }
 
         /// <summary>
@@ -234,6 +312,14 @@ namespace SysML2.NET.Core.POCO
         public bool IsAbstract { get; set; }
 
         /// <summary>
+        /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsComposite { get; set; }
+
+        /// <summary>
         /// Queries the derived property IsConjugated
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -241,6 +327,32 @@ namespace SysML2.NET.Core.POCO
         {
             throw new NotImplementedException("Derived property IsConjugated not yet supported");
         }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsConstant { get; set; }
+
+        /// <summary>
+        /// Whether the values of this Feature can always be computed from the values of other Features.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsDerived { get; set; }
+
+        /// <summary>
+        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
+        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
+        /// which case values of the crossFeature must be the same as those found by navigation across instances
+        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
+        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
+        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
+        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
+        /// fixed.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsEnd { get; set; }
 
         /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
@@ -262,6 +374,37 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property IsNonunique
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool QueryIsNonunique()
+        {
+            throw new NotImplementedException("Derived property IsNonunique not yet supported");
+        }
+
+        /// <summary>
+        /// Whether an order exists for the values of this Feature or not.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsOrdered { get; set; }
+
+        /// <summary>
+        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
+        /// the Feature and represent the same thing as those instances.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsPortion { get; set; }
+
+        /// <summary>
+        /// Queries the derived property IsReference
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool QueryIsReference()
+        {
+            throw new NotImplementedException("Derived property IsReference not yet supported");
+        }
+
+        /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
         /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
         /// is false, things may meet those conditions but still not be classified by the Type. For example, a
@@ -273,11 +416,33 @@ namespace SysML2.NET.Core.POCO
         public bool IsSufficient { get; set; }
 
         /// <summary>
-        /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
-        /// Definition must be VariantMemberships.
+        /// Whether or not values for this Feature must have no duplicates or not.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsUnique { get; set; }
+
+        /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariable { get; set; }
+
+        /// <summary>
+        /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
+        /// must be VariantMemberships.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsVariation { get; set; }
+
+        /// <summary>
+        /// Queries the derived property MayTimeVary
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool QueryMayTimeVary()
+        {
+            throw new NotImplementedException("Derived property MayTimeVary not yet supported");
+        }
 
         /// <summary>
         /// Queries the derived property Member
@@ -316,39 +481,255 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
+        /// Queries the derived property NestedAction
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<ActionUsage> QueryNestedAction()
+        {
+            throw new NotImplementedException("Derived property NestedAction not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedAllocation
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<AllocationUsage> QueryNestedAllocation()
+        {
+            throw new NotImplementedException("Derived property NestedAllocation not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedAnalysisCase
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<AnalysisCaseUsage> QueryNestedAnalysisCase()
+        {
+            throw new NotImplementedException("Derived property NestedAnalysisCase not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedAttribute
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<AttributeUsage> QueryNestedAttribute()
+        {
+            throw new NotImplementedException("Derived property NestedAttribute not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedCalculation
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<CalculationUsage> QueryNestedCalculation()
+        {
+            throw new NotImplementedException("Derived property NestedCalculation not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedCase
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<CaseUsage> QueryNestedCase()
+        {
+            throw new NotImplementedException("Derived property NestedCase not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedConcern
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<ConcernUsage> QueryNestedConcern()
+        {
+            throw new NotImplementedException("Derived property NestedConcern not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedConnection
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<IConnectorAsUsage> QueryNestedConnection()
+        {
+            throw new NotImplementedException("Derived property NestedConnection not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedConstraint
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<ConstraintUsage> QueryNestedConstraint()
+        {
+            throw new NotImplementedException("Derived property NestedConstraint not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedEnumeration
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<EnumerationUsage> QueryNestedEnumeration()
+        {
+            throw new NotImplementedException("Derived property NestedEnumeration not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedFlow
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<FlowUsage> QueryNestedFlow()
+        {
+            throw new NotImplementedException("Derived property NestedFlow not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedInterface
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<InterfaceUsage> QueryNestedInterface()
+        {
+            throw new NotImplementedException("Derived property NestedInterface not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedItem
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<ItemUsage> QueryNestedItem()
+        {
+            throw new NotImplementedException("Derived property NestedItem not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedMetadata
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<MetadataUsage> QueryNestedMetadata()
+        {
+            throw new NotImplementedException("Derived property NestedMetadata not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedOccurrence
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<OccurrenceUsage> QueryNestedOccurrence()
+        {
+            throw new NotImplementedException("Derived property NestedOccurrence not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedPart
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<PartUsage> QueryNestedPart()
+        {
+            throw new NotImplementedException("Derived property NestedPart not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedPort
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<PortUsage> QueryNestedPort()
+        {
+            throw new NotImplementedException("Derived property NestedPort not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedReference
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<ReferenceUsage> QueryNestedReference()
+        {
+            throw new NotImplementedException("Derived property NestedReference not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedRendering
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<RenderingUsage> QueryNestedRendering()
+        {
+            throw new NotImplementedException("Derived property NestedRendering not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedRequirement
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<RequirementUsage> QueryNestedRequirement()
+        {
+            throw new NotImplementedException("Derived property NestedRequirement not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedState
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<StateUsage> QueryNestedState()
+        {
+            throw new NotImplementedException("Derived property NestedState not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedTransition
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<TransitionUsage> QueryNestedTransition()
+        {
+            throw new NotImplementedException("Derived property NestedTransition not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedUsage
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Usage> QueryNestedUsage()
+        {
+            throw new NotImplementedException("Derived property NestedUsage not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedUseCase
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<UseCaseUsage> QueryNestedUseCase()
+        {
+            throw new NotImplementedException("Derived property NestedUseCase not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedVerificationCase
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<VerificationCaseUsage> QueryNestedVerificationCase()
+        {
+            throw new NotImplementedException("Derived property NestedVerificationCase not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedView
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<ViewUsage> QueryNestedView()
+        {
+            throw new NotImplementedException("Derived property NestedView not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property NestedViewpoint
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<ViewpointUsage> QueryNestedViewpoint()
+        {
+            throw new NotImplementedException("Derived property NestedViewpoint not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property Output
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Feature> QueryOutput()
         {
             throw new NotImplementedException("Derived property Output not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedAction
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ActionUsage> QueryOwnedAction()
-        {
-            throw new NotImplementedException("Derived property OwnedAction not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedAllocation
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<AllocationUsage> QueryOwnedAllocation()
-        {
-            throw new NotImplementedException("Derived property OwnedAllocation not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedAnalysisCase
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<AnalysisCaseUsage> QueryOwnedAnalysisCase()
-        {
-            throw new NotImplementedException("Derived property OwnedAnalysisCase not yet supported");
         }
 
         /// <summary>
@@ -361,42 +742,6 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property OwnedAttribute
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<AttributeUsage> QueryOwnedAttribute()
-        {
-            throw new NotImplementedException("Derived property OwnedAttribute not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedCalculation
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<CalculationUsage> QueryOwnedCalculation()
-        {
-            throw new NotImplementedException("Derived property OwnedCalculation not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedCase
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<CaseUsage> QueryOwnedCase()
-        {
-            throw new NotImplementedException("Derived property OwnedCase not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedConcern
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ConcernUsage> QueryOwnedConcern()
-        {
-            throw new NotImplementedException("Derived property OwnedConcern not yet supported");
-        }
-
-        /// <summary>
         /// Queries the derived property OwnedConjugator
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -406,21 +751,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property OwnedConnection
+        /// Queries the derived property OwnedCrossSubsetting
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IConnectorAsUsage> QueryOwnedConnection()
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public CrossSubsetting QueryOwnedCrossSubsetting()
         {
-            throw new NotImplementedException("Derived property OwnedConnection not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedConstraint
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ConstraintUsage> QueryOwnedConstraint()
-        {
-            throw new NotImplementedException("Derived property OwnedConstraint not yet supported");
+            throw new NotImplementedException("Derived property OwnedCrossSubsetting not yet supported");
         }
 
         /// <summary>
@@ -460,21 +796,30 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property OwnedEnumeration
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<EnumerationUsage> QueryOwnedEnumeration()
-        {
-            throw new NotImplementedException("Derived property OwnedEnumeration not yet supported");
-        }
-
-        /// <summary>
         /// Queries the derived property OwnedFeature
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Feature> QueryOwnedFeature()
         {
             throw new NotImplementedException("Derived property OwnedFeature not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwnedFeatureChaining
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<FeatureChaining> QueryOwnedFeatureChaining()
+        {
+            throw new NotImplementedException("Derived property OwnedFeatureChaining not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwnedFeatureInverting
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<FeatureInverting> QueryOwnedFeatureInverting()
+        {
+            throw new NotImplementedException("Derived property OwnedFeatureInverting not yet supported");
         }
 
         /// <summary>
@@ -487,15 +832,6 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property OwnedFlow
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<FlowUsage> QueryOwnedFlow()
-        {
-            throw new NotImplementedException("Derived property OwnedFlow not yet supported");
-        }
-
-        /// <summary>
         /// Queries the derived property OwnedImport
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
@@ -505,30 +841,12 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property OwnedInterface
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<InterfaceUsage> QueryOwnedInterface()
-        {
-            throw new NotImplementedException("Derived property OwnedInterface not yet supported");
-        }
-
-        /// <summary>
         /// Queries the derived property OwnedIntersecting
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Intersecting> QueryOwnedIntersecting()
         {
             throw new NotImplementedException("Derived property OwnedIntersecting not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedItem
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ItemUsage> QueryOwnedItem()
-        {
-            throw new NotImplementedException("Derived property OwnedItem not yet supported");
         }
 
         /// <summary>
@@ -550,48 +868,21 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property OwnedMetadata
+        /// Queries the derived property OwnedRedefinition
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<MetadataUsage> QueryOwnedMetadata()
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Redefinition> QueryOwnedRedefinition()
         {
-            throw new NotImplementedException("Derived property OwnedMetadata not yet supported");
+            throw new NotImplementedException("Derived property OwnedRedefinition not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedOccurrence
+        /// Queries the derived property OwnedReferenceSubsetting
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<OccurrenceUsage> QueryOwnedOccurrence()
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public ReferenceSubsetting QueryOwnedReferenceSubsetting()
         {
-            throw new NotImplementedException("Derived property OwnedOccurrence not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedPart
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<PartUsage> QueryOwnedPart()
-        {
-            throw new NotImplementedException("Derived property OwnedPart not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedPort
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<PortUsage> QueryOwnedPort()
-        {
-            throw new NotImplementedException("Derived property OwnedPort not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedReference
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ReferenceUsage> QueryOwnedReference()
-        {
-            throw new NotImplementedException("Derived property OwnedReference not yet supported");
+            throw new NotImplementedException("Derived property OwnedReferenceSubsetting not yet supported");
         }
 
         /// <summary>
@@ -599,24 +890,6 @@ namespace SysML2.NET.Core.POCO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
         public List<IRelationship> OwnedRelationship { get; set; }
-
-        /// <summary>
-        /// Queries the derived property OwnedRendering
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<RenderingUsage> QueryOwnedRendering()
-        {
-            throw new NotImplementedException("Derived property OwnedRendering not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedRequirement
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<RequirementUsage> QueryOwnedRequirement()
-        {
-            throw new NotImplementedException("Derived property OwnedRequirement not yet supported");
-        }
 
         /// <summary>
         /// Queries the derived property OwnedSpecialization
@@ -628,30 +901,30 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property OwnedState
+        /// Queries the derived property OwnedSubsetting
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Subsetting> QueryOwnedSubsetting()
+        {
+            throw new NotImplementedException("Derived property OwnedSubsetting not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwnedTypeFeaturing
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<StateUsage> QueryOwnedState()
+        public List<TypeFeaturing> QueryOwnedTypeFeaturing()
         {
-            throw new NotImplementedException("Derived property OwnedState not yet supported");
+            throw new NotImplementedException("Derived property OwnedTypeFeaturing not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedSubclassification
+        /// Queries the derived property OwnedTyping
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Subclassification> QueryOwnedSubclassification()
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<FeatureTyping> QueryOwnedTyping()
         {
-            throw new NotImplementedException("Derived property OwnedSubclassification not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedTransition
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<TransitionUsage> QueryOwnedTransition()
-        {
-            throw new NotImplementedException("Derived property OwnedTransition not yet supported");
+            throw new NotImplementedException("Derived property OwnedTyping not yet supported");
         }
 
         /// <summary>
@@ -664,57 +937,30 @@ namespace SysML2.NET.Core.POCO
         }
 
         /// <summary>
-        /// Queries the derived property OwnedUsage
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Usage> QueryOwnedUsage()
-        {
-            throw new NotImplementedException("Derived property OwnedUsage not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedUseCase
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<UseCaseUsage> QueryOwnedUseCase()
-        {
-            throw new NotImplementedException("Derived property OwnedUseCase not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedVerificationCase
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<VerificationCaseUsage> QueryOwnedVerificationCase()
-        {
-            throw new NotImplementedException("Derived property OwnedVerificationCase not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedView
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ViewUsage> QueryOwnedView()
-        {
-            throw new NotImplementedException("Derived property OwnedView not yet supported");
-        }
-
-        /// <summary>
-        /// Queries the derived property OwnedViewpoint
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ViewpointUsage> QueryOwnedViewpoint()
-        {
-            throw new NotImplementedException("Derived property OwnedViewpoint not yet supported");
-        }
-
-        /// <summary>
         /// Queries the derived property Owner
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwningDefinition
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Definition QueryOwningDefinition()
+        {
+            throw new NotImplementedException("Derived property OwningDefinition not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwningFeatureMembership
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public FeatureMembership QueryOwningFeatureMembership()
+        {
+            throw new NotImplementedException("Derived property OwningFeatureMembership not yet supported");
         }
 
         /// <summary>
@@ -742,6 +988,24 @@ namespace SysML2.NET.Core.POCO
         public IRelationship OwningRelationship { get; set; }
 
         /// <summary>
+        /// Queries the derived property OwningType
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Type QueryOwningType()
+        {
+            throw new NotImplementedException("Derived property OwningType not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property OwningUsage
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Usage QueryOwningUsage()
+        {
+            throw new NotImplementedException("Derived property OwningUsage not yet supported");
+        }
+
+        /// <summary>
         /// Queries the derived property QualifiedName
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -766,6 +1030,15 @@ namespace SysML2.NET.Core.POCO
         public List<TextualRepresentation> QueryTextualRepresentation()
         {
             throw new NotImplementedException("Derived property TextualRepresentation not yet supported");
+        }
+
+        /// <summary>
+        /// Queries the derived property Type
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Type> QueryType()
+        {
+            throw new NotImplementedException("Derived property Type not yet supported");
         }
 
         /// <summary>
