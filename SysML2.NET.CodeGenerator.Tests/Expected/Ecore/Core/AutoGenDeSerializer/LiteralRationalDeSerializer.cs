@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="PartDefinitionDeSerializer.cs" company="Starion Group S.A.">
+// <copyright file="LiteralRationalDeSerializer.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -36,16 +36,16 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
-    /// The purpose of the <see cref="PartDefinitionDeSerializer"/> is to provide deserialization capabilities
-    /// for the <see cref="IPartDefinition"/> interface
+    /// The purpose of the <see cref="LiteralRationalDeSerializer"/> is to provide deserialization capabilities
+    /// for the <see cref="ILiteralRational"/> interface
     /// </summary>
-    internal static class PartDefinitionDeSerializer
+    internal static class LiteralRationalDeSerializer
     {
         /// <summary>
-        /// Deserializes an instance of <see cref="IPartDefinition"/> from the provided <see cref="JsonElement"/>
+        /// Deserializes an instance of <see cref="ILiteralRational"/> from the provided <see cref="JsonElement"/>
         /// </summary>
         /// <param name="jsonElement">
-        /// The <see cref="JsonElement"/> that contains the <see cref="IPartDefinition"/> json object
+        /// The <see cref="JsonElement"/> that contains the <see cref="ILiteralRational"/> json object
         /// </param>
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
@@ -54,30 +54,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IPartDefinition"/>
+        /// an instance of <see cref="ILiteralRational"/>
         /// </returns>
-        internal static IPartDefinition DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static ILiteralRational DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
         {
-            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("PartDefinitionDeSerializer");
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("LiteralRationalDeSerializer");
 
             if (!jsonElement.TryGetProperty("@type"u8, out JsonElement @type))
             {
-                throw new InvalidOperationException("The @type property is not available, the PartDefinitionDeSerializer cannot be used to deserialize this JsonElement");
+                throw new InvalidOperationException("The @type property is not available, the LiteralRationalDeSerializer cannot be used to deserialize this JsonElement");
             }
 
-            if (@type.GetString() != "PartDefinition")
+            if (@type.GetString() != "LiteralRational")
             {
-                throw new InvalidOperationException($"The PartDefinitionDeSerializer can only be used to deserialize objects of type IPartDefinition, a {@type.GetString()} was provided");
+                throw new InvalidOperationException($"The LiteralRationalDeSerializer can only be used to deserialize objects of type ILiteralRational, a {@type.GetString()} was provided");
             }
 
-            var dtoInstance = new SysML2.NET.Core.DTO.PartDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.LiteralRational();
 
             if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
                 var propertyValue = idProperty.GetString();
                 if (propertyValue == null)
                 {
-                    throw new JsonException("The @id property is not present, the PartDefinition cannot be deserialized");
+                    throw new JsonException("The @id property is not present, the LiteralRational cannot be deserialized");
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the aliasIds Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the aliasIds Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out JsonElement declaredNameProperty))
@@ -107,7 +107,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the declaredName Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the declaredName Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out JsonElement declaredShortNameProperty))
@@ -116,7 +116,16 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the declaredShortName Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the declaredShortName Json property was not found in the LiteralRational: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("direction"u8, out JsonElement directionProperty))
+            {
+                dtoInstance.Direction = FeatureDirectionKindDeSerializer.DeserializeNullable(directionProperty.GetString());
+            }
+            else
+            {
+                logger.LogDebug($"the direction Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out JsonElement elementIdProperty))
@@ -129,7 +138,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the elementId Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the elementId Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out JsonElement isAbstractProperty))
@@ -141,7 +150,55 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the isAbstract Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the isAbstract Json property was not found in the LiteralRational: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isComposite"u8, out JsonElement isCompositeProperty))
+            {
+                if (isCompositeProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsComposite = isCompositeProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isComposite Json property was not found in the LiteralRational: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isConstant"u8, out JsonElement isConstantProperty))
+            {
+                if (isConstantProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsConstant = isConstantProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isConstant Json property was not found in the LiteralRational: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isDerived"u8, out JsonElement isDerivedProperty))
+            {
+                if (isDerivedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsDerived = isDerivedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isDerived Json property was not found in the LiteralRational: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isEnd"u8, out JsonElement isEndProperty))
+            {
+                if (isEndProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsEnd = isEndProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isEnd Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out JsonElement isImpliedIncludedProperty))
@@ -153,19 +210,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the isImpliedIncluded Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the isImpliedIncluded Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isIndividual"u8, out JsonElement isIndividualProperty))
+            if (jsonElement.TryGetProperty("isOrdered"u8, out JsonElement isOrderedProperty))
             {
-                if (isIndividualProperty.ValueKind != JsonValueKind.Null)
+                if (isOrderedProperty.ValueKind != JsonValueKind.Null)
                 {
-                    dtoInstance.IsIndividual = isIndividualProperty.GetBoolean();
+                    dtoInstance.IsOrdered = isOrderedProperty.GetBoolean();
                 }
             }
             else
             {
-                logger.LogDebug($"the isIndividual Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the isOrdered Json property was not found in the LiteralRational: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isPortion"u8, out JsonElement isPortionProperty))
+            {
+                if (isPortionProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsPortion = isPortionProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isPortion Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out JsonElement isSufficientProperty))
@@ -177,19 +246,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the isSufficient Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the isSufficient Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("isVariation"u8, out JsonElement isVariationProperty))
+            if (jsonElement.TryGetProperty("isUnique"u8, out JsonElement isUniqueProperty))
             {
-                if (isVariationProperty.ValueKind != JsonValueKind.Null)
+                if (isUniqueProperty.ValueKind != JsonValueKind.Null)
                 {
-                    dtoInstance.IsVariation = isVariationProperty.GetBoolean();
+                    dtoInstance.IsUnique = isUniqueProperty.GetBoolean();
                 }
             }
             else
             {
-                logger.LogDebug($"the isVariation Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the isUnique Json property was not found in the LiteralRational: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("isVariable"u8, out JsonElement isVariableProperty))
+            {
+                if (isVariableProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug($"the isVariable Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out JsonElement ownedRelationshipProperty))
@@ -208,7 +289,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the ownedRelationship Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the ownedRelationship Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out JsonElement owningRelationshipProperty))
@@ -231,7 +312,16 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug($"the owningRelationship Json property was not found in the PartDefinition: {dtoInstance.Id}");
+                logger.LogDebug($"the owningRelationship Json property was not found in the LiteralRational: {dtoInstance.Id}");
+            }
+
+            if (jsonElement.TryGetProperty("value"u8, out JsonElement valueProperty))
+            {
+                dtoInstance.Value = valueProperty.GetDouble();
+            }
+            else
+            {
+                logger.LogDebug($"the value Json property was not found in the LiteralRational: {dtoInstance.Id}");
             }
 
 
