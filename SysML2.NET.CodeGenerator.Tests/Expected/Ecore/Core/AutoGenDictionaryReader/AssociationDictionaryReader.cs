@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="AnnotationDictionaryReader.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="AssociationDictionaryReader.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -33,23 +33,23 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="AnnotationDictionaryReader"/> is to read (convert)
-    /// a <see cref="Dictionary{String, Object}"/> from an <see cref="IAnnotation"/>
+    /// The purpose of the <see cref="AssociationDictionaryReader"/> is to read (convert)
+    /// a <see cref="Dictionary{String, Object}"/> from an <see cref="IAssociation"/>
     /// </summary>
-    public static class AnnotationDictionaryReader
+    public static class AssociationDictionaryReader
     {
         /// <summary>
-        /// Reads a <see cref="IAnnotation"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Reads a <see cref="IAssociation"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property.
         /// </summary>
         /// <param name="dictionary">
-        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IAnnotation"/>
+        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IAssociation"/>
         /// </param>
         /// <param name="dictionaryKind">
         /// The source <see cref="DictionaryKind"/> that is to be read from
         /// </param>
         /// <returns>
-        /// An instance of <see cref="IAnnotation"/>
+        /// An instance of <see cref="IAssociation"/>
         /// </returns>
         /// <remarks>
         /// When the <see cref="DictionaryKind"/> is <see cref="DictionaryKind.Complex"/> then the values that are read from the
@@ -78,14 +78,14 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         }
 
         /// <summary>
-        /// Reads a <see cref="IAnnotation"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Reads a <see cref="IAssociation"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property.
         /// </summary>
         /// <param name="dictionary">
-        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IAnnotation"/>
+        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IAssociation"/>
         /// </param>
         /// <returns>
-        /// An instance of <see cref="IAnnotation"/>
+        /// An instance of <see cref="IAssociation"/>
         /// </returns>
         /// <remarks>
         /// When the <see cref="DictionaryKind"/> is <see cref="DictionaryKind.Complex"/> then the values that are read from the
@@ -100,234 +100,248 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted from string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted from an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static IAnnotation ReadSimplified(Dictionary<string, object> dictionary)
+        private static IAssociation ReadSimplified(Dictionary<string, object> dictionary)
         {
-            var annotationInstance = DictionaryNullAndTypeCheck(dictionary);
+            var associationInstance = DictionaryNullAndTypeCheck(dictionary);
 
             if (!dictionary.TryGetValue("aliasIds", out object aliasIdsObject))
             {
-                throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("annotatedElement", out object annotatedElementObject))
-            {
-                throw new ArgumentException("The annotatedElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
-            }
-            Guid annotatedElementFeature = Guid.Parse(Convert.ToString(annotatedElementObject));
-
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
 
             if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
             {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
-                throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
 
+            if (!dictionary.TryGetValue("isAbstract", out object isAbstractObject))
+            {
+                throw new ArgumentException("The isAbstract property is missing from the dictionary, the dictionary cannot be converted into a Association");
+            }
+            bool isAbstractFeature = Convert.ToBoolean(isAbstractObject);
+
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
-                throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             bool isImpliedFeature = Convert.ToBoolean(isImpliedObject);
 
             if (!dictionary.TryGetValue("isImpliedIncluded", out object isImpliedIncludedObject))
             {
-                throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
 
+            if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
+            {
+                throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a Association");
+            }
+            bool isSufficientFeature = Convert.ToBoolean(isSufficientObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
-                throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<Guid> ownedRelatedElementFeature = (ownedRelatedElementObject as List<string>)?.Select(Guid.Parse).ToList();
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
-                throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<Guid> ownedRelationshipFeature = (ownedRelationshipObject as List<string>)?.Select(Guid.Parse).ToList();
 
             if (!dictionary.TryGetValue("owningRelatedElement", out object owningRelatedElementObject))
             {
-                throw new ArgumentException("The owningRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The owningRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             Guid? owningRelatedElementFeature = owningRelatedElementObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelatedElementObject));
 
             if (!dictionary.TryGetValue("owningRelationship", out object owningRelationshipObject))
             {
-                throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
-                throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<Guid> sourceFeature = (sourceObject as List<string>)?.Select(Guid.Parse).ToList();
 
             if (!dictionary.TryGetValue("target", out object targetObject))
             {
-                throw new ArgumentException("The target property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The target property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<Guid> targetFeature = (targetObject as List<string>)?.Select(Guid.Parse).ToList();
 
 
-            annotationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            annotationInstance.AnnotatedElement = annotatedElementFeature;
-            annotationInstance.DeclaredName = declaredNameFeature;
-            annotationInstance.DeclaredShortName = declaredShortNameFeature;
-            annotationInstance.ElementId = elementIdFeature;
-            annotationInstance.IsImplied = isImpliedFeature;
-            annotationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            annotationInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
-            annotationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
-            annotationInstance.OwningRelatedElement = owningRelatedElementFeature;
-            annotationInstance.OwningRelationship = owningRelationshipFeature;
-            annotationInstance.Source = sourceFeature ?? new List<Guid>();
-            annotationInstance.Target = targetFeature ?? new List<Guid>();
+            associationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            associationInstance.DeclaredName = declaredNameFeature;
+            associationInstance.DeclaredShortName = declaredShortNameFeature;
+            associationInstance.ElementId = elementIdFeature;
+            associationInstance.IsAbstract = isAbstractFeature;
+            associationInstance.IsImplied = isImpliedFeature;
+            associationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            associationInstance.IsSufficient = isSufficientFeature;
+            associationInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
+            associationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
+            associationInstance.OwningRelatedElement = owningRelatedElementFeature;
+            associationInstance.OwningRelationship = owningRelationshipFeature;
+            associationInstance.Source = sourceFeature ?? new List<Guid>();
+            associationInstance.Target = targetFeature ?? new List<Guid>();
 
-            return annotationInstance;
+            return associationInstance;
         }
 
         /// <summary>
-        /// Reads a <see cref="IAnnotation"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Reads a <see cref="IAssociation"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property.
         /// </summary>
         /// <param name="dictionary">
-        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IAnnotation"/>
+        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IAssociation"/>
         /// </param>
         /// <returns>
-        /// An instance of <see cref="IAnnotation"/>
+        /// An instance of <see cref="IAssociation"/>
         /// </returns>
-        private static IAnnotation ReadComplex(Dictionary<string, object> dictionary)
+        private static IAssociation ReadComplex(Dictionary<string, object> dictionary)
         {
-            var annotationInstance = DictionaryNullAndTypeCheck(dictionary);
+            var associationInstance = DictionaryNullAndTypeCheck(dictionary);
 
             if (!dictionary.TryGetValue("aliasIds", out object aliasIdsObject))
             {
-                throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
-            if (!dictionary.TryGetValue("annotatedElement", out object annotatedElementObject))
-            {
-                throw new ArgumentException("The annotatedElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
-            }
-            Guid annotatedElementFeature = Guid.Parse(Convert.ToString(annotatedElementObject));
-
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
 
             if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
             {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
-                throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
 
+            if (!dictionary.TryGetValue("isAbstract", out object isAbstractObject))
+            {
+                throw new ArgumentException("The isAbstract property is missing from the dictionary, the dictionary cannot be converted into a Association");
+            }
+            bool isAbstractFeature = Convert.ToBoolean(isAbstractObject);
+
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
-                throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             bool isImpliedFeature = Convert.ToBoolean(isImpliedObject);
 
             if (!dictionary.TryGetValue("isImpliedIncluded", out object isImpliedIncludedObject))
             {
-                throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
 
+            if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
+            {
+                throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a Association");
+            }
+            bool isSufficientFeature = Convert.ToBoolean(isSufficientObject);
+
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
-                throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<Guid> ownedRelatedElementFeature = (ownedRelatedElementObject as List<Guid>);
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
-                throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<Guid> ownedRelationshipFeature = (ownedRelationshipObject as List<Guid>);
 
             if (!dictionary.TryGetValue("owningRelatedElement", out object owningRelatedElementObject))
             {
-                throw new ArgumentException("The owningRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The owningRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             Guid? owningRelatedElementFeature = (Guid?)owningRelatedElementObject;
 
             if (!dictionary.TryGetValue("owningRelationship", out object owningRelationshipObject))
             {
-                throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
-                throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<Guid> sourceFeature = (sourceObject as List<Guid>);
 
             if (!dictionary.TryGetValue("target", out object targetObject))
             {
-                throw new ArgumentException("The target property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The target property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             List<Guid> targetFeature = (targetObject as List<Guid>);
 
 
-            annotationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            annotationInstance.AnnotatedElement = annotatedElementFeature;
-            annotationInstance.DeclaredName = declaredNameFeature;
-            annotationInstance.DeclaredShortName = declaredShortNameFeature;
-            annotationInstance.ElementId = elementIdFeature;
-            annotationInstance.IsImplied = isImpliedFeature;
-            annotationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            annotationInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
-            annotationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
-            annotationInstance.OwningRelatedElement = owningRelatedElementFeature;
-            annotationInstance.OwningRelationship = owningRelationshipFeature;
-            annotationInstance.Source = sourceFeature ?? new List<Guid>();
-            annotationInstance.Target = targetFeature ?? new List<Guid>();
+            associationInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            associationInstance.DeclaredName = declaredNameFeature;
+            associationInstance.DeclaredShortName = declaredShortNameFeature;
+            associationInstance.ElementId = elementIdFeature;
+            associationInstance.IsAbstract = isAbstractFeature;
+            associationInstance.IsImplied = isImpliedFeature;
+            associationInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            associationInstance.IsSufficient = isSufficientFeature;
+            associationInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
+            associationInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
+            associationInstance.OwningRelatedElement = owningRelatedElementFeature;
+            associationInstance.OwningRelationship = owningRelationshipFeature;
+            associationInstance.Source = sourceFeature ?? new List<Guid>();
+            associationInstance.Target = targetFeature ?? new List<Guid>();
 
-            return annotationInstance;
+            return associationInstance;
         }
 
         /// <summary>
         /// Checks whether the <see cref="Dictionary{String, Object}"/> is not null and whether it is
-        /// of type <see cref="Annotation"/>
+        /// of type <see cref="Association"/>
         /// </summary>
         /// <param name="dictionary">
         /// The subject <see cref="Dictionary{String, Object}"/> that contains the key-value pairs of
         /// properties and values.
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IAnnotation"/>
+        /// an instance of <see cref="IAssociation"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="dictionary"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="dictionary"/> is not of type <see cref="Annotation"/>
+        /// Thrown when <paramref name="dictionary"/> is not of type <see cref="Association"/>
         /// </exception>
-        private static IAnnotation DictionaryNullAndTypeCheck(Dictionary<string, object> dictionary)
+        private static IAssociation DictionaryNullAndTypeCheck(Dictionary<string, object> dictionary)
         {
             if (dictionary == null)
             {
@@ -336,28 +350,28 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
             if (!dictionary.TryGetValue("@type", out object typeObject))
             {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
 
             var type = Convert.ToString(typeObject);
 
-            if (type != "Annotation")
+            if (type != "Association")
             {
-                throw new ArgumentException($"The dictionary contains an Object is of type {type} and can therefore not be converted into a Annotation");
+                throw new ArgumentException($"The dictionary contains an Object is of type {type} and can therefore not be converted into a Association");
             }
 
             if (!dictionary.TryGetValue("@id", out object idObject))
             {
-                throw new ArgumentException("The id property is missing from the dictionary, the dictionary cannot be converted into a Annotation");
+                throw new ArgumentException("The id property is missing from the dictionary, the dictionary cannot be converted into a Association");
             }
             var id = Guid.Parse(Convert.ToString(idObject));
 
-            var annotationInstance = new SysML2.NET.Core.DTO.Annotation
+            var associationInstance = new SysML2.NET.Core.DTO.Association
             {
                 Id = id
             };
 
-            return annotationInstance;
+            return associationInstance;
         }
     }
 }

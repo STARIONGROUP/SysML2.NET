@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="ConnectorDictionaryReader.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="FlowDictionaryReader.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -33,23 +33,23 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ConnectorDictionaryReader"/> is to read (convert)
-    /// a <see cref="Dictionary{String, Object}"/> from an <see cref="IConnector"/>
+    /// The purpose of the <see cref="FlowDictionaryReader"/> is to read (convert)
+    /// a <see cref="Dictionary{String, Object}"/> from an <see cref="IFlow"/>
     /// </summary>
-    public static class ConnectorDictionaryReader
+    public static class FlowDictionaryReader
     {
         /// <summary>
-        /// Reads a <see cref="IConnector"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Reads a <see cref="IFlow"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property.
         /// </summary>
         /// <param name="dictionary">
-        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IConnector"/>
+        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IFlow"/>
         /// </param>
         /// <param name="dictionaryKind">
         /// The source <see cref="DictionaryKind"/> that is to be read from
         /// </param>
         /// <returns>
-        /// An instance of <see cref="IConnector"/>
+        /// An instance of <see cref="IFlow"/>
         /// </returns>
         /// <remarks>
         /// When the <see cref="DictionaryKind"/> is <see cref="DictionaryKind.Complex"/> then the values that are read from the
@@ -78,14 +78,14 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         }
 
         /// <summary>
-        /// Reads a <see cref="IConnector"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Reads a <see cref="IFlow"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property.
         /// </summary>
         /// <param name="dictionary">
-        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IConnector"/>
+        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IFlow"/>
         /// </param>
         /// <returns>
-        /// An instance of <see cref="IConnector"/>
+        /// An instance of <see cref="IFlow"/>
         /// </returns>
         /// <remarks>
         /// When the <see cref="DictionaryKind"/> is <see cref="DictionaryKind.Complex"/> then the values that are read from the
@@ -100,374 +100,374 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted from string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted from an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static IConnector ReadSimplified(Dictionary<string, object> dictionary)
+        private static IFlow ReadSimplified(Dictionary<string, object> dictionary)
         {
-            var connectorInstance = DictionaryNullAndTypeCheck(dictionary);
+            var flowInstance = DictionaryNullAndTypeCheck(dictionary);
 
             if (!dictionary.TryGetValue("aliasIds", out object aliasIdsObject))
             {
-                throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
 
             if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
             {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
-                throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             FeatureDirectionKind? directionFeature = directionObject == null ? null : (FeatureDirectionKind?)Enum.Parse(typeof(FeatureDirectionKind), Convert.ToString(directionObject), true);
 
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
-                throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
 
             if (!dictionary.TryGetValue("isAbstract", out object isAbstractObject))
             {
-                throw new ArgumentException("The isAbstract property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isAbstract property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isAbstractFeature = Convert.ToBoolean(isAbstractObject);
 
             if (!dictionary.TryGetValue("isComposite", out object isCompositeObject))
             {
-                throw new ArgumentException("The isComposite property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isComposite property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
             if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
             {
-                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isConstantFeature = Convert.ToBoolean(isConstantObject);
 
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
-                throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isDerivedFeature = Convert.ToBoolean(isDerivedObject);
 
             if (!dictionary.TryGetValue("isEnd", out object isEndObject))
             {
-                throw new ArgumentException("The isEnd property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isEnd property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isEndFeature = Convert.ToBoolean(isEndObject);
 
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
-                throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isImpliedFeature = Convert.ToBoolean(isImpliedObject);
 
             if (!dictionary.TryGetValue("isImpliedIncluded", out object isImpliedIncludedObject))
             {
-                throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
 
             if (!dictionary.TryGetValue("isOrdered", out object isOrderedObject))
             {
-                throw new ArgumentException("The isOrdered property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isOrdered property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isOrderedFeature = Convert.ToBoolean(isOrderedObject);
 
             if (!dictionary.TryGetValue("isPortion", out object isPortionObject))
             {
-                throw new ArgumentException("The isPortion property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isPortion property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
-                throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isSufficientFeature = Convert.ToBoolean(isSufficientObject);
 
             if (!dictionary.TryGetValue("isUnique", out object isUniqueObject))
             {
-                throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
             if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
             {
-                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
-                throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<Guid> ownedRelatedElementFeature = (ownedRelatedElementObject as List<string>)?.Select(Guid.Parse).ToList();
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
-                throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<Guid> ownedRelationshipFeature = (ownedRelationshipObject as List<string>)?.Select(Guid.Parse).ToList();
 
             if (!dictionary.TryGetValue("owningRelatedElement", out object owningRelatedElementObject))
             {
-                throw new ArgumentException("The owningRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The owningRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             Guid? owningRelatedElementFeature = owningRelatedElementObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelatedElementObject));
 
             if (!dictionary.TryGetValue("owningRelationship", out object owningRelationshipObject))
             {
-                throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             Guid? owningRelationshipFeature = owningRelationshipObject == null ? (Guid?)null : Guid.Parse(Convert.ToString(owningRelationshipObject));
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
-                throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<Guid> sourceFeature = (sourceObject as List<string>)?.Select(Guid.Parse).ToList();
 
             if (!dictionary.TryGetValue("target", out object targetObject))
             {
-                throw new ArgumentException("The target property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The target property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<Guid> targetFeature = (targetObject as List<string>)?.Select(Guid.Parse).ToList();
 
 
-            connectorInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            connectorInstance.DeclaredName = declaredNameFeature;
-            connectorInstance.DeclaredShortName = declaredShortNameFeature;
-            connectorInstance.Direction = directionFeature;
-            connectorInstance.ElementId = elementIdFeature;
-            connectorInstance.IsAbstract = isAbstractFeature;
-            connectorInstance.IsComposite = isCompositeFeature;
-            connectorInstance.IsConstant = isConstantFeature;
-            connectorInstance.IsDerived = isDerivedFeature;
-            connectorInstance.IsEnd = isEndFeature;
-            connectorInstance.IsImplied = isImpliedFeature;
-            connectorInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            connectorInstance.IsOrdered = isOrderedFeature;
-            connectorInstance.IsPortion = isPortionFeature;
-            connectorInstance.IsSufficient = isSufficientFeature;
-            connectorInstance.IsUnique = isUniqueFeature;
-            connectorInstance.IsVariable = isVariableFeature;
-            connectorInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
-            connectorInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
-            connectorInstance.OwningRelatedElement = owningRelatedElementFeature;
-            connectorInstance.OwningRelationship = owningRelationshipFeature;
-            connectorInstance.Source = sourceFeature ?? new List<Guid>();
-            connectorInstance.Target = targetFeature ?? new List<Guid>();
+            flowInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            flowInstance.DeclaredName = declaredNameFeature;
+            flowInstance.DeclaredShortName = declaredShortNameFeature;
+            flowInstance.Direction = directionFeature;
+            flowInstance.ElementId = elementIdFeature;
+            flowInstance.IsAbstract = isAbstractFeature;
+            flowInstance.IsComposite = isCompositeFeature;
+            flowInstance.IsConstant = isConstantFeature;
+            flowInstance.IsDerived = isDerivedFeature;
+            flowInstance.IsEnd = isEndFeature;
+            flowInstance.IsImplied = isImpliedFeature;
+            flowInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            flowInstance.IsOrdered = isOrderedFeature;
+            flowInstance.IsPortion = isPortionFeature;
+            flowInstance.IsSufficient = isSufficientFeature;
+            flowInstance.IsUnique = isUniqueFeature;
+            flowInstance.IsVariable = isVariableFeature;
+            flowInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
+            flowInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
+            flowInstance.OwningRelatedElement = owningRelatedElementFeature;
+            flowInstance.OwningRelationship = owningRelationshipFeature;
+            flowInstance.Source = sourceFeature ?? new List<Guid>();
+            flowInstance.Target = targetFeature ?? new List<Guid>();
 
-            return connectorInstance;
+            return flowInstance;
         }
 
         /// <summary>
-        /// Reads a <see cref="IConnector"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Reads a <see cref="IFlow"/> from a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property.
         /// </summary>
         /// <param name="dictionary">
-        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IConnector"/>
+        /// The subject <see cref="Dictionary{String, Object}"/> that is to be converted into a <see cref="IFlow"/>
         /// </param>
         /// <returns>
-        /// An instance of <see cref="IConnector"/>
+        /// An instance of <see cref="IFlow"/>
         /// </returns>
-        private static IConnector ReadComplex(Dictionary<string, object> dictionary)
+        private static IFlow ReadComplex(Dictionary<string, object> dictionary)
         {
-            var connectorInstance = DictionaryNullAndTypeCheck(dictionary);
+            var flowInstance = DictionaryNullAndTypeCheck(dictionary);
 
             if (!dictionary.TryGetValue("aliasIds", out object aliasIdsObject))
             {
-                throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The aliasIds property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<string> aliasIdsFeature = aliasIdsObject as List<string>;
 
             if (!dictionary.TryGetValue("declaredName", out object declaredNameObject))
             {
-                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The declaredName property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             string declaredNameFeature = declaredNameObject == null ? null : Convert.ToString(declaredNameObject);
 
             if (!dictionary.TryGetValue("declaredShortName", out object declaredShortNameObject))
             {
-                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The declaredShortName property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             string declaredShortNameFeature = declaredShortNameObject == null ? null : Convert.ToString(declaredShortNameObject);
 
             if (!dictionary.TryGetValue("direction", out object directionObject))
             {
-                throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The direction property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             FeatureDirectionKind? directionFeature = (FeatureDirectionKind?)directionObject;
 
             if (!dictionary.TryGetValue("elementId", out object elementIdObject))
             {
-                throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The elementId property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             string elementIdFeature = Convert.ToString(elementIdObject);
 
             if (!dictionary.TryGetValue("isAbstract", out object isAbstractObject))
             {
-                throw new ArgumentException("The isAbstract property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isAbstract property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isAbstractFeature = Convert.ToBoolean(isAbstractObject);
 
             if (!dictionary.TryGetValue("isComposite", out object isCompositeObject))
             {
-                throw new ArgumentException("The isComposite property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isComposite property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isCompositeFeature = Convert.ToBoolean(isCompositeObject);
 
             if (!dictionary.TryGetValue("isConstant", out object isConstantObject))
             {
-                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isConstant property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isConstantFeature = Convert.ToBoolean(isConstantObject);
 
             if (!dictionary.TryGetValue("isDerived", out object isDerivedObject))
             {
-                throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isDerived property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isDerivedFeature = Convert.ToBoolean(isDerivedObject);
 
             if (!dictionary.TryGetValue("isEnd", out object isEndObject))
             {
-                throw new ArgumentException("The isEnd property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isEnd property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isEndFeature = Convert.ToBoolean(isEndObject);
 
             if (!dictionary.TryGetValue("isImplied", out object isImpliedObject))
             {
-                throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isImplied property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isImpliedFeature = Convert.ToBoolean(isImpliedObject);
 
             if (!dictionary.TryGetValue("isImpliedIncluded", out object isImpliedIncludedObject))
             {
-                throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isImpliedIncluded property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isImpliedIncludedFeature = Convert.ToBoolean(isImpliedIncludedObject);
 
             if (!dictionary.TryGetValue("isOrdered", out object isOrderedObject))
             {
-                throw new ArgumentException("The isOrdered property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isOrdered property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isOrderedFeature = Convert.ToBoolean(isOrderedObject);
 
             if (!dictionary.TryGetValue("isPortion", out object isPortionObject))
             {
-                throw new ArgumentException("The isPortion property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isPortion property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isPortionFeature = Convert.ToBoolean(isPortionObject);
 
             if (!dictionary.TryGetValue("isSufficient", out object isSufficientObject))
             {
-                throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isSufficient property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isSufficientFeature = Convert.ToBoolean(isSufficientObject);
 
             if (!dictionary.TryGetValue("isUnique", out object isUniqueObject))
             {
-                throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isUnique property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isUniqueFeature = Convert.ToBoolean(isUniqueObject);
 
             if (!dictionary.TryGetValue("isVariable", out object isVariableObject))
             {
-                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The isVariable property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             bool isVariableFeature = Convert.ToBoolean(isVariableObject);
 
             if (!dictionary.TryGetValue("ownedRelatedElement", out object ownedRelatedElementObject))
             {
-                throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The ownedRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<Guid> ownedRelatedElementFeature = (ownedRelatedElementObject as List<Guid>);
 
             if (!dictionary.TryGetValue("ownedRelationship", out object ownedRelationshipObject))
             {
-                throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The ownedRelationship property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<Guid> ownedRelationshipFeature = (ownedRelationshipObject as List<Guid>);
 
             if (!dictionary.TryGetValue("owningRelatedElement", out object owningRelatedElementObject))
             {
-                throw new ArgumentException("The owningRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The owningRelatedElement property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             Guid? owningRelatedElementFeature = (Guid?)owningRelatedElementObject;
 
             if (!dictionary.TryGetValue("owningRelationship", out object owningRelationshipObject))
             {
-                throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The owningRelationship property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             Guid? owningRelationshipFeature = (Guid?)owningRelationshipObject;
 
             if (!dictionary.TryGetValue("source", out object sourceObject))
             {
-                throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The source property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<Guid> sourceFeature = (sourceObject as List<Guid>);
 
             if (!dictionary.TryGetValue("target", out object targetObject))
             {
-                throw new ArgumentException("The target property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The target property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             List<Guid> targetFeature = (targetObject as List<Guid>);
 
 
-            connectorInstance.AliasIds = aliasIdsFeature ?? new List<string>();
-            connectorInstance.DeclaredName = declaredNameFeature;
-            connectorInstance.DeclaredShortName = declaredShortNameFeature;
-            connectorInstance.Direction = directionFeature;
-            connectorInstance.ElementId = elementIdFeature;
-            connectorInstance.IsAbstract = isAbstractFeature;
-            connectorInstance.IsComposite = isCompositeFeature;
-            connectorInstance.IsConstant = isConstantFeature;
-            connectorInstance.IsDerived = isDerivedFeature;
-            connectorInstance.IsEnd = isEndFeature;
-            connectorInstance.IsImplied = isImpliedFeature;
-            connectorInstance.IsImpliedIncluded = isImpliedIncludedFeature;
-            connectorInstance.IsOrdered = isOrderedFeature;
-            connectorInstance.IsPortion = isPortionFeature;
-            connectorInstance.IsSufficient = isSufficientFeature;
-            connectorInstance.IsUnique = isUniqueFeature;
-            connectorInstance.IsVariable = isVariableFeature;
-            connectorInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
-            connectorInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
-            connectorInstance.OwningRelatedElement = owningRelatedElementFeature;
-            connectorInstance.OwningRelationship = owningRelationshipFeature;
-            connectorInstance.Source = sourceFeature ?? new List<Guid>();
-            connectorInstance.Target = targetFeature ?? new List<Guid>();
+            flowInstance.AliasIds = aliasIdsFeature ?? new List<string>();
+            flowInstance.DeclaredName = declaredNameFeature;
+            flowInstance.DeclaredShortName = declaredShortNameFeature;
+            flowInstance.Direction = directionFeature;
+            flowInstance.ElementId = elementIdFeature;
+            flowInstance.IsAbstract = isAbstractFeature;
+            flowInstance.IsComposite = isCompositeFeature;
+            flowInstance.IsConstant = isConstantFeature;
+            flowInstance.IsDerived = isDerivedFeature;
+            flowInstance.IsEnd = isEndFeature;
+            flowInstance.IsImplied = isImpliedFeature;
+            flowInstance.IsImpliedIncluded = isImpliedIncludedFeature;
+            flowInstance.IsOrdered = isOrderedFeature;
+            flowInstance.IsPortion = isPortionFeature;
+            flowInstance.IsSufficient = isSufficientFeature;
+            flowInstance.IsUnique = isUniqueFeature;
+            flowInstance.IsVariable = isVariableFeature;
+            flowInstance.OwnedRelatedElement = ownedRelatedElementFeature ?? new List<Guid>();
+            flowInstance.OwnedRelationship = ownedRelationshipFeature ?? new List<Guid>();
+            flowInstance.OwningRelatedElement = owningRelatedElementFeature;
+            flowInstance.OwningRelationship = owningRelationshipFeature;
+            flowInstance.Source = sourceFeature ?? new List<Guid>();
+            flowInstance.Target = targetFeature ?? new List<Guid>();
 
-            return connectorInstance;
+            return flowInstance;
         }
 
         /// <summary>
         /// Checks whether the <see cref="Dictionary{String, Object}"/> is not null and whether it is
-        /// of type <see cref="Connector"/>
+        /// of type <see cref="Flow"/>
         /// </summary>
         /// <param name="dictionary">
         /// The subject <see cref="Dictionary{String, Object}"/> that contains the key-value pairs of
         /// properties and values.
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IConnector"/>
+        /// an instance of <see cref="IFlow"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="dictionary"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="dictionary"/> is not of type <see cref="Connector"/>
+        /// Thrown when <paramref name="dictionary"/> is not of type <see cref="Flow"/>
         /// </exception>
-        private static IConnector DictionaryNullAndTypeCheck(Dictionary<string, object> dictionary)
+        private static IFlow DictionaryNullAndTypeCheck(Dictionary<string, object> dictionary)
         {
             if (dictionary == null)
             {
@@ -476,28 +476,28 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
 
             if (!dictionary.TryGetValue("@type", out object typeObject))
             {
-                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The type property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
 
             var type = Convert.ToString(typeObject);
 
-            if (type != "Connector")
+            if (type != "Flow")
             {
-                throw new ArgumentException($"The dictionary contains an Object is of type {type} and can therefore not be converted into a Connector");
+                throw new ArgumentException($"The dictionary contains an Object is of type {type} and can therefore not be converted into a Flow");
             }
 
             if (!dictionary.TryGetValue("@id", out object idObject))
             {
-                throw new ArgumentException("The id property is missing from the dictionary, the dictionary cannot be converted into a Connector");
+                throw new ArgumentException("The id property is missing from the dictionary, the dictionary cannot be converted into a Flow");
             }
             var id = Guid.Parse(Convert.ToString(idObject));
 
-            var connectorInstance = new SysML2.NET.Core.DTO.Connector
+            var flowInstance = new SysML2.NET.Core.DTO.Flow
             {
                 Id = id
             };
 
-            return connectorInstance;
+            return flowInstance;
         }
     }
 }
