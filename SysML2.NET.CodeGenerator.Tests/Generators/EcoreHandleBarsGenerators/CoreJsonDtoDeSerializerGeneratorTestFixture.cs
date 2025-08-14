@@ -20,20 +20,19 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
-    using System.IO;
-
     using ECoreNetto;
-
     using NUnit.Framework;
-
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+    using System.IO;
+    using System.Threading.Tasks;
 
     [TestFixture]
     public class CoreJsonDtoDeSerializerGeneratorTestFixture
     {
         private DirectoryInfo dtoDirectoryInfo;
 
-        private CoreJsonDtoDeSerializerGenerator dtoDeSerializerGenerator;
+        private CoreJsonDtoDeSerializerGenerator coreJsonDtoDeSerializerGenerator;
 
         private EPackage rootPackage;
 
@@ -49,28 +48,38 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 
             this.rootPackage = DataModelLoader.Load();
 
-            this.dtoDeSerializerGenerator = new CoreJsonDtoDeSerializerGenerator();
+            this.coreJsonDtoDeSerializerGenerator = new CoreJsonDtoDeSerializerGenerator();
         }
 
         [Test]
         public void verify_enum_deserializers_are_generated()
         {
-            Assert.That(async () => await dtoDeSerializerGenerator.GenerateEnumDeSerializers(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await coreJsonDtoDeSerializerGenerator.GenerateEnumDeSerializers(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test]
         public void verify_dto_deserializers_are_generated()
         {
-            Assert.That(async () => await dtoDeSerializerGenerator.GenerateDtoDeSerializers(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await coreJsonDtoDeSerializerGenerator.GenerateDtoDeSerializers(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
         }
 
         [Test]
         public void verify_DeSerializationProvider_is_generated()
         {
-            Assert.That(async () => await dtoDeSerializerGenerator.GenerateDeSerializationProvider(rootPackage, dtoDirectoryInfo),
+            Assert.That(async () => await coreJsonDtoDeSerializerGenerator.GenerateDeSerializationProvider(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
+        }
+
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
+        public void Verify_that_expected_json_deserializer_classes_are_generated_correctly(string className)
+        {
+            var generatedCode = this.coreJsonDtoDeSerializerGenerator.GenerateClass(this.rootPackage, className);
+
+            var expected = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/ECore/Core/AutoGenDeSerializer/{className}DeSerializer.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
         }
     }
 }

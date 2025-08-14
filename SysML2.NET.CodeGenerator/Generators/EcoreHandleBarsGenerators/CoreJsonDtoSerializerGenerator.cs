@@ -20,15 +20,13 @@
 
 namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 {
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using System.IO;
-
     using ECoreNetto;
-
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A Handlebars based DTO JSON serializer code generator
@@ -80,6 +78,36 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
 
                 await Write(generatedSerializer, outputDirectory, fileName);
             }
+        }
+
+        /// <summary>
+        /// Generates a named Json Serializer class
+        /// </summary>
+        /// <param name="package">
+        /// the <see cref="EPackage"/> that contains the <see cref="EClass"/> to generate
+        /// </param>
+        /// <param name="className">
+        /// The name of the class that is to be generated
+        /// </param>
+        /// <returns>
+        /// a string representation of the generated class
+        /// </returns>
+        public string GenerateClass(EPackage package, string className)
+        {
+            var template = this.Templates["core-json-dto-serializer-template"];
+
+            var eClass = package.EClassifiers.OfType<EClass>().Single(x => x.Name == className);
+
+            if (eClass.Abstract)
+            {
+                throw new InvalidOperationException("Json Serializer should not be abstract");
+            }
+
+            var generatedDeSerializer = template(eClass);
+
+            generatedDeSerializer = CodeCleanup(generatedDeSerializer);
+
+            return generatedDeSerializer;
         }
 
         /// <summary>

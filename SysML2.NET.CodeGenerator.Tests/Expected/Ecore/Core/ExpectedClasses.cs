@@ -37,15 +37,24 @@ namespace SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core
         public IEnumerator<string> GetEnumerator()
         {
             yield return "AnnotatingElement";
-            yield return "Annotation";
-            yield return "Comment";
-            yield return "Connector";
-            yield return "Definition";
+            yield return "Association";
             yield return "Dependency";
+            yield return "EnumerationDefinition";
             yield return "Feature";
-            yield return "NamespaceImport";
+            yield return "FeatureTyping";
+            yield return "Flow";
+            yield return "FramedConcernMembership";
             yield return "LiteralInteger";
             yield return "LiteralRational";
+            yield return "Membership";
+            yield return "MultiplicityRange";
+            yield return "OwningMembership";
+            yield return "ReferenceSubsetting";
+            yield return "RequirementUsage";
+            yield return "SelectExpression";
+            yield return "Subclassification";
+            yield return "TextualRepresentation";
+            yield return "Usage";
         }
 
         /// <summary>
@@ -74,16 +83,26 @@ namespace SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core
         public IEnumerator<string> GetEnumerator()
         {
             yield return "AnnotatingElement";
-            yield return "Annotation";
-            yield return "Comment";
-            yield return "Connector";
-            yield return "Definition";
+            yield return "Association";
             yield return "Dependency";
             yield return "Element";
+            yield return "EnumerationDefinition";
             yield return "Feature";
-            yield return "Import";
+            yield return "FeatureTyping";
+            yield return "Flow";
+            yield return "FramedConcernMembership";
             yield return "LiteralInteger";
             yield return "LiteralRational";
+            yield return "Membership";
+            yield return "MultiplicityRange";
+            yield return "OwningMembership";
+            yield return "ReferenceSubsetting";
+            yield return "Relationship";
+            yield return "RequirementUsage";
+            yield return "SelectExpression";
+            yield return "Subclassification";
+            yield return "TextualRepresentation";
+            yield return "Usage";
         }
 
         /// <summary>

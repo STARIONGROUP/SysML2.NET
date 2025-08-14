@@ -20,13 +20,11 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
 {
-    using System.IO;
-
     using ECoreNetto;
-
     using NUnit.Framework;
-
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+    using System.IO;
 
     [TestFixture]
     public class CoreJsonDtoSerializerGeneratorTestFixture
@@ -64,6 +62,16 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
         {
             Assert.That(async () => await dtoSerializerGenerator.GenerateSerializationProvider(rootPackage, dtoDirectoryInfo),
                 Throws.Nothing);
+        }
+
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
+        public void Verify_that_expected_json_deserializer_classes_are_generated_correctly(string className)
+        {
+            var generatedCode = this.dtoSerializerGenerator.GenerateClass(this.rootPackage, className);
+
+            var expected = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/ECore/Core/AutoGenSerializer/{className}Serializer.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
         }
     }
 }
