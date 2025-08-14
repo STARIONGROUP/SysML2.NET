@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="CommentDictionaryWriter.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="OwningMembershipDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,17 +31,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="CommentDictionaryWriter"/> is to write (convert) a <see cref="IComment"/>
+    /// The purpose of the <see cref="OwningMembershipDictionaryWriter"/> is to write (convert) a <see cref="IOwningMembership"/>
     /// to a <see cref="Dictionary{String, Object}"/>.
     /// </summary>
-    public static class CommentDictionaryWriter
+    public static class OwningMembershipDictionaryWriter
     {
         /// <summary>
-        /// Writes a <see cref="IComment"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IOwningMembership"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
         /// <param name="dataItem">
-        /// The subject <see cref="IComment"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// The subject <see cref="IOwningMembership"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <param name="dictionaryKind">
         /// The target <see cref="DictionaryKind"/> that is to be created
@@ -65,25 +65,25 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// </remarks>
         public static Dictionary<string, object> Write(IData dataItem, DictionaryKind dictionaryKind)
         {
-            var commentInstance = ThingNullAndTypeCheck(dataItem);
+            var owningMembershipInstance = ThingNullAndTypeCheck(dataItem);
 
             switch (dictionaryKind)
             {
                 case DictionaryKind.Complex:
-                    return WriteComplex(commentInstance);
+                    return WriteComplex(owningMembershipInstance);
                 case DictionaryKind.Simplified:
-                    return WriteSimplified(commentInstance);
+                    return WriteSimplified(owningMembershipInstance);
                 default:
                     throw new NotSupportedException($"The dictionaryKind:{dictionaryKind} is not supported");
             }
         }
 
         /// <summary>
-        /// Writes a <see cref="IComment"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IOwningMembership"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="commentInstance">
-        /// The subject <see cref="IComment"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="owningMembershipInstance">
+        /// The subject <see cref="IOwningMembership"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -99,33 +99,40 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted to string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted to an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static Dictionary<string, object> WriteSimplified(IComment commentInstance)
+        private static Dictionary<string, object> WriteSimplified(IOwningMembership owningMembershipInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "Comment" },
-                { "@id", commentInstance.Id.ToString() }
+                { "@type", "OwningMembership" },
+                { "@id", owningMembershipInstance.Id.ToString() }
             };
 
-            dictionary.Add("aliasIds", commentInstance.AliasIds);
-            dictionary.Add("body", commentInstance.Body);
-            dictionary.Add("declaredName", commentInstance.DeclaredName);
-            dictionary.Add("declaredShortName", commentInstance.DeclaredShortName);
-            dictionary.Add("elementId", commentInstance.ElementId);
-            dictionary.Add("isImpliedIncluded", commentInstance.IsImpliedIncluded);
-            dictionary.Add("locale", commentInstance.Locale);
-            dictionary.Add("ownedRelationship", $"[ {string.Join(",", commentInstance.OwnedRelationship)} ]");
-            dictionary.Add("owningRelationship", commentInstance.OwningRelationship.ToString());
+            dictionary.Add("aliasIds", owningMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", owningMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", owningMembershipInstance.DeclaredShortName);
+            dictionary.Add("elementId", owningMembershipInstance.ElementId);
+            dictionary.Add("isImplied", owningMembershipInstance.IsImplied);
+            dictionary.Add("isImpliedIncluded", owningMembershipInstance.IsImpliedIncluded);
+            dictionary.Add("memberElement", owningMembershipInstance.MemberElement.ToString());
+            dictionary.Add("memberName", owningMembershipInstance.MemberName);
+            dictionary.Add("memberShortName", owningMembershipInstance.MemberShortName);
+            dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", owningMembershipInstance.OwnedRelatedElement)} ]");
+            dictionary.Add("ownedRelationship", $"[ {string.Join(",", owningMembershipInstance.OwnedRelationship)} ]");
+            dictionary.Add("owningRelatedElement", owningMembershipInstance.OwningRelatedElement.ToString());
+            dictionary.Add("owningRelationship", owningMembershipInstance.OwningRelationship.ToString());
+            dictionary.Add("source", $"[ {string.Join(",", owningMembershipInstance.Source)} ]");
+            dictionary.Add("target", $"[ {string.Join(",", owningMembershipInstance.Target)} ]");
+            dictionary.Add("visibility", owningMembershipInstance.Visibility);
 
             return dictionary;
         }
 
         /// <summary>
-        /// Writes a <see cref="IComment"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IOwningMembership"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="commentInstance">
-        /// The subject <see cref="IComment"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="owningMembershipInstance">
+        /// The subject <see cref="IOwningMembership"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -134,56 +141,63 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// <remarks>
         /// All values are stored as is, no conversion is done
         /// </remarks>
-        private static Dictionary<string, object> WriteComplex(IComment commentInstance)
+        private static Dictionary<string, object> WriteComplex(IOwningMembership owningMembershipInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "Comment" },
-                { "@id", commentInstance.Id }
+                { "@type", "OwningMembership" },
+                { "@id", owningMembershipInstance.Id }
             };
 
-            dictionary.Add("aliasIds", commentInstance.AliasIds);
-            dictionary.Add("body", commentInstance.Body);
-            dictionary.Add("declaredName", commentInstance.DeclaredName);
-            dictionary.Add("declaredShortName", commentInstance.DeclaredShortName);
-            dictionary.Add("elementId", commentInstance.ElementId);
-            dictionary.Add("isImpliedIncluded", commentInstance.IsImpliedIncluded);
-            dictionary.Add("locale", commentInstance.Locale);
-            dictionary.Add("ownedRelationship", commentInstance.OwnedRelationship);
-            dictionary.Add("owningRelationship", commentInstance.OwningRelationship);
+            dictionary.Add("aliasIds", owningMembershipInstance.AliasIds);
+            dictionary.Add("declaredName", owningMembershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", owningMembershipInstance.DeclaredShortName);
+            dictionary.Add("elementId", owningMembershipInstance.ElementId);
+            dictionary.Add("isImplied", owningMembershipInstance.IsImplied);
+            dictionary.Add("isImpliedIncluded", owningMembershipInstance.IsImpliedIncluded);
+            dictionary.Add("memberElement", owningMembershipInstance.MemberElement);
+            dictionary.Add("memberName", owningMembershipInstance.MemberName);
+            dictionary.Add("memberShortName", owningMembershipInstance.MemberShortName);
+            dictionary.Add("ownedRelatedElement", owningMembershipInstance.OwnedRelatedElement);
+            dictionary.Add("ownedRelationship", owningMembershipInstance.OwnedRelationship);
+            dictionary.Add("owningRelatedElement", owningMembershipInstance.OwningRelatedElement);
+            dictionary.Add("owningRelationship", owningMembershipInstance.OwningRelationship);
+            dictionary.Add("source", owningMembershipInstance.Source);
+            dictionary.Add("target", owningMembershipInstance.Target);
+            dictionary.Add("visibility", owningMembershipInstance.Visibility);
 
             return dictionary;
         }
 
         /// <summary>
         /// Checks whether the <see cref="IData"/> is not null and whether it is
-        /// of type <see cref="IComment"/>
+        /// of type <see cref="IOwningMembership"/>
         /// </summary>
         /// <param name="dataItem">
         /// The subject <see cref="IData"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IComment"/>
+        /// an instance of <see cref="IOwningMembership"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="thing"/> is not of type <see cref="IComment"/>
+        /// Thrown when <paramref name="thing"/> is not of type <see cref="IOwningMembership"/>
         /// </exception>
-        private static IComment ThingNullAndTypeCheck(IData dataItem)
+        private static IOwningMembership ThingNullAndTypeCheck(IData dataItem)
         {
             if (dataItem == null)
             {
                 throw new ArgumentNullException("dataItem", "The dataItem may not be null");
             }
 
-            if (!(dataItem is IComment commentInstance))
+            if (!(dataItem is IOwningMembership owningMembershipInstance))
             {
-                throw new ArgumentException("The dataItem must be of Type IComment", "dataItem");
+                throw new ArgumentException("The dataItem must be of Type IOwningMembership", "dataItem");
             }
 
-            return commentInstance;
+            return owningMembershipInstance;
         }
     }
 }

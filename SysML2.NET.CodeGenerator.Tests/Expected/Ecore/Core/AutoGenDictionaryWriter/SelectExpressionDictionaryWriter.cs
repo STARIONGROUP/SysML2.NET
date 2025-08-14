@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="LiteralRationalDictionaryWriter.cs" company="Starion Group S.A.">
+// <copyright file="SelectExpressionDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,17 +31,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="LiteralRationalDictionaryWriter"/> is to write (convert) a <see cref="ILiteralRational"/>
+    /// The purpose of the <see cref="SelectExpressionDictionaryWriter"/> is to write (convert) a <see cref="ISelectExpression"/>
     /// to a <see cref="Dictionary{String, Object}"/>.
     /// </summary>
-    public static class LiteralRationalDictionaryWriter
+    public static class SelectExpressionDictionaryWriter
     {
         /// <summary>
-        /// Writes a <see cref="ILiteralRational"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ISelectExpression"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
         /// <param name="dataItem">
-        /// The subject <see cref="ILiteralRational"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// The subject <see cref="ISelectExpression"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <param name="dictionaryKind">
         /// The target <see cref="DictionaryKind"/> that is to be created
@@ -65,25 +65,25 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// </remarks>
         public static Dictionary<string, object> Write(IData dataItem, DictionaryKind dictionaryKind)
         {
-            var literalRationalInstance = ThingNullAndTypeCheck(dataItem);
+            var selectExpressionInstance = ThingNullAndTypeCheck(dataItem);
 
             switch (dictionaryKind)
             {
                 case DictionaryKind.Complex:
-                    return WriteComplex(literalRationalInstance);
+                    return WriteComplex(selectExpressionInstance);
                 case DictionaryKind.Simplified:
-                    return WriteSimplified(literalRationalInstance);
+                    return WriteSimplified(selectExpressionInstance);
                 default:
                     throw new NotSupportedException($"The dictionaryKind:{dictionaryKind} is not supported");
             }
         }
 
         /// <summary>
-        /// Writes a <see cref="ILiteralRational"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ISelectExpression"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="literalRationalInstance">
-        /// The subject <see cref="ILiteralRational"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="selectExpressionInstance">
+        /// The subject <see cref="ISelectExpression"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -99,43 +99,43 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted to string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted to an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static Dictionary<string, object> WriteSimplified(ILiteralRational literalRationalInstance)
+        private static Dictionary<string, object> WriteSimplified(ISelectExpression selectExpressionInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "LiteralRational" },
-                { "@id", literalRationalInstance.Id.ToString() }
+                { "@type", "SelectExpression" },
+                { "@id", selectExpressionInstance.Id.ToString() }
             };
 
-            dictionary.Add("aliasIds", literalRationalInstance.AliasIds);
-            dictionary.Add("declaredName", literalRationalInstance.DeclaredName);
-            dictionary.Add("declaredShortName", literalRationalInstance.DeclaredShortName);
-            dictionary.Add("direction", literalRationalInstance.Direction);
-            dictionary.Add("elementId", literalRationalInstance.ElementId);
-            dictionary.Add("isAbstract", literalRationalInstance.IsAbstract);
-            dictionary.Add("isComposite", literalRationalInstance.IsComposite);
-            dictionary.Add("isConstant", literalRationalInstance.IsConstant);
-            dictionary.Add("isDerived", literalRationalInstance.IsDerived);
-            dictionary.Add("isEnd", literalRationalInstance.IsEnd);
-            dictionary.Add("isImpliedIncluded", literalRationalInstance.IsImpliedIncluded);
-            dictionary.Add("isOrdered", literalRationalInstance.IsOrdered);
-            dictionary.Add("isPortion", literalRationalInstance.IsPortion);
-            dictionary.Add("isSufficient", literalRationalInstance.IsSufficient);
-            dictionary.Add("isUnique", literalRationalInstance.IsUnique);
-            dictionary.Add("isVariable", literalRationalInstance.IsVariable);
-            dictionary.Add("ownedRelationship", $"[ {string.Join(",", literalRationalInstance.OwnedRelationship)} ]");
-            dictionary.Add("owningRelationship", literalRationalInstance.OwningRelationship.ToString());
-            dictionary.Add("value", literalRationalInstance.Value);
+            dictionary.Add("aliasIds", selectExpressionInstance.AliasIds);
+            dictionary.Add("declaredName", selectExpressionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", selectExpressionInstance.DeclaredShortName);
+            dictionary.Add("direction", selectExpressionInstance.Direction);
+            dictionary.Add("elementId", selectExpressionInstance.ElementId);
+            dictionary.Add("isAbstract", selectExpressionInstance.IsAbstract);
+            dictionary.Add("isComposite", selectExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", selectExpressionInstance.IsConstant);
+            dictionary.Add("isDerived", selectExpressionInstance.IsDerived);
+            dictionary.Add("isEnd", selectExpressionInstance.IsEnd);
+            dictionary.Add("isImpliedIncluded", selectExpressionInstance.IsImpliedIncluded);
+            dictionary.Add("isOrdered", selectExpressionInstance.IsOrdered);
+            dictionary.Add("isPortion", selectExpressionInstance.IsPortion);
+            dictionary.Add("isSufficient", selectExpressionInstance.IsSufficient);
+            dictionary.Add("isUnique", selectExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", selectExpressionInstance.IsVariable);
+            dictionary.Add("operator", selectExpressionInstance.Operator);
+            dictionary.Add("ownedRelationship", $"[ {string.Join(",", selectExpressionInstance.OwnedRelationship)} ]");
+            dictionary.Add("owningRelationship", selectExpressionInstance.OwningRelationship.ToString());
 
             return dictionary;
         }
 
         /// <summary>
-        /// Writes a <see cref="ILiteralRational"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ISelectExpression"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="literalRationalInstance">
-        /// The subject <see cref="ILiteralRational"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="selectExpressionInstance">
+        /// The subject <see cref="ISelectExpression"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -144,66 +144,66 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// <remarks>
         /// All values are stored as is, no conversion is done
         /// </remarks>
-        private static Dictionary<string, object> WriteComplex(ILiteralRational literalRationalInstance)
+        private static Dictionary<string, object> WriteComplex(ISelectExpression selectExpressionInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "LiteralRational" },
-                { "@id", literalRationalInstance.Id }
+                { "@type", "SelectExpression" },
+                { "@id", selectExpressionInstance.Id }
             };
 
-            dictionary.Add("aliasIds", literalRationalInstance.AliasIds);
-            dictionary.Add("declaredName", literalRationalInstance.DeclaredName);
-            dictionary.Add("declaredShortName", literalRationalInstance.DeclaredShortName);
-            dictionary.Add("direction", literalRationalInstance.Direction);
-            dictionary.Add("elementId", literalRationalInstance.ElementId);
-            dictionary.Add("isAbstract", literalRationalInstance.IsAbstract);
-            dictionary.Add("isComposite", literalRationalInstance.IsComposite);
-            dictionary.Add("isConstant", literalRationalInstance.IsConstant);
-            dictionary.Add("isDerived", literalRationalInstance.IsDerived);
-            dictionary.Add("isEnd", literalRationalInstance.IsEnd);
-            dictionary.Add("isImpliedIncluded", literalRationalInstance.IsImpliedIncluded);
-            dictionary.Add("isOrdered", literalRationalInstance.IsOrdered);
-            dictionary.Add("isPortion", literalRationalInstance.IsPortion);
-            dictionary.Add("isSufficient", literalRationalInstance.IsSufficient);
-            dictionary.Add("isUnique", literalRationalInstance.IsUnique);
-            dictionary.Add("isVariable", literalRationalInstance.IsVariable);
-            dictionary.Add("ownedRelationship", literalRationalInstance.OwnedRelationship);
-            dictionary.Add("owningRelationship", literalRationalInstance.OwningRelationship);
-            dictionary.Add("value", literalRationalInstance.Value);
+            dictionary.Add("aliasIds", selectExpressionInstance.AliasIds);
+            dictionary.Add("declaredName", selectExpressionInstance.DeclaredName);
+            dictionary.Add("declaredShortName", selectExpressionInstance.DeclaredShortName);
+            dictionary.Add("direction", selectExpressionInstance.Direction);
+            dictionary.Add("elementId", selectExpressionInstance.ElementId);
+            dictionary.Add("isAbstract", selectExpressionInstance.IsAbstract);
+            dictionary.Add("isComposite", selectExpressionInstance.IsComposite);
+            dictionary.Add("isConstant", selectExpressionInstance.IsConstant);
+            dictionary.Add("isDerived", selectExpressionInstance.IsDerived);
+            dictionary.Add("isEnd", selectExpressionInstance.IsEnd);
+            dictionary.Add("isImpliedIncluded", selectExpressionInstance.IsImpliedIncluded);
+            dictionary.Add("isOrdered", selectExpressionInstance.IsOrdered);
+            dictionary.Add("isPortion", selectExpressionInstance.IsPortion);
+            dictionary.Add("isSufficient", selectExpressionInstance.IsSufficient);
+            dictionary.Add("isUnique", selectExpressionInstance.IsUnique);
+            dictionary.Add("isVariable", selectExpressionInstance.IsVariable);
+            dictionary.Add("operator", selectExpressionInstance.Operator);
+            dictionary.Add("ownedRelationship", selectExpressionInstance.OwnedRelationship);
+            dictionary.Add("owningRelationship", selectExpressionInstance.OwningRelationship);
 
             return dictionary;
         }
 
         /// <summary>
         /// Checks whether the <see cref="IData"/> is not null and whether it is
-        /// of type <see cref="ILiteralRational"/>
+        /// of type <see cref="ISelectExpression"/>
         /// </summary>
         /// <param name="dataItem">
         /// The subject <see cref="IData"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="ILiteralRational"/>
+        /// an instance of <see cref="ISelectExpression"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="thing"/> is not of type <see cref="ILiteralRational"/>
+        /// Thrown when <paramref name="thing"/> is not of type <see cref="ISelectExpression"/>
         /// </exception>
-        private static ILiteralRational ThingNullAndTypeCheck(IData dataItem)
+        private static ISelectExpression ThingNullAndTypeCheck(IData dataItem)
         {
             if (dataItem == null)
             {
                 throw new ArgumentNullException("dataItem", "The dataItem may not be null");
             }
 
-            if (!(dataItem is ILiteralRational literalRationalInstance))
+            if (!(dataItem is ISelectExpression selectExpressionInstance))
             {
-                throw new ArgumentException("The dataItem must be of Type ILiteralRational", "dataItem");
+                throw new ArgumentException("The dataItem must be of Type ISelectExpression", "dataItem");
             }
 
-            return literalRationalInstance;
+            return selectExpressionInstance;
         }
     }
 }

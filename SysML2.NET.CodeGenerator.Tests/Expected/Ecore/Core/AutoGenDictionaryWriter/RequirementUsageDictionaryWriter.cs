@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="ConnectorDictionaryWriter.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="RequirementUsageDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,17 +31,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="ConnectorDictionaryWriter"/> is to write (convert) a <see cref="IConnector"/>
+    /// The purpose of the <see cref="RequirementUsageDictionaryWriter"/> is to write (convert) a <see cref="IRequirementUsage"/>
     /// to a <see cref="Dictionary{String, Object}"/>.
     /// </summary>
-    public static class ConnectorDictionaryWriter
+    public static class RequirementUsageDictionaryWriter
     {
         /// <summary>
-        /// Writes a <see cref="IConnector"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IRequirementUsage"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
         /// <param name="dataItem">
-        /// The subject <see cref="IConnector"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// The subject <see cref="IRequirementUsage"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <param name="dictionaryKind">
         /// The target <see cref="DictionaryKind"/> that is to be created
@@ -65,25 +65,25 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// </remarks>
         public static Dictionary<string, object> Write(IData dataItem, DictionaryKind dictionaryKind)
         {
-            var connectorInstance = ThingNullAndTypeCheck(dataItem);
+            var requirementUsageInstance = ThingNullAndTypeCheck(dataItem);
 
             switch (dictionaryKind)
             {
                 case DictionaryKind.Complex:
-                    return WriteComplex(connectorInstance);
+                    return WriteComplex(requirementUsageInstance);
                 case DictionaryKind.Simplified:
-                    return WriteSimplified(connectorInstance);
+                    return WriteSimplified(requirementUsageInstance);
                 default:
                     throw new NotSupportedException($"The dictionaryKind:{dictionaryKind} is not supported");
             }
         }
 
         /// <summary>
-        /// Writes a <see cref="IConnector"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IRequirementUsage"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="connectorInstance">
-        /// The subject <see cref="IConnector"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="requirementUsageInstance">
+        /// The subject <see cref="IRequirementUsage"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -99,47 +99,46 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted to string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted to an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static Dictionary<string, object> WriteSimplified(IConnector connectorInstance)
+        private static Dictionary<string, object> WriteSimplified(IRequirementUsage requirementUsageInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "Connector" },
-                { "@id", connectorInstance.Id.ToString() }
+                { "@type", "RequirementUsage" },
+                { "@id", requirementUsageInstance.Id.ToString() }
             };
 
-            dictionary.Add("aliasIds", connectorInstance.AliasIds);
-            dictionary.Add("declaredName", connectorInstance.DeclaredName);
-            dictionary.Add("declaredShortName", connectorInstance.DeclaredShortName);
-            dictionary.Add("direction", connectorInstance.Direction);
-            dictionary.Add("elementId", connectorInstance.ElementId);
-            dictionary.Add("isAbstract", connectorInstance.IsAbstract);
-            dictionary.Add("isComposite", connectorInstance.IsComposite);
-            dictionary.Add("isConstant", connectorInstance.IsConstant);
-            dictionary.Add("isDerived", connectorInstance.IsDerived);
-            dictionary.Add("isEnd", connectorInstance.IsEnd);
-            dictionary.Add("isImplied", connectorInstance.IsImplied);
-            dictionary.Add("isImpliedIncluded", connectorInstance.IsImpliedIncluded);
-            dictionary.Add("isOrdered", connectorInstance.IsOrdered);
-            dictionary.Add("isPortion", connectorInstance.IsPortion);
-            dictionary.Add("isSufficient", connectorInstance.IsSufficient);
-            dictionary.Add("isUnique", connectorInstance.IsUnique);
-            dictionary.Add("isVariable", connectorInstance.IsVariable);
-            dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", connectorInstance.OwnedRelatedElement)} ]");
-            dictionary.Add("ownedRelationship", $"[ {string.Join(",", connectorInstance.OwnedRelationship)} ]");
-            dictionary.Add("owningRelatedElement", connectorInstance.OwningRelatedElement.ToString());
-            dictionary.Add("owningRelationship", connectorInstance.OwningRelationship.ToString());
-            dictionary.Add("source", $"[ {string.Join(",", connectorInstance.Source)} ]");
-            dictionary.Add("target", $"[ {string.Join(",", connectorInstance.Target)} ]");
+            dictionary.Add("aliasIds", requirementUsageInstance.AliasIds);
+            dictionary.Add("declaredName", requirementUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", requirementUsageInstance.DeclaredShortName);
+            dictionary.Add("direction", requirementUsageInstance.Direction);
+            dictionary.Add("elementId", requirementUsageInstance.ElementId);
+            dictionary.Add("isAbstract", requirementUsageInstance.IsAbstract);
+            dictionary.Add("isComposite", requirementUsageInstance.IsComposite);
+            dictionary.Add("isConstant", requirementUsageInstance.IsConstant);
+            dictionary.Add("isDerived", requirementUsageInstance.IsDerived);
+            dictionary.Add("isEnd", requirementUsageInstance.IsEnd);
+            dictionary.Add("isImpliedIncluded", requirementUsageInstance.IsImpliedIncluded);
+            dictionary.Add("isIndividual", requirementUsageInstance.IsIndividual);
+            dictionary.Add("isOrdered", requirementUsageInstance.IsOrdered);
+            dictionary.Add("isPortion", requirementUsageInstance.IsPortion);
+            dictionary.Add("isSufficient", requirementUsageInstance.IsSufficient);
+            dictionary.Add("isUnique", requirementUsageInstance.IsUnique);
+            dictionary.Add("isVariable", requirementUsageInstance.IsVariable);
+            dictionary.Add("isVariation", requirementUsageInstance.IsVariation);
+            dictionary.Add("ownedRelationship", $"[ {string.Join(",", requirementUsageInstance.OwnedRelationship)} ]");
+            dictionary.Add("owningRelationship", requirementUsageInstance.OwningRelationship.ToString());
+            dictionary.Add("portionKind", requirementUsageInstance.PortionKind);
+            dictionary.Add("reqId", requirementUsageInstance.ReqId);
 
             return dictionary;
         }
 
         /// <summary>
-        /// Writes a <see cref="IConnector"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IRequirementUsage"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="connectorInstance">
-        /// The subject <see cref="IConnector"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="requirementUsageInstance">
+        /// The subject <see cref="IRequirementUsage"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -148,70 +147,69 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// <remarks>
         /// All values are stored as is, no conversion is done
         /// </remarks>
-        private static Dictionary<string, object> WriteComplex(IConnector connectorInstance)
+        private static Dictionary<string, object> WriteComplex(IRequirementUsage requirementUsageInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "Connector" },
-                { "@id", connectorInstance.Id }
+                { "@type", "RequirementUsage" },
+                { "@id", requirementUsageInstance.Id }
             };
 
-            dictionary.Add("aliasIds", connectorInstance.AliasIds);
-            dictionary.Add("declaredName", connectorInstance.DeclaredName);
-            dictionary.Add("declaredShortName", connectorInstance.DeclaredShortName);
-            dictionary.Add("direction", connectorInstance.Direction);
-            dictionary.Add("elementId", connectorInstance.ElementId);
-            dictionary.Add("isAbstract", connectorInstance.IsAbstract);
-            dictionary.Add("isComposite", connectorInstance.IsComposite);
-            dictionary.Add("isConstant", connectorInstance.IsConstant);
-            dictionary.Add("isDerived", connectorInstance.IsDerived);
-            dictionary.Add("isEnd", connectorInstance.IsEnd);
-            dictionary.Add("isImplied", connectorInstance.IsImplied);
-            dictionary.Add("isImpliedIncluded", connectorInstance.IsImpliedIncluded);
-            dictionary.Add("isOrdered", connectorInstance.IsOrdered);
-            dictionary.Add("isPortion", connectorInstance.IsPortion);
-            dictionary.Add("isSufficient", connectorInstance.IsSufficient);
-            dictionary.Add("isUnique", connectorInstance.IsUnique);
-            dictionary.Add("isVariable", connectorInstance.IsVariable);
-            dictionary.Add("ownedRelatedElement", connectorInstance.OwnedRelatedElement);
-            dictionary.Add("ownedRelationship", connectorInstance.OwnedRelationship);
-            dictionary.Add("owningRelatedElement", connectorInstance.OwningRelatedElement);
-            dictionary.Add("owningRelationship", connectorInstance.OwningRelationship);
-            dictionary.Add("source", connectorInstance.Source);
-            dictionary.Add("target", connectorInstance.Target);
+            dictionary.Add("aliasIds", requirementUsageInstance.AliasIds);
+            dictionary.Add("declaredName", requirementUsageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", requirementUsageInstance.DeclaredShortName);
+            dictionary.Add("direction", requirementUsageInstance.Direction);
+            dictionary.Add("elementId", requirementUsageInstance.ElementId);
+            dictionary.Add("isAbstract", requirementUsageInstance.IsAbstract);
+            dictionary.Add("isComposite", requirementUsageInstance.IsComposite);
+            dictionary.Add("isConstant", requirementUsageInstance.IsConstant);
+            dictionary.Add("isDerived", requirementUsageInstance.IsDerived);
+            dictionary.Add("isEnd", requirementUsageInstance.IsEnd);
+            dictionary.Add("isImpliedIncluded", requirementUsageInstance.IsImpliedIncluded);
+            dictionary.Add("isIndividual", requirementUsageInstance.IsIndividual);
+            dictionary.Add("isOrdered", requirementUsageInstance.IsOrdered);
+            dictionary.Add("isPortion", requirementUsageInstance.IsPortion);
+            dictionary.Add("isSufficient", requirementUsageInstance.IsSufficient);
+            dictionary.Add("isUnique", requirementUsageInstance.IsUnique);
+            dictionary.Add("isVariable", requirementUsageInstance.IsVariable);
+            dictionary.Add("isVariation", requirementUsageInstance.IsVariation);
+            dictionary.Add("ownedRelationship", requirementUsageInstance.OwnedRelationship);
+            dictionary.Add("owningRelationship", requirementUsageInstance.OwningRelationship);
+            dictionary.Add("portionKind", requirementUsageInstance.PortionKind);
+            dictionary.Add("reqId", requirementUsageInstance.ReqId);
 
             return dictionary;
         }
 
         /// <summary>
         /// Checks whether the <see cref="IData"/> is not null and whether it is
-        /// of type <see cref="IConnector"/>
+        /// of type <see cref="IRequirementUsage"/>
         /// </summary>
         /// <param name="dataItem">
         /// The subject <see cref="IData"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IConnector"/>
+        /// an instance of <see cref="IRequirementUsage"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="thing"/> is not of type <see cref="IConnector"/>
+        /// Thrown when <paramref name="thing"/> is not of type <see cref="IRequirementUsage"/>
         /// </exception>
-        private static IConnector ThingNullAndTypeCheck(IData dataItem)
+        private static IRequirementUsage ThingNullAndTypeCheck(IData dataItem)
         {
             if (dataItem == null)
             {
                 throw new ArgumentNullException("dataItem", "The dataItem may not be null");
             }
 
-            if (!(dataItem is IConnector connectorInstance))
+            if (!(dataItem is IRequirementUsage requirementUsageInstance))
             {
-                throw new ArgumentException("The dataItem must be of Type IConnector", "dataItem");
+                throw new ArgumentException("The dataItem must be of Type IRequirementUsage", "dataItem");
             }
 
-            return connectorInstance;
+            return requirementUsageInstance;
         }
     }
 }

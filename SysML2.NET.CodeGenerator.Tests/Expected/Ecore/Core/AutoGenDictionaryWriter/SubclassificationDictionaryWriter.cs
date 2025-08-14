@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="NamespaceImportDictionaryWriter.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="SubclassificationDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,17 +31,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="NamespaceImportDictionaryWriter"/> is to write (convert) a <see cref="INamespaceImport"/>
+    /// The purpose of the <see cref="SubclassificationDictionaryWriter"/> is to write (convert) a <see cref="ISubclassification"/>
     /// to a <see cref="Dictionary{String, Object}"/>.
     /// </summary>
-    public static class NamespaceImportDictionaryWriter
+    public static class SubclassificationDictionaryWriter
     {
         /// <summary>
-        /// Writes a <see cref="INamespaceImport"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ISubclassification"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
         /// <param name="dataItem">
-        /// The subject <see cref="INamespaceImport"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// The subject <see cref="ISubclassification"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <param name="dictionaryKind">
         /// The target <see cref="DictionaryKind"/> that is to be created
@@ -65,25 +65,25 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// </remarks>
         public static Dictionary<string, object> Write(IData dataItem, DictionaryKind dictionaryKind)
         {
-            var namespaceImportInstance = ThingNullAndTypeCheck(dataItem);
+            var subclassificationInstance = ThingNullAndTypeCheck(dataItem);
 
             switch (dictionaryKind)
             {
                 case DictionaryKind.Complex:
-                    return WriteComplex(namespaceImportInstance);
+                    return WriteComplex(subclassificationInstance);
                 case DictionaryKind.Simplified:
-                    return WriteSimplified(namespaceImportInstance);
+                    return WriteSimplified(subclassificationInstance);
                 default:
                     throw new NotSupportedException($"The dictionaryKind:{dictionaryKind} is not supported");
             }
         }
 
         /// <summary>
-        /// Writes a <see cref="INamespaceImport"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ISubclassification"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="namespaceImportInstance">
-        /// The subject <see cref="INamespaceImport"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="subclassificationInstance">
+        /// The subject <see cref="ISubclassification"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -99,40 +99,40 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted to string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted to an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static Dictionary<string, object> WriteSimplified(INamespaceImport namespaceImportInstance)
+        private static Dictionary<string, object> WriteSimplified(ISubclassification subclassificationInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "NamespaceImport" },
-                { "@id", namespaceImportInstance.Id.ToString() }
+                { "@type", "Subclassification" },
+                { "@id", subclassificationInstance.Id.ToString() }
             };
 
-            dictionary.Add("aliasIds", namespaceImportInstance.AliasIds);
-            dictionary.Add("declaredName", namespaceImportInstance.DeclaredName);
-            dictionary.Add("declaredShortName", namespaceImportInstance.DeclaredShortName);
-            dictionary.Add("elementId", namespaceImportInstance.ElementId);
-            dictionary.Add("importedNamespace", namespaceImportInstance.ImportedNamespace.ToString());
-            dictionary.Add("isImplied", namespaceImportInstance.IsImplied);
-            dictionary.Add("isImpliedIncluded", namespaceImportInstance.IsImpliedIncluded);
-            dictionary.Add("isImportAll", namespaceImportInstance.IsImportAll);
-            dictionary.Add("isRecursive", namespaceImportInstance.IsRecursive);
-            dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", namespaceImportInstance.OwnedRelatedElement)} ]");
-            dictionary.Add("ownedRelationship", $"[ {string.Join(",", namespaceImportInstance.OwnedRelationship)} ]");
-            dictionary.Add("owningRelatedElement", namespaceImportInstance.OwningRelatedElement.ToString());
-            dictionary.Add("owningRelationship", namespaceImportInstance.OwningRelationship.ToString());
-            dictionary.Add("source", $"[ {string.Join(",", namespaceImportInstance.Source)} ]");
-            dictionary.Add("target", $"[ {string.Join(",", namespaceImportInstance.Target)} ]");
-            dictionary.Add("visibility", namespaceImportInstance.Visibility);
+            dictionary.Add("aliasIds", subclassificationInstance.AliasIds);
+            dictionary.Add("declaredName", subclassificationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", subclassificationInstance.DeclaredShortName);
+            dictionary.Add("elementId", subclassificationInstance.ElementId);
+            dictionary.Add("general", subclassificationInstance.General.ToString());
+            dictionary.Add("isImplied", subclassificationInstance.IsImplied);
+            dictionary.Add("isImpliedIncluded", subclassificationInstance.IsImpliedIncluded);
+            dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", subclassificationInstance.OwnedRelatedElement)} ]");
+            dictionary.Add("ownedRelationship", $"[ {string.Join(",", subclassificationInstance.OwnedRelationship)} ]");
+            dictionary.Add("owningRelatedElement", subclassificationInstance.OwningRelatedElement.ToString());
+            dictionary.Add("owningRelationship", subclassificationInstance.OwningRelationship.ToString());
+            dictionary.Add("source", $"[ {string.Join(",", subclassificationInstance.Source)} ]");
+            dictionary.Add("specific", subclassificationInstance.Specific.ToString());
+            dictionary.Add("subclassifier", subclassificationInstance.Subclassifier.ToString());
+            dictionary.Add("superclassifier", subclassificationInstance.Superclassifier.ToString());
+            dictionary.Add("target", $"[ {string.Join(",", subclassificationInstance.Target)} ]");
 
             return dictionary;
         }
 
         /// <summary>
-        /// Writes a <see cref="INamespaceImport"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ISubclassification"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="namespaceImportInstance">
-        /// The subject <see cref="INamespaceImport"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="subclassificationInstance">
+        /// The subject <see cref="ISubclassification"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -141,63 +141,63 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// <remarks>
         /// All values are stored as is, no conversion is done
         /// </remarks>
-        private static Dictionary<string, object> WriteComplex(INamespaceImport namespaceImportInstance)
+        private static Dictionary<string, object> WriteComplex(ISubclassification subclassificationInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "NamespaceImport" },
-                { "@id", namespaceImportInstance.Id }
+                { "@type", "Subclassification" },
+                { "@id", subclassificationInstance.Id }
             };
 
-            dictionary.Add("aliasIds", namespaceImportInstance.AliasIds);
-            dictionary.Add("declaredName", namespaceImportInstance.DeclaredName);
-            dictionary.Add("declaredShortName", namespaceImportInstance.DeclaredShortName);
-            dictionary.Add("elementId", namespaceImportInstance.ElementId);
-            dictionary.Add("importedNamespace", namespaceImportInstance.ImportedNamespace);
-            dictionary.Add("isImplied", namespaceImportInstance.IsImplied);
-            dictionary.Add("isImpliedIncluded", namespaceImportInstance.IsImpliedIncluded);
-            dictionary.Add("isImportAll", namespaceImportInstance.IsImportAll);
-            dictionary.Add("isRecursive", namespaceImportInstance.IsRecursive);
-            dictionary.Add("ownedRelatedElement", namespaceImportInstance.OwnedRelatedElement);
-            dictionary.Add("ownedRelationship", namespaceImportInstance.OwnedRelationship);
-            dictionary.Add("owningRelatedElement", namespaceImportInstance.OwningRelatedElement);
-            dictionary.Add("owningRelationship", namespaceImportInstance.OwningRelationship);
-            dictionary.Add("source", namespaceImportInstance.Source);
-            dictionary.Add("target", namespaceImportInstance.Target);
-            dictionary.Add("visibility", namespaceImportInstance.Visibility);
+            dictionary.Add("aliasIds", subclassificationInstance.AliasIds);
+            dictionary.Add("declaredName", subclassificationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", subclassificationInstance.DeclaredShortName);
+            dictionary.Add("elementId", subclassificationInstance.ElementId);
+            dictionary.Add("general", subclassificationInstance.General);
+            dictionary.Add("isImplied", subclassificationInstance.IsImplied);
+            dictionary.Add("isImpliedIncluded", subclassificationInstance.IsImpliedIncluded);
+            dictionary.Add("ownedRelatedElement", subclassificationInstance.OwnedRelatedElement);
+            dictionary.Add("ownedRelationship", subclassificationInstance.OwnedRelationship);
+            dictionary.Add("owningRelatedElement", subclassificationInstance.OwningRelatedElement);
+            dictionary.Add("owningRelationship", subclassificationInstance.OwningRelationship);
+            dictionary.Add("source", subclassificationInstance.Source);
+            dictionary.Add("specific", subclassificationInstance.Specific);
+            dictionary.Add("subclassifier", subclassificationInstance.Subclassifier);
+            dictionary.Add("superclassifier", subclassificationInstance.Superclassifier);
+            dictionary.Add("target", subclassificationInstance.Target);
 
             return dictionary;
         }
 
         /// <summary>
         /// Checks whether the <see cref="IData"/> is not null and whether it is
-        /// of type <see cref="INamespaceImport"/>
+        /// of type <see cref="ISubclassification"/>
         /// </summary>
         /// <param name="dataItem">
         /// The subject <see cref="IData"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="INamespaceImport"/>
+        /// an instance of <see cref="ISubclassification"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="thing"/> is not of type <see cref="INamespaceImport"/>
+        /// Thrown when <paramref name="thing"/> is not of type <see cref="ISubclassification"/>
         /// </exception>
-        private static INamespaceImport ThingNullAndTypeCheck(IData dataItem)
+        private static ISubclassification ThingNullAndTypeCheck(IData dataItem)
         {
             if (dataItem == null)
             {
                 throw new ArgumentNullException("dataItem", "The dataItem may not be null");
             }
 
-            if (!(dataItem is INamespaceImport namespaceImportInstance))
+            if (!(dataItem is ISubclassification subclassificationInstance))
             {
-                throw new ArgumentException("The dataItem must be of Type INamespaceImport", "dataItem");
+                throw new ArgumentException("The dataItem must be of Type ISubclassification", "dataItem");
             }
 
-            return namespaceImportInstance;
+            return subclassificationInstance;
         }
     }
 }

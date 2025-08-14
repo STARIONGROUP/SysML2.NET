@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="LiteralRationalDictionaryWriter.cs" company="Starion Group S.A.">
+// <copyright file="MembershipDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,17 +31,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="LiteralRationalDictionaryWriter"/> is to write (convert) a <see cref="ILiteralRational"/>
+    /// The purpose of the <see cref="MembershipDictionaryWriter"/> is to write (convert) a <see cref="IMembership"/>
     /// to a <see cref="Dictionary{String, Object}"/>.
     /// </summary>
-    public static class LiteralRationalDictionaryWriter
+    public static class MembershipDictionaryWriter
     {
         /// <summary>
-        /// Writes a <see cref="ILiteralRational"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IMembership"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
         /// <param name="dataItem">
-        /// The subject <see cref="ILiteralRational"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// The subject <see cref="IMembership"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <param name="dictionaryKind">
         /// The target <see cref="DictionaryKind"/> that is to be created
@@ -65,25 +65,25 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// </remarks>
         public static Dictionary<string, object> Write(IData dataItem, DictionaryKind dictionaryKind)
         {
-            var literalRationalInstance = ThingNullAndTypeCheck(dataItem);
+            var membershipInstance = ThingNullAndTypeCheck(dataItem);
 
             switch (dictionaryKind)
             {
                 case DictionaryKind.Complex:
-                    return WriteComplex(literalRationalInstance);
+                    return WriteComplex(membershipInstance);
                 case DictionaryKind.Simplified:
-                    return WriteSimplified(literalRationalInstance);
+                    return WriteSimplified(membershipInstance);
                 default:
                     throw new NotSupportedException($"The dictionaryKind:{dictionaryKind} is not supported");
             }
         }
 
         /// <summary>
-        /// Writes a <see cref="ILiteralRational"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IMembership"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="literalRationalInstance">
-        /// The subject <see cref="ILiteralRational"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="membershipInstance">
+        /// The subject <see cref="IMembership"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -99,43 +99,40 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted to string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted to an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static Dictionary<string, object> WriteSimplified(ILiteralRational literalRationalInstance)
+        private static Dictionary<string, object> WriteSimplified(IMembership membershipInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "LiteralRational" },
-                { "@id", literalRationalInstance.Id.ToString() }
+                { "@type", "Membership" },
+                { "@id", membershipInstance.Id.ToString() }
             };
 
-            dictionary.Add("aliasIds", literalRationalInstance.AliasIds);
-            dictionary.Add("declaredName", literalRationalInstance.DeclaredName);
-            dictionary.Add("declaredShortName", literalRationalInstance.DeclaredShortName);
-            dictionary.Add("direction", literalRationalInstance.Direction);
-            dictionary.Add("elementId", literalRationalInstance.ElementId);
-            dictionary.Add("isAbstract", literalRationalInstance.IsAbstract);
-            dictionary.Add("isComposite", literalRationalInstance.IsComposite);
-            dictionary.Add("isConstant", literalRationalInstance.IsConstant);
-            dictionary.Add("isDerived", literalRationalInstance.IsDerived);
-            dictionary.Add("isEnd", literalRationalInstance.IsEnd);
-            dictionary.Add("isImpliedIncluded", literalRationalInstance.IsImpliedIncluded);
-            dictionary.Add("isOrdered", literalRationalInstance.IsOrdered);
-            dictionary.Add("isPortion", literalRationalInstance.IsPortion);
-            dictionary.Add("isSufficient", literalRationalInstance.IsSufficient);
-            dictionary.Add("isUnique", literalRationalInstance.IsUnique);
-            dictionary.Add("isVariable", literalRationalInstance.IsVariable);
-            dictionary.Add("ownedRelationship", $"[ {string.Join(",", literalRationalInstance.OwnedRelationship)} ]");
-            dictionary.Add("owningRelationship", literalRationalInstance.OwningRelationship.ToString());
-            dictionary.Add("value", literalRationalInstance.Value);
+            dictionary.Add("aliasIds", membershipInstance.AliasIds);
+            dictionary.Add("declaredName", membershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", membershipInstance.DeclaredShortName);
+            dictionary.Add("elementId", membershipInstance.ElementId);
+            dictionary.Add("isImplied", membershipInstance.IsImplied);
+            dictionary.Add("isImpliedIncluded", membershipInstance.IsImpliedIncluded);
+            dictionary.Add("memberElement", membershipInstance.MemberElement.ToString());
+            dictionary.Add("memberName", membershipInstance.MemberName);
+            dictionary.Add("memberShortName", membershipInstance.MemberShortName);
+            dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", membershipInstance.OwnedRelatedElement)} ]");
+            dictionary.Add("ownedRelationship", $"[ {string.Join(",", membershipInstance.OwnedRelationship)} ]");
+            dictionary.Add("owningRelatedElement", membershipInstance.OwningRelatedElement.ToString());
+            dictionary.Add("owningRelationship", membershipInstance.OwningRelationship.ToString());
+            dictionary.Add("source", $"[ {string.Join(",", membershipInstance.Source)} ]");
+            dictionary.Add("target", $"[ {string.Join(",", membershipInstance.Target)} ]");
+            dictionary.Add("visibility", membershipInstance.Visibility);
 
             return dictionary;
         }
 
         /// <summary>
-        /// Writes a <see cref="ILiteralRational"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IMembership"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="literalRationalInstance">
-        /// The subject <see cref="ILiteralRational"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="membershipInstance">
+        /// The subject <see cref="IMembership"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -144,66 +141,63 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// <remarks>
         /// All values are stored as is, no conversion is done
         /// </remarks>
-        private static Dictionary<string, object> WriteComplex(ILiteralRational literalRationalInstance)
+        private static Dictionary<string, object> WriteComplex(IMembership membershipInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "LiteralRational" },
-                { "@id", literalRationalInstance.Id }
+                { "@type", "Membership" },
+                { "@id", membershipInstance.Id }
             };
 
-            dictionary.Add("aliasIds", literalRationalInstance.AliasIds);
-            dictionary.Add("declaredName", literalRationalInstance.DeclaredName);
-            dictionary.Add("declaredShortName", literalRationalInstance.DeclaredShortName);
-            dictionary.Add("direction", literalRationalInstance.Direction);
-            dictionary.Add("elementId", literalRationalInstance.ElementId);
-            dictionary.Add("isAbstract", literalRationalInstance.IsAbstract);
-            dictionary.Add("isComposite", literalRationalInstance.IsComposite);
-            dictionary.Add("isConstant", literalRationalInstance.IsConstant);
-            dictionary.Add("isDerived", literalRationalInstance.IsDerived);
-            dictionary.Add("isEnd", literalRationalInstance.IsEnd);
-            dictionary.Add("isImpliedIncluded", literalRationalInstance.IsImpliedIncluded);
-            dictionary.Add("isOrdered", literalRationalInstance.IsOrdered);
-            dictionary.Add("isPortion", literalRationalInstance.IsPortion);
-            dictionary.Add("isSufficient", literalRationalInstance.IsSufficient);
-            dictionary.Add("isUnique", literalRationalInstance.IsUnique);
-            dictionary.Add("isVariable", literalRationalInstance.IsVariable);
-            dictionary.Add("ownedRelationship", literalRationalInstance.OwnedRelationship);
-            dictionary.Add("owningRelationship", literalRationalInstance.OwningRelationship);
-            dictionary.Add("value", literalRationalInstance.Value);
+            dictionary.Add("aliasIds", membershipInstance.AliasIds);
+            dictionary.Add("declaredName", membershipInstance.DeclaredName);
+            dictionary.Add("declaredShortName", membershipInstance.DeclaredShortName);
+            dictionary.Add("elementId", membershipInstance.ElementId);
+            dictionary.Add("isImplied", membershipInstance.IsImplied);
+            dictionary.Add("isImpliedIncluded", membershipInstance.IsImpliedIncluded);
+            dictionary.Add("memberElement", membershipInstance.MemberElement);
+            dictionary.Add("memberName", membershipInstance.MemberName);
+            dictionary.Add("memberShortName", membershipInstance.MemberShortName);
+            dictionary.Add("ownedRelatedElement", membershipInstance.OwnedRelatedElement);
+            dictionary.Add("ownedRelationship", membershipInstance.OwnedRelationship);
+            dictionary.Add("owningRelatedElement", membershipInstance.OwningRelatedElement);
+            dictionary.Add("owningRelationship", membershipInstance.OwningRelationship);
+            dictionary.Add("source", membershipInstance.Source);
+            dictionary.Add("target", membershipInstance.Target);
+            dictionary.Add("visibility", membershipInstance.Visibility);
 
             return dictionary;
         }
 
         /// <summary>
         /// Checks whether the <see cref="IData"/> is not null and whether it is
-        /// of type <see cref="ILiteralRational"/>
+        /// of type <see cref="IMembership"/>
         /// </summary>
         /// <param name="dataItem">
         /// The subject <see cref="IData"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="ILiteralRational"/>
+        /// an instance of <see cref="IMembership"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="thing"/> is not of type <see cref="ILiteralRational"/>
+        /// Thrown when <paramref name="thing"/> is not of type <see cref="IMembership"/>
         /// </exception>
-        private static ILiteralRational ThingNullAndTypeCheck(IData dataItem)
+        private static IMembership ThingNullAndTypeCheck(IData dataItem)
         {
             if (dataItem == null)
             {
                 throw new ArgumentNullException("dataItem", "The dataItem may not be null");
             }
 
-            if (!(dataItem is ILiteralRational literalRationalInstance))
+            if (!(dataItem is IMembership membershipInstance))
             {
-                throw new ArgumentException("The dataItem must be of Type ILiteralRational", "dataItem");
+                throw new ArgumentException("The dataItem must be of Type IMembership", "dataItem");
             }
 
-            return literalRationalInstance;
+            return membershipInstance;
         }
     }
 }

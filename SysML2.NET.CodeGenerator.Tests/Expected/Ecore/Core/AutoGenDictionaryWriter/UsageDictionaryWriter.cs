@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="DefinitionDictionaryWriter.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="UsageDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,17 +31,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="DefinitionDictionaryWriter"/> is to write (convert) a <see cref="IDefinition"/>
+    /// The purpose of the <see cref="UsageDictionaryWriter"/> is to write (convert) a <see cref="IUsage"/>
     /// to a <see cref="Dictionary{String, Object}"/>.
     /// </summary>
-    public static class DefinitionDictionaryWriter
+    public static class UsageDictionaryWriter
     {
         /// <summary>
-        /// Writes a <see cref="IDefinition"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IUsage"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
         /// <param name="dataItem">
-        /// The subject <see cref="IDefinition"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// The subject <see cref="IUsage"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <param name="dictionaryKind">
         /// The target <see cref="DictionaryKind"/> that is to be created
@@ -65,25 +65,25 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// </remarks>
         public static Dictionary<string, object> Write(IData dataItem, DictionaryKind dictionaryKind)
         {
-            var definitionInstance = ThingNullAndTypeCheck(dataItem);
+            var usageInstance = ThingNullAndTypeCheck(dataItem);
 
             switch (dictionaryKind)
             {
                 case DictionaryKind.Complex:
-                    return WriteComplex(definitionInstance);
+                    return WriteComplex(usageInstance);
                 case DictionaryKind.Simplified:
-                    return WriteSimplified(definitionInstance);
+                    return WriteSimplified(usageInstance);
                 default:
                     throw new NotSupportedException($"The dictionaryKind:{dictionaryKind} is not supported");
             }
         }
 
         /// <summary>
-        /// Writes a <see cref="IDefinition"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IUsage"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="definitionInstance">
-        /// The subject <see cref="IDefinition"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="usageInstance">
+        /// The subject <see cref="IUsage"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -99,34 +99,43 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted to string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted to an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static Dictionary<string, object> WriteSimplified(IDefinition definitionInstance)
+        private static Dictionary<string, object> WriteSimplified(IUsage usageInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "Definition" },
-                { "@id", definitionInstance.Id.ToString() }
+                { "@type", "Usage" },
+                { "@id", usageInstance.Id.ToString() }
             };
 
-            dictionary.Add("aliasIds", definitionInstance.AliasIds);
-            dictionary.Add("declaredName", definitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", definitionInstance.DeclaredShortName);
-            dictionary.Add("elementId", definitionInstance.ElementId);
-            dictionary.Add("isAbstract", definitionInstance.IsAbstract);
-            dictionary.Add("isImpliedIncluded", definitionInstance.IsImpliedIncluded);
-            dictionary.Add("isSufficient", definitionInstance.IsSufficient);
-            dictionary.Add("isVariation", definitionInstance.IsVariation);
-            dictionary.Add("ownedRelationship", $"[ {string.Join(",", definitionInstance.OwnedRelationship)} ]");
-            dictionary.Add("owningRelationship", definitionInstance.OwningRelationship.ToString());
+            dictionary.Add("aliasIds", usageInstance.AliasIds);
+            dictionary.Add("declaredName", usageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", usageInstance.DeclaredShortName);
+            dictionary.Add("direction", usageInstance.Direction);
+            dictionary.Add("elementId", usageInstance.ElementId);
+            dictionary.Add("isAbstract", usageInstance.IsAbstract);
+            dictionary.Add("isComposite", usageInstance.IsComposite);
+            dictionary.Add("isConstant", usageInstance.IsConstant);
+            dictionary.Add("isDerived", usageInstance.IsDerived);
+            dictionary.Add("isEnd", usageInstance.IsEnd);
+            dictionary.Add("isImpliedIncluded", usageInstance.IsImpliedIncluded);
+            dictionary.Add("isOrdered", usageInstance.IsOrdered);
+            dictionary.Add("isPortion", usageInstance.IsPortion);
+            dictionary.Add("isSufficient", usageInstance.IsSufficient);
+            dictionary.Add("isUnique", usageInstance.IsUnique);
+            dictionary.Add("isVariable", usageInstance.IsVariable);
+            dictionary.Add("isVariation", usageInstance.IsVariation);
+            dictionary.Add("ownedRelationship", $"[ {string.Join(",", usageInstance.OwnedRelationship)} ]");
+            dictionary.Add("owningRelationship", usageInstance.OwningRelationship.ToString());
 
             return dictionary;
         }
 
         /// <summary>
-        /// Writes a <see cref="IDefinition"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="IUsage"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="definitionInstance">
-        /// The subject <see cref="IDefinition"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="usageInstance">
+        /// The subject <see cref="IUsage"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -135,57 +144,66 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// <remarks>
         /// All values are stored as is, no conversion is done
         /// </remarks>
-        private static Dictionary<string, object> WriteComplex(IDefinition definitionInstance)
+        private static Dictionary<string, object> WriteComplex(IUsage usageInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "Definition" },
-                { "@id", definitionInstance.Id }
+                { "@type", "Usage" },
+                { "@id", usageInstance.Id }
             };
 
-            dictionary.Add("aliasIds", definitionInstance.AliasIds);
-            dictionary.Add("declaredName", definitionInstance.DeclaredName);
-            dictionary.Add("declaredShortName", definitionInstance.DeclaredShortName);
-            dictionary.Add("elementId", definitionInstance.ElementId);
-            dictionary.Add("isAbstract", definitionInstance.IsAbstract);
-            dictionary.Add("isImpliedIncluded", definitionInstance.IsImpliedIncluded);
-            dictionary.Add("isSufficient", definitionInstance.IsSufficient);
-            dictionary.Add("isVariation", definitionInstance.IsVariation);
-            dictionary.Add("ownedRelationship", definitionInstance.OwnedRelationship);
-            dictionary.Add("owningRelationship", definitionInstance.OwningRelationship);
+            dictionary.Add("aliasIds", usageInstance.AliasIds);
+            dictionary.Add("declaredName", usageInstance.DeclaredName);
+            dictionary.Add("declaredShortName", usageInstance.DeclaredShortName);
+            dictionary.Add("direction", usageInstance.Direction);
+            dictionary.Add("elementId", usageInstance.ElementId);
+            dictionary.Add("isAbstract", usageInstance.IsAbstract);
+            dictionary.Add("isComposite", usageInstance.IsComposite);
+            dictionary.Add("isConstant", usageInstance.IsConstant);
+            dictionary.Add("isDerived", usageInstance.IsDerived);
+            dictionary.Add("isEnd", usageInstance.IsEnd);
+            dictionary.Add("isImpliedIncluded", usageInstance.IsImpliedIncluded);
+            dictionary.Add("isOrdered", usageInstance.IsOrdered);
+            dictionary.Add("isPortion", usageInstance.IsPortion);
+            dictionary.Add("isSufficient", usageInstance.IsSufficient);
+            dictionary.Add("isUnique", usageInstance.IsUnique);
+            dictionary.Add("isVariable", usageInstance.IsVariable);
+            dictionary.Add("isVariation", usageInstance.IsVariation);
+            dictionary.Add("ownedRelationship", usageInstance.OwnedRelationship);
+            dictionary.Add("owningRelationship", usageInstance.OwningRelationship);
 
             return dictionary;
         }
 
         /// <summary>
         /// Checks whether the <see cref="IData"/> is not null and whether it is
-        /// of type <see cref="IDefinition"/>
+        /// of type <see cref="IUsage"/>
         /// </summary>
         /// <param name="dataItem">
         /// The subject <see cref="IData"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IDefinition"/>
+        /// an instance of <see cref="IUsage"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="thing"/> is not of type <see cref="IDefinition"/>
+        /// Thrown when <paramref name="thing"/> is not of type <see cref="IUsage"/>
         /// </exception>
-        private static IDefinition ThingNullAndTypeCheck(IData dataItem)
+        private static IUsage ThingNullAndTypeCheck(IData dataItem)
         {
             if (dataItem == null)
             {
                 throw new ArgumentNullException("dataItem", "The dataItem may not be null");
             }
 
-            if (!(dataItem is IDefinition definitionInstance))
+            if (!(dataItem is IUsage usageInstance))
             {
-                throw new ArgumentException("The dataItem must be of Type IDefinition", "dataItem");
+                throw new ArgumentException("The dataItem must be of Type IUsage", "dataItem");
             }
 
-            return definitionInstance;
+            return usageInstance;
         }
     }
 }

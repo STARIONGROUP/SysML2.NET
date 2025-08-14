@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="AnnotationDictionaryWriter.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="TextualRepresentationDictionaryWriter.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,17 +31,17 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
     using SysML2.NET.Core.DTO;
 
     /// <summary>
-    /// The purpose of the <see cref="AnnotationDictionaryWriter"/> is to write (convert) a <see cref="IAnnotation"/>
+    /// The purpose of the <see cref="TextualRepresentationDictionaryWriter"/> is to write (convert) a <see cref="ITextualRepresentation"/>
     /// to a <see cref="Dictionary{String, Object}"/>.
     /// </summary>
-    public static class AnnotationDictionaryWriter
+    public static class TextualRepresentationDictionaryWriter
     {
         /// <summary>
-        /// Writes a <see cref="IAnnotation"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ITextualRepresentation"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
         /// <param name="dataItem">
-        /// The subject <see cref="IAnnotation"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// The subject <see cref="ITextualRepresentation"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <param name="dictionaryKind">
         /// The target <see cref="DictionaryKind"/> that is to be created
@@ -65,25 +65,25 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// </remarks>
         public static Dictionary<string, object> Write(IData dataItem, DictionaryKind dictionaryKind)
         {
-            var annotationInstance = ThingNullAndTypeCheck(dataItem);
+            var textualRepresentationInstance = ThingNullAndTypeCheck(dataItem);
 
             switch (dictionaryKind)
             {
                 case DictionaryKind.Complex:
-                    return WriteComplex(annotationInstance);
+                    return WriteComplex(textualRepresentationInstance);
                 case DictionaryKind.Simplified:
-                    return WriteSimplified(annotationInstance);
+                    return WriteSimplified(textualRepresentationInstance);
                 default:
                     throw new NotSupportedException($"The dictionaryKind:{dictionaryKind} is not supported");
             }
         }
 
         /// <summary>
-        /// Writes a <see cref="IAnnotation"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ITextualRepresentation"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="annotationInstance">
-        /// The subject <see cref="IAnnotation"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="textualRepresentationInstance">
+        /// The subject <see cref="ITextualRepresentation"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -99,37 +99,33 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// values of other types are converted to string, in case these are an <see cref="IEnumerable{T}"/> then
         /// the values are converted to an Array of String using JSON notation, i.e. [ value_1, ..., value_n ]
         /// </remarks>
-        private static Dictionary<string, object> WriteSimplified(IAnnotation annotationInstance)
+        private static Dictionary<string, object> WriteSimplified(ITextualRepresentation textualRepresentationInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "Annotation" },
-                { "@id", annotationInstance.Id.ToString() }
+                { "@type", "TextualRepresentation" },
+                { "@id", textualRepresentationInstance.Id.ToString() }
             };
 
-            dictionary.Add("aliasIds", annotationInstance.AliasIds);
-            dictionary.Add("annotatedElement", annotationInstance.AnnotatedElement.ToString());
-            dictionary.Add("declaredName", annotationInstance.DeclaredName);
-            dictionary.Add("declaredShortName", annotationInstance.DeclaredShortName);
-            dictionary.Add("elementId", annotationInstance.ElementId);
-            dictionary.Add("isImplied", annotationInstance.IsImplied);
-            dictionary.Add("isImpliedIncluded", annotationInstance.IsImpliedIncluded);
-            dictionary.Add("ownedRelatedElement", $"[ {string.Join(",", annotationInstance.OwnedRelatedElement)} ]");
-            dictionary.Add("ownedRelationship", $"[ {string.Join(",", annotationInstance.OwnedRelationship)} ]");
-            dictionary.Add("owningRelatedElement", annotationInstance.OwningRelatedElement.ToString());
-            dictionary.Add("owningRelationship", annotationInstance.OwningRelationship.ToString());
-            dictionary.Add("source", $"[ {string.Join(",", annotationInstance.Source)} ]");
-            dictionary.Add("target", $"[ {string.Join(",", annotationInstance.Target)} ]");
+            dictionary.Add("aliasIds", textualRepresentationInstance.AliasIds);
+            dictionary.Add("body", textualRepresentationInstance.Body);
+            dictionary.Add("declaredName", textualRepresentationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", textualRepresentationInstance.DeclaredShortName);
+            dictionary.Add("elementId", textualRepresentationInstance.ElementId);
+            dictionary.Add("isImpliedIncluded", textualRepresentationInstance.IsImpliedIncluded);
+            dictionary.Add("language", textualRepresentationInstance.Language);
+            dictionary.Add("ownedRelationship", $"[ {string.Join(",", textualRepresentationInstance.OwnedRelationship)} ]");
+            dictionary.Add("owningRelationship", textualRepresentationInstance.OwningRelationship.ToString());
 
             return dictionary;
         }
 
         /// <summary>
-        /// Writes a <see cref="IAnnotation"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
+        /// Writes a <see cref="ITextualRepresentation"/> to a <see cref="Dictionary{String, Object}"/> that contains a key-value-pair
         /// for each property. The type key is used to store type information (name of the Type).
         /// </summary>
-        /// <param name="annotationInstance">
-        /// The subject <see cref="IAnnotation"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
+        /// <param name="textualRepresentationInstance">
+        /// The subject <see cref="ITextualRepresentation"/> that is to be written to a <see cref="Dictionary{String, Object}"/>.
         /// </param>
         /// <returns>
         /// An instance of <see cref="Dictionary{String, Object}"/> that contains all the properties as key-value-pairs as well
@@ -138,60 +134,56 @@ namespace SysML2.NET.Serializer.Dictionary.Core.DTO
         /// <remarks>
         /// All values are stored as is, no conversion is done
         /// </remarks>
-        private static Dictionary<string, object> WriteComplex(IAnnotation annotationInstance)
+        private static Dictionary<string, object> WriteComplex(ITextualRepresentation textualRepresentationInstance)
         {
             var dictionary = new Dictionary<string, object>
             {
-                { "@type", "Annotation" },
-                { "@id", annotationInstance.Id }
+                { "@type", "TextualRepresentation" },
+                { "@id", textualRepresentationInstance.Id }
             };
 
-            dictionary.Add("aliasIds", annotationInstance.AliasIds);
-            dictionary.Add("annotatedElement", annotationInstance.AnnotatedElement);
-            dictionary.Add("declaredName", annotationInstance.DeclaredName);
-            dictionary.Add("declaredShortName", annotationInstance.DeclaredShortName);
-            dictionary.Add("elementId", annotationInstance.ElementId);
-            dictionary.Add("isImplied", annotationInstance.IsImplied);
-            dictionary.Add("isImpliedIncluded", annotationInstance.IsImpliedIncluded);
-            dictionary.Add("ownedRelatedElement", annotationInstance.OwnedRelatedElement);
-            dictionary.Add("ownedRelationship", annotationInstance.OwnedRelationship);
-            dictionary.Add("owningRelatedElement", annotationInstance.OwningRelatedElement);
-            dictionary.Add("owningRelationship", annotationInstance.OwningRelationship);
-            dictionary.Add("source", annotationInstance.Source);
-            dictionary.Add("target", annotationInstance.Target);
+            dictionary.Add("aliasIds", textualRepresentationInstance.AliasIds);
+            dictionary.Add("body", textualRepresentationInstance.Body);
+            dictionary.Add("declaredName", textualRepresentationInstance.DeclaredName);
+            dictionary.Add("declaredShortName", textualRepresentationInstance.DeclaredShortName);
+            dictionary.Add("elementId", textualRepresentationInstance.ElementId);
+            dictionary.Add("isImpliedIncluded", textualRepresentationInstance.IsImpliedIncluded);
+            dictionary.Add("language", textualRepresentationInstance.Language);
+            dictionary.Add("ownedRelationship", textualRepresentationInstance.OwnedRelationship);
+            dictionary.Add("owningRelationship", textualRepresentationInstance.OwningRelationship);
 
             return dictionary;
         }
 
         /// <summary>
         /// Checks whether the <see cref="IData"/> is not null and whether it is
-        /// of type <see cref="IAnnotation"/>
+        /// of type <see cref="ITextualRepresentation"/>
         /// </summary>
         /// <param name="dataItem">
         /// The subject <see cref="IData"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="IAnnotation"/>
+        /// an instance of <see cref="ITextualRepresentation"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="thing"/> is null
         /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when <paramref name="thing"/> is not of type <see cref="IAnnotation"/>
+        /// Thrown when <paramref name="thing"/> is not of type <see cref="ITextualRepresentation"/>
         /// </exception>
-        private static IAnnotation ThingNullAndTypeCheck(IData dataItem)
+        private static ITextualRepresentation ThingNullAndTypeCheck(IData dataItem)
         {
             if (dataItem == null)
             {
                 throw new ArgumentNullException("dataItem", "The dataItem may not be null");
             }
 
-            if (!(dataItem is IAnnotation annotationInstance))
+            if (!(dataItem is ITextualRepresentation textualRepresentationInstance))
             {
-                throw new ArgumentException("The dataItem must be of Type IAnnotation", "dataItem");
+                throw new ArgumentException("The dataItem must be of Type ITextualRepresentation", "dataItem");
             }
 
-            return annotationInstance;
+            return textualRepresentationInstance;
         }
     }
 }
