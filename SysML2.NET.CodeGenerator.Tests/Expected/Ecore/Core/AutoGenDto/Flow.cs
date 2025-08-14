@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Dependency.cs" company="Starion Group S.A.">
+// <copyright file="Flow.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,26 +31,42 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Dependency is a Relationship that indicates that one or more client Elements require one more
-    /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
-    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
+    /// An Flow is a Step that represents the transfer of values from one Feature to another. Flows can take
+    /// non-zero time to complete.specializesFromLibrary('Transfers::transfers')payloadType =    if
+    /// payloadFeature = null then Sequence{}    else payloadFeature.type    endifsourceOutputFeature =   
+    /// if connectorEnd->isEmpty() or         connectorEnd.ownedFeature->isEmpty()    then null    else
+    /// connectorEnd.ownedFeature->first()    endiftargetInputFeature =    if connectorEnd->size() < 2 or   
+    ///      connectorEnd->at(2).ownedFeature->isEmpty()    then null    else
+    /// connectorEnd->at(2).ownedFeature->first()    endifflowEnd =
+    /// connectorEnd->selectByKind(FlowEnd)payloadFeature =    let payloadFeatures :
+    /// Sequence(PayloadFeature) =        ownedFeature->selectByKind(PayloadFeature) in    if
+    /// payloadFeatures->isEmpty() then null    else payloadFeatures->first()   
+    /// endifownedFeature->selectByKind(PayloadFeature)->size() <= 1ownedEndFeatures->notEmpty() implies   
+    /// specializesFromLibrary('Transfers::flowTransfers')
     /// </summary>
-    public partial class Dependency : IDependency
+    public partial class Flow : IFlow
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Dependency"/> class.
+        /// Initializes a new instance of the <see cref="Flow"/> class.
         /// </summary>
-        public Dependency()
+        public Flow()
         {
             this.AliasIds = new List<string>();
-            this.Client = new List<Guid>();
+            this.IsAbstract = false;
+            this.IsComposite = false;
+            this.IsConstant = false;
+            this.IsDerived = false;
+            this.IsEnd = false;
             this.IsImplied = false;
             this.IsImpliedIncluded = false;
+            this.IsOrdered = false;
+            this.IsPortion = false;
+            this.IsSufficient = false;
+            this.IsUnique = true;
+            this.IsVariable = false;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
-            this.Supplier = new List<Guid>();
             this.Target = new List<Guid>();
         }
 
@@ -65,12 +81,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The Element or Elements dependent on the supplier Elements.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Guid> Client { get; set; }
 
         /// <summary>
         /// The declared name of this Element.
@@ -88,11 +98,59 @@ namespace SysML2.NET.Core.DTO
         public string DeclaredShortName { get; set; }
 
         /// <summary>
+        /// Indicates how values of this Feature are determined or used (as specified for the
+        /// FeatureDirectionKind).
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public FeatureDirectionKind? Direction { get; set; }
+
+        /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public string ElementId { get; set; }
+
+        /// <summary>
+        /// Indicates whether instances of this Type must also be instances of at least one of its specialized
+        /// Types.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsAbstract { get; set; }
+
+        /// <summary>
+        /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
+        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
+        /// feature that is not on the same featuring instance.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsComposite { get; set; }
+
+        /// <summary>
+        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
+        /// snapshots of its owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsConstant { get; set; }
+
+        /// <summary>
+        /// Whether the values of this Feature can always be computed from the values of other Features.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsDerived { get; set; }
+
+        /// <summary>
+        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
+        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
+        /// which case values of the crossFeature must be the same as those found by navigation across instances
+        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
+        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
+        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
+        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
+        /// fixed.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsEnd { get; set; }
 
         /// <summary>
         /// Whether this Relationship was generated by tooling to meet semantic rules, rather than being
@@ -110,6 +168,43 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public bool IsImpliedIncluded { get; set; }
+
+        /// <summary>
+        /// Whether an order exists for the values of this Feature or not.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsOrdered { get; set; }
+
+        /// <summary>
+        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
+        /// the Feature and represent the same thing as those instances.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsPortion { get; set; }
+
+        /// <summary>
+        /// Whether all things that meet the classification conditions of this Type must be classified by the
+        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
+        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
+        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// classify all four-wheeled things.)
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsSufficient { get; set; }
+
+        /// <summary>
+        /// Whether or not values for this Feature must have no duplicates or not.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsUnique { get; set; }
+
+        /// <summary>
+        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
+        /// different value for each snapshot of an owningType that is an Occurrence.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariable { get; set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -140,12 +235,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Guid> Source { get; set; }
-
-        /// <summary>
-        /// The Element or Elements on which the client Elements depend in some respect.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Guid> Supplier { get; set; }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.

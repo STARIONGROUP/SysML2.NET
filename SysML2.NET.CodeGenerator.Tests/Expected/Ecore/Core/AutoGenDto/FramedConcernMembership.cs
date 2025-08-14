@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="Connector.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="FramedConcernMembership.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,52 +31,24 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
-    /// which they are used (domain of the Connector). The associations of the Connector restrict what kinds
-    /// of things might be linked. The Connector further restricts these links to be between values of
-    /// Features on instances of its domain.relatedFeature = connectorEnd.ownedReferenceSubsetting->   
-    /// select(s | s <> null).subsettedFeaturerelatedFeature->forAll(f |     if featuringType->isEmpty()
-    /// then f.isFeaturedWithin(null)    else featuringType->forAll(t | f.isFeaturedWithin(t))   
-    /// endif)sourceFeature =     if relatedFeature->isEmpty() then null     else relatedFeature->first()   
-    ///  endiftargetFeature =    if relatedFeature->size() < 2 then OrderedSet{}    else        
-    /// relatedFeature->            subSequence(2, relatedFeature->size())->            asOrderedSet()   
-    /// endifnot isAbstract implies relatedFeature->size() >=
-    /// 2specializesFromLibrary('Links::links')association->exists(oclIsKindOf(AssociationStructure))
-    /// implies    specializesFromLibrary('Objects::linkObjects')connectorEnds->size() = 2
-    /// andassociation->exists(oclIsKindOf(AssociationStructure)) implies   
-    /// specializesFromLibrary('Objects::binaryLinkObjects')connectorEnd->size() = 2 implies   
-    /// specializesFromLibrary('Links::binaryLinks')connectorEnds->size() > 2 implies    not
-    /// specializesFromLibrary('Links::BinaryLink')let commonFeaturingTypes : OrderedSet(Type) =    
-    /// relatedFeature->closure(featuringType)->select(t |         relatedFeature->forAll(f |
-    /// f.isFeaturedWithin(t))    ) inlet nearestCommonFeaturingTypes : OrderedSet(Type) =   
-    /// commonFeaturingTypes->reject(t1 |         commonFeaturingTypes->exists(t2 |             t2 <> t1 and
-    /// t2->closure(featuringType)->contains(t1)    )) inif nearestCommonFeaturingTypes->isEmpty() then
-    /// nullelse nearestCommonFeaturingTypes->first()endif
+    /// A FramedConcernMembership is a RequirementConstraintMembership for a framed ConcernUsage of a
+    /// RequirementDefinition or RequirementUsage.kind = RequirementConstraintKind::requirement
     /// </summary>
-    public partial class Connector : IConnector
+    public partial class FramedConcernMembership : IFramedConcernMembership
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Connector"/> class.
+        /// Initializes a new instance of the <see cref="FramedConcernMembership"/> class.
         /// </summary>
-        public Connector()
+        public FramedConcernMembership()
         {
             this.AliasIds = new List<string>();
-            this.IsAbstract = false;
-            this.IsComposite = false;
-            this.IsConstant = false;
-            this.IsDerived = false;
-            this.IsEnd = false;
             this.IsImplied = false;
             this.IsImpliedIncluded = false;
-            this.IsOrdered = false;
-            this.IsPortion = false;
-            this.IsSufficient = false;
-            this.IsUnique = true;
-            this.IsVariable = false;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
             this.Target = new List<Guid>();
+            this.Visibility = VisibilityKind.Public;
         }
 
         /// <summary>
@@ -107,59 +79,11 @@ namespace SysML2.NET.Core.DTO
         public string DeclaredShortName { get; set; }
 
         /// <summary>
-        /// Indicates how values of this Feature are determined or used (as specified for the
-        /// FeatureDirectionKind).
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public FeatureDirectionKind? Direction { get; set; }
-
-        /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public string ElementId { get; set; }
-
-        /// <summary>
-        /// Indicates whether instances of this Type must also be instances of at least one of its specialized
-        /// Types.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsAbstract { get; set; }
-
-        /// <summary>
-        /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
-        /// cannot exist after its featuring instance no longer does and cannot be values of another composite
-        /// feature that is not on the same featuring instance.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsComposite { get; set; }
-
-        /// <summary>
-        /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
-        /// snapshots of its owningType.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsConstant { get; set; }
-
-        /// <summary>
-        /// Whether the values of this Feature can always be computed from the values of other Features.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsDerived { get; set; }
-
-        /// <summary>
-        /// Whether or not this Feature is an end Feature. An end Feature always has multiplicity 1, mapping
-        /// each of its domain instances to a single co-domain instance. However, it may have a crossFeature, in
-        /// which case values of the crossFeature must be the same as those found by navigation across instances
-        /// of the owningType from values of other end Features to values of this Feature. If the owningType has
-        /// n end Features, then the multiplicity, ordering, and uniqueness declared for the crossFeature of any
-        /// one of these end Features constrains the cardinality, ordering, and uniqueness of the collection of
-        /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
-        /// fixed.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsEnd { get; set; }
 
         /// <summary>
         /// Whether this Relationship was generated by tooling to meet semantic rules, rather than being
@@ -179,41 +103,28 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// Whether an order exists for the values of this Feature or not.
+        /// Whether the RequirementConstraintMembership is for an assumed or required ConstraintUsage.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsOrdered { get; set; }
+        public RequirementConstraintKind Kind { get; set; }
 
         /// <summary>
-        /// Whether the values of this Feature are contained in the space and time of instances of the domain of
-        /// the Feature and represent the same thing as those instances.
+        /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsPortion { get; set; }
+        public Guid MemberElement { get; set; }
 
         /// <summary>
-        /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
-        /// classify all four-wheeled things.)
+        /// The name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsSufficient { get; set; }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string MemberName { get; set; }
 
         /// <summary>
-        /// Whether or not values for this Feature must have no duplicates or not.
+        /// The short name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsUnique { get; set; }
-
-        /// <summary>
-        /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
-        /// different value for each snapshot of an owningType that is an Occurrence.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsVariable { get; set; }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string MemberShortName { get; set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -250,6 +161,13 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Guid> Target { get; set; }
+
+        /// <summary>
+        /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly
+        /// visible outside that Namespace.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public VisibilityKind Visibility { get; set; }
 
     }
 }

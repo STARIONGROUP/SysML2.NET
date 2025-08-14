@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IDependency.cs" company="Starion Group S.A.">
+// <copyright file="IFlow.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,25 +31,21 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Dependency is a Relationship that indicates that one or more client Elements require one more
-    /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
-    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
+    /// An Flow is a Step that represents the transfer of values from one Feature to another. Flows can take
+    /// non-zero time to complete.specializesFromLibrary('Transfers::transfers')payloadType =    if
+    /// payloadFeature = null then Sequence{}    else payloadFeature.type    endifsourceOutputFeature =   
+    /// if connectorEnd->isEmpty() or         connectorEnd.ownedFeature->isEmpty()    then null    else
+    /// connectorEnd.ownedFeature->first()    endiftargetInputFeature =    if connectorEnd->size() < 2 or   
+    ///      connectorEnd->at(2).ownedFeature->isEmpty()    then null    else
+    /// connectorEnd->at(2).ownedFeature->first()    endifflowEnd =
+    /// connectorEnd->selectByKind(FlowEnd)payloadFeature =    let payloadFeatures :
+    /// Sequence(PayloadFeature) =        ownedFeature->selectByKind(PayloadFeature) in    if
+    /// payloadFeatures->isEmpty() then null    else payloadFeatures->first()   
+    /// endifownedFeature->selectByKind(PayloadFeature)->size() <= 1ownedEndFeatures->notEmpty() implies   
+    /// specializesFromLibrary('Transfers::flowTransfers')
     /// </summary>
-    public partial interface IDependency : IRelationship
+    public partial interface IFlow : IConnector, IStep
     {
-        /// <summary>
-        /// The Element or Elements dependent on the supplier Elements.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Guid> Client { get; set; }
-
-        /// <summary>
-        /// The Element or Elements on which the client Elements depend in some respect.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Guid> Supplier { get; set; }
-
     }
 }
 

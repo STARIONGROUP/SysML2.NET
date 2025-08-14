@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="NamespaceImport.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="TextualRepresentation.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,29 +31,41 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A NamespaceImport is an Import that imports Memberships from its importedNamespace into the
-    /// importOwningNamespace. If  isRecursive = false, then only the visible Memberships of the
-    /// importedNamespace are imported. If  isRecursive = true, then, in addition, Memberships are
-    /// recursively imported from any ownedMembers of the importedNamespace that are
-    /// Namespaces.importedElement = importedNamespace
+    /// A TextualRepresentation is an AnnotatingElement whose body represents the representedElement in a
+    /// given language. The representedElement must be the owner of the TextualRepresentation. The named
+    /// language can be a natural language, in which case the body is an informal representation, or an
+    /// artificial language, in which case the body is expected to be a formal, machine-parsable
+    /// representation.If the named language of a TextualRepresentation is machine-parsable, then the body
+    /// text should be legal input text as defined for that language. The interpretation of the named
+    /// language string shall be case insensitive. The following language names are defined to correspond to
+    /// the given standard languages:<table border="1" cellpadding="1" cellspacing="1"
+    /// width="498">	<thead>	</thead>	<tbody>		<tr>			<td style="text-align: center; width:
+    /// 154px;">kerml</td>			<td style="width: 332px;">Kernel Modeling Language</td>		</tr>		<tr>			<td
+    /// style="text-align: center; width: 154px;">ocl</td>			<td style="width: 332px;">Object Constraint
+    /// Language</td>		</tr>		<tr>			<td style="text-align: center; width: 154px;">alf</td>			<td
+    /// style="width: 332px;">Action Language for fUML</td>		</tr>	</tbody></table>Other specifications may
+    /// define specific language strings, other than those shown above, to be used to indicate the use of
+    /// languages from those specifications in KerML TextualRepresentation.If the language of a
+    /// TextualRepresentation is &quot;kerml&quot;, then the body text shall be a legal representation of
+    /// the representedElement in the KerML textual concrete syntax. A conforming tool can use such a
+    /// TextualRepresentation Annotation to record the original KerML concrete syntax text from which an
+    /// Element was parsed. In this case, it is a tool responsibility to ensure that the body of the
+    /// TextualRepresentation remains correct (or the Annotation is removed) if the annotated Element
+    /// changes other than by re-parsing the body text.An Element with a TextualRepresentation in a language
+    /// other than KerML is essentially a semantically &quot;opaque&quot; Element specified in the other
+    /// language. However, a conforming KerML tool may interpret such an element consistently with the
+    /// specification of the named language.
     /// </summary>
-    public partial class NamespaceImport : INamespaceImport
+    public partial class TextualRepresentation : ITextualRepresentation
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NamespaceImport"/> class.
+        /// Initializes a new instance of the <see cref="TextualRepresentation"/> class.
         /// </summary>
-        public NamespaceImport()
+        public TextualRepresentation()
         {
             this.AliasIds = new List<string>();
-            this.IsImplied = false;
             this.IsImpliedIncluded = false;
-            this.IsImportAll = false;
-            this.IsRecursive = false;
-            this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
-            this.Source = new List<Guid>();
-            this.Target = new List<Guid>();
-            this.Visibility = VisibilityKind.Private;
         }
 
         /// <summary>
@@ -67,6 +79,12 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
+
+        /// <summary>
+        /// The textual representation of the representedElement in the given language.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string Body { get; set; }
 
         /// <summary>
         /// The declared name of this Element.
@@ -91,19 +109,6 @@ namespace SysML2.NET.Core.DTO
         public string ElementId { get; set; }
 
         /// <summary>
-        /// The Namespace whose visible Memberships are imported by this NamespaceImport.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Guid ImportedNamespace { get; set; }
-
-        /// <summary>
-        /// Whether this Relationship was generated by tooling to meet semantic rules, rather than being
-        /// directly created by a modeler.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsImplied { get; set; }
-
-        /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
         /// Element. This property may be true, even if there are not actually any ownedRelationships with
         /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
@@ -114,22 +119,10 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// Whether to import memberships without regard to declared visibility.
+        /// The natural or artifical language in which the body text is written.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsImportAll { get; set; }
-
-        /// <summary>
-        /// Whether to recursively import Memberships from visible, owned sub-Namespaces.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsRecursive { get; set; }
-
-        /// <summary>
-        /// The relatedElements of this Relationship that are owned by the Relationship.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
-        public List<Guid> OwnedRelatedElement { get; set; }
+        public string Language { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
@@ -138,35 +131,10 @@ namespace SysML2.NET.Core.DTO
         public List<Guid> OwnedRelationship { get; set; }
 
         /// <summary>
-        /// The relatedElement of this Relationship that owns the Relationship, if any.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Guid? OwningRelatedElement { get; set; }
-
-        /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
-
-        /// <summary>
-        /// The relatedElements from which this Relationship is considered to be directed.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Guid> Source { get; set; }
-
-        /// <summary>
-        /// The relatedElements to which this Relationship is considered to be directed.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Guid> Target { get; set; }
-
-        /// <summary>
-        /// The visibility level of the imported members from this Import relative to the importOwningNamespace.
-        /// The default is private.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public VisibilityKind Visibility { get; set; }
 
     }
 }

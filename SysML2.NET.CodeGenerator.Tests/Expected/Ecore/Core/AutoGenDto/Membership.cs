@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Dependency.cs" company="Starion Group S.A.">
+// <copyright file="Membership.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,27 +31,30 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Dependency is a Relationship that indicates that one or more client Elements require one more
-    /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
-    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
+    /// A Membership is a Relationship between a Namespace and an Element that indicates the Element is a
+    /// member of (i.e., is contained in) the Namespace. Any memberNames specify how the memberElement is
+    /// identified in the Namespace and the visibility specifies whether or not the memberElement is
+    /// publicly visible from outside the Namespace.If a Membership is an OwningMembership, then it owns its
+    /// memberElement, which becomes an ownedMember of the membershipOwningNamespace. Otherwise, the
+    /// memberNames of a Membership are effectively aliases within the membershipOwningNamespace for an
+    /// Element with a separate OwningMembership in the same or a different Namespace. memberElementId
+    /// = memberElement.elementId
     /// </summary>
-    public partial class Dependency : IDependency
+    public partial class Membership : IMembership
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Dependency"/> class.
+        /// Initializes a new instance of the <see cref="Membership"/> class.
         /// </summary>
-        public Dependency()
+        public Membership()
         {
             this.AliasIds = new List<string>();
-            this.Client = new List<Guid>();
             this.IsImplied = false;
             this.IsImpliedIncluded = false;
             this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
-            this.Supplier = new List<Guid>();
             this.Target = new List<Guid>();
+            this.Visibility = VisibilityKind.Public;
         }
 
         /// <summary>
@@ -65,12 +68,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The Element or Elements dependent on the supplier Elements.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Guid> Client { get; set; }
 
         /// <summary>
         /// The declared name of this Element.
@@ -112,6 +109,24 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
+        /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Guid MemberElement { get; set; }
+
+        /// <summary>
+        /// The name of the memberElement relative to the membershipOwningNamespace.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string MemberName { get; set; }
+
+        /// <summary>
+        /// The short name of the memberElement relative to the membershipOwningNamespace.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string MemberShortName { get; set; }
+
+        /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -142,16 +157,17 @@ namespace SysML2.NET.Core.DTO
         public List<Guid> Source { get; set; }
 
         /// <summary>
-        /// The Element or Elements on which the client Elements depend in some respect.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Guid> Supplier { get; set; }
-
-        /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Guid> Target { get; set; }
+
+        /// <summary>
+        /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly
+        /// visible outside that Namespace.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public VisibilityKind Visibility { get; set; }
 
     }
 }

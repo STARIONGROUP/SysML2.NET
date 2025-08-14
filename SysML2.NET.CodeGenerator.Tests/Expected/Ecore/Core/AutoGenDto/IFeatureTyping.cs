@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="IImport.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="IFeatureTyping.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,34 +31,24 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An Import is an Relationship between its importOwningNamespace and either a Membership (for a
-    /// MembershipImport) or another Namespace (for a NamespaceImport), which determines a set of
-    /// Memberships that become importedMemberships of the importOwningNamespace. If isImportAll = false
-    /// (the default), then only public Memberships are considered &quot;visible&quot;. If isImportAll =
-    /// true, then all Memberships are considered &quot;visible&quot;, regardless of their declared
-    /// visibility. If isRecursive = true, then visible Memberships are also recursively imported from owned
-    /// sub-Namespaces.importOwningNamespace.owner = null implies     visibility = VisibilityKind::private
+    /// FeatureTyping is Specialization in which the specific Type is a Feature. This means the set of
+    /// instances of the (specific) typedFeature is a subset of the set of instances of the (general) type.
+    /// In the simplest case, the type is a Classifier, whereupon the typedFeature has values that are
+    /// instances of the Classifier.
     /// </summary>
-    public partial interface IImport : IRelationship
+    public partial interface IFeatureTyping : ISpecialization
     {
         /// <summary>
-        /// Whether to import memberships without regard to declared visibility.
+        /// The Type that is being applied by this FeatureTyping.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        bool IsImportAll { get; set; }
+        Guid Type { get; set; }
 
         /// <summary>
-        /// Whether to recursively import Memberships from visible, owned sub-Namespaces.
+        /// The Feature that has a type determined by this FeatureTyping.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        bool IsRecursive { get; set; }
-
-        /// <summary>
-        /// The visibility level of the imported members from this Import relative to the importOwningNamespace.
-        /// The default is private.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        VisibilityKind Visibility { get; set; }
+        Guid TypedFeature { get; set; }
 
     }
 }

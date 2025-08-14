@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="Definition.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="Subclassification.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,57 +31,23 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Definition is a Classifier of Usages. The actual kinds of Definition that may appear in a model
-    /// are given by the subclasses of Definition (possibly as extended with user-defined
-    /// SemanticMetadata).Normally, a Definition has owned Usages that model features of the thing being
-    /// defined. A Definition may also have other Definitions nested in it, but this has no semantic
-    /// significance, other than the nested scoping resulting from the Definition being considered as a
-    /// Namespace for any nested Definitions.However, if a Definition has isVariation = true, then it
-    /// represents a variation point Definition. In this case, all of its members must be variant Usages,
-    /// related to the Definition by VariantMembership Relationships. Rather than being features of the
-    /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
-    /// an abstract Usage of the variation point Definition.isVariation implies
-    /// ownedFeatureMembership->isEmpty()variant = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)isVariation implies    not
-    /// ownedSpecialization.specific->exists(        oclIsKindOf(Definition) and       
-    /// oclAsType(Definition).isVariation)usage = feature->selectByKind(Usage)directedUsage =
-    /// directedFeature->selectByKind(Usage)ownedUsage = ownedFeature->selectByKind(Usage)ownedAttribute =
-    /// ownedUsage->selectByKind(AttributeUsage)ownedReference =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedEnumeration =
-    /// ownedUsage->selectByKind(EnumerationUsage)ownedOccurrence =
-    /// ownedUsage->selectByKind(OccurrenceUsage)ownedItem = ownedUsage->selectByKind(ItemUsage)ownedPart =
-    /// ownedUsage->selectByKind(PartUsage)ownedPort = ownedUsage->selectByKind(PortUsage)ownedConnection =
-    /// ownedUsage->selectByKind(ConnectorAsUsage)ownedFlow =
-    /// ownedUsage->selectByKind(FlowConnectionUsage)ownedInterface =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedAllocation =
-    /// ownedUsage->selectByKind(AllocationUsage)ownedAction =
-    /// ownedUsage->selectByKind(ActionUsage)ownedState =
-    /// ownedUsage->selectByKind(StateUsage)ownedTransition =
-    /// ownedUsage->selectByKind(TransitionUsage)ownedCalculation =
-    /// ownedUsage->selectByKind(CalculationUsage)ownedConstraint =
-    /// ownedUsage->selectByKind(ConstraintUsage)ownedRequirement =
-    /// ownedUsage->selectByKind(RequirementUsage)ownedConcern =
-    /// ownedUsage->selectByKind(ConcernUsage)ownedCase =
-    /// ownedUsage->selectByKind(CaseUsage)ownedAnalysisCase =
-    /// ownedUsage->selectByKind(AnalysisCaseUsage)ownedVerificationCase =
-    /// ownedUsage->selectByKind(VerificationCaseUsage)ownedUseCase =
-    /// ownedUsage->selectByKind(UseCaseUsage)ownedView = ownedUsage->selectByKind(ViewUsage)ownedViewpoint
-    /// = ownedUsage->selectByKind(ViewpointUsage)ownedRendering =
-    /// ownedUsage->selectByKind(RenderingUsage)ownedMetadata =
-    /// ownedUsage->selectByKind(MetadataUsage)isVariation implies isAbstract
+    /// Subclassification is Specialization in which both the specific and general Types are Classifier.
+    /// This means all instances of the specific Classifier are also instances of the general Classifier.
     /// </summary>
-    public partial class Definition : IDefinition
+    public partial class Subclassification : ISubclassification
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Definition"/> class.
+        /// Initializes a new instance of the <see cref="Subclassification"/> class.
         /// </summary>
-        public Definition()
+        public Subclassification()
         {
             this.AliasIds = new List<string>();
-            this.IsAbstract = false;
+            this.IsImplied = false;
             this.IsImpliedIncluded = false;
-            this.IsSufficient = false;
+            this.OwnedRelatedElement = new List<Guid>();
             this.OwnedRelationship = new List<Guid>();
+            this.Source = new List<Guid>();
+            this.Target = new List<Guid>();
         }
 
         /// <summary>
@@ -119,11 +85,17 @@ namespace SysML2.NET.Core.DTO
         public string ElementId { get; set; }
 
         /// <summary>
-        /// Indicates whether instances of this Type must also be instances of at least one of its specialized
-        /// Types.
+        /// A Type with a superset of all instances of the specific Type, which might be the same set.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsAbstract { get; set; }
+        public Guid General { get; set; }
+
+        /// <summary>
+        /// Whether this Relationship was generated by tooling to meet semantic rules, rather than being
+        /// directly created by a modeler.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsImplied { get; set; }
 
         /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
@@ -136,22 +108,10 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
-        /// classify all four-wheeled things.)
+        /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsSufficient { get; set; }
-
-        /// <summary>
-        /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
-        /// Definition must be VariantMemberships.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsVariation { get; set; }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
+        public List<Guid> OwnedRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
@@ -160,10 +120,46 @@ namespace SysML2.NET.Core.DTO
         public List<Guid> OwnedRelationship { get; set; }
 
         /// <summary>
+        /// The relatedElement of this Relationship that owns the Relationship, if any.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Guid? OwningRelatedElement { get; set; }
+
+        /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// The relatedElements from which this Relationship is considered to be directed.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Guid> Source { get; set; }
+
+        /// <summary>
+        /// A Type with a subset of all instances of the general Type, which might be the same set.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Guid Specific { get; set; }
+
+        /// <summary>
+        /// The more specific Classifier in this Subclassification.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Guid Subclassifier { get; set; }
+
+        /// <summary>
+        /// The more general Classifier in this Subclassification.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Guid Superclassifier { get; set; }
+
+        /// <summary>
+        /// The relatedElements to which this Relationship is considered to be directed.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        public List<Guid> Target { get; set; }
 
     }
 }

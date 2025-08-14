@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Feature.cs" company="Starion Group S.A.">
+// <copyright file="RequirementUsage.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,121 +31,36 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Feature is a Type that classifies relations between multiple things (in the universe). The domain
-    /// of the relation is the intersection of the featuringTypes of the Feature. (The domain of a Feature
-    /// with no featuringTyps is implicitly the most general Type Base::Anything from the Kernel Semantic
-    /// Library.) The co-domain of the relation is the intersection of the types of the Feature.In the
-    /// simplest cases, the featuringTypes and types are Classifiers and the Feature relates two things, one
-    /// from the domain and one from the range. Examples include cars paired with wheels, people paired with
-    /// other people, and cars paired with numbers representing the car length.Since Features are Types,
-    /// their featuringTypes and types can be Features. In this case, the Feature effectively classifies
-    /// relations between relations, which can be interpreted as the sequence of things related by the
-    /// domain Feature concatenated with the sequence of things related by the co-domain Feature.The values
-    /// of a Feature for a given instance of its domain are all the instances of its co-domain that are
-    /// related to that domain instance by the Feature. The values of a Feature with chainingFeatures are
-    /// the same as values of the last Feature in the chain, which can be found by starting with values of
-    /// the first Feature, then using those values as domain instances to obtain valus of the second
-    /// Feature, and so on, to values of the last Feature.ownedRedefinition =
-    /// ownedSubsetting->selectByKind(Redefinition)ownedTypeFeaturing =
-    /// ownedRelationship->selectByKind(TypeFeaturing)->    select(tf | tf.featureOfType =
-    /// self)ownedSubsetting = ownedSpecialization->selectByKind(Subsetting)ownedTyping =
-    /// ownedGeneralization->selectByKind(FeatureTyping)type =     let types : OrderedSet(Types) =
-    /// OrderedSet{self}->        -- Note: The closure operation automatically handles circular
-    /// relationships.        closure(typingFeatures()).typing.type->asOrderedSet() in    types->reject(t1 |
-    /// types->exist(t2 | t2 <> t1 and t2.specializes(t1)))multiplicity <> null implies
-    /// multiplicity.featuringType = featuringType
-    /// specializesFromLibrary('Base::things')chainingFeature->excludes(self)ownedFeatureChaining =
-    /// ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
-    /// ownedFeatureChaining.chainingFeaturechainingFeature->size() <> 1isEnd and owningType <> null implies
-    ///    let i : Integer =         owningType.ownedEndFeature->indexOf(self) in   
-    /// owningType.ownedSpecialization.general->        forAll(supertype |            
-    /// supertype.endFeature->size() >= i implies               
-    /// redefines(supertype.endFeature->at(i))direction = null andownedSpecializations->forAll(isImplied)
-    /// implies    ownedMembership->        selectByKind(FeatureValue)->        forAll(fv |
-    /// specializes(fv.value.result))isEnd and owningType <> null and(owningType.oclIsKindOf(Association) or
-    /// owningType.oclIsKindOf(Connector)) implies   
-    /// specializesFromLibrary('Links::Link::participant')isComposite
-    /// andownedTyping.type->includes(oclIsKindOf(Structure)) andowningType <> null
-    /// and(owningType.oclIsKindOf(Structure) or owningType.type->includes(oclIsKindOf(Structure))) implies 
-    ///  
-    /// specializesFromLibrary('Occurrence::Occurrence::suboccurrences')ownedTyping.type->exists(selectByKind(Class))
-    /// implies    specializesFromLibrary('Occurrences::occurrences')isComposite
-    /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
-    /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
-    /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
-    /// specializesFromLibrary('Occurrence::Occurrence::suboccurrences')ownedTyping.type->exists(selectByKind(DataType))
-    /// implies    specializesFromLibrary('Base::dataValues')owningType <> null
-    /// andowningType.oclIsKindOf(FlowEnd) andowningType.ownedFeature->at(1) = self implies    let flowType
-    /// : Type = owningType.owningType in    flowType <> null implies        let i : Integer =            
-    /// flowType.ownedFeature.indexOf(owningType) in        (i = 1 implies            
-    /// redefinesFromLibrary('Transfers::Transfer::source::sourceOutput')) and        (i = 2 implies        
-    ///    redefinesFromLibrary('Transfers::Transfer::source::targetInput'))                 owningType <>
-    /// null andnot owningFeatureMembership.    oclIsKindOf(ReturnParameterMembership)
-    /// and(owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step) and   
-    /// (owningType.oclIsKindOf(InvocationExpression) implies      not ownedRedefinition->exists(not
-    /// isImplied)) implies    let i : Integer =        owningType.ownedFeature->select(direction <> null)->
-    ///            reject(owningFeatureMembership.                oclIsKindOf(ReturnParameterMembership))-> 
-    ///           indexOf(self) in    owningType.ownedSpecialization.general->        forAll(supertype |    
-    ///        let ownedParameters : Sequence(Feature) =               
-    /// supertype.ownedFeature->select(direction <> null)->                    
-    /// reject(owningFeatureMembership.                         oclIsKindOf(ReturnParameterMembership)) in  
-    ///          ownedParameters->size() >= i implies               
-    /// redefines(ownedParameters->at(i))ownedTyping.type->exists(selectByKind(Structure)) implies   
-    /// specializesFromLibary('Objects::objects')owningType <> null and(owningType.oclIsKindOf(Function) and
-    ///    self = owningType.oclAsType(Function).result or owningType.oclIsKindOf(Expression) and    self =
-    /// owningType.oclAsType(Expression).result) implies    owningType.ownedSpecialization.general->       
-    /// select(oclIsKindOf(Function) or oclIsKindOf(Expression))->        forAll(supertype |           
-    /// redefines(                if superType.oclIsKindOf(Function) then                   
-    /// superType.oclAsType(Function).result                else                   
-    /// superType.oclAsType(Expression).result                endif)ownedFeatureInverting =
-    /// ownedRelationship->selectByKind(FeatureInverting)->    select(fi | fi.featureInverted =
-    /// self)featuringType =    let featuringTypes : OrderedSet(Type) =        
-    /// featuring.type->asOrderedSet() in    if chainingFeature->isEmpty() then featuringTypes    else      
-    ///  featuringTypes->            union(chainingFeature->first().featuringType)->           
-    /// asOrderedSet()    endifownedReferenceSubsetting =    let referenceSubsettings :
-    /// OrderedSet(ReferenceSubsetting) =        ownedSubsetting->selectByKind(ReferenceSubsetting) in    if
-    /// referenceSubsettings->isEmpty() then null    else referenceSubsettings->first()
-    /// endifownedSubsetting->selectByKind(ReferenceSubsetting)->size() <=
-    /// 1Sequence{2..chainingFeature->size()}->forAll(i |   
-    /// chainingFeature->at(i).isFeaturedWithin(chainingFeature->at(i-1)))isPortion
-    /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
-    /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
-    /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
-    /// specializesFromLibrary('Occurrence::Occurrence::portions')featureTarget = if
-    /// chainingFeature->isEmpty() then self else chainingFeature->last() endifownedCrossSubsetting =    let
-    /// crossSubsettings: Sequence(CrossSubsetting) =         ownedSubsetting->selectByKind(CrossSubsetting)
-    /// in    if crossSubsettings->isEmpty() then null    else crossSubsettings->first()    endifisEnd
-    /// implies     multiplicities().allSuperTypes()->flatten()->   
-    /// selectByKind(MultiplicityRange)->exists(hasBounds(1,1))crossFeature <> null implies   
-    /// crossFeature.type->asSet() = type->asSet()ownedSubsetting->selectByKind(CrossSubsetting)->size() <=
-    /// 1crossFeature =    if ownedCrossSubsetting = null then null    else         let chainingFeatures:
-    /// Sequence(Feature) =             ownedCrossSubsetting.crossedFeature.chainingFeature in        if
-    /// chainingFeatures->size() < 2 then null        else chainingFeatures->at(2)   
-    /// endifisOwnedCrossFeature() implies    owner.oclAsType(Feature).type->forAll(t |
-    /// self.specializes(t))isOwnedCrossFeature() implies    ownedSubsetting.subsettedFeature->includesAll( 
-    ///       owner.oclAsType(Feature).ownedRedefinition.redefinedFeature->            select(crossFeature
-    /// <> null).crossFeature)crossFeature <> null implies   
-    /// ownedRedefinition.redefinedFeature.crossFeature->            forAll(f | f <> null implies
-    /// crossFeature.specializes(f))ownedCrossFeature() <> null implies    crossFeature =
-    /// ownedCrossFeature()isOwnedCrossFeature() implies    let otherEnds : OrderedSet(Feature) =        
-    /// owner.oclAsType(Feature).owningType.endFeature->excluding(self) in    if (otherEnds->size() = 1)
-    /// then        featuringType = otherEnds->first().type    else        featuringType->size() = 1 and    
-    ///    featuringType->first().isCartesianProduct() and       
-    /// featuringType->first().asCartesianProduct() = otherEnds.type and       
-    /// featuringType->first().allSupertypes()->includesAll(           
-    /// owner.oclAsType(Feature).ownedRedefinition.redefinedFeature->               select(crossFeature() <>
-    /// null).crossFeature().featuringType)          endifisPortion implies not isVariableisEnd implied
-    /// direction = nullowningFeatureMembership <> null implies    featuringTypes->exists(t |
-    /// isFeaturingType(t))isConstant implies isVariableisVariable implies    owningType <> null and    
-    /// owningType.specializes('Occurrences::Occurrence')isEnd implies not (isDerived or isAbstract or
-    /// isComposite or isPortion)isEnd and isVariable implies isConstant
+    /// A RequirementUsage is a Usage of a RequirementDefinition.actorParameter = featureMembership->   
+    /// selectByKind(ActorMembership).    ownedActorParameterassumedConstraint = ownedFeatureMembership->   
+    /// selectByKind(RequirementConstraintMembership)->    select(kind =
+    /// RequirementConstraintKind::assumption).    ownedConstraintframedConcern = featureMembership->   
+    /// selectByKind(FramedConcernMembership).    ownedConcernrequiredConstraint = ownedFeatureMembership-> 
+    ///   selectByKind(RequirementConstraintMembership)->    select(kind =
+    /// RequirementConstraintKind::requirement).    ownedConstraintstakeholderParameter =
+    /// featureMembership->    selectByKind(AStakholderMembership).   
+    /// ownedStakeholderParametersubjectParameter =    let subjects : OrderedSet(SubjectMembership) =       
+    ///  featureMembership->selectByKind(SubjectMembership) in    if subjects->isEmpty() then null    else
+    /// subjects->first().ownedSubjectParameter    endiftext = documentation.bodyfeatureMembership->   
+    /// selectByKind(SubjectMembership)->    size() <= 1input->notEmpty() and input->first() =
+    /// subjectParameterspecializesFromLibrary('Requirements::requirementChecks')isComposite and owningType
+    /// <> null and    (owningType.oclIsKindOf(RequirementDefinition) or    
+    /// owningType.oclIsKindOf(RequirementUsage)) implies   
+    /// specializesFromLibrary('Requirements::RequirementCheck::subrequirements')owningfeatureMembership <>
+    /// null andowningfeatureMembership.oclIsKindOf(ObjectiveMembership) implies   
+    /// owningType.ownedSpecialization.general->forAll(gen |        (gen.oclIsKindOf(CaseDefinition) implies
+    ///            redefines(gen.oclAsType(CaseDefinition).objectiveRequirement)) and       
+    /// (gen.oclIsKindOf(CaseUsage) implies           
+    /// redefines(gen.oclAsType(CaseUsage).objectiveRequirement))owningFeatureMembership <> null
+    /// andowningFeatureMembership.oclIsKindOf(RequirementVerificationMembership) implies   
+    /// specializesFromLibrary('VerificationCases::VerificationCase::obj::requirementVerifications')
     /// </summary>
-    public partial class Feature : IFeature
+    public partial class RequirementUsage : IRequirementUsage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Feature"/> class.
+        /// Initializes a new instance of the <see cref="RequirementUsage"/> class.
         /// </summary>
-        public Feature()
+        public RequirementUsage()
         {
             this.AliasIds = new List<string>();
             this.IsAbstract = false;
@@ -154,6 +69,7 @@ namespace SysML2.NET.Core.DTO
             this.IsDerived = false;
             this.IsEnd = false;
             this.IsImpliedIncluded = false;
+            this.IsIndividual = false;
             this.IsOrdered = false;
             this.IsPortion = false;
             this.IsSufficient = false;
@@ -255,6 +171,13 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
+        /// Whether this OccurrenceUsage represents the usage of the specific individual represented by its
+        /// individualDefinition.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsIndividual { get; set; }
+
+        /// <summary>
         /// Whether an order exists for the values of this Feature or not.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
@@ -292,6 +215,13 @@ namespace SysML2.NET.Core.DTO
         public bool IsVariable { get; set; }
 
         /// <summary>
+        /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
+        /// must be VariantMemberships.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariation { get; set; }
+
+        /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -302,6 +232,22 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
         public Guid? OwningRelationship { get; set; }
+
+        /// <summary>
+        /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
+        /// portionKind is not null, then the owningType of the OccurrenceUsage must be non-null, and the
+        /// OccurrenceUsage represents portions of the featuring instance of the owningType.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public PortionKind? PortionKind { get; set; }
+
+        /// <summary>
+        /// An optional modeler-specified identifier for this RequirementUsage (used, e.g., to link it to an
+        /// original requirement text in some source document), which is the declaredShortName for the
+        /// RequirementUsage.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string ReqId { get; set; }
 
     }
 }

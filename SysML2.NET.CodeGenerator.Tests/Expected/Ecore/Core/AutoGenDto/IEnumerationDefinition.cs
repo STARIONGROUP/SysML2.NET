@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IDependency.cs" company="Starion Group S.A.">
+// <copyright file="IEnumerationDefinition.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,25 +31,12 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Dependency is a Relationship that indicates that one or more client Elements require one more
-    /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
-    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
+    /// An EnumerationDefinition is an AttributeDefinition all of whose instances are given by an explicit
+    /// list of enumeratedValues. This is realized by requiring that the EnumerationDefinition have
+    /// isVariation = true, with the enumeratedValues being its variants. isVariation
     /// </summary>
-    public partial interface IDependency : IRelationship
+    public partial interface IEnumerationDefinition : IAttributeDefinition
     {
-        /// <summary>
-        /// The Element or Elements dependent on the supplier Elements.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Guid> Client { get; set; }
-
-        /// <summary>
-        /// The Element or Elements on which the client Elements depend in some respect.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Guid> Supplier { get; set; }
-
     }
 }
 

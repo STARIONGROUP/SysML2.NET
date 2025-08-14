@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="Comment.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="EnumerationDefinition.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,17 +31,21 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Comment is an AnnotatingElement whose body in some way describes its annotatedElements.
+    /// An EnumerationDefinition is an AttributeDefinition all of whose instances are given by an explicit
+    /// list of enumeratedValues. This is realized by requiring that the EnumerationDefinition have
+    /// isVariation = true, with the enumeratedValues being its variants. isVariation
     /// </summary>
-    public partial class Comment : IComment
+    public partial class EnumerationDefinition : IEnumerationDefinition
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Comment"/> class.
+        /// Initializes a new instance of the <see cref="EnumerationDefinition"/> class.
         /// </summary>
-        public Comment()
+        public EnumerationDefinition()
         {
             this.AliasIds = new List<string>();
+            this.IsAbstract = false;
             this.IsImpliedIncluded = false;
+            this.IsSufficient = false;
             this.OwnedRelationship = new List<Guid>();
         }
 
@@ -56,12 +60,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The annotation text for the Comment.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string Body { get; set; }
 
         /// <summary>
         /// The declared name of this Element.
@@ -86,6 +84,13 @@ namespace SysML2.NET.Core.DTO
         public string ElementId { get; set; }
 
         /// <summary>
+        /// Indicates whether instances of this Type must also be instances of at least one of its specialized
+        /// Types.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsAbstract { get; set; }
+
+        /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
         /// Element. This property may be true, even if there are not actually any ownedRelationships with
         /// isImplied = true, meaning that no such Relationships are actually implied for this Element. However,
@@ -96,12 +101,22 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
-        /// Identification of the language of the body text and, optionally, the region and/or encoding. The
-        /// format shall be a POSIX locale conformant to ISO/IEC 15897, with the format
-        /// [language[_territory][.codeset][@modifier]].
+        /// Whether all things that meet the classification conditions of this Type must be classified by the
+        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
+        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
+        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
+        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
+        /// classify all four-wheeled things.)
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string Locale { get; set; }
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsSufficient { get; set; }
+
+        /// <summary>
+        /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
+        /// Definition must be VariantMemberships.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public bool IsVariation { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.

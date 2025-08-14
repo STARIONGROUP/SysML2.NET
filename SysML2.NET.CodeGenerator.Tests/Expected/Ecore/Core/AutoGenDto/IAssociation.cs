@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IDependency.cs" company="Starion Group S.A.">
+// <copyright file="IAssociation.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,25 +31,19 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Dependency is a Relationship that indicates that one or more client Elements require one more
-    /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
-    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
+    /// An Association is a Relationship and a Classifier to enable classification of links between things
+    /// (in the universe). The co-domains (types) of the associationEnd Features are the relatedTypes, as
+    /// co-domain and participants (linked things) of an Association identify each other.relatedType =
+    /// associationEnd.typespecializesFromLibrary('Links::Link')oclIsKindOf(Structure) =
+    /// oclIsKindOf(AssociationStructure)associationEnd->size() = 2 implies   
+    /// specializesFromLibrary('Links::BinaryLink')not isAbstract implies relatedType->size() >=
+    /// 2associationEnds->size() > 2 implies    not specializesFromLibrary('Links::BinaryLink')sourceType = 
+    ///   if relatedType->isEmpty() then null    else relatedType->first() endiftargetType =    if
+    /// relatedType->size() < 2 then OrderedSet{}    else         relatedType->            subSequence(2,
+    /// relatedType->size())->            asOrderedSet()     endifownedEndFeature->forAll(type->size() = 1)
     /// </summary>
-    public partial interface IDependency : IRelationship
+    public partial interface IAssociation : IClassifier, IRelationship
     {
-        /// <summary>
-        /// The Element or Elements dependent on the supplier Elements.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Guid> Client { get; set; }
-
-        /// <summary>
-        /// The Element or Elements on which the client Elements depend in some respect.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Guid> Supplier { get; set; }
-
     }
 }
 

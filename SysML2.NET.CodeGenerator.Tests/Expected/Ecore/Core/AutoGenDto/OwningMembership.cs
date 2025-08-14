@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="Annotation.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="OwningMembership.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -31,20 +31,16 @@ namespace SysML2.NET.Core.DTO
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An Annotation is a Relationship between an AnnotatingElement and the Element that is annotated by
-    /// that AnnotatingElement.(owningAnnotatedElement <> null) = (ownedAnnotatingElement <>
-    /// null)ownedAnnotatingElement <> null xor owningAnnotatingElement <> nullownedAnnotatingElement =   
-    /// let ownedAnnotatingElements : Sequence(AnnotatingElement) =        
-    /// ownedRelatedElement->selectByKind(AnnotatingElement) in    if ownedAnnotatingElements->isEmpty()
-    /// then null    else ownedAnnotatingElements->first()    endifannotatingElement =    if
-    /// ownedAnnotatingElement <> null then ownedAnnotatingElement    else owningAnnotatingElement    endif
+    /// An OwningMembership is a Membership that owns its memberElement as a ownedRelatedElement. The
+    /// ownedMemberElement becomes an ownedMember of the membershipOwningNamespace.ownedMemberName =
+    /// ownedMemberElement.nameownedMemberShortName = ownedMemberElement.shortName
     /// </summary>
-    public partial class Annotation : IAnnotation
+    public partial class OwningMembership : IOwningMembership
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Annotation"/> class.
+        /// Initializes a new instance of the <see cref="OwningMembership"/> class.
         /// </summary>
-        public Annotation()
+        public OwningMembership()
         {
             this.AliasIds = new List<string>();
             this.IsImplied = false;
@@ -53,6 +49,7 @@ namespace SysML2.NET.Core.DTO
             this.OwnedRelationship = new List<Guid>();
             this.Source = new List<Guid>();
             this.Target = new List<Guid>();
+            this.Visibility = VisibilityKind.Public;
         }
 
         /// <summary>
@@ -66,12 +63,6 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<string> AliasIds { get; set; }
-
-        /// <summary>
-        /// The Element that is annotated by the annotatingElement of this Annotation.
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Guid AnnotatedElement { get; set; }
 
         /// <summary>
         /// The declared name of this Element.
@@ -113,6 +104,24 @@ namespace SysML2.NET.Core.DTO
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
+        /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public Guid MemberElement { get; set; }
+
+        /// <summary>
+        /// The name of the memberElement relative to the membershipOwningNamespace.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string MemberName { get; set; }
+
+        /// <summary>
+        /// The short name of the memberElement relative to the membershipOwningNamespace.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public string MemberShortName { get; set; }
+
+        /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
@@ -147,6 +156,13 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
         public List<Guid> Target { get; set; }
+
+        /// <summary>
+        /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly
+        /// visible outside that Namespace.
+        /// </summary>
+        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        public VisibilityKind Visibility { get; set; }
 
     }
 }
