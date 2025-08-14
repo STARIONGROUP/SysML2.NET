@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="AnnotationExtensions.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="RequirementUsageExtensions.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="Annotation"/> class
+    /// A static class that provides extension methods for the <see cref="RequirementUsage"/> class
     /// </summary>
-    public static class AnnotationExtensions
+    public static class RequirementUsageExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="Annotation"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="RequirementUsage"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Annotation"/> that is to be updated
+        /// The <see cref="RequirementUsage"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Annotation"/> with
+        /// The DTO that is used to update the <see cref="RequirementUsage"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -53,7 +53,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Annotation poco, Core.DTO.Annotation dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.RequirementUsage poco, Core.DTO.RequirementUsage dto)
         {
             if (poco == null)
             {
@@ -73,18 +73,35 @@ namespace SysML2.NET.Dal
 
             poco.DeclaredShortName = dto.DeclaredShortName;
 
+            poco.Direction = dto.Direction;
+
             poco.ElementId = dto.ElementId;
 
-            poco.IsImplied = dto.IsImplied;
+            poco.IsAbstract = dto.IsAbstract;
+
+            poco.IsComposite = dto.IsComposite;
+
+            poco.IsConstant = dto.IsConstant;
+
+            poco.IsDerived = dto.IsDerived;
+
+            poco.IsEnd = dto.IsEnd;
 
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
-            var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
-            foreach (var identifier in ownedRelatedElementToDelete)
-            {
-                poco.OwnedRelatedElement.Remove(poco.OwnedRelatedElement.Single(x => x.Id == identifier));
-            }
-            identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
+            poco.IsIndividual = dto.IsIndividual;
+
+            poco.IsOrdered = dto.IsOrdered;
+
+            poco.IsPortion = dto.IsPortion;
+
+            poco.IsSufficient = dto.IsSufficient;
+
+            poco.IsUnique = dto.IsUnique;
+
+            poco.IsVariable = dto.IsVariable;
+
+            poco.IsVariation = dto.IsVariation;
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
             foreach (var identifier in ownedRelationshipToDelete)
@@ -93,38 +110,30 @@ namespace SysML2.NET.Dal
             }
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
-            var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
-            foreach (var identifier in sourceToDelete)
-            {
-                poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
-            }
+            poco.PortionKind = dto.PortionKind;
 
-            var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
-            foreach (var identifier in targetToDelete)
-            {
-                poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
-            }
+            poco.ReqId = dto.ReqId;
 
 
             return identifiersOfObjectsToDelete;
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Annotation"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="RequirementUsage"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Annotation"/> that is to be updated
+        /// The <see cref="RequirementUsage"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Annotation"/> with
+        /// The DTO that is used to update the <see cref="RequirementUsage"/> with
         /// </param>
         /// <param name="cache">
         /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.IElement}}"/> that contains the
         /// <see cref="Core.POCO.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.Annotation poco, Core.DTO.Annotation dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.RequirementUsage poco, Core.DTO.RequirementUsage dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
         {
             if (poco == null)
             {
@@ -143,24 +152,6 @@ namespace SysML2.NET.Dal
 
             Lazy<Core.POCO.IElement> lazyPoco;
 
-            if (cache.TryGetValue(dto.AnnotatedElement, out lazyPoco))
-            {
-                poco.AnnotatedElement = (IElement)lazyPoco.Value;
-            }
-            else
-            {
-                poco.AnnotatedElement = null;
-            }
-
-            var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
-            foreach (var identifier in ownedRelatedElementToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.OwnedRelatedElement.Add((IElement)lazyPoco.Value);
-                }
-            }
-
             var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
             foreach (var identifier in ownedRelationshipToAdd)
             {
@@ -168,15 +159,6 @@ namespace SysML2.NET.Dal
                 {
                     poco.OwnedRelationship.Add((IRelationship)lazyPoco.Value);
                 }
-            }
-
-            if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
-            {
-                poco.OwningRelatedElement = (IElement)lazyPoco.Value;
-            }
-            else
-            {
-                poco.OwningRelatedElement = null;
             }
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
@@ -188,53 +170,44 @@ namespace SysML2.NET.Dal
                 poco.OwningRelationship = null;
             }
 
-            var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
-            foreach (var identifier in sourceToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Source.Add((IElement)lazyPoco.Value);
-                }
-            }
-
-            var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
-            foreach (var identifier in targetToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Target.Add((IElement)lazyPoco.Value);
-                }
-            }
-
         }
 
         /// <summary>
-        /// Creates a <see cref="Core.DTO.Annotation"/> based on the provided POCO
+        /// Creates a <see cref="Core.DTO.RequirementUsage"/> based on the provided POCO
         /// </summary>
         /// <param name="poco">
-        /// The subject <see cref="Core.POCO.Annotation"/> from which a DTO is to be created
+        /// The subject <see cref="Core.POCO.RequirementUsage"/> from which a DTO is to be created
         /// </param>
         /// <returns>
-        /// An instance of <see cref="Core.POCO.Annotation"/>
+        /// An instance of <see cref="Core.POCO.RequirementUsage"/>
         /// </returns>
-        public static Core.DTO.Annotation ToDto(this Core.POCO.Annotation poco)
+        public static Core.DTO.RequirementUsage ToDto(this Core.POCO.RequirementUsage poco)
         {
-            var dto = new Core.DTO.Annotation();
+            var dto = new Core.DTO.RequirementUsage();
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;
-            dto.AnnotatedElement = poco.AnnotatedElement.Id;
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.Direction = poco.Direction;
             dto.ElementId = poco.ElementId;
-            dto.IsImplied = poco.IsImplied;
+            dto.IsAbstract = poco.IsAbstract;
+            dto.IsComposite = poco.IsComposite;
+            dto.IsConstant = poco.IsConstant;
+            dto.IsDerived = poco.IsDerived;
+            dto.IsEnd = poco.IsEnd;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
-            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
+            dto.IsIndividual = poco.IsIndividual;
+            dto.IsOrdered = poco.IsOrdered;
+            dto.IsPortion = poco.IsPortion;
+            dto.IsSufficient = poco.IsSufficient;
+            dto.IsUnique = poco.IsUnique;
+            dto.IsVariable = poco.IsVariable;
+            dto.IsVariation = poco.IsVariation;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
-            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
-            dto.Source = poco.Source.Select(x => x.Id).ToList();
-            dto.Target = poco.Target.Select(x => x.Id).ToList();
+            dto.PortionKind = poco.PortionKind;
+            dto.ReqId = poco.ReqId;
 
             return dto;
         }

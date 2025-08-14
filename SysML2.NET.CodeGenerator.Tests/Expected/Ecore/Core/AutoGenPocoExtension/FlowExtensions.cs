@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="CommentExtensions.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="FlowExtensions.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="Comment"/> class
+    /// A static class that provides extension methods for the <see cref="Flow"/> class
     /// </summary>
-    public static class CommentExtensions
+    public static class FlowExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="Comment"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="Flow"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Comment"/> that is to be updated
+        /// The <see cref="Flow"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Comment"/> with
+        /// The DTO that is used to update the <see cref="Flow"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -53,7 +53,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Comment poco, Core.DTO.Comment dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Flow poco, Core.DTO.Flow dto)
         {
             if (poco == null)
             {
@@ -69,17 +69,44 @@ namespace SysML2.NET.Dal
 
             poco.AliasIds = dto.AliasIds;
 
-            poco.Body = dto.Body;
-
             poco.DeclaredName = dto.DeclaredName;
 
             poco.DeclaredShortName = dto.DeclaredShortName;
 
+            poco.Direction = dto.Direction;
+
             poco.ElementId = dto.ElementId;
+
+            poco.IsAbstract = dto.IsAbstract;
+
+            poco.IsComposite = dto.IsComposite;
+
+            poco.IsConstant = dto.IsConstant;
+
+            poco.IsDerived = dto.IsDerived;
+
+            poco.IsEnd = dto.IsEnd;
+
+            poco.IsImplied = dto.IsImplied;
 
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
-            poco.Locale = dto.Locale;
+            poco.IsOrdered = dto.IsOrdered;
+
+            poco.IsPortion = dto.IsPortion;
+
+            poco.IsSufficient = dto.IsSufficient;
+
+            poco.IsUnique = dto.IsUnique;
+
+            poco.IsVariable = dto.IsVariable;
+
+            var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
+            foreach (var identifier in ownedRelatedElementToDelete)
+            {
+                poco.OwnedRelatedElement.Remove(poco.OwnedRelatedElement.Single(x => x.Id == identifier));
+            }
+            identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
             foreach (var identifier in ownedRelationshipToDelete)
@@ -88,26 +115,38 @@ namespace SysML2.NET.Dal
             }
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
+            var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
+            foreach (var identifier in sourceToDelete)
+            {
+                poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
+            }
+
+            var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
+            foreach (var identifier in targetToDelete)
+            {
+                poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
+            }
+
 
             return identifiersOfObjectsToDelete;
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Comment"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Flow"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Comment"/> that is to be updated
+        /// The <see cref="Flow"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Comment"/> with
+        /// The DTO that is used to update the <see cref="Flow"/> with
         /// </param>
         /// <param name="cache">
         /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.IElement}}"/> that contains the
         /// <see cref="Core.POCO.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.Comment poco, Core.DTO.Comment dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.Flow poco, Core.DTO.Flow dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
         {
             if (poco == null)
             {
@@ -126,6 +165,15 @@ namespace SysML2.NET.Dal
 
             Lazy<Core.POCO.IElement> lazyPoco;
 
+            var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
+            foreach (var identifier in ownedRelatedElementToAdd)
+            {
+                if (cache.TryGetValue(identifier, out lazyPoco))
+                {
+                    poco.OwnedRelatedElement.Add((IElement)lazyPoco.Value);
+                }
+            }
+
             var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
             foreach (var identifier in ownedRelationshipToAdd)
             {
@@ -133,6 +181,15 @@ namespace SysML2.NET.Dal
                 {
                     poco.OwnedRelationship.Add((IRelationship)lazyPoco.Value);
                 }
+            }
+
+            if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
+            {
+                poco.OwningRelatedElement = (IElement)lazyPoco.Value;
+            }
+            else
+            {
+                poco.OwningRelatedElement = null;
             }
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
@@ -144,31 +201,63 @@ namespace SysML2.NET.Dal
                 poco.OwningRelationship = null;
             }
 
+            var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
+            foreach (var identifier in sourceToAdd)
+            {
+                if (cache.TryGetValue(identifier, out lazyPoco))
+                {
+                    poco.Source.Add((IElement)lazyPoco.Value);
+                }
+            }
+
+            var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
+            foreach (var identifier in targetToAdd)
+            {
+                if (cache.TryGetValue(identifier, out lazyPoco))
+                {
+                    poco.Target.Add((IElement)lazyPoco.Value);
+                }
+            }
+
         }
 
         /// <summary>
-        /// Creates a <see cref="Core.DTO.Comment"/> based on the provided POCO
+        /// Creates a <see cref="Core.DTO.Flow"/> based on the provided POCO
         /// </summary>
         /// <param name="poco">
-        /// The subject <see cref="Core.POCO.Comment"/> from which a DTO is to be created
+        /// The subject <see cref="Core.POCO.Flow"/> from which a DTO is to be created
         /// </param>
         /// <returns>
-        /// An instance of <see cref="Core.POCO.Comment"/>
+        /// An instance of <see cref="Core.POCO.Flow"/>
         /// </returns>
-        public static Core.DTO.Comment ToDto(this Core.POCO.Comment poco)
+        public static Core.DTO.Flow ToDto(this Core.POCO.Flow poco)
         {
-            var dto = new Core.DTO.Comment();
+            var dto = new Core.DTO.Flow();
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;
-            dto.Body = poco.Body;
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
+            dto.Direction = poco.Direction;
             dto.ElementId = poco.ElementId;
+            dto.IsAbstract = poco.IsAbstract;
+            dto.IsComposite = poco.IsComposite;
+            dto.IsConstant = poco.IsConstant;
+            dto.IsDerived = poco.IsDerived;
+            dto.IsEnd = poco.IsEnd;
+            dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
-            dto.Locale = poco.Locale;
+            dto.IsOrdered = poco.IsOrdered;
+            dto.IsPortion = poco.IsPortion;
+            dto.IsSufficient = poco.IsSufficient;
+            dto.IsUnique = poco.IsUnique;
+            dto.IsVariable = poco.IsVariable;
+            dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
+            dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Target = poco.Target.Select(x => x.Id).ToList();
 
             return dto;
         }

@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="NamespaceImportExtensions.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="ReferenceSubsettingExtensions.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="NamespaceImport"/> class
+    /// A static class that provides extension methods for the <see cref="ReferenceSubsetting"/> class
     /// </summary>
-    public static class NamespaceImportExtensions
+    public static class ReferenceSubsettingExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="NamespaceImport"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="ReferenceSubsetting"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="NamespaceImport"/> that is to be updated
+        /// The <see cref="ReferenceSubsetting"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="NamespaceImport"/> with
+        /// The DTO that is used to update the <see cref="ReferenceSubsetting"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -53,7 +53,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.NamespaceImport poco, Core.DTO.NamespaceImport dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.ReferenceSubsetting poco, Core.DTO.ReferenceSubsetting dto)
         {
             if (poco == null)
             {
@@ -78,10 +78,6 @@ namespace SysML2.NET.Dal
             poco.IsImplied = dto.IsImplied;
 
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
-
-            poco.IsImportAll = dto.IsImportAll;
-
-            poco.IsRecursive = dto.IsRecursive;
 
             var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
             foreach (var identifier in ownedRelatedElementToDelete)
@@ -109,28 +105,26 @@ namespace SysML2.NET.Dal
                 poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
             }
 
-            poco.Visibility = dto.Visibility;
-
 
             return identifiersOfObjectsToDelete;
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="NamespaceImport"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="ReferenceSubsetting"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="NamespaceImport"/> that is to be updated
+        /// The <see cref="ReferenceSubsetting"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="NamespaceImport"/> with
+        /// The DTO that is used to update the <see cref="ReferenceSubsetting"/> with
         /// </param>
         /// <param name="cache">
         /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.IElement}}"/> that contains the
         /// <see cref="Core.POCO.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.NamespaceImport poco, Core.DTO.NamespaceImport dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.ReferenceSubsetting poco, Core.DTO.ReferenceSubsetting dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
         {
             if (poco == null)
             {
@@ -149,13 +143,13 @@ namespace SysML2.NET.Dal
 
             Lazy<Core.POCO.IElement> lazyPoco;
 
-            if (cache.TryGetValue(dto.ImportedNamespace, out lazyPoco))
+            if (cache.TryGetValue(dto.General, out lazyPoco))
             {
-                poco.ImportedNamespace = (Core.POCO.Namespace)lazyPoco.Value;
+                poco.General = (Core.POCO.Type)lazyPoco.Value;
             }
             else
             {
-                poco.ImportedNamespace = null;
+                poco.General = null;
             }
 
             var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
@@ -194,6 +188,15 @@ namespace SysML2.NET.Dal
                 poco.OwningRelationship = null;
             }
 
+            if (cache.TryGetValue(dto.ReferencedFeature, out lazyPoco))
+            {
+                poco.ReferencedFeature = (Core.POCO.Feature)lazyPoco.Value;
+            }
+            else
+            {
+                poco.ReferencedFeature = null;
+            }
+
             var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
             foreach (var identifier in sourceToAdd)
             {
@@ -201,6 +204,33 @@ namespace SysML2.NET.Dal
                 {
                     poco.Source.Add((IElement)lazyPoco.Value);
                 }
+            }
+
+            if (cache.TryGetValue(dto.Specific, out lazyPoco))
+            {
+                poco.Specific = (Core.POCO.Type)lazyPoco.Value;
+            }
+            else
+            {
+                poco.Specific = null;
+            }
+
+            if (cache.TryGetValue(dto.SubsettedFeature, out lazyPoco))
+            {
+                poco.SubsettedFeature = (Core.POCO.Feature)lazyPoco.Value;
+            }
+            else
+            {
+                poco.SubsettedFeature = null;
+            }
+
+            if (cache.TryGetValue(dto.SubsettingFeature, out lazyPoco))
+            {
+                poco.SubsettingFeature = (Core.POCO.Feature)lazyPoco.Value;
+            }
+            else
+            {
+                poco.SubsettingFeature = null;
             }
 
             var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
@@ -215,35 +245,36 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Creates a <see cref="Core.DTO.NamespaceImport"/> based on the provided POCO
+        /// Creates a <see cref="Core.DTO.ReferenceSubsetting"/> based on the provided POCO
         /// </summary>
         /// <param name="poco">
-        /// The subject <see cref="Core.POCO.NamespaceImport"/> from which a DTO is to be created
+        /// The subject <see cref="Core.POCO.ReferenceSubsetting"/> from which a DTO is to be created
         /// </param>
         /// <returns>
-        /// An instance of <see cref="Core.POCO.NamespaceImport"/>
+        /// An instance of <see cref="Core.POCO.ReferenceSubsetting"/>
         /// </returns>
-        public static Core.DTO.NamespaceImport ToDto(this Core.POCO.NamespaceImport poco)
+        public static Core.DTO.ReferenceSubsetting ToDto(this Core.POCO.ReferenceSubsetting poco)
         {
-            var dto = new Core.DTO.NamespaceImport();
+            var dto = new Core.DTO.ReferenceSubsetting();
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
             dto.ElementId = poco.ElementId;
-            dto.ImportedNamespace = poco.ImportedNamespace.Id;
+            dto.General = poco.General.Id;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
-            dto.IsImportAll = poco.IsImportAll;
-            dto.IsRecursive = poco.IsRecursive;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
+            dto.ReferencedFeature = poco.ReferencedFeature.Id;
             dto.Source = poco.Source.Select(x => x.Id).ToList();
+            dto.Specific = poco.Specific.Id;
+            dto.SubsettedFeature = poco.SubsettedFeature.Id;
+            dto.SubsettingFeature = poco.SubsettingFeature.Id;
             dto.Target = poco.Target.Select(x => x.Id).ToList();
-            dto.Visibility = poco.Visibility;
 
             return dto;
         }
