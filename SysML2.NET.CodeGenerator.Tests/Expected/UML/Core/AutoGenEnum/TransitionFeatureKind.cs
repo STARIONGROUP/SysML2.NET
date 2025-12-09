@@ -24,10 +24,13 @@
 
 namespace SysML2.NET.Core
 {
+    using System.CodeDom.Compiler;
+
     /// <summary>
     /// A TransitionActionKind indicates whether the transitionFeature of a TransitionFeatureMembership is a
     /// trigger, guard or effect.
     /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
     public enum TransitionFeatureKind
     {
         /// <summary>

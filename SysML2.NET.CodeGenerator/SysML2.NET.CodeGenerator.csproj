@@ -27,7 +27,7 @@
 
         <!--
          -->
-        <PackageReference Include="uml4net.HandleBars" Version="5.2.1" />
+        <PackageReference Include="uml4net.HandleBars" Version="5.3.0" />
         <PackageReference Include="uml4net.Reporting" Version="5.1.1" />
         <PackageReference Include="uml4net.xmi" Version="4.0.4" />
 
@@ -89,7 +89,13 @@
       <None Update="Templates\core-dto-class-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Templates\core-dto-class-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Templates\core-dto-interface-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\core-dto-interface-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\core-element-dal-factory.hbs">

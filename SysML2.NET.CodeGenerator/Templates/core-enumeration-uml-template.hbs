@@ -24,7 +24,10 @@
 
 namespace SysML2.NET.Core
 {
+    using System.CodeDom.Compiler;
+
     {{ #Documentation this }}
+    [GeneratedCode("SysML2.NET", "latest")]
     {{ Enum.ToString this.Visibility }} enum {{ this.Name }}
     {
         {{ #each this.OwnedLiteral as | enumerationLiteral | }}

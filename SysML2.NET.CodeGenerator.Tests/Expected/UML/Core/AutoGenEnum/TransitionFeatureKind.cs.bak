@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="VisibilityKind.cs" company="Starion Group S.A.">
+// <copyright file="TransitionFeatureKind.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -24,35 +24,26 @@
 
 namespace SysML2.NET.Core
 {
-    using System.CodeDom.Compiler;
-
     /// <summary>
-    /// VisibilityKind is an enumeration whose literals specify the visibility of a Membership of an Element
-    /// in a Namespace outside of that Namespace. Note that &quot;visibility&quot; specifically restricts
-    /// whether an Element in a Namespace may be referenced by name from outside the Namespace and only
-    /// otherwise restricts access to an Element as provided by specific constraints in the abstract syntax
-    /// (e.g., preventing the import or inheritance of private Elements).
+    /// A TransitionActionKind indicates whether the transitionFeature of a TransitionFeatureMembership is a
+    /// trigger, guard or effect.
     /// </summary>
-    [GeneratedCode("SysML2.NET", "latest")]
-    public enum VisibilityKind
+    public enum TransitionFeatureKind
     {
         /// <summary>
-        /// Indicates a Membership is not visible outside its owning Namespace.
+        /// Indicates that the transitionFeature of a TransitionFeatureMembership is a triggerAction.
         /// </summary>
-        Private,
+        Trigger,
 
         /// <summary>
-        /// An intermediate level of visibility between public and private. By default, it is equivalent to
-        /// private for the purposes of normal access to and import of Elements from a Namespace. However, other
-        /// Relationships may be specified to include Memberships with protected visibility in the list of
-        /// memberships for a Namespace (e.g., Specialization).
+        /// Indicates that the transitionFeature of a TransitionFeatureMembership is a guardExpression.
         /// </summary>
-        Protected,
+        Guard,
 
         /// <summary>
-        /// Indicates that a Membership is publicly visible outside its owning Namespace.
+        /// Indicates that the transitionFeature of a TransitionFeatureMembership is an effectAction.
         /// </summary>
-        Public,
+        Effect,
 
     }
 }
