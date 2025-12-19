@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="INamespace.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,13 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Root.Namespaces
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -39,15 +40,60 @@ namespace SysML2.NET.Core.DTO
     /// the corresponding memberElement relative to the Namespace. For an OwningMembership, the
     /// ownedMemberName and ownedMemberShortName are given by the Element name and shortName. Note that the
     /// same Element may be the memberElement of multiple Memberships in a Namespace (though it may be owned
-    /// at most once), each of which may define a separate alias for the Element relative to the
-    /// Namespace.membership->forAll(m1 |     membership->forAll(m2 |         m1 <> m2 implies
-    /// m1.isDistinguishableFrom(m2)))member = membership.memberElementownedMember =
-    /// ownedMembership->selectByKind(OwningMembership).ownedMemberElementimportedMembership =
-    /// importedMemberships(Set{})ownedImport = ownedRelationship->selectByKind(Import)ownedMembership =
-    /// ownedRelationship->selectByKind(Membership)
+    /// at most once), each of which may define a separate alias for the Element relative to the Namespace.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651694_110063_42176", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface INamespace : IElement
     {
+        /// <summary>
+        /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
+        /// </summary>
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
+        List<Guid> ImportedMembership { get; }
+
+        /// <summary>
+        /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
+        /// the Namespace.
+        /// </summary>
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        List<Guid> Member { get; }
+
+        /// <summary>
+        /// All Memberships in this Namespace, including (at least) the union of ownedMemberships and
+        /// importedMemberships.
+        /// </summary>
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
+        List<Guid> Membership { get; }
+
+        /// <summary>
+        /// The ownedRelationships of this Namespace that are Imports, for which the Namespace is the
+        /// importOwningNamespace.
+        /// </summary>
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674974_746786_43247", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        List<Guid> OwnedImport { get; }
+
+        /// <summary>
+        /// The owned members of this Namespace, which are the <cpde>ownedMemberElements of the ownedMemberships
+        /// of the Namespace.</cpde>
+        /// </summary>
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
+        List<Guid> OwnedMember { get; }
+
+        /// <summary>
+        /// The ownedRelationships of this Namespace that are Memberships, for which the Namespace is the
+        /// membershipOwningNamespace.
+        /// </summary>
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_190614_43269", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        List<Guid> OwnedMembership { get; }
+
     }
 }
 

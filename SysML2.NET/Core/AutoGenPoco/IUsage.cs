@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,40 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Actions;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
+    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
+    using SysML2.NET.Core.POCO.Systems.Attributes;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Core.POCO.Systems.Cases;
+    using SysML2.NET.Core.POCO.Systems.Connections;
+    using SysML2.NET.Core.POCO.Systems.Constraints;
+    using SysML2.NET.Core.POCO.Systems.Enumerations;
+    using SysML2.NET.Core.POCO.Systems.Flows;
+    using SysML2.NET.Core.POCO.Systems.Interfaces;
+    using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
+    using SysML2.NET.Core.POCO.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Core.POCO.Systems.States;
+    using SysML2.NET.Core.POCO.Systems.UseCases;
+    using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -37,272 +65,283 @@ namespace SysML2.NET.Core.POCO
     /// Namespace for any nested Definitions.However, if a Usage has isVariation = true, then it represents
     /// a variation point Usage. In this case, all of its members must be variant Usages, related to the
     /// Usage by VariantMembership Relationships. Rather than being features of the Usage, variant Usages
-    /// model different concrete alternatives that can be chosen to fill in for the variation point
-    /// Usage.variant = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)isVariation implies
-    /// ownedFeatureMembership->isEmpty()isReference = not isCompositeowningVariationUsage <> null implies  
-    ///  specializes(owningVariationUsage)isVariation implies    not ownedSpecialization.specific->exists(  
-    ///      oclIsKindOf(Definition) and        oclAsType(Definition).isVariation or       
-    /// oclIsKindOf(Usage) and        oclAsType(Usage).isVariation)owningVariationDefinition <> null implies
-    ///    specializes(owningVariationDefinition)directedUsage =
-    /// directedFeature->selectByKind(Usage)nestedAction =
-    /// nestedUsage->selectByKind(ActionUsage)nestedAllocation =
-    /// nestedUsage->selectByKind(AllocationUsage)nestedAnalysisCase =
-    /// nestedUsage->selectByKind(AnalysisCaseUsage)nestedAttribute =
-    /// nestedUsage->selectByKind(AttributeUsage)nestedCalculation =
-    /// nestedUsage->selectByKind(CalculationUsage)nestedCase =
-    /// nestedUsage->selectByKind(CaseUsage)nestedConcern =
-    /// nestedUsage->selectByKind(ConcernUsage)nestedConnection =
-    /// nestedUsage->selectByKind(ConnectorAsUsage)nestedConstraint =
-    /// nestedUsage->selectByKind(ConstraintUsage)ownedNested =
-    /// nestedUsage->selectByKind(EnumerationUsage)nestedFlow =
-    /// nestedUsage->selectByKind(FlowConnectionUsage)nestedInterface =
-    /// nestedUsage->selectByKind(ReferenceUsage)nestedItem =
-    /// nestedUsage->selectByKind(ItemUsage)nestedMetadata =
-    /// nestedUsage->selectByKind(MetadataUsage)nestedOccurrence =
-    /// nestedUsage->selectByKind(OccurrenceUsage)nestedPart =
-    /// nestedUsage->selectByKind(PartUsage)nestedPort = nestedUsage->selectByKind(PortUsage)nestedReference
-    /// = nestedUsage->selectByKind(ReferenceUsage)nestedRendering =
-    /// nestedUsage->selectByKind(RenderingUsage)nestedRequirement =
-    /// nestedUsage->selectByKind(RequirementUsage)nestedState =
-    /// nestedUsage->selectByKind(StateUsage)nestedTransition =
-    /// nestedUsage->selectByKind(TransitionUsage)nestedUsage =
-    /// ownedFeature->selectByKind(Usage)nestedUseCase =
-    /// nestedUsage->selectByKind(UseCaseUsage)nestedVerificationCase =
-    /// nestedUsage->selectByKind(VerificationCaseUsage)nestedView =
-    /// nestedUsage->selectByKind(ViewUsage)nestedViewpoint = nestedUsage->selectByKind(ViewpointUsage)usage
-    /// = feature->selectByKind(Usage)direction <> null or isEnd or featuringType->isEmpty() implies   
-    /// isReferenceisVariation implies isAbstractmayTimeVary =    owningType <> null and   
-    /// owningType.specializesFromLibrary('Occurrences::Occurrence') and    not (        isPortion or       
-    /// specializesFromLibrary('Links::SelfLink') or       
-    /// specializesFromLibrary('Occurrences::HappensLink') or        isComposite and
-    /// specializesFromLibrary('Actions::Action')    )owningVariationUsage <> null implies   
-    /// featuringType->asSet() = owningVariationUsage.featuringType->asSet()
+    /// model different concrete alternatives that can be chosen to fill in for the variation point Usage.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1565469997820_598571_19982", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IUsage : IFeature
     {
         /// <summary>
-        /// Queries the derived property Definition
+        /// The Classifiers that are the types of this Usage. Nominally, these are Definitions, but other kinds
+        /// of Kernel Classifiers are also allowed, to permit use of Classifiers from the Kernel Model
+        /// Libraries.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Classifier> QueryDefinition();
+        [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
+        List<IClassifier> QueryDefinition();
 
         /// <summary>
-        /// Queries the derived property DirectedUsage
+        /// The usages of this Usage that are directedFeatures.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryDirectedUsage();
+        [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
+        List<IUsage> QueryDirectedUsage();
 
         /// <summary>
-        /// Queries the derived property IsReference
+        /// Whether this Usage is a referential Usage, that is, it has isComposite = false.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         bool QueryIsReference();
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
         /// must be VariantMemberships.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_2_12e503d9_1590978312364_290951_421", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         bool IsVariation { get; set; }
 
         /// <summary>
-        /// Queries the derived property MayTimeVary
+        /// Whether this Usage may be time varying (that is, whether it is featured by the snapshots of its
+        /// owningType, rather than being featured by the owningType itself). However, if isConstant is also
+        /// true, then the value of the Usage is nevertheless constant over the entire duration of an instance
+        /// of its owningType (that is, it has the same value on all snapshots).The property mayTimeVary
+        /// redefines the KerML property Feature::isVariable, making it derived. The property isConstant is
+        /// inherited from Feature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         bool QueryMayTimeVary();
 
         /// <summary>
-        /// Queries the derived property NestedAction
+        /// The ActionUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ActionUsage> QueryNestedAction();
+        [Property(xmiId: "_18_5_3_12e503d9_1565501745142_70952_31609", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
+        List<IActionUsage> QueryNestedAction();
 
         /// <summary>
-        /// Queries the derived property NestedAllocation
+        /// The AllocationUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AllocationUsage> QueryNestedAllocation();
+        [Property(xmiId: "_19_0_4_12e503d9_1611430983774_648557_1053", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
+        List<IAllocationUsage> QueryNestedAllocation();
 
         /// <summary>
-        /// Queries the derived property NestedAnalysisCase
+        /// The AnalysisCaseUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AnalysisCaseUsage> QueryNestedAnalysisCase();
+        [Property(xmiId: "_19_0_2_12e503d9_1591152666850_226358_3749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
+        List<IAnalysisCaseUsage> QueryNestedAnalysisCase();
 
         /// <summary>
-        /// Queries the derived property NestedAttribute
+        /// The code>AttributeUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AttributeUsage> QueryNestedAttribute();
+        [Property(xmiId: "_19_0_2_12e503d9_1591500785349_111324_4486", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        List<IAttributeUsage> QueryNestedAttribute();
 
         /// <summary>
-        /// Queries the derived property NestedCalculation
+        /// The CalculationUsage that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<CalculationUsage> QueryNestedCalculation();
+        [Property(xmiId: "_19_0_2_12e503d9_1588215112283_215964_632", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
+        List<ICalculationUsage> QueryNestedCalculation();
 
         /// <summary>
-        /// Queries the derived property NestedCase
+        /// The CaseUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<CaseUsage> QueryNestedCase();
+        [Property(xmiId: "_19_0_2_12e503d9_1591135021853_494751_737", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1588215112283_215964_632")]
+        List<ICaseUsage> QueryNestedCase();
 
         /// <summary>
-        /// Queries the derived property NestedConcern
+        /// The ConcernUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ConcernUsage> QueryNestedConcern();
+        [Property(xmiId: "_19_0_4_12e503d9_1617051711833_106553_1460", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
+        List<IConcernUsage> QueryNestedConcern();
 
         /// <summary>
-        /// Queries the derived property NestedConnection
+        /// The ConnectorAsUsages that are nestedUsages of this Usage. Note that this list includes
+        /// BindingConnectorAsUsages, SuccessionAsUsages, and FlowConnectionUsages because these are
+        /// ConnectorAsUsages even though they are not ConnectionUsages.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_2_12e503d9_1591479754895_422988_1242", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         List<IConnectorAsUsage> QueryNestedConnection();
 
         /// <summary>
-        /// Queries the derived property NestedConstraint
+        /// The ConstraintUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ConstraintUsage> QueryNestedConstraint();
+        [Property(xmiId: "_19_0_2_12e503d9_1578067664051_434365_1774", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
+        List<IConstraintUsage> QueryNestedConstraint();
 
         /// <summary>
-        /// Queries the derived property NestedEnumeration
+        /// The code>EnumerationUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<EnumerationUsage> QueryNestedEnumeration();
+        [Property(xmiId: "_19_0_4_12e503d9_1606946589000_158124_239", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591500785349_111324_4486")]
+        List<IEnumerationUsage> QueryNestedEnumeration();
 
         /// <summary>
-        /// Queries the derived property NestedFlow
+        /// The code>FlowUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<FlowUsage> QueryNestedFlow();
+        [Property(xmiId: "_19_0_4_12e503d9_1624054938718_124518_1464", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
+        List<IFlowUsage> QueryNestedFlow();
 
         /// <summary>
-        /// Queries the derived property NestedInterface
+        /// The InterfaceUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<InterfaceUsage> QueryNestedInterface();
+        [Property(xmiId: "_19_0_2_12e503d9_1591498454569_383419_3839", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
+        List<IInterfaceUsage> QueryNestedInterface();
 
         /// <summary>
-        /// Queries the derived property NestedItem
+        /// The ItemUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ItemUsage> QueryNestedItem();
+        [Property(xmiId: "_19_0_2_12e503d9_1591482421103_284620_2978", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
+        List<IItemUsage> QueryNestedItem();
 
         /// <summary>
-        /// Queries the derived property NestedMetadata
+        /// The MetadataUsages that are nestedUsages of this of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<MetadataUsage> QueryNestedMetadata();
+        [Property(xmiId: "_19_0_4_12e503d9_1661488589862_120785_2970", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
+        List<IMetadataUsage> QueryNestedMetadata();
 
         /// <summary>
-        /// Queries the derived property NestedOccurrence
+        /// The OccurrenceUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<OccurrenceUsage> QueryNestedOccurrence();
+        [Property(xmiId: "_19_0_4_12e503d9_1618943853976_48759_278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        List<IOccurrenceUsage> QueryNestedOccurrence();
 
         /// <summary>
-        /// Queries the derived property NestedPart
+        /// The PartUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<PartUsage> QueryNestedPart();
+        [Property(xmiId: "_19_0_2_12e503d9_1591496406876_479979_3188", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
+        List<IPartUsage> QueryNestedPart();
 
         /// <summary>
-        /// Queries the derived property NestedPort
+        /// The PortUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<PortUsage> QueryNestedPort();
+        [Property(xmiId: "_18_5_3_12e503d9_1565494459494_859367_26042", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        List<IPortUsage> QueryNestedPort();
 
         /// <summary>
-        /// Queries the derived property NestedReference
+        /// The ReferenceUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ReferenceUsage> QueryNestedReference();
+        [Property(xmiId: "_19_0_2_12e503d9_1591477541360_47573_933", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        List<IReferenceUsage> QueryNestedReference();
 
         /// <summary>
-        /// Queries the derived property NestedRendering
+        /// The RenderingUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<RenderingUsage> QueryNestedRendering();
+        [Property(xmiId: "_19_0_2_12e503d9_1596741501454_147708_6545", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
+        List<IRenderingUsage> QueryNestedRendering();
 
         /// <summary>
-        /// Queries the derived property NestedRequirement
+        /// The RequirementUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<RequirementUsage> QueryNestedRequirement();
+        [Property(xmiId: "_19_0_2_12e503d9_1583000447195_878123_1244", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1578067664051_434365_1774")]
+        List<IRequirementUsage> QueryNestedRequirement();
 
         /// <summary>
-        /// Queries the derived property NestedState
+        /// The StateUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<StateUsage> QueryNestedState();
+        [Property(xmiId: "_19_0_2_12e503d9_1575587743891_973819_756", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
+        List<IStateUsage> QueryNestedState();
 
         /// <summary>
-        /// Queries the derived property NestedTransition
+        /// The TransitionUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<TransitionUsage> QueryNestedTransition();
+        [Property(xmiId: "_19_0_2_12e503d9_1578597913303_768272_3894", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        List<ITransitionUsage> QueryNestedTransition();
 
         /// <summary>
-        /// Queries the derived property NestedUsage
+        /// The Usages that are ownedFeatures of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryNestedUsage();
+        [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
+        List<IUsage> QueryNestedUsage();
 
         /// <summary>
-        /// Queries the derived property NestedUseCase
+        /// The UseCaseUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<UseCaseUsage> QueryNestedUseCase();
+        [Property(xmiId: "_19_0_4_12e503d9_1621463992900_247262_1080", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
+        List<IUseCaseUsage> QueryNestedUseCase();
 
         /// <summary>
-        /// Queries the derived property NestedVerificationCase
+        /// The VerificationCaseUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<VerificationCaseUsage> QueryNestedVerificationCase();
+        [Property(xmiId: "_19_0_2_12e503d9_1596821592100_42801_10499", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
+        List<IVerificationCaseUsage> QueryNestedVerificationCase();
 
         /// <summary>
-        /// Queries the derived property NestedView
+        /// The ViewUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ViewUsage> QueryNestedView();
+        [Property(xmiId: "_19_0_2_12e503d9_1596644669126_858176_809", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
+        List<IViewUsage> QueryNestedView();
 
         /// <summary>
-        /// Queries the derived property NestedViewpoint
+        /// The ViewpointUsages that are nestedUsages of this Usage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ViewpointUsage> QueryNestedViewpoint();
+        [Property(xmiId: "_19_0_2_12e503d9_1596649930212_443356_3818", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
+        List<IViewpointUsage> QueryNestedViewpoint();
 
         /// <summary>
-        /// Queries the derived property OwningDefinition
+        /// The Definition that owns this Usage (if any).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Definition QueryOwningDefinition();
+        [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
+        IDefinition QueryOwningDefinition();
 
         /// <summary>
-        /// Queries the derived property OwningUsage
+        /// The Usage in which this Usage is nested (if any).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Usage QueryOwningUsage();
+        [Property(xmiId: "_18_5_3_12e503d9_1565472757327_504924_21260", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        IUsage QueryOwningUsage();
 
         /// <summary>
-        /// Queries the derived property Usage
+        /// The Usages that are features of this Usage (not necessarily owned).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryUsage();
+        [Property(xmiId: "_19_0_2_12e503d9_1591217543254_26688_475", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        List<IUsage> QueryUsage();
 
         /// <summary>
-        /// Queries the derived property Variant
+        /// The Usages which represent the variants of this Usage as a variation point Usage, if isVariation =
+        /// true. If isVariation = false, then there must be no variants.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryVariant();
+        [Property(xmiId: "_19_0_2_12e503d9_1590979649160_380466_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        List<IUsage> QueryVariant();
 
         /// <summary>
-        /// Queries the derived property VariantMembership
+        /// The ownedMemberships of this Usage that are VariantMemberships. If isVariation = true, then this
+        /// must be all memberships of the Usage. If isVariation = false, then variantMembershipmust be empty.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<VariantMembership> QueryVariantMembership();
+        [Property(xmiId: "_19_0_2_12e503d9_1590979136735_982171_914", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
+        List<IVariantMembership> QueryVariantMembership();
 
     }
 }

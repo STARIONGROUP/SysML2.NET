@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IActionUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,32 +22,38 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Actions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.DTO.Kernel.Behaviors;
+    using SysML2.NET.Core.DTO.Systems.Occurrences;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// An ActionUsage is a Usage that is also a Step, and, so, is typed by a Behavior. Nominally, if the
     /// type is an ActionDefinition, an ActionUsage is a Usage of that ActionDefinition within a system.
     /// However, other kinds of kernel Behaviors are also allowed, to permit use of Behaviors from the
-    /// Kernel Model Libraries.isSubactionUsage() implies   
-    /// specializesFromLibrary('Actions::Action::subactions')specializesFromLibrary('Actions::actions')isComposite
-    /// and owningType <> null and(owningType.oclIsKindOf(PartDefinition) or
-    /// owningType.oclIsKindOf(PartUsage)) implies   
-    /// specializesFromLibrary('Parts::Part::ownedActions')owningFeatureMembership <> null
-    /// andowningFeatureMembership.oclIsKindOf(StateSubactionMembership) implies    let kind :
-    /// StateSubactionKind =         owningFeatureMembership.oclAsType(StateSubactionMembership).kind in   
-    /// if kind = StateSubactionKind::entry then       
-    /// redefinesFromLibrary('States::StateAction::entryAction')    else if kind = StateSubactionKind::do
-    /// then        redefinesFromLibrary('States::StateAction::doAction')    else       
-    /// redefinesFromLibrary('States::StateAction::exitAction')    endif endif
+    /// Kernel Model Libraries.
     /// </summary>
-    public partial interface IActionUsage : IOccurrenceUsage, IStep
+    [Class(xmiId: "_18_5_3_12e503d9_1565500580749_954926_30405", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
+    public partial interface IActionUsage : IStep, IOccurrenceUsage
     {
+        /// <summary>
+        /// The Behaviors that are the types of this ActionUsage. Nominally, these would be ActionDefinitions,
+        /// but other kinds of Kernel Behaviors are also allowed, to permit use of Behaviors from the Kernel
+        /// Model Libraries.
+        /// </summary>
+        [Property(xmiId: "_18_5_3_12e503d9_1565500905804_589845_30779", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
+        List<Guid> ActionDefinition { get; }
+
     }
 }
 

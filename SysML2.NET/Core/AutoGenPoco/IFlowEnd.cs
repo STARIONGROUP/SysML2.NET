@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFlowEnd.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,21 +22,28 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Kernel.Interactions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A FlowEnd is a Feature that is one of the connectorEnds giving the source or target of a Flow. For
     /// Flows typed by FlowTransfer or its specializations, FlowEnds must have exactly one ownedFeature,
     /// which redefines Transfer::source::sourceOutput or Transfer::target::targetInput and redefines the
-    /// corresponding feature of the relatedElement for its end.isEndownedFeature->size() = 1owningType <>
-    /// null and owningType.oclIsKindOf(Flow)
+    /// corresponding feature of the relatedElement for its end.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1563219035000_53223_20571", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFlowEnd : IFeature
     {
     }

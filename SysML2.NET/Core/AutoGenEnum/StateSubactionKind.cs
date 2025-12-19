@@ -22,12 +22,15 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core
+namespace SysML2.NET.Core.Systems.States
 {
+    using System.CodeDom.Compiler;
+
     /// <summary>
     /// A StateSubactionKind indicates whether the action of a StateSubactionMembership is an entry, do or
     /// exit action.
     /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
     public enum StateSubactionKind
     {
         /// <summary>

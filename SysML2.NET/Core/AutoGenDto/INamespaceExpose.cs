@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="INamespaceExpose.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,19 +22,23 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Views
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.DTO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A NamespaceExpose is an Expose Relationship that exposes the Memberships of a specific
     /// importedNamespace and, if isRecursive = true, additional Memberships recursively.
     /// </summary>
-    public partial interface INamespaceExpose : INamespaceImport, IExpose
+    [Class(xmiId: "_19_0_4_12e503d9_1668805386737_851862_212", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
+    public partial interface INamespaceExpose : IExpose, INamespaceImport
     {
     }
 }

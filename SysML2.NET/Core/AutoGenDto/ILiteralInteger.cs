@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralInteger.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,26 +22,27 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Kernel.Expressions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A LiteralInteger is a LiteralExpression that provides an Integer value as a result. Its result
-    /// parameter must have the type
-    /// Integer.specializesFromLibrary('Performances::literalIntegerEvaluations')
+    /// parameter must have the type Integer.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651681_567347_42153", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralInteger : ILiteralExpression
     {
         /// <summary>
-        /// The Integer value that is the result of evaluating this LiteralInteger.The Integer value that is the
-        /// result of evaluating this Expression.
+        /// The Integer value that is the result of evaluating this LiteralInteger.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_358889_43199", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         int Value { get; set; }
 
     }

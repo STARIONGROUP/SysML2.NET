@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FlowDefinition.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,50 +22,60 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.Flows
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Behaviors;
+    using SysML2.NET.Core.POCO.Kernel.Interactions;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Actions;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
+    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
+    using SysML2.NET.Core.POCO.Systems.Attributes;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Core.POCO.Systems.Cases;
+    using SysML2.NET.Core.POCO.Systems.Connections;
+    using SysML2.NET.Core.POCO.Systems.Constraints;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.POCO.Systems.Enumerations;
+    using SysML2.NET.Core.POCO.Systems.Interfaces;
+    using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
+    using SysML2.NET.Core.POCO.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Core.POCO.Systems.States;
+    using SysML2.NET.Core.POCO.Systems.UseCases;
+    using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A FlowDefinition is an ActionDefinition that is also an Interaction (which is both a KerML Behavior
-    /// and Association), representing flows between
-    /// Usages.specializesFromLibrary('Flows::MessageAction')flowEnd->size() = 2 implies   
-    /// specializesFromLibrary('Flows::Message')flowEnd->size() <= 2
+    /// and Association), representing flows between Usages.
     /// </summary>
+    [Class(xmiId: "_19_0_4_12e503d9_1661892471095_470217_5", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial class FlowDefinition : IFlowDefinition
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FlowDefinition"/> class.
+        /// The ActionUsages that are steps in this ActionDefinition, which define the actions that specify the
+        /// behavior of the ActionDefinition.
         /// </summary>
-        public FlowDefinition()
-        {
-            this.AliasIds = new List<string>();
-            this.IsAbstract = false;
-            this.IsImplied = false;
-            this.IsImpliedIncluded = false;
-            this.IsIndividual = false;
-            this.IsSufficient = false;
-            this.OwnedRelatedElement = new List<IElement>();
-            this.OwnedRelationship = new List<IRelationship>();
-            this.Source = new List<IElement>();
-            this.Target = new List<IElement>();
-        }
-
-        /// <summary>
-        /// Gets or sets the unique identifier
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Queries the derived property Action
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ActionUsage> QueryAction()
+        [Property(xmiId: "_18_5_3_12e503d9_1565500809065_170841_30688", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_b9102da_1536346067212_587255_17343")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
+        public
+         List<IActionUsage> QueryAction()
         {
             throw new NotImplementedException("Derived property Action not yet supported");
         }
@@ -73,14 +83,21 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<string> AliasIds { get; set; }
+        [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         List<string> AliasIds
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property AssociationEnd
+        /// The features of the Association that identify the things that can be related by it. A concrete
+        /// Association must have at least two associationEnds. When it has exactly two, the Association is
+        /// called a binary Association.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryAssociationEnd()
+        [Property(xmiId: "_18_5_3_12e503d9_1562477648742_24204_22901", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
+        [RedefinedByProperty("IFlowDefinition.FlowEnd")]
+        public
+         List<IFeature> QueryAssociationEnd()
         {
             throw new NotImplementedException("Derived property AssociationEnd not yet supported");
         }
@@ -88,8 +105,10 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The declared name of this Element.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredName { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         string DeclaredName
+        { get; set; }
 
         /// <summary>
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
@@ -97,41 +116,59 @@ namespace SysML2.NET.Core.POCO
         /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
         /// model or relative to some other context.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string DeclaredShortName { get; set; }
+        [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         string DeclaredShortName
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property DifferencingType
+        /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
+        /// Types, but not including those of the remaining Types. For example, a Classifier might be the
+        /// difference of a Classifier for people and another for people of a particular nationality, leaving
+        /// people who are not of that nationality. Similarly, a feature of people might be the difference
+        /// between a feature for their children and a Classifier for people of a particular sex, identifying
+        /// their children not of that sex (because the interpretations of the children Feature that identify
+        /// those of that sex are also interpretations of the Classifier for that sex).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Type> QueryDifferencingType()
+        [Property(xmiId: "_19_0_4_b9102da_1661975883472_645501_1372", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         List<IType> QueryDifferencingType()
         {
             throw new NotImplementedException("Derived property DifferencingType not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property DirectedFeature
+        /// The features of this Type that have a non-null direction.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryDirectedFeature()
+        [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        [RedefinedByProperty("IBehavior.Parameter")]
+        public
+         List<IFeature> QueryDirectedFeature()
         {
             throw new NotImplementedException("Derived property DirectedFeature not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property DirectedUsage
+        /// The usages of this Definition that are directedFeatures.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Usage> QueryDirectedUsage()
+        [Property(xmiId: "_18_5_3_12e503d9_1565495064714_974634_26150", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
+        public
+         List<IUsage> QueryDirectedUsage()
         {
             throw new NotImplementedException("Derived property DirectedUsage not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Documentation
+        /// The Documentation owned by this Element.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Documentation> QueryDocumentation()
+        [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
+        public
+         List<IDocumentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
         }
@@ -140,86 +177,114 @@ namespace SysML2.NET.Core.POCO
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string ElementId { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_844338_43305", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         string ElementId
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property EndFeature
+        /// All features of this Type with isEnd = true.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryEndFeature()
+        [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        [RedefinedByProperty("IAssociation.AssociationEnd")]
+        public
+         List<IFeature> QueryEndFeature()
         {
             throw new NotImplementedException("Derived property EndFeature not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Feature
+        /// The ownedMemberFeatures of the featureMemberships of this Type.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryFeature()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
+        public
+         List<IFeature> QueryFeature()
         {
             throw new NotImplementedException("Derived property Feature not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property FeatureMembership
+        /// The FeatureMemberships for features of this Type, which include all ownedFeatureMemberships and
+        /// those inheritedMemberships that are FeatureMemberships (but does not include any
+        /// importedMemberships).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<FeatureMembership> QueryFeatureMembership()
+        [Property(xmiId: "_19_0_4_12e503d9_1651076866512_962346_485", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         List<IFeatureMembership> QueryFeatureMembership()
         {
             throw new NotImplementedException("Derived property FeatureMembership not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property FlowEnd
+        /// The Usages that define the things related by the FlowDefinition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Usage> QueryFlowEnd()
+        [Property(xmiId: "_2022x_2_12e503d9_1733008492358_136366_19515", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
+        public
+         List<IUsage> QueryFlowEnd()
         {
             throw new NotImplementedException("Derived property FlowEnd not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property ImportedMembership
+        /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Membership> QueryImportedMembership()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
+        public
+         List<IMembership> QueryImportedMembership()
         {
             throw new NotImplementedException("Derived property ImportedMembership not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property InheritedFeature
+        /// All the memberFeatures of the inheritedMemberships of this Type that are FeatureMemberships.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryInheritedFeature()
+        [Property(xmiId: "_19_0_2_12e503d9_1575499020770_15576_2334", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        public
+         List<IFeature> QueryInheritedFeature()
         {
             throw new NotImplementedException("Derived property InheritedFeature not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property InheritedMembership
+        /// All Memberships inherited by this Type via Specialization or Conjugation. These are included in the
+        /// derived union for the memberships of the Type.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Membership> QueryInheritedMembership()
+        [Property(xmiId: "_18_5_3_12e503d9_1551972927538_787976_19004", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
+        public
+         List<IMembership> QueryInheritedMembership()
         {
             throw new NotImplementedException("Derived property InheritedMembership not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Input
+        /// All features related to this Type by FeatureMemberships that have direction in or inout.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryInput()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_37384_43169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        public
+         List<IFeature> QueryInput()
         {
             throw new NotImplementedException("Derived property Input not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property IntersectingType
+        /// The interpretations of a Type with intersectingTypes are asserted to be those in common among the
+        /// intersectingTypes, which are the Types derived from the intersectingType of the ownedIntersectings
+        /// of this Type. For example, a Classifier might be an intersection of Classifiers for people of a
+        /// particular sex and of a particular nationality. Similarly, a feature for people&#39;s children of a
+        /// particular sex might be the intersection of a Feature for their children and a Classifier for people
+        /// of that sex (because the interpretations of the children Feature that identify those of that sex are
+        /// also interpretations of the Classifier for that sex).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Type> QueryIntersectingType()
+        [Property(xmiId: "_19_0_4_b9102da_1661973922199_584242_1045", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         List<IType> QueryIntersectingType()
         {
             throw new NotImplementedException("Derived property IntersectingType not yet supported");
         }
@@ -228,14 +293,17 @@ namespace SysML2.NET.Core.POCO
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized
         /// Types.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsAbstract { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_741353_43165", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        public
+         bool IsAbstract
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property IsConjugated
+        /// Indicates whether this Type has an ownedConjugator.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool QueryIsConjugated()
+        [Property(xmiId: "_19_0_2_12e503d9_1575485930816_796088_1933", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         bool QueryIsConjugated()
         {
             throw new NotImplementedException("Derived property IsConjugated not yet supported");
         }
@@ -244,8 +312,10 @@ namespace SysML2.NET.Core.POCO
         /// Whether this Relationship was generated by tooling to meet semantic rules, rather than being
         /// directly created by a modeler.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsImplied { get; set; }
+        [Property(xmiId: "_19_0_4_12e503d9_1662070829631_521257_3623", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        public
+         bool IsImplied
+        { get; set; }
 
         /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
@@ -254,20 +324,25 @@ namespace SysML2.NET.Core.POCO
         /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsImpliedIncluded { get; set; }
+        [Property(xmiId: "_19_0_4_12e503d9_1662070949317_79713_3658", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        public
+         bool IsImpliedIncluded
+        { get; set; }
 
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent at most one thing.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsIndividual { get; set; }
+        [Property(xmiId: "_19_0_4_12e503d9_1618955405499_394357_6740", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        public
+         bool IsIndividual
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property IsLibraryElement
+        /// Whether this Element is contained in the ownership tree of a library model.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool QueryIsLibraryElement()
+        [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         bool QueryIsLibraryElement()
         {
             throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
         }
@@ -280,327 +355,424 @@ namespace SysML2.NET.Core.POCO
         /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
         /// classify all four-wheeled things.)
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsSufficient { get; set; }
+        [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        public
+         bool IsSufficient
+        { get; set; }
 
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
         /// Definition must be VariantMemberships.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public bool IsVariation { get; set; }
+        [Property(xmiId: "_19_0_2_12e503d9_1590978283180_265362_419", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         bool IsVariation
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property Member
+        /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
+        /// the Namespace.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryMember()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         List<IElement> QueryMember()
         {
             throw new NotImplementedException("Derived property Member not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Membership
+        /// All Memberships in this Namespace, including (at least) the union of ownedMemberships and
+        /// importedMemberships.
         /// </summary>
-        [EFeature(isChangeable: false, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Membership> QueryMembership()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
+        public
+         List<IMembership> QueryMembership()
         {
             throw new NotImplementedException("Derived property Membership not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Multiplicity
+        /// An ownedMember of this Type that is a Multiplicity, which constraints the cardinality of the Type.
+        /// If there is no such ownedMember, then the cardinality of this Type is constrained by all the
+        /// Multiplicity constraints applicable to any direct supertypes.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Multiplicity QueryMultiplicity()
+        [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        public
+         IMultiplicity QueryMultiplicity()
         {
             throw new NotImplementedException("Derived property Multiplicity not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Name
+        /// The name to be used for this Element during name resolution within its owningNamespace. This is
+        /// derived using the effectiveName() operation. By default, it is the same as the declaredName, but
+        /// this is overridden for certain kinds of Elements to compute a name even when the declaredName is
+        /// null.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryName()
+        [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         string QueryName()
         {
             throw new NotImplementedException("Derived property Name not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Output
+        /// All features related to this Type by FeatureMemberships that have direction out or inout.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryOutput()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_365618_43170", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        public
+         List<IFeature> QueryOutput()
         {
             throw new NotImplementedException("Derived property Output not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedAction
+        /// The ActionUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ActionUsage> QueryOwnedAction()
+        [Property(xmiId: "_19_0_2_12e503d9_1591479011613_547927_1091", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
+        public
+         List<IActionUsage> QueryOwnedAction()
         {
             throw new NotImplementedException("Derived property OwnedAction not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedAllocation
+        /// The AllocationUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<AllocationUsage> QueryOwnedAllocation()
+        [Property(xmiId: "_19_0_4_12e503d9_1611430819239_430196_1024", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
+        public
+         List<IAllocationUsage> QueryOwnedAllocation()
         {
             throw new NotImplementedException("Derived property OwnedAllocation not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedAnalysisCase
+        /// The AnalysisCaseUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<AnalysisCaseUsage> QueryOwnedAnalysisCase()
+        [Property(xmiId: "_19_0_2_12e503d9_1591152747086_367030_3846", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
+        public
+         List<IAnalysisCaseUsage> QueryOwnedAnalysisCase()
         {
             throw new NotImplementedException("Derived property OwnedAnalysisCase not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedAnnotation
+        /// The ownedRelationships of this Element that are Annotations, for which this Element is the
+        /// annotatedElement.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Annotation> QueryOwnedAnnotation()
+        [Property(xmiId: "_19_0_2_12e503d9_1594152527165_702130_2500", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
+        public
+         List<IAnnotation> QueryOwnedAnnotation()
         {
             throw new NotImplementedException("Derived property OwnedAnnotation not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedAttribute
+        /// The AttributeUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<AttributeUsage> QueryOwnedAttribute()
+        [Property(xmiId: "_19_0_2_12e503d9_1591500614097_490259_4413", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        public
+         List<IAttributeUsage> QueryOwnedAttribute()
         {
             throw new NotImplementedException("Derived property OwnedAttribute not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedCalculation
+        /// The CalculationUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<CalculationUsage> QueryOwnedCalculation()
+        [Property(xmiId: "_19_0_2_12e503d9_1588215335104_898924_667", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479011613_547927_1091")]
+        public
+         List<ICalculationUsage> QueryOwnedCalculation()
         {
             throw new NotImplementedException("Derived property OwnedCalculation not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedCase
+        /// The code>CaseUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<CaseUsage> QueryOwnedCase()
+        [Property(xmiId: "_19_0_2_59601fc_1590257108055_7496_483", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1588215335104_898924_667")]
+        public
+         List<ICaseUsage> QueryOwnedCase()
         {
             throw new NotImplementedException("Derived property OwnedCase not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedConcern
+        /// The ConcernUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ConcernUsage> QueryOwnedConcern()
+        [Property(xmiId: "_19_0_4_12e503d9_1617051597354_928367_1357", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000559760_444344_1273")]
+        public
+         List<IConcernUsage> QueryOwnedConcern()
         {
             throw new NotImplementedException("Derived property OwnedConcern not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedConjugator
+        /// A Conjugation owned by this Type for which the Type is the originalType.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Conjugation QueryOwnedConjugator()
+        [Property(xmiId: "_19_0_2_12e503d9_1575482646809_280165_440", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490144_309557_300")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        public
+         IConjugation QueryOwnedConjugator()
         {
             throw new NotImplementedException("Derived property OwnedConjugator not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedConnection
+        /// The ConnectorAsUsages that are ownedUsages of this Definition. Note that this list includes
+        /// BindingConnectorAsUsages, SuccessionAsUsages, and FlowUsages because these are ConnectorAsUsages
+        /// even though they are not ConnectionUsages.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IConnectorAsUsage> QueryOwnedConnection()
+        [Property(xmiId: "_19_0_2_12e503d9_1591480607506_951212_2333", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        public
+         List<IConnectorAsUsage> QueryOwnedConnection()
         {
             throw new NotImplementedException("Derived property OwnedConnection not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedConstraint
+        /// The ConstraintUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ConstraintUsage> QueryOwnedConstraint()
+        [Property(xmiId: "_19_0_2_12e503d9_1578068081992_244000_1803", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
+        public
+         List<IConstraintUsage> QueryOwnedConstraint()
         {
             throw new NotImplementedException("Derived property OwnedConstraint not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedDifferencing
+        /// The ownedRelationships of this Type that are Differencings, having this Type as their
+        /// typeDifferenced.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Differencing> QueryOwnedDifferencing()
+        [Property(xmiId: "_19_0_4_b9102da_1661871168454_98082_797", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        public
+         List<IDifferencing> QueryOwnedDifferencing()
         {
             throw new NotImplementedException("Derived property OwnedDifferencing not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedDisjoining
+        /// The ownedRelationships of this Type that are Disjoinings, for which the Type is the typeDisjoined
+        /// Type.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Disjoining> QueryOwnedDisjoining()
+        [Property(xmiId: "_19_0_4_12e503d9_1627447519613_145554_370", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623183194914_502526_616")]
+        public
+         List<IDisjoining> QueryOwnedDisjoining()
         {
             throw new NotImplementedException("Derived property OwnedDisjoining not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedElement
+        /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
+        /// this Element.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryOwnedElement()
+        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         List<IElement> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedEndFeature
+        /// All endFeatures of this Type that are ownedFeatures.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryOwnedEndFeature()
+        [Property(xmiId: "_18_5_3_12e503d9_1563834516278_687758_20652", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        public
+         List<IFeature> QueryOwnedEndFeature()
         {
             throw new NotImplementedException("Derived property OwnedEndFeature not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedEnumeration
+        /// The EnumerationUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<EnumerationUsage> QueryOwnedEnumeration()
+        [Property(xmiId: "_19_0_4_12e503d9_1606946600508_763872_252", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591500614097_490259_4413")]
+        public
+         List<IEnumerationUsage> QueryOwnedEnumeration()
         {
             throw new NotImplementedException("Derived property OwnedEnumeration not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedFeature
+        /// The ownedMemberFeatures of the ownedFeatureMemberships of this Type.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryOwnedFeature()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_226999_43167", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        public
+         List<IFeature> QueryOwnedFeature()
         {
             throw new NotImplementedException("Derived property OwnedFeature not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedFeatureMembership
+        /// The ownedMemberships of this Type that are FeatureMemberships, for which the Type is the owningType.
+        /// Each such FeatureMembership identifies an ownedFeature of the Type.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<FeatureMembership> QueryOwnedFeatureMembership()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674960_868417_43171", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866512_962346_485")]
+        public
+         List<IFeatureMembership> QueryOwnedFeatureMembership()
         {
             throw new NotImplementedException("Derived property OwnedFeatureMembership not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedFlow
+        /// The FlowUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<FlowUsage> QueryOwnedFlow()
+        [Property(xmiId: "_19_0_4_12e503d9_1624055201422_104863_1697", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
+        public
+         List<IFlowUsage> QueryOwnedFlow()
         {
             throw new NotImplementedException("Derived property OwnedFlow not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedImport
+        /// The ownedRelationships of this Namespace that are Imports, for which the Namespace is the
+        /// importOwningNamespace.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IImport> QueryOwnedImport()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674974_746786_43247", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        public
+         List<IImport> QueryOwnedImport()
         {
             throw new NotImplementedException("Derived property OwnedImport not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedInterface
+        /// The InterfaceUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<InterfaceUsage> QueryOwnedInterface()
+        [Property(xmiId: "_19_0_2_12e503d9_1591498709150_220812_4128", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
+        public
+         List<IInterfaceUsage> QueryOwnedInterface()
         {
             throw new NotImplementedException("Derived property OwnedInterface not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedIntersecting
+        /// The ownedRelationships of this Type that are Intersectings, have the Type as their typeIntersected.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Intersecting> QueryOwnedIntersecting()
+        [Property(xmiId: "_19_0_4_b9102da_1623242552144_910757_524", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        public
+         List<IIntersecting> QueryOwnedIntersecting()
         {
             throw new NotImplementedException("Derived property OwnedIntersecting not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedItem
+        /// The ItemUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ItemUsage> QueryOwnedItem()
+        [Property(xmiId: "_19_0_2_12e503d9_1591482567975_649284_3005", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
+        public
+         List<IItemUsage> QueryOwnedItem()
         {
             throw new NotImplementedException("Derived property OwnedItem not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedMember
+        /// The owned members of this Namespace, which are the <cpde>ownedMemberElements of the ownedMemberships
+        /// of the Namespace.</cpde>
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryOwnedMember()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
+        public
+         List<IElement> QueryOwnedMember()
         {
             throw new NotImplementedException("Derived property OwnedMember not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedMembership
+        /// The ownedRelationships of this Namespace that are Memberships, for which the Namespace is the
+        /// membershipOwningNamespace.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Membership> QueryOwnedMembership()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_190614_43269", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        public
+         List<IMembership> QueryOwnedMembership()
         {
             throw new NotImplementedException("Derived property OwnedMembership not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedMetadata
+        /// The MetadataUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<MetadataUsage> QueryOwnedMetadata()
+        [Property(xmiId: "_19_0_4_12e503d9_1661488358064_457109_2881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]
+        public
+         List<IMetadataUsage> QueryOwnedMetadata()
         {
             throw new NotImplementedException("Derived property OwnedMetadata not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedOccurrence
+        /// The OccurrenceUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<OccurrenceUsage> QueryOwnedOccurrence()
+        [Property(xmiId: "_19_0_4_12e503d9_1618943849505_989631_257", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        public
+         List<IOccurrenceUsage> QueryOwnedOccurrence()
         {
             throw new NotImplementedException("Derived property OwnedOccurrence not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedPart
+        /// The PartUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<PartUsage> QueryOwnedPart()
+        [Property(xmiId: "_19_0_2_12e503d9_1591496643392_630316_3279", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]
+        public
+         List<IPartUsage> QueryOwnedPart()
         {
             throw new NotImplementedException("Derived property OwnedPart not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedPort
+        /// The PortUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<PortUsage> QueryOwnedPort()
+        [Property(xmiId: "_18_5_3_12e503d9_1565494319970_455996_25799", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        public
+         List<IPortUsage> QueryOwnedPort()
         {
             throw new NotImplementedException("Derived property OwnedPort not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedReference
+        /// The ReferenceUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ReferenceUsage> QueryOwnedReference()
+        [Property(xmiId: "_19_0_2_12e503d9_1591477471991_39731_908", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        public
+         List<IReferenceUsage> QueryOwnedReference()
         {
             throw new NotImplementedException("Derived property OwnedReference not yet supported");
         }
@@ -608,146 +780,189 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
-        public List<IElement> OwnedRelatedElement { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
+        public
+         List<IElement> OwnedRelatedElement
+        { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: true)]
-        public List<IRelationship> OwnedRelationship { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
+        public
+         List<IRelationship> OwnedRelationship
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property OwnedRendering
+        /// The RenderingUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<RenderingUsage> QueryOwnedRendering()
+        [Property(xmiId: "_19_0_2_12e503d9_1596741437225_963350_6474", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496643392_630316_3279")]
+        public
+         List<IRenderingUsage> QueryOwnedRendering()
         {
             throw new NotImplementedException("Derived property OwnedRendering not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedRequirement
+        /// The RequirementUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<RequirementUsage> QueryOwnedRequirement()
+        [Property(xmiId: "_19_0_2_12e503d9_1583000559760_444344_1273", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1578068081992_244000_1803")]
+        public
+         List<IRequirementUsage> QueryOwnedRequirement()
         {
             throw new NotImplementedException("Derived property OwnedRequirement not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedSpecialization
+        /// The ownedRelationships of this Type that are Specializations, for which the Type is the specific
+        /// Type.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Specialization> QueryOwnedSpecialization()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674959_579676_43168", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674984_558067_43292")]
+        public
+         List<ISpecialization> QueryOwnedSpecialization()
         {
             throw new NotImplementedException("Derived property OwnedSpecialization not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedState
+        /// The StateUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<StateUsage> QueryOwnedState()
+        [Property(xmiId: "_19_0_2_12e503d9_1575587977045_745776_941", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479011613_547927_1091")]
+        public
+         List<IStateUsage> QueryOwnedState()
         {
             throw new NotImplementedException("Derived property OwnedState not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedSubclassification
+        /// The ownedSpecializations of this Classifier that are Subclassifications, for which this Classifier
+        /// is the subclassifier.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Subclassification> QueryOwnedSubclassification()
+        [Property(xmiId: "_18_5_3_12e503d9_1543189170643_419862_25507", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
+        public
+         List<ISubclassification> QueryOwnedSubclassification()
         {
             throw new NotImplementedException("Derived property OwnedSubclassification not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedTransition
+        /// The TransitionUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<TransitionUsage> QueryOwnedTransition()
+        [Property(xmiId: "_19_0_2_12e503d9_1578598061680_350995_3923", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        public
+         List<ITransitionUsage> QueryOwnedTransition()
         {
             throw new NotImplementedException("Derived property OwnedTransition not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedUnioning
+        /// The ownedRelationships of this Type that are Unionings, having the Type as their typeUnioned.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Unioning> QueryOwnedUnioning()
+        [Property(xmiId: "_19_0_4_b9102da_1661869978505_968809_460", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        public
+         List<IUnioning> QueryOwnedUnioning()
         {
             throw new NotImplementedException("Derived property OwnedUnioning not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedUsage
+        /// The Usages that are ownedFeatures of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Usage> QueryOwnedUsage()
+        [Property(xmiId: "_18_5_3_12e503d9_1565479686637_967933_23236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
+        public
+         List<IUsage> QueryOwnedUsage()
         {
             throw new NotImplementedException("Derived property OwnedUsage not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedUseCase
+        /// The UseCaseUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<UseCaseUsage> QueryOwnedUseCase()
+        [Property(xmiId: "_19_0_4_12e503d9_1621461106608_978605_945", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
+        public
+         List<IUseCaseUsage> QueryOwnedUseCase()
         {
             throw new NotImplementedException("Derived property OwnedUseCase not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedVerificationCase
+        /// The VerificationCaseUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<VerificationCaseUsage> QueryOwnedVerificationCase()
+        [Property(xmiId: "_19_0_2_12e503d9_1596821523387_872104_10416", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
+        public
+         List<IVerificationCaseUsage> QueryOwnedVerificationCase()
         {
             throw new NotImplementedException("Derived property OwnedVerificationCase not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedView
+        /// The ViewUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ViewUsage> QueryOwnedView()
+        [Property(xmiId: "_19_0_2_12e503d9_1596644570381_840567_784", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496643392_630316_3279")]
+        public
+         List<IViewUsage> QueryOwnedView()
         {
             throw new NotImplementedException("Derived property OwnedView not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwnedViewpoint
+        /// The ViewpointUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<ViewpointUsage> QueryOwnedViewpoint()
+        [Property(xmiId: "_19_0_2_12e503d9_1596649828408_673531_3683", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000559760_444344_1273")]
+        public
+         List<IViewpointUsage> QueryOwnedViewpoint()
         {
             throw new NotImplementedException("Derived property OwnedViewpoint not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Owner
+        /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
+        /// Element, if any.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement QueryOwner()
+        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwningMembership
+        /// The owningRelationship of this Element, if that Relationship is a Membership.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public OwningMembership QueryOwningMembership()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
+        public
+         IOwningMembership QueryOwningMembership()
         {
             throw new NotImplementedException("Derived property OwningMembership not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property OwningNamespace
+        /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
+        /// of this Element, if any.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Namespace QueryOwningNamespace()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
+        public
+         INamespace QueryOwningNamespace()
         {
             throw new NotImplementedException("Derived property OwningNamespace not yet supported");
         }
@@ -755,56 +970,81 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IElement OwningRelatedElement { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1543092026091_693018_16749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
+        public
+         IElement OwningRelatedElement
+        { get; set; }
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public IRelationship OwningRelationship { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
+        public
+         IRelationship OwningRelationship
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property Parameter
+        /// The parameters of this Behavior, which are defined as its directedFeatures, whose values are passed
+        /// into and/or out of a performance of the Behavior.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Feature> QueryParameter()
+        [Property(xmiId: "_18_5_3_12e503d9_1543948010065_362066_20413", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        public
+         List<IFeature> QueryParameter()
         {
             throw new NotImplementedException("Derived property Parameter not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property QualifiedName
+        /// The full ownership-qualified name of this Element, represented in a form that is valid according to
+        /// the KerML textual concrete syntax for qualified names (including use of unrestricted name notation
+        /// and escaped characters, as necessary). The qualifiedName is null if this Element has no
+        /// owningNamespace or if there is not a complete ownership chain of named Namespaces from a root
+        /// Namespace to this Element. If the owningNamespace has other Elements with the same name as this one,
+        /// then the qualifiedName is null for all such Elements other than the first.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryQualifiedName()
+        [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         string QueryQualifiedName()
         {
             throw new NotImplementedException("Derived property QualifiedName not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property RelatedElement
+        /// The Elements that are related by this Relationship, derived as the union of the source and target
+        /// Elements of the Relationship.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> QueryRelatedElement()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [RedefinedByProperty("IAssociation.RelatedType")]
+        public
+         List<IElement> QueryRelatedElement()
         {
             throw new NotImplementedException("Derived property RelatedElement not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property RelatedType
+        /// The types of the associationEnds of the Association, which are the relatedElements of the
+        /// Association considered as a Relationship.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Type> QueryRelatedType()
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674994_4339_43349", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
+        public
+         List<IType> QueryRelatedType()
         {
             throw new NotImplementedException("Derived property RelatedType not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property ShortName
+        /// The short name to be used for this Element during name resolution within its owningNamespace. This
+        /// is derived using the effectiveShortName() operation. By default, it is the same as the
+        /// declaredShortName, but this is overridden for certain kinds of Elements to compute a shortName even
+        /// when the declaredName is null.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public string QueryShortName()
+        [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         string QueryShortName()
         {
             throw new NotImplementedException("Derived property ShortName not yet supported");
         }
@@ -812,23 +1052,32 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> Source { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
+        [RedefinedByProperty("IAssociation.SourceType")]
+        public
+         List<IElement> Source
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property SourceType
+        /// The source relatedType for this Association. It is the first relatedType of the Association.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        public Type QuerySourceType()
+        [Property(xmiId: "_19_0_2_12e503d9_1594939013292_377668_3566", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        public
+         IType QuerySourceType()
         {
             throw new NotImplementedException("Derived property SourceType not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Step
+        /// The Steps that make up this Behavior.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Step> QueryStep()
+        [Property(xmiId: "_18_5_3_b9102da_1536346067212_587255_17343", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        public
+         List<IStep> QueryStep()
         {
             throw new NotImplementedException("Derived property Step not yet supported");
         }
@@ -836,59 +1085,84 @@ namespace SysML2.NET.Core.POCO
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<IElement> Target { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
+        [RedefinedByProperty("IAssociation.TargetType")]
+        public
+         List<IElement> Target
+        { get; set; }
 
         /// <summary>
-        /// Queries the derived property TargetType
+        /// The target relatedTypes for this Association. This includes all the relatedTypes other than the
+        /// sourceType.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Type> QueryTargetType()
+        [Property(xmiId: "_19_0_2_12e503d9_1594939237325_861933_3707", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        public
+         List<IType> QueryTargetType()
         {
             throw new NotImplementedException("Derived property TargetType not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property TextualRepresentation
+        /// The TextualRepresentations that annotate this Element.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<TextualRepresentation> QueryTextualRepresentation()
+        [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
+        public
+         List<ITextualRepresentation> QueryTextualRepresentation()
         {
             throw new NotImplementedException("Derived property TextualRepresentation not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property UnioningType
+        /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the
+        /// unioningTypes together, which are the Types derived from the unioningType of the ownedUnionings of
+        /// this Type. For example, a Classifier for people might be the union of Classifiers for all the sexes.
+        /// Similarly, a feature for people&#39;s children might be the union of features dividing them in the
+        /// same ways as people in general.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Type> QueryUnioningType()
+        [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        public
+         List<IType> QueryUnioningType()
         {
             throw new NotImplementedException("Derived property UnioningType not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Usage
+        /// The Usages that are features of this Definition (not necessarily owned).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Usage> QueryUsage()
+        [Property(xmiId: "_18_5_3_12e503d9_1565498571495_48981_27786", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        public
+         List<IUsage> QueryUsage()
         {
             throw new NotImplementedException("Derived property Usage not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property Variant
+        /// The Usages which represent the variants of this Definition as a variation point Definition, if
+        /// isVariation = true. If isVariation = false, the there must be no variants.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<Usage> QueryVariant()
+        [Property(xmiId: "_19_0_2_12e503d9_1590979457191_746167_951", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        public
+         List<IUsage> QueryVariant()
         {
             throw new NotImplementedException("Derived property Variant not yet supported");
         }
 
         /// <summary>
-        /// Queries the derived property VariantMembership
+        /// The ownedMemberships of this Definition that are VariantMemberships. If isVariation = true, then
+        /// this must be all ownedMemberships of the Definition. If isVariation = false, then
+        /// variantMembershipmust be empty.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        public List<VariantMembership> QueryVariantMembership()
+        [Property(xmiId: "_19_0_2_12e503d9_1590979005861_503124_894", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
+        public
+         List<IVariantMembership> QueryVariantMembership()
         {
             throw new NotImplementedException("Derived property VariantMembership not yet supported");
         }

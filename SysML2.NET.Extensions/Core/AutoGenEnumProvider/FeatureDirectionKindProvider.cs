@@ -26,7 +26,7 @@ namespace SysML2.NET.Extensions.Core
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
 
     /// <summary>
     /// The purpose of the <see cref="FeatureDirectionKindProvider"/> is to provide conversion methods
@@ -69,7 +69,6 @@ namespace SysML2.NET.Extensions.Core
                 return FeatureDirectionKind.Out;
             }
 
-
             throw new ArgumentException($"'{new string(value)}' is not a valid FeatureDirectionKind", nameof(value));
         }
 
@@ -107,7 +106,6 @@ namespace SysML2.NET.Extensions.Core
             {
                 return FeatureDirectionKind.Out;
             }
-
 
             throw new ArgumentException($"'{System.Text.Encoding.UTF8.GetString(value)}' is not a valid FeatureDirectionKind", nameof(value));
         }

@@ -34,10 +34,4 @@
         <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Core\AutoGenDto\" />
-      <Folder Include="Core\AutoGenEnum\" />
-      <Folder Include="Core\AutoGenPoco\" />
-    </ItemGroup>
-
 </Project>

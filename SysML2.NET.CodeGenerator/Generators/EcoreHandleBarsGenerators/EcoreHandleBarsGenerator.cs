@@ -33,6 +33,14 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     public abstract class EcoreHandleBarsGenerator : HandleBarsGenerator
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="HandleBarsGenerator"/> class/
+        /// </summary>
+        protected EcoreHandleBarsGenerator()
+        {
+            this.TemplateFolderPath = Path.Combine(this.TemplateFolderPath, "Ecore");
+        }
+
+        /// <summary>
         /// Generates code specific to the concrete implementation
         /// </summary>
         /// <param name="package">

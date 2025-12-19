@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISatisfyRequirementUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,32 +22,43 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Requirements
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.DTO.Systems.Constraints;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A SatisfyRequirementUsage is an AssertConstraintUsage that asserts, by default, that a satisfied
     /// RequirementUsage is true for a specific satisfyingFeature, or, if isNegated = true, that the
     /// RequirementUsage is false. The satisfied RequirementUsage is related to the SatisfyRequirementUsage
-    /// by a ReferenceSubsetting Relationship.satisfyingFeature =    let bindings: BindingConnector =
-    /// ownedMember->        selectByKind(BindingConnector)->        select(b |
-    /// b.relatedElement->includes(subjectParameter)) in    if bindings->isEmpty() or       
-    /// bindings->first().relatedElement->exits(r | r <> subjectParameter)     then null    else
-    /// bindings->first().relatedElement->any(r | r <> subjectParameter)   
-    /// endifownedMember->selectByKind(BindingConnector)->    select(b |       
-    /// b.relatedElement->includes(subjectParameter) and        b.relatedElement->exists(r | r <>
-    /// subjectParameter))->    size() = 1referencedFeatureTarget() <> null implies   
-    /// referencedFeatureTarget().oclIsKindOf(RequirementUsage)if isNegated then   
-    /// specializesFromLibrary('Requirements::notSatisfiedRequirementChecks')else   
-    /// specializesFromLibrary('Requirements::satisfiedRequirementChecks')endif
+    /// by a ReferenceSubsetting Relationship.
     /// </summary>
+    [Class(xmiId: "_19_0_2_12e503d9_1583184587272_448420_2009", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISatisfyRequirementUsage : IRequirementUsage, IAssertConstraintUsage
     {
+        /// <summary>
+        /// The RequirementUsage that is satisfied by the satisfyingSubject of this SatisfyRequirementUsage. It
+        /// is the assertedConstraint of the SatisfyRequirementUsage considered as an AssertConstraintUsage,
+        /// which must be a RequirementUsage.
+        /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1583185037725_699150_2332", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1581045158665_239617_9458")]
+        Guid SatisfiedRequirement { get; }
+
+        /// <summary>
+        /// The Feature that represents the actual subject that is asserted to satisfy the satisfiedRequirement.
+        /// The satisfyingFeature is bound to the subjectParameter of the SatisfyRequirementUsage.
+        /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1583378847285_929988_1396", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        Guid SatisfyingFeature { get; }
+
     }
 }
 

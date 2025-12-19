@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IReturnParameterMembership.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,19 +22,23 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Kernel.Functions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.DTO.Kernel.Behaviors;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A ReturnParameterMembership is a ParameterMembership that indicates that the ownedMemberParameter is
     /// the result parameter of a Function or Expression. The direction of the ownedMemberParameter must be
-    /// out.owningType.oclIsKindOf(Function) or owningType.oclIsKindOf(Expression)
+    /// out.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1557528148740_240982_111109", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IReturnParameterMembership : IParameterMembership
     {
     }

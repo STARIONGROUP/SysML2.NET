@@ -25,11 +25,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.UmlHandleBarHelpers;
+
     using uml4net.Extensions;
-    using uml4net.Packages;
+    using uml4net.HandleBars;
     using uml4net.SimpleClassifiers;
-    using uml4net.StructuredClassifiers;
     using uml4net.xmi.Readers;
+
+    using NamedElementHelper = SysML2.NET.CodeGenerator.HandleBarHelpers.NamedElementHelper;
 
     /// <summary>
     /// A UML Handlebars based enum code generator
@@ -40,13 +43,13 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// Generates the Core SysML2 model Enumerations
         /// </summary>
         /// <param name="xmiReaderResult">
-        /// the <see cref="XmiReaderResult"/> that contains the UML model to generate from
+        /// the <see cref="XmiReaderResult" /> that contains the UML model to generate from
         /// </param>
         /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
+        /// The target <see cref="DirectoryInfo" />
         /// </param>
         /// <returns>
-        /// an awaitable <see cref="Task"/>
+        /// an awaitable <see cref="Task" />
         /// </returns>
         public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
         {
@@ -57,10 +60,10 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// Generates Enumerations
         /// </summary>
         /// <param name="xmiReaderResult">
-        /// the <see cref="XmiReaderResult"/> that contains the UML model to generate from
+        /// the <see cref="XmiReaderResult" /> that contains the UML model to generate from
         /// </param>
         /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
+        /// The target <see cref="DirectoryInfo" />
         /// </param>
         /// <returns>
         /// an awaitable task
@@ -68,20 +71,69 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         public Task GenerateEnumerationsAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
         {
             ArgumentNullException.ThrowIfNull(xmiReaderResult);
-
             ArgumentNullException.ThrowIfNull(outputDirectory);
 
             return this.GenerateEnumerationsInternalAsync(xmiReaderResult, outputDirectory);
         }
 
         /// <summary>
+        /// Generates POCO interfaces
+        /// </summary>
+        /// <param name="xmiReaderResult">
+        /// the <see cref="XmiReaderResult" /> that contains the UML model to generate from
+        /// </param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo" />
+        /// </param>
+        /// <param name="name">
+        /// The name of the Enumeration to generate
+        /// </param>
+        /// <returns>
+        /// an awaitable task
+        /// </returns>
+        public Task<string> GenerateEnumerationAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string name)
+        {
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+            ArgumentException.ThrowIfNullOrEmpty(name);
+
+            return this.GenerateEnumerationInternalAsync(xmiReaderResult, outputDirectory, name);
+        }
+
+        /// <summary>
+        /// Register the custom helpers
+        /// </summary>
+        protected override void RegisterHelpers()
+        {
+            this.Handlebars.RegisterStringHelper();
+            this.Handlebars.RegisterEnumerableHelper();
+            this.Handlebars.RegisterClassHelper();
+            this.Handlebars.RegisterPropertyHelper();
+            this.Handlebars.RegisterGeneralizationHelper();
+            this.Handlebars.RegisterDocumentationHelper();
+            this.Handlebars.RegisterEnumHelper();
+            this.Handlebars.RegisterDecoratorHelper();
+
+            EnumerationLiteralHelper.RegisterTypeNameHelper(this.Handlebars);
+            NamedElementHelper.RegisterNamedElementHelper(this.Handlebars);
+        }
+
+        /// <summary>
+        /// Register the code templates
+        /// </summary>
+        protected override void RegisterTemplates()
+        {
+            this.RegisterTemplate("core-enumeration-uml-template");
+        }
+
+        /// <summary>
         /// Generates Enumeration
         /// </summary>
         /// <param name="xmiReaderResult">
-        /// the <see cref="XmiReaderResult"/> that contains the UML model to generate from
+        /// the <see cref="XmiReaderResult" /> that contains the UML model to generate from
         /// </param>
         /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
+        /// The target <see cref="DirectoryInfo" />
         /// </param>
         /// <returns>
         /// an awaitable task
@@ -98,7 +150,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             {
                 var generatedEnumeration = template(enumeration);
 
-                generatedEnumeration = CodeCleanup(generatedEnumeration);
+                generatedEnumeration = this.CodeCleanup(generatedEnumeration);
 
                 var fileName = $"{enumeration.Name.CapitalizeFirstLetter()}.cs";
 
@@ -110,39 +162,10 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// Generates POCO interfaces
         /// </summary>
         /// <param name="xmiReaderResult">
-        /// the <see cref="XmiReaderResult"/> that contains the UML model to generate from
+        /// the <see cref="XmiReaderResult" /> that contains the UML model to generate from
         /// </param>
         /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
-        /// </param>
-        /// <param name="name">
-        /// The name of the Enumeration to generate
-        /// </param>
-        /// <returns>
-        /// an awaitable task
-        /// </returns>
-        public Task<string> GenerateEnumerationAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string name)
-        {
-            ArgumentNullException.ThrowIfNull(xmiReaderResult);
-
-            ArgumentNullException.ThrowIfNull(outputDirectory);
-
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException(nameof(name));
-            }
-
-            return this.GenerateEnumerationInternalAsync(xmiReaderResult, outputDirectory, name);
-        }
-
-        /// <summary>
-        /// Generates POCO interfaces
-        /// </summary>
-        /// <param name="xmiReaderResult">
-        /// the <see cref="XmiReaderResult"/> that contains the UML model to generate from
-        /// </param>
-        /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo"/>
+        /// The target <see cref="DirectoryInfo" />
         /// </param>
         /// <param name="name">
         /// The name of the Enumeration to generate
@@ -158,44 +181,17 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
                 .SelectMany(x => x.PackagedElement.OfType<IEnumeration>())
                 .ToList();
 
-            var enumNames = enumerations.Select(x => x.Name);
-
             var enumeration = enumerations.Single(x => x.Name == name);
 
             var generatedEnumeration = template(enumeration);
 
-            generatedEnumeration = CodeCleanup(generatedEnumeration);
+            generatedEnumeration = this.CodeCleanup(generatedEnumeration);
 
             var fileName = $"{enumeration.Name.CapitalizeFirstLetter()}.cs";
 
             await WriteAsync(generatedEnumeration, outputDirectory, fileName);
 
             return generatedEnumeration;
-        }
-
-        /// <summary>
-        /// Register the custom helpers
-        /// </summary>
-        protected override void RegisterHelpers()
-        {
-            uml4net.HandleBars.StringHelper.RegisterStringHelper(this.Handlebars);
-            uml4net.HandleBars.IEnumerableHelper.RegisterEnumerableHelper(this.Handlebars);
-            uml4net.HandleBars.ClassHelper.RegisterClassHelper(this.Handlebars);
-            uml4net.HandleBars.PropertyHelper.RegisterPropertyHelper(this.Handlebars);
-            uml4net.HandleBars.GeneralizationHelper.RegisterGeneralizationHelper(this.Handlebars);
-            uml4net.HandleBars.DocumentationHelper.RegisterDocumentationHelper(this.Handlebars);
-            uml4net.HandleBars.EnumHelper.RegisterEnumHelper(this.Handlebars);
-            uml4net.HandleBars.DecoratorHelper.RegisterDecoratorHelper(this.Handlebars);
-
-            UmlHandleBarHelpers.EnumerationLiteralHelper.RegisterTypeNameHelper(this.Handlebars);
-        }
-
-        /// <summary>
-        /// Register the code templates
-        /// </summary>
-        protected override void RegisterTemplates()
-        {
-            this.RegisterTemplate("core-enumeration-uml-template");
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IParameterMembership.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,29 +22,35 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Kernel.Behaviors
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A ParameterMembership is a FeatureMembership that identifies its memberFeature as a parameter, which
     /// is always owned, and must have a direction. A ParameterMembership must be owned by a Behavior, a
-    /// Step, or the result parameter of a ConstructorExpression.ownedMemberParameter.direction =
-    /// parameterDirection()owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step)
-    /// orowningType.owningMembership.oclIsKindOf(ReturnParameterMembership) and   
-    /// owningType.owningNamespace.oclIsKindOf(ConstructorExpression)
+    /// Step, or the result parameter of a ConstructorExpression.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1557527738711_165124_110466", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IParameterMembership : IFeatureMembership
     {
         /// <summary>
-        /// Queries the derived property OwnedMemberParameter
+        /// The Feature that is identified as a parameter by this ParameterMembership.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Feature QueryOwnedMemberParameter();
+        [Property(xmiId: "_18_5_3_12e503d9_1557528016548_548098_110830", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
+        IFeature QueryOwnedMemberParameter();
 
     }
 }

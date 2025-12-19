@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPortConjugation.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,13 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Ports
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.DTO.Core.Types;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -37,12 +38,22 @@ namespace SysML2.NET.Core.DTO
     /// become outputs on the ConjugatedPortDefinition and output flows of the original PortDefinition
     /// become inputs on the ConjugatedPortDefinition.
     /// </summary>
+    [Class(xmiId: "_19_0_2_12e503d9_1575484318404_705000_871", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPortConjugation : IConjugation
     {
         /// <summary>
+        /// The ConjugatedPortDefinition that is conjugate to the originalPortDefinition.
+        /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1575484344899_880331_946", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_778895_441")]
+        Guid ConjugatedPortDefinition { get; }
+
+        /// <summary>
         /// The PortDefinition being conjugated.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575484331999_998721_917", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482354187_108424_237")]
         Guid OriginalPortDefinition { get; set; }
 
     }

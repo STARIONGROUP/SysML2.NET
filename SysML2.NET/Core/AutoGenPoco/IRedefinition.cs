@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IRedefinition.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,16 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -42,36 +46,25 @@ namespace SysML2.NET.Core.POCO
     /// Redefinition to require the owningTypes of the redefiningFeature and redefinedFeature to be
     /// different and the redefinedFeature to not be inherited into the owningNamespace of the
     /// redefiningFeature.This enables the redefiningFeature to have the same name as the redefinedFeature,
-    /// if desired.let anythingType: Type =   
-    /// redefiningFeature.resolveGlobal('Base::Anything').modelElement.oclAsType(Type) in -- Including
-    /// "Anything" accounts for implicit featuringType of Features-- with no explicit featuringType.let
-    /// redefiningFeaturingTypes: Set(Type) =    if redefiningFeature.isVariable then
-    /// Set{redefiningFeature.owningType}    else
-    /// redefiningFeature.featuringTypes->asSet()->including(anythingType)     endif inlet
-    /// redefinedFeaturingTypes: Set(Type) =    if redefinedFeature.isVariable then
-    /// Set{redefinedFeature.owningType}    else
-    /// redefinedFeature.featuringTypes->asSet()->including(anythingType)    endif
-    /// inredefiningFeaturingTypes <> redefinedFeaturingTypelet featuringTypes : Sequence(Type) =    if
-    /// redefiningFeature.isVariable then Sequence{redefiningFeature.owningType}    else
-    /// redefiningFeature.featuringType    endif infeaturingTypes->forAll(t |    let direction :
-    /// FeatureDirectionKind = t.directionOf(redefinedFeature) in    ((direction =
-    /// FeatureDirectionKind::_'in' or       direction = FeatureDirectionKind::out) implies        
-    /// redefiningFeature.direction = direction)    and     (direction = FeatureDirectionKind::inout implies
-    /// redefiningFeature.direction <> null))redefinedFeature.isEnd implies redefiningFeature.isEnd
+    /// if desired.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651690_251835_42168", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IRedefinition : ISubsetting
     {
         /// <summary>
         /// The Feature that is redefined by the redefiningFeature of this Redefinition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Feature RedefinedFeature { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674973_199798_43245", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_393191_43181")]
+        IFeature RedefinedFeature { get; set; }
 
         /// <summary>
         /// The Feature that is redefining the redefinedFeature of this Redefinition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Feature RedefiningFeature { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674958_414216_43160", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
+        IFeature RedefiningFeature { get; set; }
 
     }
 }

@@ -22,14 +22,15 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Kernel.Interactions
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core.Types;
-
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.DTO.Kernel.Behaviors;
+    using SysML2.NET.Core.DTO.Kernel.Connectors;
     using SysML2.NET.Decorators;
 
     /// <summary>

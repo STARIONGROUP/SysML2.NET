@@ -65,7 +65,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 
@@ -113,7 +113,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

@@ -22,15 +22,15 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Requirements
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core.Types;
-    using SysML2.NET.Systems.Occurrences;
-
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.DTO.Systems.Constraints;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -72,7 +72,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583376474630_975784_96", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594160442439_915308_4153")]
-        string? ReqId { get; set; }
+        string ReqId { get; set; }
 
         /// <summary>
         /// The owned ConstraintUsages that represent requirements of this RequirementUsage, which are the

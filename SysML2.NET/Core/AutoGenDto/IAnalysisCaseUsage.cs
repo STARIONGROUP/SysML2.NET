@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAnalysisCaseUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,25 +22,39 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.AnalysisCases
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.DTO.Systems.Cases;
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// An AnalysisCaseUsage is a Usage of an AnalysisCaseDefinition.resultExpression =    let results :
-    /// OrderedSet(ResultExpressionMembership) =        featureMembersip->           
-    /// selectByKind(ResultExpressionMembership) in    if results->isEmpty() then null    else
-    /// results->first().ownedResultExpression   
-    /// endifspecializesFromLibrary('AnalysisCases::analysisCases')isComposite and owningType <> null and   
-    /// (owningType.oclIsKindOf(AnalysisCaseDefinition) or     owningType.oclIsKindOf(AnalysisCaseUsage))
-    /// implies    specializesFromLibrary('AnalysisCases::AnalysisCase::subAnalysisCases')
+    /// An AnalysisCaseUsage is a Usage of an AnalysisCaseDefinition.
     /// </summary>
+    [Class(xmiId: "_19_0_2_59601fc_1590260225615_617039_1090", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAnalysisCaseUsage : ICaseUsage
     {
+        /// <summary>
+        /// The AnalysisCaseDefinition that is the definition of this AnalysisCaseUsage.
+        /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1591152217935_225164_2921", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_59601fc_1590257465225_855208_512")]
+        Guid? AnalysisCaseDefinition { get; }
+
+        /// <summary>
+        /// An Expression used to compute the result of the AnalysisCaseUsage, owned via a
+        /// ResultExpressionMembership.
+        /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1591151453868_910052_2600", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        Guid? ResultExpression { get; }
+
     }
 }
 

@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ITransitionUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,45 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.States
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Behaviors;
+    using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Connectors;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Actions;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
+    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
+    using SysML2.NET.Core.POCO.Systems.Attributes;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Core.POCO.Systems.Cases;
+    using SysML2.NET.Core.POCO.Systems.Connections;
+    using SysML2.NET.Core.POCO.Systems.Constraints;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.POCO.Systems.Enumerations;
+    using SysML2.NET.Core.POCO.Systems.Flows;
+    using SysML2.NET.Core.POCO.Systems.Interfaces;
+    using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
+    using SysML2.NET.Core.POCO.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Core.POCO.Systems.UseCases;
+    using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -36,80 +69,60 @@ namespace SysML2.NET.Core.POCO
     /// TransitionUsage asserts that its source is exited, then its effectAction (if any) is performed, and
     /// then its target is entered.A TransitionUsage can be related to some of its ownedFeatures using
     /// TransitionFeatureMembership Relationships, corresponding to the triggerAction, guardExpression and
-    /// effectAction of the TransitionUsage.isComposite and owningType <> null
-    /// and(owningType.oclIsKindOf(ActionDefinition) or owningType.oclIsKindOf(ActionUsage)) andsource <>
-    /// null and not source.oclIsKindOf(StateUsage) implies   
-    /// specializesFromLibrary('Actions::Action::decisionTransitions')isComposite and owningType <> null
-    /// and(owningType.oclIsKindOf(StateDefinition) or owningType.oclIsKindOf(StateUsage)) andsource <> null
-    /// and source.oclIsKindOf(StateUsage) implies   
-    /// specializesFromLibrary('States::StateAction::stateTransitions')specializesFromLibrary('Actions::transitionActions')source
-    /// =    let sourceFeature : Feature = sourceFeature() in    if sourceFeature = null then null    else
-    /// sourceFeature.featureTarget.oclAsType(ActionUsage)target =    if succession.targetFeature->isEmpty()
-    /// then null    else        let targetFeature : Feature =           
-    /// succession.targetFeature->first().featureTarget in        if not
-    /// targetFeature.oclIsKindOf(ActionUsage) then null        else targetFeature.oclAsType(ActionUsage)   
-    ///     endif    endiftriggerAction = ownedFeatureMembership->   
-    /// selectByKind(TransitionFeatureMembership)->    select(kind =
-    /// TransitionFeatureKind::trigger).transitionFeature->    selectByKind(AcceptActionUsage)let
-    /// successions : Sequence(Successions) =     ownedMember->selectByKind(Succession)
-    /// insuccessions->notEmpty() andsuccessions->at(1).targetFeature.featureTarget->   
-    /// forAll(oclIsKindOf(ActionUsage))guardExpression = ownedFeatureMembership->   
-    /// selectByKind(TransitionFeatureMembership)->    select(kind =
-    /// TransitionFeatureKind::trigger).transitionFeature->   
-    /// selectByKind(Expression)triggerAction->forAll(specializesFromLibrary('Actions::TransitionAction::accepter')
-    /// andguardExpression->forAll(specializesFromLibrary('Actions::TransitionAction::guard')
-    /// andeffectAction->forAll(specializesFromLibrary('Actions::TransitionAction::effect'))triggerAction =
-    /// ownedFeatureMembership->    selectByKind(TransitionFeatureMembership)->    select(kind =
-    /// TransitionFeatureKind::trigger).transitionFeatures->   
-    /// selectByKind(AcceptActionUsage)succession.sourceFeature =
-    /// sourceownedMember->selectByKind(BindingConnector)->exists(b |    b.relatedFeatures->includes(source)
-    /// and    b.relatedFeatures->includes(inputParameter(1)))triggerAction->notEmpty() implies    let
-    /// payloadParameter : Feature = inputParameter(2) in    payloadParameter <> null and   
-    /// payloadParameter.subsetsChain(triggerAction->at(1),
-    /// triggerPayloadParameter())ownedMember->selectByKind(BindingConnector)->exists(b |   
-    /// b.relatedFeatures->includes(succession) and    b.relatedFeatures->includes(resolveGlobal(       
-    /// 'TransitionPerformances::TransitionPerformance::transitionLink')))if triggerAction->isEmpty() then  
-    ///  inputParameters()->size() >= 1else    inputParameters()->size() >= 2endif    succession =
-    /// ownedMember->selectByKind(Succession)->at(1)source <> null and not source.oclIsKindOf(StateUsage)
-    /// implies    triggerAction->isEmpty()
+    /// effectAction of the TransitionUsage.
     /// </summary>
+    [Class(xmiId: "_19_0_2_12e503d9_1575672078353_626298_450", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ITransitionUsage : IActionUsage
     {
         /// <summary>
-        /// Queries the derived property EffectAction
+        /// The ActionUsages that define the effects of this TransitionUsage, which are the ownedFeatures of the
+        /// TransitionUsage related to it by TransitionFeatureMemberships with kind = effect, which must all be
+        /// ActionUsages.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ActionUsage> QueryEffectAction();
+        [Property(xmiId: "_19_0_2_12e503d9_1581029782522_542070_6299", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        List<IActionUsage> QueryEffectAction();
 
         /// <summary>
-        /// Queries the derived property GuardExpression
+        /// The Expressions that define the guards of this TransitionUsage, which are the ownedFeatures of the
+        /// TransitionUsage related to it by TransitionFeatureMemberships with kind = guard, which must all be
+        /// Expressions.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Expression> QueryGuardExpression();
+        [Property(xmiId: "_19_0_2_12e503d9_1581029720824_747691_6254", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        List<IExpression> QueryGuardExpression();
 
         /// <summary>
-        /// Queries the derived property Source
+        /// The source ActionUsage of this TransitionUsage, which becomes the source of the succession for the
+        /// TransitionUsage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        ActionUsage QuerySource();
+        [Property(xmiId: "_19_0_2_12e503d9_1581029439311_947395_6114", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IActionUsage QuerySource();
 
         /// <summary>
-        /// Queries the derived property Succession
+        /// The Succession that is the ownedFeature of this TransitionUsage, which, if the TransitionUsage is
+        /// triggered, asserts the temporal ordering of the source and target.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Succession QuerySuccession();
+        [Property(xmiId: "_19_0_2_12e503d9_1581030490131_304332_6364", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        ISuccession QuerySuccession();
 
         /// <summary>
-        /// Queries the derived property Target
+        /// The target ActionUsage of this TransitionUsage, which is the targetFeature of the succession for the
+        /// TransitionUsage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        ActionUsage QueryTarget();
+        [Property(xmiId: "_19_0_2_12e503d9_1581029493366_130491_6153", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IActionUsage QueryTarget();
 
         /// <summary>
-        /// Queries the derived property TriggerAction
+        /// The AcceptActionUsages that define the triggers of this TransitionUsage, which are the ownedFeatures
+        /// of the TransitionUsage related to it by TransitionFeatureMemberships with kind = trigger, which must
+        /// all be AcceptActionUsages.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AcceptActionUsage> QueryTriggerAction();
+        [Property(xmiId: "_19_0_2_12e503d9_1581029662256_985457_6209", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        List<IAcceptActionUsage> QueryTriggerAction();
 
     }
 }

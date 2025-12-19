@@ -22,15 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Requirements
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Root.Namespaces;
-    using SysML2.NET.Systems.Requirements;
-
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.Systems.Requirements;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -46,7 +45,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617120451812_644221_3690", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048161309_821854_390")]
-        RequirementConstraintKind Kind { get; set; }
+        new RequirementConstraintKind Kind { get; set; }
 
         /// <summary>
         /// The ConcernUsage that is the ownedConstraint of this FramedConcernMembership.

@@ -22,10 +22,11 @@ namespace SysML2.NET.Extensions.Tests.Core.EnumProvider
 {
     using System;
 
-    using SysML2.NET.Core;
     using SysML2.NET.Extensions.Core;
 
     using NUnit.Framework;
+
+    using SysML2.NET.Core.Root.Namespaces;
 
     [TestFixture]
     public class VisibilityKindProviderTestFixture

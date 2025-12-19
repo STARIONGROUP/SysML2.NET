@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ITerminateActionUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Actions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -35,13 +37,19 @@ namespace SysML2.NET.Core.DTO
     /// ActionDefinition TerminateAction from the Systems Model Library, which causes a given
     /// terminatedOccurrence to end during its performance. By default, the terminatedOccurrence is the
     /// featuring instance (that) of the performance of the TerminateActionUsage, generally the performance
-    /// of its immediately containing ActionDefinition or
-    /// ActionUsage.specializesFromLibrary('Actions::terminateActions')terminatedOccurrenceArgument =
-    /// argument(1)isSubactionUsage() implies   
-    /// specializesFromLibrary('Actions::Action::terminateSubactions')
+    /// of its immediately containing ActionDefinition or ActionUsage.
     /// </summary>
+    [Class(xmiId: "_2022x_2_12e503d9_1724451571263_191875_31", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ITerminateActionUsage : IActionUsage
     {
+        /// <summary>
+        /// The Expression that is the featureValue of the terminateOccurrence parameter of this
+        /// TerminateActionUsage.
+        /// </summary>
+        [Property(xmiId: "_2022x_2_12e503d9_1724451750939_948290_107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        Guid? TerminatedOccurrenceArgument { get; }
+
     }
 }
 

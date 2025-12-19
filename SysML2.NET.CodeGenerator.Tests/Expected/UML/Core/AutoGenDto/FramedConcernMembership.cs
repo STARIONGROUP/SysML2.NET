@@ -22,15 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Requirements
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Root.Namespaces;
-    using SysML2.NET.Systems.Requirements;
-
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.Systems.Requirements;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -60,7 +59,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.DeclaredName")]
-        public string? DeclaredName { get; set; }
+        public string DeclaredName { get; set; }
 
         /// <summary>
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
@@ -70,7 +69,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.DeclaredShortName")]
-        public string? DeclaredShortName { get; set; }
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The Documentation owned by this Element.
@@ -121,7 +120,7 @@ namespace SysML2.NET.Core.DTO
         [Property(xmiId: "_19_0_4_12e503d9_1617120451812_644221_3690", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048161309_821854_390")]
         [Implements(implementation: "IFramedConcernMembership.Kind")]
-        public RequirementConstraintKind Kind { get; set; }
+        RequirementConstraintKind IFramedConcernMembership.Kind { get; set; }
 
         /// <summary>
         /// Whether the RequirementConstraintMembership is for an assumed or required ConstraintUsage.
@@ -129,7 +128,7 @@ namespace SysML2.NET.Core.DTO
         [Property(xmiId: "_19_0_2_12e503d9_1584048161309_821854_390", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IFramedConcernMembership.Kind")]
         [Implements(implementation: "IRequirementConstraintMembership.Kind")]
-        public RequirementConstraintKind Kind { get; set; }
+        RequirementConstraintKind IRequirementConstraintMembership.Kind { get; set; }
 
         /// <summary>
         /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
@@ -154,7 +153,7 @@ namespace SysML2.NET.Core.DTO
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_35293_43192", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberName")]
         [Implements(implementation: "IMembership.MemberName")]
-        public string? MemberName { get; set; }
+        public string MemberName { get; set; }
 
         /// <summary>
         /// The Namespace of which the memberElement becomes a member due to this Membership.
@@ -173,7 +172,7 @@ namespace SysML2.NET.Core.DTO
         [Property(xmiId: "_19_0_4_12e503d9_1651721174176_601088_238", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberShortName")]
         [Implements(implementation: "IMembership.MemberShortName")]
-        public string? MemberShortName { get; set; }
+        public string MemberShortName { get; set; }
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -183,7 +182,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string? Name { get; internal set; }
+        public string Name { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -255,7 +254,7 @@ namespace SysML2.NET.Core.DTO
         [Property(xmiId: "_19_0_4_12e503d9_1648181616390_323441_387", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_35293_43192")]
         [Implements(implementation: "IOwningMembership.OwnedMemberName")]
-        public string? OwnedMemberName { get; internal set; }
+        public string OwnedMemberName { get; internal set; }
 
         /// <summary>
         /// The shortName of the ownedMemberElement.
@@ -263,7 +262,7 @@ namespace SysML2.NET.Core.DTO
         [Property(xmiId: "_19_0_4_12e503d9_1651721262092_909505_246", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721174176_601088_238")]
         [Implements(implementation: "IOwningMembership.OwnedMemberShortName")]
-        public string? OwnedMemberShortName { get; internal set; }
+        public string OwnedMemberShortName { get; internal set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -342,7 +341,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string? QualifiedName { get; internal set; }
+        public string QualifiedName { get; internal set; }
 
         /// <summary>
         /// The ConcernUsage that is referenced through this FramedConcernMembership. It is the
@@ -380,7 +379,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string? ShortName { get; internal set; }
+        public string ShortName { get; internal set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.

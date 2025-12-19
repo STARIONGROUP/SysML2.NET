@@ -22,14 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Root.Namespaces
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Root.Namespaces;
-
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.DTO
         /// The name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_35293_43192", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        string? MemberName { get; set; }
+        string MemberName { get; set; }
 
         /// <summary>
         /// The Namespace of which the memberElement becomes a member due to this Membership.
@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.DTO
         /// The short name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651721174176_601088_238", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        string? MemberShortName { get; set; }
+        string MemberShortName { get; set; }
 
         /// <summary>
         /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly

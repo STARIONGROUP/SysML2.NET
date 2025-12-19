@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConnector.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,74 +22,79 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Kernel.Connectors
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Associations;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A Connector is a usage of Associations, with links restricted according to instances of the Type in
     /// which they are used (domain of the Connector). The associations of the Connector restrict what kinds
     /// of things might be linked. The Connector further restricts these links to be between values of
-    /// Features on instances of its domain.relatedFeature = connectorEnd.ownedReferenceSubsetting->   
-    /// select(s | s <> null).subsettedFeaturerelatedFeature->forAll(f |     if featuringType->isEmpty()
-    /// then f.isFeaturedWithin(null)    else featuringType->forAll(t | f.isFeaturedWithin(t))   
-    /// endif)sourceFeature =     if relatedFeature->isEmpty() then null     else relatedFeature->first()   
-    ///  endiftargetFeature =    if relatedFeature->size() < 2 then OrderedSet{}    else        
-    /// relatedFeature->            subSequence(2, relatedFeature->size())->            asOrderedSet()   
-    /// endifnot isAbstract implies relatedFeature->size() >=
-    /// 2specializesFromLibrary('Links::links')association->exists(oclIsKindOf(AssociationStructure))
-    /// implies    specializesFromLibrary('Objects::linkObjects')connectorEnds->size() = 2
-    /// andassociation->exists(oclIsKindOf(AssociationStructure)) implies   
-    /// specializesFromLibrary('Objects::binaryLinkObjects')connectorEnd->size() = 2 implies   
-    /// specializesFromLibrary('Links::binaryLinks')connectorEnds->size() > 2 implies    not
-    /// specializesFromLibrary('Links::BinaryLink')let commonFeaturingTypes : OrderedSet(Type) =    
-    /// relatedFeature->closure(featuringType)->select(t |         relatedFeature->forAll(f |
-    /// f.isFeaturedWithin(t))    ) inlet nearestCommonFeaturingTypes : OrderedSet(Type) =   
-    /// commonFeaturingTypes->reject(t1 |         commonFeaturingTypes->exists(t2 |             t2 <> t1 and
-    /// t2->closure(featuringType)->contains(t1)    )) inif nearestCommonFeaturingTypes->isEmpty() then
-    /// nullelse nearestCommonFeaturingTypes->first()endif
+    /// Features on instances of its domain.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651698_598377_42185", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConnector : IFeature, IRelationship
     {
         /// <summary>
-        /// Queries the derived property Association
+        /// The Associations that type the Connector.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Association> QueryAssociation();
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674983_471497_43284", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
+        List<IAssociation> QueryAssociation();
 
         /// <summary>
-        /// Queries the derived property ConnectorEnd
+        /// The endFeatures of a Connector, which redefine the endFeatures of the associations of the Connector.
+        /// The connectorEnds determine via ReferenceSubsetting Relationships which Features are related by the
+        /// Connector.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Feature> QueryConnectorEnd();
+        [Property(xmiId: "_18_5_3_12e503d9_1556735067666_827798_21922", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
+        List<IFeature> QueryConnectorEnd();
 
         /// <summary>
-        /// Queries the derived property DefaultFeaturingType
+        /// The innermost Type that is a common direct or indirect featuringType of the relatedFeatures, such
+        /// that, if it exists and was the featuringType of this Connector, the Connector would satisfy the
+        /// checkConnectorTypeFeaturing constraint.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Type QueryDefaultFeaturingType();
+        [Property(xmiId: "_2022x_2_12e503d9_1737751598145_444042_71", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IType QueryDefaultFeaturingType();
 
         /// <summary>
-        /// Queries the derived property RelatedFeature
+        /// The Features that are related by this Connector considered as a Relationship and that restrict the
+        /// links it identifies, given by the referenced Features of the connectorEnds of the Connector.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Feature> QueryRelatedFeature();
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674968_916334_43210", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
+        List<IFeature> QueryRelatedFeature();
 
         /// <summary>
-        /// Queries the derived property SourceFeature
+        /// The source relatedFeature for this Connector. It is the first relatedFeature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Feature QuerySourceFeature();
+        [Property(xmiId: "_19_0_2_12e503d9_1594953058873_558253_3897", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        IFeature QuerySourceFeature();
 
         /// <summary>
-        /// Queries the derived property TargetFeature
+        /// The target relatedFeatures for this Connector. This includes all the relatedFeatures other than the
+        /// sourceFeature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Feature> QueryTargetFeature();
+        [Property(xmiId: "_19_0_2_12e503d9_1594953128207_991867_3946", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        List<IFeature> QueryTargetFeature();
 
     }
 }

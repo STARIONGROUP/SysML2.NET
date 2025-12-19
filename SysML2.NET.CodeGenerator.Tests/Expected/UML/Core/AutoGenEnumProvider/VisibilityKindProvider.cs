@@ -26,7 +26,7 @@ namespace SysML2.NET.Extensions.Core
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Root.Namespaces;
 
     /// <summary>
     /// The purpose of the <see cref="VisibilityKindProvider"/> is to provide conversion methods

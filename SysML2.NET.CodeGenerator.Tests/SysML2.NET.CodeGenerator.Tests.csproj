@@ -678,6 +678,166 @@
       <Content Include="Expected\Ecore\Core\AutoGenEnum\VisibilityKind.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\AnnotatingElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\AnnotatingElement.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IFeatureTyping.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IFeatureTyping.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IFeature.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IFeature.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\LiteralRational.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\LiteralRational.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\FramedConcernMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\FramedConcernMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IRelationship.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IRelationship.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\ISelectExpression.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\ISelectExpression.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\ISubclassification.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\ISubclassification.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IAnnotatingElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IAnnotatingElement.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\Usage.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\Usage.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IReferenceSubsetting.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IReferenceSubsetting.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\MultiplicityRange.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\MultiplicityRange.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IRequirementUsage.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IRequirementUsage.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\Association.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\Association.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IDependency.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IDependency.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IElement.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IFlow.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IFlow.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\LiteralInteger.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\LiteralInteger.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\Membership.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\Membership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\ILiteralRational.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\ILiteralRational.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\Dependency.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\Dependency.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IMultiplicityRange.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IMultiplicityRange.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\EnumerationDefinition.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\EnumerationDefinition.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\ILiteralInteger.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\ILiteralInteger.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\ITextualRepresentation.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\ITextualRepresentation.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\TextualRepresentation.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\TextualRepresentation.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\OwningMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\OwningMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IUsage.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IUsage.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IEnumerationDefinition.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IEnumerationDefinition.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\Flow.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\Flow.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\ReferenceSubsetting.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\ReferenceSubsetting.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\FeatureTyping.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\FeatureTyping.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IOwningMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IOwningMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\Subclassification.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\Subclassification.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IFramedConcernMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IFramedConcernMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\SelectExpression.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\SelectExpression.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\RequirementUsage.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\RequirementUsage.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\Feature.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\Feature.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenPoco\IAssociation.cs" />
+      <None Include="Expected\UML\Core\AutoGenPoco\IAssociation.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

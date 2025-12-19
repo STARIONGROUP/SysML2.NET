@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IForLoopActionUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,39 +22,70 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.Actions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Behaviors;
+    using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
+    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
+    using SysML2.NET.Core.POCO.Systems.Attributes;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Core.POCO.Systems.Cases;
+    using SysML2.NET.Core.POCO.Systems.Connections;
+    using SysML2.NET.Core.POCO.Systems.Constraints;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.POCO.Systems.Enumerations;
+    using SysML2.NET.Core.POCO.Systems.Flows;
+    using SysML2.NET.Core.POCO.Systems.Interfaces;
+    using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
+    using SysML2.NET.Core.POCO.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Core.POCO.Systems.States;
+    using SysML2.NET.Core.POCO.Systems.UseCases;
+    using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A ForLoopActionUsage is a LoopActionUsage that specifies that its bodyAction ActionUsage should be
     /// performed once for each value, in order, from the sequence of values obtained as the result of the
-    /// seqArgument Expression, with the loopVariable set to the value for each iteration.seqArgument =
-    /// argument(1)isSubactionUsage() implies   
-    /// specializesFromLibrary('Actions::Action::forLoops')loopVariable <> null
-    /// andloopVariable.redefinesFromLibrary('Actions::ForLoopAction::var')specializesFromLibrary('Actions::forLoopActions')loopVariable
-    /// =    if ownedFeature->isEmpty() or         not ownedFeature->first().oclIsKindOf(ReferenceUsage)
-    /// then         null    else         ownedFeature->first().oclAsType(ReferenceUsage)   
-    /// endifownedFeature->notEmpty()
-    /// andownedFeature->at(1).oclIsKindOf(ReferenceUsage)inputParameters()->size() = 2
+    /// seqArgument Expression, with the loopVariable set to the value for each iteration.
     /// </summary>
+    [Class(xmiId: "_19_0_4_12e503d9_1624306893649_489444_5711", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IForLoopActionUsage : ILoopActionUsage
     {
         /// <summary>
-        /// Queries the derived property LoopVariable
+        /// The ownedFeature of this <co>ForLoopActionUsage that acts as the loop variable, which is assigned
+        /// the successive values of the input sequence on each iteration. It is the ownedFeature that redefines
+        /// ForLoopAction::var.</co>
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        ReferenceUsage QueryLoopVariable();
+        [Property(xmiId: "_19_0_4_12e503d9_1640325378400_227367_3662", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IReferenceUsage QueryLoopVariable();
 
         /// <summary>
-        /// Queries the derived property SeqArgument
+        /// The Expression whose result provides the sequence of values to which the loopVariable is set for
+        /// each iterative performance of the bodyAction. It is the Expression whose result is bound to the seq
+        /// input parameter of this ForLoopActionUsage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Expression QuerySeqArgument();
+        [Property(xmiId: "_19_0_4_12e503d9_1624306920911_355291_5769", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IExpression QuerySeqArgument();
 
     }
 }

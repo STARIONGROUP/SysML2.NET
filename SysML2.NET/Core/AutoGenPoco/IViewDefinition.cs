@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IViewDefinition.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,51 +22,80 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.Views
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Actions;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
+    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
+    using SysML2.NET.Core.POCO.Systems.Attributes;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Core.POCO.Systems.Cases;
+    using SysML2.NET.Core.POCO.Systems.Connections;
+    using SysML2.NET.Core.POCO.Systems.Constraints;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.POCO.Systems.Enumerations;
+    using SysML2.NET.Core.POCO.Systems.Flows;
+    using SysML2.NET.Core.POCO.Systems.Interfaces;
+    using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
+    using SysML2.NET.Core.POCO.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Core.POCO.Systems.States;
+    using SysML2.NET.Core.POCO.Systems.UseCases;
+    using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A ViewDefinition is a PartDefinition that specifies how a view artifact is constructed to satisfy a
     /// viewpoint. It specifies a viewConditions to define the model content to be presented and a
-    /// viewRendering to define how the model content is presented.view =
-    /// usage->selectByKind(ViewUsage)satisfiedViewpoint = ownedRequirement->   
-    /// selectByKind(ViewpointUsage)->    select(isComposite)viewRendering =    let renderings:
-    /// OrderedSet(ViewRenderingMembership) =       
-    /// featureMembership->selectByKind(ViewRenderingMembership) in    if renderings->isEmpty() then null   
-    /// else renderings->first().referencedRendering    endifviewCondition = ownedMembership->   
-    /// selectByKind(ElementFilterMembership).    conditionfeatureMembership->   
-    /// selectByKind(ViewRenderingMembership)->    size() <= 1specializesFromLibrary('Views::View')
+    /// viewRendering to define how the model content is presented.
     /// </summary>
+    [Class(xmiId: "_19_0_2_59601fc_1583087286915_926479_556", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IViewDefinition : IPartDefinition
     {
         /// <summary>
-        /// Queries the derived property SatisfiedViewpoint
+        /// The composite ownedRequirements of this ViewDefinition that are ViewpointUsages for viewpoints
+        /// satisfied by the ViewDefinition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ViewpointUsage> QuerySatisfiedViewpoint();
+        [Property(xmiId: "_19_0_2_12e503d9_1596645596183_374903_1209", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000559760_444344_1273")]
+        List<IViewpointUsage> QuerySatisfiedViewpoint();
 
         /// <summary>
-        /// Queries the derived property View
+        /// The usages of this ViewDefinition that are ViewUsages.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ViewUsage> QueryView();
+        [Property(xmiId: "_19_0_2_12e503d9_1596644452170_21813_753", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
+        List<IViewUsage> QueryView();
 
         /// <summary>
-        /// Queries the derived property ViewCondition
+        /// The Expressions related to this ViewDefinition by ElementFilterMemberships, which specify conditions
+        /// on Elements to be rendered in a view.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Expression> QueryViewCondition();
+        [Property(xmiId: "_19_0_4_12e503d9_1606938929077_183245_4796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        List<IExpression> QueryViewCondition();
 
         /// <summary>
-        /// Queries the derived property ViewRendering
+        /// The RenderingUsage to be used to render views defined by this ViewDefinition, which is the
+        /// referencedRendering of the ViewRenderingMembership of the ViewDefinition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        RenderingUsage QueryViewRendering();
+        [Property(xmiId: "_19_0_2_12e503d9_1596657187664_758418_4914", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IRenderingUsage QueryViewRendering();
 
     }
 }

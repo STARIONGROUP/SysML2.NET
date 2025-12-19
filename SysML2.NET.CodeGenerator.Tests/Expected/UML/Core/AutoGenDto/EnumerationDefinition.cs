@@ -22,13 +22,13 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Enumerations
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-
+    using SysML2.NET.Core.DTO.Systems.Attributes;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -59,7 +59,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.DeclaredName")]
-        public string? DeclaredName { get; set; }
+        public string DeclaredName { get; set; }
 
         /// <summary>
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
@@ -69,7 +69,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.DeclaredShortName")]
-        public string? DeclaredShortName { get; set; }
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -250,7 +250,7 @@ namespace SysML2.NET.Core.DTO
         [Property(xmiId: "_19_0_4_12e503d9_1606946783667_895456_287", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1590978283180_265362_419")]
         [Implements(implementation: "IEnumerationDefinition.IsVariation")]
-        public bool IsVariation { get; set; }
+        bool IEnumerationDefinition.IsVariation { get; set; } = true;
 
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
@@ -259,7 +259,7 @@ namespace SysML2.NET.Core.DTO
         [Property(xmiId: "_19_0_2_12e503d9_1590978283180_265362_419", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IEnumerationDefinition.IsVariation")]
         [Implements(implementation: "IDefinition.IsVariation")]
-        public bool IsVariation { get; set; }
+        bool Systems.DefinitionAndUsage.IDefinition.IsVariation { get; set; }
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -295,7 +295,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string? Name { get; internal set; }
+        public string Name { get; internal set; }
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -717,7 +717,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string? QualifiedName { get; internal set; }
+        public string QualifiedName { get; internal set; }
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -727,7 +727,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string? ShortName { get; internal set; }
+        public string ShortName { get; internal set; }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

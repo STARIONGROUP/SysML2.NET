@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeature.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,17 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Core.Features
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -45,159 +50,82 @@ namespace SysML2.NET.Core.POCO
     /// related to that domain instance by the Feature. The values of a Feature with chainingFeatures are
     /// the same as values of the last Feature in the chain, which can be found by starting with values of
     /// the first Feature, then using those values as domain instances to obtain valus of the second
-    /// Feature, and so on, to values of the last Feature.ownedRedefinition =
-    /// ownedSubsetting->selectByKind(Redefinition)ownedTypeFeaturing =
-    /// ownedRelationship->selectByKind(TypeFeaturing)->    select(tf | tf.featureOfType =
-    /// self)ownedSubsetting = ownedSpecialization->selectByKind(Subsetting)ownedTyping =
-    /// ownedGeneralization->selectByKind(FeatureTyping)type =     let types : OrderedSet(Types) =
-    /// OrderedSet{self}->        -- Note: The closure operation automatically handles circular
-    /// relationships.        closure(typingFeatures()).typing.type->asOrderedSet() in    types->reject(t1 |
-    /// types->exist(t2 | t2 <> t1 and t2.specializes(t1)))multiplicity <> null implies
-    /// multiplicity.featuringType = featuringType
-    /// specializesFromLibrary('Base::things')chainingFeature->excludes(self)ownedFeatureChaining =
-    /// ownedRelationship->selectByKind(FeatureChaining)chainingFeature =
-    /// ownedFeatureChaining.chainingFeaturechainingFeature->size() <> 1isEnd and owningType <> null implies
-    ///    let i : Integer =         owningType.ownedEndFeature->indexOf(self) in   
-    /// owningType.ownedSpecialization.general->        forAll(supertype |            
-    /// supertype.endFeature->size() >= i implies               
-    /// redefines(supertype.endFeature->at(i))direction = null andownedSpecializations->forAll(isImplied)
-    /// implies    ownedMembership->        selectByKind(FeatureValue)->        forAll(fv |
-    /// specializes(fv.value.result))isEnd and owningType <> null and(owningType.oclIsKindOf(Association) or
-    /// owningType.oclIsKindOf(Connector)) implies   
-    /// specializesFromLibrary('Links::Link::participant')isComposite
-    /// andownedTyping.type->includes(oclIsKindOf(Structure)) andowningType <> null
-    /// and(owningType.oclIsKindOf(Structure) or owningType.type->includes(oclIsKindOf(Structure))) implies 
-    ///  
-    /// specializesFromLibrary('Occurrence::Occurrence::suboccurrences')ownedTyping.type->exists(selectByKind(Class))
-    /// implies    specializesFromLibrary('Occurrences::occurrences')isComposite
-    /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
-    /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
-    /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
-    /// specializesFromLibrary('Occurrence::Occurrence::suboccurrences')ownedTyping.type->exists(selectByKind(DataType))
-    /// implies    specializesFromLibrary('Base::dataValues')owningType <> null
-    /// andowningType.oclIsKindOf(FlowEnd) andowningType.ownedFeature->at(1) = self implies    let flowType
-    /// : Type = owningType.owningType in    flowType <> null implies        let i : Integer =            
-    /// flowType.ownedFeature.indexOf(owningType) in        (i = 1 implies            
-    /// redefinesFromLibrary('Transfers::Transfer::source::sourceOutput')) and        (i = 2 implies        
-    ///    redefinesFromLibrary('Transfers::Transfer::source::targetInput'))                 owningType <>
-    /// null andnot owningFeatureMembership.    oclIsKindOf(ReturnParameterMembership)
-    /// and(owningType.oclIsKindOf(Behavior) or owningType.oclIsKindOf(Step) and   
-    /// (owningType.oclIsKindOf(InvocationExpression) implies      not ownedRedefinition->exists(not
-    /// isImplied)) implies    let i : Integer =        owningType.ownedFeature->select(direction <> null)->
-    ///            reject(owningFeatureMembership.                oclIsKindOf(ReturnParameterMembership))-> 
-    ///           indexOf(self) in    owningType.ownedSpecialization.general->        forAll(supertype |    
-    ///        let ownedParameters : Sequence(Feature) =               
-    /// supertype.ownedFeature->select(direction <> null)->                    
-    /// reject(owningFeatureMembership.                         oclIsKindOf(ReturnParameterMembership)) in  
-    ///          ownedParameters->size() >= i implies               
-    /// redefines(ownedParameters->at(i))ownedTyping.type->exists(selectByKind(Structure)) implies   
-    /// specializesFromLibary('Objects::objects')owningType <> null and(owningType.oclIsKindOf(Function) and
-    ///    self = owningType.oclAsType(Function).result or owningType.oclIsKindOf(Expression) and    self =
-    /// owningType.oclAsType(Expression).result) implies    owningType.ownedSpecialization.general->       
-    /// select(oclIsKindOf(Function) or oclIsKindOf(Expression))->        forAll(supertype |           
-    /// redefines(                if superType.oclIsKindOf(Function) then                   
-    /// superType.oclAsType(Function).result                else                   
-    /// superType.oclAsType(Expression).result                endif)ownedFeatureInverting =
-    /// ownedRelationship->selectByKind(FeatureInverting)->    select(fi | fi.featureInverted =
-    /// self)featuringType =    let featuringTypes : OrderedSet(Type) =        
-    /// featuring.type->asOrderedSet() in    if chainingFeature->isEmpty() then featuringTypes    else      
-    ///  featuringTypes->            union(chainingFeature->first().featuringType)->           
-    /// asOrderedSet()    endifownedReferenceSubsetting =    let referenceSubsettings :
-    /// OrderedSet(ReferenceSubsetting) =        ownedSubsetting->selectByKind(ReferenceSubsetting) in    if
-    /// referenceSubsettings->isEmpty() then null    else referenceSubsettings->first()
-    /// endifownedSubsetting->selectByKind(ReferenceSubsetting)->size() <=
-    /// 1Sequence{2..chainingFeature->size()}->forAll(i |   
-    /// chainingFeature->at(i).isFeaturedWithin(chainingFeature->at(i-1)))isPortion
-    /// andownedTyping.type->includes(oclIsKindOf(Class)) andowningType <> null
-    /// and(owningType.oclIsKindOf(Class) or owningType.oclIsKindOf(Feature) and   
-    /// owningType.oclAsType(Feature).type->        exists(oclIsKindOf(Class))) implies   
-    /// specializesFromLibrary('Occurrence::Occurrence::portions')featureTarget = if
-    /// chainingFeature->isEmpty() then self else chainingFeature->last() endifownedCrossSubsetting =    let
-    /// crossSubsettings: Sequence(CrossSubsetting) =         ownedSubsetting->selectByKind(CrossSubsetting)
-    /// in    if crossSubsettings->isEmpty() then null    else crossSubsettings->first()    endifisEnd
-    /// implies     multiplicities().allSuperTypes()->flatten()->   
-    /// selectByKind(MultiplicityRange)->exists(hasBounds(1,1))crossFeature <> null implies   
-    /// crossFeature.type->asSet() = type->asSet()ownedSubsetting->selectByKind(CrossSubsetting)->size() <=
-    /// 1crossFeature =    if ownedCrossSubsetting = null then null    else         let chainingFeatures:
-    /// Sequence(Feature) =             ownedCrossSubsetting.crossedFeature.chainingFeature in        if
-    /// chainingFeatures->size() < 2 then null        else chainingFeatures->at(2)   
-    /// endifisOwnedCrossFeature() implies    owner.oclAsType(Feature).type->forAll(t |
-    /// self.specializes(t))isOwnedCrossFeature() implies    ownedSubsetting.subsettedFeature->includesAll( 
-    ///       owner.oclAsType(Feature).ownedRedefinition.redefinedFeature->            select(crossFeature
-    /// <> null).crossFeature)crossFeature <> null implies   
-    /// ownedRedefinition.redefinedFeature.crossFeature->            forAll(f | f <> null implies
-    /// crossFeature.specializes(f))ownedCrossFeature() <> null implies    crossFeature =
-    /// ownedCrossFeature()isOwnedCrossFeature() implies    let otherEnds : OrderedSet(Feature) =        
-    /// owner.oclAsType(Feature).owningType.endFeature->excluding(self) in    if (otherEnds->size() = 1)
-    /// then        featuringType = otherEnds->first().type    else        featuringType->size() = 1 and    
-    ///    featuringType->first().isCartesianProduct() and       
-    /// featuringType->first().asCartesianProduct() = otherEnds.type and       
-    /// featuringType->first().allSupertypes()->includesAll(           
-    /// owner.oclAsType(Feature).ownedRedefinition.redefinedFeature->               select(crossFeature() <>
-    /// null).crossFeature().featuringType)          endifisPortion implies not isVariableisEnd implied
-    /// direction = nullowningFeatureMembership <> null implies    featuringTypes->exists(t |
-    /// isFeaturingType(t))isConstant implies isVariableisVariable implies    owningType <> null and    
-    /// owningType.specializes('Occurrences::Occurrence')isEnd implies not (isDerived or isAbstract or
-    /// isComposite or isPortion)isEnd and isVariable implies isConstant
+    /// Feature, and so on, to values of the last Feature.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651684_893483_42160", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFeature : IType
     {
         /// <summary>
-        /// Queries the derived property ChainingFeature
+        /// The Feature that are chained together to determine the values of this Feature, derived from the
+        /// chainingFeatures of the ownedFeatureChainings of this Feature, in the same order. The values of a
+        /// Feature with chainingFeatures are the same as values of the last Feature in the chain, which can be
+        /// found by starting with the values of the first Feature (for each instance of the domain of the
+        /// original Feature), then using each of those as domain instances to find the values of the second
+        /// Feature in chainingFeatures, and so on, to values of the last Feature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Feature> QueryChainingFeature();
+        [Property(xmiId: "_19_0_4_b9102da_1619792219511_543311_445", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        List<IFeature> QueryChainingFeature();
 
         /// <summary>
-        /// Queries the derived property CrossFeature
+        /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
+        /// has one. Semantically, the values of the crossFeature of an end Feature must include all values of
+        /// the end Feature obtained when navigating from values of the other end Features of the same
+        /// owningType.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Feature QueryCrossFeature();
+        [Property(xmiId: "_19_0_4_b9102da_1689616227528_355910_218", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IFeature QueryCrossFeature();
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
         /// FeatureDirectionKind).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        FeatureDirectionKind? Direction { get; set; }
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674994_447677_43347", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        FeatureDirectionKind Direction { get; set; }
 
         /// <summary>
-        /// Queries the derived property EndOwningType
+        /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
+        /// ownedMemberFeature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Type QueryEndOwningType();
+        [Property(xmiId: "_18_5_3_12e503d9_1563834516279_920295_20653", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168386_366266_22107")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        IType QueryEndOwningType();
 
         /// <summary>
-        /// Queries the derived property FeatureTarget
+        /// The last of the chainingFeatures of this Feature, if it has any. Otherwise, this Feature itself.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Feature QueryFeatureTarget();
+        [Property(xmiId: "_2022x_2_12e503d9_1715790852907_110671_19", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IFeature QueryFeatureTarget();
 
         /// <summary>
-        /// Queries the derived property FeaturingType
+        /// Types that feature this Feature, such that any instance in the domain of the Feature must be
+        /// classified by all of these Types, including at least all the featuringTypes of its typeFeaturings. 
+        /// If the Feature is chained, then the featuringTypes of the first Feature in the chain are also
+        /// featuringTypes of the chained Feature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Type> QueryFeaturingType();
+        [Property(xmiId: "_19_0_4_12e503d9_1603905619975_304385_743", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        List<IType> QueryFeaturingType();
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
         /// cannot exist after its featuring instance no longer does and cannot be values of another composite
         /// feature that is not on the same featuring instance.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_331870_43224", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsComposite { get; set; }
 
         /// <summary>
         /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
         /// snapshots of its owningType.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674993_300560_43342", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674992_500504_43341", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsDerived { get; set; }
 
         /// <summary>
@@ -210,106 +138,128 @@ namespace SysML2.NET.Core.POCO
         /// values of that Feature reached by navigation when the values of the other n-1 end Features are held
         /// fixed.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1562475749426_705395_21984", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsEnd { get; set; }
-
-        /// <summary>
-        /// Queries the derived property IsNonunique
-        /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        bool QueryIsNonunique();
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674969_728225_43215", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsOrdered { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature are contained in the space and time of instances of the domain of
         /// the Feature and represent the same thing as those instances.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_b9102da_1559231981638_234817_22063", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsPortion { get; set; }
 
         /// <summary>
         /// Whether or not values for this Feature must have no duplicates or not.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674968_321342_43214", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         bool IsUnique { get; set; }
 
         /// <summary>
         /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsVariable { get; set; }
 
         /// <summary>
-        /// Queries the derived property OwnedCrossSubsetting
+        /// The one ownedSubsetting of this Feature, if any, that is a CrossSubsetting}, for which the Feature
+        /// is the crossingFeature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        CrossSubsetting QueryOwnedCrossSubsetting();
+        [Property(xmiId: "_19_0_4_b9102da_1689616916594_145818_277", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
+        ICrossSubsetting QueryOwnedCrossSubsetting();
 
         /// <summary>
-        /// Queries the derived property OwnedFeatureChaining
+        /// The ownedRelationships of this Feature that are FeatureChainings, for which the Feature will be the
+        /// featureChained.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<FeatureChaining> QueryOwnedFeatureChaining();
+        [Property(xmiId: "_19_0_4_b9102da_1622125589880_791465_72", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        List<IFeatureChaining> QueryOwnedFeatureChaining();
 
         /// <summary>
-        /// Queries the derived property OwnedFeatureInverting
+        /// The ownedRelationships of this Feature that are FeatureInvertings and for which the Feature is the
+        /// featureInverted.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<FeatureInverting> QueryOwnedFeatureInverting();
+        [Property(xmiId: "_19_0_4_b9102da_1653567738671_359235_43", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838861_768019_145")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        List<IFeatureInverting> QueryOwnedFeatureInverting();
 
         /// <summary>
-        /// Queries the derived property OwnedRedefinition
+        /// The ownedSubsettings of this Feature that are Redefinitions, for which the Feature is the
+        /// redefiningFeature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Redefinition> QueryOwnedRedefinition();
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_161813_43220", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
+        List<IRedefinition> QueryOwnedRedefinition();
 
         /// <summary>
-        /// Queries the derived property OwnedReferenceSubsetting
+        /// The one ownedSubsetting of this Feature, if any, that is a ReferenceSubsetting, for which the
+        /// Feature is the referencingFeature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        ReferenceSubsetting QueryOwnedReferenceSubsetting();
+        [Property(xmiId: "_19_0_4_12e503d9_1661555161564_247405_255", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
+        IReferenceSubsetting QueryOwnedReferenceSubsetting();
 
         /// <summary>
-        /// Queries the derived property OwnedSubsetting
+        /// The ownedSpecializations of this Feature that are Subsettings, for which the Feature is the
+        /// subsettingFeature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Subsetting> QueryOwnedSubsetting();
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_472382_43221", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674966_718145_43205")]
+        List<ISubsetting> QueryOwnedSubsetting();
 
         /// <summary>
-        /// Queries the derived property OwnedTypeFeaturing
+        /// The ownedRelationships of this Feature that are TypeFeaturings and for which the Feature is the
+        /// featureOfType.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<TypeFeaturing> QueryOwnedTypeFeaturing();
+        [Property(xmiId: "_19_0_4_12e503d9_1603905673975_310948_762", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_196800_580")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        List<ITypeFeaturing> QueryOwnedTypeFeaturing();
 
         /// <summary>
-        /// Queries the derived property OwnedTyping
+        /// The ownedSpecializations of this Feature that are FeatureTypings, for which the Feature is the
+        /// typedFeature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<FeatureTyping> QueryOwnedTyping();
+        [Property(xmiId: "_19_0_2_12e503d9_1596597427751_965862_42", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_804591_21100")]
+        List<IFeatureTyping> QueryOwnedTyping();
 
         /// <summary>
-        /// Queries the derived property OwningFeatureMembership
+        /// The FeatureMembership that owns this Feature as an ownedMemberFeature, determining its owningType.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        FeatureMembership QueryOwningFeatureMembership();
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674970_68441_43223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674972_622493_43236")]
+        IFeatureMembership QueryOwningFeatureMembership();
 
         /// <summary>
-        /// Queries the derived property OwningType
+        /// The Type that is the owningType of the owningFeatureMembership of this Feature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Type QueryOwningType();
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_592215_43200", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674987_297074_43308")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603905619975_304385_743")]
+        IType QueryOwningType();
 
         /// <summary>
-        /// Queries the derived property Type
+        /// Types that restrict the values of this Feature, such that the values must be instances of all the
+        /// types. The types of a Feature are derived from its typings and the types of its subsettings. If the
+        /// Feature is chained, then the types of the last Feature in the chain are also types of the chained
+        /// Feature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Type> QueryType();
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        List<IType> QueryType();
 
     }
 }

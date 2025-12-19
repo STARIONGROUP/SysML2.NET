@@ -22,8 +22,10 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core
+namespace SysML2.NET.Core.Root.Namespaces
 {
+    using System.CodeDom.Compiler;
+
     /// <summary>
     /// VisibilityKind is an enumeration whose literals specify the visibility of a Membership of an Element
     /// in a Namespace outside of that Namespace. Note that &quot;visibility&quot; specifically restricts
@@ -31,6 +33,7 @@ namespace SysML2.NET.Core
     /// otherwise restricts access to an Element as provided by specific constraints in the abstract syntax
     /// (e.g., preventing the import or inheritance of private Elements).
     /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
     public enum VisibilityKind
     {
         /// <summary>

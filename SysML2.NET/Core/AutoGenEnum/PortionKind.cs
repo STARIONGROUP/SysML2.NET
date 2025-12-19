@@ -22,12 +22,15 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core
+namespace SysML2.NET.Core.Systems.Occurrences
 {
+    using System.CodeDom.Compiler;
+
     /// <summary>
     /// PortionKind is an enumeration of the specific kinds of Occurrence portions that can be represented
     /// by an OccurrenceUsage.
     /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
     public enum PortionKind
     {
         /// <summary>

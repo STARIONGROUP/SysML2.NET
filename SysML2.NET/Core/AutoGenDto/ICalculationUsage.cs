@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ICalculationUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,25 +22,38 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Calculations
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.DTO.Kernel.Functions;
+    using SysML2.NET.Core.DTO.Systems.Actions;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A CalculationUsage is an ActionUsage that is also an Expression, and, so, is typed by a Function.
     /// Nominally, if the type is a CalculationDefinition, a CalculationUsage is a Usage of that
     /// CalculationDefinition within a system. However, other kinds of kernel Functions are also allowed, to
-    /// permit use of Functions from the Kernel Model
-    /// Libraries.specializesFromLibrary('Calculations::calculations')owningType <> null
-    /// and(owningType.oclIsKindOf(CalculationDefinition) or owningType.oclIsKindOf(CalculationUsage))
-    /// implies    specializesFromLibrary('Calculations::Calculation::subcalculations')
+    /// permit use of Functions from the Kernel Model Libraries.
     /// </summary>
-    public partial interface ICalculationUsage : IActionUsage, IExpression
+    [Class(xmiId: "_19_0_2_12e503d9_1588213258220_731107_146", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
+    public partial interface ICalculationUsage : IExpression, IActionUsage
     {
+        /// <summary>
+        /// The <ode>Function that is the type of this CalculationUsage. Nominally, this would be a
+        /// CalculationDefinition, but a kernel Function is also allowed, to permit use of Functions from the
+        /// Kernel Model Libraries.</ode>
+        /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1588213526305_899324_302", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
+        Guid? CalculationDefinition { get; }
+
     }
 }
 

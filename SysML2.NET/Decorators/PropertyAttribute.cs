@@ -48,7 +48,7 @@ namespace SysML2.NET.Decorators
     /// Attribute used to decorate properties with using the properties sourced from
     /// the UML metamodel.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = false)]
     public sealed class PropertyAttribute : Attribute
     {
         /// <summary>

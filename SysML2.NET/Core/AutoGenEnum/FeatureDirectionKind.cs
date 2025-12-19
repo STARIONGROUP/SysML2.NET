@@ -22,12 +22,15 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core
+namespace SysML2.NET.Core.Core.Types
 {
+    using System.CodeDom.Compiler;
+
     /// <summary>
     /// FeatureDirectionKind enumerates the possible kinds of direction that a Feature may be given as a
     /// member of a Type.
     /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
     public enum FeatureDirectionKind
     {
         /// <summary>

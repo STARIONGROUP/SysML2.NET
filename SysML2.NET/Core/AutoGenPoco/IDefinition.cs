@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IDefinition.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,39 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Actions;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
+    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
+    using SysML2.NET.Core.POCO.Systems.Attributes;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Core.POCO.Systems.Cases;
+    using SysML2.NET.Core.POCO.Systems.Connections;
+    using SysML2.NET.Core.POCO.Systems.Constraints;
+    using SysML2.NET.Core.POCO.Systems.Enumerations;
+    using SysML2.NET.Core.POCO.Systems.Flows;
+    using SysML2.NET.Core.POCO.Systems.Interfaces;
+    using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
+    using SysML2.NET.Core.POCO.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Core.POCO.Systems.States;
+    using SysML2.NET.Core.POCO.Systems.UseCases;
+    using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -40,230 +67,242 @@ namespace SysML2.NET.Core.POCO
     /// represents a variation point Definition. In this case, all of its members must be variant Usages,
     /// related to the Definition by VariantMembership Relationships. Rather than being features of the
     /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
-    /// an abstract Usage of the variation point Definition.isVariation implies
-    /// ownedFeatureMembership->isEmpty()variant = variantMembership.ownedVariantUsagevariantMembership =
-    /// ownedMembership->selectByKind(VariantMembership)isVariation implies    not
-    /// ownedSpecialization.specific->exists(        oclIsKindOf(Definition) and       
-    /// oclAsType(Definition).isVariation)usage = feature->selectByKind(Usage)directedUsage =
-    /// directedFeature->selectByKind(Usage)ownedUsage = ownedFeature->selectByKind(Usage)ownedAttribute =
-    /// ownedUsage->selectByKind(AttributeUsage)ownedReference =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedEnumeration =
-    /// ownedUsage->selectByKind(EnumerationUsage)ownedOccurrence =
-    /// ownedUsage->selectByKind(OccurrenceUsage)ownedItem = ownedUsage->selectByKind(ItemUsage)ownedPart =
-    /// ownedUsage->selectByKind(PartUsage)ownedPort = ownedUsage->selectByKind(PortUsage)ownedConnection =
-    /// ownedUsage->selectByKind(ConnectorAsUsage)ownedFlow =
-    /// ownedUsage->selectByKind(FlowConnectionUsage)ownedInterface =
-    /// ownedUsage->selectByKind(ReferenceUsage)ownedAllocation =
-    /// ownedUsage->selectByKind(AllocationUsage)ownedAction =
-    /// ownedUsage->selectByKind(ActionUsage)ownedState =
-    /// ownedUsage->selectByKind(StateUsage)ownedTransition =
-    /// ownedUsage->selectByKind(TransitionUsage)ownedCalculation =
-    /// ownedUsage->selectByKind(CalculationUsage)ownedConstraint =
-    /// ownedUsage->selectByKind(ConstraintUsage)ownedRequirement =
-    /// ownedUsage->selectByKind(RequirementUsage)ownedConcern =
-    /// ownedUsage->selectByKind(ConcernUsage)ownedCase =
-    /// ownedUsage->selectByKind(CaseUsage)ownedAnalysisCase =
-    /// ownedUsage->selectByKind(AnalysisCaseUsage)ownedVerificationCase =
-    /// ownedUsage->selectByKind(VerificationCaseUsage)ownedUseCase =
-    /// ownedUsage->selectByKind(UseCaseUsage)ownedView = ownedUsage->selectByKind(ViewUsage)ownedViewpoint
-    /// = ownedUsage->selectByKind(ViewpointUsage)ownedRendering =
-    /// ownedUsage->selectByKind(RenderingUsage)ownedMetadata =
-    /// ownedUsage->selectByKind(MetadataUsage)isVariation implies isAbstract
+    /// an abstract Usage of the variation point Definition.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1565479032244_336549_22524", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IDefinition : IClassifier
     {
         /// <summary>
-        /// Queries the derived property DirectedUsage
+        /// The usages of this Definition that are directedFeatures.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryDirectedUsage();
+        [Property(xmiId: "_18_5_3_12e503d9_1565495064714_974634_26150", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
+        List<IUsage> QueryDirectedUsage();
 
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
         /// Definition must be VariantMemberships.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_2_12e503d9_1590978283180_265362_419", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         bool IsVariation { get; set; }
 
         /// <summary>
-        /// Queries the derived property OwnedAction
+        /// The ActionUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ActionUsage> QueryOwnedAction();
+        [Property(xmiId: "_19_0_2_12e503d9_1591479011613_547927_1091", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
+        List<IActionUsage> QueryOwnedAction();
 
         /// <summary>
-        /// Queries the derived property OwnedAllocation
+        /// The AllocationUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AllocationUsage> QueryOwnedAllocation();
+        [Property(xmiId: "_19_0_4_12e503d9_1611430819239_430196_1024", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
+        List<IAllocationUsage> QueryOwnedAllocation();
 
         /// <summary>
-        /// Queries the derived property OwnedAnalysisCase
+        /// The AnalysisCaseUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AnalysisCaseUsage> QueryOwnedAnalysisCase();
+        [Property(xmiId: "_19_0_2_12e503d9_1591152747086_367030_3846", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
+        List<IAnalysisCaseUsage> QueryOwnedAnalysisCase();
 
         /// <summary>
-        /// Queries the derived property OwnedAttribute
+        /// The AttributeUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<AttributeUsage> QueryOwnedAttribute();
+        [Property(xmiId: "_19_0_2_12e503d9_1591500614097_490259_4413", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        List<IAttributeUsage> QueryOwnedAttribute();
 
         /// <summary>
-        /// Queries the derived property OwnedCalculation
+        /// The CalculationUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<CalculationUsage> QueryOwnedCalculation();
+        [Property(xmiId: "_19_0_2_12e503d9_1588215335104_898924_667", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479011613_547927_1091")]
+        List<ICalculationUsage> QueryOwnedCalculation();
 
         /// <summary>
-        /// Queries the derived property OwnedCase
+        /// The code>CaseUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<CaseUsage> QueryOwnedCase();
+        [Property(xmiId: "_19_0_2_59601fc_1590257108055_7496_483", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1588215335104_898924_667")]
+        List<ICaseUsage> QueryOwnedCase();
 
         /// <summary>
-        /// Queries the derived property OwnedConcern
+        /// The ConcernUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ConcernUsage> QueryOwnedConcern();
+        [Property(xmiId: "_19_0_4_12e503d9_1617051597354_928367_1357", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000559760_444344_1273")]
+        List<IConcernUsage> QueryOwnedConcern();
 
         /// <summary>
-        /// Queries the derived property OwnedConnection
+        /// The ConnectorAsUsages that are ownedUsages of this Definition. Note that this list includes
+        /// BindingConnectorAsUsages, SuccessionAsUsages, and FlowUsages because these are ConnectorAsUsages
+        /// even though they are not ConnectionUsages.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_2_12e503d9_1591480607506_951212_2333", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
         List<IConnectorAsUsage> QueryOwnedConnection();
 
         /// <summary>
-        /// Queries the derived property OwnedConstraint
+        /// The ConstraintUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ConstraintUsage> QueryOwnedConstraint();
+        [Property(xmiId: "_19_0_2_12e503d9_1578068081992_244000_1803", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
+        List<IConstraintUsage> QueryOwnedConstraint();
 
         /// <summary>
-        /// Queries the derived property OwnedEnumeration
+        /// The EnumerationUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<EnumerationUsage> QueryOwnedEnumeration();
+        [Property(xmiId: "_19_0_4_12e503d9_1606946600508_763872_252", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591500614097_490259_4413")]
+        List<IEnumerationUsage> QueryOwnedEnumeration();
 
         /// <summary>
-        /// Queries the derived property OwnedFlow
+        /// The FlowUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<FlowUsage> QueryOwnedFlow();
+        [Property(xmiId: "_19_0_4_12e503d9_1624055201422_104863_1697", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
+        List<IFlowUsage> QueryOwnedFlow();
 
         /// <summary>
-        /// Queries the derived property OwnedInterface
+        /// The InterfaceUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<InterfaceUsage> QueryOwnedInterface();
+        [Property(xmiId: "_19_0_2_12e503d9_1591498709150_220812_4128", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
+        List<IInterfaceUsage> QueryOwnedInterface();
 
         /// <summary>
-        /// Queries the derived property OwnedItem
+        /// The ItemUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ItemUsage> QueryOwnedItem();
+        [Property(xmiId: "_19_0_2_12e503d9_1591482567975_649284_3005", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
+        List<IItemUsage> QueryOwnedItem();
 
         /// <summary>
-        /// Queries the derived property OwnedMetadata
+        /// The MetadataUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<MetadataUsage> QueryOwnedMetadata();
+        [Property(xmiId: "_19_0_4_12e503d9_1661488358064_457109_2881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]
+        List<IMetadataUsage> QueryOwnedMetadata();
 
         /// <summary>
-        /// Queries the derived property OwnedOccurrence
+        /// The OccurrenceUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<OccurrenceUsage> QueryOwnedOccurrence();
+        [Property(xmiId: "_19_0_4_12e503d9_1618943849505_989631_257", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        List<IOccurrenceUsage> QueryOwnedOccurrence();
 
         /// <summary>
-        /// Queries the derived property OwnedPart
+        /// The PartUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<PartUsage> QueryOwnedPart();
+        [Property(xmiId: "_19_0_2_12e503d9_1591496643392_630316_3279", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]
+        List<IPartUsage> QueryOwnedPart();
 
         /// <summary>
-        /// Queries the derived property OwnedPort
+        /// The PortUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<PortUsage> QueryOwnedPort();
+        [Property(xmiId: "_18_5_3_12e503d9_1565494319970_455996_25799", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        List<IPortUsage> QueryOwnedPort();
 
         /// <summary>
-        /// Queries the derived property OwnedReference
+        /// The ReferenceUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ReferenceUsage> QueryOwnedReference();
+        [Property(xmiId: "_19_0_2_12e503d9_1591477471991_39731_908", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        List<IReferenceUsage> QueryOwnedReference();
 
         /// <summary>
-        /// Queries the derived property OwnedRendering
+        /// The RenderingUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<RenderingUsage> QueryOwnedRendering();
+        [Property(xmiId: "_19_0_2_12e503d9_1596741437225_963350_6474", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496643392_630316_3279")]
+        List<IRenderingUsage> QueryOwnedRendering();
 
         /// <summary>
-        /// Queries the derived property OwnedRequirement
+        /// The RequirementUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<RequirementUsage> QueryOwnedRequirement();
+        [Property(xmiId: "_19_0_2_12e503d9_1583000559760_444344_1273", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1578068081992_244000_1803")]
+        List<IRequirementUsage> QueryOwnedRequirement();
 
         /// <summary>
-        /// Queries the derived property OwnedState
+        /// The StateUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<StateUsage> QueryOwnedState();
+        [Property(xmiId: "_19_0_2_12e503d9_1575587977045_745776_941", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479011613_547927_1091")]
+        List<IStateUsage> QueryOwnedState();
 
         /// <summary>
-        /// Queries the derived property OwnedTransition
+        /// The TransitionUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<TransitionUsage> QueryOwnedTransition();
+        [Property(xmiId: "_19_0_2_12e503d9_1578598061680_350995_3923", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
+        List<ITransitionUsage> QueryOwnedTransition();
 
         /// <summary>
-        /// Queries the derived property OwnedUsage
+        /// The Usages that are ownedFeatures of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryOwnedUsage();
+        [Property(xmiId: "_18_5_3_12e503d9_1565479686637_967933_23236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
+        List<IUsage> QueryOwnedUsage();
 
         /// <summary>
-        /// Queries the derived property OwnedUseCase
+        /// The UseCaseUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<UseCaseUsage> QueryOwnedUseCase();
+        [Property(xmiId: "_19_0_4_12e503d9_1621461106608_978605_945", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
+        List<IUseCaseUsage> QueryOwnedUseCase();
 
         /// <summary>
-        /// Queries the derived property OwnedVerificationCase
+        /// The VerificationCaseUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<VerificationCaseUsage> QueryOwnedVerificationCase();
+        [Property(xmiId: "_19_0_2_12e503d9_1596821523387_872104_10416", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
+        List<IVerificationCaseUsage> QueryOwnedVerificationCase();
 
         /// <summary>
-        /// Queries the derived property OwnedView
+        /// The ViewUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ViewUsage> QueryOwnedView();
+        [Property(xmiId: "_19_0_2_12e503d9_1596644570381_840567_784", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496643392_630316_3279")]
+        List<IViewUsage> QueryOwnedView();
 
         /// <summary>
-        /// Queries the derived property OwnedViewpoint
+        /// The ViewpointUsages that are ownedUsages of this Definition.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<ViewpointUsage> QueryOwnedViewpoint();
+        [Property(xmiId: "_19_0_2_12e503d9_1596649828408_673531_3683", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000559760_444344_1273")]
+        List<IViewpointUsage> QueryOwnedViewpoint();
 
         /// <summary>
-        /// Queries the derived property Usage
+        /// The Usages that are features of this Definition (not necessarily owned).
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryUsage();
+        [Property(xmiId: "_18_5_3_12e503d9_1565498571495_48981_27786", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        List<IUsage> QueryUsage();
 
         /// <summary>
-        /// Queries the derived property Variant
+        /// The Usages which represent the variants of this Definition as a variation point Definition, if
+        /// isVariation = true. If isVariation = false, the there must be no variants.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Usage> QueryVariant();
+        [Property(xmiId: "_19_0_2_12e503d9_1590979457191_746167_951", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        List<IUsage> QueryVariant();
 
         /// <summary>
-        /// Queries the derived property VariantMembership
+        /// The ownedMemberships of this Definition that are VariantMemberships. If isVariation = true, then
+        /// this must be all ownedMemberships of the Definition. If isVariation = false, then
+        /// variantMembershipmust be empty.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<VariantMembership> QueryVariantMembership();
+        [Property(xmiId: "_19_0_2_12e503d9_1590979005861_503124_894", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
+        List<IVariantMembership> QueryVariantMembership();
 
     }
 }

@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralRational.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,26 +22,27 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Kernel.Expressions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A LiteralRational is a LiteralExpression that provides a Rational value as a result. Its result
-    /// parameter must have the type
-    /// Rational.specializesFromLibrary('Performances::literalRationalEvaluations')
+    /// parameter must have the type Rational.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651706_235283_42203", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralRational : ILiteralExpression
     {
         /// <summary>
-        /// The value whose rational approximation is the result of evaluating this LiteralRational.The Real
-        /// value that is the result of evaluating this Expression.
+        /// The value whose rational approximation is the result of evaluating this LiteralRational.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_967605_43310", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         double Value { get; set; }
 
     }

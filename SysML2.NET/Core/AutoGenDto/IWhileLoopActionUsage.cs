@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IWhileLoopActionUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Actions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -35,16 +37,26 @@ namespace SysML2.NET.Core.DTO
     /// performed repeatedly while the result of the whileArgument Expression is true or until the result of
     /// the untilArgument Expression (if provided) is true. The whileArgument Expression is evaluated before
     /// each (possible) performance of the bodyAction, and the untilArgument Expression is evaluated after
-    /// each performance of the bodyAction.isSubactionUsage() implies   
-    /// specializesFromLibrary('Actions::Action::whileLoops')untilArgument =    let parameter : Feature =
-    /// inputParameter(3) in    if parameter <> null and parameter.oclIsKindOf(Expression) then       
-    /// parameter.oclAsType(Expression)    else        null   
-    /// endifspecializesFromLibrary('Actions::whileLoopActions')whileArgument =    let parameter : Feature =
-    /// inputParameter(1) in    if parameter <> null and parameter.oclIsKindOf(Expression) then       
-    /// parameter.oclAsType(Expression)    else        null    endifinputParameters()->size() >= 2
+    /// each performance of the bodyAction.
     /// </summary>
+    [Class(xmiId: "_19_0_4_12e503d9_1624306821108_998562_5594", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IWhileLoopActionUsage : ILoopActionUsage
     {
+        /// <summary>
+        /// The Expression whose result, if false, determines that the bodyAction should continue to be
+        /// performed. It is the (optional) third owned parameter of the WhileLoopActionUsage.
+        /// </summary>
+        [Property(xmiId: "_19_0_4_12e503d9_1624290717721_449719_4195", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        Guid? UntilArgument { get; }
+
+        /// <summary>
+        /// The Expression whose result, if true, determines that the bodyAction should continue to be
+        /// performed. It is the first owned parameter of the WhileLoopActionUsage.
+        /// </summary>
+        [Property(xmiId: "_19_0_4_12e503d9_1624203871924_371126_3842", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        Guid WhileArgument { get; }
+
     }
 }
 

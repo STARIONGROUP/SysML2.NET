@@ -26,25 +26,28 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
     using HandlebarsDotNet;
 
+    using SysML2.NET.CodeGenerator.Extensions;
+
     using uml4net.Extensions;
+    using uml4net.SimpleClassifiers;
     using uml4net.StructuredClassifiers;
 
     /// <summary>
-    /// A handlebars block helper for the <see cref="IClass"/> interface
+    /// A handlebars block helper for the <see cref="IClass" /> interface
     /// </summary>
     public static class ClassHelper
     {
         /// <summary>
-        /// Registers the <see cref="ClassHelper"/>
+        /// Registers the <see cref="ClassHelper" />
         /// </summary>
         /// <param name="handlebars">
-        /// The <see cref="IHandlebars"/> context with which the helper needs to be registered
+        /// The <see cref="IHandlebars" /> context with which the helper needs to be registered
         /// </param>
         public static void RegisterClassHelper(this IHandlebars handlebars)
         {
             handlebars.RegisterHelper("Class.WriteEnumerationNameSpaces", (writer, context, _) =>
             {
-                if (!(context.Value is IClass @class))
+                if (context.Value is not IClass @class)
                 {
                     throw new ArgumentException("supposed to be IClass");
                 }
@@ -52,53 +55,69 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var uniqueNamespaces = new HashSet<string>();
 
                 var allProperties = @class.QueryAllProperties();
+
                 foreach (var prop in allProperties.Where(x => x.QueryIsEnum()))
                 {
-                    var qualifiedNameSpaces = prop.Type.QualifiedName.Split("::");
-                    var namespaces = qualifiedNameSpaces.Skip(1).Take(qualifiedNameSpaces.Length - 2);
-                    var nameSpace = string.Join('.', namespaces);
-                    uniqueNamespaces.Add(nameSpace);
+                    uniqueNamespaces.Add(prop.Type.QueryNamespace());
                 }
 
                 var orderedNamespaces = uniqueNamespaces.Order().ToList();
+
                 foreach (var orderedNamespace in orderedNamespaces)
                 {
-                    writer.WriteSafeString($"using SysML2.NET.{orderedNamespace} ;{Environment.NewLine}");
+                    writer.WriteSafeString($"using SysML2.NET.Core.{orderedNamespace} ;{Environment.NewLine}");
                 }
             });
 
-            handlebars.RegisterHelper("Class.WriteDTONameSpaces", (writer, context, _) =>
+            handlebars.RegisterHelper("Class.WriteEnumerationNameSpace", (writer, context, _) =>
             {
-                if (!(context.Value is IClass @class))
+                if (context.Value is not IEnumeration enumeration)
+                {
+                    throw new ArgumentException("#Class.WriteEnumerationNameSpace supposed to be an IEnumeration");
+                }
+
+                writer.WriteSafeString($"using SysML2.NET.Core.{enumeration.QueryNamespace()};{Environment.NewLine}");
+            });
+
+            handlebars.RegisterHelper("Class.WriteNameSpaces", (writer, context, arguments) =>
+            {
+                if (context.Value is not IClass @class)
                 {
                     throw new ArgumentException("supposed to be IClass");
                 }
 
+                if (arguments.Length != 2)
+                {
+                    throw new ArgumentException("#Class.WriteNameSpaces Expects to have 2 arguments");
+                }
+
+                var namespacePrefix = arguments[1].ToString();
+                
                 var superClasses = @class.SuperClass;
 
                 var uniqueNamespaces = new HashSet<string>();
 
                 foreach (var superClass in superClasses)
                 {
-                    var qualifiedNameSpaces = superClass.QualifiedName.Split("::");
-                    var namespaces = qualifiedNameSpaces.Skip(1).Take(qualifiedNameSpaces.Length - 2);
-                    var nameSpace = string.Join('.', namespaces);
-                    uniqueNamespaces.Add(nameSpace);
+                    uniqueNamespaces.Add(superClass.QueryNamespace());
                 }
 
-                var allProperties = @class.QueryAllProperties();
-                foreach (var prop in allProperties.Where(x => x.QueryIsReferenceProperty()))
+                if (namespacePrefix == "POCO")
                 {
-                    var qualifiedNameSpaces = prop.Type.QualifiedName.Split("::");
-                    var namespaces = qualifiedNameSpaces.Skip(1).Take(qualifiedNameSpaces.Length - 2);
-                    var nameSpace = string.Join('.', namespaces);
-                    uniqueNamespaces.Add(nameSpace);
+                    var allProperties = @class.QueryAllProperties();
+
+                    foreach (var prop in allProperties.Where(x => x.QueryIsReferenceProperty()))
+                    {
+                        uniqueNamespaces.Add(prop.Type.QueryNamespace());
+                    }
                 }
 
+                uniqueNamespaces.Remove(@class.QueryNamespace());
                 var orderedNamespaces = uniqueNamespaces.Order().ToList();
+
                 foreach (var orderedNamespace in orderedNamespaces)
                 {
-                    writer.WriteSafeString($"using SysML2.NET.DTO.{orderedNamespace} ;{Environment.NewLine}");
+                    writer.WriteSafeString($"using SysML2.NET.Core.{namespacePrefix}.{orderedNamespace} ;{Environment.NewLine}");
                 }
             });
         }

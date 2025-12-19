@@ -22,15 +22,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 {
     using System;
     using System.Globalization;
-    using System.IO;
     using System.Linq;
     using System.Text;
 
     using HandlebarsDotNet;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+    using SysML2.NET.CodeGenerator.Extensions;
+
     using uml4net.SimpleClassifiers;
     using uml4net.Extensions;
     using uml4net.Classification;
+    using uml4net.CommonStructure;
     using uml4net.StructuredClassifiers;
 
     /// <summary>
@@ -48,28 +50,35 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             handlebars.RegisterHelper("Property.WriteForDTOInterface", (writer, context, _) =>
             {
-                if (!(context.Value is IProperty property))
+                if (context.Value is not IProperty property)
                 {
                     throw new ArgumentException("supposed to be IProperty");
                 }
 
                 var sb = new StringBuilder();
-
+                
+                if (property.RedefinedProperty.Any(x => x.Name == property.Name))
+                {
+                    sb.Append("new ");
+                }
+                
                 if (property.Type is IDataType)
                 {
                     if (property.QueryIsEnumerable())
                     {
                         sb.Append($"List<{property.QueryCSharpTypeName()}>");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                     else
                     {
                         sb.Append($"{property.QueryCSharpTypeName()}");
-                        if (property.Lower == 0)
+                        
+                        if (property.QueryIsNullableAndNotString())
                         {
-                            sb.Append("?");
+                            sb.Append('?');
                         }
-                        sb.Append(" ");
+                        
+                        sb.Append(' ');
                     }
                 }
                 else
@@ -77,22 +86,22 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (property.QueryIsEnumerable())
                     {
                         sb.Append("List<Guid>");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                     else
                     {
                         sb.Append("Guid");
 
-                        if (property.Lower == 0)
+                        if (property.QueryIsNullableAndNotString())
                         {
-                            sb.Append("?");
+                            sb.Append('?');
                         }
 
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
-                }
-
-                var propertyName = property.Name.CapitalizeFirstLetter();
+                } 
+                
+                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
 
                 if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
                 {
@@ -100,7 +109,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 sb.Append(propertyName);
-                sb.Append(" ");
+                sb.Append(' ');
 
                 if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
                 {
@@ -121,29 +130,37 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new HandlebarsException("{{#Property.WriteForDTOClass}} helper must have exactly two arguments");
                 }
 
-                var property = parameters[0] as IProperty;
-                var @class = parameters[1] as IClass;
+                var property = (parameters[0] as IProperty)!;
+                var generatedClass = (parameters[1] as IClass)!;
 
                 var sb = new StringBuilder();
-
-                sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
-                sb.Append(" ");
+                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+                var hasSameNameAsClass = generatedClass.Name == propertyName;
+                var classHaveToImplementTwiceSameProperty = generatedClass.QueryAllProperties().Count(x => x.Name == property.Name) > 1;
+                
+                if (!hasSameNameAsClass && !classHaveToImplementTwiceSameProperty)
+                {
+                    sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
+                    sb.Append(' ');    
+                }
 
                 if (property.Type is IDataType)
                 {
                     if (property.QueryIsEnumerable())
                     {
                         sb.Append($"List<{property.QueryCSharpTypeName()}>");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                     else
                     {
                         sb.Append($"{property.QueryCSharpTypeName()}");
-                        if (property.Lower == 0)
+                        
+                        if (property.QueryIsNullableAndNotString())
                         {
-                            sb.Append("?");
+                            sb.Append('?');
                         }
-                        sb.Append(" ");
+                        
+                        sb.Append(' ');
                     }
                 }
                 else
@@ -151,36 +168,45 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     if (property.QueryIsEnumerable())
                     {
                         sb.Append("List<Guid>");
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                     else
                     {
                         sb.Append("Guid");
 
-                        if (property.Lower == 0)
+                        if (property.QueryIsNullableAndNotString())
                         {
-                            sb.Append("?");
+                            sb.Append('?');
                         }
 
-                        sb.Append(" ");
+                        sb.Append(' ');
                     }
                 }
-
-                var owner = property.Owner as IClass;
-
-                var propertyName = property.Name.CapitalizeFirstLetter();
 
                 if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
                 {
                     propertyName = $"{propertyName}";
                 }
 
+                if (hasSameNameAsClass || classHaveToImplementTwiceSameProperty)
+                {
+                    var owner = (INamedElement)property.Owner;
+                    propertyName = $"I{owner.Name}.{propertyName}";
+
+                    var ownerNamespace = owner.QueryNamespace();
+
+                    if (ownerNamespace != generatedClass.QueryNamespace())
+                    {
+                        propertyName = $"{ownerNamespace}.{propertyName}";
+                    }
+                }
+
                 sb.Append(propertyName);
-                sb.Append(" ");
+                sb.Append(' ');
 
                  if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
                 {
-                    sb.Append("{ get; internal set; }");
+                    sb.Append($"{{ get; {(hasSameNameAsClass || classHaveToImplementTwiceSameProperty ? "" : "internal set;" )}}}");
                 }
                 else
                 {
@@ -190,6 +216,154 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         sb.Append(" = [];");
                     }
+                    else if (property.QueryIsDefaultValueDifferentThanDefault())
+                    {
+                        if (property.QueryIsString())
+                        {
+                            sb.Append($" = \"{property.QueryDefaultValueAsString()}\";");
+                        }
+                        else
+                        {
+                            sb.Append($" = {property.QueryDefaultValueAsString()};");
+                        }
+                    }
+                }
+
+                writer.WriteSafeString(sb + Environment.NewLine);
+            });
+            
+            handlebars.RegisterHelper("Property.WriteForPOCOInterface", (writer, context, _) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.WriteForPOCOInterface supposed to be IProperty");
+                }
+
+                var sb = new StringBuilder();
+                var typeName = property.QueryCSharpTypeName();
+
+                if (property.RedefinedProperty.Any(x => x.Name == property.Name))
+                {
+                    sb.Append("new ");
+                }
+                
+                if (property.Type is not IDataType)
+                {
+                    typeName = $"I{typeName}";
+                }
+
+                if (property.QueryIsEnumerable())
+                {
+                    sb.Append($"List<{typeName}> ");
+                }
+                else
+                {
+                    sb.Append($"{typeName} ");
+                }
+                
+                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+
+                if (property.IsDerived || property.IsDerivedUnion)
+                {
+                    propertyName = $"Query{propertyName}";
+                }
+
+                sb.Append(propertyName);
+
+                if (property.IsDerived || property.IsDerivedUnion)
+                {
+                    sb.Append("();");
+                }
+                else if (property.IsReadOnly)
+                {
+                    sb.Append(" { get; }");
+                }
+                else
+                {
+                    sb.Append(" { get; set; }");
+                }
+
+                writer.WriteSafeString(sb + Environment.NewLine);
+            });
+            
+            handlebars.RegisterHelper("Property.WriteForPOCOClass", (writer, context, arguments) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.WriteForPOCOClass context supposed to be IProperty");
+                }
+
+                if (arguments.Length != 2)
+                {
+                    throw new ArgumentException("The #Property.WriteForPOCOClass supposed to be have 2 arguments IProperty");
+                }
+
+                if (arguments[1] is not IClass generatedClass)
+                {
+                    throw new ArgumentException("The #Property.WriteForPOCOClass supposed to be have an IClass as second argument");
+                }
+
+                var sb = new StringBuilder();
+                var typeName = property.QueryCSharpTypeName();
+
+                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+                var hasSameNameAsClass = generatedClass.Name == propertyName;
+                var classHaveToImplementTwiceSameProperty = generatedClass.QueryAllProperties().Count(x => x.Name == property.Name) > 1;
+                
+                if (!hasSameNameAsClass && !classHaveToImplementTwiceSameProperty)
+                {
+                    sb.AppendLine(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
+                    sb.Append(' ');    
+                }
+                
+                if (property.Type is not IDataType)
+                {
+                    typeName = $"I{typeName}";
+                }
+
+                if (property.QueryIsEnumerable())
+                {
+                    sb.Append($"List<{typeName}> ");
+                }
+                else
+                {
+                    sb.Append($"{typeName} ");
+                }
+                
+                if (property.IsDerived || property.IsDerivedUnion)
+                {
+                    propertyName = $"Query{propertyName}";
+                }
+
+                if (hasSameNameAsClass || classHaveToImplementTwiceSameProperty)
+                {
+                    var owner = (INamedElement)property.Owner;
+                    propertyName = $"I{owner.Name}.{propertyName}";
+
+                    var ownerNamespace = owner.QueryNamespace();
+
+                    if (ownerNamespace != generatedClass.QueryNamespace())
+                    {
+                        propertyName = $"{ownerNamespace}.{propertyName}";
+                    }
+                }
+                
+                sb.Append(propertyName);
+
+                if (property.IsDerived || property.IsDerivedUnion)
+                {
+                    sb.Append("()");
+                    sb.AppendLine("{");
+                    sb.AppendLine($"\tthrow new NotImplementedException(\"Derived property {GenericExtensions.CapitalizeFirstLetter(property.Name)} not yet supported\");");
+                    sb.Append('}');
+                }
+                else if (property.IsReadOnly)
+                {
+                    sb.Append(" { get; }");
+                }
+                else
+                {
+                    sb.Append(" { get; set; }");
                 }
 
                 writer.WriteSafeString(sb + Environment.NewLine);

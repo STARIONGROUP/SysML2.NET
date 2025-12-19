@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ITriggerInvocationExpression.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,37 +22,37 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.Actions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Actions;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Behaviors;
+    using SysML2.NET.Core.POCO.Kernel.Expressions;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A TriggerInvocationExpression is an InvocationExpression that invokes one of the trigger Functions
-    /// from the Kernel Semantic Library Triggers package, as indicated by its kind.kind =
-    /// TriggerKind::after implies    argument->notEmpty() and   
-    /// argument->at(1).result.specializesFromLibrary('Quantities::ScalarQuantityValue') and    let mRef :
-    /// Element =         resolveGlobal('Quantities::TensorQuantityValue::mRef').ownedMemberElement in   
-    /// argument->at(1).result.feature->        select(ownedRedefinition.redefinedFeature->          
-    /// closure(ownedRedefinition.redefinedFeature)->           includes(mRef))->       
-    /// exists(specializesFromLibrary('ISQBase::DurationUnit'))kind = TriggerKind::at implies   
-    /// argument->notEmpty() and   
-    /// argument->at(1).result.specializesFromLibrary('Time::TimeInstantValue')kind = TriggerKind::when
-    /// implies    argument->notEmpty() and    argument->at(1).oclIsKindOf(FeatureReferenceExpression) and  
-    ///  let referent : Feature =         argument->at(1).oclAsType(FeatureReferenceExpression).referent in 
-    ///   referent.oclIsKindOf(Expression) and   
-    /// referent.oclAsType(Expression).result.specializesFromLibrary('ScalarValues::Boolean')
+    /// from the Kernel Semantic Library Triggers package, as indicated by its kind.
     /// </summary>
+    [Class(xmiId: "_19_0_4_12e503d9_1643588492412_624345_274", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ITriggerInvocationExpression : IInvocationExpression
     {
         /// <summary>
         /// Indicates which of the Functions from the Triggers model in the Kernel Semantic Library is to be
         /// invoked by this TriggerInvocationExpression.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_4_12e503d9_1643588513495_774789_300", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         TriggerKind Kind { get; set; }
 
     }

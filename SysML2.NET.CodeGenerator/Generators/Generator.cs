@@ -47,7 +47,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// <summary>
         /// Gets the path where the template are stored
         /// </summary>
-        public string TemplateFolderPath { get; private set; }
+        public string TemplateFolderPath { get; protected set; }
         
         /// <summary>
         /// perform code cleanup

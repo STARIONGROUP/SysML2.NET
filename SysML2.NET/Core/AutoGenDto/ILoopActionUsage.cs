@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILoopActionUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,23 +22,32 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Actions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A LoopActionUsage is an ActionUsage that specifies that its bodyAction should be performed
     /// repeatedly. Its subclasses WhileLoopActionUsage and ForLoopActionUsage provide different ways to
-    /// determine how many times the bodyAction should be performed.bodyAction =    let parameter : Feature
-    /// = inputParameter(2) in    if parameter <> null and parameter.oclIsKindOf(Action) then       
-    /// parameter.oclAsType(Action)    else        null    endif
+    /// determine how many times the bodyAction should be performed.
     /// </summary>
+    [Class(xmiId: "_19_0_4_12e503d9_1624203585458_610400_3524", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILoopActionUsage : IActionUsage
     {
+        /// <summary>
+        /// The ActionUsage to be performed repeatedly by the LoopActionUsage. It is the second parameter of the
+        /// LoopActionUsage.
+        /// </summary>
+        [Property(xmiId: "_19_0_4_12e503d9_1624203902575_509097_3869", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        Guid BodyAction { get; }
+
     }
 }
 

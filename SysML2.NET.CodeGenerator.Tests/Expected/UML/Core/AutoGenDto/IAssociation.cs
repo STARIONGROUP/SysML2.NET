@@ -22,13 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Kernel.Associations
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-
+    using SysML2.NET.Core.DTO.Core.Classifiers;
+    using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.Decorators;
 
     /// <summary>

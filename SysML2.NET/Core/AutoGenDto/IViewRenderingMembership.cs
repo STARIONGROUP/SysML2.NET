@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IViewRenderingMembership.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,24 +22,40 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Views
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.DTO.Core.Types;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A ViewRenderingMembership is a <coed>FeatureMembership that identifies the viewRendering of a
-    /// ViewDefinition or ViewUsage.</coed>referencedRendering =    let referencedFeature : Feature =       
-    ///  ownedRendering.referencedFeatureTarget() in    if referencedFeature = null then ownedRendering   
-    /// else if referencedFeature.oclIsKindOf(RenderingUsage) then       
-    /// refrencedFeature.oclAsType(RenderingUsage)    else null    endif
-    /// endifowningType.oclIsKindOf(ViewDefinition) orowningType.oclIsKindOf(ViewUsage)
+    /// ViewDefinition or ViewUsage.</coed>
     /// </summary>
+    [Class(xmiId: "_19_0_4_12e503d9_1617134177967_461389_5877", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IViewRenderingMembership : IFeatureMembership
     {
+        /// <summary>
+        /// The owned RenderingUsage that is either itself the referencedRendering or subsets the
+        /// referencedRendering.
+        /// </summary>
+        [Property(xmiId: "_19_0_4_12e503d9_1617134244546_130200_6000", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
+        Guid OwnedRendering { get; }
+
+        /// <summary>
+        /// The RenderingUsage that is referenced through this ViewRenderingMembership. It is the
+        /// referencedFeature of the ownedReferenceSubsetting for the ownedRendering, if there is one, and,
+        /// otherwise, the ownedRendering itself.
+        /// </summary>
+        [Property(xmiId: "_19_0_4_12e503d9_1617134300857_286392_6081", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        Guid ReferencedRendering { get; }
+
     }
 }
 

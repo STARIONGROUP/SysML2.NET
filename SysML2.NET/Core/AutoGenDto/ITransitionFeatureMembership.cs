@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ITransitionFeatureMembership.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,32 +22,38 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.States
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.Systems.States;
+    using SysML2.NET.Core.DTO.Core.Types;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A TransitionFeatureMembership is a FeatureMembership for a trigger, guard or effect of a
     /// TransitionUsage, whose transitionFeature is a AcceptActionUsage, Boolean-valued Expression or
-    /// ActionUsage, depending on its kind. kind = TransitionFeatureKind::trigger implies   
-    /// transitionFeature.oclIsKindOf(AcceptActionUsage)owningType.oclIsKindOf(TransitionUsage)kind =
-    /// TransitionFeatureKind::guard implies    transitionFeature.oclIsKindOf(Expression) and    let guard :
-    /// Expression = transitionFeature.oclIsKindOf(Expression) in   
-    /// guard.result.specializesFromLibrary('ScalarValues::Boolean') and    guard.result.multiplicity <>
-    /// null and    guard.result.multiplicity.hasBounds(1,1)kind = TransitionFeatureKind::effect implies   
-    /// transitionFeature.oclIsKindOf(ActionUsage)
+    /// ActionUsage, depending on its kind.
     /// </summary>
+    [Class(xmiId: "_19_0_2_12e503d9_1575672033669_188530_395", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ITransitionFeatureMembership : IFeatureMembership
     {
         /// <summary>
         /// Whether this TransitionFeatureMembership  is for a trigger, guard or effect.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575672142396_129864_506", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         TransitionFeatureKind Kind { get; set; }
+
+        /// <summary>
+        /// The Step that is the ownedMemberFeature of this TransitionFeatureMembership.
+        /// </summary>
+        [Property(xmiId: "_19_0_2_12e503d9_1582975046568_736161_148", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
+        Guid TransitionFeature { get; }
 
     }
 }

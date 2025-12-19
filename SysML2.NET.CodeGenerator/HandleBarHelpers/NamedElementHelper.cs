@@ -25,6 +25,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
     using HandlebarsDotNet;
 
+    using SysML2.NET.CodeGenerator.Extensions;
+
     using uml4net.SimpleClassifiers;
     using uml4net.CommonStructure;
 
@@ -43,23 +45,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         {
             handlebars.RegisterHelper("NamedElement.WriteFullyQualifiedNameSpace", (writer, context, _) =>
             {
-                if (!(context.Value is INamedElement namedElement))
+                if (context.Value is not INamedElement namedElement)
                 {
                     throw new ArgumentException("supposed to be INamedElement");
                 }
 
-                var qualifiedNameSpaces = namedElement.QualifiedName.Split("::");
-                var namespaces = qualifiedNameSpaces.Skip(1).Take(qualifiedNameSpaces.Length - 2);
-                var nameSpace = string.Join('.', namespaces);
-
-                if (namedElement is IEnumeration)
-                {
-                    writer.WriteSafeString($"SysML2.{nameSpace}");
-                }
-                else
-                {
-                    writer.WriteSafeString($"SysML2.NET.DTO.{nameSpace}");
-                }
+                writer.WriteSafeString(namedElement.QueryNamespace());
             });
         }
     }

@@ -22,12 +22,15 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core
+namespace SysML2.NET.Core.Systems.Requirements
 {
+    using System.CodeDom.Compiler;
+
     /// <summary>
     /// A RequirementConstraintKind indicates whether a ConstraintUsage is an assumption or a requirement in
     /// a RequirementDefinition or RequirementUsage.
     /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
     public enum RequirementConstraintKind
     {
         /// <summary>

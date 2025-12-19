@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMultiplicity.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Core.Types
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.DTO.Core.Features;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -42,10 +44,10 @@ namespace SysML2.NET.Core.DTO
     /// models) can be specified by Expression that might vary in their results. If the typeWithMultiplicity
     /// is a Classifier, the domain of the Multiplicity shall be Base::Anything.  If the
     /// typeWithMultiplicity is a Feature,  the Multiplicity shall have the same domain as the
-    /// typeWithMultiplicity.if owningType <> null and owningType.oclIsKindOf(Feature) then    featuringType
-    /// =         owningType.oclAsType(Feature).featuringTypeelse   
-    /// featuringType->isEmpty()endifspecializesFromLibrary('Base::naturals')
+    /// typeWithMultiplicity.
     /// </summary>
+    [Class(xmiId: "_19_0_2_12e503d9_1573083797505_495205_3879", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMultiplicity : IFeature
     {
     }

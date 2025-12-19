@@ -25,7 +25,7 @@ namespace SysML2.NET.Decorators
     /// <summary>
     /// Attribute used to decorate properties when these are redefined properties
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
     public sealed class RedefinedPropertyAttribute : Attribute
     {
         /// <summary>

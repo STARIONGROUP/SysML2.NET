@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMultiplicityRange.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,19 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Kernel.Multiplicities
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -37,38 +44,35 @@ namespace SysML2.NET.Core.POCO
     /// is the unbounded value *, then the specified range includes all natural numbers greater than or
     /// equal to the lowerBound value. If no lowerBound Expression, then the default is that the lower bound
     /// has the same value as the upper bound, except if the upperBound evaluates to *, in which case the
-    /// default for the lower bound is 0.bound->forAll(b | b.featuringType =
-    /// self.featuringType)bound->forAll(b |    b.result.specializesFromLibrary('ScalarValues::Integer') and
-    ///    let value : UnlimitedNatural = valueOf(b) in    value <> null implies value >= 0)lowerBound =   
-    /// let ownedExpressions : Sequence(Expression) =        ownedMember->selectByKind(Expression) in    if
-    /// ownedExpressions->size() < 2 then null    else ownedExpressions->first()    endifupperBound =    let
-    /// ownedExpressions : Sequence(Expression) =        ownedMember->selectByKind(Expression) in    if
-    /// ownedExpressions->isEmpty() then null    else if ownedExpressions->size() = 1 then
-    /// ownedExpressions->at(1)    else ownedExpressions->at(2)    endif endif bound =    if upperBound =
-    /// null then Sequence{}    else if lowerBound = null then Sequence{upperBound}    else
-    /// Sequence{lowerBound, upperBound}    endif endifif lowerBound = null then    ownedMember->notEmpty()
-    /// and    ownedMember->at(1) = upperBoundelse    ownedMember->size() > 1 and    ownedMember->at(1) =
-    /// lowerBound and    ownedMember->at(2) = upperBoundendif
+    /// default for the lower bound is 0.
     /// </summary>
+    [Class(xmiId: "_19_0_2_12e503d9_1573086225407_540120_4572", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMultiplicityRange : IMultiplicity
     {
         /// <summary>
-        /// Queries the derived property Bound
+        /// The owned Expressions of the MultiplicityRange whose results provide its bounds. These must be the
+        /// first ownedMembers of the MultiplicityRange.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: true, lowerBound: 1, upperBound: 2, isMany: false, isRequired: false, isContainment: false)]
-        List<Expression> QueryBound();
+        [Property(xmiId: "_19_0_2_12e503d9_1573095221994_519580_5095", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 2, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        List<IExpression> QueryBound();
 
         /// <summary>
-        /// Queries the derived property LowerBound
+        /// The Expression whose result provides the lower bound of the MultiplicityRange. If no lowerBound
+        /// Expression is given, then the lower bound shall have the same value as the upper bound, unless the
+        /// upper bound is unbounded (*), in which case the lower bound shall be 0.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Expression QueryLowerBound();
+        [Property(xmiId: "_19_0_2_12e503d9_1573094905677_801324_4744", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1573095221994_519580_5095")]
+        IExpression QueryLowerBound();
 
         /// <summary>
-        /// Queries the derived property UpperBound
+        /// The Expression whose result is the upper bound of the MultiplicityRange.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Expression QueryUpperBound();
+        [Property(xmiId: "_19_0_2_12e503d9_1573094947427_797440_4796", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1573095221994_519580_5095")]
+        IExpression QueryUpperBound();
 
     }
 }

@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IVerificationCaseDefinition.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,23 +22,30 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.VerificationCases
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.DTO.Systems.Cases;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// A VerificationCaseDefinition is a CaseDefinition for the purpose of verification of the subject of
-    /// the case against its requirements.verifiedRequirement =    if objectiveRequirement = null then
-    /// OrderedSet{}    else         objectiveRequirement.featureMembership->           
-    /// selectByKind(RequirementVerificationMembership).            verifiedRequirement->asOrderedSet()   
-    /// endifspecializesFromLibrary('VerificationCases::VerificationCase')
+    /// the case against its requirements.
     /// </summary>
+    [Class(xmiId: "_19_0_2_12e503d9_1596821335655_850182_10186", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IVerificationCaseDefinition : ICaseDefinition
     {
+        /// <summary>
+        /// The RequirementUsages verified by this VerificationCaseDefinition, which are the
+        /// verifiedRequirements of all RequirementVerificationMemberships of the objectiveRequirement.
+        /// </summary>
+        [Property(xmiId: "_19_0_4_12e503d9_1603922371399_701592_338", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        List<Guid> VerifiedRequirement { get; }
+
     }
 }
 

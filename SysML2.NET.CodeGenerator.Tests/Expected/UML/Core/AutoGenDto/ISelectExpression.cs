@@ -22,14 +22,13 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Kernel.Expressions
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core.Types;
-
+    using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -44,7 +43,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1559596728932_861031_29126", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "select")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528808100_646606_111674")]
-        string Operator { get; set; }
+        new string Operator { get; set; }
 
     }
 }

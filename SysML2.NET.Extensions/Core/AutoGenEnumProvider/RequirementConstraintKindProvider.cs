@@ -26,7 +26,7 @@ namespace SysML2.NET.Extensions.Core
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Systems.Requirements;
 
     /// <summary>
     /// The purpose of the <see cref="RequirementConstraintKindProvider"/> is to provide conversion methods
@@ -64,7 +64,6 @@ namespace SysML2.NET.Extensions.Core
                 return RequirementConstraintKind.Requirement;
             }
 
-
             throw new ArgumentException($"'{new string(value)}' is not a valid RequirementConstraintKind", nameof(value));
         }
 
@@ -97,7 +96,6 @@ namespace SysML2.NET.Extensions.Core
             {
                 return RequirementConstraintKind.Requirement;
             }
-
 
             throw new ArgumentException($"'{System.Text.Encoding.UTF8.GetString(value)}' is not a valid RequirementConstraintKind", nameof(value));
         }

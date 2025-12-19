@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IObjectiveMembership.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,27 +22,35 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.Cases
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// An ObjectiveMembership is a FeatureMembership that indicates that its ownedObjectiveRequirement is
-    /// the objective RequirementUsage for its owningType, which must be a CaseDefinition or
-    /// CaseUsage.owningType.oclIsType(CaseDefinition)
-    /// orowningType.oclIsType(CaseUsage)ownedObjectiveRequirement.isComposite
+    /// the objective RequirementUsage for its owningType, which must be a CaseDefinition or CaseUsage.
     /// </summary>
+    [Class(xmiId: "_19_0_2_59601fc_1590256849943_920466_400", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IObjectiveMembership : IFeatureMembership
     {
         /// <summary>
-        /// Queries the derived property OwnedObjectiveRequirement
+        /// The RequirementUsage that is the ownedMemberFeature of this RequirementUsage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        RequirementUsage QueryOwnedObjectiveRequirement();
+        [Property(xmiId: "_19_0_2_59601fc_1590258776804_538578_832", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
+        IRequirementUsage QueryOwnedObjectiveRequirement();
 
     }
 }

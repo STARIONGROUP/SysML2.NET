@@ -22,12 +22,15 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core
+namespace SysML2.NET.Core.Systems.Actions
 {
+    using System.CodeDom.Compiler;
+
     /// <summary>
     /// TriggerKind enumerates the kinds of triggers that can be represented by a
     /// TriggerInvocationExpression.
     /// </summary>
+    [GeneratedCode("SysML2.NET", "latest")]
     public enum TriggerKind
     {
         /// <summary>

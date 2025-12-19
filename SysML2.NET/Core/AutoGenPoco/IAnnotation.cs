@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAnnotation.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,54 +22,62 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Root.Annotations
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// An Annotation is a Relationship between an AnnotatingElement and the Element that is annotated by
-    /// that AnnotatingElement.(owningAnnotatedElement <> null) = (ownedAnnotatingElement <>
-    /// null)ownedAnnotatingElement <> null xor owningAnnotatingElement <> nullownedAnnotatingElement =   
-    /// let ownedAnnotatingElements : Sequence(AnnotatingElement) =        
-    /// ownedRelatedElement->selectByKind(AnnotatingElement) in    if ownedAnnotatingElements->isEmpty()
-    /// then null    else ownedAnnotatingElements->first()    endifannotatingElement =    if
-    /// ownedAnnotatingElement <> null then ownedAnnotatingElement    else owningAnnotatingElement    endif
+    /// that AnnotatingElement.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1543093613150_792705_18263", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAnnotation : IRelationship
     {
         /// <summary>
         /// The Element that is annotated by the annotatingElement of this Annotation.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: false, isTransient: false, isUnsettable: false, isDerived: false, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543094430277_494140_18542", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IElement AnnotatedElement { get; set; }
 
         /// <summary>
-        /// Queries the derived property AnnotatingElement
+        /// The AnnotatingElement that annotates the annotatedElement of this Annotation. This is always either
+        /// the ownedAnnotatingElement or the owningAnnotatingElement.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        AnnotatingElement QueryAnnotatingElement();
+        [Property(xmiId: "_18_5_3_12e503d9_1543094212714_638255_18408", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        IAnnotatingElement QueryAnnotatingElement();
 
         /// <summary>
-        /// Queries the derived property OwnedAnnotatingElement
+        /// The annotatingElement of this Annotation, when it is an ownedRelatedElement.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        AnnotatingElement QueryOwnedAnnotatingElement();
+        [Property(xmiId: "_2022x_2_12e503d9_1735188506571_384269_375", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094212714_638255_18408")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_59873_43302")]
+        IAnnotatingElement QueryOwnedAnnotatingElement();
 
         /// <summary>
-        /// Queries the derived property OwningAnnotatedElement
+        /// The annotatedElement of this Annotation, when it is also the owningRelatedElement.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594152527165_104456_2501", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_494140_18542")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         IElement QueryOwningAnnotatedElement();
 
         /// <summary>
-        /// Queries the derived property OwningAnnotatingElement
+        /// The annotatingElement of this Annotation, when it is the owningRelatedElement.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        AnnotatingElement QueryOwningAnnotatingElement();
+        [Property(xmiId: "_19_0_4_12e503d9_1703019570939_266622_19", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094212714_638255_18408")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
+        IAnnotatingElement QueryOwningAnnotatingElement();
 
     }
 }

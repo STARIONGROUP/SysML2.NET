@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConnectorAsUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,12 +22,15 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Connections
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.DTO.Kernel.Connectors;
+    using SysML2.NET.Core.DTO.Systems.DefinitionAndUsage;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -35,6 +38,8 @@ namespace SysML2.NET.Core.DTO
     /// in a SysML model, but it is a base class for the concrete classes BindingConnectorAsUsage,
     /// SuccessionAsUsage, ConnectionUsage and FlowConnectionUsage.
     /// </summary>
+    [Class(xmiId: "_19_0_4_12e503d9_1624053320057_820842_471", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConnectorAsUsage : IUsage, IConnector
     {
     }

@@ -20,103 +20,65 @@
 
 namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 {
-    using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
 
-    using Microsoft.Extensions.Logging;
-
     using NUnit.Framework;
-
-    using Serilog;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
     using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
-    
-    using uml4net.xmi;
-    using uml4net.xmi.Readers;
 
     [TestFixture]
     public class UmlCoreDtoGeneratorTestFixture
     {
         private DirectoryInfo umlDtoDirectoryInfo;
-
         private UmlCoreDtoGenerator umlCoreDtoGenerator;
 
-        private ILoggerFactory loggerFactory;
-
-        private XmiReaderResult xmiReaderResult;
-
         [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console()
-                .CreateLogger();
-
-            loggerFactory = LoggerFactory.Create(builder => { builder.AddSerilog(); });
-        }
-
-        [SetUp]
         public void SetUp()
         {
-            var rootPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel");
-
-            var pathMaps = new Dictionary<string, string>
-            {
-                ["pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml"] =
-                    Path.Combine(rootPath, "PrimitiveTypes.xmi")
-            };
-
-            var reader = XmiReaderBuilder.Create()
-                .UsingSettings(x => x.LocalReferenceBasePath = rootPath)
-                .UsingSettings(x => x.PathMaps = pathMaps)
-                .WithLogger(loggerFactory)
-                .Build();
-
-            xmiReaderResult = reader.Read(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
-                "SysML_xmi.uml"));
-
             var directoryInfo = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
 
             var path = Path.Combine("UML", "_SysML2.NET.Core.AutoGenDto");
 
             this.umlDtoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
-
             this.umlCoreDtoGenerator = new UmlCoreDtoGenerator();
         }
 
         [Test]
-        public void Verify_that_DataTransferObjects_are_generated()
+        public async Task Verify_that_DataTransferObjects_are_generated()
         {
-            Assert.That(async () => await this.umlCoreDtoGenerator.GenerateAsync(xmiReaderResult,
+            await Assert.ThatAsync(() => this.umlCoreDtoGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult,
                     this.umlDtoDirectoryInfo),
                 Throws.Nothing);
         }
 
-        [Test, TestCaseSource(typeof(ExpectedAllClasses)), Category("Expected")]
-        public async Task Verify_that_expected_Interfaces_are_generated(string className)
-        {
-            var generatedCode = await this.umlCoreDtoGenerator.GenerateDataTransferObjectInterfaceAsync(xmiReaderResult,
-                this.umlDtoDirectoryInfo,
-                className);
-
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
-                $"Expected/UML/Core/AutoGenDto/I{className}.cs"));
-
-            Assert.That(generatedCode, Is.EqualTo(expected));
-        }
-
-        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
+        [Test]
+        [TestCaseSource(typeof(ExpectedConcreteClasses))]
+        [Category("Expected")]
         public async Task Verify_that_expected_Classes_are_generated(string className)
         {
-            var generatedCode = await this.umlCoreDtoGenerator.GenerateDataTransferObjectClassAsync(xmiReaderResult,
+            var generatedCode = await this.umlCoreDtoGenerator.GenerateDataTransferObjectClassAsync(GeneratorSetupFixture.XmiReaderResult,
                 this.umlDtoDirectoryInfo,
                 className);
 
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
                 $"Expected/UML/Core/AutoGenDto/{className}.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
+        }
+
+        [Test]
+        [TestCaseSource(typeof(ExpectedAllClasses))]
+        [Category("Expected")]
+        public async Task Verify_that_expected_Interfaces_are_generated(string className)
+        {
+            var generatedCode = await this.umlCoreDtoGenerator.GenerateDataTransferObjectInterfaceAsync(GeneratorSetupFixture.XmiReaderResult,
+                this.umlDtoDirectoryInfo,
+                className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
+                $"Expected/UML/Core/AutoGenDto/I{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAssociation.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,51 +22,62 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Kernel.Associations
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// An Association is a Relationship and a Classifier to enable classification of links between things
     /// (in the universe). The co-domains (types) of the associationEnd Features are the relatedTypes, as
-    /// co-domain and participants (linked things) of an Association identify each other.relatedType =
-    /// associationEnd.typespecializesFromLibrary('Links::Link')oclIsKindOf(Structure) =
-    /// oclIsKindOf(AssociationStructure)associationEnd->size() = 2 implies   
-    /// specializesFromLibrary('Links::BinaryLink')not isAbstract implies relatedType->size() >=
-    /// 2associationEnds->size() > 2 implies    not specializesFromLibrary('Links::BinaryLink')sourceType = 
-    ///   if relatedType->isEmpty() then null    else relatedType->first() endiftargetType =    if
-    /// relatedType->size() < 2 then OrderedSet{}    else         relatedType->            subSequence(2,
-    /// relatedType->size())->            asOrderedSet()     endifownedEndFeature->forAll(type->size() = 1)
+    /// co-domain and participants (linked things) of an Association identify each other.
     /// </summary>
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651716_116234_42240", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAssociation : IClassifier, IRelationship
     {
         /// <summary>
-        /// Queries the derived property AssociationEnd
+        /// The features of the Association that identify the things that can be related by it. A concrete
+        /// Association must have at least two associationEnds. When it has exactly two, the Association is
+        /// called a binary Association.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Feature> QueryAssociationEnd();
+        [Property(xmiId: "_18_5_3_12e503d9_1562477648742_24204_22901", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
+        List<IFeature> QueryAssociationEnd();
 
         /// <summary>
-        /// Queries the derived property RelatedType
+        /// The types of the associationEnds of the Association, which are the relatedElements of the
+        /// Association considered as a Relationship.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: true, isUnique: false, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Type> QueryRelatedType();
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674994_4339_43349", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
+        List<IType> QueryRelatedType();
 
         /// <summary>
-        /// Queries the derived property SourceType
+        /// The source relatedType for this Association. It is the first relatedType of the Association.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Type QuerySourceType();
+        [Property(xmiId: "_19_0_2_12e503d9_1594939013292_377668_3566", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        IType QuerySourceType();
 
         /// <summary>
-        /// Queries the derived property TargetType
+        /// The target relatedTypes for this Association. This includes all the relatedTypes other than the
+        /// sourceType.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: -1, isMany: false, isRequired: false, isContainment: false)]
-        List<Type> QueryTargetType();
+        [Property(xmiId: "_19_0_2_12e503d9_1594939237325_861933_3707", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        List<IType> QueryTargetType();
 
     }
 }

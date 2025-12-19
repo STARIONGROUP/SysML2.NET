@@ -22,15 +22,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.{{ #NamedElement.WriteNameSpace this }}
+namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
     {{ #Class.WriteEnumerationNameSpaces this}}
-    {{ #Class.WriteDTONameSpaces this}}
-    
+    {{ #Class.WriteNameSpaces this POCO}}
     using SysML2.NET.Decorators;
 
     {{ #Documentation this }}
@@ -45,7 +44,7 @@ namespace SysML2.NET.Core.{{ #NamedElement.WriteNameSpace this }}
         {{ #Decorator.WriteRedefinedPropertyAttribute property }}
         {{ #Decorator.WriteRedefinedByPropertyAttribute property ../ }}
         {{ #Property.WriteForPOCOInterface property }}
-
+        
         {{/each}}
     }
 }

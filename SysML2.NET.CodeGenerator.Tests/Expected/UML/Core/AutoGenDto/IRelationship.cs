@@ -22,12 +22,11 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Root.Elements
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
-
 
     using SysML2.NET.Decorators;
 

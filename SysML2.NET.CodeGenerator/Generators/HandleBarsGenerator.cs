@@ -74,7 +74,7 @@ namespace SysML2.NET.CodeGenerator.Generators
         protected void RegisterTemplate(string name)
         {
             var templatePath = Path.Combine(TemplateFolderPath, $"{name}.hbs");
-
+ 
             var template = File.ReadAllText(templatePath);
 
             var compiledTemplate = Handlebars.Compile(template);

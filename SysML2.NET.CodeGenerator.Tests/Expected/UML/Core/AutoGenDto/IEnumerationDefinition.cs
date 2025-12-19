@@ -22,13 +22,13 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Systems.Enumerations
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-
+    using SysML2.NET.Core.DTO.Systems.Attributes;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.DTO
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1606946783667_895456_287", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1590978283180_265362_419")]
-        bool IsVariation { get; set; }
+        new bool IsVariation { get; set; }
 
     }
 }

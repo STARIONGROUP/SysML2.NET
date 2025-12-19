@@ -1,11 +1,11 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAssignmentActionUsage.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2025 Starion Group S.A.
 //
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
 //
 //        http://www.apache.org/licenses/LICENSE-2.0
 //
@@ -22,56 +22,76 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Systems.Actions
 {
     using System;
+    using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Core.Classifiers;
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Behaviors;
+    using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Functions;
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
+    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
+    using SysML2.NET.Core.POCO.Systems.Attributes;
+    using SysML2.NET.Core.POCO.Systems.Calculations;
+    using SysML2.NET.Core.POCO.Systems.Cases;
+    using SysML2.NET.Core.POCO.Systems.Connections;
+    using SysML2.NET.Core.POCO.Systems.Constraints;
+    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.POCO.Systems.Enumerations;
+    using SysML2.NET.Core.POCO.Systems.Flows;
+    using SysML2.NET.Core.POCO.Systems.Interfaces;
+    using SysML2.NET.Core.POCO.Systems.Items;
+    using SysML2.NET.Core.POCO.Systems.Metadata;
+    using SysML2.NET.Core.POCO.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Core.POCO.Systems.Requirements;
+    using SysML2.NET.Core.POCO.Systems.States;
+    using SysML2.NET.Core.POCO.Systems.UseCases;
+    using SysML2.NET.Core.POCO.Systems.VerificationCases;
+    using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Decorators;
 
     /// <summary>
     /// An AssignmentActionUsage is an ActionUsage that is defined, directly or indirectly, by the
     /// ActionDefinition AssignmentAction from the Systems Model Library. It specifies that the value of the
     /// referent Feature, relative to the target given by the result of the targetArgument Expression,
-    /// should be set to the result of the
-    /// valueExpression.specializesFromLibrary('Actions::assignmentActions')let targetParameter : Feature =
-    /// inputParameter(1) intargetParameter <> null andtargetParameter.ownedFeature->notEmpty()
-    /// andtargetParameter.ownedFeature->first().   
-    /// redefines('AssignmentAction::target::startingAt')valueExpression = argument(2)targetArgument =
-    /// argument(1)isSubactionUsage() implies    specializesFromLibrary('Actions::Action::assignments')let
-    /// targetParameter : Feature = inputParameter(1) intargetParameter <> null
-    /// andtargetParameter.ownedFeature->notEmpty() andtargetParameter->first().ownedFeature->notEmpty()
-    /// andtargetParameter->first().ownedFeature->first().   
-    /// redefines('AssigmentAction::target::startingAt::accessedFeature')let targetParameter : Feature =
-    /// inputParameter(1) intargetParameter <> null andtargetParameter.ownedFeature->notEmpty()
-    /// andtargetParameter->first().ownedFeature->notEmpty()
-    /// andtargetParameter->first().ownedFeature->first().redefines(referent)referent =    let
-    /// unownedFeatures : Sequence(Feature) = ownedMembership->       
-    /// reject(oclIsKindOf(FeatureMembership)).memberElement->        selectByKind(Feature) in    if
-    /// unownedFeatures->isEmpty() then null    else unownedFeatures->first().oclAsType(Feature)   
-    /// endifownedMembership->exists(    not oclIsKindOf(OwningMembership) and    
-    /// memberElement.oclIsKindOf(Feature))referent <> null implies referent.featureTarget.mayTimeVary
+    /// should be set to the result of the valueExpression.
     /// </summary>
+    [Class(xmiId: "_19_0_4_12e503d9_1624201606942_142574_2658", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAssignmentActionUsage : IActionUsage
     {
         /// <summary>
-        /// Queries the derived property Referent
+        /// The Feature whose value is to be set.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 1, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Feature QueryReferent();
+        [Property(xmiId: "_19_0_4_12e503d9_1624202269076_561550_3109", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
+        IFeature QueryReferent();
 
         /// <summary>
-        /// Queries the derived property TargetArgument
+        /// The Expression whose value is an occurrence in the domain of the referent Feature, for which the
+        /// value of the referent will be set to the result of the valueExpression by this
+        /// AssignmentActionUsage.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Expression QueryTargetArgument();
+        [Property(xmiId: "_19_0_4_12e503d9_1624201786354_844501_2835", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IExpression QueryTargetArgument();
 
         /// <summary>
-        /// Queries the derived property ValueExpression
+        /// The Expression whose result is to be assigned to the referent Feature.
         /// </summary>
-        [EFeature(isChangeable: true, isVolatile: true, isTransient: true, isUnsettable: false, isDerived: true, isOrdered: false, isUnique: true, lowerBound: 0, upperBound: 1, isMany: false, isRequired: false, isContainment: false)]
-        Expression QueryValueExpression();
+        [Property(xmiId: "_19_0_4_12e503d9_1624201792996_104394_2856", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        IExpression QueryValueExpression();
 
     }
 }

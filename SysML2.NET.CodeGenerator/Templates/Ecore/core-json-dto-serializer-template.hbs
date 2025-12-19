@@ -1,0 +1,150 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="{{ this.Name }}Serializer.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2025 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.Json.Core.DTO
+{
+    using System;
+    using System.Text.Json;
+
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Serializer.Json;
+
+    /// <summary>
+    /// The purpose of the <see cref="{{ this.Name }}Serializer"/> is to provide serialization capabilities
+    /// capabilities for the <see cref="I{{ this.Name }}"/> interface
+    /// </summary>
+    internal static class {{ this.Name }}Serializer
+    {
+        /// <summary>
+        /// Serializes an instance of <see cref="I{{ this.Name }}"/> using an <see cref="Utf8JsonWriter"/>
+        /// </summary>
+        /// <param name="obj">
+        /// The <see cref="I{{ this.Name }}"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// enumeration specifying what kind of serialization shall be used
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        {
+            if (!(obj is I{{ this.Name }} i{{this.Name }}))
+            {
+                throw new ArgumentException("The object shall be an I{{ this.Name }}", nameof(obj));
+            }
+
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("@type"u8);
+            writer.WriteStringValue("{{ this.Name }}"u8);
+
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(i{{this.Name }}.Id);
+
+            {{#with this as | EClass |}}
+            {{#each EClass.AllEStructuralFeaturesOrderByName as | structuralFeature |}}
+            {{#unless structuralFeature.Derived }}
+                {{#unless structuralFeature.Transient }}
+                    {{#if (StructuralFeature.QueryIsEnumerable structuralFeature)}}
+                        writer.WriteStartArray("{{String.LowerCaseFirstLetter structuralFeature.Name }}"u8);
+                        foreach (var item in i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name}})
+                        {
+                            {{#if (structuralFeature.QueryIsReference structuralFeature)}}
+                                writer.WriteStartObject();
+                                writer.WritePropertyName("@id"u8);
+                                writer.WriteStringValue(item);
+                                writer.WriteEndObject();
+                            {{else if (StructuralFeature.QueryIsBool structuralFeature )}}
+                                writer.WriteBooleanValue(item);
+                            {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
+                                writer.WriteNumberValue(item);
+                            {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
+                                writer.WriteStringValue(item).ToString().ToLower());
+                            {{else}}
+                                writer.WriteStringValue(item);
+                            {{/if}}
+                        }
+                        writer.WriteEndArray();
+
+                    {{ else if (StructuralFeature.QueryIsNullable structuralFeature)}}
+                        writer.WritePropertyName("{{ String.LowerCaseFirstLetter structuralFeature.Name }}"u8);
+                        {{#if (StructuralFeature.QueryIsString structuralFeature )}}
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                        {{ else }}
+                            if (i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.HasValue)
+                            {
+                                {{#if (structuralFeature.QueryIsReference structuralFeature)}}
+                                    writer.WriteStartObject();
+                                    writer.WritePropertyName("@id"u8);
+                                    writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
+                                    writer.WriteEndObject();
+                                {{else if (StructuralFeature.QueryIsBool structuralFeature )}}
+                                    writer.WriteBooleanValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
+                                {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
+                                    writer.WriteNumberValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
+                                {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
+                                    writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value.ToString().ToLower());
+                                {{else}}
+                                    writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.Value);
+                                {{/if}}
+                            }
+                            else
+                            {
+                                writer.WriteNullValue();
+                            }
+                        {{/if}}
+                    {{ else if (StructuralFeature.QueryIsScalar structuralFeature)}}
+                        writer.WritePropertyName("{{ String.LowerCaseFirstLetter structuralFeature.Name }}"u8);
+                        {{#if (structuralFeature.QueryIsReference structuralFeature)}}
+                            writer.WriteStartObject();
+                            writer.WritePropertyName("@id"u8);
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                            writer.WriteEndObject();
+                        {{else if (StructuralFeature.QueryIsBool structuralFeature )}}
+                            writer.WriteBooleanValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                        {{else if (StructuralFeature.QueryIsString structuralFeature )}}
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                        {{else if (StructuralFeature.QueryIsNumeric structuralFeature )}}
+                            writer.WriteNumberValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                        {{else if (StructuralFeature.QueryIsEnum structuralFeature )}}
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }}.ToString().ToLower());
+                        {{else}}
+                            writer.WriteStringValue(i{{EClass.Name}}.{{String.CapitalizeFirstLetter structuralFeature.Name }});
+                        {{/if}}
+
+                    {{/if}}
+                {{/unless}}
+            {{/unless}}
+            {{/each}}
+            {{/with}}
+            writer.WriteEndObject();
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
