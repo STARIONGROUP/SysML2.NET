@@ -24,6 +24,7 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     using System.Threading.Tasks;
 
     using ECoreNetto;
+    
     using SysML2.NET.CodeGenerator.Generators;
 
     /// <summary>
@@ -33,11 +34,12 @@ namespace SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators
     public abstract class EcoreHandleBarsGenerator : HandleBarsGenerator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HandleBarsGenerator"/> class/
+        /// Gets an optional subfolder location path to locate templates
         /// </summary>
-        protected EcoreHandleBarsGenerator()
+        /// <returns>An optional subfolder name</returns>
+        protected override string GetOptionalSubfolderTemplateLocation()
         {
-            this.TemplateFolderPath = Path.Combine(this.TemplateFolderPath, "Ecore");
+            return "ecore";
         }
 
         /// <summary>

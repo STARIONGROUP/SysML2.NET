@@ -40,8 +40,32 @@ namespace SysML2.NET.CodeGenerator.Generators
         /// </summary>
         protected Generator()
         {
+            this.AssignTemplateFolderPath();
+        }
+
+        /// <summary>
+        /// Assigns the value of the <see cref="TemplateFolderPath"/>
+        /// </summary>
+        private void AssignTemplateFolderPath()
+        {
             var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             this.TemplateFolderPath = Path.Combine(assemblyFolder, "Templates");
+
+            var subfolderLocation = this.GetOptionalSubfolderTemplateLocation();
+
+            if (!string.IsNullOrWhiteSpace(subfolderLocation))
+            {
+                this.TemplateFolderPath = Path.Combine(this.TemplateFolderPath, subfolderLocation);
+            }
+        }
+
+        /// <summary>
+        /// Gets an optional subfolder location path to locate templates
+        /// </summary>
+        /// <returns>An optional subfolder name</returns>
+        protected virtual string GetOptionalSubfolderTemplateLocation()
+        {
+            return null;
         }
 
         /// <summary>
