@@ -32,6 +32,8 @@ namespace SysML2.NET.Serializer.Json.Tests
     using SysML2.NET.Core.DTO;
     using SysML2.NET.Serializer.Json;
     using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
+    using SysML2.NET.Core.DTO.Core.Features;
 
     /// <summary>
     /// Suite of tests for the <see cref="DeSerializer"/>

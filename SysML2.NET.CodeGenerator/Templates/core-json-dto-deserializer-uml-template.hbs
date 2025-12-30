@@ -1,0 +1,223 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="{{this.Name}}DeSerializer.cs" company="Starion Group S.A.">
+    //
+    //   Copyright 2022-2025 Starion Group S.A.
+    //
+    //   Licensed under the Apache License, Version 2.0 (the "License");
+    //   you may not use this file except in compliance with the License.
+    //   You may obtain a copy of the License at
+    //
+    //        http://www.apache.org/licenses/LICENSE-2.0
+    //
+    //    Unless required by applicable law or agreed to in writing, software
+    //    distributed under the License is distributed on an "AS IS" BASIS,
+    //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    //    See the License for the specific language governing permissions and
+    //    limitations under the License.
+    //
+    // </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.Json.Core.DTO
+{
+    using System;
+    using System.Text.Json;
+    
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+    
+    using SysML2.NET.Common;
+    using SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
+    using SysML2.NET.Serializer.Json;
+
+    /// <summary>
+    /// The purpose of the <see cref="{{ this.Name }}DeSerializer"/> is to provide deserialization capabilities
+    /// for the <see cref="I{{ this.Name }}"/> interface
+    /// </summary>
+    internal static class {{ this.Name }}DeSerializer
+    {
+        /// <summary>
+        /// Deserializes an instance of <see cref="I{{ this.Name }}"/> from the provided <see cref="JsonElement"/>
+        /// </summary>
+        /// <param name="jsonElement">
+        /// The <see cref="JsonElement"/> that contains the <see cref="I{{ this.Name }}"/> json object
+        /// </param>
+        /// <param name="serializationModeKind">
+        /// enumeration specifying what kind of serialization shall be used
+        /// </param>
+        /// <param name="loggerFactory">
+        /// The <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="I{{ this.Name }}"/>
+        /// </returns>
+        internal static I{{ this.Name }} DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        {
+            var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("{{ this.Name }}DeSerializer");
+
+            if (!jsonElement.TryGetProperty("@type"u8, out var @type))
+            {
+                throw new InvalidOperationException("The @type property is not available, the {{ this.Name }}DeSerializer cannot be used to deserialize this JsonElement");
+            }
+
+            if (@type.GetString() != "{{ this.Name }}")
+            {
+                throw new InvalidOperationException($"The {{ this.Name }}DeSerializer can only be used to deserialize objects of type I{{ this.Name }}, a {@type.GetString()} was provided");
+            }
+
+            I{{ this.Name }} dtoInstance = new SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}();
+
+            if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
+            {
+                var propertyValue = idProperty.GetString();
+                
+                if (propertyValue == null)
+                {
+                    throw new JsonException("The @id property is not present, the {{ this.Name }} cannot be deserialized");
+                }
+                else
+                {
+                    dtoInstance.Id = Guid.Parse(propertyValue);
+                }
+            }
+
+            {{#with this as |class| }}
+                {{ #each (Class.QueryAllProperties this) as | property | }}
+                    {{#unless this.IsDerived}}
+                        {{#unless this.IsTransient}}
+                            {{#unless (Property.ContainsPropertyRedifinitionWithSameName this class)}}
+                            if (jsonElement.TryGetProperty("{{ property.Name }}"u8, out var {{ property.Name }}Property))
+                            {
+                            {{#if (Property.QueryIsReferenceProperty property)}}
+                                {{#if (Property.QueryIsEnumerable property)}}
+                                    foreach (var arrayItem in {{ property.Name }}Property.EnumerateArray())
+                                    {
+                                        if (arrayItem.TryGetProperty("@id"u8, out var {{ property.Name }}IdProperty))
+                                        {
+                                            var propertyValue = {{ property.Name }}IdProperty.GetString();
+                                    
+                                            if (propertyValue != null)
+                                            {
+                                                dtoInstance.{{String.CapitalizeFirstLetter property.Name }}.Add(Guid.Parse(propertyValue));
+                                            }
+                                        }
+                                    }
+                                {{ else }}
+                                    if ({{ property.Name }}Property.ValueKind == JsonValueKind.Null)
+                                    {
+                                    {{#if (Property.QueryIsNullable property) }}
+                                        dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = null;
+                                    {{else}}
+                                        dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = Guid.Empty;
+                                        logger.LogDebug($"the {{ class.Name }}.{{String.CapitalizeFirstLetter property.Name }} property was not found in the Json. The value is set to Guid.Empty");
+                                    {{/if}}
+                                    }
+                                    else
+                                    {
+                                        if ({{ property.Name }}Property.TryGetProperty("@id"u8, out var {{ property.Name }}IdProperty))
+                                        {
+                                            var propertyValue = {{ property.Name }}IdProperty.GetString();
+                                    
+                                            if (propertyValue != null)
+                                            {
+                                                dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = Guid.Parse(propertyValue);
+                                            }
+                                        }
+                                    }
+                                {{/if}}
+                            {{ else }}
+                                {{#if (Property.QueryIsEnumerable property)}}
+                                    foreach (var arrayItem in {{ property.Name }}Property.EnumerateArray())
+                                    {
+                                    {{#if (Property.QueryIsBool property )}}
+                                        var propertyValue = arrayItem.GetBoolean();
+                                        
+                                        if (propertyValue != null)
+                                        {
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }}.Add(propertyValue);
+                                        }
+                                    {{else if (Property.QueryIsEnum property )}}
+                                        throw new NotImplementedException("Enumerable Enum - {{class.Name}}.{{property.Name}} is not yet supported");
+                                    {{else if (Property.QueryIsNumeric property )}}
+                                        {{#if (Property.QueryIsInteger property) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }}.Add(arrayItem.GetInt32());
+                                        {{else if (Property.QueryIsDouble property) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }}.Add(arrayItem.GetDouble());
+                                        {{ else }}
+                                            throw new NotImplementedException("Enumerable Double - {{class.Name}}.{{property.Name}} is not yet supported");
+                                        {{/if}}
+                                    {{else}}
+                                        var propertyValue = arrayItem.GetString();
+                                        
+                                        if (propertyValue != null)
+                                        {
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }}.Add(propertyValue);
+                                        }
+                                    {{/if}}
+                                    }
+                                {{ else if (Property.QueryIsNullable property) }}
+                                    {{#if (Property.QueryIsBool property )}}
+                                        dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Name }}Property.GetBoolean();
+                                    {{else if (Property.QueryIsEnum property )}}
+                                        dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Type.Name }}DeSerializer.DeserializeNullable({{ property.Name }}Property.GetString());
+                                    {{else if (Property.QueryIsNumeric property )}}
+                                        {{#if (Property.QueryIsInteger property) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Name }}Property.GetInt32();
+                                        {{else if (Property.QueryIsDouble property) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Name }}Property.GetDouble();
+                                        {{ else }}
+                                            new NotImplementedException("nullable - {{class.Name}}.{{property.Name}} is not yet supported");
+                                        {{/if}}
+                                    {{else}}
+                                        dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Name }}Property.GetString();
+                                    {{/if}}
+                                {{ else if (Property.QueryIsScalar property) }}
+                                    {{#if (Property.QueryIsBool property )}}
+                                        if ({{ property.Name }}Property.ValueKind != JsonValueKind.Null)
+                                        {
+                                        dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Name }}Property.GetBoolean();
+                                        }
+                                    {{else if (Property.QueryIsEnum property )}}
+                                        dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Type.Name }}DeSerializer.Deserialize({{ property.Name }}Property.GetString());
+                                    {{else if (Property.QueryIsNumeric property )}}
+                                        {{#if (Property.QueryIsInteger property) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Name }}Property.GetInt32();
+                                        {{else if (Property.QueryIsDouble property) }}
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = {{ property.Name }}Property.GetDouble();
+                                        {{ else }}
+                                            new NotImplementedException("Scalar - {{class.Name}}.{{property.Name}} is not yet supported");
+                                        {{/if}}
+                                    {{else}}
+                                        var propertyValue = {{property.Name }}Property.GetString();
+                                        
+                                        if (propertyValue != null)
+                                        {
+                                            dtoInstance.{{String.CapitalizeFirstLetter property.Name }} = propertyValue;
+                                        }
+                                    {{/if}}
+                                {{/if}}
+                            {{/if}}
+                            }
+                            else
+                            {
+                                logger.LogDebug("the {{ property.Name }} Json property was not found in the {{ class.Name }}: { Id }", dtoInstance.Id);
+                            }
+            
+                            {{/unless}}
+                        {{/unless}}
+                    {{/unless}}
+                {{/each}}
+            {{/with}}
+
+            return dtoInstance;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

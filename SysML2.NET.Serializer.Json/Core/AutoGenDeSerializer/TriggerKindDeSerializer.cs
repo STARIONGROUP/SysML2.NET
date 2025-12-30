@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Systems.Actions;
 
     /// <summary>
     /// The purpose of the <see cref="TriggerKindDeSerializer"/> is to provide deserialization capabilities
@@ -47,17 +47,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         {
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "WHEN":
-                    return TriggerKind.When;
-                case "AT":
-                    return TriggerKind.At;
-                case "AFTER":
-                    return TriggerKind.After;
-                default:
-                    throw new ArgumentException($"{value} is not a valid TriggerKind", nameof(value));
-            }
+                "WHEN" => TriggerKind.When,
+                "AT" => TriggerKind.At,
+                "AFTER" => TriggerKind.After,
+                _ => throw new ArgumentException($"{value} is not a valid TriggerKind", nameof(value))
+            };
         }
 
         /// <summary>
@@ -78,17 +74,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "WHEN":
-                    return TriggerKind.When;
-                case "AT":
-                    return TriggerKind.At;
-                case "AFTER":
-                    return TriggerKind.After;
-                default:
-                    throw new ArgumentException($"{value} is not a valid TriggerKind", nameof(value));
-            }
+                "WHEN" => TriggerKind.When,
+                "AT" => TriggerKind.At,
+                "AFTER" => TriggerKind.After,
+                _ => throw new ArgumentException($"{value} is not a valid TriggerKind", nameof(value))
+            };
         }
     }
 }

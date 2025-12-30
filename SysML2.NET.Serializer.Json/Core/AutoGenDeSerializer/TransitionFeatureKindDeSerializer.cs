@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Systems.States;
 
     /// <summary>
     /// The purpose of the <see cref="TransitionFeatureKindDeSerializer"/> is to provide deserialization capabilities
@@ -47,17 +47,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         {
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "TRIGGER":
-                    return TransitionFeatureKind.Trigger;
-                case "GUARD":
-                    return TransitionFeatureKind.Guard;
-                case "EFFECT":
-                    return TransitionFeatureKind.Effect;
-                default:
-                    throw new ArgumentException($"{value} is not a valid TransitionFeatureKind", nameof(value));
-            }
+                "TRIGGER" => TransitionFeatureKind.Trigger,
+                "GUARD" => TransitionFeatureKind.Guard,
+                "EFFECT" => TransitionFeatureKind.Effect,
+                _ => throw new ArgumentException($"{value} is not a valid TransitionFeatureKind", nameof(value))
+            };
         }
 
         /// <summary>
@@ -78,17 +74,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "TRIGGER":
-                    return TransitionFeatureKind.Trigger;
-                case "GUARD":
-                    return TransitionFeatureKind.Guard;
-                case "EFFECT":
-                    return TransitionFeatureKind.Effect;
-                default:
-                    throw new ArgumentException($"{value} is not a valid TransitionFeatureKind", nameof(value));
-            }
+                "TRIGGER" => TransitionFeatureKind.Trigger,
+                "GUARD" => TransitionFeatureKind.Guard,
+                "EFFECT" => TransitionFeatureKind.Effect,
+                _ => throw new ArgumentException($"{value} is not a valid TransitionFeatureKind", nameof(value))
+            };
         }
     }
 }

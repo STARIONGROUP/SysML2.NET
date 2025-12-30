@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Systems.Occurrences;
 
     /// <summary>
     /// The purpose of the <see cref="PortionKindDeSerializer"/> is to provide deserialization capabilities
@@ -47,15 +47,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         {
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "TIMESLICE":
-                    return PortionKind.Timeslice;
-                case "SNAPSHOT":
-                    return PortionKind.Snapshot;
-                default:
-                    throw new ArgumentException($"{value} is not a valid PortionKind", nameof(value));
-            }
+                "TIMESLICE" => PortionKind.Timeslice,
+                "SNAPSHOT" => PortionKind.Snapshot,
+                _ => throw new ArgumentException($"{value} is not a valid PortionKind", nameof(value))
+            };
         }
 
         /// <summary>
@@ -76,15 +73,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "TIMESLICE":
-                    return PortionKind.Timeslice;
-                case "SNAPSHOT":
-                    return PortionKind.Snapshot;
-                default:
-                    throw new ArgumentException($"{value} is not a valid PortionKind", nameof(value));
-            }
+                "TIMESLICE" => PortionKind.Timeslice,
+                "SNAPSHOT" => PortionKind.Snapshot,
+                _ => throw new ArgumentException($"{value} is not a valid PortionKind", nameof(value))
+            };
         }
     }
 }

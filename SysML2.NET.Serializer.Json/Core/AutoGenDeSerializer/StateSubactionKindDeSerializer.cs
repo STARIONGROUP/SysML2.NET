@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Systems.States;
 
     /// <summary>
     /// The purpose of the <see cref="StateSubactionKindDeSerializer"/> is to provide deserialization capabilities
@@ -47,17 +47,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         {
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "ENTRY":
-                    return StateSubactionKind.Entry;
-                case "DO":
-                    return StateSubactionKind.Do;
-                case "EXIT":
-                    return StateSubactionKind.Exit;
-                default:
-                    throw new ArgumentException($"{value} is not a valid StateSubactionKind", nameof(value));
-            }
+                "ENTRY" => StateSubactionKind.Entry,
+                "DO" => StateSubactionKind.Do,
+                "EXIT" => StateSubactionKind.Exit,
+                _ => throw new ArgumentException($"{value} is not a valid StateSubactionKind", nameof(value))
+            };
         }
 
         /// <summary>
@@ -78,17 +74,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "ENTRY":
-                    return StateSubactionKind.Entry;
-                case "DO":
-                    return StateSubactionKind.Do;
-                case "EXIT":
-                    return StateSubactionKind.Exit;
-                default:
-                    throw new ArgumentException($"{value} is not a valid StateSubactionKind", nameof(value));
-            }
+                "ENTRY" => StateSubactionKind.Entry,
+                "DO" => StateSubactionKind.Do,
+                "EXIT" => StateSubactionKind.Exit,
+                _ => throw new ArgumentException($"{value} is not a valid StateSubactionKind", nameof(value))
+            };
         }
     }
 }

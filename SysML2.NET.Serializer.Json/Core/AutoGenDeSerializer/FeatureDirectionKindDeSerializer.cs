@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Core.Types;
 
     /// <summary>
     /// The purpose of the <see cref="FeatureDirectionKindDeSerializer"/> is to provide deserialization capabilities
@@ -47,17 +47,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         {
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "IN":
-                    return FeatureDirectionKind.In;
-                case "INOUT":
-                    return FeatureDirectionKind.Inout;
-                case "OUT":
-                    return FeatureDirectionKind.Out;
-                default:
-                    throw new ArgumentException($"{value} is not a valid FeatureDirectionKind", nameof(value));
-            }
+                "IN" => FeatureDirectionKind.In,
+                "INOUT" => FeatureDirectionKind.Inout,
+                "OUT" => FeatureDirectionKind.Out,
+                _ => throw new ArgumentException($"{value} is not a valid FeatureDirectionKind", nameof(value))
+            };
         }
 
         /// <summary>
@@ -78,17 +74,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "IN":
-                    return FeatureDirectionKind.In;
-                case "INOUT":
-                    return FeatureDirectionKind.Inout;
-                case "OUT":
-                    return FeatureDirectionKind.Out;
-                default:
-                    throw new ArgumentException($"{value} is not a valid FeatureDirectionKind", nameof(value));
-            }
+                "IN" => FeatureDirectionKind.In,
+                "INOUT" => FeatureDirectionKind.Inout,
+                "OUT" => FeatureDirectionKind.Out,
+                _ => throw new ArgumentException($"{value} is not a valid FeatureDirectionKind", nameof(value))
+            };
         }
     }
 }

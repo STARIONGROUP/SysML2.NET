@@ -1,5 +1,5 @@
-﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="RequirementConstraintKindDeSerializer.cs" company="Starion Group S.A.">
+// -------------------------------------------------------------------------------------------------
+// <copyright file="{{this.Name}}DeSerializer.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2025 Starion Group S.A.
 //
@@ -26,45 +26,48 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
 
-    using SysML2.NET.Core.Systems.Requirements;
+    using SysML2.NET.Core.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
 
     /// <summary>
-    /// The purpose of the <see cref="RequirementConstraintKindDeSerializer"/> is to provide deserialization capabilities
-    /// for the <see cref="RequirementConstraintKind"/> Enum
+    /// The purpose of the <see cref="{{this.Name}}DeSerializer"/> is to provide deserialization capabilities
+    /// for the <see cref="{{this.Name}}"/> Enum
     /// </summary>
-    internal static class RequirementConstraintKindDeSerializer
+    internal static class {{this.Name}}DeSerializer
     {
         /// <summary>
-        /// Deserializes a string value to a <see cref="RequirementConstraintKind"/>
+        /// Deserializes a string value to a <see cref="{{this.Name}}"/>
         /// </summary>
         /// <param name="value">
-        /// The string representation of the <see cref="RequirementConstraintKind"/>
+        /// The string representation of the <see cref="{{this.Name}}"/>
         /// </param>
         /// <returns>
-        /// The value of the <see cref="RequirementConstraintKind"/>
+        /// The value of the <see cref="{{this.Name}}"/>
         /// </returns>
-        internal static RequirementConstraintKind Deserialize(string value)
+        internal static {{this.Name}} Deserialize(string value)
         {
             value = value.ToUpper();
 
             return value switch
             {
-                "ASSUMPTION" => RequirementConstraintKind.Assumption,
-                "REQUIREMENT" => RequirementConstraintKind.Requirement,
-                _ => throw new ArgumentException($"{value} is not a valid RequirementConstraintKind", nameof(value))
+                {{#with this as | enum |}}
+                {{#each this.OwnedLiteral as | enumerationLiteral |}}
+                    "{{ String.UpperCase enumerationLiteral.Name }}" => {{ enum.Name }}.{{ String.PascalCase enumerationLiteral.Name }},
+                {{/each}}
+                    _ => throw new ArgumentException($"{value} is not a valid {{ enum.Name }}", nameof(value))
+                {{/with}}
             };
         }
 
         /// <summary>
-        /// Deserializes a string value to a nullable <see cref="RequirementConstraintKind"/>
+        /// Deserializes a string value to a nullable <see cref="{{this.Name}}"/>
         /// </summary>
         /// <param name="value">
-        /// The string representation of the <see cref="RequirementConstraintKind"/>
+        /// The string representation of the <see cref="{{this.Name}}"/>
         /// </param>
         /// <returns>
-        /// The value of the nullable <see cref="RequirementConstraintKind"/>
+        /// The value of the nullable <see cref="{{this.Name}}"/>
         /// </returns>
-        internal static RequirementConstraintKind? DeserializeNullable(string value)
+        internal static {{this.Name}}? DeserializeNullable(string value)
         {
             if (value == null)
             {
@@ -75,9 +78,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             return value switch
             {
-                "ASSUMPTION" => RequirementConstraintKind.Assumption,
-                "REQUIREMENT" => RequirementConstraintKind.Requirement,
-                _ => throw new ArgumentException($"{value} is not a valid RequirementConstraintKind", nameof(value))
+            {{#with this as | enum |}}
+                {{#each this.OwnedLiteral as | enumerationLiteral |}}
+                    "{{ String.UpperCase enumerationLiteral.Name }}" => {{ enum.Name }}.{{ String.PascalCase enumerationLiteral.Name }},
+                {{/each}}
+                _ => throw new ArgumentException($"{value} is not a valid {{ enum.Name }}", nameof(value))
+            {{/with}}
             };
         }
     }

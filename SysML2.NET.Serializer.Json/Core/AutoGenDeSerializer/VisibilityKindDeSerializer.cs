@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 {
     using System;
 
-    using SysML2.NET.Core;
+    using SysML2.NET.Core.Root.Namespaces;
 
     /// <summary>
     /// The purpose of the <see cref="VisibilityKindDeSerializer"/> is to provide deserialization capabilities
@@ -47,17 +47,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         {
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "PRIVATE":
-                    return VisibilityKind.Private;
-                case "PROTECTED":
-                    return VisibilityKind.Protected;
-                case "PUBLIC":
-                    return VisibilityKind.Public;
-                default:
-                    throw new ArgumentException($"{value} is not a valid VisibilityKind", nameof(value));
-            }
+                "PRIVATE" => VisibilityKind.Private,
+                "PROTECTED" => VisibilityKind.Protected,
+                "PUBLIC" => VisibilityKind.Public,
+                _ => throw new ArgumentException($"{value} is not a valid VisibilityKind", nameof(value))
+            };
         }
 
         /// <summary>
@@ -78,17 +74,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             value = value.ToUpper();
 
-            switch (value)
+            return value switch
             {
-                case "PRIVATE":
-                    return VisibilityKind.Private;
-                case "PROTECTED":
-                    return VisibilityKind.Protected;
-                case "PUBLIC":
-                    return VisibilityKind.Public;
-                default:
-                    throw new ArgumentException($"{value} is not a valid VisibilityKind", nameof(value));
-            }
+                "PRIVATE" => VisibilityKind.Private,
+                "PROTECTED" => VisibilityKind.Protected,
+                "PUBLIC" => VisibilityKind.Public,
+                _ => throw new ArgumentException($"{value} is not a valid VisibilityKind", nameof(value))
+            };
         }
     }
 }
