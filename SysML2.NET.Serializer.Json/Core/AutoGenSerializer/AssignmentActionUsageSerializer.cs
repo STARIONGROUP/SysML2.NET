@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Actions;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IAssignmentActionUsage iAssignmentActionUsage))
+            if (obj is not IAssignmentActionUsage iAssignmentActionUsage)
             {
                 throw new ArgumentException("The object shall be an IAssignmentActionUsage", nameof(obj));
             }
@@ -65,17 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iAssignmentActionUsage.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iAssignmentActionUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iAssignmentActionUsage.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iAssignmentActionUsage.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
+
             if (iAssignmentActionUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iAssignmentActionUsage.Direction.Value.ToString().ToLower());
@@ -84,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iAssignmentActionUsage.ElementId);
 
@@ -127,6 +133,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iAssignmentActionUsage.IsVariation);
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iAssignmentActionUsage.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -134,9 +141,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iAssignmentActionUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -148,7 +157,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("portionKind"u8);
+
             if (iAssignmentActionUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iAssignmentActionUsage.PortionKind.Value.ToString().ToLower());
@@ -157,11 +168,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

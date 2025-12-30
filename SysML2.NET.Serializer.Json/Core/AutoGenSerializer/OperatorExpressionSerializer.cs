@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Kernel.Expressions;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IOperatorExpression iOperatorExpression))
+            if (obj is not IOperatorExpression iOperatorExpression)
             {
                 throw new ArgumentException("The object shall be an IOperatorExpression", nameof(obj));
             }
@@ -65,17 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iOperatorExpression.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iOperatorExpression.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iOperatorExpression.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iOperatorExpression.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
+
             if (iOperatorExpression.Direction.HasValue)
             {
                 writer.WriteStringValue(iOperatorExpression.Direction.Value.ToString().ToLower());
@@ -84,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iOperatorExpression.ElementId);
 
@@ -124,6 +130,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iOperatorExpression.Operator);
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iOperatorExpression.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -131,9 +138,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iOperatorExpression.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -145,11 +154,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

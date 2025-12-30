@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO
+namespace SysML2.NET.Core.DTO.Root.Elements
 {
     using SysML2.NET.Common;
 

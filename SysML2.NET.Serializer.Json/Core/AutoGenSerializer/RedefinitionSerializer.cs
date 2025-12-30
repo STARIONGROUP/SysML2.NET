@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Core.Features;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IRedefinition iRedefinition))
+            if (obj is not IRedefinition iRedefinition)
             {
                 throw new ArgumentException("The object shall be an IRedefinition", nameof(obj));
             }
@@ -65,24 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iRedefinition.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iRedefinition.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iRedefinition.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iRedefinition.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iRedefinition.ElementId);
-
-            writer.WritePropertyName("general"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iRedefinition.General);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iRedefinition.IsImplied);
@@ -91,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iRedefinition.IsImpliedIncluded);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iRedefinition.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -98,9 +97,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iRedefinition.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -108,9 +109,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iRedefinition.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -122,7 +125,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iRedefinition.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -134,19 +139,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("redefinedFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iRedefinition.RedefinedFeature);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("redefiningFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iRedefinition.RedefiningFeature);
-            writer.WriteEndObject();
 
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iRedefinition.Source)
             {
                 writer.WriteStartObject();
@@ -154,27 +149,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iRedefinition.Specific);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("subsettedFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iRedefinition.SubsettedFeature);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("subsettingFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iRedefinition.SubsettingFeature);
-            writer.WriteEndObject();
-
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iRedefinition.Target)
             {
                 writer.WriteStartObject();
@@ -182,13 +161,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

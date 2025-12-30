@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Actions;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IWhileLoopActionUsage iWhileLoopActionUsage))
+            if (obj is not IWhileLoopActionUsage iWhileLoopActionUsage)
             {
                 throw new ArgumentException("The object shall be an IWhileLoopActionUsage", nameof(obj));
             }
@@ -65,17 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iWhileLoopActionUsage.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iWhileLoopActionUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iWhileLoopActionUsage.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iWhileLoopActionUsage.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
+
             if (iWhileLoopActionUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iWhileLoopActionUsage.Direction.Value.ToString().ToLower());
@@ -84,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iWhileLoopActionUsage.ElementId);
 
@@ -127,6 +133,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iWhileLoopActionUsage.IsVariation);
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iWhileLoopActionUsage.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -134,9 +141,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iWhileLoopActionUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -148,7 +157,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("portionKind"u8);
+
             if (iWhileLoopActionUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iWhileLoopActionUsage.PortionKind.Value.ToString().ToLower());
@@ -157,11 +168,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

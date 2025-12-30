@@ -42,12 +42,17 @@ namespace SysML2.NET.Core.POCO.Core.Features
     public partial class FeatureChaining : IFeatureChaining
     {
         /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        [Property(xmiId: "sysml2.net", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IData.Id")]
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         List<string> AliasIds
-        { get; set; }
+        public List<string> AliasIds { get; set; }
 
         /// <summary>
         /// The Feature whose values partly determine values of featureChained, as described in
@@ -55,17 +60,13 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1622125799011_772669_117", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
-        public
-         IFeature ChainingFeature
-        { get; set; }
+        public IFeature ChainingFeature { get; set; }
 
         /// <summary>
         /// The declared name of this Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string DeclaredName
-        { get; set; }
+        public string DeclaredName { get; set; }
 
         /// <summary>
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
@@ -74,9 +75,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// model or relative to some other context.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string DeclaredShortName
-        { get; set; }
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The Documentation owned by this Element.
@@ -84,8 +83,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
-        public
-         List<IDocumentation> QueryDocumentation()
+        public List<IDocumentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
         }
@@ -95,9 +93,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// not change during the lifetime of the Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_844338_43305", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string ElementId
-        { get; set; }
+        public string ElementId { get; set; }
 
         /// <summary>
         /// The Feature whose values are partly determined by values of the chainingFeature, as described in
@@ -106,8 +102,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Property(xmiId: "_19_0_4_b9102da_1622125589880_897608_73", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        public
-         IFeature QueryFeatureChained()
+        public IFeature QueryFeatureChained()
         {
             throw new NotImplementedException("Derived property FeatureChained not yet supported");
         }
@@ -117,9 +112,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// directly created by a modeler.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1662070829631_521257_3623", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
-        public
-         bool IsImplied
-        { get; set; }
+        public bool IsImplied { get; set; }
 
         /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
@@ -129,16 +122,13 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1662070949317_79713_3658", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
-        public
-         bool IsImpliedIncluded
-        { get; set; }
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether this Element is contained in the ownership tree of a library model.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         bool QueryIsLibraryElement()
+        public bool QueryIsLibraryElement()
         {
             throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
         }
@@ -150,8 +140,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// null.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string QueryName()
+        public string QueryName()
         {
             throw new NotImplementedException("Derived property Name not yet supported");
         }
@@ -163,8 +152,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Property(xmiId: "_19_0_2_12e503d9_1594152527165_702130_2500", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
-        public
-         List<IAnnotation> QueryOwnedAnnotation()
+        public List<IAnnotation> QueryOwnedAnnotation()
         {
             throw new NotImplementedException("Derived property OwnedAnnotation not yet supported");
         }
@@ -174,8 +162,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// this Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         List<IElement> QueryOwnedElement()
+        public List<IElement> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
@@ -185,26 +172,21 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        public
-         List<IElement> OwnedRelatedElement
-        { get; set; }
+        public List<IElement> OwnedRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
-        public
-         List<IRelationship> OwnedRelationship
-        { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
         /// Element, if any.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         IElement QueryOwner()
+        public IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
@@ -215,8 +197,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
-        public
-         IOwningMembership QueryOwningMembership()
+        public IOwningMembership QueryOwningMembership()
         {
             throw new NotImplementedException("Derived property OwningMembership not yet supported");
         }
@@ -227,8 +208,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
-        public
-         INamespace QueryOwningNamespace()
+        public INamespace QueryOwningNamespace()
         {
             throw new NotImplementedException("Derived property OwningNamespace not yet supported");
         }
@@ -238,18 +218,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_693018_16749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        public
-         IElement OwningRelatedElement
-        { get; set; }
+        public IElement OwningRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
-        public
-         IRelationship OwningRelationship
-        { get; set; }
+        public IRelationship OwningRelationship { get; set; }
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -260,8 +236,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// then the qualifiedName is null for all such Elements other than the first.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string QueryQualifiedName()
+        public string QueryQualifiedName()
         {
             throw new NotImplementedException("Derived property QualifiedName not yet supported");
         }
@@ -271,8 +246,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// Elements of the Relationship.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        public
-         List<IElement> QueryRelatedElement()
+        public List<IElement> QueryRelatedElement()
         {
             throw new NotImplementedException("Derived property RelatedElement not yet supported");
         }
@@ -284,8 +258,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// when the declaredName is null.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string QueryShortName()
+        public string QueryShortName()
         {
             throw new NotImplementedException("Derived property ShortName not yet supported");
         }
@@ -295,20 +268,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IFeatureChaining.FeatureChained")]
-        public
-         List<IElement> Source
-        { get; set; }
+        [RedefinedByProperty("IFeatureChaining.FeatureChained")] public List<IElement> Source { get; set; }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IFeatureChaining.ChainingFeature")]
-        public
-         List<IElement> Target
-        { get; set; }
+        [RedefinedByProperty("IFeatureChaining.ChainingFeature")] public List<IElement> Target { get; set; }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -316,8 +283,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
-        public
-         List<ITextualRepresentation> QueryTextualRepresentation()
+        public List<ITextualRepresentation> QueryTextualRepresentation()
         {
             throw new NotImplementedException("Derived property TextualRepresentation not yet supported");
         }

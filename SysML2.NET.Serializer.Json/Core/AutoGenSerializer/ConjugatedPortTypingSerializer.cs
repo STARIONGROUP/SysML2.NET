@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Ports;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IConjugatedPortTyping iConjugatedPortTyping))
+            if (obj is not IConjugatedPortTyping iConjugatedPortTyping)
             {
                 throw new ArgumentException("The object shall be an IConjugatedPortTyping", nameof(obj));
             }
@@ -65,30 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iConjugatedPortTyping.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iConjugatedPortTyping.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
-            writer.WriteEndArray();
 
-            writer.WritePropertyName("conjugatedPortDefinition"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iConjugatedPortTyping.ConjugatedPortDefinition);
-            writer.WriteEndObject();
+            writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConjugatedPortTyping.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iConjugatedPortTyping.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iConjugatedPortTyping.ElementId);
-
-            writer.WritePropertyName("general"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iConjugatedPortTyping.General);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iConjugatedPortTyping.IsImplied);
@@ -97,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iConjugatedPortTyping.IsImpliedIncluded);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iConjugatedPortTyping.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -104,9 +97,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iConjugatedPortTyping.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -114,9 +109,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iConjugatedPortTyping.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -128,7 +125,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iConjugatedPortTyping.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -140,7 +139,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iConjugatedPortTyping.Source)
             {
                 writer.WriteStartObject();
@@ -148,15 +149,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iConjugatedPortTyping.Specific);
-            writer.WriteEndObject();
-
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iConjugatedPortTyping.Target)
             {
                 writer.WriteStartObject();
@@ -164,25 +161,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
-
-            writer.WritePropertyName("type"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iConjugatedPortTyping.Type);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("typedFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iConjugatedPortTyping.TypedFeature);
-            writer.WriteEndObject();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

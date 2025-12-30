@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Flows;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IFlowDefinition iFlowDefinition))
+            if (obj is not IFlowDefinition iFlowDefinition)
             {
                 throw new ArgumentException("The object shall be an IFlowDefinition", nameof(obj));
             }
@@ -65,16 +65,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iFlowDefinition.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iFlowDefinition.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iFlowDefinition.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iFlowDefinition.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iFlowDefinition.ElementId);
 
@@ -97,6 +101,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iFlowDefinition.IsVariation);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iFlowDefinition.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -104,9 +109,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iFlowDefinition.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -114,9 +121,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iFlowDefinition.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -128,7 +137,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iFlowDefinition.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -140,7 +151,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iFlowDefinition.Source)
             {
                 writer.WriteStartObject();
@@ -148,9 +161,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iFlowDefinition.Target)
             {
                 writer.WriteStartObject();
@@ -158,13 +173,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

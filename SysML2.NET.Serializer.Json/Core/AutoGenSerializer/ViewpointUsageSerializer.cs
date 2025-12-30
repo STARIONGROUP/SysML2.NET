@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Views;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IViewpointUsage iViewpointUsage))
+            if (obj is not IViewpointUsage iViewpointUsage)
             {
                 throw new ArgumentException("The object shall be an IViewpointUsage", nameof(obj));
             }
@@ -65,17 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iViewpointUsage.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iViewpointUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iViewpointUsage.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iViewpointUsage.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
+
             if (iViewpointUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iViewpointUsage.Direction.Value.ToString().ToLower());
@@ -84,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iViewpointUsage.ElementId);
 
@@ -127,6 +133,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iViewpointUsage.IsVariation);
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iViewpointUsage.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -134,9 +141,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iViewpointUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -148,7 +157,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("portionKind"u8);
+
             if (iViewpointUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iViewpointUsage.PortionKind.Value.ToString().ToLower());
@@ -157,13 +168,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("reqId"u8);
-            writer.WriteStringValue(iViewpointUsage.ReqId);
+
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

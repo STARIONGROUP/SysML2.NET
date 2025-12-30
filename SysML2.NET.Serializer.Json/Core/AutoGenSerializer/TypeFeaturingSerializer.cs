@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Core.Features;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is ITypeFeaturing iTypeFeaturing))
+            if (obj is not ITypeFeaturing iTypeFeaturing)
             {
                 throw new ArgumentException("The object shall be an ITypeFeaturing", nameof(obj));
             }
@@ -65,30 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iTypeFeaturing.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iTypeFeaturing.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iTypeFeaturing.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iTypeFeaturing.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iTypeFeaturing.ElementId);
-
-            writer.WritePropertyName("featureOfType"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iTypeFeaturing.FeatureOfType);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("featuringType"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iTypeFeaturing.FeaturingType);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iTypeFeaturing.IsImplied);
@@ -97,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iTypeFeaturing.IsImpliedIncluded);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iTypeFeaturing.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -104,9 +97,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iTypeFeaturing.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -114,9 +109,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iTypeFeaturing.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -128,7 +125,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iTypeFeaturing.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -140,7 +139,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iTypeFeaturing.Source)
             {
                 writer.WriteStartObject();
@@ -148,9 +149,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iTypeFeaturing.Target)
             {
                 writer.WriteStartObject();
@@ -158,13 +161,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

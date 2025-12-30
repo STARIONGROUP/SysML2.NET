@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Views;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IMembershipExpose iMembershipExpose))
+            if (obj is not IMembershipExpose iMembershipExpose)
             {
                 throw new ArgumentException("The object shall be an IMembershipExpose", nameof(obj));
             }
@@ -65,24 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iMembershipExpose.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iMembershipExpose.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iMembershipExpose.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iMembershipExpose.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iMembershipExpose.ElementId);
-
-            writer.WritePropertyName("importedMembership"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iMembershipExpose.ImportedMembership);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iMembershipExpose.IsImplied);
@@ -97,6 +95,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iMembershipExpose.IsRecursive);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iMembershipExpose.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -104,9 +103,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iMembershipExpose.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -114,9 +115,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iMembershipExpose.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -128,7 +131,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iMembershipExpose.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -140,7 +145,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iMembershipExpose.Source)
             {
                 writer.WriteStartObject();
@@ -148,9 +155,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iMembershipExpose.Target)
             {
                 writer.WriteStartObject();
@@ -158,6 +167,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
@@ -167,7 +177,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

@@ -24,6 +24,7 @@ namespace SysML2.NET.PIM.POCO
 
     using SysML2.NET.Common;
     using SysML2.NET.Core.POCO;
+    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
     /// ExternalRelationship is a realization of Data, and represents the relationship between a

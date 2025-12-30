@@ -312,7 +312,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 
                 if (!hasSameNameAsClass && !classHaveToImplementTwiceSameProperty)
                 {
-                    sb.AppendLine(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
+                    sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
                     sb.Append(' ');    
                 }
                 
@@ -367,6 +367,33 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 writer.WriteSafeString(sb + Environment.NewLine);
+            });
+
+            handlebars.RegisterHelper("Property.ContainsPropertyRedifinitionWithSameName", (context, arguments) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.ContainsPropertyRedifinitionWithSameName context supposed to be IProperty");
+                }
+
+                if (arguments.Length != 2)
+                {
+                    throw new ArgumentException("The #Property.ContainsPropertyRedifinitionWithSameName supposed to be have 2 arguments IProperty");
+                }
+
+                if (arguments[1] is not IClass generatedClass)
+                {
+                    throw new ArgumentException("The #Property.ContainsPropertyRedifinitionWithSameName supposed to be have an IClass as second argument");
+                }
+
+                if (!property.QueryIsRedefined())
+                {
+                    return false;
+                }
+
+                var allProperties = generatedClass.QueryAllProperties();
+
+                return allProperties.Any(x => x.RedefinedProperty.Any(p => p.XmiGuid == property.XmiGuid) && x.Name == property.Name);
             });
         }
     }

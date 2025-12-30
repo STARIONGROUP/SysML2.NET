@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.UseCases;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IIncludeUseCaseUsage iIncludeUseCaseUsage))
+            if (obj is not IIncludeUseCaseUsage iIncludeUseCaseUsage)
             {
                 throw new ArgumentException("The object shall be an IIncludeUseCaseUsage", nameof(obj));
             }
@@ -65,17 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iIncludeUseCaseUsage.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iIncludeUseCaseUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iIncludeUseCaseUsage.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iIncludeUseCaseUsage.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
+
             if (iIncludeUseCaseUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iIncludeUseCaseUsage.Direction.Value.ToString().ToLower());
@@ -84,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iIncludeUseCaseUsage.ElementId);
 
@@ -127,6 +133,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iIncludeUseCaseUsage.IsVariation);
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iIncludeUseCaseUsage.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -134,9 +141,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iIncludeUseCaseUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -148,7 +157,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("portionKind"u8);
+
             if (iIncludeUseCaseUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iIncludeUseCaseUsage.PortionKind.Value.ToString().ToLower());
@@ -157,11 +168,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

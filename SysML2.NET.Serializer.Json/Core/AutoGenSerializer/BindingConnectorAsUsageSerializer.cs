@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Connections;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IBindingConnectorAsUsage iBindingConnectorAsUsage))
+            if (obj is not IBindingConnectorAsUsage iBindingConnectorAsUsage)
             {
                 throw new ArgumentException("The object shall be an IBindingConnectorAsUsage", nameof(obj));
             }
@@ -65,17 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iBindingConnectorAsUsage.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iBindingConnectorAsUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iBindingConnectorAsUsage.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iBindingConnectorAsUsage.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
+
             if (iBindingConnectorAsUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iBindingConnectorAsUsage.Direction.Value.ToString().ToLower());
@@ -84,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iBindingConnectorAsUsage.ElementId);
 
@@ -127,6 +133,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsVariation);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iBindingConnectorAsUsage.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -134,9 +141,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iBindingConnectorAsUsage.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -144,9 +153,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iBindingConnectorAsUsage.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -158,7 +169,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iBindingConnectorAsUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -170,7 +183,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iBindingConnectorAsUsage.Source)
             {
                 writer.WriteStartObject();
@@ -178,9 +193,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iBindingConnectorAsUsage.Target)
             {
                 writer.WriteStartObject();
@@ -188,13 +205,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

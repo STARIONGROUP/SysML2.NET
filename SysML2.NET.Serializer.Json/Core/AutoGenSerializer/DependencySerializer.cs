@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Root.Dependencies;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IDependency iDependency))
+            if (obj is not IDependency iDependency)
             {
                 throw new ArgumentException("The object shall be an IDependency", nameof(obj));
             }
@@ -65,26 +65,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iDependency.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iDependency.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
-            writer.WriteEndArray();
 
-            writer.WriteStartArray("client"u8);
-            foreach (var item in iDependency.Client)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iDependency.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iDependency.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iDependency.ElementId);
 
@@ -95,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iDependency.IsImpliedIncluded);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iDependency.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -102,9 +97,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iDependency.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -112,9 +109,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iDependency.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -126,7 +125,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iDependency.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -138,7 +139,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iDependency.Source)
             {
                 writer.WriteStartObject();
@@ -146,19 +149,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
-            writer.WriteEndArray();
 
-            writer.WriteStartArray("supplier"u8);
-            foreach (var item in iDependency.Supplier)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iDependency.Target)
             {
                 writer.WriteStartObject();
@@ -166,13 +161,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

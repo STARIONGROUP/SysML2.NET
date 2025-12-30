@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Flows;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IFlowUsage iFlowUsage))
+            if (obj is not IFlowUsage iFlowUsage)
             {
                 throw new ArgumentException("The object shall be an IFlowUsage", nameof(obj));
             }
@@ -65,17 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iFlowUsage.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iFlowUsage.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iFlowUsage.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iFlowUsage.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
+
             if (iFlowUsage.Direction.HasValue)
             {
                 writer.WriteStringValue(iFlowUsage.Direction.Value.ToString().ToLower());
@@ -84,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iFlowUsage.ElementId);
 
@@ -130,6 +136,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iFlowUsage.IsVariation);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iFlowUsage.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -137,9 +144,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iFlowUsage.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -147,9 +156,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iFlowUsage.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -161,7 +172,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iFlowUsage.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -173,7 +186,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("portionKind"u8);
+
             if (iFlowUsage.PortionKind.HasValue)
             {
                 writer.WriteStringValue(iFlowUsage.PortionKind.Value.ToString().ToLower());
@@ -182,7 +197,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iFlowUsage.Source)
             {
                 writer.WriteStartObject();
@@ -190,9 +207,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iFlowUsage.Target)
             {
                 writer.WriteStartObject();
@@ -200,13 +219,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

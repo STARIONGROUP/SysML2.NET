@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Views;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IRenderingDefinition iRenderingDefinition))
+            if (obj is not IRenderingDefinition iRenderingDefinition)
             {
                 throw new ArgumentException("The object shall be an IRenderingDefinition", nameof(obj));
             }
@@ -65,16 +65,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iRenderingDefinition.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iRenderingDefinition.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iRenderingDefinition.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iRenderingDefinition.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iRenderingDefinition.ElementId);
 
@@ -94,6 +98,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iRenderingDefinition.IsVariation);
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iRenderingDefinition.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -101,9 +106,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iRenderingDefinition.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -115,11 +122,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

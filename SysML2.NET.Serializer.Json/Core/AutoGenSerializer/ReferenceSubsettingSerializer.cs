@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Core.Features;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IReferenceSubsetting iReferenceSubsetting))
+            if (obj is not IReferenceSubsetting iReferenceSubsetting)
             {
                 throw new ArgumentException("The object shall be an IReferenceSubsetting", nameof(obj));
             }
@@ -65,24 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iReferenceSubsetting.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iReferenceSubsetting.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iReferenceSubsetting.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iReferenceSubsetting.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iReferenceSubsetting.ElementId);
-
-            writer.WritePropertyName("general"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iReferenceSubsetting.General);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iReferenceSubsetting.IsImplied);
@@ -91,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iReferenceSubsetting.IsImpliedIncluded);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iReferenceSubsetting.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -98,9 +97,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iReferenceSubsetting.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -108,9 +109,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iReferenceSubsetting.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -122,7 +125,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iReferenceSubsetting.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -134,13 +139,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-            writer.WritePropertyName("referencedFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iReferenceSubsetting.ReferencedFeature);
-            writer.WriteEndObject();
 
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iReferenceSubsetting.Source)
             {
                 writer.WriteStartObject();
@@ -148,27 +149,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iReferenceSubsetting.Specific);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("subsettedFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iReferenceSubsetting.SubsettedFeature);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("subsettingFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iReferenceSubsetting.SubsettingFeature);
-            writer.WriteEndObject();
-
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iReferenceSubsetting.Target)
             {
                 writer.WriteStartObject();
@@ -176,13 +161,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

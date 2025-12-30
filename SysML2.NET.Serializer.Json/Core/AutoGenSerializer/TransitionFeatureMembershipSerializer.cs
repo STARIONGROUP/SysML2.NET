@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.States;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is ITransitionFeatureMembership iTransitionFeatureMembership))
+            if (obj is not ITransitionFeatureMembership iTransitionFeatureMembership)
             {
                 throw new ArgumentException("The object shall be an ITransitionFeatureMembership", nameof(obj));
             }
@@ -65,16 +65,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iTransitionFeatureMembership.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iTransitionFeatureMembership.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.ElementId);
 
@@ -87,17 +91,14 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("kind"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.Kind.ToString().ToLower());
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iTransitionFeatureMembership.MemberElement);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.MemberName);
+
             writer.WritePropertyName("memberShortName"u8);
             writer.WriteStringValue(iTransitionFeatureMembership.MemberShortName);
+
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iTransitionFeatureMembership.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -105,9 +106,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iTransitionFeatureMembership.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -115,9 +118,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iTransitionFeatureMembership.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -129,7 +134,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iTransitionFeatureMembership.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -141,7 +148,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iTransitionFeatureMembership.Source)
             {
                 writer.WriteStartObject();
@@ -149,9 +158,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iTransitionFeatureMembership.Target)
             {
                 writer.WriteStartObject();
@@ -159,6 +170,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
@@ -168,7 +180,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

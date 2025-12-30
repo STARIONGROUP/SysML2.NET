@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Root.Namespaces;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is INamespaceImport iNamespaceImport))
+            if (obj is not INamespaceImport iNamespaceImport)
             {
                 throw new ArgumentException("The object shall be an INamespaceImport", nameof(obj));
             }
@@ -65,24 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iNamespaceImport.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iNamespaceImport.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iNamespaceImport.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iNamespaceImport.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iNamespaceImport.ElementId);
-
-            writer.WritePropertyName("importedNamespace"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iNamespaceImport.ImportedNamespace);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iNamespaceImport.IsImplied);
@@ -97,6 +95,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iNamespaceImport.IsRecursive);
 
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iNamespaceImport.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -104,9 +103,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iNamespaceImport.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -114,9 +115,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iNamespaceImport.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -128,7 +131,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iNamespaceImport.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -140,7 +145,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iNamespaceImport.Source)
             {
                 writer.WriteStartObject();
@@ -148,9 +155,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iNamespaceImport.Target)
             {
                 writer.WriteStartObject();
@@ -158,6 +167,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
@@ -167,7 +177,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

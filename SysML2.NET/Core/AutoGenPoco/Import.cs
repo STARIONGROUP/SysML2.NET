@@ -47,20 +47,23 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     public partial class Import : IImport
     {
         /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        [Property(xmiId: "sysml2.net", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IData.Id")]
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         List<string> AliasIds
-        { get; set; }
+        public List<string> AliasIds { get; set; }
 
         /// <summary>
         /// The declared name of this Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string DeclaredName
-        { get; set; }
+        public string DeclaredName { get; set; }
 
         /// <summary>
         /// An optional alternative name for the Element that is intended to be shorter or in some way more
@@ -69,9 +72,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// model or relative to some other context.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string DeclaredShortName
-        { get; set; }
+        public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The Documentation owned by this Element.
@@ -79,8 +80,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
-        public
-         List<IDocumentation> QueryDocumentation()
+        public List<IDocumentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
         }
@@ -90,17 +90,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// not change during the lifetime of the Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_844338_43305", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string ElementId
-        { get; set; }
+        public string ElementId { get; set; }
 
         /// <summary>
         /// The effectively imported Element for this Import. For a MembershipImport, this is the memberElement
         /// of the importedMembership. For a NamespaceImport, it is the importedNamespace.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1668801846848_909736_64", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         IElement QueryImportedElement()
+        public IElement QueryImportedElement()
         {
             throw new NotImplementedException("Derived property ImportedElement not yet supported");
         }
@@ -112,8 +109,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674974_548878_43248", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        public
-         INamespace QueryImportOwningNamespace()
+        public INamespace QueryImportOwningNamespace()
         {
             throw new NotImplementedException("Derived property ImportOwningNamespace not yet supported");
         }
@@ -123,9 +119,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// directly created by a modeler.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1662070829631_521257_3623", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
-        public
-         bool IsImplied
-        { get; set; }
+        public bool IsImplied { get; set; }
 
         /// <summary>
         /// Whether all necessary implied Relationships have been included in the ownedRelationships of this
@@ -135,24 +129,19 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1662070949317_79713_3658", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
-        public
-         bool IsImpliedIncluded
-        { get; set; }
+        public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether to import memberships without regard to declared visibility.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1622577942205_869984_64", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
-        public
-         bool IsImportAll
-        { get; set; }
+        public bool IsImportAll { get; set; }
 
         /// <summary>
         /// Whether this Element is contained in the ownership tree of a library model.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         bool QueryIsLibraryElement()
+        public bool QueryIsLibraryElement()
         {
             throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
         }
@@ -161,9 +150,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// Whether to recursively import Memberships from visible, owned sub-Namespaces.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1605759116711_596237_5033", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
-        public
-         bool IsRecursive
-        { get; set; }
+        public bool IsRecursive { get; set; }
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -172,8 +159,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// null.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string QueryName()
+        public string QueryName()
         {
             throw new NotImplementedException("Derived property Name not yet supported");
         }
@@ -185,8 +171,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_19_0_2_12e503d9_1594152527165_702130_2500", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
-        public
-         List<IAnnotation> QueryOwnedAnnotation()
+        public List<IAnnotation> QueryOwnedAnnotation()
         {
             throw new NotImplementedException("Derived property OwnedAnnotation not yet supported");
         }
@@ -196,8 +181,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// this Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         List<IElement> QueryOwnedElement()
+        public List<IElement> QueryOwnedElement()
         {
             throw new NotImplementedException("Derived property OwnedElement not yet supported");
         }
@@ -207,26 +191,21 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        public
-         List<IElement> OwnedRelatedElement
-        { get; set; }
+        public List<IElement> OwnedRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
-        public
-         List<IRelationship> OwnedRelationship
-        { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; }
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
         /// Element, if any.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         IElement QueryOwner()
+        public IElement QueryOwner()
         {
             throw new NotImplementedException("Derived property Owner not yet supported");
         }
@@ -237,8 +216,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
-        public
-         IOwningMembership QueryOwningMembership()
+        public IOwningMembership QueryOwningMembership()
         {
             throw new NotImplementedException("Derived property OwningMembership not yet supported");
         }
@@ -249,8 +227,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
-        public
-         INamespace QueryOwningNamespace()
+        public INamespace QueryOwningNamespace()
         {
             throw new NotImplementedException("Derived property OwningNamespace not yet supported");
         }
@@ -260,18 +237,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_693018_16749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        public
-         IElement OwningRelatedElement
-        { get; set; }
+        public IElement OwningRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
-        public
-         IRelationship OwningRelationship
-        { get; set; }
+        public IRelationship OwningRelationship { get; set; }
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -282,8 +255,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// then the qualifiedName is null for all such Elements other than the first.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string QueryQualifiedName()
+        public string QueryQualifiedName()
         {
             throw new NotImplementedException("Derived property QualifiedName not yet supported");
         }
@@ -293,8 +265,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// Elements of the Relationship.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        public
-         List<IElement> QueryRelatedElement()
+        public List<IElement> QueryRelatedElement()
         {
             throw new NotImplementedException("Derived property RelatedElement not yet supported");
         }
@@ -306,8 +277,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// when the declaredName is null.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        public
-         string QueryShortName()
+        public string QueryShortName()
         {
             throw new NotImplementedException("Derived property ShortName not yet supported");
         }
@@ -317,19 +287,14 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        [RedefinedByProperty("IImport.ImportOwningNamespace")]
-        public
-         List<IElement> Source
-        { get; set; }
+        [RedefinedByProperty("IImport.ImportOwningNamespace")] public List<IElement> Source { get; set; }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        public
-         List<IElement> Target
-        { get; set; }
+        public List<IElement> Target { get; set; }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -337,8 +302,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
-        public
-         List<ITextualRepresentation> QueryTextualRepresentation()
+        public List<ITextualRepresentation> QueryTextualRepresentation()
         {
             throw new NotImplementedException("Derived property TextualRepresentation not yet supported");
         }
@@ -348,9 +312,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// The default is private.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674976_798509_43257", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "private")]
-        public
-         VisibilityKind Visibility
-        { get; set; }
+        public VisibilityKind Visibility { get; set; }
 
     }
 }

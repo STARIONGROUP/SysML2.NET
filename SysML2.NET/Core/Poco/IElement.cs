@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO
+namespace SysML2.NET.Core.POCO.Root.Elements
 {
 	using SysML2.NET.Common;
 

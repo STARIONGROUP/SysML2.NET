@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Systems.Requirements;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IActorMembership iActorMembership))
+            if (obj is not IActorMembership iActorMembership)
             {
                 throw new ArgumentException("The object shall be an IActorMembership", nameof(obj));
             }
@@ -65,16 +65,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iActorMembership.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iActorMembership.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iActorMembership.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iActorMembership.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iActorMembership.ElementId);
 
@@ -84,17 +88,14 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iActorMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iActorMembership.MemberElement);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iActorMembership.MemberName);
+
             writer.WritePropertyName("memberShortName"u8);
             writer.WriteStringValue(iActorMembership.MemberShortName);
+
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iActorMembership.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -102,9 +103,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iActorMembership.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -112,9 +115,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iActorMembership.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -126,7 +131,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iActorMembership.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -138,7 +145,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iActorMembership.Source)
             {
                 writer.WriteStartObject();
@@ -146,9 +155,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iActorMembership.Target)
             {
                 writer.WriteStartObject();
@@ -156,6 +167,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
@@ -165,7 +177,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

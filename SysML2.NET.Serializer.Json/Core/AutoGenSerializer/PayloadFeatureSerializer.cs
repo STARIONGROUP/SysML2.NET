@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Kernel.Interactions;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IPayloadFeature iPayloadFeature))
+            if (obj is not IPayloadFeature iPayloadFeature)
             {
                 throw new ArgumentException("The object shall be an IPayloadFeature", nameof(obj));
             }
@@ -65,17 +65,22 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iPayloadFeature.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iPayloadFeature.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iPayloadFeature.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iPayloadFeature.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
+
             if (iPayloadFeature.Direction.HasValue)
             {
                 writer.WriteStringValue(iPayloadFeature.Direction.Value.ToString().ToLower());
@@ -84,6 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iPayloadFeature.ElementId);
 
@@ -121,6 +127,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteBooleanValue(iPayloadFeature.IsVariable);
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iPayloadFeature.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -128,9 +135,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iPayloadFeature.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -142,11 +151,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

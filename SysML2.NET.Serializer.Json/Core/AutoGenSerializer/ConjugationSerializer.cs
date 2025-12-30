@@ -28,7 +28,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     using System.Text.Json;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Core.Types;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -51,7 +51,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
         {
-            if (!(obj is IConjugation iConjugation))
+            if (obj is not IConjugation iConjugation)
             {
                 throw new ArgumentException("The object shall be an IConjugation", nameof(obj));
             }
@@ -65,22 +65,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iConjugation.Id);
 
             writer.WriteStartArray("aliasIds"u8);
+
             foreach (var item in iConjugation.AliasIds)
             {
                 writer.WriteStringValue(item);
             }
-            writer.WriteEndArray();
 
-            writer.WritePropertyName("conjugatedType"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iConjugation.ConjugatedType);
-            writer.WriteEndObject();
+            writer.WriteEndArray();
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConjugation.DeclaredName);
+
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iConjugation.DeclaredShortName);
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iConjugation.ElementId);
 
@@ -90,13 +88,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iConjugation.IsImpliedIncluded);
 
-            writer.WritePropertyName("originalType"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iConjugation.OriginalType);
-            writer.WriteEndObject();
-
             writer.WriteStartArray("ownedRelatedElement"u8);
+
             foreach (var item in iConjugation.OwnedRelatedElement)
             {
                 writer.WriteStartObject();
@@ -104,9 +97,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("ownedRelationship"u8);
+
             foreach (var item in iConjugation.OwnedRelationship)
             {
                 writer.WriteStartObject();
@@ -114,9 +109,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WritePropertyName("owningRelatedElement"u8);
+
             if (iConjugation.OwningRelatedElement.HasValue)
             {
                 writer.WriteStartObject();
@@ -128,7 +125,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WritePropertyName("owningRelationship"u8);
+
             if (iConjugation.OwningRelationship.HasValue)
             {
                 writer.WriteStartObject();
@@ -140,7 +139,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
             writer.WriteStartArray("source"u8);
+
             foreach (var item in iConjugation.Source)
             {
                 writer.WriteStartObject();
@@ -148,9 +149,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteStartArray("target"u8);
+
             foreach (var item in iConjugation.Target)
             {
                 writer.WriteStartObject();
@@ -158,13 +161,13 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStringValue(item);
                 writer.WriteEndObject();
             }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
         }
     }
 }
-
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------

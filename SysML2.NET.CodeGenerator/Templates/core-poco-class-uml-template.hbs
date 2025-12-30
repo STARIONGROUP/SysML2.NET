@@ -37,6 +37,13 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
     [GeneratedCode("SysML2.NET", "latest")]
     {{ Enum.ToString this.Visibility }} partial class {{this.Name}} : I{{this.Name}}
     {
+        /// <summary>
+        /// Gets or sets the unique identifier
+        /// </summary>
+        [Property(xmiId: "sysml2.net", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IData.Id")]
+        public Guid Id { get; set; }
+
         {{ #each (Class.QueryAllProperties this) as | property | }}
         {{ #Documentation property }}
         {{ #Decorator.WritePropertyAttribute property }}
