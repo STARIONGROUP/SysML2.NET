@@ -103,5 +103,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
             return payload;
         }
+
+        /// <summary>
+        /// Gets an optional subfolder location path to locate templates
+        /// </summary>
+        /// <returns>An optional subfolder name</returns>
+        protected override string GetOptionalSubfolderTemplateLocation()
+        {
+            return "Uml";
+        }
     }
 }

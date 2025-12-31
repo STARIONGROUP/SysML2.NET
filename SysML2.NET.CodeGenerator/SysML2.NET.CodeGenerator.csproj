@@ -80,18 +80,6 @@
       <None Update="Resources\HtmlDocs\css\starionclassdocs.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\core-dto-class-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\core-dto-interface-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\core-enumeration-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\core-enumprovider-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Templates\dal-element-extensions.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -200,25 +188,37 @@
       <None Update="Templates\Ecore\dto-psm-rest-class-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\core-poco-interface-uml-template.hbs">
+      <None Update="Templates\Uml\core-dto-class-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\core-poco-class-uml-template.hbs">
+      <None Update="Templates\Uml\core-dto-interface-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\core-json-dto-serializer-uml-template.hbs">
+      <None Update="Templates\Uml\core-enumeration-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\core-json-dto-serialization-provider-uml-template.hbs">
+      <None Update="Templates\Uml\core-enumprovider-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\core-json-dto-deserializer-uml-template.hbs">
+      <None Update="Templates\Uml\core-json-dto-deserialization-provider-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\core-json-dto-deserialization-provider-uml-template.hbs">
+      <None Update="Templates\Uml\core-json-dto-deserializer-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Templates\core-json-enum-deserializer-uml-template.hbs">
+      <None Update="Templates\Uml\core-json-dto-serialization-provider-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\core-json-dto-serializer-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\core-json-enum-deserializer-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\core-poco-class-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\core-poco-interface-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
