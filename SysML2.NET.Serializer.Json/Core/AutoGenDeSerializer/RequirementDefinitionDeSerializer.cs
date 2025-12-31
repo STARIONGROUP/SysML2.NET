@@ -238,6 +238,15 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the owningRelationship Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("reqId"u8, out var reqIdProperty))
+            {
+                dtoInstance.ReqId = reqIdProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the reqId Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+            }
+
 
             return dtoInstance;
         }

@@ -286,6 +286,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the target Json property was not found in the Unioning: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))
+            {
+                if (unioningTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.UnioningType = Guid.Empty;
+                    logger.LogDebug($"the Unioning.UnioningType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (unioningTypeProperty.TryGetProperty("@id"u8, out var unioningTypeIdProperty))
+                    {
+                        var propertyValue = unioningTypeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.UnioningType = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the unioningType Json property was not found in the Unioning: { Id }", dtoInstance.Id);
+            }
+
 
             return dtoInstance;
         }

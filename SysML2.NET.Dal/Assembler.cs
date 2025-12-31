@@ -47,13 +47,13 @@ namespace SysML2.NET.Dal
         {
             this.logger = loggerFactory == null ? NullLogger<Assembler>.Instance : loggerFactory.CreateLogger<Assembler>();
 
-            this.Cache = new ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>>();
+            this.Cache = new ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>>();
         }
 
         /// <summary>
-        /// Gets the Cache that contains all the <see cref="Core.POCO.IElement"/>s
+        /// Gets the Cache that contains all the <see cref="Core.POCO.Root.Elements.IElement"/>s
         /// </summary>
-        public ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> Cache { get; private set; }
+        public ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> Cache { get; private set; }
 
         /// <summary>
         /// Synchronize the Cache based on the provided <paramref name="dtos"/>
@@ -61,7 +61,7 @@ namespace SysML2.NET.Dal
         /// <param name="dtos">
         /// the DTOs used to update the cache with
         /// </param>
-        public void Synchronize(IEnumerable<Core.DTO.IElement> dtos)
+        public void Synchronize(IEnumerable<Core.DTO.Root.Elements.IElement> dtos)
         {
             if (dtos == null)
             {
@@ -88,7 +88,7 @@ namespace SysML2.NET.Dal
             // removed POCOs that are up for deletion
             foreach (var identifier in deletedIdentifiers)
             {
-                Lazy<Core.POCO.IElement> lazyPoco;
+                Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
                 if (this.Cache.TryRemove(identifier, out lazyPoco))
                 {
                     this.logger.LogTrace("{0} with identifier {1} was deleted", lazyPoco.Value.GetType().Name, identifier);
@@ -109,7 +109,7 @@ namespace SysML2.NET.Dal
             {
                 var dto = dtos.Single(x => x.Id == identifier);
                 var poco = elementFactory.Create(dto);
-                this.Cache.AddOrUpdate(poco.Id, new Lazy<Core.POCO.IElement>(() => poco), (key, oldValue) => oldValue);
+                this.Cache.AddOrUpdate(poco.Id, new Lazy<Core.POCO.Root.Elements.IElement>(() => poco), (key, oldValue) => oldValue);
                 this.logger.LogTrace("{0}:{1} added to Cache", poco.GetType().Name, poco.Id);
             }
             this.logger.LogDebug("A total of {0} POCOs have been added to the Cache in {1} [ms]", newIdentifiers.Count(), sw.ElapsedMilliseconds);
@@ -118,7 +118,7 @@ namespace SysML2.NET.Dal
             this.logger.LogDebug("Update POCO reference properties");
             foreach (var dto in dtos)
             {
-                Lazy<Core.POCO.IElement> lazyPoco;
+                Lazy<Core.POCO.Root.Elements.Element> lazyPoco;
                 if (this.Cache.TryGetValue(dto.Id, out lazyPoco))
                 {
                     var poco = lazyPoco.Value;

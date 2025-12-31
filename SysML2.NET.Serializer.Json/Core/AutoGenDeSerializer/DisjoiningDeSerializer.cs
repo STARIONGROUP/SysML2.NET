@@ -120,6 +120,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredShortName Json property was not found in the Disjoining: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("disjoiningType"u8, out var disjoiningTypeProperty))
+            {
+                if (disjoiningTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.DisjoiningType = Guid.Empty;
+                    logger.LogDebug($"the Disjoining.DisjoiningType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (disjoiningTypeProperty.TryGetProperty("@id"u8, out var disjoiningTypeIdProperty))
+                    {
+                        var propertyValue = disjoiningTypeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.DisjoiningType = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the disjoiningType Json property was not found in the Disjoining: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();
@@ -284,6 +309,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the target Json property was not found in the Disjoining: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("typeDisjoined"u8, out var typeDisjoinedProperty))
+            {
+                if (typeDisjoinedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.TypeDisjoined = Guid.Empty;
+                    logger.LogDebug($"the Disjoining.TypeDisjoined property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (typeDisjoinedProperty.TryGetProperty("@id"u8, out var typeDisjoinedIdProperty))
+                    {
+                        var propertyValue = typeDisjoinedIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.TypeDisjoined = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the typeDisjoined Json property was not found in the Disjoining: { Id }", dtoInstance.Id);
             }
 
 

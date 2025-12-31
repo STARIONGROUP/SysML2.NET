@@ -352,6 +352,15 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the portionKind Json property was not found in the ViewpointUsage: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("reqId"u8, out var reqIdProperty))
+            {
+                dtoInstance.ReqId = reqIdProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the reqId Json property was not found in the ViewpointUsage: { Id }", dtoInstance.Id);
+            }
+
 
             return dtoInstance;
         }

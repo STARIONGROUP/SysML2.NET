@@ -33,7 +33,7 @@ namespace SySML2.NET.REST
     using SysML2.NET.PIM;
     using SysML2.NET.PIM.DTO;
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>

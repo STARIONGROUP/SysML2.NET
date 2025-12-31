@@ -134,6 +134,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the NamespaceImport: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("importedNamespace"u8, out var importedNamespaceProperty))
+            {
+                if (importedNamespaceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.ImportedNamespace = Guid.Empty;
+                    logger.LogDebug($"the NamespaceImport.ImportedNamespace property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (importedNamespaceProperty.TryGetProperty("@id"u8, out var importedNamespaceIdProperty))
+                    {
+                        var propertyValue = importedNamespaceIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ImportedNamespace = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the importedNamespace Json property was not found in the NamespaceImport: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)

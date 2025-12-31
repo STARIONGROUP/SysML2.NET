@@ -134,6 +134,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the ReferenceSubsetting: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("general"u8, out var generalProperty))
+            {
+                if (generalProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.General = Guid.Empty;
+                    logger.LogDebug($"the ReferenceSubsetting.General property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (generalProperty.TryGetProperty("@id"u8, out var generalIdProperty))
+                    {
+                        var propertyValue = generalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.General = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the general Json property was not found in the ReferenceSubsetting: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)
@@ -246,6 +271,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the owningRelationship Json property was not found in the ReferenceSubsetting: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("referencedFeature"u8, out var referencedFeatureProperty))
+            {
+                if (referencedFeatureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.ReferencedFeature = Guid.Empty;
+                    logger.LogDebug($"the ReferenceSubsetting.ReferencedFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (referencedFeatureProperty.TryGetProperty("@id"u8, out var referencedFeatureIdProperty))
+                    {
+                        var propertyValue = referencedFeatureIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ReferencedFeature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the referencedFeature Json property was not found in the ReferenceSubsetting: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
             {
                 foreach (var arrayItem in sourceProperty.EnumerateArray())
@@ -264,6 +314,81 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the source Json property was not found in the ReferenceSubsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("specific"u8, out var specificProperty))
+            {
+                if (specificProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Specific = Guid.Empty;
+                    logger.LogDebug($"the ReferenceSubsetting.Specific property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (specificProperty.TryGetProperty("@id"u8, out var specificIdProperty))
+                    {
+                        var propertyValue = specificIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Specific = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the specific Json property was not found in the ReferenceSubsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("subsettedFeature"u8, out var subsettedFeatureProperty))
+            {
+                if (subsettedFeatureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.SubsettedFeature = Guid.Empty;
+                    logger.LogDebug($"the ReferenceSubsetting.SubsettedFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (subsettedFeatureProperty.TryGetProperty("@id"u8, out var subsettedFeatureIdProperty))
+                    {
+                        var propertyValue = subsettedFeatureIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.SubsettedFeature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the subsettedFeature Json property was not found in the ReferenceSubsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("subsettingFeature"u8, out var subsettingFeatureProperty))
+            {
+                if (subsettingFeatureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.SubsettingFeature = Guid.Empty;
+                    logger.LogDebug($"the ReferenceSubsetting.SubsettingFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (subsettingFeatureProperty.TryGetProperty("@id"u8, out var subsettingFeatureIdProperty))
+                    {
+                        var propertyValue = subsettingFeatureIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.SubsettingFeature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the subsettingFeature Json property was not found in the ReferenceSubsetting: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("target"u8, out var targetProperty))

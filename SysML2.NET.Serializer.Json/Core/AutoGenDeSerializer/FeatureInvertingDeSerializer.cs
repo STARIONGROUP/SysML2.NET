@@ -134,6 +134,56 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the FeatureInverting: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("featureInverted"u8, out var featureInvertedProperty))
+            {
+                if (featureInvertedProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.FeatureInverted = Guid.Empty;
+                    logger.LogDebug($"the FeatureInverting.FeatureInverted property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (featureInvertedProperty.TryGetProperty("@id"u8, out var featureInvertedIdProperty))
+                    {
+                        var propertyValue = featureInvertedIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.FeatureInverted = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the featureInverted Json property was not found in the FeatureInverting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("invertingFeature"u8, out var invertingFeatureProperty))
+            {
+                if (invertingFeatureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.InvertingFeature = Guid.Empty;
+                    logger.LogDebug($"the FeatureInverting.InvertingFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (invertingFeatureProperty.TryGetProperty("@id"u8, out var invertingFeatureIdProperty))
+                    {
+                        var propertyValue = invertingFeatureIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.InvertingFeature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the invertingFeature Json property was not found in the FeatureInverting: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)

@@ -27,7 +27,7 @@ namespace SySML2.NET.REST
     
     using SysML2.NET.PIM;
     using SysML2.NET.PIM.DTO;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Root.Elements;
 
     /// <summary>
     /// The purpose of the <see cref="IRestClient"/> is to provide an abstraction over the SysML REST/HTTP PSM protocol

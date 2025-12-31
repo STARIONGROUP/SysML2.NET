@@ -102,6 +102,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the aliasIds Json property was not found in the FeatureChaining: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("chainingFeature"u8, out var chainingFeatureProperty))
+            {
+                if (chainingFeatureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.ChainingFeature = Guid.Empty;
+                    logger.LogDebug($"the FeatureChaining.ChainingFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (chainingFeatureProperty.TryGetProperty("@id"u8, out var chainingFeatureIdProperty))
+                    {
+                        var propertyValue = chainingFeatureIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ChainingFeature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the chainingFeature Json property was not found in the FeatureChaining: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
             {
                 dtoInstance.DeclaredName = declaredNameProperty.GetString();

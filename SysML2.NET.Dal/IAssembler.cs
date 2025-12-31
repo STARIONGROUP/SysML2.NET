@@ -31,9 +31,9 @@ namespace SysML2.NET.Dal
     public interface IAssembler
     {
         /// <summary>
-        /// Gets the Cache that contains all the <see cref="Core.POCO.IElement"/>s
+        /// Gets the Cache that contains all the <see cref="Core.POCO.Root.Elements.IElement"/>s
         /// </summary>
-        ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> Cache { get; }
+        ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> Cache { get; }
 
         /// <summary>
         /// Synchronize the Cache based on the provided <paramref name="dtos"/>
@@ -41,6 +41,6 @@ namespace SysML2.NET.Dal
         /// <param name="dtos">
         /// the DTOs used to update the cache with
         /// </param>
-        void Synchronize(IEnumerable<Core.DTO.IElement> dtos);
+        void Synchronize(IEnumerable<Core.DTO.Root.Elements.IElement> dtos);
     }
 }

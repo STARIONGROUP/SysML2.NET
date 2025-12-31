@@ -167,6 +167,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the kind Json property was not found in the TransitionFeatureMembership: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("memberElement"u8, out var memberElementProperty))
+            {
+                if (memberElementProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.MemberElement = Guid.Empty;
+                    logger.LogDebug($"the TransitionFeatureMembership.MemberElement property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (memberElementProperty.TryGetProperty("@id"u8, out var memberElementIdProperty))
+                    {
+                        var propertyValue = memberElementIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.MemberElement = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the memberElement Json property was not found in the TransitionFeatureMembership: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("memberName"u8, out var memberNameProperty))
             {
                 dtoInstance.MemberName = memberNameProperty.GetString();

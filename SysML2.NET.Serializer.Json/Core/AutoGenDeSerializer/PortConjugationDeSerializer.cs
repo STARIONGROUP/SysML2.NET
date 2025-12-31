@@ -102,6 +102,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the aliasIds Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("conjugatedType"u8, out var conjugatedTypeProperty))
+            {
+                if (conjugatedTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.ConjugatedType = Guid.Empty;
+                    logger.LogDebug($"the PortConjugation.ConjugatedType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (conjugatedTypeProperty.TryGetProperty("@id"u8, out var conjugatedTypeIdProperty))
+                    {
+                        var propertyValue = conjugatedTypeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ConjugatedType = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the conjugatedType Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
             {
                 dtoInstance.DeclaredName = declaredNameProperty.GetString();
@@ -156,6 +181,56 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isImpliedIncluded Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("originalPortDefinition"u8, out var originalPortDefinitionProperty))
+            {
+                if (originalPortDefinitionProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.OriginalPortDefinition = Guid.Empty;
+                    logger.LogDebug($"the PortConjugation.OriginalPortDefinition property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (originalPortDefinitionProperty.TryGetProperty("@id"u8, out var originalPortDefinitionIdProperty))
+                    {
+                        var propertyValue = originalPortDefinitionIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OriginalPortDefinition = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the originalPortDefinition Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("originalType"u8, out var originalTypeProperty))
+            {
+                if (originalTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.OriginalType = Guid.Empty;
+                    logger.LogDebug($"the PortConjugation.OriginalType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (originalTypeProperty.TryGetProperty("@id"u8, out var originalTypeIdProperty))
+                    {
+                        var propertyValue = originalTypeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OriginalType = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the originalType Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))

@@ -134,6 +134,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the MembershipExpose: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
+            {
+                if (importedMembershipProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.ImportedMembership = Guid.Empty;
+                    logger.LogDebug($"the MembershipExpose.ImportedMembership property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (importedMembershipProperty.TryGetProperty("@id"u8, out var importedMembershipIdProperty))
+                    {
+                        var propertyValue = importedMembershipIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ImportedMembership = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the importedMembership Json property was not found in the MembershipExpose: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)

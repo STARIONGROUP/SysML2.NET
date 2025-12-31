@@ -134,6 +134,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("general"u8, out var generalProperty))
+            {
+                if (generalProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.General = Guid.Empty;
+                    logger.LogDebug($"the Subclassification.General property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (generalProperty.TryGetProperty("@id"u8, out var generalIdProperty))
+                    {
+                        var propertyValue = generalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.General = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the general Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)
@@ -264,6 +289,81 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the source Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("specific"u8, out var specificProperty))
+            {
+                if (specificProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Specific = Guid.Empty;
+                    logger.LogDebug($"the Subclassification.Specific property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (specificProperty.TryGetProperty("@id"u8, out var specificIdProperty))
+                    {
+                        var propertyValue = specificIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Specific = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the specific Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("subclassifier"u8, out var subclassifierProperty))
+            {
+                if (subclassifierProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Subclassifier = Guid.Empty;
+                    logger.LogDebug($"the Subclassification.Subclassifier property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (subclassifierProperty.TryGetProperty("@id"u8, out var subclassifierIdProperty))
+                    {
+                        var propertyValue = subclassifierIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Subclassifier = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the subclassifier Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("superclassifier"u8, out var superclassifierProperty))
+            {
+                if (superclassifierProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Superclassifier = Guid.Empty;
+                    logger.LogDebug($"the Subclassification.Superclassifier property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (superclassifierProperty.TryGetProperty("@id"u8, out var superclassifierIdProperty))
+                    {
+                        var propertyValue = superclassifierIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Superclassifier = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the superclassifier Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("target"u8, out var targetProperty))

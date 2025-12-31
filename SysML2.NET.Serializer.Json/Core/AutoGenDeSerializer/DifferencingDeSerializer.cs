@@ -120,6 +120,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredShortName Json property was not found in the Differencing: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
+            {
+                if (differencingTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.DifferencingType = Guid.Empty;
+                    logger.LogDebug($"the Differencing.DifferencingType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (differencingTypeProperty.TryGetProperty("@id"u8, out var differencingTypeIdProperty))
+                    {
+                        var propertyValue = differencingTypeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.DifferencingType = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the differencingType Json property was not found in the Differencing: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();

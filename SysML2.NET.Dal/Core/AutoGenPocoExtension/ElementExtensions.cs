@@ -50,7 +50,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.IElement poco, Core.DTO.IElement dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Root.Elements.IElement poco, Core.DTO.IElement dto)
         {
             if (poco == null)
             {

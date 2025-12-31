@@ -392,8 +392,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 var allProperties = generatedClass.QueryAllProperties();
-
-                return allProperties.Any(x => x.RedefinedProperty.Any(p => p.XmiGuid == property.XmiGuid) && x.Name == property.Name);
+                return property.RedefinedProperty.Where(x => x.Name == property.Name).Any(x => allProperties.Contains(x));
             });
         }
     }

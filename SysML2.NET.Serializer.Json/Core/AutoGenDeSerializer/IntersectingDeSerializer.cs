@@ -134,6 +134,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the Intersecting: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("intersectingType"u8, out var intersectingTypeProperty))
+            {
+                if (intersectingTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.IntersectingType = Guid.Empty;
+                    logger.LogDebug($"the Intersecting.IntersectingType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (intersectingTypeProperty.TryGetProperty("@id"u8, out var intersectingTypeIdProperty))
+                    {
+                        var propertyValue = intersectingTypeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.IntersectingType = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the intersectingType Json property was not found in the Intersecting: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)

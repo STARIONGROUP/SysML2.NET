@@ -134,6 +134,56 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the TypeFeaturing: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("featureOfType"u8, out var featureOfTypeProperty))
+            {
+                if (featureOfTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.FeatureOfType = Guid.Empty;
+                    logger.LogDebug($"the TypeFeaturing.FeatureOfType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (featureOfTypeProperty.TryGetProperty("@id"u8, out var featureOfTypeIdProperty))
+                    {
+                        var propertyValue = featureOfTypeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.FeatureOfType = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the featureOfType Json property was not found in the TypeFeaturing: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("featuringType"u8, out var featuringTypeProperty))
+            {
+                if (featuringTypeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.FeaturingType = Guid.Empty;
+                    logger.LogDebug($"the TypeFeaturing.FeaturingType property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (featuringTypeProperty.TryGetProperty("@id"u8, out var featuringTypeIdProperty))
+                    {
+                        var propertyValue = featuringTypeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.FeaturingType = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the featuringType Json property was not found in the TypeFeaturing: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)

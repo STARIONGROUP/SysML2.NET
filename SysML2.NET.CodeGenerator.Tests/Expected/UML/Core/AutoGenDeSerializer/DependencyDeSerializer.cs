@@ -102,6 +102,26 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the aliasIds Json property was not found in the Dependency: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("client"u8, out var clientProperty))
+            {
+                foreach (var arrayItem in clientProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var clientIdProperty))
+                    {
+                        var propertyValue = clientIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Client.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the client Json property was not found in the Dependency: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
             {
                 dtoInstance.DeclaredName = declaredNameProperty.GetString();
@@ -264,6 +284,26 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the source Json property was not found in the Dependency: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("supplier"u8, out var supplierProperty))
+            {
+                foreach (var arrayItem in supplierProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var supplierIdProperty))
+                    {
+                        var propertyValue = supplierIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Supplier.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the supplier Json property was not found in the Dependency: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("target"u8, out var targetProperty))

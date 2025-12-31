@@ -134,6 +134,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("general"u8, out var generalProperty))
+            {
+                if (generalProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.General = Guid.Empty;
+                    logger.LogDebug($"the FeatureTyping.General property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (generalProperty.TryGetProperty("@id"u8, out var generalIdProperty))
+                    {
+                        var propertyValue = generalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.General = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the general Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)
@@ -266,6 +291,31 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the source Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("specific"u8, out var specificProperty))
+            {
+                if (specificProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Specific = Guid.Empty;
+                    logger.LogDebug($"the FeatureTyping.Specific property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (specificProperty.TryGetProperty("@id"u8, out var specificIdProperty))
+                    {
+                        var propertyValue = specificIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Specific = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the specific Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
             {
                 foreach (var arrayItem in targetProperty.EnumerateArray())
@@ -284,6 +334,56 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the target Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
+            {
+                if (typeProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.Type = Guid.Empty;
+                    logger.LogDebug($"the FeatureTyping.Type property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (typeProperty.TryGetProperty("@id"u8, out var typeIdProperty))
+                    {
+                        var propertyValue = typeIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.Type = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the type Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("typedFeature"u8, out var typedFeatureProperty))
+            {
+                if (typedFeatureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.TypedFeature = Guid.Empty;
+                    logger.LogDebug($"the FeatureTyping.TypedFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (typedFeatureProperty.TryGetProperty("@id"u8, out var typedFeatureIdProperty))
+                    {
+                        var propertyValue = typedFeatureIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.TypedFeature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the typedFeature Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
             }
 
 
