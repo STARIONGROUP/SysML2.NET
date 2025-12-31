@@ -306,6 +306,27 @@
       <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\AnnotatingElementExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\AssociationExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\DependencyExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\ElementExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\EnumerationDefinitionExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\FeatureExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\FeatureTypingExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\FlowExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\FramedConcernMembershipExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\LiteralIntegerExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\LiteralRationalExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\MembershipExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\MultiplicityRangeExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\OwningMembershipExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\ReferenceSubsettingExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\RelationshipExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\RequirementUsageExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\SelectExpressionExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\SubclassificationExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\TextualRepresentationExtensions.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\UsageExtensions.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -679,6 +700,69 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Compile Remove="Expected\UML\Core\AutoGenPoco\AnnotatingElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\AnnotatingElementExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\AssociationExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\DependencyExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\ElementExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\EnumerationDefinitionExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\FeatureExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\FeatureTypingExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\FlowExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\FramedConcernMembershipExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\LiteralIntegerExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\LiteralRationalExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\MembershipExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\MultiplicityRangeExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\OwningMembershipExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\ReferenceSubsettingExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\RelationshipExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\RequirementUsageExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\SelectExpressionExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\SubclassificationExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\TextualRepresentationExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenPocoExtend\UsageExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Include="Expected\UML\Core\AutoGenPoco\AnnotatingElement.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
