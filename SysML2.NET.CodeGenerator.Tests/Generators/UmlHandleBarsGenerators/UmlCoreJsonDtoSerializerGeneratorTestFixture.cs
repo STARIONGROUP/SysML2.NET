@@ -26,11 +26,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
 
     [TestFixture]
     public class UmlCoreJsonDtoSerializerGeneratorTestFixture
     {
-        private DirectoryInfo umlPocoDirectoryInfo;
+        private DirectoryInfo umlDtoSerializerDirectoryInfo;
         private UmlCoreJsonDtoSerializerGenerator umlCoreDtoSerializerGenerator;
 
         [OneTimeSetUp]
@@ -40,14 +41,24 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 
             var path = Path.Combine("UML", "_SysML2.NET.Serializer.Json.Core.AutoGenSerializer");
 
-            this.umlPocoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
+            this.umlDtoSerializerDirectoryInfo = directoryInfo.CreateSubdirectory(path);
             this.umlCoreDtoSerializerGenerator = new UmlCoreJsonDtoSerializerGenerator();
         }
 
         [Test]
         public async Task VerifyCanGenerateDtoJsonSerializer()
         {
-            await Assert.ThatAsync(() => this.umlCoreDtoSerializerGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlPocoDirectoryInfo), Throws.Nothing);
+            await Assert.ThatAsync(() => this.umlCoreDtoSerializerGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlDtoSerializerDirectoryInfo), Throws.Nothing);
+        }
+        
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
+        public async Task VerifyMatchesExpectedSerializerClass(string className)
+        {
+            var generatedCode = await this.umlCoreDtoSerializerGenerator.GenerateDtoSerializerClass(GeneratorSetupFixture.XmiReaderResult, this.umlDtoSerializerDirectoryInfo, className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/UML/Core/AutoGenSerializer/{className}Serializer.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
         }
     }
 }

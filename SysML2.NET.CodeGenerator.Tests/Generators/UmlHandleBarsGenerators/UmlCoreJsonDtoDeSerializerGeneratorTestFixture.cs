@@ -26,11 +26,12 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
 
     [TestFixture]
     public class UmlCoreJsonDtoDeSerializerGeneratorTestFixture
     {
-        private DirectoryInfo umlPocoDirectoryInfo;
+        private DirectoryInfo umlDtoDeserializerDirectoryInfo;
         private UmlCoreJsonDtoDeSerializerGenerator umlCoreDtoDeSerializerGenerator;
 
         [OneTimeSetUp]
@@ -40,14 +41,24 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 
             var path = Path.Combine("UML", "_SysML2.NET.Serializer.Json.Core.AutoGenDeSerializer");
 
-            this.umlPocoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
+            this.umlDtoDeserializerDirectoryInfo = directoryInfo.CreateSubdirectory(path);
             this.umlCoreDtoDeSerializerGenerator = new UmlCoreJsonDtoDeSerializerGenerator();
         }
 
         [Test]
         public async Task VerifyCanGenerateDtoJsonDeSerializer()
         {
-            await Assert.ThatAsync(() => this.umlCoreDtoDeSerializerGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlPocoDirectoryInfo), Throws.Nothing);
+            await Assert.ThatAsync(() => this.umlCoreDtoDeSerializerGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlDtoDeserializerDirectoryInfo), Throws.Nothing);
+        }
+        
+        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
+        public async Task VerifyMatchesExpectedSerializerClass(string className)
+        {
+            var generatedCode = await this.umlCoreDtoDeSerializerGenerator.GenerateDtoDeSerializerClass(GeneratorSetupFixture.XmiReaderResult, this.umlDtoDeserializerDirectoryInfo, className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/UML/Core/AutoGenDeSerializer/{className}DeSerializer.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
         }
     }
 }

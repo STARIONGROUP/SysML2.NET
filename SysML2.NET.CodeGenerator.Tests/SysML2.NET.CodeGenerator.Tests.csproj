@@ -838,6 +838,158 @@
       <None Include="Expected\UML\Core\AutoGenPoco\IAssociation.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\AnnotatingElementSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\AnnotatingElementSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\AssociationSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\AssociationSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\DependencySerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\DependencySerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\EnumerationDefinitionSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\EnumerationDefinitionSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\FeatureSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\FeatureSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\FeatureTypingSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\FeatureTypingSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\FlowSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\FlowSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\FramedConcernMembershipSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\FramedConcernMembershipSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\LiteralIntegerSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\LiteralIntegerSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\LiteralRationalSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\LiteralRationalSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\MembershipSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\MembershipSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\MultiplicityRangeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\MultiplicityRangeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\OwningMembershipSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\OwningMembershipSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\ReferenceSubsettingSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\ReferenceSubsettingSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\RequirementUsageSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\RequirementUsageSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\SelectExpressionSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\SelectExpressionSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\SubclassificationSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\SubclassificationSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\TextualRepresentationSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\TextualRepresentationSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenSerializer\UsageSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenSerializer\UsageSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\AnnotatingElementDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\AnnotatingElementDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\AssociationDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\AssociationDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\DependencyDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\DependencyDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\EnumerationDefinitionDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\EnumerationDefinitionDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\FeatureDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\FeatureDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\FeatureTypingDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\FeatureTypingDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\FlowDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\FlowDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\FramedConcernMembershipDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\FramedConcernMembershipDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\LiteralIntegerDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\LiteralIntegerDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\LiteralRationalDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\LiteralRationalDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\MembershipDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\MembershipDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\MultiplicityRangeDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\MultiplicityRangeDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\OwningMembershipDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\OwningMembershipDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\ReferenceSubsettingDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\ReferenceSubsettingDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\RequirementUsageDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\RequirementUsageDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\SelectExpressionDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\SelectExpressionDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\SubclassificationDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\SubclassificationDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\TextualRepresentationDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\TextualRepresentationDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDeSerializer\UsageDeSerializer.cs" />
+      <None Include="Expected\UML\Core\AutoGenDeSerializer\UsageDeSerializer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

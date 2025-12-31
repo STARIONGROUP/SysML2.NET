@@ -174,14 +174,64 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
             foreach (var @class in classes)
             {
-                var generatedInterface = template(@class);
+                var generatedJsonSerializer = template(@class);
 
-                generatedInterface = this.CodeCleanup(generatedInterface);
+                generatedJsonSerializer = this.CodeCleanup(generatedJsonSerializer);
 
                 var fileName = $"{@class.Name.CapitalizeFirstLetter()}Serializer.cs";
 
-                await WriteAsync(generatedInterface, outputDirectory, fileName);
+                await WriteAsync(generatedJsonSerializer, outputDirectory, fileName);
             }
+        }
+
+        /// <summary>
+        /// Generates DTO Json Serializer file based for a specific class name
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="className">The name of the class to generate</param>
+        /// <returns>
+        /// an awaitable <see cref="Task" /> with the generated code
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// In case of null value for <paramref name="xmiReaderResult" /> or
+        /// <paramref name="outputDirectory" />
+        /// </exception>
+        /// <exception cref="ArgumentException">In case of null or whitespace value for the <paramref name="className"/></exception>
+        public Task<string> GenerateDtoSerializerClass(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        {
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+            ArgumentException.ThrowIfNullOrWhiteSpace(className);
+
+            return this.GenerateDtoSerializerClassInternal(xmiReaderResult, outputDirectory, className);
+        }
+
+        /// <summary>
+        /// Generates DTO Json Serializer file based for a specific class name
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="className">The name of the class to generate</param>
+        /// <returns>
+        /// an awaitable <see cref="Task" /> with the generated code
+        /// </returns>
+        private async Task<string> GenerateDtoSerializerClassInternal(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates[DtoSerializerTemplateName];
+
+            var classToGenerate = xmiReaderResult.Root.QueryPackages()
+                .SelectMany(x => x.PackagedElement.OfType<IClass>())
+                .Single(x => x.Name == className);
+            
+            var generatedJsonSerializer = template(classToGenerate);
+
+            generatedJsonSerializer = this.CodeCleanup(generatedJsonSerializer);
+
+            var fileName = $"{classToGenerate.Name.CapitalizeFirstLetter()}Serializer.cs";
+
+            await WriteAsync(generatedJsonSerializer, outputDirectory, fileName);
+            return generatedJsonSerializer;
         }
     }
 }
