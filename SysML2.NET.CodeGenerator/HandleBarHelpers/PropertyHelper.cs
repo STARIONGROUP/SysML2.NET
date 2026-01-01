@@ -369,6 +369,38 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(sb + Environment.NewLine);
             });
 
+            handlebars.RegisterHelper("Property.WriteTypeForExtendClass", (writer, context, _) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.WriteTypeForExtendClass context supposed to be IProperty");
+                }
+
+                if (!property.IsDerived && !property.IsDerivedUnion)
+                {
+                    throw new ArgumentException("The #Property.WriteTypeForExtendClass shall only be called on IsDerived or IsDerivedUnion properties");
+                }
+
+                var sb = new StringBuilder();
+                var typeName = property.QueryCSharpTypeName();
+
+                if (property.Type is not IDataType)
+                {
+                    typeName = $"I{typeName}";
+                }
+
+                if (property.QueryIsEnumerable())
+                {
+                    sb.Append($"List<{typeName}> ");
+                }
+                else
+                {
+                    sb.Append($"{typeName} ");
+                }
+
+                writer.WriteSafeString(sb);
+            });
+
             handlebars.RegisterHelper("Property.ContainsPropertyRedifinitionWithSameName", (context, arguments) =>
             {
                 if (context.Value is not IProperty property)
