@@ -265,7 +265,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674994_447677_43347", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.Direction")]
-        public FeatureDirectionKind Direction { get; set; }
+        public FeatureDirectionKind? Direction { get; set; }
 
         /// <summary>
         /// The Documentation owned by this Element.
@@ -1390,7 +1390,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618959362712_182798_7138", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IOccurrenceUsage.PortionKind")]
-        public PortionKind PortionKind { get; set; }
+        public PortionKind? PortionKind { get; set; }
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to

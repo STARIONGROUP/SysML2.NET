@@ -202,7 +202,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674994_447677_43347", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.Direction")]
-        public FeatureDirectionKind Direction { get; set; }
+        public FeatureDirectionKind? Direction { get; set; }
 
         /// <summary>
         /// The Documentation owned by this Element.
