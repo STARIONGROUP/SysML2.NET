@@ -20,61 +20,64 @@
 
 namespace SysML2.NET.Dal.Tests
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	using NUnit.Framework;
+    using NUnit.Framework;
 
-	using SysML2.NET.Core.POCO;
-	using SysML2.NET.Dal;
-	
-	/// <summary>
-	/// Suite of tests for the <see cref="AnnotatingElementExtensions"/> class
-	/// </summary>
-	[TestFixture]
-	public class AnnotatingElementExtensionsTestFixture
-	{
-		[Test]
-		public void Verify_that_ToDto_works_as_expected()
-		{
-			var annotation = new Core.POCO.Annotation
-			{
-				Id = Guid.NewGuid()
-			};
+    using SysML2.NET.Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
 
-			var ownedMemberShip = new Core.POCO.Membership
-			{
-				Id = Guid.NewGuid()
-			};
+    using SysML2.NET.Dal;
 
-			var owningMemberShip = new Core.POCO.Membership
-			{
-				Id = Guid.NewGuid()
-			};
+    /// <summary>
+    /// Suite of tests for the <see cref="AnnotatingElementExtensions"/> class
+    /// </summary>
+    [TestFixture]
+    public class AnnotatingElementExtensionsTestFixture
+    {
+        [Test]
+        public void Verify_that_ToDto_works_as_expected()
+        {
+            var annotation = new Annotation
+            {
+                Id = Guid.NewGuid()
+            };
 
-			var poco = new Core.POCO.AnnotatingElement
-			{
-				Id = Guid.NewGuid(),
-				AliasIds = new List<string> { "alias_1", "alias_2" },
-				DeclaredName = "declared name",
-				DeclaredShortName = "declared shortname",
-				ElementId = "element id",
-				IsImpliedIncluded = true,
-				OwnedRelationship = new List<IRelationship>{ ownedMemberShip },
-				OwningRelationship = owningMemberShip
-			};
+            var ownedMemberShip = new Membership
+            {
+                Id = Guid.NewGuid()
+            };
 
-			var dto = poco.ToDto();
+            var owningMemberShip = new Membership
+            {
+                Id = Guid.NewGuid()
+            };
 
-			Assert.That(dto.Id, Is.EqualTo(poco.Id));
-			Assert.That(dto.AliasIds, Is.EquivalentTo(poco.AliasIds));
-			Assert.That(dto.DeclaredName, Is.EqualTo(poco.DeclaredName));
-			Assert.That(dto.DeclaredShortName, Is.EqualTo(poco.DeclaredShortName));
-			Assert.That(dto.ElementId, Is.EqualTo(poco.ElementId));
-			Assert.That(dto.IsImpliedIncluded, Is.EqualTo(poco.IsImpliedIncluded));
-			Assert.That(dto.OwnedRelationship.Single(), Is.EqualTo(poco.OwnedRelationship.Single().Id));
-			Assert.That(dto.OwningRelationship, Is.EqualTo(poco.OwningRelationship.Id));
-		}
-	}
+            var poco = new AnnotatingElement
+            {
+                Id = Guid.NewGuid(),
+                AliasIds = new List<string> { "alias_1", "alias_2" },
+                DeclaredName = "declared name",
+                DeclaredShortName = "declared shortname",
+                ElementId = "element id",
+                IsImpliedIncluded = true,
+                OwnedRelationship = new List<IRelationship>{ ownedMemberShip },
+                OwningRelationship = owningMemberShip
+            };
+
+            var dto = poco.ToDto();
+
+            Assert.That(dto.Id, Is.EqualTo(poco.Id));
+            Assert.That(dto.AliasIds, Is.EquivalentTo(poco.AliasIds));
+            Assert.That(dto.DeclaredName, Is.EqualTo(poco.DeclaredName));
+            Assert.That(dto.DeclaredShortName, Is.EqualTo(poco.DeclaredShortName));
+            Assert.That(dto.ElementId, Is.EqualTo(poco.ElementId));
+            Assert.That(dto.IsImpliedIncluded, Is.EqualTo(poco.IsImpliedIncluded));
+            Assert.That(dto.OwnedRelationship.Single(), Is.EqualTo(poco.OwnedRelationship.Single().Id));
+            Assert.That(dto.OwningRelationship, Is.EqualTo(poco.OwningRelationship.Id));
+        }
+    }
 }

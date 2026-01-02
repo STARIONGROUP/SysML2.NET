@@ -22,8 +22,8 @@ namespace SysML2.NET.Dal.Tests
 {
     using System;
     using System.Collections.Generic;
-
-	using NUnit.Framework;
+    
+    using NUnit.Framework;
 
 	using SysML2.NET.Dal;
 
@@ -35,7 +35,7 @@ namespace SysML2.NET.Dal.Tests
 	{
 		private Assembler assembler;
 
-        private Lazy<Core.POCO.IElement> lazyPoco;
+        private Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
 
         [SetUp]
 		public void Setup()
@@ -46,16 +46,16 @@ namespace SysML2.NET.Dal.Tests
         [Test]
         public void Verify_that_synchronize_Works_as_Expected()
         {
-            var dtos = new List<Core.DTO.IElement>();
+            var dtos = new List<Core.DTO.Root.Elements.IElement>();
 
-            var packageDto = new Core.DTO.Package
+            var packageDto = new SysML2.NET.Core.DTO.Kernel.Packages.Package
             {
                 Id = Guid.Parse("86082bb1-ac56-4080-9b04-2804be48cacb"),
                 DeclaredName = "a package",
                 ElementId = "86082bb1-ac56-4080-9b04-2804be48cacb",
             };
 
-            var featureDto = new Core.DTO.Feature
+            var featureDto = new SysML2.NET.Core.DTO.Core.Features.Feature
             {
                 Id = Guid.Parse("e1e89f3a-5863-4f7a-b9c5-5779d73630dd"),
                 DeclaredName = "some feature",
@@ -63,7 +63,7 @@ namespace SysML2.NET.Dal.Tests
                 ElementId = "e1e89f3a-5863-4f7a-b9c5-5779d73630dd"
             };
 
-            var membershipDto = new Core.DTO.Membership
+            var membershipDto = new Core.DTO.Root.Namespaces.Membership
             {
                 Id = Guid.Parse("215054ad-eb1d-45f6-8537-d43a3470e73c"),
                 Source = new List<Guid> { packageDto.Id },
@@ -76,12 +76,12 @@ namespace SysML2.NET.Dal.Tests
 
             this.assembler.Synchronize(dtos);
 
-            Core.POCO.Feature featurePoco = null;
-            Core.POCO.Membership membershipPoco = null;
+            Core.POCO.Core.Features.Feature featurePoco = null;
+            Core.POCO.Root.Namespaces.Membership membershipPoco = null;
 
             if (this.assembler.Cache.TryGetValue(featureDto.Id, out this.lazyPoco))
             {
-                featurePoco = (Core.POCO.Feature)this.lazyPoco.Value;
+                featurePoco = (Core.POCO.Core.Features.Feature)this.lazyPoco.Value;
             }
 
             Assert.That(featurePoco.Id, Is.EqualTo(featureDto.Id));
@@ -90,7 +90,7 @@ namespace SysML2.NET.Dal.Tests
 
             if (this.assembler.Cache.TryGetValue(membershipDto.Id, out this.lazyPoco))
             {
-                membershipPoco = (Core.POCO.Membership)this.lazyPoco.Value;
+                membershipPoco = (Core.POCO.Root.Namespaces.Membership)this.lazyPoco.Value;
             }
 
             Assert.That(membershipPoco.Target.Contains(featurePoco), Is.True);
@@ -105,7 +105,7 @@ namespace SysML2.NET.Dal.Tests
             
             if (this.assembler.Cache.TryGetValue(featureDto.Id, out this.lazyPoco))
             {
-                featurePoco = (Core.POCO.Feature)this.lazyPoco.Value;
+                featurePoco = (Core.POCO.Core.Features.Feature)this.lazyPoco.Value;
             }
             
             Assert.That(featurePoco.DeclaredName, Is.EqualTo("some updated feature"));
