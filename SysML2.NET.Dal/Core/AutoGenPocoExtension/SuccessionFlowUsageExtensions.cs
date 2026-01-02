@@ -29,7 +29,7 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
-    using Core.POCO;
+    using Core.POCO.Systems.Flows;
 
     /// <summary>
     /// A static class that provides extension methods for the <see cref="SuccessionFlowUsage"/> class
@@ -53,7 +53,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.SuccessionFlowUsage poco, Core.DTO.SuccessionFlowUsage dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Systems.Flows.SuccessionFlowUsage poco, Core.DTO.Systems.Flows.SuccessionFlowUsage dto)
         {
             if (poco == null)
             {
@@ -106,32 +106,40 @@ namespace SysML2.NET.Dal
             poco.IsVariation = dto.IsVariation;
 
             var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
+
             foreach (var identifier in ownedRelatedElementToDelete)
             {
                 poco.OwnedRelatedElement.Remove(poco.OwnedRelatedElement.Single(x => x.Id == identifier));
             }
+
             identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
+
             foreach (var identifier in ownedRelationshipToDelete)
             {
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
+
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
             poco.PortionKind = dto.PortionKind;
 
             var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
+
             foreach (var identifier in sourceToDelete)
             {
                 poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
             }
 
+
             var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
+
             foreach (var identifier in targetToDelete)
             {
                 poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
             }
+
 
 
             return identifiersOfObjectsToDelete;
@@ -148,11 +156,11 @@ namespace SysML2.NET.Dal
         /// The DTO that is used to update the <see cref="SuccessionFlowUsage"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.IElement}}"/> that contains the
-        /// <see cref="Core.POCO.IElement"/>s that are know and cached.
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.SuccessionFlowUsage poco, Core.DTO.SuccessionFlowUsage dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.Systems.Flows.SuccessionFlowUsage poco, Core.DTO.Systems.Flows.SuccessionFlowUsage dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
         {
             if (poco == null)
             {
@@ -169,29 +177,31 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
             }
 
-            Lazy<Core.POCO.IElement> lazyPoco;
+            Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
 
             var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
+
             foreach (var identifier in ownedRelatedElementToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelatedElement.Add((IElement)lazyPoco.Value);
+                    poco.OwnedRelatedElement.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
             var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
+
             foreach (var identifier in ownedRelationshipToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelationship.Add((IRelationship)lazyPoco.Value);
+                    poco.OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
                 }
             }
 
             if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
             {
-                poco.OwningRelatedElement = (IElement)lazyPoco.Value;
+                poco.OwningRelatedElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
             }
             else
             {
@@ -200,7 +210,7 @@ namespace SysML2.NET.Dal
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
             {
-                poco.OwningRelationship = (IRelationship)lazyPoco.Value;
+                poco.OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
             }
             else
             {
@@ -208,37 +218,39 @@ namespace SysML2.NET.Dal
             }
 
             var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
+
             foreach (var identifier in sourceToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.Source.Add((IElement)lazyPoco.Value);
+                    poco.Source.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
             var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
+
             foreach (var identifier in targetToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.Target.Add((IElement)lazyPoco.Value);
+                    poco.Target.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
         }
 
         /// <summary>
-        /// Creates a <see cref="Core.DTO.SuccessionFlowUsage"/> based on the provided POCO
+        /// Creates a <see cref="Core.DTO.Systems.Flows.SuccessionFlowUsage"/> based on the provided POCO
         /// </summary>
         /// <param name="poco">
-        /// The subject <see cref="Core.POCO.SuccessionFlowUsage"/> from which a DTO is to be created
+        /// The subject <see cref="Core.POCO.Systems.Flows.SuccessionFlowUsage"/> from which a DTO is to be created
         /// </param>
         /// <returns>
-        /// An instance of <see cref="Core.POCO.SuccessionFlowUsage"/>
+        /// An instance of <see cref="Core.POCO.Systems.Flows.SuccessionFlowUsage"/>
         /// </returns>
-        public static Core.DTO.SuccessionFlowUsage ToDto(this Core.POCO.SuccessionFlowUsage poco)
+        public static Core.DTO.Systems.Flows.SuccessionFlowUsage ToDto(this Core.POCO.Systems.Flows.SuccessionFlowUsage poco)
         {
-            var dto = new Core.DTO.SuccessionFlowUsage();
+            var dto = new Core.DTO.Systems.Flows.SuccessionFlowUsage();
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;

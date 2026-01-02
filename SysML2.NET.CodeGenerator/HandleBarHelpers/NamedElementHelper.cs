@@ -43,9 +43,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </param>
         public static void RegisterNamedElementHelper(this IHandlebars handlebars)
         {
-            handlebars.RegisterHelper("NamedElement.WriteFullyQualifiedNameSpace", (writer, context, _) =>
+            handlebars.RegisterHelper("NamedElement.WriteFullyQualifiedNameSpace", (writer, _, arguments) =>
             {
-                if (context.Value is not INamedElement namedElement)
+                if (arguments[0] is not INamedElement namedElement)
                 {
                     throw new ArgumentException("supposed to be INamedElement");
                 }

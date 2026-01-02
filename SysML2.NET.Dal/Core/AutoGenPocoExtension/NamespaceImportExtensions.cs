@@ -29,7 +29,7 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
-    using Core.POCO;
+    using Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// A static class that provides extension methods for the <see cref="NamespaceImport"/> class
@@ -53,7 +53,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.NamespaceImport poco, Core.DTO.NamespaceImport dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Root.Namespaces.NamespaceImport poco, Core.DTO.Root.Namespaces.NamespaceImport dto)
         {
             if (poco == null)
             {
@@ -84,30 +84,38 @@ namespace SysML2.NET.Dal
             poco.IsRecursive = dto.IsRecursive;
 
             var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
+
             foreach (var identifier in ownedRelatedElementToDelete)
             {
                 poco.OwnedRelatedElement.Remove(poco.OwnedRelatedElement.Single(x => x.Id == identifier));
             }
+
             identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
+
             foreach (var identifier in ownedRelationshipToDelete)
             {
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
+
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
             var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
+
             foreach (var identifier in sourceToDelete)
             {
                 poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
             }
 
+
             var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
+
             foreach (var identifier in targetToDelete)
             {
                 poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
             }
+
 
             poco.Visibility = dto.Visibility;
 
@@ -126,11 +134,11 @@ namespace SysML2.NET.Dal
         /// The DTO that is used to update the <see cref="NamespaceImport"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.IElement}}"/> that contains the
-        /// <see cref="Core.POCO.IElement"/>s that are know and cached.
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.NamespaceImport poco, Core.DTO.NamespaceImport dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.Root.Namespaces.NamespaceImport poco, Core.DTO.Root.Namespaces.NamespaceImport dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
         {
             if (poco == null)
             {
@@ -147,11 +155,11 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
             }
 
-            Lazy<Core.POCO.IElement> lazyPoco;
+            Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
 
             if (cache.TryGetValue(dto.ImportedNamespace, out lazyPoco))
             {
-                poco.ImportedNamespace = (Core.POCO.Namespace)lazyPoco.Value;
+                poco.ImportedNamespace = (Core.POCO.Root.Namespaces.Namespace)lazyPoco.Value;
             }
             else
             {
@@ -159,26 +167,28 @@ namespace SysML2.NET.Dal
             }
 
             var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
+
             foreach (var identifier in ownedRelatedElementToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelatedElement.Add((IElement)lazyPoco.Value);
+                    poco.OwnedRelatedElement.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
             var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
+
             foreach (var identifier in ownedRelationshipToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelationship.Add((IRelationship)lazyPoco.Value);
+                    poco.OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
                 }
             }
 
             if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
             {
-                poco.OwningRelatedElement = (IElement)lazyPoco.Value;
+                poco.OwningRelatedElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
             }
             else
             {
@@ -187,7 +197,7 @@ namespace SysML2.NET.Dal
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
             {
-                poco.OwningRelationship = (IRelationship)lazyPoco.Value;
+                poco.OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
             }
             else
             {
@@ -195,37 +205,39 @@ namespace SysML2.NET.Dal
             }
 
             var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
+
             foreach (var identifier in sourceToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.Source.Add((IElement)lazyPoco.Value);
+                    poco.Source.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
             var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
+
             foreach (var identifier in targetToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.Target.Add((IElement)lazyPoco.Value);
+                    poco.Target.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
         }
 
         /// <summary>
-        /// Creates a <see cref="Core.DTO.NamespaceImport"/> based on the provided POCO
+        /// Creates a <see cref="Core.DTO.Root.Namespaces.NamespaceImport"/> based on the provided POCO
         /// </summary>
         /// <param name="poco">
-        /// The subject <see cref="Core.POCO.NamespaceImport"/> from which a DTO is to be created
+        /// The subject <see cref="Core.POCO.Root.Namespaces.NamespaceImport"/> from which a DTO is to be created
         /// </param>
         /// <returns>
-        /// An instance of <see cref="Core.POCO.NamespaceImport"/>
+        /// An instance of <see cref="Core.POCO.Root.Namespaces.NamespaceImport"/>
         /// </returns>
-        public static Core.DTO.NamespaceImport ToDto(this Core.POCO.NamespaceImport poco)
+        public static Core.DTO.Root.Namespaces.NamespaceImport ToDto(this Core.POCO.Root.Namespaces.NamespaceImport poco)
         {
-            var dto = new Core.DTO.NamespaceImport();
+            var dto = new Core.DTO.Root.Namespaces.NamespaceImport();
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;

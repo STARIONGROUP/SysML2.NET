@@ -185,7 +185,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         }
 
         /// <summary>
-        /// Generates DTO Json Serializer file based for a specific class name
+        /// Generates DTO Json Serializer file based for a specific class
         /// </summary>
         /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
         /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
@@ -208,7 +208,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         }
 
         /// <summary>
-        /// Generates DTO Json Serializer file based for a specific class name
+        /// Generates DTO Json Serializer file based for a specific class
         /// </summary>
         /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
         /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>

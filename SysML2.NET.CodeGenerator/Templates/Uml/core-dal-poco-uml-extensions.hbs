@@ -1,0 +1,233 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="{{ this.Name }}Extensions.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2025 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Dal
+{
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
+
+    /// <summary>
+    /// A static class that provides extension methods for the <see cref="{{ this.Name }}"/> class
+    /// </summary>
+    public static class {{ this.Name }}Extensions
+    {
+        /// <summary>
+        /// Updates the value properties of the <see cref="{{ this.Name }}"/> by setting the value equal to that of the dto
+        /// Removes deleted objects from the reference properties and returns the unique identifiers
+        /// of the objects that have been removed from contained properties
+        /// </summary>
+        /// <param name="poco">
+        /// The <see cref="{{ this.Name }}"/> that is to be updated
+        /// </param>
+        /// <param name="dto">
+        /// The DTO that is used to update the <see cref="{{ this.Name }}"/> with
+        /// </param>
+        /// <returns>
+        /// The unique identifiers of the objects that have been removed from contained properties
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
+        /// </exception>
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} poco, Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dto)
+        {
+            if (poco == null)
+            {
+                throw new ArgumentNullException(nameof(poco), $"the {nameof(poco)} may not be null");
+            }
+
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
+            }
+
+            var identifiersOfObjectsToDelete = new List<Guid>();
+
+            {{#each (Class.QueryAllProperties this) as | property |}}
+            {{#unless property.IsDerived }}
+            {{#unless property.IsTransient }}
+                {{#if (Property.QueryIsReferenceProperty property)}}
+                    {{#if (Property.QueryIsEnumerable property) }}
+                            var {{ property.Name}}ToDelete = poco.{{ String.PascalCase property.Name}}.Select(x => x.Id).Except(dto.{{ String.PascalCase property.Name}});
+                    
+                            foreach (var identifier in {{ property.Name}}ToDelete)
+                            {
+                                poco.{{ String.PascalCase property.Name}}.Remove(poco.{{ String.PascalCase property.Name}}.Single(x => x.Id == identifier));
+                            }
+                    
+                        {{#if property.IsComposite }}
+                            identifiersOfObjectsToDelete.AddRange({{ property.Name}}ToDelete);
+                        {{/if}}
+
+                    {{/if}}
+                {{else}}
+                    {{#if (Property.IsRedefinedOrRedifines this ../this)}}
+                        ((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})poco).{{ String.PascalCase property.Name }} = ((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})dto).{{ String.PascalCase property.Name }};
+                    {{else}}
+                        poco.{{ String.PascalCase property.Name }} = dto.{{ String.PascalCase property.Name }};
+                    {{/if}}
+
+                {{/if}}
+            {{/unless}}
+            {{/unless}}
+            {{/each}}
+
+            return identifiersOfObjectsToDelete;
+        }
+
+        /// <summary>
+        /// Updates the Reference properties of the <see cref="{{ this.Name }}"/> using the data (identifiers) encapsulated in the DTO
+        /// and the provided cache to find the referenced object.
+        /// </summary>
+        /// <param name="poco">
+        /// The <see cref="{{ this.Name }}"/> that is to be updated
+        /// </param>
+        /// <param name="dto">
+        /// The DTO that is used to update the <see cref="{{ this.Name }}"/> with
+        /// </param>
+        /// <param name="cache">
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
+        /// </param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void UpdateReferenceProperties(this Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} poco, Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
+        {
+            if (poco == null)
+            {
+                throw new ArgumentNullException(nameof(poco), $"the {nameof(poco)} may not be null");
+            }
+
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
+            }
+
+            if (cache == null)
+            {
+                throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
+            }
+
+            Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
+
+            {{#each (Class.QueryAllProperties this) as | property |}}
+                {{#unless property.IsDerived }}
+                {{#unless property.IsTransient }}
+                {{#if (Property.QueryIsReferenceProperty property)}}
+                    {{#if (Property.QueryIsEnumerable property) }}
+                        var {{ property.Name}}ToAdd = dto.{{ String.PascalCase property.Name}}.Except(poco.{{ String.PascalCase property.Name}}.Select(x => x.Id));
+                        
+                        foreach (var identifier in {{ property.Name}}ToAdd)
+                        {
+                            if (cache.TryGetValue(identifier, out lazyPoco))
+                            {
+                                {{#if property.Type.IsAbstract }}
+                                poco.{{ String.PascalCase property.Name}}.Add((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value);
+                                {{else}}
+                                poco.{{ String.PascalCase property.Name}}.Add((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value);
+                                {{/if}}
+                            }
+                        }
+
+                    {{else if (Property.QueryIsNullable property) }}
+                        if (dto.{{ String.PascalCase property.Name}}.HasValue && cache.TryGetValue(dto.{{ String.PascalCase property.Name}}.Value, out lazyPoco))
+                        {
+                            {{#if property.Type.IsAbstract }}
+                            poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value;
+                            {{else}}
+                            poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value;
+                            {{/if}}
+                        }
+                        else
+                        {
+                            poco.{{ String.PascalCase property.Name}} = null;
+                        }
+
+                    {{else}}
+                        if (cache.TryGetValue(dto.{{ String.PascalCase property.Name}}, out lazyPoco))
+                        {
+                            {{#if property.Type.IsAbstract }}
+                            poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value;
+                            {{else}}
+                            poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value;
+                            {{/if}}
+                        }
+                        else
+                        {
+                            poco.{{ String.PascalCase property.Name}} = null;
+                        }
+
+                    {{/if}}
+                {{/if}}
+            {{/unless}}
+            {{/unless}}
+            {{/each}}
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/> based on the provided POCO
+        /// </summary>
+        /// <param name="poco">
+        /// The subject <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/> from which a DTO is to be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/>
+        /// </returns>
+        public static Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} ToDto(this Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} poco)
+        {
+            var dto = new Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}();
+
+            dto.Id = poco.Id;
+            {{#each (Class.QueryAllProperties this) as | property |}}
+            {{#unless property.IsDerived }}
+            {{#unless property.IsTransient }}
+            {{#if (Property.QueryIsReferenceProperty property) }}
+                {{#if (Property.QueryIsEnumerable property)}}
+                    dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }}.Select(x => x.Id).ToList();
+                {{ else if (Property.QueryIsNullable property)}}
+                    dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }}?.Id;
+                {{ else }}
+                    dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }}.Id;
+                {{/if}}
+            {{ else }}
+                {{#if (Property.IsRedefinedOrRedifines this ../this)}}
+                    ((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})dto).{{ String.PascalCase property.Name }} = ((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})poco).{{ String.PascalCase property.Name }};
+                {{else}}
+                    dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }};
+                {{/if}}
+            {{/if}}
+            {{/unless}}
+            {{/unless}}
+            {{/each}}
+
+            return dto;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

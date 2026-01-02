@@ -258,7 +258,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    sb.Append($"{typeName} ");
+                    if (property.QueryIsNullableAndNotString() && !property.QueryIsReferenceProperty())
+                    {
+                        sb.Append($"{typeName}? ");
+                    }
+                    else
+                    { 
+                        sb.Append($"{typeName} ");
+                    }
                 }
                 
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
@@ -327,7 +334,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    sb.Append($"{typeName} ");
+                    if (property.QueryIsNullableAndNotString()  && !property.QueryIsReferenceProperty())
+                    {
+                        sb.Append($"{typeName}? ");
+                    }
+                    else
+                    { 
+                        sb.Append($"{typeName} ");
+                    }
                 }
                 
                 if (property.IsDerived || property.IsDerivedUnion)
@@ -425,6 +439,29 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var allProperties = generatedClass.QueryAllProperties();
                 return property.RedefinedProperty.Where(x => x.Name == property.Name).Any(x => allProperties.Contains(x));
+            });
+            
+            handlebars.RegisterHelper("Property.IsRedefinedOrRedifines", (context, arguments) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.IsRedefinedOrRedifines context supposed to be IProperty");
+                }
+                
+                if (arguments.Length != 2)
+                {
+                    throw new ArgumentException("The #Property.IsRedefinedOrRedifines supposed to be have 2 arguments IProperty");
+                }
+
+                if (arguments[1] is not IClass generatedClass)
+                {
+                    throw new ArgumentException("The #Property.IsRedefinedOrRedifines supposed to be have an IClass as second argument");
+                }
+
+                var allProperties = generatedClass.QueryAllProperties();
+                var propertiesWithSameName = allProperties.SkipWhile(x => x == property).Where(x => x.Name == property.Name);
+                
+                return property.RedefinedProperty.Any(x => propertiesWithSameName.Contains(x)) || propertiesWithSameName.Any(x => x.RedefinedProperty.Contains(property));
             });
         }
     }

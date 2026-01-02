@@ -81,7 +81,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// FeatureDirectionKind).
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674994_447677_43347", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        FeatureDirectionKind Direction { get; set; }
+        FeatureDirectionKind? Direction { get; set; }
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an

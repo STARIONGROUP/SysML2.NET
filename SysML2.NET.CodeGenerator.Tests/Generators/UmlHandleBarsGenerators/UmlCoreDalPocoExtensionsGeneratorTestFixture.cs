@@ -26,6 +26,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
 
     [TestFixture]
     public class UmlCoreDalPocoExtensionsGeneratorTestFixture
@@ -48,6 +49,21 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         public async Task VerifyCanGeneratePocoExtensions()
         {
              await Assert.ThatAsync(() => this.umlCoreDalPocoExtensionsGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlPocoExtensionDirectoryInfo), Throws.Nothing);
+        }
+
+        [Test]
+        [TestCaseSource(typeof(ExpectedConcreteClasses))]
+        [Category("Expected")]
+        public async Task VerifyExpectedPocoExtensionsMachtes(string className)
+        {
+            var generatedCode = await this.umlCoreDalPocoExtensionsGenerator.GenerateDalPocoExtension(GeneratorSetupFixture.XmiReaderResult,
+                this.umlPocoExtensionDirectoryInfo,
+                className);
+
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
+                $"Expected/UML/Core/AutoGenPocoExtension/{className}Extensions.cs"));
+
+            Assert.That(generatedCode, Is.EqualTo(expected));
         }
     }
 }

@@ -99,7 +99,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// OccurrenceUsage represents portions of the featuring instance of the owningType.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618959362712_182798_7138", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        PortionKind PortionKind { get; set; }
+        PortionKind? PortionKind { get; set; }
 
     }
 }

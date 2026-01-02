@@ -29,7 +29,7 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
-    using Core.POCO;
+    using Core.POCO.Kernel.Expressions;
 
     /// <summary>
     /// A static class that provides extension methods for the <see cref="CollectExpression"/> class
@@ -53,7 +53,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.CollectExpression poco, Core.DTO.CollectExpression dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Kernel.Expressions.CollectExpression poco, Core.DTO.Kernel.Expressions.CollectExpression dto)
         {
             if (poco == null)
             {
@@ -99,13 +99,17 @@ namespace SysML2.NET.Dal
 
             poco.IsVariable = dto.IsVariable;
 
-            poco.Operator = dto.Operator;
+            ((Core.POCO.Kernel.Expressions.ICollectExpression)poco).Operator = ((Core.DTO.Kernel.Expressions.ICollectExpression)dto).Operator;
+
+            ((Core.POCO.Kernel.Expressions.IOperatorExpression)poco).Operator = ((Core.DTO.Kernel.Expressions.IOperatorExpression)dto).Operator;
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
+
             foreach (var identifier in ownedRelationshipToDelete)
             {
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
+
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
 
@@ -123,11 +127,11 @@ namespace SysML2.NET.Dal
         /// The DTO that is used to update the <see cref="CollectExpression"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.IElement}}"/> that contains the
-        /// <see cref="Core.POCO.IElement"/>s that are know and cached.
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.CollectExpression poco, Core.DTO.CollectExpression dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.Kernel.Expressions.CollectExpression poco, Core.DTO.Kernel.Expressions.CollectExpression dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
         {
             if (poco == null)
             {
@@ -144,20 +148,21 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
             }
 
-            Lazy<Core.POCO.IElement> lazyPoco;
+            Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
 
             var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
+
             foreach (var identifier in ownedRelationshipToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelationship.Add((IRelationship)lazyPoco.Value);
+                    poco.OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
                 }
             }
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
             {
-                poco.OwningRelationship = (IRelationship)lazyPoco.Value;
+                poco.OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
             }
             else
             {
@@ -167,17 +172,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Creates a <see cref="Core.DTO.CollectExpression"/> based on the provided POCO
+        /// Creates a <see cref="Core.DTO.Kernel.Expressions.CollectExpression"/> based on the provided POCO
         /// </summary>
         /// <param name="poco">
-        /// The subject <see cref="Core.POCO.CollectExpression"/> from which a DTO is to be created
+        /// The subject <see cref="Core.POCO.Kernel.Expressions.CollectExpression"/> from which a DTO is to be created
         /// </param>
         /// <returns>
-        /// An instance of <see cref="Core.POCO.CollectExpression"/>
+        /// An instance of <see cref="Core.POCO.Kernel.Expressions.CollectExpression"/>
         /// </returns>
-        public static Core.DTO.CollectExpression ToDto(this Core.POCO.CollectExpression poco)
+        public static Core.DTO.Kernel.Expressions.CollectExpression ToDto(this Core.POCO.Kernel.Expressions.CollectExpression poco)
         {
-            var dto = new Core.DTO.CollectExpression();
+            var dto = new Core.DTO.Kernel.Expressions.CollectExpression();
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;
@@ -196,7 +201,8 @@ namespace SysML2.NET.Dal
             dto.IsSufficient = poco.IsSufficient;
             dto.IsUnique = poco.IsUnique;
             dto.IsVariable = poco.IsVariable;
-            dto.Operator = poco.Operator;
+            ((Core.DTO.Kernel.Expressions.ICollectExpression)dto).Operator = ((Core.POCO.Kernel.Expressions.ICollectExpression)poco).Operator;
+            ((Core.DTO.Kernel.Expressions.IOperatorExpression)dto).Operator = ((Core.POCO.Kernel.Expressions.IOperatorExpression)poco).Operator;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;
 

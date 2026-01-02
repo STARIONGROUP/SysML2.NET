@@ -29,7 +29,7 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
-    using Core.POCO;
+    using Core.POCO.Systems.Items;
 
     /// <summary>
     /// A static class that provides extension methods for the <see cref="ItemDefinition"/> class
@@ -53,7 +53,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.ItemDefinition poco, Core.DTO.ItemDefinition dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Systems.Items.ItemDefinition poco, Core.DTO.Systems.Items.ItemDefinition dto)
         {
             if (poco == null)
             {
@@ -86,10 +86,12 @@ namespace SysML2.NET.Dal
             poco.IsVariation = dto.IsVariation;
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
+
             foreach (var identifier in ownedRelationshipToDelete)
             {
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
+
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
 
@@ -107,11 +109,11 @@ namespace SysML2.NET.Dal
         /// The DTO that is used to update the <see cref="ItemDefinition"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.IElement}}"/> that contains the
-        /// <see cref="Core.POCO.IElement"/>s that are know and cached.
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.ItemDefinition poco, Core.DTO.ItemDefinition dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.Systems.Items.ItemDefinition poco, Core.DTO.Systems.Items.ItemDefinition dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
         {
             if (poco == null)
             {
@@ -128,20 +130,21 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
             }
 
-            Lazy<Core.POCO.IElement> lazyPoco;
+            Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
 
             var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
+
             foreach (var identifier in ownedRelationshipToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelationship.Add((IRelationship)lazyPoco.Value);
+                    poco.OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
                 }
             }
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
             {
-                poco.OwningRelationship = (IRelationship)lazyPoco.Value;
+                poco.OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
             }
             else
             {
@@ -151,17 +154,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Creates a <see cref="Core.DTO.ItemDefinition"/> based on the provided POCO
+        /// Creates a <see cref="Core.DTO.Systems.Items.ItemDefinition"/> based on the provided POCO
         /// </summary>
         /// <param name="poco">
-        /// The subject <see cref="Core.POCO.ItemDefinition"/> from which a DTO is to be created
+        /// The subject <see cref="Core.POCO.Systems.Items.ItemDefinition"/> from which a DTO is to be created
         /// </param>
         /// <returns>
-        /// An instance of <see cref="Core.POCO.ItemDefinition"/>
+        /// An instance of <see cref="Core.POCO.Systems.Items.ItemDefinition"/>
         /// </returns>
-        public static Core.DTO.ItemDefinition ToDto(this Core.POCO.ItemDefinition poco)
+        public static Core.DTO.Systems.Items.ItemDefinition ToDto(this Core.POCO.Systems.Items.ItemDefinition poco)
         {
-            var dto = new Core.DTO.ItemDefinition();
+            var dto = new Core.DTO.Systems.Items.ItemDefinition();
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;

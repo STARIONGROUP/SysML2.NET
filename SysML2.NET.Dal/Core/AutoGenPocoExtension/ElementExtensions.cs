@@ -29,20 +29,20 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="Core.POCO.IElement"/> class
+    /// A static class that provides extension methods for the <see cref="Core.POCO.Root.Elements.IElement"/> class
     /// </summary>
     public static class ElementExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="Core.POCO.IElement"/> by setting the value equal to that of the dto.
+        /// Updates the value properties of the <see cref="Core.POCO.Root.Elements.IElement"/> by setting the value equal to that of the dto.
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from containment properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Core.POCO.IElement"/> that is to be updated
+        /// The <see cref="Core.POCO.Root.Elements.IElement"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Core.POCO.IElement"/> with
+        /// The DTO that is used to update the <see cref="Core.POCO.Root.Elements.IElement"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from containment properties
@@ -50,7 +50,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Root.Elements.IElement poco, Core.DTO.IElement dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Root.Elements.IElement poco, Core.DTO.Root.Elements.IElement dto)
         {
             if (poco == null)
             {
@@ -62,363 +62,195 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            switch (poco)
+            return poco switch
             {
-                case Core.POCO.AcceptActionUsage acceptActionUsagePoco:
-                    return acceptActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AcceptActionUsage)dto);
-                case Core.POCO.ActionDefinition actionDefinitionPoco:
-                    return actionDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ActionDefinition)dto);
-                case Core.POCO.ActionUsage actionUsagePoco:
-                    return actionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ActionUsage)dto);
-                case Core.POCO.ActorMembership actorMembershipPoco:
-                    return actorMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ActorMembership)dto);
-                case Core.POCO.AllocationDefinition allocationDefinitionPoco:
-                    return allocationDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AllocationDefinition)dto);
-                case Core.POCO.AllocationUsage allocationUsagePoco:
-                    return allocationUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AllocationUsage)dto);
-                case Core.POCO.AnalysisCaseDefinition analysisCaseDefinitionPoco:
-                    return analysisCaseDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AnalysisCaseDefinition)dto);
-                case Core.POCO.AnalysisCaseUsage analysisCaseUsagePoco:
-                    return analysisCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AnalysisCaseUsage)dto);
-                case Core.POCO.AnnotatingElement annotatingElementPoco:
-                    return annotatingElementPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AnnotatingElement)dto);
-                case Core.POCO.Annotation annotationPoco:
-                    return annotationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Annotation)dto);
-                case Core.POCO.AssertConstraintUsage assertConstraintUsagePoco:
-                    return assertConstraintUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AssertConstraintUsage)dto);
-                case Core.POCO.AssignmentActionUsage assignmentActionUsagePoco:
-                    return assignmentActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AssignmentActionUsage)dto);
-                case Core.POCO.Association associationPoco:
-                    return associationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Association)dto);
-                case Core.POCO.AssociationStructure associationStructurePoco:
-                    return associationStructurePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AssociationStructure)dto);
-                case Core.POCO.AttributeDefinition attributeDefinitionPoco:
-                    return attributeDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AttributeDefinition)dto);
-                case Core.POCO.AttributeUsage attributeUsagePoco:
-                    return attributeUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.AttributeUsage)dto);
-                case Core.POCO.Behavior behaviorPoco:
-                    return behaviorPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Behavior)dto);
-                case Core.POCO.BindingConnector bindingConnectorPoco:
-                    return bindingConnectorPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.BindingConnector)dto);
-                case Core.POCO.BindingConnectorAsUsage bindingConnectorAsUsagePoco:
-                    return bindingConnectorAsUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.BindingConnectorAsUsage)dto);
-                case Core.POCO.BooleanExpression booleanExpressionPoco:
-                    return booleanExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.BooleanExpression)dto);
-                case Core.POCO.CalculationDefinition calculationDefinitionPoco:
-                    return calculationDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.CalculationDefinition)dto);
-                case Core.POCO.CalculationUsage calculationUsagePoco:
-                    return calculationUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.CalculationUsage)dto);
-                case Core.POCO.CaseDefinition caseDefinitionPoco:
-                    return caseDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.CaseDefinition)dto);
-                case Core.POCO.CaseUsage caseUsagePoco:
-                    return caseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.CaseUsage)dto);
-                case Core.POCO.Class classPoco:
-                    return classPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Class)dto);
-                case Core.POCO.Classifier classifierPoco:
-                    return classifierPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Classifier)dto);
-                case Core.POCO.CollectExpression collectExpressionPoco:
-                    return collectExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.CollectExpression)dto);
-                case Core.POCO.Comment commentPoco:
-                    return commentPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Comment)dto);
-                case Core.POCO.ConcernDefinition concernDefinitionPoco:
-                    return concernDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConcernDefinition)dto);
-                case Core.POCO.ConcernUsage concernUsagePoco:
-                    return concernUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConcernUsage)dto);
-                case Core.POCO.ConjugatedPortDefinition conjugatedPortDefinitionPoco:
-                    return conjugatedPortDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConjugatedPortDefinition)dto);
-                case Core.POCO.ConjugatedPortTyping conjugatedPortTypingPoco:
-                    return conjugatedPortTypingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConjugatedPortTyping)dto);
-                case Core.POCO.Conjugation conjugationPoco:
-                    return conjugationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Conjugation)dto);
-                case Core.POCO.ConnectionDefinition connectionDefinitionPoco:
-                    return connectionDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConnectionDefinition)dto);
-                case Core.POCO.ConnectionUsage connectionUsagePoco:
-                    return connectionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConnectionUsage)dto);
-                case Core.POCO.Connector connectorPoco:
-                    return connectorPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Connector)dto);
-                case Core.POCO.ConstraintDefinition constraintDefinitionPoco:
-                    return constraintDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConstraintDefinition)dto);
-                case Core.POCO.ConstraintUsage constraintUsagePoco:
-                    return constraintUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConstraintUsage)dto);
-                case Core.POCO.ConstructorExpression constructorExpressionPoco:
-                    return constructorExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ConstructorExpression)dto);
-                case Core.POCO.CrossSubsetting crossSubsettingPoco:
-                    return crossSubsettingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.CrossSubsetting)dto);
-                case Core.POCO.DataType dataTypePoco:
-                    return dataTypePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.DataType)dto);
-                case Core.POCO.DecisionNode decisionNodePoco:
-                    return decisionNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.DecisionNode)dto);
-                case Core.POCO.Definition definitionPoco:
-                    return definitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Definition)dto);
-                case Core.POCO.Dependency dependencyPoco:
-                    return dependencyPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Dependency)dto);
-                case Core.POCO.Differencing differencingPoco:
-                    return differencingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Differencing)dto);
-                case Core.POCO.Disjoining disjoiningPoco:
-                    return disjoiningPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Disjoining)dto);
-                case Core.POCO.Documentation documentationPoco:
-                    return documentationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Documentation)dto);
-                case Core.POCO.ElementFilterMembership elementFilterMembershipPoco:
-                    return elementFilterMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ElementFilterMembership)dto);
-                case Core.POCO.EndFeatureMembership endFeatureMembershipPoco:
-                    return endFeatureMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.EndFeatureMembership)dto);
-                case Core.POCO.EnumerationDefinition enumerationDefinitionPoco:
-                    return enumerationDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.EnumerationDefinition)dto);
-                case Core.POCO.EnumerationUsage enumerationUsagePoco:
-                    return enumerationUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.EnumerationUsage)dto);
-                case Core.POCO.EventOccurrenceUsage eventOccurrenceUsagePoco:
-                    return eventOccurrenceUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.EventOccurrenceUsage)dto);
-                case Core.POCO.ExhibitStateUsage exhibitStateUsagePoco:
-                    return exhibitStateUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ExhibitStateUsage)dto);
-                case Core.POCO.Expression expressionPoco:
-                    return expressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Expression)dto);
-                case Core.POCO.Feature featurePoco:
-                    return featurePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Feature)dto);
-                case Core.POCO.FeatureChainExpression featureChainExpressionPoco:
-                    return featureChainExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureChainExpression)dto);
-                case Core.POCO.FeatureChaining featureChainingPoco:
-                    return featureChainingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureChaining)dto);
-                case Core.POCO.FeatureInverting featureInvertingPoco:
-                    return featureInvertingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureInverting)dto);
-                case Core.POCO.FeatureMembership featureMembershipPoco:
-                    return featureMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureMembership)dto);
-                case Core.POCO.FeatureReferenceExpression featureReferenceExpressionPoco:
-                    return featureReferenceExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureReferenceExpression)dto);
-                case Core.POCO.FeatureTyping featureTypingPoco:
-                    return featureTypingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureTyping)dto);
-                case Core.POCO.FeatureValue featureValuePoco:
-                    return featureValuePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FeatureValue)dto);
-                case Core.POCO.Flow flowPoco:
-                    return flowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Flow)dto);
-                case Core.POCO.FlowDefinition flowDefinitionPoco:
-                    return flowDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FlowDefinition)dto);
-                case Core.POCO.FlowEnd flowEndPoco:
-                    return flowEndPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FlowEnd)dto);
-                case Core.POCO.FlowUsage flowUsagePoco:
-                    return flowUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FlowUsage)dto);
-                case Core.POCO.ForkNode forkNodePoco:
-                    return forkNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ForkNode)dto);
-                case Core.POCO.ForLoopActionUsage forLoopActionUsagePoco:
-                    return forLoopActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ForLoopActionUsage)dto);
-                case Core.POCO.FramedConcernMembership framedConcernMembershipPoco:
-                    return framedConcernMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.FramedConcernMembership)dto);
-                case Core.POCO.Function functionPoco:
-                    return functionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Function)dto);
-                case Core.POCO.IfActionUsage ifActionUsagePoco:
-                    return ifActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.IfActionUsage)dto);
-                case Core.POCO.IncludeUseCaseUsage includeUseCaseUsagePoco:
-                    return includeUseCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.IncludeUseCaseUsage)dto);
-                case Core.POCO.IndexExpression indexExpressionPoco:
-                    return indexExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.IndexExpression)dto);
-                case Core.POCO.Interaction interactionPoco:
-                    return interactionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Interaction)dto);
-                case Core.POCO.InterfaceDefinition interfaceDefinitionPoco:
-                    return interfaceDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.InterfaceDefinition)dto);
-                case Core.POCO.InterfaceUsage interfaceUsagePoco:
-                    return interfaceUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.InterfaceUsage)dto);
-                case Core.POCO.Intersecting intersectingPoco:
-                    return intersectingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Intersecting)dto);
-                case Core.POCO.Invariant invariantPoco:
-                    return invariantPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Invariant)dto);
-                case Core.POCO.InvocationExpression invocationExpressionPoco:
-                    return invocationExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.InvocationExpression)dto);
-                case Core.POCO.ItemDefinition itemDefinitionPoco:
-                    return itemDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ItemDefinition)dto);
-                case Core.POCO.ItemUsage itemUsagePoco:
-                    return itemUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ItemUsage)dto);
-                case Core.POCO.JoinNode joinNodePoco:
-                    return joinNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.JoinNode)dto);
-                case Core.POCO.LibraryPackage libraryPackagePoco:
-                    return libraryPackagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LibraryPackage)dto);
-                case Core.POCO.LiteralBoolean literalBooleanPoco:
-                    return literalBooleanPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LiteralBoolean)dto);
-                case Core.POCO.LiteralExpression literalExpressionPoco:
-                    return literalExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LiteralExpression)dto);
-                case Core.POCO.LiteralInfinity literalInfinityPoco:
-                    return literalInfinityPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LiteralInfinity)dto);
-                case Core.POCO.LiteralInteger literalIntegerPoco:
-                    return literalIntegerPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LiteralInteger)dto);
-                case Core.POCO.LiteralRational literalRationalPoco:
-                    return literalRationalPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LiteralRational)dto);
-                case Core.POCO.LiteralString literalStringPoco:
-                    return literalStringPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.LiteralString)dto);
-                case Core.POCO.Membership membershipPoco:
-                    return membershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Membership)dto);
-                case Core.POCO.MembershipExpose membershipExposePoco:
-                    return membershipExposePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.MembershipExpose)dto);
-                case Core.POCO.MembershipImport membershipImportPoco:
-                    return membershipImportPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.MembershipImport)dto);
-                case Core.POCO.MergeNode mergeNodePoco:
-                    return mergeNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.MergeNode)dto);
-                case Core.POCO.Metaclass metaclassPoco:
-                    return metaclassPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Metaclass)dto);
-                case Core.POCO.MetadataAccessExpression metadataAccessExpressionPoco:
-                    return metadataAccessExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.MetadataAccessExpression)dto);
-                case Core.POCO.MetadataDefinition metadataDefinitionPoco:
-                    return metadataDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.MetadataDefinition)dto);
-                case Core.POCO.MetadataFeature metadataFeaturePoco:
-                    return metadataFeaturePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.MetadataFeature)dto);
-                case Core.POCO.MetadataUsage metadataUsagePoco:
-                    return metadataUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.MetadataUsage)dto);
-                case Core.POCO.Multiplicity multiplicityPoco:
-                    return multiplicityPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Multiplicity)dto);
-                case Core.POCO.MultiplicityRange multiplicityRangePoco:
-                    return multiplicityRangePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.MultiplicityRange)dto);
-                case Core.POCO.Namespace namespacePoco:
-                    return namespacePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Namespace)dto);
-                case Core.POCO.NamespaceExpose namespaceExposePoco:
-                    return namespaceExposePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.NamespaceExpose)dto);
-                case Core.POCO.NamespaceImport namespaceImportPoco:
-                    return namespaceImportPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.NamespaceImport)dto);
-                case Core.POCO.NullExpression nullExpressionPoco:
-                    return nullExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.NullExpression)dto);
-                case Core.POCO.ObjectiveMembership objectiveMembershipPoco:
-                    return objectiveMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ObjectiveMembership)dto);
-                case Core.POCO.OccurrenceDefinition occurrenceDefinitionPoco:
-                    return occurrenceDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.OccurrenceDefinition)dto);
-                case Core.POCO.OccurrenceUsage occurrenceUsagePoco:
-                    return occurrenceUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.OccurrenceUsage)dto);
-                case Core.POCO.OperatorExpression operatorExpressionPoco:
-                    return operatorExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.OperatorExpression)dto);
-                case Core.POCO.OwningMembership owningMembershipPoco:
-                    return owningMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.OwningMembership)dto);
-                case Core.POCO.Package packagePoco:
-                    return packagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Package)dto);
-                case Core.POCO.ParameterMembership parameterMembershipPoco:
-                    return parameterMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ParameterMembership)dto);
-                case Core.POCO.PartDefinition partDefinitionPoco:
-                    return partDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PartDefinition)dto);
-                case Core.POCO.PartUsage partUsagePoco:
-                    return partUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PartUsage)dto);
-                case Core.POCO.PayloadFeature payloadFeaturePoco:
-                    return payloadFeaturePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PayloadFeature)dto);
-                case Core.POCO.PerformActionUsage performActionUsagePoco:
-                    return performActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PerformActionUsage)dto);
-                case Core.POCO.PortConjugation portConjugationPoco:
-                    return portConjugationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PortConjugation)dto);
-                case Core.POCO.PortDefinition portDefinitionPoco:
-                    return portDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PortDefinition)dto);
-                case Core.POCO.PortUsage portUsagePoco:
-                    return portUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.PortUsage)dto);
-                case Core.POCO.Predicate predicatePoco:
-                    return predicatePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Predicate)dto);
-                case Core.POCO.Redefinition redefinitionPoco:
-                    return redefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Redefinition)dto);
-                case Core.POCO.ReferenceSubsetting referenceSubsettingPoco:
-                    return referenceSubsettingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ReferenceSubsetting)dto);
-                case Core.POCO.ReferenceUsage referenceUsagePoco:
-                    return referenceUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ReferenceUsage)dto);
-                case Core.POCO.RenderingDefinition renderingDefinitionPoco:
-                    return renderingDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.RenderingDefinition)dto);
-                case Core.POCO.RenderingUsage renderingUsagePoco:
-                    return renderingUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.RenderingUsage)dto);
-                case Core.POCO.RequirementConstraintMembership requirementConstraintMembershipPoco:
-                    return requirementConstraintMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.RequirementConstraintMembership)dto);
-                case Core.POCO.RequirementDefinition requirementDefinitionPoco:
-                    return requirementDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.RequirementDefinition)dto);
-                case Core.POCO.RequirementUsage requirementUsagePoco:
-                    return requirementUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.RequirementUsage)dto);
-                case Core.POCO.RequirementVerificationMembership requirementVerificationMembershipPoco:
-                    return requirementVerificationMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.RequirementVerificationMembership)dto);
-                case Core.POCO.ResultExpressionMembership resultExpressionMembershipPoco:
-                    return resultExpressionMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ResultExpressionMembership)dto);
-                case Core.POCO.ReturnParameterMembership returnParameterMembershipPoco:
-                    return returnParameterMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ReturnParameterMembership)dto);
-                case Core.POCO.SatisfyRequirementUsage satisfyRequirementUsagePoco:
-                    return satisfyRequirementUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SatisfyRequirementUsage)dto);
-                case Core.POCO.SelectExpression selectExpressionPoco:
-                    return selectExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SelectExpression)dto);
-                case Core.POCO.SendActionUsage sendActionUsagePoco:
-                    return sendActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SendActionUsage)dto);
-                case Core.POCO.Specialization specializationPoco:
-                    return specializationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Specialization)dto);
-                case Core.POCO.StakeholderMembership stakeholderMembershipPoco:
-                    return stakeholderMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.StakeholderMembership)dto);
-                case Core.POCO.StateDefinition stateDefinitionPoco:
-                    return stateDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.StateDefinition)dto);
-                case Core.POCO.StateSubactionMembership stateSubactionMembershipPoco:
-                    return stateSubactionMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.StateSubactionMembership)dto);
-                case Core.POCO.StateUsage stateUsagePoco:
-                    return stateUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.StateUsage)dto);
-                case Core.POCO.Step stepPoco:
-                    return stepPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Step)dto);
-                case Core.POCO.Structure structurePoco:
-                    return structurePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Structure)dto);
-                case Core.POCO.Subclassification subclassificationPoco:
-                    return subclassificationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Subclassification)dto);
-                case Core.POCO.SubjectMembership subjectMembershipPoco:
-                    return subjectMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SubjectMembership)dto);
-                case Core.POCO.Subsetting subsettingPoco:
-                    return subsettingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Subsetting)dto);
-                case Core.POCO.Succession successionPoco:
-                    return successionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Succession)dto);
-                case Core.POCO.SuccessionAsUsage successionAsUsagePoco:
-                    return successionAsUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionAsUsage)dto);
-                case Core.POCO.SuccessionFlow successionFlowPoco:
-                    return successionFlowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionFlow)dto);
-                case Core.POCO.SuccessionFlowUsage successionFlowUsagePoco:
-                    return successionFlowUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.SuccessionFlowUsage)dto);
-                case Core.POCO.TerminateActionUsage terminateActionUsagePoco:
-                    return terminateActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TerminateActionUsage)dto);
-                case Core.POCO.TextualRepresentation textualRepresentationPoco:
-                    return textualRepresentationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TextualRepresentation)dto);
-                case Core.POCO.TransitionFeatureMembership transitionFeatureMembershipPoco:
-                    return transitionFeatureMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TransitionFeatureMembership)dto);
-                case Core.POCO.TransitionUsage transitionUsagePoco:
-                    return transitionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TransitionUsage)dto);
-                case Core.POCO.TriggerInvocationExpression triggerInvocationExpressionPoco:
-                    return triggerInvocationExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TriggerInvocationExpression)dto);
-                case Core.POCO.Type typePoco:
-                    return typePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Type)dto);
-                case Core.POCO.TypeFeaturing typeFeaturingPoco:
-                    return typeFeaturingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.TypeFeaturing)dto);
-                case Core.POCO.Unioning unioningPoco:
-                    return unioningPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Unioning)dto);
-                case Core.POCO.Usage usagePoco:
-                    return usagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Usage)dto);
-                case Core.POCO.UseCaseDefinition useCaseDefinitionPoco:
-                    return useCaseDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.UseCaseDefinition)dto);
-                case Core.POCO.UseCaseUsage useCaseUsagePoco:
-                    return useCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.UseCaseUsage)dto);
-                case Core.POCO.VariantMembership variantMembershipPoco:
-                    return variantMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.VariantMembership)dto);
-                case Core.POCO.VerificationCaseDefinition verificationCaseDefinitionPoco:
-                    return verificationCaseDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.VerificationCaseDefinition)dto);
-                case Core.POCO.VerificationCaseUsage verificationCaseUsagePoco:
-                    return verificationCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.VerificationCaseUsage)dto);
-                case Core.POCO.ViewDefinition viewDefinitionPoco:
-                    return viewDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ViewDefinition)dto);
-                case Core.POCO.ViewpointDefinition viewpointDefinitionPoco:
-                    return viewpointDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ViewpointDefinition)dto);
-                case Core.POCO.ViewpointUsage viewpointUsagePoco:
-                    return viewpointUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ViewpointUsage)dto);
-                case Core.POCO.ViewRenderingMembership viewRenderingMembershipPoco:
-                    return viewRenderingMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ViewRenderingMembership)dto);
-                case Core.POCO.ViewUsage viewUsagePoco:
-                    return viewUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.ViewUsage)dto);
-                case Core.POCO.WhileLoopActionUsage whileLoopActionUsagePoco:
-                    return whileLoopActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.WhileLoopActionUsage)dto);
-                default:
-                    throw new NotSupportedException($"{poco.GetType().Name} not yet supported");
-            }
+                Core.POCO.Systems.Actions.AcceptActionUsage acceptActionUsagePoco => acceptActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.AcceptActionUsage)dto),
+                Core.POCO.Systems.Actions.ActionDefinition actionDefinitionPoco => actionDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.ActionDefinition)dto),
+                Core.POCO.Systems.Actions.ActionUsage actionUsagePoco => actionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.ActionUsage)dto),
+                Core.POCO.Systems.Requirements.ActorMembership actorMembershipPoco => actorMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.ActorMembership)dto),
+                Core.POCO.Systems.Allocations.AllocationDefinition allocationDefinitionPoco => allocationDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Allocations.AllocationDefinition)dto),
+                Core.POCO.Systems.Allocations.AllocationUsage allocationUsagePoco => allocationUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Allocations.AllocationUsage)dto),
+                Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition analysisCaseDefinitionPoco => analysisCaseDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.AnalysisCases.AnalysisCaseDefinition)dto),
+                Core.POCO.Systems.AnalysisCases.AnalysisCaseUsage analysisCaseUsagePoco => analysisCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.AnalysisCases.AnalysisCaseUsage)dto),
+                Core.POCO.Root.Annotations.AnnotatingElement annotatingElementPoco => annotatingElementPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Annotations.AnnotatingElement)dto),
+                Core.POCO.Root.Annotations.Annotation annotationPoco => annotationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Annotations.Annotation)dto),
+                Core.POCO.Systems.Constraints.AssertConstraintUsage assertConstraintUsagePoco => assertConstraintUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Constraints.AssertConstraintUsage)dto),
+                Core.POCO.Systems.Actions.AssignmentActionUsage assignmentActionUsagePoco => assignmentActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.AssignmentActionUsage)dto),
+                Core.POCO.Kernel.Associations.Association associationPoco => associationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Associations.Association)dto),
+                Core.POCO.Kernel.Associations.AssociationStructure associationStructurePoco => associationStructurePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Associations.AssociationStructure)dto),
+                Core.POCO.Systems.Attributes.AttributeDefinition attributeDefinitionPoco => attributeDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Attributes.AttributeDefinition)dto),
+                Core.POCO.Systems.Attributes.AttributeUsage attributeUsagePoco => attributeUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Attributes.AttributeUsage)dto),
+                Core.POCO.Kernel.Behaviors.Behavior behaviorPoco => behaviorPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Behaviors.Behavior)dto),
+                Core.POCO.Kernel.Connectors.BindingConnector bindingConnectorPoco => bindingConnectorPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Connectors.BindingConnector)dto),
+                Core.POCO.Systems.Connections.BindingConnectorAsUsage bindingConnectorAsUsagePoco => bindingConnectorAsUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Connections.BindingConnectorAsUsage)dto),
+                Core.POCO.Kernel.Functions.BooleanExpression booleanExpressionPoco => booleanExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Functions.BooleanExpression)dto),
+                Core.POCO.Systems.Calculations.CalculationDefinition calculationDefinitionPoco => calculationDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Calculations.CalculationDefinition)dto),
+                Core.POCO.Systems.Calculations.CalculationUsage calculationUsagePoco => calculationUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Calculations.CalculationUsage)dto),
+                Core.POCO.Systems.Cases.CaseDefinition caseDefinitionPoco => caseDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Cases.CaseDefinition)dto),
+                Core.POCO.Systems.Cases.CaseUsage caseUsagePoco => caseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Cases.CaseUsage)dto),
+                Core.POCO.Kernel.Classes.Class classPoco => classPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Classes.Class)dto),
+                Core.POCO.Core.Classifiers.Classifier classifierPoco => classifierPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Classifiers.Classifier)dto),
+                Core.POCO.Kernel.Expressions.CollectExpression collectExpressionPoco => collectExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.CollectExpression)dto),
+                Core.POCO.Root.Annotations.Comment commentPoco => commentPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Annotations.Comment)dto),
+                Core.POCO.Systems.Requirements.ConcernDefinition concernDefinitionPoco => concernDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.ConcernDefinition)dto),
+                Core.POCO.Systems.Requirements.ConcernUsage concernUsagePoco => concernUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.ConcernUsage)dto),
+                Core.POCO.Systems.Ports.ConjugatedPortDefinition conjugatedPortDefinitionPoco => conjugatedPortDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Ports.ConjugatedPortDefinition)dto),
+                Core.POCO.Systems.Ports.ConjugatedPortTyping conjugatedPortTypingPoco => conjugatedPortTypingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Ports.ConjugatedPortTyping)dto),
+                Core.POCO.Core.Types.Conjugation conjugationPoco => conjugationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.Conjugation)dto),
+                Core.POCO.Systems.Connections.ConnectionDefinition connectionDefinitionPoco => connectionDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Connections.ConnectionDefinition)dto),
+                Core.POCO.Systems.Connections.ConnectionUsage connectionUsagePoco => connectionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Connections.ConnectionUsage)dto),
+                Core.POCO.Kernel.Connectors.Connector connectorPoco => connectorPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Connectors.Connector)dto),
+                Core.POCO.Systems.Constraints.ConstraintDefinition constraintDefinitionPoco => constraintDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Constraints.ConstraintDefinition)dto),
+                Core.POCO.Systems.Constraints.ConstraintUsage constraintUsagePoco => constraintUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Constraints.ConstraintUsage)dto),
+                Core.POCO.Kernel.Expressions.ConstructorExpression constructorExpressionPoco => constructorExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.ConstructorExpression)dto),
+                Core.POCO.Core.Features.CrossSubsetting crossSubsettingPoco => crossSubsettingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.CrossSubsetting)dto),
+                Core.POCO.Kernel.DataTypes.DataType dataTypePoco => dataTypePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.DataTypes.DataType)dto),
+                Core.POCO.Systems.Actions.DecisionNode decisionNodePoco => decisionNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.DecisionNode)dto),
+                Core.POCO.Systems.DefinitionAndUsage.Definition definitionPoco => definitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.DefinitionAndUsage.Definition)dto),
+                Core.POCO.Root.Dependencies.Dependency dependencyPoco => dependencyPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Dependencies.Dependency)dto),
+                Core.POCO.Core.Types.Differencing differencingPoco => differencingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.Differencing)dto),
+                Core.POCO.Core.Types.Disjoining disjoiningPoco => disjoiningPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.Disjoining)dto),
+                Core.POCO.Root.Annotations.Documentation documentationPoco => documentationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Annotations.Documentation)dto),
+                Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembershipPoco => elementFilterMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Packages.ElementFilterMembership)dto),
+                Core.POCO.Core.Features.EndFeatureMembership endFeatureMembershipPoco => endFeatureMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.EndFeatureMembership)dto),
+                Core.POCO.Systems.Enumerations.EnumerationDefinition enumerationDefinitionPoco => enumerationDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Enumerations.EnumerationDefinition)dto),
+                Core.POCO.Systems.Enumerations.EnumerationUsage enumerationUsagePoco => enumerationUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Enumerations.EnumerationUsage)dto),
+                Core.POCO.Systems.Occurrences.EventOccurrenceUsage eventOccurrenceUsagePoco => eventOccurrenceUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Occurrences.EventOccurrenceUsage)dto),
+                Core.POCO.Systems.States.ExhibitStateUsage exhibitStateUsagePoco => exhibitStateUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.States.ExhibitStateUsage)dto),
+                Core.POCO.Kernel.Functions.Expression expressionPoco => expressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Functions.Expression)dto),
+                Core.POCO.Core.Features.Feature featurePoco => featurePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.Feature)dto),
+                Core.POCO.Kernel.Expressions.FeatureChainExpression featureChainExpressionPoco => featureChainExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.FeatureChainExpression)dto),
+                Core.POCO.Core.Features.FeatureChaining featureChainingPoco => featureChainingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.FeatureChaining)dto),
+                Core.POCO.Core.Features.FeatureInverting featureInvertingPoco => featureInvertingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.FeatureInverting)dto),
+                Core.POCO.Core.Types.FeatureMembership featureMembershipPoco => featureMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.FeatureMembership)dto),
+                Core.POCO.Kernel.Expressions.FeatureReferenceExpression featureReferenceExpressionPoco => featureReferenceExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.FeatureReferenceExpression)dto),
+                Core.POCO.Core.Features.FeatureTyping featureTypingPoco => featureTypingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.FeatureTyping)dto),
+                Core.POCO.Kernel.FeatureValues.FeatureValue featureValuePoco => featureValuePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.FeatureValues.FeatureValue)dto),
+                Core.POCO.Kernel.Interactions.Flow flowPoco => flowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Interactions.Flow)dto),
+                Core.POCO.Systems.Flows.FlowDefinition flowDefinitionPoco => flowDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Flows.FlowDefinition)dto),
+                Core.POCO.Kernel.Interactions.FlowEnd flowEndPoco => flowEndPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Interactions.FlowEnd)dto),
+                Core.POCO.Systems.Flows.FlowUsage flowUsagePoco => flowUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Flows.FlowUsage)dto),
+                Core.POCO.Systems.Actions.ForkNode forkNodePoco => forkNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.ForkNode)dto),
+                Core.POCO.Systems.Actions.ForLoopActionUsage forLoopActionUsagePoco => forLoopActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.ForLoopActionUsage)dto),
+                Core.POCO.Systems.Requirements.FramedConcernMembership framedConcernMembershipPoco => framedConcernMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.FramedConcernMembership)dto),
+                Core.POCO.Kernel.Functions.Function functionPoco => functionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Functions.Function)dto),
+                Core.POCO.Systems.Actions.IfActionUsage ifActionUsagePoco => ifActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.IfActionUsage)dto),
+                Core.POCO.Systems.UseCases.IncludeUseCaseUsage includeUseCaseUsagePoco => includeUseCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.UseCases.IncludeUseCaseUsage)dto),
+                Core.POCO.Kernel.Expressions.IndexExpression indexExpressionPoco => indexExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.IndexExpression)dto),
+                Core.POCO.Kernel.Interactions.Interaction interactionPoco => interactionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Interactions.Interaction)dto),
+                Core.POCO.Systems.Interfaces.InterfaceDefinition interfaceDefinitionPoco => interfaceDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Interfaces.InterfaceDefinition)dto),
+                Core.POCO.Systems.Interfaces.InterfaceUsage interfaceUsagePoco => interfaceUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Interfaces.InterfaceUsage)dto),
+                Core.POCO.Core.Types.Intersecting intersectingPoco => intersectingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.Intersecting)dto),
+                Core.POCO.Kernel.Functions.Invariant invariantPoco => invariantPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Functions.Invariant)dto),
+                Core.POCO.Kernel.Expressions.InvocationExpression invocationExpressionPoco => invocationExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.InvocationExpression)dto),
+                Core.POCO.Systems.Items.ItemDefinition itemDefinitionPoco => itemDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Items.ItemDefinition)dto),
+                Core.POCO.Systems.Items.ItemUsage itemUsagePoco => itemUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Items.ItemUsage)dto),
+                Core.POCO.Systems.Actions.JoinNode joinNodePoco => joinNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.JoinNode)dto),
+                Core.POCO.Kernel.Packages.LibraryPackage libraryPackagePoco => libraryPackagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Packages.LibraryPackage)dto),
+                Core.POCO.Kernel.Expressions.LiteralBoolean literalBooleanPoco => literalBooleanPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.LiteralBoolean)dto),
+                Core.POCO.Kernel.Expressions.LiteralExpression literalExpressionPoco => literalExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.LiteralExpression)dto),
+                Core.POCO.Kernel.Expressions.LiteralInfinity literalInfinityPoco => literalInfinityPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.LiteralInfinity)dto),
+                Core.POCO.Kernel.Expressions.LiteralInteger literalIntegerPoco => literalIntegerPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.LiteralInteger)dto),
+                Core.POCO.Kernel.Expressions.LiteralRational literalRationalPoco => literalRationalPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.LiteralRational)dto),
+                Core.POCO.Kernel.Expressions.LiteralString literalStringPoco => literalStringPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.LiteralString)dto),
+                Core.POCO.Root.Namespaces.Membership membershipPoco => membershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Namespaces.Membership)dto),
+                Core.POCO.Systems.Views.MembershipExpose membershipExposePoco => membershipExposePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.MembershipExpose)dto),
+                Core.POCO.Root.Namespaces.MembershipImport membershipImportPoco => membershipImportPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Namespaces.MembershipImport)dto),
+                Core.POCO.Systems.Actions.MergeNode mergeNodePoco => mergeNodePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.MergeNode)dto),
+                Core.POCO.Kernel.Metadata.Metaclass metaclassPoco => metaclassPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Metadata.Metaclass)dto),
+                Core.POCO.Kernel.Expressions.MetadataAccessExpression metadataAccessExpressionPoco => metadataAccessExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.MetadataAccessExpression)dto),
+                Core.POCO.Systems.Metadata.MetadataDefinition metadataDefinitionPoco => metadataDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Metadata.MetadataDefinition)dto),
+                Core.POCO.Kernel.Metadata.MetadataFeature metadataFeaturePoco => metadataFeaturePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Metadata.MetadataFeature)dto),
+                Core.POCO.Systems.Metadata.MetadataUsage metadataUsagePoco => metadataUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Metadata.MetadataUsage)dto),
+                Core.POCO.Core.Types.Multiplicity multiplicityPoco => multiplicityPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.Multiplicity)dto),
+                Core.POCO.Kernel.Multiplicities.MultiplicityRange multiplicityRangePoco => multiplicityRangePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Multiplicities.MultiplicityRange)dto),
+                Core.POCO.Root.Namespaces.Namespace namespacePoco => namespacePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Namespaces.Namespace)dto),
+                Core.POCO.Systems.Views.NamespaceExpose namespaceExposePoco => namespaceExposePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.NamespaceExpose)dto),
+                Core.POCO.Root.Namespaces.NamespaceImport namespaceImportPoco => namespaceImportPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Namespaces.NamespaceImport)dto),
+                Core.POCO.Kernel.Expressions.NullExpression nullExpressionPoco => nullExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.NullExpression)dto),
+                Core.POCO.Systems.Cases.ObjectiveMembership objectiveMembershipPoco => objectiveMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Cases.ObjectiveMembership)dto),
+                Core.POCO.Systems.Occurrences.OccurrenceDefinition occurrenceDefinitionPoco => occurrenceDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Occurrences.OccurrenceDefinition)dto),
+                Core.POCO.Systems.Occurrences.OccurrenceUsage occurrenceUsagePoco => occurrenceUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Occurrences.OccurrenceUsage)dto),
+                Core.POCO.Kernel.Expressions.OperatorExpression operatorExpressionPoco => operatorExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.OperatorExpression)dto),
+                Core.POCO.Root.Namespaces.OwningMembership owningMembershipPoco => owningMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Namespaces.OwningMembership)dto),
+                Core.POCO.Kernel.Packages.Package packagePoco => packagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Packages.Package)dto),
+                Core.POCO.Kernel.Behaviors.ParameterMembership parameterMembershipPoco => parameterMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Behaviors.ParameterMembership)dto),
+                Core.POCO.Systems.Parts.PartDefinition partDefinitionPoco => partDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Parts.PartDefinition)dto),
+                Core.POCO.Systems.Parts.PartUsage partUsagePoco => partUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Parts.PartUsage)dto),
+                Core.POCO.Kernel.Interactions.PayloadFeature payloadFeaturePoco => payloadFeaturePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Interactions.PayloadFeature)dto),
+                Core.POCO.Systems.Actions.PerformActionUsage performActionUsagePoco => performActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.PerformActionUsage)dto),
+                Core.POCO.Systems.Ports.PortConjugation portConjugationPoco => portConjugationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Ports.PortConjugation)dto),
+                Core.POCO.Systems.Ports.PortDefinition portDefinitionPoco => portDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Ports.PortDefinition)dto),
+                Core.POCO.Systems.Ports.PortUsage portUsagePoco => portUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Ports.PortUsage)dto),
+                Core.POCO.Kernel.Functions.Predicate predicatePoco => predicatePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Functions.Predicate)dto),
+                Core.POCO.Core.Features.Redefinition redefinitionPoco => redefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.Redefinition)dto),
+                Core.POCO.Core.Features.ReferenceSubsetting referenceSubsettingPoco => referenceSubsettingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.ReferenceSubsetting)dto),
+                Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage referenceUsagePoco => referenceUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.DefinitionAndUsage.ReferenceUsage)dto),
+                Core.POCO.Systems.Views.RenderingDefinition renderingDefinitionPoco => renderingDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.RenderingDefinition)dto),
+                Core.POCO.Systems.Views.RenderingUsage renderingUsagePoco => renderingUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.RenderingUsage)dto),
+                Core.POCO.Systems.Requirements.RequirementConstraintMembership requirementConstraintMembershipPoco => requirementConstraintMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.RequirementConstraintMembership)dto),
+                Core.POCO.Systems.Requirements.RequirementDefinition requirementDefinitionPoco => requirementDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.RequirementDefinition)dto),
+                Core.POCO.Systems.Requirements.RequirementUsage requirementUsagePoco => requirementUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.RequirementUsage)dto),
+                Core.POCO.Systems.VerificationCases.RequirementVerificationMembership requirementVerificationMembershipPoco => requirementVerificationMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.VerificationCases.RequirementVerificationMembership)dto),
+                Core.POCO.Kernel.Functions.ResultExpressionMembership resultExpressionMembershipPoco => resultExpressionMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Functions.ResultExpressionMembership)dto),
+                Core.POCO.Kernel.Functions.ReturnParameterMembership returnParameterMembershipPoco => returnParameterMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Functions.ReturnParameterMembership)dto),
+                Core.POCO.Systems.Requirements.SatisfyRequirementUsage satisfyRequirementUsagePoco => satisfyRequirementUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.SatisfyRequirementUsage)dto),
+                Core.POCO.Kernel.Expressions.SelectExpression selectExpressionPoco => selectExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Expressions.SelectExpression)dto),
+                Core.POCO.Systems.Actions.SendActionUsage sendActionUsagePoco => sendActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.SendActionUsage)dto),
+                Core.POCO.Core.Types.Specialization specializationPoco => specializationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.Specialization)dto),
+                Core.POCO.Systems.Requirements.StakeholderMembership stakeholderMembershipPoco => stakeholderMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.StakeholderMembership)dto),
+                Core.POCO.Systems.States.StateDefinition stateDefinitionPoco => stateDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.States.StateDefinition)dto),
+                Core.POCO.Systems.States.StateSubactionMembership stateSubactionMembershipPoco => stateSubactionMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.States.StateSubactionMembership)dto),
+                Core.POCO.Systems.States.StateUsage stateUsagePoco => stateUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.States.StateUsage)dto),
+                Core.POCO.Kernel.Behaviors.Step stepPoco => stepPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Behaviors.Step)dto),
+                Core.POCO.Kernel.Structures.Structure structurePoco => structurePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Structures.Structure)dto),
+                Core.POCO.Core.Classifiers.Subclassification subclassificationPoco => subclassificationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Classifiers.Subclassification)dto),
+                Core.POCO.Systems.Requirements.SubjectMembership subjectMembershipPoco => subjectMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Requirements.SubjectMembership)dto),
+                Core.POCO.Core.Features.Subsetting subsettingPoco => subsettingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.Subsetting)dto),
+                Core.POCO.Kernel.Connectors.Succession successionPoco => successionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Connectors.Succession)dto),
+                Core.POCO.Systems.Connections.SuccessionAsUsage successionAsUsagePoco => successionAsUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Connections.SuccessionAsUsage)dto),
+                Core.POCO.Kernel.Interactions.SuccessionFlow successionFlowPoco => successionFlowPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Kernel.Interactions.SuccessionFlow)dto),
+                Core.POCO.Systems.Flows.SuccessionFlowUsage successionFlowUsagePoco => successionFlowUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Flows.SuccessionFlowUsage)dto),
+                Core.POCO.Systems.Actions.TerminateActionUsage terminateActionUsagePoco => terminateActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.TerminateActionUsage)dto),
+                Core.POCO.Root.Annotations.TextualRepresentation textualRepresentationPoco => textualRepresentationPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Root.Annotations.TextualRepresentation)dto),
+                Core.POCO.Systems.States.TransitionFeatureMembership transitionFeatureMembershipPoco => transitionFeatureMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.States.TransitionFeatureMembership)dto),
+                Core.POCO.Systems.States.TransitionUsage transitionUsagePoco => transitionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.States.TransitionUsage)dto),
+                Core.POCO.Systems.Actions.TriggerInvocationExpression triggerInvocationExpressionPoco => triggerInvocationExpressionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.TriggerInvocationExpression)dto),
+                Core.POCO.Core.Types.Type typePoco => typePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.Type)dto),
+                Core.POCO.Core.Features.TypeFeaturing typeFeaturingPoco => typeFeaturingPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Features.TypeFeaturing)dto),
+                Core.POCO.Core.Types.Unioning unioningPoco => unioningPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Core.Types.Unioning)dto),
+                Core.POCO.Systems.DefinitionAndUsage.Usage usagePoco => usagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.DefinitionAndUsage.Usage)dto),
+                Core.POCO.Systems.UseCases.UseCaseDefinition useCaseDefinitionPoco => useCaseDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.UseCases.UseCaseDefinition)dto),
+                Core.POCO.Systems.UseCases.UseCaseUsage useCaseUsagePoco => useCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.UseCases.UseCaseUsage)dto),
+                Core.POCO.Systems.DefinitionAndUsage.VariantMembership variantMembershipPoco => variantMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.DefinitionAndUsage.VariantMembership)dto),
+                Core.POCO.Systems.VerificationCases.VerificationCaseDefinition verificationCaseDefinitionPoco => verificationCaseDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.VerificationCases.VerificationCaseDefinition)dto),
+                Core.POCO.Systems.VerificationCases.VerificationCaseUsage verificationCaseUsagePoco => verificationCaseUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.VerificationCases.VerificationCaseUsage)dto),
+                Core.POCO.Systems.Views.ViewDefinition viewDefinitionPoco => viewDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.ViewDefinition)dto),
+                Core.POCO.Systems.Views.ViewpointDefinition viewpointDefinitionPoco => viewpointDefinitionPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.ViewpointDefinition)dto),
+                Core.POCO.Systems.Views.ViewpointUsage viewpointUsagePoco => viewpointUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.ViewpointUsage)dto),
+                Core.POCO.Systems.Views.ViewRenderingMembership viewRenderingMembershipPoco => viewRenderingMembershipPoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.ViewRenderingMembership)dto),
+                Core.POCO.Systems.Views.ViewUsage viewUsagePoco => viewUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Views.ViewUsage)dto),
+                Core.POCO.Systems.Actions.WhileLoopActionUsage whileLoopActionUsagePoco => whileLoopActionUsagePoco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.Systems.Actions.WhileLoopActionUsage)dto),
+                _ => throw new NotSupportedException($"{poco.GetType().Name} not yet supported")
+            };
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Core.POCO.IElement"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Core.POCO.Root.Elements.IElement"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
         /// The <see cref=""/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref=""/> with
+        /// The DTO that is used to update the <see cref="Core.POCO.Root.Elements.IElement"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{String, Lazy{Core.POCO.IElement}}"/> that contains the
+        /// The <see cref="ConcurrentDictionary{String, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
         /// <see cref="ModelThing"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.IElement poco, Core.DTO.IElement dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.Root.Elements.IElement poco, Core.DTO.Root.Elements.IElement dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
         {
             if (poco == null)
             {
@@ -437,506 +269,506 @@ namespace SysML2.NET.Dal
 
             switch (poco)
             {
-                case Core.POCO.AcceptActionUsage acceptActionUsagePoco:
-                    acceptActionUsagePoco.UpdateReferenceProperties((Core.DTO.AcceptActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.AcceptActionUsage acceptActionUsagePoco:
+                    acceptActionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.AcceptActionUsage)dto, cache);
                     break;
-                case Core.POCO.ActionDefinition actionDefinitionPoco:
-                    actionDefinitionPoco.UpdateReferenceProperties((Core.DTO.ActionDefinition)dto, cache);
+                case Core.POCO.Systems.Actions.ActionDefinition actionDefinitionPoco:
+                    actionDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.ActionDefinition)dto, cache);
                     break;
-                case Core.POCO.ActionUsage actionUsagePoco:
-                    actionUsagePoco.UpdateReferenceProperties((Core.DTO.ActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.ActionUsage actionUsagePoco:
+                    actionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.ActionUsage)dto, cache);
                     break;
-                case Core.POCO.ActorMembership actorMembershipPoco:
-                    actorMembershipPoco.UpdateReferenceProperties((Core.DTO.ActorMembership)dto, cache);
+                case Core.POCO.Systems.Requirements.ActorMembership actorMembershipPoco:
+                    actorMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.ActorMembership)dto, cache);
                     break;
-                case Core.POCO.AllocationDefinition allocationDefinitionPoco:
-                    allocationDefinitionPoco.UpdateReferenceProperties((Core.DTO.AllocationDefinition)dto, cache);
+                case Core.POCO.Systems.Allocations.AllocationDefinition allocationDefinitionPoco:
+                    allocationDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Allocations.AllocationDefinition)dto, cache);
                     break;
-                case Core.POCO.AllocationUsage allocationUsagePoco:
-                    allocationUsagePoco.UpdateReferenceProperties((Core.DTO.AllocationUsage)dto, cache);
+                case Core.POCO.Systems.Allocations.AllocationUsage allocationUsagePoco:
+                    allocationUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Allocations.AllocationUsage)dto, cache);
                     break;
-                case Core.POCO.AnalysisCaseDefinition analysisCaseDefinitionPoco:
-                    analysisCaseDefinitionPoco.UpdateReferenceProperties((Core.DTO.AnalysisCaseDefinition)dto, cache);
+                case Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition analysisCaseDefinitionPoco:
+                    analysisCaseDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.AnalysisCases.AnalysisCaseDefinition)dto, cache);
                     break;
-                case Core.POCO.AnalysisCaseUsage analysisCaseUsagePoco:
-                    analysisCaseUsagePoco.UpdateReferenceProperties((Core.DTO.AnalysisCaseUsage)dto, cache);
+                case Core.POCO.Systems.AnalysisCases.AnalysisCaseUsage analysisCaseUsagePoco:
+                    analysisCaseUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.AnalysisCases.AnalysisCaseUsage)dto, cache);
                     break;
-                case Core.POCO.AnnotatingElement annotatingElementPoco:
-                    annotatingElementPoco.UpdateReferenceProperties((Core.DTO.AnnotatingElement)dto, cache);
+                case Core.POCO.Root.Annotations.AnnotatingElement annotatingElementPoco:
+                    annotatingElementPoco.UpdateReferenceProperties((Core.DTO.Root.Annotations.AnnotatingElement)dto, cache);
                     break;
-                case Core.POCO.Annotation annotationPoco:
-                    annotationPoco.UpdateReferenceProperties((Core.DTO.Annotation)dto, cache);
+                case Core.POCO.Root.Annotations.Annotation annotationPoco:
+                    annotationPoco.UpdateReferenceProperties((Core.DTO.Root.Annotations.Annotation)dto, cache);
                     break;
-                case Core.POCO.AssertConstraintUsage assertConstraintUsagePoco:
-                    assertConstraintUsagePoco.UpdateReferenceProperties((Core.DTO.AssertConstraintUsage)dto, cache);
+                case Core.POCO.Systems.Constraints.AssertConstraintUsage assertConstraintUsagePoco:
+                    assertConstraintUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Constraints.AssertConstraintUsage)dto, cache);
                     break;
-                case Core.POCO.AssignmentActionUsage assignmentActionUsagePoco:
-                    assignmentActionUsagePoco.UpdateReferenceProperties((Core.DTO.AssignmentActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.AssignmentActionUsage assignmentActionUsagePoco:
+                    assignmentActionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.AssignmentActionUsage)dto, cache);
                     break;
-                case Core.POCO.Association associationPoco:
-                    associationPoco.UpdateReferenceProperties((Core.DTO.Association)dto, cache);
+                case Core.POCO.Kernel.Associations.Association associationPoco:
+                    associationPoco.UpdateReferenceProperties((Core.DTO.Kernel.Associations.Association)dto, cache);
                     break;
-                case Core.POCO.AssociationStructure associationStructurePoco:
-                    associationStructurePoco.UpdateReferenceProperties((Core.DTO.AssociationStructure)dto, cache);
+                case Core.POCO.Kernel.Associations.AssociationStructure associationStructurePoco:
+                    associationStructurePoco.UpdateReferenceProperties((Core.DTO.Kernel.Associations.AssociationStructure)dto, cache);
                     break;
-                case Core.POCO.AttributeDefinition attributeDefinitionPoco:
-                    attributeDefinitionPoco.UpdateReferenceProperties((Core.DTO.AttributeDefinition)dto, cache);
+                case Core.POCO.Systems.Attributes.AttributeDefinition attributeDefinitionPoco:
+                    attributeDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Attributes.AttributeDefinition)dto, cache);
                     break;
-                case Core.POCO.AttributeUsage attributeUsagePoco:
-                    attributeUsagePoco.UpdateReferenceProperties((Core.DTO.AttributeUsage)dto, cache);
+                case Core.POCO.Systems.Attributes.AttributeUsage attributeUsagePoco:
+                    attributeUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Attributes.AttributeUsage)dto, cache);
                     break;
-                case Core.POCO.Behavior behaviorPoco:
-                    behaviorPoco.UpdateReferenceProperties((Core.DTO.Behavior)dto, cache);
+                case Core.POCO.Kernel.Behaviors.Behavior behaviorPoco:
+                    behaviorPoco.UpdateReferenceProperties((Core.DTO.Kernel.Behaviors.Behavior)dto, cache);
                     break;
-                case Core.POCO.BindingConnector bindingConnectorPoco:
-                    bindingConnectorPoco.UpdateReferenceProperties((Core.DTO.BindingConnector)dto, cache);
+                case Core.POCO.Kernel.Connectors.BindingConnector bindingConnectorPoco:
+                    bindingConnectorPoco.UpdateReferenceProperties((Core.DTO.Kernel.Connectors.BindingConnector)dto, cache);
                     break;
-                case Core.POCO.BindingConnectorAsUsage bindingConnectorAsUsagePoco:
-                    bindingConnectorAsUsagePoco.UpdateReferenceProperties((Core.DTO.BindingConnectorAsUsage)dto, cache);
+                case Core.POCO.Systems.Connections.BindingConnectorAsUsage bindingConnectorAsUsagePoco:
+                    bindingConnectorAsUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Connections.BindingConnectorAsUsage)dto, cache);
                     break;
-                case Core.POCO.BooleanExpression booleanExpressionPoco:
-                    booleanExpressionPoco.UpdateReferenceProperties((Core.DTO.BooleanExpression)dto, cache);
+                case Core.POCO.Kernel.Functions.BooleanExpression booleanExpressionPoco:
+                    booleanExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Functions.BooleanExpression)dto, cache);
                     break;
-                case Core.POCO.CalculationDefinition calculationDefinitionPoco:
-                    calculationDefinitionPoco.UpdateReferenceProperties((Core.DTO.CalculationDefinition)dto, cache);
+                case Core.POCO.Systems.Calculations.CalculationDefinition calculationDefinitionPoco:
+                    calculationDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Calculations.CalculationDefinition)dto, cache);
                     break;
-                case Core.POCO.CalculationUsage calculationUsagePoco:
-                    calculationUsagePoco.UpdateReferenceProperties((Core.DTO.CalculationUsage)dto, cache);
+                case Core.POCO.Systems.Calculations.CalculationUsage calculationUsagePoco:
+                    calculationUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Calculations.CalculationUsage)dto, cache);
                     break;
-                case Core.POCO.CaseDefinition caseDefinitionPoco:
-                    caseDefinitionPoco.UpdateReferenceProperties((Core.DTO.CaseDefinition)dto, cache);
+                case Core.POCO.Systems.Cases.CaseDefinition caseDefinitionPoco:
+                    caseDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Cases.CaseDefinition)dto, cache);
                     break;
-                case Core.POCO.CaseUsage caseUsagePoco:
-                    caseUsagePoco.UpdateReferenceProperties((Core.DTO.CaseUsage)dto, cache);
+                case Core.POCO.Systems.Cases.CaseUsage caseUsagePoco:
+                    caseUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Cases.CaseUsage)dto, cache);
                     break;
-                case Core.POCO.Class classPoco:
-                    classPoco.UpdateReferenceProperties((Core.DTO.Class)dto, cache);
+                case Core.POCO.Kernel.Classes.Class classPoco:
+                    classPoco.UpdateReferenceProperties((Core.DTO.Kernel.Classes.Class)dto, cache);
                     break;
-                case Core.POCO.Classifier classifierPoco:
-                    classifierPoco.UpdateReferenceProperties((Core.DTO.Classifier)dto, cache);
+                case Core.POCO.Core.Classifiers.Classifier classifierPoco:
+                    classifierPoco.UpdateReferenceProperties((Core.DTO.Core.Classifiers.Classifier)dto, cache);
                     break;
-                case Core.POCO.CollectExpression collectExpressionPoco:
-                    collectExpressionPoco.UpdateReferenceProperties((Core.DTO.CollectExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.CollectExpression collectExpressionPoco:
+                    collectExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.CollectExpression)dto, cache);
                     break;
-                case Core.POCO.Comment commentPoco:
-                    commentPoco.UpdateReferenceProperties((Core.DTO.Comment)dto, cache);
+                case Core.POCO.Root.Annotations.Comment commentPoco:
+                    commentPoco.UpdateReferenceProperties((Core.DTO.Root.Annotations.Comment)dto, cache);
                     break;
-                case Core.POCO.ConcernDefinition concernDefinitionPoco:
-                    concernDefinitionPoco.UpdateReferenceProperties((Core.DTO.ConcernDefinition)dto, cache);
+                case Core.POCO.Systems.Requirements.ConcernDefinition concernDefinitionPoco:
+                    concernDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.ConcernDefinition)dto, cache);
                     break;
-                case Core.POCO.ConcernUsage concernUsagePoco:
-                    concernUsagePoco.UpdateReferenceProperties((Core.DTO.ConcernUsage)dto, cache);
+                case Core.POCO.Systems.Requirements.ConcernUsage concernUsagePoco:
+                    concernUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.ConcernUsage)dto, cache);
                     break;
-                case Core.POCO.ConjugatedPortDefinition conjugatedPortDefinitionPoco:
-                    conjugatedPortDefinitionPoco.UpdateReferenceProperties((Core.DTO.ConjugatedPortDefinition)dto, cache);
+                case Core.POCO.Systems.Ports.ConjugatedPortDefinition conjugatedPortDefinitionPoco:
+                    conjugatedPortDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Ports.ConjugatedPortDefinition)dto, cache);
                     break;
-                case Core.POCO.ConjugatedPortTyping conjugatedPortTypingPoco:
-                    conjugatedPortTypingPoco.UpdateReferenceProperties((Core.DTO.ConjugatedPortTyping)dto, cache);
+                case Core.POCO.Systems.Ports.ConjugatedPortTyping conjugatedPortTypingPoco:
+                    conjugatedPortTypingPoco.UpdateReferenceProperties((Core.DTO.Systems.Ports.ConjugatedPortTyping)dto, cache);
                     break;
-                case Core.POCO.Conjugation conjugationPoco:
-                    conjugationPoco.UpdateReferenceProperties((Core.DTO.Conjugation)dto, cache);
+                case Core.POCO.Core.Types.Conjugation conjugationPoco:
+                    conjugationPoco.UpdateReferenceProperties((Core.DTO.Core.Types.Conjugation)dto, cache);
                     break;
-                case Core.POCO.ConnectionDefinition connectionDefinitionPoco:
-                    connectionDefinitionPoco.UpdateReferenceProperties((Core.DTO.ConnectionDefinition)dto, cache);
+                case Core.POCO.Systems.Connections.ConnectionDefinition connectionDefinitionPoco:
+                    connectionDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Connections.ConnectionDefinition)dto, cache);
                     break;
-                case Core.POCO.ConnectionUsage connectionUsagePoco:
-                    connectionUsagePoco.UpdateReferenceProperties((Core.DTO.ConnectionUsage)dto, cache);
+                case Core.POCO.Systems.Connections.ConnectionUsage connectionUsagePoco:
+                    connectionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Connections.ConnectionUsage)dto, cache);
                     break;
-                case Core.POCO.Connector connectorPoco:
-                    connectorPoco.UpdateReferenceProperties((Core.DTO.Connector)dto, cache);
+                case Core.POCO.Kernel.Connectors.Connector connectorPoco:
+                    connectorPoco.UpdateReferenceProperties((Core.DTO.Kernel.Connectors.Connector)dto, cache);
                     break;
-                case Core.POCO.ConstraintDefinition constraintDefinitionPoco:
-                    constraintDefinitionPoco.UpdateReferenceProperties((Core.DTO.ConstraintDefinition)dto, cache);
+                case Core.POCO.Systems.Constraints.ConstraintDefinition constraintDefinitionPoco:
+                    constraintDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Constraints.ConstraintDefinition)dto, cache);
                     break;
-                case Core.POCO.ConstraintUsage constraintUsagePoco:
-                    constraintUsagePoco.UpdateReferenceProperties((Core.DTO.ConstraintUsage)dto, cache);
+                case Core.POCO.Systems.Constraints.ConstraintUsage constraintUsagePoco:
+                    constraintUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Constraints.ConstraintUsage)dto, cache);
                     break;
-                case Core.POCO.ConstructorExpression constructorExpressionPoco:
-                    constructorExpressionPoco.UpdateReferenceProperties((Core.DTO.ConstructorExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.ConstructorExpression constructorExpressionPoco:
+                    constructorExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.ConstructorExpression)dto, cache);
                     break;
-                case Core.POCO.CrossSubsetting crossSubsettingPoco:
-                    crossSubsettingPoco.UpdateReferenceProperties((Core.DTO.CrossSubsetting)dto, cache);
+                case Core.POCO.Core.Features.CrossSubsetting crossSubsettingPoco:
+                    crossSubsettingPoco.UpdateReferenceProperties((Core.DTO.Core.Features.CrossSubsetting)dto, cache);
                     break;
-                case Core.POCO.DataType dataTypePoco:
-                    dataTypePoco.UpdateReferenceProperties((Core.DTO.DataType)dto, cache);
+                case Core.POCO.Kernel.DataTypes.DataType dataTypePoco:
+                    dataTypePoco.UpdateReferenceProperties((Core.DTO.Kernel.DataTypes.DataType)dto, cache);
                     break;
-                case Core.POCO.DecisionNode decisionNodePoco:
-                    decisionNodePoco.UpdateReferenceProperties((Core.DTO.DecisionNode)dto, cache);
+                case Core.POCO.Systems.Actions.DecisionNode decisionNodePoco:
+                    decisionNodePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.DecisionNode)dto, cache);
                     break;
-                case Core.POCO.Definition definitionPoco:
-                    definitionPoco.UpdateReferenceProperties((Core.DTO.Definition)dto, cache);
+                case Core.POCO.Systems.DefinitionAndUsage.Definition definitionPoco:
+                    definitionPoco.UpdateReferenceProperties((Core.DTO.Systems.DefinitionAndUsage.Definition)dto, cache);
                     break;
-                case Core.POCO.Dependency dependencyPoco:
-                    dependencyPoco.UpdateReferenceProperties((Core.DTO.Dependency)dto, cache);
+                case Core.POCO.Root.Dependencies.Dependency dependencyPoco:
+                    dependencyPoco.UpdateReferenceProperties((Core.DTO.Root.Dependencies.Dependency)dto, cache);
                     break;
-                case Core.POCO.Differencing differencingPoco:
-                    differencingPoco.UpdateReferenceProperties((Core.DTO.Differencing)dto, cache);
+                case Core.POCO.Core.Types.Differencing differencingPoco:
+                    differencingPoco.UpdateReferenceProperties((Core.DTO.Core.Types.Differencing)dto, cache);
                     break;
-                case Core.POCO.Disjoining disjoiningPoco:
-                    disjoiningPoco.UpdateReferenceProperties((Core.DTO.Disjoining)dto, cache);
+                case Core.POCO.Core.Types.Disjoining disjoiningPoco:
+                    disjoiningPoco.UpdateReferenceProperties((Core.DTO.Core.Types.Disjoining)dto, cache);
                     break;
-                case Core.POCO.Documentation documentationPoco:
-                    documentationPoco.UpdateReferenceProperties((Core.DTO.Documentation)dto, cache);
+                case Core.POCO.Root.Annotations.Documentation documentationPoco:
+                    documentationPoco.UpdateReferenceProperties((Core.DTO.Root.Annotations.Documentation)dto, cache);
                     break;
-                case Core.POCO.ElementFilterMembership elementFilterMembershipPoco:
-                    elementFilterMembershipPoco.UpdateReferenceProperties((Core.DTO.ElementFilterMembership)dto, cache);
+                case Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembershipPoco:
+                    elementFilterMembershipPoco.UpdateReferenceProperties((Core.DTO.Kernel.Packages.ElementFilterMembership)dto, cache);
                     break;
-                case Core.POCO.EndFeatureMembership endFeatureMembershipPoco:
-                    endFeatureMembershipPoco.UpdateReferenceProperties((Core.DTO.EndFeatureMembership)dto, cache);
+                case Core.POCO.Core.Features.EndFeatureMembership endFeatureMembershipPoco:
+                    endFeatureMembershipPoco.UpdateReferenceProperties((Core.DTO.Core.Features.EndFeatureMembership)dto, cache);
                     break;
-                case Core.POCO.EnumerationDefinition enumerationDefinitionPoco:
-                    enumerationDefinitionPoco.UpdateReferenceProperties((Core.DTO.EnumerationDefinition)dto, cache);
+                case Core.POCO.Systems.Enumerations.EnumerationDefinition enumerationDefinitionPoco:
+                    enumerationDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Enumerations.EnumerationDefinition)dto, cache);
                     break;
-                case Core.POCO.EnumerationUsage enumerationUsagePoco:
-                    enumerationUsagePoco.UpdateReferenceProperties((Core.DTO.EnumerationUsage)dto, cache);
+                case Core.POCO.Systems.Enumerations.EnumerationUsage enumerationUsagePoco:
+                    enumerationUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Enumerations.EnumerationUsage)dto, cache);
                     break;
-                case Core.POCO.EventOccurrenceUsage eventOccurrenceUsagePoco:
-                    eventOccurrenceUsagePoco.UpdateReferenceProperties((Core.DTO.EventOccurrenceUsage)dto, cache);
+                case Core.POCO.Systems.Occurrences.EventOccurrenceUsage eventOccurrenceUsagePoco:
+                    eventOccurrenceUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Occurrences.EventOccurrenceUsage)dto, cache);
                     break;
-                case Core.POCO.ExhibitStateUsage exhibitStateUsagePoco:
-                    exhibitStateUsagePoco.UpdateReferenceProperties((Core.DTO.ExhibitStateUsage)dto, cache);
+                case Core.POCO.Systems.States.ExhibitStateUsage exhibitStateUsagePoco:
+                    exhibitStateUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.States.ExhibitStateUsage)dto, cache);
                     break;
-                case Core.POCO.Expression expressionPoco:
-                    expressionPoco.UpdateReferenceProperties((Core.DTO.Expression)dto, cache);
+                case Core.POCO.Kernel.Functions.Expression expressionPoco:
+                    expressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Functions.Expression)dto, cache);
                     break;
-                case Core.POCO.Feature featurePoco:
-                    featurePoco.UpdateReferenceProperties((Core.DTO.Feature)dto, cache);
+                case Core.POCO.Core.Features.Feature featurePoco:
+                    featurePoco.UpdateReferenceProperties((Core.DTO.Core.Features.Feature)dto, cache);
                     break;
-                case Core.POCO.FeatureChainExpression featureChainExpressionPoco:
-                    featureChainExpressionPoco.UpdateReferenceProperties((Core.DTO.FeatureChainExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.FeatureChainExpression featureChainExpressionPoco:
+                    featureChainExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.FeatureChainExpression)dto, cache);
                     break;
-                case Core.POCO.FeatureChaining featureChainingPoco:
-                    featureChainingPoco.UpdateReferenceProperties((Core.DTO.FeatureChaining)dto, cache);
+                case Core.POCO.Core.Features.FeatureChaining featureChainingPoco:
+                    featureChainingPoco.UpdateReferenceProperties((Core.DTO.Core.Features.FeatureChaining)dto, cache);
                     break;
-                case Core.POCO.FeatureInverting featureInvertingPoco:
-                    featureInvertingPoco.UpdateReferenceProperties((Core.DTO.FeatureInverting)dto, cache);
+                case Core.POCO.Core.Features.FeatureInverting featureInvertingPoco:
+                    featureInvertingPoco.UpdateReferenceProperties((Core.DTO.Core.Features.FeatureInverting)dto, cache);
                     break;
-                case Core.POCO.FeatureMembership featureMembershipPoco:
-                    featureMembershipPoco.UpdateReferenceProperties((Core.DTO.FeatureMembership)dto, cache);
+                case Core.POCO.Core.Types.FeatureMembership featureMembershipPoco:
+                    featureMembershipPoco.UpdateReferenceProperties((Core.DTO.Core.Types.FeatureMembership)dto, cache);
                     break;
-                case Core.POCO.FeatureReferenceExpression featureReferenceExpressionPoco:
-                    featureReferenceExpressionPoco.UpdateReferenceProperties((Core.DTO.FeatureReferenceExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.FeatureReferenceExpression featureReferenceExpressionPoco:
+                    featureReferenceExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.FeatureReferenceExpression)dto, cache);
                     break;
-                case Core.POCO.FeatureTyping featureTypingPoco:
-                    featureTypingPoco.UpdateReferenceProperties((Core.DTO.FeatureTyping)dto, cache);
+                case Core.POCO.Core.Features.FeatureTyping featureTypingPoco:
+                    featureTypingPoco.UpdateReferenceProperties((Core.DTO.Core.Features.FeatureTyping)dto, cache);
                     break;
-                case Core.POCO.FeatureValue featureValuePoco:
-                    featureValuePoco.UpdateReferenceProperties((Core.DTO.FeatureValue)dto, cache);
+                case Core.POCO.Kernel.FeatureValues.FeatureValue featureValuePoco:
+                    featureValuePoco.UpdateReferenceProperties((Core.DTO.Kernel.FeatureValues.FeatureValue)dto, cache);
                     break;
-                case Core.POCO.Flow flowPoco:
-                    flowPoco.UpdateReferenceProperties((Core.DTO.Flow)dto, cache);
+                case Core.POCO.Kernel.Interactions.Flow flowPoco:
+                    flowPoco.UpdateReferenceProperties((Core.DTO.Kernel.Interactions.Flow)dto, cache);
                     break;
-                case Core.POCO.FlowDefinition flowDefinitionPoco:
-                    flowDefinitionPoco.UpdateReferenceProperties((Core.DTO.FlowDefinition)dto, cache);
+                case Core.POCO.Systems.Flows.FlowDefinition flowDefinitionPoco:
+                    flowDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Flows.FlowDefinition)dto, cache);
                     break;
-                case Core.POCO.FlowEnd flowEndPoco:
-                    flowEndPoco.UpdateReferenceProperties((Core.DTO.FlowEnd)dto, cache);
+                case Core.POCO.Kernel.Interactions.FlowEnd flowEndPoco:
+                    flowEndPoco.UpdateReferenceProperties((Core.DTO.Kernel.Interactions.FlowEnd)dto, cache);
                     break;
-                case Core.POCO.FlowUsage flowUsagePoco:
-                    flowUsagePoco.UpdateReferenceProperties((Core.DTO.FlowUsage)dto, cache);
+                case Core.POCO.Systems.Flows.FlowUsage flowUsagePoco:
+                    flowUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Flows.FlowUsage)dto, cache);
                     break;
-                case Core.POCO.ForkNode forkNodePoco:
-                    forkNodePoco.UpdateReferenceProperties((Core.DTO.ForkNode)dto, cache);
+                case Core.POCO.Systems.Actions.ForkNode forkNodePoco:
+                    forkNodePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.ForkNode)dto, cache);
                     break;
-                case Core.POCO.ForLoopActionUsage forLoopActionUsagePoco:
-                    forLoopActionUsagePoco.UpdateReferenceProperties((Core.DTO.ForLoopActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.ForLoopActionUsage forLoopActionUsagePoco:
+                    forLoopActionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.ForLoopActionUsage)dto, cache);
                     break;
-                case Core.POCO.FramedConcernMembership framedConcernMembershipPoco:
-                    framedConcernMembershipPoco.UpdateReferenceProperties((Core.DTO.FramedConcernMembership)dto, cache);
+                case Core.POCO.Systems.Requirements.FramedConcernMembership framedConcernMembershipPoco:
+                    framedConcernMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.FramedConcernMembership)dto, cache);
                     break;
-                case Core.POCO.Function functionPoco:
-                    functionPoco.UpdateReferenceProperties((Core.DTO.Function)dto, cache);
+                case Core.POCO.Kernel.Functions.Function functionPoco:
+                    functionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Functions.Function)dto, cache);
                     break;
-                case Core.POCO.IfActionUsage ifActionUsagePoco:
-                    ifActionUsagePoco.UpdateReferenceProperties((Core.DTO.IfActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.IfActionUsage ifActionUsagePoco:
+                    ifActionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.IfActionUsage)dto, cache);
                     break;
-                case Core.POCO.IncludeUseCaseUsage includeUseCaseUsagePoco:
-                    includeUseCaseUsagePoco.UpdateReferenceProperties((Core.DTO.IncludeUseCaseUsage)dto, cache);
+                case Core.POCO.Systems.UseCases.IncludeUseCaseUsage includeUseCaseUsagePoco:
+                    includeUseCaseUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.UseCases.IncludeUseCaseUsage)dto, cache);
                     break;
-                case Core.POCO.IndexExpression indexExpressionPoco:
-                    indexExpressionPoco.UpdateReferenceProperties((Core.DTO.IndexExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.IndexExpression indexExpressionPoco:
+                    indexExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.IndexExpression)dto, cache);
                     break;
-                case Core.POCO.Interaction interactionPoco:
-                    interactionPoco.UpdateReferenceProperties((Core.DTO.Interaction)dto, cache);
+                case Core.POCO.Kernel.Interactions.Interaction interactionPoco:
+                    interactionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Interactions.Interaction)dto, cache);
                     break;
-                case Core.POCO.InterfaceDefinition interfaceDefinitionPoco:
-                    interfaceDefinitionPoco.UpdateReferenceProperties((Core.DTO.InterfaceDefinition)dto, cache);
+                case Core.POCO.Systems.Interfaces.InterfaceDefinition interfaceDefinitionPoco:
+                    interfaceDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Interfaces.InterfaceDefinition)dto, cache);
                     break;
-                case Core.POCO.InterfaceUsage interfaceUsagePoco:
-                    interfaceUsagePoco.UpdateReferenceProperties((Core.DTO.InterfaceUsage)dto, cache);
+                case Core.POCO.Systems.Interfaces.InterfaceUsage interfaceUsagePoco:
+                    interfaceUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Interfaces.InterfaceUsage)dto, cache);
                     break;
-                case Core.POCO.Intersecting intersectingPoco:
-                    intersectingPoco.UpdateReferenceProperties((Core.DTO.Intersecting)dto, cache);
+                case Core.POCO.Core.Types.Intersecting intersectingPoco:
+                    intersectingPoco.UpdateReferenceProperties((Core.DTO.Core.Types.Intersecting)dto, cache);
                     break;
-                case Core.POCO.Invariant invariantPoco:
-                    invariantPoco.UpdateReferenceProperties((Core.DTO.Invariant)dto, cache);
+                case Core.POCO.Kernel.Functions.Invariant invariantPoco:
+                    invariantPoco.UpdateReferenceProperties((Core.DTO.Kernel.Functions.Invariant)dto, cache);
                     break;
-                case Core.POCO.InvocationExpression invocationExpressionPoco:
-                    invocationExpressionPoco.UpdateReferenceProperties((Core.DTO.InvocationExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.InvocationExpression invocationExpressionPoco:
+                    invocationExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.InvocationExpression)dto, cache);
                     break;
-                case Core.POCO.ItemDefinition itemDefinitionPoco:
-                    itemDefinitionPoco.UpdateReferenceProperties((Core.DTO.ItemDefinition)dto, cache);
+                case Core.POCO.Systems.Items.ItemDefinition itemDefinitionPoco:
+                    itemDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Items.ItemDefinition)dto, cache);
                     break;
-                case Core.POCO.ItemUsage itemUsagePoco:
-                    itemUsagePoco.UpdateReferenceProperties((Core.DTO.ItemUsage)dto, cache);
+                case Core.POCO.Systems.Items.ItemUsage itemUsagePoco:
+                    itemUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Items.ItemUsage)dto, cache);
                     break;
-                case Core.POCO.JoinNode joinNodePoco:
-                    joinNodePoco.UpdateReferenceProperties((Core.DTO.JoinNode)dto, cache);
+                case Core.POCO.Systems.Actions.JoinNode joinNodePoco:
+                    joinNodePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.JoinNode)dto, cache);
                     break;
-                case Core.POCO.LibraryPackage libraryPackagePoco:
-                    libraryPackagePoco.UpdateReferenceProperties((Core.DTO.LibraryPackage)dto, cache);
+                case Core.POCO.Kernel.Packages.LibraryPackage libraryPackagePoco:
+                    libraryPackagePoco.UpdateReferenceProperties((Core.DTO.Kernel.Packages.LibraryPackage)dto, cache);
                     break;
-                case Core.POCO.LiteralBoolean literalBooleanPoco:
-                    literalBooleanPoco.UpdateReferenceProperties((Core.DTO.LiteralBoolean)dto, cache);
+                case Core.POCO.Kernel.Expressions.LiteralBoolean literalBooleanPoco:
+                    literalBooleanPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.LiteralBoolean)dto, cache);
                     break;
-                case Core.POCO.LiteralExpression literalExpressionPoco:
-                    literalExpressionPoco.UpdateReferenceProperties((Core.DTO.LiteralExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.LiteralExpression literalExpressionPoco:
+                    literalExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.LiteralExpression)dto, cache);
                     break;
-                case Core.POCO.LiteralInfinity literalInfinityPoco:
-                    literalInfinityPoco.UpdateReferenceProperties((Core.DTO.LiteralInfinity)dto, cache);
+                case Core.POCO.Kernel.Expressions.LiteralInfinity literalInfinityPoco:
+                    literalInfinityPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.LiteralInfinity)dto, cache);
                     break;
-                case Core.POCO.LiteralInteger literalIntegerPoco:
-                    literalIntegerPoco.UpdateReferenceProperties((Core.DTO.LiteralInteger)dto, cache);
+                case Core.POCO.Kernel.Expressions.LiteralInteger literalIntegerPoco:
+                    literalIntegerPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.LiteralInteger)dto, cache);
                     break;
-                case Core.POCO.LiteralRational literalRationalPoco:
-                    literalRationalPoco.UpdateReferenceProperties((Core.DTO.LiteralRational)dto, cache);
+                case Core.POCO.Kernel.Expressions.LiteralRational literalRationalPoco:
+                    literalRationalPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.LiteralRational)dto, cache);
                     break;
-                case Core.POCO.LiteralString literalStringPoco:
-                    literalStringPoco.UpdateReferenceProperties((Core.DTO.LiteralString)dto, cache);
+                case Core.POCO.Kernel.Expressions.LiteralString literalStringPoco:
+                    literalStringPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.LiteralString)dto, cache);
                     break;
-                case Core.POCO.Membership membershipPoco:
-                    membershipPoco.UpdateReferenceProperties((Core.DTO.Membership)dto, cache);
+                case Core.POCO.Root.Namespaces.Membership membershipPoco:
+                    membershipPoco.UpdateReferenceProperties((Core.DTO.Root.Namespaces.Membership)dto, cache);
                     break;
-                case Core.POCO.MembershipExpose membershipExposePoco:
-                    membershipExposePoco.UpdateReferenceProperties((Core.DTO.MembershipExpose)dto, cache);
+                case Core.POCO.Systems.Views.MembershipExpose membershipExposePoco:
+                    membershipExposePoco.UpdateReferenceProperties((Core.DTO.Systems.Views.MembershipExpose)dto, cache);
                     break;
-                case Core.POCO.MembershipImport membershipImportPoco:
-                    membershipImportPoco.UpdateReferenceProperties((Core.DTO.MembershipImport)dto, cache);
+                case Core.POCO.Root.Namespaces.MembershipImport membershipImportPoco:
+                    membershipImportPoco.UpdateReferenceProperties((Core.DTO.Root.Namespaces.MembershipImport)dto, cache);
                     break;
-                case Core.POCO.MergeNode mergeNodePoco:
-                    mergeNodePoco.UpdateReferenceProperties((Core.DTO.MergeNode)dto, cache);
+                case Core.POCO.Systems.Actions.MergeNode mergeNodePoco:
+                    mergeNodePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.MergeNode)dto, cache);
                     break;
-                case Core.POCO.Metaclass metaclassPoco:
-                    metaclassPoco.UpdateReferenceProperties((Core.DTO.Metaclass)dto, cache);
+                case Core.POCO.Kernel.Metadata.Metaclass metaclassPoco:
+                    metaclassPoco.UpdateReferenceProperties((Core.DTO.Kernel.Metadata.Metaclass)dto, cache);
                     break;
-                case Core.POCO.MetadataAccessExpression metadataAccessExpressionPoco:
-                    metadataAccessExpressionPoco.UpdateReferenceProperties((Core.DTO.MetadataAccessExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.MetadataAccessExpression metadataAccessExpressionPoco:
+                    metadataAccessExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.MetadataAccessExpression)dto, cache);
                     break;
-                case Core.POCO.MetadataDefinition metadataDefinitionPoco:
-                    metadataDefinitionPoco.UpdateReferenceProperties((Core.DTO.MetadataDefinition)dto, cache);
+                case Core.POCO.Systems.Metadata.MetadataDefinition metadataDefinitionPoco:
+                    metadataDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Metadata.MetadataDefinition)dto, cache);
                     break;
-                case Core.POCO.MetadataFeature metadataFeaturePoco:
-                    metadataFeaturePoco.UpdateReferenceProperties((Core.DTO.MetadataFeature)dto, cache);
+                case Core.POCO.Kernel.Metadata.MetadataFeature metadataFeaturePoco:
+                    metadataFeaturePoco.UpdateReferenceProperties((Core.DTO.Kernel.Metadata.MetadataFeature)dto, cache);
                     break;
-                case Core.POCO.MetadataUsage metadataUsagePoco:
-                    metadataUsagePoco.UpdateReferenceProperties((Core.DTO.MetadataUsage)dto, cache);
+                case Core.POCO.Systems.Metadata.MetadataUsage metadataUsagePoco:
+                    metadataUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Metadata.MetadataUsage)dto, cache);
                     break;
-                case Core.POCO.Multiplicity multiplicityPoco:
-                    multiplicityPoco.UpdateReferenceProperties((Core.DTO.Multiplicity)dto, cache);
+                case Core.POCO.Core.Types.Multiplicity multiplicityPoco:
+                    multiplicityPoco.UpdateReferenceProperties((Core.DTO.Core.Types.Multiplicity)dto, cache);
                     break;
-                case Core.POCO.MultiplicityRange multiplicityRangePoco:
-                    multiplicityRangePoco.UpdateReferenceProperties((Core.DTO.MultiplicityRange)dto, cache);
+                case Core.POCO.Kernel.Multiplicities.MultiplicityRange multiplicityRangePoco:
+                    multiplicityRangePoco.UpdateReferenceProperties((Core.DTO.Kernel.Multiplicities.MultiplicityRange)dto, cache);
                     break;
-                case Core.POCO.Namespace namespacePoco:
-                    namespacePoco.UpdateReferenceProperties((Core.DTO.Namespace)dto, cache);
+                case Core.POCO.Root.Namespaces.Namespace namespacePoco:
+                    namespacePoco.UpdateReferenceProperties((Core.DTO.Root.Namespaces.Namespace)dto, cache);
                     break;
-                case Core.POCO.NamespaceExpose namespaceExposePoco:
-                    namespaceExposePoco.UpdateReferenceProperties((Core.DTO.NamespaceExpose)dto, cache);
+                case Core.POCO.Systems.Views.NamespaceExpose namespaceExposePoco:
+                    namespaceExposePoco.UpdateReferenceProperties((Core.DTO.Systems.Views.NamespaceExpose)dto, cache);
                     break;
-                case Core.POCO.NamespaceImport namespaceImportPoco:
-                    namespaceImportPoco.UpdateReferenceProperties((Core.DTO.NamespaceImport)dto, cache);
+                case Core.POCO.Root.Namespaces.NamespaceImport namespaceImportPoco:
+                    namespaceImportPoco.UpdateReferenceProperties((Core.DTO.Root.Namespaces.NamespaceImport)dto, cache);
                     break;
-                case Core.POCO.NullExpression nullExpressionPoco:
-                    nullExpressionPoco.UpdateReferenceProperties((Core.DTO.NullExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.NullExpression nullExpressionPoco:
+                    nullExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.NullExpression)dto, cache);
                     break;
-                case Core.POCO.ObjectiveMembership objectiveMembershipPoco:
-                    objectiveMembershipPoco.UpdateReferenceProperties((Core.DTO.ObjectiveMembership)dto, cache);
+                case Core.POCO.Systems.Cases.ObjectiveMembership objectiveMembershipPoco:
+                    objectiveMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.Cases.ObjectiveMembership)dto, cache);
                     break;
-                case Core.POCO.OccurrenceDefinition occurrenceDefinitionPoco:
-                    occurrenceDefinitionPoco.UpdateReferenceProperties((Core.DTO.OccurrenceDefinition)dto, cache);
+                case Core.POCO.Systems.Occurrences.OccurrenceDefinition occurrenceDefinitionPoco:
+                    occurrenceDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Occurrences.OccurrenceDefinition)dto, cache);
                     break;
-                case Core.POCO.OccurrenceUsage occurrenceUsagePoco:
-                    occurrenceUsagePoco.UpdateReferenceProperties((Core.DTO.OccurrenceUsage)dto, cache);
+                case Core.POCO.Systems.Occurrences.OccurrenceUsage occurrenceUsagePoco:
+                    occurrenceUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Occurrences.OccurrenceUsage)dto, cache);
                     break;
-                case Core.POCO.OperatorExpression operatorExpressionPoco:
-                    operatorExpressionPoco.UpdateReferenceProperties((Core.DTO.OperatorExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.OperatorExpression operatorExpressionPoco:
+                    operatorExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.OperatorExpression)dto, cache);
                     break;
-                case Core.POCO.OwningMembership owningMembershipPoco:
-                    owningMembershipPoco.UpdateReferenceProperties((Core.DTO.OwningMembership)dto, cache);
+                case Core.POCO.Root.Namespaces.OwningMembership owningMembershipPoco:
+                    owningMembershipPoco.UpdateReferenceProperties((Core.DTO.Root.Namespaces.OwningMembership)dto, cache);
                     break;
-                case Core.POCO.Package packagePoco:
-                    packagePoco.UpdateReferenceProperties((Core.DTO.Package)dto, cache);
+                case Core.POCO.Kernel.Packages.Package packagePoco:
+                    packagePoco.UpdateReferenceProperties((Core.DTO.Kernel.Packages.Package)dto, cache);
                     break;
-                case Core.POCO.ParameterMembership parameterMembershipPoco:
-                    parameterMembershipPoco.UpdateReferenceProperties((Core.DTO.ParameterMembership)dto, cache);
+                case Core.POCO.Kernel.Behaviors.ParameterMembership parameterMembershipPoco:
+                    parameterMembershipPoco.UpdateReferenceProperties((Core.DTO.Kernel.Behaviors.ParameterMembership)dto, cache);
                     break;
-                case Core.POCO.PartDefinition partDefinitionPoco:
-                    partDefinitionPoco.UpdateReferenceProperties((Core.DTO.PartDefinition)dto, cache);
+                case Core.POCO.Systems.Parts.PartDefinition partDefinitionPoco:
+                    partDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Parts.PartDefinition)dto, cache);
                     break;
-                case Core.POCO.PartUsage partUsagePoco:
-                    partUsagePoco.UpdateReferenceProperties((Core.DTO.PartUsage)dto, cache);
+                case Core.POCO.Systems.Parts.PartUsage partUsagePoco:
+                    partUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Parts.PartUsage)dto, cache);
                     break;
-                case Core.POCO.PayloadFeature payloadFeaturePoco:
-                    payloadFeaturePoco.UpdateReferenceProperties((Core.DTO.PayloadFeature)dto, cache);
+                case Core.POCO.Kernel.Interactions.PayloadFeature payloadFeaturePoco:
+                    payloadFeaturePoco.UpdateReferenceProperties((Core.DTO.Kernel.Interactions.PayloadFeature)dto, cache);
                     break;
-                case Core.POCO.PerformActionUsage performActionUsagePoco:
-                    performActionUsagePoco.UpdateReferenceProperties((Core.DTO.PerformActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.PerformActionUsage performActionUsagePoco:
+                    performActionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.PerformActionUsage)dto, cache);
                     break;
-                case Core.POCO.PortConjugation portConjugationPoco:
-                    portConjugationPoco.UpdateReferenceProperties((Core.DTO.PortConjugation)dto, cache);
+                case Core.POCO.Systems.Ports.PortConjugation portConjugationPoco:
+                    portConjugationPoco.UpdateReferenceProperties((Core.DTO.Systems.Ports.PortConjugation)dto, cache);
                     break;
-                case Core.POCO.PortDefinition portDefinitionPoco:
-                    portDefinitionPoco.UpdateReferenceProperties((Core.DTO.PortDefinition)dto, cache);
+                case Core.POCO.Systems.Ports.PortDefinition portDefinitionPoco:
+                    portDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Ports.PortDefinition)dto, cache);
                     break;
-                case Core.POCO.PortUsage portUsagePoco:
-                    portUsagePoco.UpdateReferenceProperties((Core.DTO.PortUsage)dto, cache);
+                case Core.POCO.Systems.Ports.PortUsage portUsagePoco:
+                    portUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Ports.PortUsage)dto, cache);
                     break;
-                case Core.POCO.Predicate predicatePoco:
-                    predicatePoco.UpdateReferenceProperties((Core.DTO.Predicate)dto, cache);
+                case Core.POCO.Kernel.Functions.Predicate predicatePoco:
+                    predicatePoco.UpdateReferenceProperties((Core.DTO.Kernel.Functions.Predicate)dto, cache);
                     break;
-                case Core.POCO.Redefinition redefinitionPoco:
-                    redefinitionPoco.UpdateReferenceProperties((Core.DTO.Redefinition)dto, cache);
+                case Core.POCO.Core.Features.Redefinition redefinitionPoco:
+                    redefinitionPoco.UpdateReferenceProperties((Core.DTO.Core.Features.Redefinition)dto, cache);
                     break;
-                case Core.POCO.ReferenceSubsetting referenceSubsettingPoco:
-                    referenceSubsettingPoco.UpdateReferenceProperties((Core.DTO.ReferenceSubsetting)dto, cache);
+                case Core.POCO.Core.Features.ReferenceSubsetting referenceSubsettingPoco:
+                    referenceSubsettingPoco.UpdateReferenceProperties((Core.DTO.Core.Features.ReferenceSubsetting)dto, cache);
                     break;
-                case Core.POCO.ReferenceUsage referenceUsagePoco:
-                    referenceUsagePoco.UpdateReferenceProperties((Core.DTO.ReferenceUsage)dto, cache);
+                case Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage referenceUsagePoco:
+                    referenceUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.DefinitionAndUsage.ReferenceUsage)dto, cache);
                     break;
-                case Core.POCO.RenderingDefinition renderingDefinitionPoco:
-                    renderingDefinitionPoco.UpdateReferenceProperties((Core.DTO.RenderingDefinition)dto, cache);
+                case Core.POCO.Systems.Views.RenderingDefinition renderingDefinitionPoco:
+                    renderingDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Views.RenderingDefinition)dto, cache);
                     break;
-                case Core.POCO.RenderingUsage renderingUsagePoco:
-                    renderingUsagePoco.UpdateReferenceProperties((Core.DTO.RenderingUsage)dto, cache);
+                case Core.POCO.Systems.Views.RenderingUsage renderingUsagePoco:
+                    renderingUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Views.RenderingUsage)dto, cache);
                     break;
-                case Core.POCO.RequirementConstraintMembership requirementConstraintMembershipPoco:
-                    requirementConstraintMembershipPoco.UpdateReferenceProperties((Core.DTO.RequirementConstraintMembership)dto, cache);
+                case Core.POCO.Systems.Requirements.RequirementConstraintMembership requirementConstraintMembershipPoco:
+                    requirementConstraintMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.RequirementConstraintMembership)dto, cache);
                     break;
-                case Core.POCO.RequirementDefinition requirementDefinitionPoco:
-                    requirementDefinitionPoco.UpdateReferenceProperties((Core.DTO.RequirementDefinition)dto, cache);
+                case Core.POCO.Systems.Requirements.RequirementDefinition requirementDefinitionPoco:
+                    requirementDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.RequirementDefinition)dto, cache);
                     break;
-                case Core.POCO.RequirementUsage requirementUsagePoco:
-                    requirementUsagePoco.UpdateReferenceProperties((Core.DTO.RequirementUsage)dto, cache);
+                case Core.POCO.Systems.Requirements.RequirementUsage requirementUsagePoco:
+                    requirementUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.RequirementUsage)dto, cache);
                     break;
-                case Core.POCO.RequirementVerificationMembership requirementVerificationMembershipPoco:
-                    requirementVerificationMembershipPoco.UpdateReferenceProperties((Core.DTO.RequirementVerificationMembership)dto, cache);
+                case Core.POCO.Systems.VerificationCases.RequirementVerificationMembership requirementVerificationMembershipPoco:
+                    requirementVerificationMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.VerificationCases.RequirementVerificationMembership)dto, cache);
                     break;
-                case Core.POCO.ResultExpressionMembership resultExpressionMembershipPoco:
-                    resultExpressionMembershipPoco.UpdateReferenceProperties((Core.DTO.ResultExpressionMembership)dto, cache);
+                case Core.POCO.Kernel.Functions.ResultExpressionMembership resultExpressionMembershipPoco:
+                    resultExpressionMembershipPoco.UpdateReferenceProperties((Core.DTO.Kernel.Functions.ResultExpressionMembership)dto, cache);
                     break;
-                case Core.POCO.ReturnParameterMembership returnParameterMembershipPoco:
-                    returnParameterMembershipPoco.UpdateReferenceProperties((Core.DTO.ReturnParameterMembership)dto, cache);
+                case Core.POCO.Kernel.Functions.ReturnParameterMembership returnParameterMembershipPoco:
+                    returnParameterMembershipPoco.UpdateReferenceProperties((Core.DTO.Kernel.Functions.ReturnParameterMembership)dto, cache);
                     break;
-                case Core.POCO.SatisfyRequirementUsage satisfyRequirementUsagePoco:
-                    satisfyRequirementUsagePoco.UpdateReferenceProperties((Core.DTO.SatisfyRequirementUsage)dto, cache);
+                case Core.POCO.Systems.Requirements.SatisfyRequirementUsage satisfyRequirementUsagePoco:
+                    satisfyRequirementUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.SatisfyRequirementUsage)dto, cache);
                     break;
-                case Core.POCO.SelectExpression selectExpressionPoco:
-                    selectExpressionPoco.UpdateReferenceProperties((Core.DTO.SelectExpression)dto, cache);
+                case Core.POCO.Kernel.Expressions.SelectExpression selectExpressionPoco:
+                    selectExpressionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Expressions.SelectExpression)dto, cache);
                     break;
-                case Core.POCO.SendActionUsage sendActionUsagePoco:
-                    sendActionUsagePoco.UpdateReferenceProperties((Core.DTO.SendActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.SendActionUsage sendActionUsagePoco:
+                    sendActionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.SendActionUsage)dto, cache);
                     break;
-                case Core.POCO.Specialization specializationPoco:
-                    specializationPoco.UpdateReferenceProperties((Core.DTO.Specialization)dto, cache);
+                case Core.POCO.Core.Types.Specialization specializationPoco:
+                    specializationPoco.UpdateReferenceProperties((Core.DTO.Core.Types.Specialization)dto, cache);
                     break;
-                case Core.POCO.StakeholderMembership stakeholderMembershipPoco:
-                    stakeholderMembershipPoco.UpdateReferenceProperties((Core.DTO.StakeholderMembership)dto, cache);
+                case Core.POCO.Systems.Requirements.StakeholderMembership stakeholderMembershipPoco:
+                    stakeholderMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.StakeholderMembership)dto, cache);
                     break;
-                case Core.POCO.StateDefinition stateDefinitionPoco:
-                    stateDefinitionPoco.UpdateReferenceProperties((Core.DTO.StateDefinition)dto, cache);
+                case Core.POCO.Systems.States.StateDefinition stateDefinitionPoco:
+                    stateDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.States.StateDefinition)dto, cache);
                     break;
-                case Core.POCO.StateSubactionMembership stateSubactionMembershipPoco:
-                    stateSubactionMembershipPoco.UpdateReferenceProperties((Core.DTO.StateSubactionMembership)dto, cache);
+                case Core.POCO.Systems.States.StateSubactionMembership stateSubactionMembershipPoco:
+                    stateSubactionMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.States.StateSubactionMembership)dto, cache);
                     break;
-                case Core.POCO.StateUsage stateUsagePoco:
-                    stateUsagePoco.UpdateReferenceProperties((Core.DTO.StateUsage)dto, cache);
+                case Core.POCO.Systems.States.StateUsage stateUsagePoco:
+                    stateUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.States.StateUsage)dto, cache);
                     break;
-                case Core.POCO.Step stepPoco:
-                    stepPoco.UpdateReferenceProperties((Core.DTO.Step)dto, cache);
+                case Core.POCO.Kernel.Behaviors.Step stepPoco:
+                    stepPoco.UpdateReferenceProperties((Core.DTO.Kernel.Behaviors.Step)dto, cache);
                     break;
-                case Core.POCO.Structure structurePoco:
-                    structurePoco.UpdateReferenceProperties((Core.DTO.Structure)dto, cache);
+                case Core.POCO.Kernel.Structures.Structure structurePoco:
+                    structurePoco.UpdateReferenceProperties((Core.DTO.Kernel.Structures.Structure)dto, cache);
                     break;
-                case Core.POCO.Subclassification subclassificationPoco:
-                    subclassificationPoco.UpdateReferenceProperties((Core.DTO.Subclassification)dto, cache);
+                case Core.POCO.Core.Classifiers.Subclassification subclassificationPoco:
+                    subclassificationPoco.UpdateReferenceProperties((Core.DTO.Core.Classifiers.Subclassification)dto, cache);
                     break;
-                case Core.POCO.SubjectMembership subjectMembershipPoco:
-                    subjectMembershipPoco.UpdateReferenceProperties((Core.DTO.SubjectMembership)dto, cache);
+                case Core.POCO.Systems.Requirements.SubjectMembership subjectMembershipPoco:
+                    subjectMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.Requirements.SubjectMembership)dto, cache);
                     break;
-                case Core.POCO.Subsetting subsettingPoco:
-                    subsettingPoco.UpdateReferenceProperties((Core.DTO.Subsetting)dto, cache);
+                case Core.POCO.Core.Features.Subsetting subsettingPoco:
+                    subsettingPoco.UpdateReferenceProperties((Core.DTO.Core.Features.Subsetting)dto, cache);
                     break;
-                case Core.POCO.Succession successionPoco:
-                    successionPoco.UpdateReferenceProperties((Core.DTO.Succession)dto, cache);
+                case Core.POCO.Kernel.Connectors.Succession successionPoco:
+                    successionPoco.UpdateReferenceProperties((Core.DTO.Kernel.Connectors.Succession)dto, cache);
                     break;
-                case Core.POCO.SuccessionAsUsage successionAsUsagePoco:
-                    successionAsUsagePoco.UpdateReferenceProperties((Core.DTO.SuccessionAsUsage)dto, cache);
+                case Core.POCO.Systems.Connections.SuccessionAsUsage successionAsUsagePoco:
+                    successionAsUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Connections.SuccessionAsUsage)dto, cache);
                     break;
-                case Core.POCO.SuccessionFlow successionFlowPoco:
-                    successionFlowPoco.UpdateReferenceProperties((Core.DTO.SuccessionFlow)dto, cache);
+                case Core.POCO.Kernel.Interactions.SuccessionFlow successionFlowPoco:
+                    successionFlowPoco.UpdateReferenceProperties((Core.DTO.Kernel.Interactions.SuccessionFlow)dto, cache);
                     break;
-                case Core.POCO.SuccessionFlowUsage successionFlowUsagePoco:
-                    successionFlowUsagePoco.UpdateReferenceProperties((Core.DTO.SuccessionFlowUsage)dto, cache);
+                case Core.POCO.Systems.Flows.SuccessionFlowUsage successionFlowUsagePoco:
+                    successionFlowUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Flows.SuccessionFlowUsage)dto, cache);
                     break;
-                case Core.POCO.TerminateActionUsage terminateActionUsagePoco:
-                    terminateActionUsagePoco.UpdateReferenceProperties((Core.DTO.TerminateActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.TerminateActionUsage terminateActionUsagePoco:
+                    terminateActionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.TerminateActionUsage)dto, cache);
                     break;
-                case Core.POCO.TextualRepresentation textualRepresentationPoco:
-                    textualRepresentationPoco.UpdateReferenceProperties((Core.DTO.TextualRepresentation)dto, cache);
+                case Core.POCO.Root.Annotations.TextualRepresentation textualRepresentationPoco:
+                    textualRepresentationPoco.UpdateReferenceProperties((Core.DTO.Root.Annotations.TextualRepresentation)dto, cache);
                     break;
-                case Core.POCO.TransitionFeatureMembership transitionFeatureMembershipPoco:
-                    transitionFeatureMembershipPoco.UpdateReferenceProperties((Core.DTO.TransitionFeatureMembership)dto, cache);
+                case Core.POCO.Systems.States.TransitionFeatureMembership transitionFeatureMembershipPoco:
+                    transitionFeatureMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.States.TransitionFeatureMembership)dto, cache);
                     break;
-                case Core.POCO.TransitionUsage transitionUsagePoco:
-                    transitionUsagePoco.UpdateReferenceProperties((Core.DTO.TransitionUsage)dto, cache);
+                case Core.POCO.Systems.States.TransitionUsage transitionUsagePoco:
+                    transitionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.States.TransitionUsage)dto, cache);
                     break;
-                case Core.POCO.TriggerInvocationExpression triggerInvocationExpressionPoco:
-                    triggerInvocationExpressionPoco.UpdateReferenceProperties((Core.DTO.TriggerInvocationExpression)dto, cache);
+                case Core.POCO.Systems.Actions.TriggerInvocationExpression triggerInvocationExpressionPoco:
+                    triggerInvocationExpressionPoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.TriggerInvocationExpression)dto, cache);
                     break;
-                case Core.POCO.Type typePoco:
-                    typePoco.UpdateReferenceProperties((Core.DTO.Type)dto, cache);
+                case Core.POCO.Core.Types.Type typePoco:
+                    typePoco.UpdateReferenceProperties((Core.DTO.Core.Types.Type)dto, cache);
                     break;
-                case Core.POCO.TypeFeaturing typeFeaturingPoco:
-                    typeFeaturingPoco.UpdateReferenceProperties((Core.DTO.TypeFeaturing)dto, cache);
+                case Core.POCO.Core.Features.TypeFeaturing typeFeaturingPoco:
+                    typeFeaturingPoco.UpdateReferenceProperties((Core.DTO.Core.Features.TypeFeaturing)dto, cache);
                     break;
-                case Core.POCO.Unioning unioningPoco:
-                    unioningPoco.UpdateReferenceProperties((Core.DTO.Unioning)dto, cache);
+                case Core.POCO.Core.Types.Unioning unioningPoco:
+                    unioningPoco.UpdateReferenceProperties((Core.DTO.Core.Types.Unioning)dto, cache);
                     break;
-                case Core.POCO.Usage usagePoco:
-                    usagePoco.UpdateReferenceProperties((Core.DTO.Usage)dto, cache);
+                case Core.POCO.Systems.DefinitionAndUsage.Usage usagePoco:
+                    usagePoco.UpdateReferenceProperties((Core.DTO.Systems.DefinitionAndUsage.Usage)dto, cache);
                     break;
-                case Core.POCO.UseCaseDefinition useCaseDefinitionPoco:
-                    useCaseDefinitionPoco.UpdateReferenceProperties((Core.DTO.UseCaseDefinition)dto, cache);
+                case Core.POCO.Systems.UseCases.UseCaseDefinition useCaseDefinitionPoco:
+                    useCaseDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.UseCases.UseCaseDefinition)dto, cache);
                     break;
-                case Core.POCO.UseCaseUsage useCaseUsagePoco:
-                    useCaseUsagePoco.UpdateReferenceProperties((Core.DTO.UseCaseUsage)dto, cache);
+                case Core.POCO.Systems.UseCases.UseCaseUsage useCaseUsagePoco:
+                    useCaseUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.UseCases.UseCaseUsage)dto, cache);
                     break;
-                case Core.POCO.VariantMembership variantMembershipPoco:
-                    variantMembershipPoco.UpdateReferenceProperties((Core.DTO.VariantMembership)dto, cache);
+                case Core.POCO.Systems.DefinitionAndUsage.VariantMembership variantMembershipPoco:
+                    variantMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.DefinitionAndUsage.VariantMembership)dto, cache);
                     break;
-                case Core.POCO.VerificationCaseDefinition verificationCaseDefinitionPoco:
-                    verificationCaseDefinitionPoco.UpdateReferenceProperties((Core.DTO.VerificationCaseDefinition)dto, cache);
+                case Core.POCO.Systems.VerificationCases.VerificationCaseDefinition verificationCaseDefinitionPoco:
+                    verificationCaseDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.VerificationCases.VerificationCaseDefinition)dto, cache);
                     break;
-                case Core.POCO.VerificationCaseUsage verificationCaseUsagePoco:
-                    verificationCaseUsagePoco.UpdateReferenceProperties((Core.DTO.VerificationCaseUsage)dto, cache);
+                case Core.POCO.Systems.VerificationCases.VerificationCaseUsage verificationCaseUsagePoco:
+                    verificationCaseUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.VerificationCases.VerificationCaseUsage)dto, cache);
                     break;
-                case Core.POCO.ViewDefinition viewDefinitionPoco:
-                    viewDefinitionPoco.UpdateReferenceProperties((Core.DTO.ViewDefinition)dto, cache);
+                case Core.POCO.Systems.Views.ViewDefinition viewDefinitionPoco:
+                    viewDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Views.ViewDefinition)dto, cache);
                     break;
-                case Core.POCO.ViewpointDefinition viewpointDefinitionPoco:
-                    viewpointDefinitionPoco.UpdateReferenceProperties((Core.DTO.ViewpointDefinition)dto, cache);
+                case Core.POCO.Systems.Views.ViewpointDefinition viewpointDefinitionPoco:
+                    viewpointDefinitionPoco.UpdateReferenceProperties((Core.DTO.Systems.Views.ViewpointDefinition)dto, cache);
                     break;
-                case Core.POCO.ViewpointUsage viewpointUsagePoco:
-                    viewpointUsagePoco.UpdateReferenceProperties((Core.DTO.ViewpointUsage)dto, cache);
+                case Core.POCO.Systems.Views.ViewpointUsage viewpointUsagePoco:
+                    viewpointUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Views.ViewpointUsage)dto, cache);
                     break;
-                case Core.POCO.ViewRenderingMembership viewRenderingMembershipPoco:
-                    viewRenderingMembershipPoco.UpdateReferenceProperties((Core.DTO.ViewRenderingMembership)dto, cache);
+                case Core.POCO.Systems.Views.ViewRenderingMembership viewRenderingMembershipPoco:
+                    viewRenderingMembershipPoco.UpdateReferenceProperties((Core.DTO.Systems.Views.ViewRenderingMembership)dto, cache);
                     break;
-                case Core.POCO.ViewUsage viewUsagePoco:
-                    viewUsagePoco.UpdateReferenceProperties((Core.DTO.ViewUsage)dto, cache);
+                case Core.POCO.Systems.Views.ViewUsage viewUsagePoco:
+                    viewUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Views.ViewUsage)dto, cache);
                     break;
-                case Core.POCO.WhileLoopActionUsage whileLoopActionUsagePoco:
-                    whileLoopActionUsagePoco.UpdateReferenceProperties((Core.DTO.WhileLoopActionUsage)dto, cache);
+                case Core.POCO.Systems.Actions.WhileLoopActionUsage whileLoopActionUsagePoco:
+                    whileLoopActionUsagePoco.UpdateReferenceProperties((Core.DTO.Systems.Actions.WhileLoopActionUsage)dto, cache);
                     break;
                 default:
                     throw new NotSupportedException($"{poco.GetType().Name} not yet supported");

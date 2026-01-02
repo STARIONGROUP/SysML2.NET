@@ -29,7 +29,7 @@ namespace SysML2.NET.Dal
     using System.Collections.Generic;
     using System.Linq;
 
-    using Core.POCO;
+    using Core.POCO.Core.Features;
 
     /// <summary>
     /// A static class that provides extension methods for the <see cref="FeatureTyping"/> class
@@ -53,7 +53,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// Thrown when the <paramref name="poco"/> or <paramref name="dto"/> is null
         /// </exception>
-        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.FeatureTyping poco, Core.DTO.FeatureTyping dto)
+        public static IEnumerable<Guid> UpdateValueAndRemoveDeletedReferenceProperties(this Core.POCO.Core.Features.FeatureTyping poco, Core.DTO.Core.Features.FeatureTyping dto)
         {
             if (poco == null)
             {
@@ -80,30 +80,38 @@ namespace SysML2.NET.Dal
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
+
             foreach (var identifier in ownedRelatedElementToDelete)
             {
                 poco.OwnedRelatedElement.Remove(poco.OwnedRelatedElement.Single(x => x.Id == identifier));
             }
+
             identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
+
             foreach (var identifier in ownedRelationshipToDelete)
             {
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
+
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
             var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
+
             foreach (var identifier in sourceToDelete)
             {
                 poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
             }
 
+
             var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
+
             foreach (var identifier in targetToDelete)
             {
                 poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
             }
+
 
 
             return identifiersOfObjectsToDelete;
@@ -120,11 +128,11 @@ namespace SysML2.NET.Dal
         /// The DTO that is used to update the <see cref="FeatureTyping"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.IElement}}"/> that contains the
-        /// <see cref="Core.POCO.IElement"/>s that are know and cached.
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void UpdateReferenceProperties(this Core.POCO.FeatureTyping poco, Core.DTO.FeatureTyping dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.IElement>> cache)
+        public static void UpdateReferenceProperties(this Core.POCO.Core.Features.FeatureTyping poco, Core.DTO.Core.Features.FeatureTyping dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)
         {
             if (poco == null)
             {
@@ -141,11 +149,11 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(cache), $"the {nameof(cache)} may not be null");
             }
 
-            Lazy<Core.POCO.IElement> lazyPoco;
+            Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
 
             if (cache.TryGetValue(dto.General, out lazyPoco))
             {
-                poco.General = (Core.POCO.Type)lazyPoco.Value;
+                poco.General = (Core.POCO.Core.Types.Type)lazyPoco.Value;
             }
             else
             {
@@ -153,26 +161,28 @@ namespace SysML2.NET.Dal
             }
 
             var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
+
             foreach (var identifier in ownedRelatedElementToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelatedElement.Add((IElement)lazyPoco.Value);
+                    poco.OwnedRelatedElement.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
             var ownedRelationshipToAdd = dto.OwnedRelationship.Except(poco.OwnedRelationship.Select(x => x.Id));
+
             foreach (var identifier in ownedRelationshipToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelationship.Add((IRelationship)lazyPoco.Value);
+                    poco.OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
                 }
             }
 
             if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
             {
-                poco.OwningRelatedElement = (IElement)lazyPoco.Value;
+                poco.OwningRelatedElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
             }
             else
             {
@@ -181,7 +191,7 @@ namespace SysML2.NET.Dal
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
             {
-                poco.OwningRelationship = (IRelationship)lazyPoco.Value;
+                poco.OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
             }
             else
             {
@@ -189,17 +199,18 @@ namespace SysML2.NET.Dal
             }
 
             var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
+
             foreach (var identifier in sourceToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.Source.Add((IElement)lazyPoco.Value);
+                    poco.Source.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
             if (cache.TryGetValue(dto.Specific, out lazyPoco))
             {
-                poco.Specific = (Core.POCO.Type)lazyPoco.Value;
+                poco.Specific = (Core.POCO.Core.Types.Type)lazyPoco.Value;
             }
             else
             {
@@ -207,17 +218,18 @@ namespace SysML2.NET.Dal
             }
 
             var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
+
             foreach (var identifier in targetToAdd)
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.Target.Add((IElement)lazyPoco.Value);
+                    poco.Target.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
             if (cache.TryGetValue(dto.Type, out lazyPoco))
             {
-                poco.Type = (Core.POCO.Type)lazyPoco.Value;
+                poco.Type = (Core.POCO.Core.Types.Type)lazyPoco.Value;
             }
             else
             {
@@ -226,7 +238,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.TypedFeature, out lazyPoco))
             {
-                poco.TypedFeature = (Core.POCO.Feature)lazyPoco.Value;
+                poco.TypedFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
             }
             else
             {
@@ -236,17 +248,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Creates a <see cref="Core.DTO.FeatureTyping"/> based on the provided POCO
+        /// Creates a <see cref="Core.DTO.Core.Features.FeatureTyping"/> based on the provided POCO
         /// </summary>
         /// <param name="poco">
-        /// The subject <see cref="Core.POCO.FeatureTyping"/> from which a DTO is to be created
+        /// The subject <see cref="Core.POCO.Core.Features.FeatureTyping"/> from which a DTO is to be created
         /// </param>
         /// <returns>
-        /// An instance of <see cref="Core.POCO.FeatureTyping"/>
+        /// An instance of <see cref="Core.POCO.Core.Features.FeatureTyping"/>
         /// </returns>
-        public static Core.DTO.FeatureTyping ToDto(this Core.POCO.FeatureTyping poco)
+        public static Core.DTO.Core.Features.FeatureTyping ToDto(this Core.POCO.Core.Features.FeatureTyping poco)
         {
-            var dto = new Core.DTO.FeatureTyping();
+            var dto = new Core.DTO.Core.Features.FeatureTyping();
 
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;

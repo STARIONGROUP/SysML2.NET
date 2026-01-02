@@ -31,6 +31,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using uml4net.xmi.Readers;
 
     using NamedElementHelper = SysML2.NET.CodeGenerator.HandleBarHelpers.NamedElementHelper;
+    using PropertyHelper = SysML2.NET.CodeGenerator.HandleBarHelpers.PropertyHelper;
 
     /// <summary>
     /// A UML Handlebars based POCO Extension code generator
@@ -38,9 +39,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     public class UmlCoreDalPocoExtensionsGenerator : UmlHandleBarsGenerator
     {
         /// <summary>
-        /// Gets the name of the template used to generate POCO Elements extension
+        /// Gets the name of the template used to generate POCO Element extension
         /// </summary>
         private const string ElementExtensionsTemplateName = "core-dal-element-uml-extensions";
+        
+        /// <summary>
+        /// Gets the name of the template used to generate POCO Elements extension
+        /// </summary>
+        private const string PocoExtensionsTemplateName = "core-dal-poco-uml-extensions";
 
         /// <summary>
         /// Generates code specific to the concrete implementation
@@ -57,6 +63,106 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
         {
             await this.GenerateElementExtensions(xmiReaderResult, outputDirectory);
+            await this.GeneratePocoExtensions(xmiReaderResult, outputDirectory);
+        }
+
+        /// <summary>
+        /// Generates the static poco extensions for the DAL library
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <returns>
+        /// an awaitable <see cref="Task" />
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// In case of null value for <paramref name="xmiReaderResult" /> or
+        /// <paramref name="outputDirectory" />
+        /// </exception>
+        private Task GeneratePocoExtensions(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        {
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+
+            return this.GeneratePocoExtensionsInternal(xmiReaderResult, outputDirectory);
+        }
+        
+        /// <summary>
+        /// Generates the static poco extensions for the DAL library
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <returns>
+        /// an awaitable <see cref="Task" />
+        /// </returns>
+        private async Task GeneratePocoExtensionsInternal(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        {
+            var template = this.Templates[PocoExtensionsTemplateName];
+
+            var classes = xmiReaderResult.Root.QueryPackages()
+                .SelectMany(x => x.PackagedElement.OfType<IClass>())
+                .Where(x => !x.IsAbstract)
+                .ToList();
+
+            foreach (var classToGenerate in classes)
+            {
+                var generatedPocoExtension = template(classToGenerate);
+
+                generatedPocoExtension = this.CodeCleanup(generatedPocoExtension);
+
+                var  fileName = $"{classToGenerate.Name}Extensions.cs";
+
+                await Write(generatedPocoExtension, outputDirectory, fileName);
+            }
+        }
+
+        /// <summary>
+        /// Generates the static poco extensions for the DAL library for a specific class
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="className">The name of the class to generate</param>
+        /// <returns>
+        /// an awaitable <see cref="Task" /> with the generated code
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// In case of null value for <paramref name="xmiReaderResult" /> or
+        /// <paramref name="outputDirectory" />
+        /// </exception>
+        /// <exception cref="ArgumentException">In case of null or whitespace value for the <paramref name="className"/></exception>
+        public Task<string> GenerateDalPocoExtension(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        {
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+            ArgumentException.ThrowIfNullOrWhiteSpace(className);
+
+            return this.GenerateDalPocoExtensionInternal(xmiReaderResult, outputDirectory, className);
+        }
+
+        /// <summary>
+        /// Generates the static poco extensions for the DAL library for a specific class
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="className">The name of the class to generate</param>
+        /// <returns>
+        /// an awaitable <see cref="Task" /> with the generated code
+        /// </returns>
+        private async Task<string> GenerateDalPocoExtensionInternal(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates[PocoExtensionsTemplateName];
+
+            var classToGenerate = xmiReaderResult.Root.QueryPackages()
+                .SelectMany(x => x.PackagedElement.OfType<IClass>())
+                .Single(x => x.Name == className);
+            
+            var generatedJsonSerializer = template(classToGenerate);
+
+            generatedJsonSerializer = this.CodeCleanup(generatedJsonSerializer);
+
+            var fileName = $"{classToGenerate.Name.CapitalizeFirstLetter()}Extensions.cs";
+
+            await WriteAsync(generatedJsonSerializer, outputDirectory, fileName);
+            return generatedJsonSerializer;
         }
 
         /// <summary>
@@ -69,6 +175,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             this.Handlebars.RegisterPropertyHelper();
 
             NamedElementHelper.RegisterNamedElementHelper(this.Handlebars);
+            PropertyHelper.RegisterPropertyHelper(this.Handlebars);
         }
 
         /// <summary>
@@ -77,6 +184,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         protected override void RegisterTemplates()
         {
             this.RegisterTemplate(ElementExtensionsTemplateName);
+            this.RegisterTemplate(PocoExtensionsTemplateName);
         }
 
         /// <summary>

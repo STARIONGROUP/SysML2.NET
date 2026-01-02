@@ -62,15 +62,13 @@ namespace SysML2.NET.Dal
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            switch (poco)
+            return poco switch
             {
                 {{#each this as | class |}}
-                case Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco:
-                    return {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }})dto);
+                Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco => {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }})dto),
                 {{/each}}
-                default:
-                    throw new NotSupportedException($"{poco.GetType().Name} not yet supported");
-            }
+                _ => throw new NotSupportedException($"{poco.GetType().Name} not yet supported")
+            };
         }
 
         /// <summary>
@@ -109,7 +107,7 @@ namespace SysML2.NET.Dal
             {
                 {{#each this as | class |}}
                 case Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco:
-                    {{ String.LowerCaseFirstLetter eClass.Name }}Poco.UpdateReferenceProperties((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }}) dto, cache);
+                    {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateReferenceProperties((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }}) dto, cache);
                     break;
                 {{/each}}
                 default:
