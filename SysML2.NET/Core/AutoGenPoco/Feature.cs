@@ -187,7 +187,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
-        List<IFeature> Core.Types.IType.QueryFeature()
+        public List<IFeature> QueryFeature()
         {
             throw new NotImplementedException("Derived property Feature not yet supported");
         }

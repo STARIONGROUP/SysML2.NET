@@ -260,7 +260,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
-        IOwningMembership Root.Elements.IElement.QueryOwningMembership()
+        public IOwningMembership QueryOwningMembership()
         {
             throw new NotImplementedException("Derived property OwningMembership not yet supported");
         }

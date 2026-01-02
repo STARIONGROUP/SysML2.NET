@@ -102,7 +102,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
-        List<IDocumentation> Root.Elements.IElement.QueryDocumentation()
+        public List<IDocumentation> QueryDocumentation()
         {
             throw new NotImplementedException("Derived property Documentation not yet supported");
         }

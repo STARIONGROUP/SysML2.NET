@@ -308,7 +308,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
-        List<ITextualRepresentation> Root.Elements.IElement.QueryTextualRepresentation()
+        public List<ITextualRepresentation> QueryTextualRepresentation()
         {
             throw new NotImplementedException("Derived property TextualRepresentation not yet supported");
         }

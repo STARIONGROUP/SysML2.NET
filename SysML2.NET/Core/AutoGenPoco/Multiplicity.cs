@@ -410,7 +410,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        IMultiplicity IType.QueryMultiplicity()
+        public IMultiplicity QueryMultiplicity()
         {
             throw new NotImplementedException("Derived property Multiplicity not yet supported");
         }

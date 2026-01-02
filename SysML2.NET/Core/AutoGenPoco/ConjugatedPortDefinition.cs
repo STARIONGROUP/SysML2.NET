@@ -88,7 +88,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575484364015_206236_989", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        IConjugatedPortDefinition IPortDefinition.QueryConjugatedPortDefinition()
+        public IConjugatedPortDefinition QueryConjugatedPortDefinition()
         {
             throw new NotImplementedException("Derived property ConjugatedPortDefinition not yet supported");
         }

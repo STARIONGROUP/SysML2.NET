@@ -307,8 +307,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var typeName = property.QueryCSharpTypeName();
 
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
-                var hasSameNameAsClass = generatedClass.Name == propertyName;
-                var classHaveToImplementTwiceSameProperty = generatedClass.QueryAllProperties().Count(x => x.Name == property.Name) > 1;
+                var hasSameNameAsClass = !property.IsDerived && !property.IsDerivedUnion && generatedClass.Name == propertyName;
+                var classHaveToImplementTwiceSameProperty =  generatedClass.QueryAllProperties().Count(x => x.Name == property.Name) > 1;
                 
                 if (!hasSameNameAsClass && !classHaveToImplementTwiceSameProperty)
                 {

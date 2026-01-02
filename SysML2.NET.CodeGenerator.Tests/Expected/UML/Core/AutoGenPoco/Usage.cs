@@ -1192,7 +1192,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591217543254_26688_475", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        List<IUsage> IUsage.QueryUsage()
+        public List<IUsage> QueryUsage()
         {
             throw new NotImplementedException("Derived property Usage not yet supported");
         }
