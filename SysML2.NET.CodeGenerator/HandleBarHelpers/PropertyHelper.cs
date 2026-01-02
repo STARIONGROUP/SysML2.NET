@@ -354,7 +354,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     sb.Append("()");
                     sb.AppendLine("{");
-                    sb.AppendLine($"\tthrow new NotImplementedException(\"Derived property {GenericExtensions.CapitalizeFirstLetter(property.Name)} not yet supported\");");
+                    sb.AppendLine($"\treturn this.Compute{StringExtensions.CapitalizeFirstLetter(property.Name)}();");
                     sb.Append('}');
                 }
                 else if (property.IsReadOnly)

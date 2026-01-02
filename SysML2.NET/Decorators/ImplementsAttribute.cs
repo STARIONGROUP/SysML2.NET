@@ -26,7 +26,7 @@ namespace SysML2.NET.Decorators
     /// Attribute used to decorate properties with to indicate which class/property
     /// is being implemented
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = false)]
     public sealed class ImplementsAttribute : Attribute
     {
         /// <summary>

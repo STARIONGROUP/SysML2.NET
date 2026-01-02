@@ -88,15 +88,17 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
+        [Implements(implementation: "IActionUsage.ActionDefinition")]
         public List<IBehavior> QueryActionDefinition()
         {
-            throw new NotImplementedException("Derived property ActionDefinition not yet supported");
+            return this.ComputeActionDefinition();
         }
 
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.AliasIds")]
         public List<string> AliasIds { get; set; }
 
         /// <summary>
@@ -105,9 +107,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
+        [Implements(implementation: "IStep.Behavior")]
         public List<IBehavior> QueryBehavior()
         {
-            throw new NotImplementedException("Derived property Behavior not yet supported");
+            return this.ComputeBehavior();
         }
 
         /// <summary>
@@ -118,9 +121,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1588213526305_899324_302", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
+        [Implements(implementation: "ICalculationUsage.CalculationDefinition")]
         public IFunction QueryCalculationDefinition()
         {
-            throw new NotImplementedException("Derived property CalculationDefinition not yet supported");
+            return this.ComputeCalculationDefinition();
         }
 
         /// <summary>
@@ -132,9 +136,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// Feature in chainingFeatures, and so on, to values of the last Feature.
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1619792219511_543311_445", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [Implements(implementation: "IFeature.ChainingFeature")]
         public List<IFeature> QueryChainingFeature()
         {
-            throw new NotImplementedException("Derived property ChainingFeature not yet supported");
+            return this.ComputeChainingFeature();
         }
 
         /// <summary>
@@ -144,15 +149,17 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// owningType.
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1689616227528_355910_218", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IFeature.CrossFeature")]
         public IFeature QueryCrossFeature()
         {
-            throw new NotImplementedException("Derived property CrossFeature not yet supported");
+            return this.ComputeCrossFeature();
         }
 
         /// <summary>
         /// The declared name of this Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.DeclaredName")]
         public string DeclaredName { get; set; }
 
         /// <summary>
@@ -162,6 +169,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// model or relative to some other context.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.DeclaredShortName")]
         public string DeclaredShortName { get; set; }
 
         /// <summary>
@@ -172,9 +180,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
+        [Implements(implementation: "IUsage.Definition")]
         public List<IClassifier> QueryDefinition()
         {
-            throw new NotImplementedException("Derived property Definition not yet supported");
+            return this.ComputeDefinition();
         }
 
         /// <summary>
@@ -187,9 +196,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// those of that sex are also interpretations of the Classifier for that sex).
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661975883472_645501_1372", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IType.DifferencingType")]
         public List<IType> QueryDifferencingType()
         {
-            throw new NotImplementedException("Derived property DifferencingType not yet supported");
+            return this.ComputeDifferencingType();
         }
 
         /// <summary>
@@ -198,9 +208,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
+        [Implements(implementation: "IType.DirectedFeature")]
         public List<IFeature> QueryDirectedFeature()
         {
-            throw new NotImplementedException("Derived property DirectedFeature not yet supported");
+            return this.ComputeDirectedFeature();
         }
 
         /// <summary>
@@ -209,9 +220,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
+        [Implements(implementation: "IUsage.DirectedUsage")]
         public List<IUsage> QueryDirectedUsage()
         {
-            throw new NotImplementedException("Derived property DirectedUsage not yet supported");
+            return this.ComputeDirectedUsage();
         }
 
         /// <summary>
@@ -219,6 +231,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// FeatureDirectionKind).
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674994_447677_43347", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IFeature.Direction")]
         public FeatureDirectionKind Direction { get; set; }
 
         /// <summary>
@@ -227,9 +240,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
+        [Implements(implementation: "IElement.Documentation")]
         public List<IDocumentation> QueryDocumentation()
         {
-            throw new NotImplementedException("Derived property Documentation not yet supported");
+            return this.ComputeDocumentation();
         }
 
         /// <summary>
@@ -237,6 +251,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// not change during the lifetime of the Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_844338_43305", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.ElementId")]
         public string ElementId { get; set; }
 
         /// <summary>
@@ -244,9 +259,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        [Implements(implementation: "IType.EndFeature")]
         public List<IFeature> QueryEndFeature()
         {
-            throw new NotImplementedException("Derived property EndFeature not yet supported");
+            return this.ComputeEndFeature();
         }
 
         /// <summary>
@@ -256,9 +272,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1563834516279_920295_20653", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168386_366266_22107")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        [Implements(implementation: "IFeature.EndOwningType")]
         public IType QueryEndOwningType()
         {
-            throw new NotImplementedException("Derived property EndOwningType not yet supported");
+            return this.ComputeEndOwningType();
         }
 
         /// <summary>
@@ -266,9 +283,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
+        [Implements(implementation: "IType.Feature")]
         public List<IFeature> QueryFeature()
         {
-            throw new NotImplementedException("Derived property Feature not yet supported");
+            return this.ComputeFeature();
         }
 
         /// <summary>
@@ -277,18 +295,20 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// importedMemberships).
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651076866512_962346_485", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IType.FeatureMembership")]
         public List<IFeatureMembership> QueryFeatureMembership()
         {
-            throw new NotImplementedException("Derived property FeatureMembership not yet supported");
+            return this.ComputeFeatureMembership();
         }
 
         /// <summary>
         /// The last of the chainingFeatures of this Feature, if it has any. Otherwise, this Feature itself.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1715790852907_110671_19", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IFeature.FeatureTarget")]
         public IFeature QueryFeatureTarget()
         {
-            throw new NotImplementedException("Derived property FeatureTarget not yet supported");
+            return this.ComputeFeatureTarget();
         }
 
         /// <summary>
@@ -298,9 +318,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// featuringTypes of the chained Feature.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1603905619975_304385_743", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IFeature.FeaturingType")]
         public List<IType> QueryFeaturingType()
         {
-            throw new NotImplementedException("Derived property FeaturingType not yet supported");
+            return this.ComputeFeaturingType();
         }
 
         /// <summary>
@@ -309,9 +330,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1543948477241_299049_20934", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
+        [Implements(implementation: "IExpression.Function")]
         public IFunction QueryFunction()
         {
-            throw new NotImplementedException("Derived property Function not yet supported");
+            return this.ComputeFunction();
         }
 
         /// <summary>
@@ -319,9 +341,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
+        [Implements(implementation: "INamespace.ImportedMembership")]
         public List<IMembership> QueryImportedMembership()
         {
-            throw new NotImplementedException("Derived property ImportedMembership not yet supported");
+            return this.ComputeImportedMembership();
         }
 
         /// <summary>
@@ -329,9 +352,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618958878775_52798_7090", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
+        [Implements(implementation: "IOccurrenceUsage.IndividualDefinition")]
         public IOccurrenceDefinition QueryIndividualDefinition()
         {
-            throw new NotImplementedException("Derived property IndividualDefinition not yet supported");
+            return this.ComputeIndividualDefinition();
         }
 
         /// <summary>
@@ -339,9 +363,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575499020770_15576_2334", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        [Implements(implementation: "IType.InheritedFeature")]
         public List<IFeature> QueryInheritedFeature()
         {
-            throw new NotImplementedException("Derived property InheritedFeature not yet supported");
+            return this.ComputeInheritedFeature();
         }
 
         /// <summary>
@@ -350,9 +375,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1551972927538_787976_19004", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
+        [Implements(implementation: "IType.InheritedMembership")]
         public List<IMembership> QueryInheritedMembership()
         {
-            throw new NotImplementedException("Derived property InheritedMembership not yet supported");
+            return this.ComputeInheritedMembership();
         }
 
         /// <summary>
@@ -360,9 +386,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_37384_43169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [Implements(implementation: "IType.Input")]
         public List<IFeature> QueryInput()
         {
-            throw new NotImplementedException("Derived property Input not yet supported");
+            return this.ComputeInput();
         }
 
         /// <summary>
@@ -375,9 +402,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// also interpretations of the Classifier for that sex).
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661973922199_584242_1045", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IType.IntersectingType")]
         public List<IType> QueryIntersectingType()
         {
-            throw new NotImplementedException("Derived property IntersectingType not yet supported");
+            return this.ComputeIntersectingType();
         }
 
         /// <summary>
@@ -385,6 +413,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// Types.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_741353_43165", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IType.IsAbstract")]
         public bool IsAbstract { get; set; }
 
         /// <summary>
@@ -393,15 +422,17 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// feature that is not on the same featuring instance.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_331870_43224", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IFeature.IsComposite")]
         public bool IsComposite { get; set; }
 
         /// <summary>
         /// Indicates whether this Type has an ownedConjugator.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575485930816_796088_1933", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IType.IsConjugated")]
         public bool QueryIsConjugated()
         {
-            throw new NotImplementedException("Derived property IsConjugated not yet supported");
+            return this.ComputeIsConjugated();
         }
 
         /// <summary>
@@ -409,12 +440,14 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// snapshots of its owningType.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674993_300560_43342", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IFeature.IsConstant")]
         public bool IsConstant { get; set; }
 
         /// <summary>
         /// Whether the values of this Feature can always be computed from the values of other Features.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674992_500504_43341", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IFeature.IsDerived")]
         public bool IsDerived { get; set; }
 
         /// <summary>
@@ -428,6 +461,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// fixed.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562475749426_705395_21984", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IFeature.IsEnd")]
         public bool IsEnd { get; set; }
 
         /// <summary>
@@ -438,6 +472,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1662070949317_79713_3658", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IElement.IsImpliedIncluded")]
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
@@ -445,15 +480,17 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// individualDefinition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618959865886_548379_7149", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IOccurrenceUsage.IsIndividual")]
         public bool IsIndividual { get; set; }
 
         /// <summary>
         /// Whether this Element is contained in the ownership tree of a library model.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.IsLibraryElement")]
         public bool QueryIsLibraryElement()
         {
-            throw new NotImplementedException("Derived property IsLibraryElement not yet supported");
+            return this.ComputeIsLibraryElement();
         }
 
         /// <summary>
@@ -461,15 +498,17 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// using metadata within the model.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1609957047704_424471_48", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IExpression.IsModelLevelEvaluable")]
         public bool QueryIsModelLevelEvaluable()
         {
-            throw new NotImplementedException("Derived property IsModelLevelEvaluable not yet supported");
+            return this.ComputeIsModelLevelEvaluable();
         }
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_728225_43215", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IFeature.IsOrdered")]
         public bool IsOrdered { get; set; }
 
         /// <summary>
@@ -477,15 +516,17 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// the Feature and represent the same thing as those instances.
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1559231981638_234817_22063", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IFeature.IsPortion")]
         public bool IsPortion { get; set; }
 
         /// <summary>
         /// Whether this Usage is a referential Usage, that is, it has isComposite = false.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IUsage.IsReference")]
         public bool QueryIsReference()
         {
-            throw new NotImplementedException("Derived property IsReference not yet supported");
+            return this.ComputeIsReference();
         }
 
         /// <summary>
@@ -497,12 +538,14 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Implements(implementation: "IType.IsSufficient")]
         public bool IsSufficient { get; set; }
 
         /// <summary>
         /// Whether or not values for this Feature must have no duplicates or not.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674968_321342_43214", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [Implements(implementation: "IFeature.IsUnique")]
         public bool IsUnique { get; set; }
 
         /// <summary>
@@ -510,13 +553,16 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// different value for each snapshot of an owningType that is an Occurrence.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
-        [RedefinedByProperty("IUsage.MayTimeVary")] public bool IsVariable { get; set; }
+        [RedefinedByProperty("IUsage.MayTimeVary")]
+        [Implements(implementation: "IFeature.IsVariable")]
+        public bool IsVariable { get; set; }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
         /// must be VariantMemberships.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1590978312364_290951_421", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IUsage.IsVariation")]
         public bool IsVariation { get; set; }
 
         /// <summary>
@@ -529,9 +575,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
+        [Implements(implementation: "IUsage.MayTimeVary")]
         public bool QueryMayTimeVary()
         {
-            throw new NotImplementedException("Derived property MayTimeVary not yet supported");
+            return this.ComputeMayTimeVary();
         }
 
         /// <summary>
@@ -539,9 +586,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// the Namespace.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "INamespace.Member")]
         public List<IElement> QueryMember()
         {
-            throw new NotImplementedException("Derived property Member not yet supported");
+            return this.ComputeMember();
         }
 
         /// <summary>
@@ -549,9 +597,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// importedMemberships.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "INamespace.Membership")]
         public List<IMembership> QueryMembership()
         {
-            throw new NotImplementedException("Derived property Membership not yet supported");
+            return this.ComputeMembership();
         }
 
         /// <summary>
@@ -561,9 +610,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        [Implements(implementation: "IType.Multiplicity")]
         public IMultiplicity QueryMultiplicity()
         {
-            throw new NotImplementedException("Derived property Multiplicity not yet supported");
+            return this.ComputeMultiplicity();
         }
 
         /// <summary>
@@ -573,9 +623,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// null.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.Name")]
         public string QueryName()
         {
-            throw new NotImplementedException("Derived property Name not yet supported");
+            return this.ComputeName();
         }
 
         /// <summary>
@@ -583,9 +634,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565501745142_70952_31609", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
+        [Implements(implementation: "IUsage.NestedAction")]
         public List<IActionUsage> QueryNestedAction()
         {
-            throw new NotImplementedException("Derived property NestedAction not yet supported");
+            return this.ComputeNestedAction();
         }
 
         /// <summary>
@@ -593,9 +645,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611430983774_648557_1053", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
+        [Implements(implementation: "IUsage.NestedAllocation")]
         public List<IAllocationUsage> QueryNestedAllocation()
         {
-            throw new NotImplementedException("Derived property NestedAllocation not yet supported");
+            return this.ComputeNestedAllocation();
         }
 
         /// <summary>
@@ -603,9 +656,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591152666850_226358_3749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
+        [Implements(implementation: "IUsage.NestedAnalysisCase")]
         public List<IAnalysisCaseUsage> QueryNestedAnalysisCase()
         {
-            throw new NotImplementedException("Derived property NestedAnalysisCase not yet supported");
+            return this.ComputeNestedAnalysisCase();
         }
 
         /// <summary>
@@ -613,9 +667,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591500785349_111324_4486", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        [Implements(implementation: "IUsage.NestedAttribute")]
         public List<IAttributeUsage> QueryNestedAttribute()
         {
-            throw new NotImplementedException("Derived property NestedAttribute not yet supported");
+            return this.ComputeNestedAttribute();
         }
 
         /// <summary>
@@ -623,9 +678,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1588215112283_215964_632", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
+        [Implements(implementation: "IUsage.NestedCalculation")]
         public List<ICalculationUsage> QueryNestedCalculation()
         {
-            throw new NotImplementedException("Derived property NestedCalculation not yet supported");
+            return this.ComputeNestedCalculation();
         }
 
         /// <summary>
@@ -633,9 +689,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591135021853_494751_737", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1588215112283_215964_632")]
+        [Implements(implementation: "IUsage.NestedCase")]
         public List<ICaseUsage> QueryNestedCase()
         {
-            throw new NotImplementedException("Derived property NestedCase not yet supported");
+            return this.ComputeNestedCase();
         }
 
         /// <summary>
@@ -643,9 +700,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617051711833_106553_1460", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
+        [Implements(implementation: "IUsage.NestedConcern")]
         public List<IConcernUsage> QueryNestedConcern()
         {
-            throw new NotImplementedException("Derived property NestedConcern not yet supported");
+            return this.ComputeNestedConcern();
         }
 
         /// <summary>
@@ -655,9 +713,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591479754895_422988_1242", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        [Implements(implementation: "IUsage.NestedConnection")]
         public List<IConnectorAsUsage> QueryNestedConnection()
         {
-            throw new NotImplementedException("Derived property NestedConnection not yet supported");
+            return this.ComputeNestedConnection();
         }
 
         /// <summary>
@@ -665,9 +724,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1578067664051_434365_1774", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
+        [Implements(implementation: "IUsage.NestedConstraint")]
         public List<IConstraintUsage> QueryNestedConstraint()
         {
-            throw new NotImplementedException("Derived property NestedConstraint not yet supported");
+            return this.ComputeNestedConstraint();
         }
 
         /// <summary>
@@ -675,9 +735,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1606946589000_158124_239", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591500785349_111324_4486")]
+        [Implements(implementation: "IUsage.NestedEnumeration")]
         public List<IEnumerationUsage> QueryNestedEnumeration()
         {
-            throw new NotImplementedException("Derived property NestedEnumeration not yet supported");
+            return this.ComputeNestedEnumeration();
         }
 
         /// <summary>
@@ -685,9 +746,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624054938718_124518_1464", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
+        [Implements(implementation: "IUsage.NestedFlow")]
         public List<IFlowUsage> QueryNestedFlow()
         {
-            throw new NotImplementedException("Derived property NestedFlow not yet supported");
+            return this.ComputeNestedFlow();
         }
 
         /// <summary>
@@ -695,9 +757,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591498454569_383419_3839", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
+        [Implements(implementation: "IUsage.NestedInterface")]
         public List<IInterfaceUsage> QueryNestedInterface()
         {
-            throw new NotImplementedException("Derived property NestedInterface not yet supported");
+            return this.ComputeNestedInterface();
         }
 
         /// <summary>
@@ -705,9 +768,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591482421103_284620_2978", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
+        [Implements(implementation: "IUsage.NestedItem")]
         public List<IItemUsage> QueryNestedItem()
         {
-            throw new NotImplementedException("Derived property NestedItem not yet supported");
+            return this.ComputeNestedItem();
         }
 
         /// <summary>
@@ -715,9 +779,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661488589862_120785_2970", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
+        [Implements(implementation: "IUsage.NestedMetadata")]
         public List<IMetadataUsage> QueryNestedMetadata()
         {
-            throw new NotImplementedException("Derived property NestedMetadata not yet supported");
+            return this.ComputeNestedMetadata();
         }
 
         /// <summary>
@@ -725,9 +790,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618943853976_48759_278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        [Implements(implementation: "IUsage.NestedOccurrence")]
         public List<IOccurrenceUsage> QueryNestedOccurrence()
         {
-            throw new NotImplementedException("Derived property NestedOccurrence not yet supported");
+            return this.ComputeNestedOccurrence();
         }
 
         /// <summary>
@@ -735,9 +801,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591496406876_479979_3188", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
+        [Implements(implementation: "IUsage.NestedPart")]
         public List<IPartUsage> QueryNestedPart()
         {
-            throw new NotImplementedException("Derived property NestedPart not yet supported");
+            return this.ComputeNestedPart();
         }
 
         /// <summary>
@@ -745,9 +812,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565494459494_859367_26042", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        [Implements(implementation: "IUsage.NestedPort")]
         public List<IPortUsage> QueryNestedPort()
         {
-            throw new NotImplementedException("Derived property NestedPort not yet supported");
+            return this.ComputeNestedPort();
         }
 
         /// <summary>
@@ -755,9 +823,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477541360_47573_933", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        [Implements(implementation: "IUsage.NestedReference")]
         public List<IReferenceUsage> QueryNestedReference()
         {
-            throw new NotImplementedException("Derived property NestedReference not yet supported");
+            return this.ComputeNestedReference();
         }
 
         /// <summary>
@@ -765,9 +834,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596741501454_147708_6545", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
+        [Implements(implementation: "IUsage.NestedRendering")]
         public List<IRenderingUsage> QueryNestedRendering()
         {
-            throw new NotImplementedException("Derived property NestedRendering not yet supported");
+            return this.ComputeNestedRendering();
         }
 
         /// <summary>
@@ -775,9 +845,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583000447195_878123_1244", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1578067664051_434365_1774")]
+        [Implements(implementation: "IUsage.NestedRequirement")]
         public List<IRequirementUsage> QueryNestedRequirement()
         {
-            throw new NotImplementedException("Derived property NestedRequirement not yet supported");
+            return this.ComputeNestedRequirement();
         }
 
         /// <summary>
@@ -785,9 +856,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575587743891_973819_756", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
+        [Implements(implementation: "IUsage.NestedState")]
         public List<IStateUsage> QueryNestedState()
         {
-            throw new NotImplementedException("Derived property NestedState not yet supported");
+            return this.ComputeNestedState();
         }
 
         /// <summary>
@@ -795,9 +867,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1578597913303_768272_3894", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
+        [Implements(implementation: "IUsage.NestedTransition")]
         public List<ITransitionUsage> QueryNestedTransition()
         {
-            throw new NotImplementedException("Derived property NestedTransition not yet supported");
+            return this.ComputeNestedTransition();
         }
 
         /// <summary>
@@ -806,9 +879,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
+        [Implements(implementation: "IUsage.NestedUsage")]
         public List<IUsage> QueryNestedUsage()
         {
-            throw new NotImplementedException("Derived property NestedUsage not yet supported");
+            return this.ComputeNestedUsage();
         }
 
         /// <summary>
@@ -816,9 +890,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621463992900_247262_1080", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
+        [Implements(implementation: "IUsage.NestedUseCase")]
         public List<IUseCaseUsage> QueryNestedUseCase()
         {
-            throw new NotImplementedException("Derived property NestedUseCase not yet supported");
+            return this.ComputeNestedUseCase();
         }
 
         /// <summary>
@@ -826,9 +901,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596821592100_42801_10499", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
+        [Implements(implementation: "IUsage.NestedVerificationCase")]
         public List<IVerificationCaseUsage> QueryNestedVerificationCase()
         {
-            throw new NotImplementedException("Derived property NestedVerificationCase not yet supported");
+            return this.ComputeNestedVerificationCase();
         }
 
         /// <summary>
@@ -836,9 +912,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596644669126_858176_809", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
+        [Implements(implementation: "IUsage.NestedView")]
         public List<IViewUsage> QueryNestedView()
         {
-            throw new NotImplementedException("Derived property NestedView not yet supported");
+            return this.ComputeNestedView();
         }
 
         /// <summary>
@@ -846,9 +923,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596649930212_443356_3818", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
+        [Implements(implementation: "IUsage.NestedViewpoint")]
         public List<IViewpointUsage> QueryNestedViewpoint()
         {
-            throw new NotImplementedException("Derived property NestedViewpoint not yet supported");
+            return this.ComputeNestedViewpoint();
         }
 
         /// <summary>
@@ -859,9 +937,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
+        [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
         public List<IClass> QueryOccurrenceDefinition()
         {
-            throw new NotImplementedException("Derived property OccurrenceDefinition not yet supported");
+            return this.ComputeOccurrenceDefinition();
         }
 
         /// <summary>
@@ -869,9 +948,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_365618_43170", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [Implements(implementation: "IType.Output")]
         public List<IFeature> QueryOutput()
         {
-            throw new NotImplementedException("Derived property Output not yet supported");
+            return this.ComputeOutput();
         }
 
         /// <summary>
@@ -881,9 +961,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1594152527165_702130_2500", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
+        [Implements(implementation: "IElement.OwnedAnnotation")]
         public List<IAnnotation> QueryOwnedAnnotation()
         {
-            throw new NotImplementedException("Derived property OwnedAnnotation not yet supported");
+            return this.ComputeOwnedAnnotation();
         }
 
         /// <summary>
@@ -892,9 +973,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1575482646809_280165_440", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490144_309557_300")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [Implements(implementation: "IType.OwnedConjugator")]
         public IConjugation QueryOwnedConjugator()
         {
-            throw new NotImplementedException("Derived property OwnedConjugator not yet supported");
+            return this.ComputeOwnedConjugator();
         }
 
         /// <summary>
@@ -903,9 +985,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1689616916594_145818_277", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
+        [Implements(implementation: "IFeature.OwnedCrossSubsetting")]
         public ICrossSubsetting QueryOwnedCrossSubsetting()
         {
-            throw new NotImplementedException("Derived property OwnedCrossSubsetting not yet supported");
+            return this.ComputeOwnedCrossSubsetting();
         }
 
         /// <summary>
@@ -915,9 +998,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_b9102da_1661871168454_98082_797", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [Implements(implementation: "IType.OwnedDifferencing")]
         public List<IDifferencing> QueryOwnedDifferencing()
         {
-            throw new NotImplementedException("Derived property OwnedDifferencing not yet supported");
+            return this.ComputeOwnedDifferencing();
         }
 
         /// <summary>
@@ -927,9 +1011,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_12e503d9_1627447519613_145554_370", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623183194914_502526_616")]
+        [Implements(implementation: "IType.OwnedDisjoining")]
         public List<IDisjoining> QueryOwnedDisjoining()
         {
-            throw new NotImplementedException("Derived property OwnedDisjoining not yet supported");
+            return this.ComputeOwnedDisjoining();
         }
 
         /// <summary>
@@ -937,9 +1022,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// this Element.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.OwnedElement")]
         public List<IElement> QueryOwnedElement()
         {
-            throw new NotImplementedException("Derived property OwnedElement not yet supported");
+            return this.ComputeOwnedElement();
         }
 
         /// <summary>
@@ -948,9 +1034,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1563834516278_687758_20652", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [Implements(implementation: "IType.OwnedEndFeature")]
         public List<IFeature> QueryOwnedEndFeature()
         {
-            throw new NotImplementedException("Derived property OwnedEndFeature not yet supported");
+            return this.ComputeOwnedEndFeature();
         }
 
         /// <summary>
@@ -958,9 +1045,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_226999_43167", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        [Implements(implementation: "IType.OwnedFeature")]
         public List<IFeature> QueryOwnedFeature()
         {
-            throw new NotImplementedException("Derived property OwnedFeature not yet supported");
+            return this.ComputeOwnedFeature();
         }
 
         /// <summary>
@@ -970,9 +1058,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_b9102da_1622125589880_791465_72", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [Implements(implementation: "IFeature.OwnedFeatureChaining")]
         public List<IFeatureChaining> QueryOwnedFeatureChaining()
         {
-            throw new NotImplementedException("Derived property OwnedFeatureChaining not yet supported");
+            return this.ComputeOwnedFeatureChaining();
         }
 
         /// <summary>
@@ -982,9 +1071,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_b9102da_1653567738671_359235_43", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838861_768019_145")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [Implements(implementation: "IFeature.OwnedFeatureInverting")]
         public List<IFeatureInverting> QueryOwnedFeatureInverting()
         {
-            throw new NotImplementedException("Derived property OwnedFeatureInverting not yet supported");
+            return this.ComputeOwnedFeatureInverting();
         }
 
         /// <summary>
@@ -994,9 +1084,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_868417_43171", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866512_962346_485")]
+        [Implements(implementation: "IType.OwnedFeatureMembership")]
         public List<IFeatureMembership> QueryOwnedFeatureMembership()
         {
-            throw new NotImplementedException("Derived property OwnedFeatureMembership not yet supported");
+            return this.ComputeOwnedFeatureMembership();
         }
 
         /// <summary>
@@ -1006,9 +1097,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674974_746786_43247", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [Implements(implementation: "INamespace.OwnedImport")]
         public List<IImport> QueryOwnedImport()
         {
-            throw new NotImplementedException("Derived property OwnedImport not yet supported");
+            return this.ComputeOwnedImport();
         }
 
         /// <summary>
@@ -1017,9 +1109,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_b9102da_1623242552144_910757_524", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [Implements(implementation: "IType.OwnedIntersecting")]
         public List<IIntersecting> QueryOwnedIntersecting()
         {
-            throw new NotImplementedException("Derived property OwnedIntersecting not yet supported");
+            return this.ComputeOwnedIntersecting();
         }
 
         /// <summary>
@@ -1028,9 +1121,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
+        [Implements(implementation: "INamespace.OwnedMember")]
         public List<IElement> QueryOwnedMember()
         {
-            throw new NotImplementedException("Derived property OwnedMember not yet supported");
+            return this.ComputeOwnedMember();
         }
 
         /// <summary>
@@ -1041,9 +1135,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [Implements(implementation: "INamespace.OwnedMembership")]
         public List<IMembership> QueryOwnedMembership()
         {
-            throw new NotImplementedException("Derived property OwnedMembership not yet supported");
+            return this.ComputeOwnedMembership();
         }
 
         /// <summary>
@@ -1052,9 +1147,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_161813_43220", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
+        [Implements(implementation: "IFeature.OwnedRedefinition")]
         public List<IRedefinition> QueryOwnedRedefinition()
         {
-            throw new NotImplementedException("Derived property OwnedRedefinition not yet supported");
+            return this.ComputeOwnedRedefinition();
         }
 
         /// <summary>
@@ -1063,9 +1159,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661555161564_247405_255", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
+        [Implements(implementation: "IFeature.OwnedReferenceSubsetting")]
         public IReferenceSubsetting QueryOwnedReferenceSubsetting()
         {
-            throw new NotImplementedException("Derived property OwnedReferenceSubsetting not yet supported");
+            return this.ComputeOwnedReferenceSubsetting();
         }
 
         /// <summary>
@@ -1073,6 +1170,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
+        [Implements(implementation: "IElement.OwnedRelationship")]
         public List<IRelationship> OwnedRelationship { get; set; }
 
         /// <summary>
@@ -1082,9 +1180,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_579676_43168", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674984_558067_43292")]
+        [Implements(implementation: "IType.OwnedSpecialization")]
         public List<ISpecialization> QueryOwnedSpecialization()
         {
-            throw new NotImplementedException("Derived property OwnedSpecialization not yet supported");
+            return this.ComputeOwnedSpecialization();
         }
 
         /// <summary>
@@ -1094,9 +1193,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_472382_43221", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674966_718145_43205")]
+        [Implements(implementation: "IFeature.OwnedSubsetting")]
         public List<ISubsetting> QueryOwnedSubsetting()
         {
-            throw new NotImplementedException("Derived property OwnedSubsetting not yet supported");
+            return this.ComputeOwnedSubsetting();
         }
 
         /// <summary>
@@ -1106,9 +1206,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_12e503d9_1603905673975_310948_762", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_196800_580")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [Implements(implementation: "IFeature.OwnedTypeFeaturing")]
         public List<ITypeFeaturing> QueryOwnedTypeFeaturing()
         {
-            throw new NotImplementedException("Derived property OwnedTypeFeaturing not yet supported");
+            return this.ComputeOwnedTypeFeaturing();
         }
 
         /// <summary>
@@ -1118,9 +1219,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1596597427751_965862_42", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_804591_21100")]
+        [Implements(implementation: "IFeature.OwnedTyping")]
         public List<IFeatureTyping> QueryOwnedTyping()
         {
-            throw new NotImplementedException("Derived property OwnedTyping not yet supported");
+            return this.ComputeOwnedTyping();
         }
 
         /// <summary>
@@ -1129,9 +1231,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_4_b9102da_1661869978505_968809_460", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [Implements(implementation: "IType.OwnedUnioning")]
         public List<IUnioning> QueryOwnedUnioning()
         {
-            throw new NotImplementedException("Derived property OwnedUnioning not yet supported");
+            return this.ComputeOwnedUnioning();
         }
 
         /// <summary>
@@ -1139,9 +1242,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// Element, if any.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.Owner")]
         public IElement QueryOwner()
         {
-            throw new NotImplementedException("Derived property Owner not yet supported");
+            return this.ComputeOwner();
         }
 
         /// <summary>
@@ -1150,9 +1254,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
+        [Implements(implementation: "IUsage.OwningDefinition")]
         public IDefinition QueryOwningDefinition()
         {
-            throw new NotImplementedException("Derived property OwningDefinition not yet supported");
+            return this.ComputeOwningDefinition();
         }
 
         /// <summary>
@@ -1160,9 +1265,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_68441_43223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674972_622493_43236")]
+        [Implements(implementation: "IFeature.OwningFeatureMembership")]
         public IFeatureMembership QueryOwningFeatureMembership()
         {
-            throw new NotImplementedException("Derived property OwningFeatureMembership not yet supported");
+            return this.ComputeOwningFeatureMembership();
         }
 
         /// <summary>
@@ -1171,9 +1277,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
+        [Implements(implementation: "IElement.OwningMembership")]
         public IOwningMembership QueryOwningMembership()
         {
-            throw new NotImplementedException("Derived property OwningMembership not yet supported");
+            return this.ComputeOwningMembership();
         }
 
         /// <summary>
@@ -1182,9 +1289,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
+        [Implements(implementation: "IElement.OwningNamespace")]
         public INamespace QueryOwningNamespace()
         {
-            throw new NotImplementedException("Derived property OwningNamespace not yet supported");
+            return this.ComputeOwningNamespace();
         }
 
         /// <summary>
@@ -1192,6 +1300,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
+        [Implements(implementation: "IElement.OwningRelationship")]
         public IRelationship OwningRelationship { get; set; }
 
         /// <summary>
@@ -1201,9 +1310,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674987_297074_43308")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603905619975_304385_743")]
+        [Implements(implementation: "IFeature.OwningType")]
         public IType QueryOwningType()
         {
-            throw new NotImplementedException("Derived property OwningType not yet supported");
+            return this.ComputeOwningType();
         }
 
         /// <summary>
@@ -1211,9 +1321,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_504924_21260", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
+        [Implements(implementation: "IUsage.OwningUsage")]
         public IUsage QueryOwningUsage()
         {
-            throw new NotImplementedException("Derived property OwningUsage not yet supported");
+            return this.ComputeOwningUsage();
         }
 
         /// <summary>
@@ -1222,9 +1333,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [Implements(implementation: "IStep.Parameter")]
         public List<IFeature> QueryParameter()
         {
-            throw new NotImplementedException("Derived property Parameter not yet supported");
+            return this.ComputeParameter();
         }
 
         /// <summary>
@@ -1233,6 +1345,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// OccurrenceUsage represents portions of the featuring instance of the owningType.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618959362712_182798_7138", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IOccurrenceUsage.PortionKind")]
         public PortionKind PortionKind { get; set; }
 
         /// <summary>
@@ -1244,9 +1357,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// then the qualifiedName is null for all such Elements other than the first.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.QualifiedName")]
         public string QueryQualifiedName()
         {
-            throw new NotImplementedException("Derived property QualifiedName not yet supported");
+            return this.ComputeQualifiedName();
         }
 
         /// <summary>
@@ -1257,9 +1371,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1595188071574_902060_363", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674960_365618_43170")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
+        [Implements(implementation: "IExpression.Result")]
         public IFeature QueryResult()
         {
-            throw new NotImplementedException("Derived property Result not yet supported");
+            return this.ComputeResult();
         }
 
         /// <summary>
@@ -1269,9 +1384,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// when the declaredName is null.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IElement.ShortName")]
         public string QueryShortName()
         {
-            throw new NotImplementedException("Derived property ShortName not yet supported");
+            return this.ComputeShortName();
         }
 
         /// <summary>
@@ -1280,9 +1396,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
+        [Implements(implementation: "IElement.TextualRepresentation")]
         public List<ITextualRepresentation> QueryTextualRepresentation()
         {
-            throw new NotImplementedException("Derived property TextualRepresentation not yet supported");
+            return this.ComputeTextualRepresentation();
         }
 
         /// <summary>
@@ -1293,9 +1410,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
+        [Implements(implementation: "IFeature.Type")]
         public List<IType> QueryType()
         {
-            throw new NotImplementedException("Derived property Type not yet supported");
+            return this.ComputeType();
         }
 
         /// <summary>
@@ -1306,9 +1424,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// same ways as people in general.
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Implements(implementation: "IType.UnioningType")]
         public List<IType> QueryUnioningType()
         {
-            throw new NotImplementedException("Derived property UnioningType not yet supported");
+            return this.ComputeUnioningType();
         }
 
         /// <summary>
@@ -1316,9 +1435,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591217543254_26688_475", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        [Implements(implementation: "IUsage.Usage")]
         public List<IUsage> QueryUsage()
         {
-            throw new NotImplementedException("Derived property Usage not yet supported");
+            return this.ComputeUsage();
         }
 
         /// <summary>
@@ -1327,9 +1447,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1590979649160_380466_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        [Implements(implementation: "IUsage.Variant")]
         public List<IUsage> QueryVariant()
         {
-            throw new NotImplementedException("Derived property Variant not yet supported");
+            return this.ComputeVariant();
         }
 
         /// <summary>
@@ -1338,9 +1459,10 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1590979136735_982171_914", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
+        [Implements(implementation: "IUsage.VariantMembership")]
         public List<IVariantMembership> QueryVariantMembership()
         {
-            throw new NotImplementedException("Derived property VariantMembership not yet supported");
+            return this.ComputeVariantMembership();
         }
 
     }

@@ -35,6 +35,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Kernel.Associations;
     using SysML2.NET.Core.POCO.Kernel.Classes;
+    using SysML2.NET.Core.POCO.Kernel.Connectors;
     using SysML2.NET.Core.POCO.Kernel.Structures;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;

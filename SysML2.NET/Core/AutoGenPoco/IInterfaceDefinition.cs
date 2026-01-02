@@ -31,6 +31,7 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Kernel.Associations;
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
