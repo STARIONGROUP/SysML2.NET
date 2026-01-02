@@ -28,43 +28,44 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="MembershipExposeFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.MembershipExpose"/> based on a <see cref="Core.DTO.MembershipExpose"/>
+    /// <see cref="Core.POCO.Systems.Views.MembershipExpose"/> based on a <see cref="Core.DTO.Systems.Views.MembershipExpose"/>
     /// </summary>
     public class MembershipExposeFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.MembershipExpose"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Views.MembershipExpose"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.MembershipExpose"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Views.MembershipExpose"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.MembershipExpose"/>
+        /// an instance of <see cref="Core.POCO.Systems.Views.MembershipExpose"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.MembershipExpose Create(Core.DTO.MembershipExpose dto)
+        public Core.POCO.Systems.Views.MembershipExpose Create(Core.DTO.Systems.Views.MembershipExpose dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.MembershipExpose
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsImportAll = dto.IsImportAll,
-                IsRecursive = dto.IsRecursive,
-                Visibility = dto.Visibility,
-            };
+            var poco = new Core.POCO.Systems.Views.MembershipExpose();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            ((Core.POCO.Root.Namespaces.IImport)poco).IsImportAll = ((Core.DTO.Root.Namespaces.IImport)dto).IsImportAll;
+            ((Core.POCO.Systems.Views.IExpose)poco).IsImportAll = ((Core.DTO.Systems.Views.IExpose)dto).IsImportAll;
+            poco.IsRecursive = dto.IsRecursive;
+            ((Core.POCO.Root.Namespaces.IImport)poco).Visibility = ((Core.DTO.Root.Namespaces.IImport)dto).Visibility;
+            ((Core.POCO.Systems.Views.IExpose)poco).Visibility = ((Core.DTO.Systems.Views.IExpose)dto).Visibility;
 
             return poco;
         }

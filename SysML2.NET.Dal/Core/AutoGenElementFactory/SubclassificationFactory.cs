@@ -28,40 +28,39 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="SubclassificationFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Subclassification"/> based on a <see cref="Core.DTO.Subclassification"/>
+    /// <see cref="Core.POCO.Core.Classifiers.Subclassification"/> based on a <see cref="Core.DTO.Core.Classifiers.Subclassification"/>
     /// </summary>
     public class SubclassificationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Subclassification"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Core.Classifiers.Subclassification"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Subclassification"/>
+        /// The instance of the <see cref="Core.DTO.Core.Classifiers.Subclassification"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Subclassification"/>
+        /// an instance of <see cref="Core.POCO.Core.Classifiers.Subclassification"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Subclassification Create(Core.DTO.Subclassification dto)
+        public Core.POCO.Core.Classifiers.Subclassification Create(Core.DTO.Core.Classifiers.Subclassification dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Subclassification
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-            };
+            var poco = new Core.POCO.Core.Classifiers.Subclassification();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             return poco;
         }

@@ -28,43 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="PortDefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.PortDefinition"/> based on a <see cref="Core.DTO.PortDefinition"/>
+    /// <see cref="Core.POCO.Systems.Ports.PortDefinition"/> based on a <see cref="Core.DTO.Systems.Ports.PortDefinition"/>
     /// </summary>
     public class PortDefinitionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.PortDefinition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Ports.PortDefinition"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.PortDefinition"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Ports.PortDefinition"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.PortDefinition"/>
+        /// an instance of <see cref="Core.POCO.Systems.Ports.PortDefinition"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.PortDefinition Create(Core.DTO.PortDefinition dto)
+        public Core.POCO.Systems.Ports.PortDefinition Create(Core.DTO.Systems.Ports.PortDefinition dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.PortDefinition
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
-            };
+            var poco = new Core.POCO.Systems.Ports.PortDefinition();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsVariation = dto.IsVariation;
 
             return poco;
         }

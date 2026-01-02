@@ -28,42 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="EnumerationDefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.EnumerationDefinition"/> based on a <see cref="Core.DTO.EnumerationDefinition"/>
+    /// <see cref="Core.POCO.Systems.Enumerations.EnumerationDefinition"/> based on a <see cref="Core.DTO.Systems.Enumerations.EnumerationDefinition"/>
     /// </summary>
     public class EnumerationDefinitionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.EnumerationDefinition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Enumerations.EnumerationDefinition"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.EnumerationDefinition"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Enumerations.EnumerationDefinition"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.EnumerationDefinition"/>
+        /// an instance of <see cref="Core.POCO.Systems.Enumerations.EnumerationDefinition"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.EnumerationDefinition Create(Core.DTO.EnumerationDefinition dto)
+        public Core.POCO.Systems.Enumerations.EnumerationDefinition Create(Core.DTO.Systems.Enumerations.EnumerationDefinition dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.EnumerationDefinition
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
-            };
+            var poco = new Core.POCO.Systems.Enumerations.EnumerationDefinition();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsSufficient = dto.IsSufficient;
+            ((Core.POCO.Systems.Enumerations.IEnumerationDefinition)poco).IsVariation = ((Core.DTO.Systems.Enumerations.IEnumerationDefinition)dto).IsVariation;
+            ((Core.POCO.Systems.DefinitionAndUsage.IDefinition)poco).IsVariation = ((Core.DTO.Systems.DefinitionAndUsage.IDefinition)dto).IsVariation;
 
             return poco;
         }

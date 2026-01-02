@@ -28,42 +28,41 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="InteractionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Interaction"/> based on a <see cref="Core.DTO.Interaction"/>
+    /// <see cref="Core.POCO.Kernel.Interactions.Interaction"/> based on a <see cref="Core.DTO.Kernel.Interactions.Interaction"/>
     /// </summary>
     public class InteractionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Interaction"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Interactions.Interaction"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Interaction"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Interactions.Interaction"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Interaction"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Interactions.Interaction"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Interaction Create(Core.DTO.Interaction dto)
+        public Core.POCO.Kernel.Interactions.Interaction Create(Core.DTO.Kernel.Interactions.Interaction dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Interaction
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsSufficient = dto.IsSufficient,
-            };
+            var poco = new Core.POCO.Kernel.Interactions.Interaction();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsSufficient = dto.IsSufficient;
 
             return poco;
         }

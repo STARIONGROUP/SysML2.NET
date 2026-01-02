@@ -28,40 +28,39 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="PortConjugationFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.PortConjugation"/> based on a <see cref="Core.DTO.PortConjugation"/>
+    /// <see cref="Core.POCO.Systems.Ports.PortConjugation"/> based on a <see cref="Core.DTO.Systems.Ports.PortConjugation"/>
     /// </summary>
     public class PortConjugationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.PortConjugation"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Ports.PortConjugation"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.PortConjugation"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Ports.PortConjugation"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.PortConjugation"/>
+        /// an instance of <see cref="Core.POCO.Systems.Ports.PortConjugation"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.PortConjugation Create(Core.DTO.PortConjugation dto)
+        public Core.POCO.Systems.Ports.PortConjugation Create(Core.DTO.Systems.Ports.PortConjugation dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.PortConjugation
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-            };
+            var poco = new Core.POCO.Systems.Ports.PortConjugation();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             return poco;
         }

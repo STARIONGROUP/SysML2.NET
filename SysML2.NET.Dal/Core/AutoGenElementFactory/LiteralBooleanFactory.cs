@@ -28,51 +28,50 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="LiteralBooleanFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.LiteralBoolean"/> based on a <see cref="Core.DTO.LiteralBoolean"/>
+    /// <see cref="Core.POCO.Kernel.Expressions.LiteralBoolean"/> based on a <see cref="Core.DTO.Kernel.Expressions.LiteralBoolean"/>
     /// </summary>
     public class LiteralBooleanFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.LiteralBoolean"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.LiteralBoolean"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.LiteralBoolean"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Expressions.LiteralBoolean"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.LiteralBoolean"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Expressions.LiteralBoolean"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.LiteralBoolean Create(Core.DTO.LiteralBoolean dto)
+        public Core.POCO.Kernel.Expressions.LiteralBoolean Create(Core.DTO.Kernel.Expressions.LiteralBoolean dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.LiteralBoolean
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-                Value = dto.Value,
-            };
+            var poco = new Core.POCO.Kernel.Expressions.LiteralBoolean();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
+            poco.Value = dto.Value;
 
             return poco;
         }

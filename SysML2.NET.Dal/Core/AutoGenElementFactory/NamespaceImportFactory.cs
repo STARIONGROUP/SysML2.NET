@@ -28,43 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="NamespaceImportFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.NamespaceImport"/> based on a <see cref="Core.DTO.NamespaceImport"/>
+    /// <see cref="Core.POCO.Root.Namespaces.NamespaceImport"/> based on a <see cref="Core.DTO.Root.Namespaces.NamespaceImport"/>
     /// </summary>
     public class NamespaceImportFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.NamespaceImport"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Root.Namespaces.NamespaceImport"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.NamespaceImport"/>
+        /// The instance of the <see cref="Core.DTO.Root.Namespaces.NamespaceImport"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.NamespaceImport"/>
+        /// an instance of <see cref="Core.POCO.Root.Namespaces.NamespaceImport"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.NamespaceImport Create(Core.DTO.NamespaceImport dto)
+        public Core.POCO.Root.Namespaces.NamespaceImport Create(Core.DTO.Root.Namespaces.NamespaceImport dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.NamespaceImport
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsImportAll = dto.IsImportAll,
-                IsRecursive = dto.IsRecursive,
-                Visibility = dto.Visibility,
-            };
+            var poco = new Core.POCO.Root.Namespaces.NamespaceImport();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsImportAll = dto.IsImportAll;
+            poco.IsRecursive = dto.IsRecursive;
+            poco.Visibility = dto.Visibility;
 
             return poco;
         }

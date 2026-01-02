@@ -28,43 +28,44 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="NamespaceExposeFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.NamespaceExpose"/> based on a <see cref="Core.DTO.NamespaceExpose"/>
+    /// <see cref="Core.POCO.Systems.Views.NamespaceExpose"/> based on a <see cref="Core.DTO.Systems.Views.NamespaceExpose"/>
     /// </summary>
     public class NamespaceExposeFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.NamespaceExpose"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Views.NamespaceExpose"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.NamespaceExpose"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Views.NamespaceExpose"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.NamespaceExpose"/>
+        /// an instance of <see cref="Core.POCO.Systems.Views.NamespaceExpose"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.NamespaceExpose Create(Core.DTO.NamespaceExpose dto)
+        public Core.POCO.Systems.Views.NamespaceExpose Create(Core.DTO.Systems.Views.NamespaceExpose dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.NamespaceExpose
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsImportAll = dto.IsImportAll,
-                IsRecursive = dto.IsRecursive,
-                Visibility = dto.Visibility,
-            };
+            var poco = new Core.POCO.Systems.Views.NamespaceExpose();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            ((Core.POCO.Systems.Views.IExpose)poco).IsImportAll = ((Core.DTO.Systems.Views.IExpose)dto).IsImportAll;
+            ((Core.POCO.Root.Namespaces.IImport)poco).IsImportAll = ((Core.DTO.Root.Namespaces.IImport)dto).IsImportAll;
+            poco.IsRecursive = dto.IsRecursive;
+            ((Core.POCO.Systems.Views.IExpose)poco).Visibility = ((Core.DTO.Systems.Views.IExpose)dto).Visibility;
+            ((Core.POCO.Root.Namespaces.IImport)poco).Visibility = ((Core.DTO.Root.Namespaces.IImport)dto).Visibility;
 
             return poco;
         }

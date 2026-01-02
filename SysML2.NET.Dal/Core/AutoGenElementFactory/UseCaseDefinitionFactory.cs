@@ -28,43 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="UseCaseDefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.UseCaseDefinition"/> based on a <see cref="Core.DTO.UseCaseDefinition"/>
+    /// <see cref="Core.POCO.Systems.UseCases.UseCaseDefinition"/> based on a <see cref="Core.DTO.Systems.UseCases.UseCaseDefinition"/>
     /// </summary>
     public class UseCaseDefinitionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.UseCaseDefinition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.UseCases.UseCaseDefinition"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.UseCaseDefinition"/>
+        /// The instance of the <see cref="Core.DTO.Systems.UseCases.UseCaseDefinition"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.UseCaseDefinition"/>
+        /// an instance of <see cref="Core.POCO.Systems.UseCases.UseCaseDefinition"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.UseCaseDefinition Create(Core.DTO.UseCaseDefinition dto)
+        public Core.POCO.Systems.UseCases.UseCaseDefinition Create(Core.DTO.Systems.UseCases.UseCaseDefinition dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.UseCaseDefinition
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
-            };
+            var poco = new Core.POCO.Systems.UseCases.UseCaseDefinition();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsVariation = dto.IsVariation;
 
             return poco;
         }

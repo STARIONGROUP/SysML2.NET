@@ -28,50 +28,49 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="FeatureReferenceExpressionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.FeatureReferenceExpression"/> based on a <see cref="Core.DTO.FeatureReferenceExpression"/>
+    /// <see cref="Core.POCO.Kernel.Expressions.FeatureReferenceExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.FeatureReferenceExpression"/>
     /// </summary>
     public class FeatureReferenceExpressionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.FeatureReferenceExpression"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.FeatureReferenceExpression"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.FeatureReferenceExpression"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Expressions.FeatureReferenceExpression"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.FeatureReferenceExpression"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Expressions.FeatureReferenceExpression"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.FeatureReferenceExpression Create(Core.DTO.FeatureReferenceExpression dto)
+        public Core.POCO.Kernel.Expressions.FeatureReferenceExpression Create(Core.DTO.Kernel.Expressions.FeatureReferenceExpression dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.FeatureReferenceExpression
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-            };
+            var poco = new Core.POCO.Kernel.Expressions.FeatureReferenceExpression();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
 
             return poco;
         }

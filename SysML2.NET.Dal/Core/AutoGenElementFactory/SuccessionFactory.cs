@@ -28,51 +28,50 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="SuccessionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Succession"/> based on a <see cref="Core.DTO.Succession"/>
+    /// <see cref="Core.POCO.Kernel.Connectors.Succession"/> based on a <see cref="Core.DTO.Kernel.Connectors.Succession"/>
     /// </summary>
     public class SuccessionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Succession"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Connectors.Succession"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Succession"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Connectors.Succession"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Succession"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Connectors.Succession"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Succession Create(Core.DTO.Succession dto)
+        public Core.POCO.Kernel.Connectors.Succession Create(Core.DTO.Kernel.Connectors.Succession dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Succession
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-            };
+            var poco = new Core.POCO.Kernel.Connectors.Succession();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
 
             return poco;
         }

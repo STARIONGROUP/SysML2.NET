@@ -28,43 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="CaseDefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.CaseDefinition"/> based on a <see cref="Core.DTO.CaseDefinition"/>
+    /// <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> based on a <see cref="Core.DTO.Systems.Cases.CaseDefinition"/>
     /// </summary>
     public class CaseDefinitionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.CaseDefinition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.CaseDefinition"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Cases.CaseDefinition"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.CaseDefinition"/>
+        /// an instance of <see cref="Core.POCO.Systems.Cases.CaseDefinition"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.CaseDefinition Create(Core.DTO.CaseDefinition dto)
+        public Core.POCO.Systems.Cases.CaseDefinition Create(Core.DTO.Systems.Cases.CaseDefinition dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.CaseDefinition
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
-            };
+            var poco = new Core.POCO.Systems.Cases.CaseDefinition();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsVariation = dto.IsVariation;
 
             return poco;
         }

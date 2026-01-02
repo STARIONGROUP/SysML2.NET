@@ -118,7 +118,7 @@ namespace SysML2.NET.Dal
             this.logger.LogDebug("Update POCO reference properties");
             foreach (var dto in dtos)
             {
-                Lazy<Core.POCO.Root.Elements.Element> lazyPoco;
+                Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
                 if (this.Cache.TryGetValue(dto.Id, out lazyPoco))
                 {
                     var poco = lazyPoco.Value;

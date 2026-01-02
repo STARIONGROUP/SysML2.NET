@@ -28,53 +28,52 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="VerificationCaseUsageFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.VerificationCaseUsage"/> based on a <see cref="Core.DTO.VerificationCaseUsage"/>
+    /// <see cref="Core.POCO.Systems.VerificationCases.VerificationCaseUsage"/> based on a <see cref="Core.DTO.Systems.VerificationCases.VerificationCaseUsage"/>
     /// </summary>
     public class VerificationCaseUsageFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.VerificationCaseUsage"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.VerificationCases.VerificationCaseUsage"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.VerificationCaseUsage"/>
+        /// The instance of the <see cref="Core.DTO.Systems.VerificationCases.VerificationCaseUsage"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.VerificationCaseUsage"/>
+        /// an instance of <see cref="Core.POCO.Systems.VerificationCases.VerificationCaseUsage"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.VerificationCaseUsage Create(Core.DTO.VerificationCaseUsage dto)
+        public Core.POCO.Systems.VerificationCases.VerificationCaseUsage Create(Core.DTO.Systems.VerificationCases.VerificationCaseUsage dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.VerificationCaseUsage
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-                IsVariation = dto.IsVariation,
-                PortionKind = dto.PortionKind,
-            };
+            var poco = new Core.POCO.Systems.VerificationCases.VerificationCaseUsage();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
+            poco.IsVariation = dto.IsVariation;
+            poco.PortionKind = dto.PortionKind;
 
             return poco;
         }

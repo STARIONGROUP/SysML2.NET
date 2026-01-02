@@ -28,45 +28,44 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="FeatureValueFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.FeatureValue"/> based on a <see cref="Core.DTO.FeatureValue"/>
+    /// <see cref="Core.POCO.Kernel.FeatureValues.FeatureValue"/> based on a <see cref="Core.DTO.Kernel.FeatureValues.FeatureValue"/>
     /// </summary>
     public class FeatureValueFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.FeatureValue"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.FeatureValues.FeatureValue"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.FeatureValue"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.FeatureValues.FeatureValue"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.FeatureValue"/>
+        /// an instance of <see cref="Core.POCO.Kernel.FeatureValues.FeatureValue"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.FeatureValue Create(Core.DTO.FeatureValue dto)
+        public Core.POCO.Kernel.FeatureValues.FeatureValue Create(Core.DTO.Kernel.FeatureValues.FeatureValue dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.FeatureValue
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsDefault = dto.IsDefault,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsInitial = dto.IsInitial,
-                MemberName = dto.MemberName,
-                MemberShortName = dto.MemberShortName,
-                Visibility = dto.Visibility,
-            };
+            var poco = new Core.POCO.Kernel.FeatureValues.FeatureValue();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsDefault = dto.IsDefault;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsInitial = dto.IsInitial;
+            poco.MemberName = dto.MemberName;
+            poco.MemberShortName = dto.MemberShortName;
+            poco.Visibility = dto.Visibility;
 
             return poco;
         }

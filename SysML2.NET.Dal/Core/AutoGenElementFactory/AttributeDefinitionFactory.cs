@@ -28,42 +28,41 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="AttributeDefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.AttributeDefinition"/> based on a <see cref="Core.DTO.AttributeDefinition"/>
+    /// <see cref="Core.POCO.Systems.Attributes.AttributeDefinition"/> based on a <see cref="Core.DTO.Systems.Attributes.AttributeDefinition"/>
     /// </summary>
     public class AttributeDefinitionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.AttributeDefinition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Attributes.AttributeDefinition"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.AttributeDefinition"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Attributes.AttributeDefinition"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.AttributeDefinition"/>
+        /// an instance of <see cref="Core.POCO.Systems.Attributes.AttributeDefinition"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.AttributeDefinition Create(Core.DTO.AttributeDefinition dto)
+        public Core.POCO.Systems.Attributes.AttributeDefinition Create(Core.DTO.Systems.Attributes.AttributeDefinition dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.AttributeDefinition
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
-            };
+            var poco = new Core.POCO.Systems.Attributes.AttributeDefinition();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsVariation = dto.IsVariation;
 
             return poco;
         }

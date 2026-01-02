@@ -28,40 +28,39 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="SpecializationFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Specialization"/> based on a <see cref="Core.DTO.Specialization"/>
+    /// <see cref="Core.POCO.Core.Types.Specialization"/> based on a <see cref="Core.DTO.Core.Types.Specialization"/>
     /// </summary>
     public class SpecializationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Specialization"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Core.Types.Specialization"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Specialization"/>
+        /// The instance of the <see cref="Core.DTO.Core.Types.Specialization"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Specialization"/>
+        /// an instance of <see cref="Core.POCO.Core.Types.Specialization"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Specialization Create(Core.DTO.Specialization dto)
+        public Core.POCO.Core.Types.Specialization Create(Core.DTO.Core.Types.Specialization dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Specialization
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-            };
+            var poco = new Core.POCO.Core.Types.Specialization();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             return poco;
         }

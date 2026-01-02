@@ -28,41 +28,40 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="DocumentationFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Documentation"/> based on a <see cref="Core.DTO.Documentation"/>
+    /// <see cref="Core.POCO.Root.Annotations.Documentation"/> based on a <see cref="Core.DTO.Root.Annotations.Documentation"/>
     /// </summary>
     public class DocumentationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Documentation"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Root.Annotations.Documentation"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Documentation"/>
+        /// The instance of the <see cref="Core.DTO.Root.Annotations.Documentation"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Documentation"/>
+        /// an instance of <see cref="Core.POCO.Root.Annotations.Documentation"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Documentation Create(Core.DTO.Documentation dto)
+        public Core.POCO.Root.Annotations.Documentation Create(Core.DTO.Root.Annotations.Documentation dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Documentation
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                Body = dto.Body,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                Locale = dto.Locale,
-            };
+            var poco = new Core.POCO.Root.Annotations.Documentation();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.Body = dto.Body;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.Locale = dto.Locale;
 
             return poco;
         }

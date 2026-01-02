@@ -28,40 +28,39 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="DifferencingFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Differencing"/> based on a <see cref="Core.DTO.Differencing"/>
+    /// <see cref="Core.POCO.Core.Types.Differencing"/> based on a <see cref="Core.DTO.Core.Types.Differencing"/>
     /// </summary>
     public class DifferencingFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Differencing"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Core.Types.Differencing"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Differencing"/>
+        /// The instance of the <see cref="Core.DTO.Core.Types.Differencing"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Differencing"/>
+        /// an instance of <see cref="Core.POCO.Core.Types.Differencing"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Differencing Create(Core.DTO.Differencing dto)
+        public Core.POCO.Core.Types.Differencing Create(Core.DTO.Core.Types.Differencing dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Differencing
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-            };
+            var poco = new Core.POCO.Core.Types.Differencing();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             return poco;
         }

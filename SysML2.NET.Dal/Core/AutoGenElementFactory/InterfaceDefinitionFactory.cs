@@ -28,44 +28,44 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="InterfaceDefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.InterfaceDefinition"/> based on a <see cref="Core.DTO.InterfaceDefinition"/>
+    /// <see cref="Core.POCO.Systems.Interfaces.InterfaceDefinition"/> based on a <see cref="Core.DTO.Systems.Interfaces.InterfaceDefinition"/>
     /// </summary>
     public class InterfaceDefinitionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.InterfaceDefinition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Interfaces.InterfaceDefinition"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.InterfaceDefinition"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Interfaces.InterfaceDefinition"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.InterfaceDefinition"/>
+        /// an instance of <see cref="Core.POCO.Systems.Interfaces.InterfaceDefinition"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.InterfaceDefinition Create(Core.DTO.InterfaceDefinition dto)
+        public Core.POCO.Systems.Interfaces.InterfaceDefinition Create(Core.DTO.Systems.Interfaces.InterfaceDefinition dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.InterfaceDefinition
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
-            };
+            var poco = new Core.POCO.Systems.Interfaces.InterfaceDefinition();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            ((Core.POCO.Systems.Connections.IConnectionDefinition)poco).IsSufficient = ((Core.DTO.Systems.Connections.IConnectionDefinition)dto).IsSufficient;
+            ((Core.POCO.Core.Types.IType)poco).IsSufficient = ((Core.DTO.Core.Types.IType)dto).IsSufficient;
+            poco.IsVariation = dto.IsVariation;
 
             return poco;
         }

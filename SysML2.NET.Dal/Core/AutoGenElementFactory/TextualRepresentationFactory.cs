@@ -28,41 +28,40 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="TextualRepresentationFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.TextualRepresentation"/> based on a <see cref="Core.DTO.TextualRepresentation"/>
+    /// <see cref="Core.POCO.Root.Annotations.TextualRepresentation"/> based on a <see cref="Core.DTO.Root.Annotations.TextualRepresentation"/>
     /// </summary>
     public class TextualRepresentationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.TextualRepresentation"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Root.Annotations.TextualRepresentation"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.TextualRepresentation"/>
+        /// The instance of the <see cref="Core.DTO.Root.Annotations.TextualRepresentation"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.TextualRepresentation"/>
+        /// an instance of <see cref="Core.POCO.Root.Annotations.TextualRepresentation"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.TextualRepresentation Create(Core.DTO.TextualRepresentation dto)
+        public Core.POCO.Root.Annotations.TextualRepresentation Create(Core.DTO.Root.Annotations.TextualRepresentation dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.TextualRepresentation
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                Body = dto.Body,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                Language = dto.Language,
-            };
+            var poco = new Core.POCO.Root.Annotations.TextualRepresentation();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.Body = dto.Body;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.Language = dto.Language;
 
             return poco;
         }

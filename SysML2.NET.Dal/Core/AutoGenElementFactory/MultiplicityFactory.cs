@@ -28,50 +28,49 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="MultiplicityFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Multiplicity"/> based on a <see cref="Core.DTO.Multiplicity"/>
+    /// <see cref="Core.POCO.Core.Types.Multiplicity"/> based on a <see cref="Core.DTO.Core.Types.Multiplicity"/>
     /// </summary>
     public class MultiplicityFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Multiplicity"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Core.Types.Multiplicity"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Multiplicity"/>
+        /// The instance of the <see cref="Core.DTO.Core.Types.Multiplicity"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Multiplicity"/>
+        /// an instance of <see cref="Core.POCO.Core.Types.Multiplicity"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Multiplicity Create(Core.DTO.Multiplicity dto)
+        public Core.POCO.Core.Types.Multiplicity Create(Core.DTO.Core.Types.Multiplicity dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Multiplicity
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-            };
+            var poco = new Core.POCO.Core.Types.Multiplicity();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
 
             return poco;
         }

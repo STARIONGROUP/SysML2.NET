@@ -28,43 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="ViewRenderingMembershipFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.ViewRenderingMembership"/> based on a <see cref="Core.DTO.ViewRenderingMembership"/>
+    /// <see cref="Core.POCO.Systems.Views.ViewRenderingMembership"/> based on a <see cref="Core.DTO.Systems.Views.ViewRenderingMembership"/>
     /// </summary>
     public class ViewRenderingMembershipFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.ViewRenderingMembership"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Views.ViewRenderingMembership"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.ViewRenderingMembership"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Views.ViewRenderingMembership"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.ViewRenderingMembership"/>
+        /// an instance of <see cref="Core.POCO.Systems.Views.ViewRenderingMembership"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.ViewRenderingMembership Create(Core.DTO.ViewRenderingMembership dto)
+        public Core.POCO.Systems.Views.ViewRenderingMembership Create(Core.DTO.Systems.Views.ViewRenderingMembership dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.ViewRenderingMembership
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                MemberName = dto.MemberName,
-                MemberShortName = dto.MemberShortName,
-                Visibility = dto.Visibility,
-            };
+            var poco = new Core.POCO.Systems.Views.ViewRenderingMembership();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.MemberName = dto.MemberName;
+            poco.MemberShortName = dto.MemberShortName;
+            poco.Visibility = dto.Visibility;
 
             return poco;
         }

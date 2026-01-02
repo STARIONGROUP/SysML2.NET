@@ -28,40 +28,39 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="ConjugationFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Conjugation"/> based on a <see cref="Core.DTO.Conjugation"/>
+    /// <see cref="Core.POCO.Core.Types.Conjugation"/> based on a <see cref="Core.DTO.Core.Types.Conjugation"/>
     /// </summary>
     public class ConjugationFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Conjugation"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Core.Types.Conjugation"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Conjugation"/>
+        /// The instance of the <see cref="Core.DTO.Core.Types.Conjugation"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Conjugation"/>
+        /// an instance of <see cref="Core.POCO.Core.Types.Conjugation"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Conjugation Create(Core.DTO.Conjugation dto)
+        public Core.POCO.Core.Types.Conjugation Create(Core.DTO.Core.Types.Conjugation dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Conjugation
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-            };
+            var poco = new Core.POCO.Core.Types.Conjugation();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             return poco;
         }

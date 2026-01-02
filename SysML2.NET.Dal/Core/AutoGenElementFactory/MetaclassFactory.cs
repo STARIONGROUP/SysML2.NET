@@ -28,41 +28,40 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="MetaclassFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Metaclass"/> based on a <see cref="Core.DTO.Metaclass"/>
+    /// <see cref="Core.POCO.Kernel.Metadata.Metaclass"/> based on a <see cref="Core.DTO.Kernel.Metadata.Metaclass"/>
     /// </summary>
     public class MetaclassFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Metaclass"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Metadata.Metaclass"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Metaclass"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Metadata.Metaclass"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Metaclass"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Metadata.Metaclass"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Metaclass Create(Core.DTO.Metaclass dto)
+        public Core.POCO.Kernel.Metadata.Metaclass Create(Core.DTO.Kernel.Metadata.Metaclass dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Metaclass
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsSufficient = dto.IsSufficient,
-            };
+            var poco = new Core.POCO.Kernel.Metadata.Metaclass();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsSufficient = dto.IsSufficient;
 
             return poco;
         }

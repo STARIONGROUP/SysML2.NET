@@ -28,44 +28,43 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="RequirementDefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.RequirementDefinition"/> based on a <see cref="Core.DTO.RequirementDefinition"/>
+    /// <see cref="Core.POCO.Systems.Requirements.RequirementDefinition"/> based on a <see cref="Core.DTO.Systems.Requirements.RequirementDefinition"/>
     /// </summary>
     public class RequirementDefinitionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.RequirementDefinition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.RequirementDefinition"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.RequirementDefinition"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Requirements.RequirementDefinition"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.RequirementDefinition"/>
+        /// an instance of <see cref="Core.POCO.Systems.Requirements.RequirementDefinition"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.RequirementDefinition Create(Core.DTO.RequirementDefinition dto)
+        public Core.POCO.Systems.Requirements.RequirementDefinition Create(Core.DTO.Systems.Requirements.RequirementDefinition dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.RequirementDefinition
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
-                ReqId = dto.ReqId,
-            };
+            var poco = new Core.POCO.Systems.Requirements.RequirementDefinition();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsVariation = dto.IsVariation;
+            poco.ReqId = dto.ReqId;
 
             return poco;
         }

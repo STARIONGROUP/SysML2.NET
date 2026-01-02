@@ -28,40 +28,39 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="FeatureInvertingFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.FeatureInverting"/> based on a <see cref="Core.DTO.FeatureInverting"/>
+    /// <see cref="Core.POCO.Core.Features.FeatureInverting"/> based on a <see cref="Core.DTO.Core.Features.FeatureInverting"/>
     /// </summary>
     public class FeatureInvertingFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.FeatureInverting"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Core.Features.FeatureInverting"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.FeatureInverting"/>
+        /// The instance of the <see cref="Core.DTO.Core.Features.FeatureInverting"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.FeatureInverting"/>
+        /// an instance of <see cref="Core.POCO.Core.Features.FeatureInverting"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.FeatureInverting Create(Core.DTO.FeatureInverting dto)
+        public Core.POCO.Core.Features.FeatureInverting Create(Core.DTO.Core.Features.FeatureInverting dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.FeatureInverting
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-            };
+            var poco = new Core.POCO.Core.Features.FeatureInverting();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             return poco;
         }

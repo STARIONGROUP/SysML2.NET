@@ -28,41 +28,40 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="BehaviorFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Behavior"/> based on a <see cref="Core.DTO.Behavior"/>
+    /// <see cref="Core.POCO.Kernel.Behaviors.Behavior"/> based on a <see cref="Core.DTO.Kernel.Behaviors.Behavior"/>
     /// </summary>
     public class BehaviorFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Behavior"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Behaviors.Behavior"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Behavior"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Behaviors.Behavior"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Behavior"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Behaviors.Behavior"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Behavior Create(Core.DTO.Behavior dto)
+        public Core.POCO.Kernel.Behaviors.Behavior Create(Core.DTO.Kernel.Behaviors.Behavior dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Behavior
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsSufficient = dto.IsSufficient,
-            };
+            var poco = new Core.POCO.Kernel.Behaviors.Behavior();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsSufficient = dto.IsSufficient;
 
             return poco;
         }

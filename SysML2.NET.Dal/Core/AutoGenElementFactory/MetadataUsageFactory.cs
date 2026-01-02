@@ -28,53 +28,52 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="MetadataUsageFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.MetadataUsage"/> based on a <see cref="Core.DTO.MetadataUsage"/>
+    /// <see cref="Core.POCO.Systems.Metadata.MetadataUsage"/> based on a <see cref="Core.DTO.Systems.Metadata.MetadataUsage"/>
     /// </summary>
     public class MetadataUsageFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.MetadataUsage"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Metadata.MetadataUsage"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.MetadataUsage"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Metadata.MetadataUsage"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.MetadataUsage"/>
+        /// an instance of <see cref="Core.POCO.Systems.Metadata.MetadataUsage"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.MetadataUsage Create(Core.DTO.MetadataUsage dto)
+        public Core.POCO.Systems.Metadata.MetadataUsage Create(Core.DTO.Systems.Metadata.MetadataUsage dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.MetadataUsage
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-                IsVariation = dto.IsVariation,
-                PortionKind = dto.PortionKind,
-            };
+            var poco = new Core.POCO.Systems.Metadata.MetadataUsage();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
+            poco.IsVariation = dto.IsVariation;
+            poco.PortionKind = dto.PortionKind;
 
             return poco;
         }

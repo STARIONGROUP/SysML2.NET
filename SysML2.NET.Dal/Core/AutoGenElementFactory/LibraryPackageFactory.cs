@@ -28,40 +28,39 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="LibraryPackageFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.LibraryPackage"/> based on a <see cref="Core.DTO.LibraryPackage"/>
+    /// <see cref="Core.POCO.Kernel.Packages.LibraryPackage"/> based on a <see cref="Core.DTO.Kernel.Packages.LibraryPackage"/>
     /// </summary>
     public class LibraryPackageFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.LibraryPackage"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Packages.LibraryPackage"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.LibraryPackage"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Packages.LibraryPackage"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.LibraryPackage"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Packages.LibraryPackage"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.LibraryPackage Create(Core.DTO.LibraryPackage dto)
+        public Core.POCO.Kernel.Packages.LibraryPackage Create(Core.DTO.Kernel.Packages.LibraryPackage dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.LibraryPackage
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsStandard = dto.IsStandard,
-            };
+            var poco = new Core.POCO.Kernel.Packages.LibraryPackage();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsStandard = dto.IsStandard;
 
             return poco;
         }

@@ -28,50 +28,49 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="PayloadFeatureFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.PayloadFeature"/> based on a <see cref="Core.DTO.PayloadFeature"/>
+    /// <see cref="Core.POCO.Kernel.Interactions.PayloadFeature"/> based on a <see cref="Core.DTO.Kernel.Interactions.PayloadFeature"/>
     /// </summary>
     public class PayloadFeatureFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.PayloadFeature"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Interactions.PayloadFeature"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.PayloadFeature"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Interactions.PayloadFeature"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.PayloadFeature"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Interactions.PayloadFeature"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.PayloadFeature Create(Core.DTO.PayloadFeature dto)
+        public Core.POCO.Kernel.Interactions.PayloadFeature Create(Core.DTO.Kernel.Interactions.PayloadFeature dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.PayloadFeature
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-            };
+            var poco = new Core.POCO.Kernel.Interactions.PayloadFeature();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
 
             return poco;
         }

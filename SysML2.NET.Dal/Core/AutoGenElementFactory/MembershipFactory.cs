@@ -28,43 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="MembershipFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Membership"/> based on a <see cref="Core.DTO.Membership"/>
+    /// <see cref="Core.POCO.Root.Namespaces.Membership"/> based on a <see cref="Core.DTO.Root.Namespaces.Membership"/>
     /// </summary>
     public class MembershipFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Membership"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Root.Namespaces.Membership"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Membership"/>
+        /// The instance of the <see cref="Core.DTO.Root.Namespaces.Membership"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Membership"/>
+        /// an instance of <see cref="Core.POCO.Root.Namespaces.Membership"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Membership Create(Core.DTO.Membership dto)
+        public Core.POCO.Root.Namespaces.Membership Create(Core.DTO.Root.Namespaces.Membership dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Membership
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                MemberName = dto.MemberName,
-                MemberShortName = dto.MemberShortName,
-                Visibility = dto.Visibility,
-            };
+            var poco = new Core.POCO.Root.Namespaces.Membership();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.MemberName = dto.MemberName;
+            poco.MemberShortName = dto.MemberShortName;
+            poco.Visibility = dto.Visibility;
 
             return poco;
         }

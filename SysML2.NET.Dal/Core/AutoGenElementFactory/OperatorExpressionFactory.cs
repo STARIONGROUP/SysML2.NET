@@ -28,51 +28,50 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="OperatorExpressionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.OperatorExpression"/> based on a <see cref="Core.DTO.OperatorExpression"/>
+    /// <see cref="Core.POCO.Kernel.Expressions.OperatorExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.OperatorExpression"/>
     /// </summary>
     public class OperatorExpressionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.OperatorExpression"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.OperatorExpression"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.OperatorExpression"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Expressions.OperatorExpression"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.OperatorExpression"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Expressions.OperatorExpression"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.OperatorExpression Create(Core.DTO.OperatorExpression dto)
+        public Core.POCO.Kernel.Expressions.OperatorExpression Create(Core.DTO.Kernel.Expressions.OperatorExpression dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.OperatorExpression
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-                Operator = dto.Operator,
-            };
+            var poco = new Core.POCO.Kernel.Expressions.OperatorExpression();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
+            poco.Operator = dto.Operator;
 
             return poco;
         }

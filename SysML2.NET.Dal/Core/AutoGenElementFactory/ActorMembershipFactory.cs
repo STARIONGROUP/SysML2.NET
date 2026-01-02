@@ -28,43 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="ActorMembershipFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.ActorMembership"/> based on a <see cref="Core.DTO.ActorMembership"/>
+    /// <see cref="Core.POCO.Systems.Requirements.ActorMembership"/> based on a <see cref="Core.DTO.Systems.Requirements.ActorMembership"/>
     /// </summary>
     public class ActorMembershipFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.ActorMembership"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.ActorMembership"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.ActorMembership"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Requirements.ActorMembership"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.ActorMembership"/>
+        /// an instance of <see cref="Core.POCO.Systems.Requirements.ActorMembership"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.ActorMembership Create(Core.DTO.ActorMembership dto)
+        public Core.POCO.Systems.Requirements.ActorMembership Create(Core.DTO.Systems.Requirements.ActorMembership dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.ActorMembership
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImplied = dto.IsImplied,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                MemberName = dto.MemberName,
-                MemberShortName = dto.MemberShortName,
-                Visibility = dto.Visibility,
-            };
+            var poco = new Core.POCO.Systems.Requirements.ActorMembership();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImplied = dto.IsImplied;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.MemberName = dto.MemberName;
+            poco.MemberShortName = dto.MemberShortName;
+            poco.Visibility = dto.Visibility;
 
             return poco;
         }

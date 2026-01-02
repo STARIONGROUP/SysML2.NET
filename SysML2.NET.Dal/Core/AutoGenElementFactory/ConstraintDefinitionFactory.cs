@@ -28,43 +28,42 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="ConstraintDefinitionFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.ConstraintDefinition"/> based on a <see cref="Core.DTO.ConstraintDefinition"/>
+    /// <see cref="Core.POCO.Systems.Constraints.ConstraintDefinition"/> based on a <see cref="Core.DTO.Systems.Constraints.ConstraintDefinition"/>
     /// </summary>
     public class ConstraintDefinitionFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.ConstraintDefinition"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Constraints.ConstraintDefinition"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.ConstraintDefinition"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Constraints.ConstraintDefinition"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.ConstraintDefinition"/>
+        /// an instance of <see cref="Core.POCO.Systems.Constraints.ConstraintDefinition"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.ConstraintDefinition Create(Core.DTO.ConstraintDefinition dto)
+        public Core.POCO.Systems.Constraints.ConstraintDefinition Create(Core.DTO.Systems.Constraints.ConstraintDefinition dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.ConstraintDefinition
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsSufficient = dto.IsSufficient,
-                IsVariation = dto.IsVariation,
-            };
+            var poco = new Core.POCO.Systems.Constraints.ConstraintDefinition();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsVariation = dto.IsVariation;
 
             return poco;
         }

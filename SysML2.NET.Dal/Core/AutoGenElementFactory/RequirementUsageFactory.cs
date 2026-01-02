@@ -28,54 +28,53 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="RequirementUsageFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.RequirementUsage"/> based on a <see cref="Core.DTO.RequirementUsage"/>
+    /// <see cref="Core.POCO.Systems.Requirements.RequirementUsage"/> based on a <see cref="Core.DTO.Systems.Requirements.RequirementUsage"/>
     /// </summary>
     public class RequirementUsageFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.RequirementUsage"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.RequirementUsage"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.RequirementUsage"/>
+        /// The instance of the <see cref="Core.DTO.Systems.Requirements.RequirementUsage"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.RequirementUsage"/>
+        /// an instance of <see cref="Core.POCO.Systems.Requirements.RequirementUsage"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.RequirementUsage Create(Core.DTO.RequirementUsage dto)
+        public Core.POCO.Systems.Requirements.RequirementUsage Create(Core.DTO.Systems.Requirements.RequirementUsage dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.RequirementUsage
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                Direction = dto.Direction,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsComposite = dto.IsComposite,
-                IsConstant = dto.IsConstant,
-                IsDerived = dto.IsDerived,
-                IsEnd = dto.IsEnd,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsIndividual = dto.IsIndividual,
-                IsOrdered = dto.IsOrdered,
-                IsPortion = dto.IsPortion,
-                IsSufficient = dto.IsSufficient,
-                IsUnique = dto.IsUnique,
-                IsVariable = dto.IsVariable,
-                IsVariation = dto.IsVariation,
-                PortionKind = dto.PortionKind,
-                ReqId = dto.ReqId,
-            };
+            var poco = new Core.POCO.Systems.Requirements.RequirementUsage();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.Direction = dto.Direction;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsComposite = dto.IsComposite;
+            poco.IsConstant = dto.IsConstant;
+            poco.IsDerived = dto.IsDerived;
+            poco.IsEnd = dto.IsEnd;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsIndividual = dto.IsIndividual;
+            poco.IsOrdered = dto.IsOrdered;
+            poco.IsPortion = dto.IsPortion;
+            poco.IsSufficient = dto.IsSufficient;
+            poco.IsUnique = dto.IsUnique;
+            poco.IsVariable = dto.IsVariable;
+            poco.IsVariation = dto.IsVariation;
+            poco.PortionKind = dto.PortionKind;
+            poco.ReqId = dto.ReqId;
 
             return poco;
         }

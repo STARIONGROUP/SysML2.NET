@@ -28,39 +28,38 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="AnnotatingElementFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.AnnotatingElement"/> based on a <see cref="Core.DTO.AnnotatingElement"/>
+    /// <see cref="Core.POCO.Root.Annotations.AnnotatingElement"/> based on a <see cref="Core.DTO.Root.Annotations.AnnotatingElement"/>
     /// </summary>
     public class AnnotatingElementFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.AnnotatingElement"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Root.Annotations.AnnotatingElement"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.AnnotatingElement"/>
+        /// The instance of the <see cref="Core.DTO.Root.Annotations.AnnotatingElement"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.AnnotatingElement"/>
+        /// an instance of <see cref="Core.POCO.Root.Annotations.AnnotatingElement"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.AnnotatingElement Create(Core.DTO.AnnotatingElement dto)
+        public Core.POCO.Root.Annotations.AnnotatingElement Create(Core.DTO.Root.Annotations.AnnotatingElement dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.AnnotatingElement
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-            };
+            var poco = new Core.POCO.Root.Annotations.AnnotatingElement();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             return poco;
         }

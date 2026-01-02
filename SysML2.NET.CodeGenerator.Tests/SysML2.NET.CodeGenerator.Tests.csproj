@@ -1155,6 +1155,82 @@
       <None Include="Expected\UML\Core\AutoGenPocoExtension\UsageExtensions.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\AnnotatingElementFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\AnnotatingElementFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\AssociationFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\AssociationFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\DependencyFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\DependencyFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\EnumerationDefinitionFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\EnumerationDefinitionFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\FeatureFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\FeatureFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\FeatureTypingFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\FeatureTypingFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\FlowFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\FlowFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\FramedConcernMembershipFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\FramedConcernMembershipFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\LiteralIntegerFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\LiteralIntegerFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\LiteralRationalFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\LiteralRationalFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\MembershipFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\MembershipFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\MultiplicityRangeFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\MultiplicityRangeFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\OwningMembershipFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\OwningMembershipFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\ReferenceSubsettingFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\ReferenceSubsettingFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\RequirementUsageFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\RequirementUsageFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\SelectExpressionFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\SelectExpressionFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\SubclassificationFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\SubclassificationFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\TextualRepresentationFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\TextualRepresentationFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenElementFactory\UsageFactory.cs" />
+      <None Include="Expected\UML\Core\AutoGenElementFactory\UsageFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

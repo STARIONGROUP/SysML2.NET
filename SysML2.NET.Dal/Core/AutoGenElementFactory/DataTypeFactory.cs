@@ -28,41 +28,40 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="DataTypeFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.DataType"/> based on a <see cref="Core.DTO.DataType"/>
+    /// <see cref="Core.POCO.Kernel.DataTypes.DataType"/> based on a <see cref="Core.DTO.Kernel.DataTypes.DataType"/>
     /// </summary>
     public class DataTypeFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.DataType"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.DataTypes.DataType"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.DataType"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.DataTypes.DataType"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.DataType"/>
+        /// an instance of <see cref="Core.POCO.Kernel.DataTypes.DataType"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.DataType Create(Core.DTO.DataType dto)
+        public Core.POCO.Kernel.DataTypes.DataType Create(Core.DTO.Kernel.DataTypes.DataType dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.DataType
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsSufficient = dto.IsSufficient,
-            };
+            var poco = new Core.POCO.Kernel.DataTypes.DataType();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsSufficient = dto.IsSufficient;
 
             return poco;
         }

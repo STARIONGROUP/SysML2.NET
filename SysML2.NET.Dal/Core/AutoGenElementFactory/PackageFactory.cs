@@ -28,39 +28,38 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="PackageFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Package"/> based on a <see cref="Core.DTO.Package"/>
+    /// <see cref="Core.POCO.Kernel.Packages.Package"/> based on a <see cref="Core.DTO.Kernel.Packages.Package"/>
     /// </summary>
     public class PackageFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Package"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Packages.Package"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Package"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Packages.Package"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Package"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Packages.Package"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Package Create(Core.DTO.Package dto)
+        public Core.POCO.Kernel.Packages.Package Create(Core.DTO.Kernel.Packages.Package dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Package
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-            };
+            var poco = new Core.POCO.Kernel.Packages.Package();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
             return poco;
         }

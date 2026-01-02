@@ -28,41 +28,40 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="PredicateFactory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.Predicate"/> based on a <see cref="Core.DTO.Predicate"/>
+    /// <see cref="Core.POCO.Kernel.Functions.Predicate"/> based on a <see cref="Core.DTO.Kernel.Functions.Predicate"/>
     /// </summary>
     public class PredicateFactory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.Predicate"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO.Kernel.Functions.Predicate"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.Predicate"/>
+        /// The instance of the <see cref="Core.DTO.Kernel.Functions.Predicate"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.Predicate"/>
+        /// an instance of <see cref="Core.POCO.Kernel.Functions.Predicate"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Predicate Create(Core.DTO.Predicate dto)
+        public Core.POCO.Kernel.Functions.Predicate Create(Core.DTO.Kernel.Functions.Predicate dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.Predicate
-            {
-                Id = dto.Id,
-                AliasIds = dto.AliasIds,
-                DeclaredName = dto.DeclaredName,
-                DeclaredShortName = dto.DeclaredShortName,
-                ElementId = dto.ElementId,
-                IsAbstract = dto.IsAbstract,
-                IsImpliedIncluded = dto.IsImpliedIncluded,
-                IsSufficient = dto.IsSufficient,
-            };
+            var poco = new Core.POCO.Kernel.Functions.Predicate();
+
+            poco.Id = dto.Id;
+            poco.AliasIds = dto.AliasIds;
+            poco.DeclaredName = dto.DeclaredName;
+            poco.DeclaredShortName = dto.DeclaredShortName;
+            poco.ElementId = dto.ElementId;
+            poco.IsAbstract = dto.IsAbstract;
+            poco.IsImpliedIncluded = dto.IsImpliedIncluded;
+            poco.IsSufficient = dto.IsSufficient;
 
             return poco;
         }
