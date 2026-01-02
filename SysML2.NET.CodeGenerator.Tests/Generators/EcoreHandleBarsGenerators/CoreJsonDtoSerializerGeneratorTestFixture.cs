@@ -26,6 +26,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
     using System.IO;
 
+    [Explicit("we are about to drop Ecore based code gen, these are present for reference only until permanently removed")]
     [TestFixture]
     public class CoreJsonDtoSerializerGeneratorTestFixture
     {

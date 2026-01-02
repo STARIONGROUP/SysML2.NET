@@ -380,6 +380,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     sb.Append(" { get; set; }");
                 }
 
+                if (!property.IsReadOnly && !property.IsDerived && !property.IsDerivedUnion && property.QueryIsEnumerable())
+                {
+                    sb.Append(" = [];");
+                }
+
                 writer.WriteSafeString(sb + Environment.NewLine);
             });
 

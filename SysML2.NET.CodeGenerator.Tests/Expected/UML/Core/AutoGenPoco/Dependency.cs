@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.AliasIds")]
-        public List<string> AliasIds { get; set; }
+        public List<string> AliasIds { get; set; } = [];
 
         /// <summary>
         /// The Element or Elements dependent on the supplier Elements.
@@ -63,7 +63,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         [Property(xmiId: "_19_0_2_12e503d9_1594006406653_175551_182", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [Implements(implementation: "IDependency.Client")]
-        public List<IElement> Client { get; set; }
+        public List<IElement> Client { get; set; } = [];
 
         /// <summary>
         /// The declared name of this Element.
@@ -174,7 +174,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IRelationship.OwnedRelatedElement")]
-        public List<IElement> OwnedRelatedElement { get; set; }
+        public List<IElement> OwnedRelatedElement { get; set; } = [];
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
@@ -182,7 +182,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwnedRelationship")]
-        public List<IRelationship> OwnedRelationship { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; } = [];
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
@@ -281,7 +281,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IDependency.Client")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; }
+        public List<IElement> Source { get; set; } = [];
 
         /// <summary>
         /// The Element or Elements on which the client Elements depend in some respect.
@@ -289,7 +289,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         [Property(xmiId: "_19_0_2_12e503d9_1594006525044_548771_207", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [Implements(implementation: "IDependency.Supplier")]
-        public List<IElement> Supplier { get; set; }
+        public List<IElement> Supplier { get; set; } = [];
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -298,7 +298,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IDependency.Supplier")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; }
+        public List<IElement> Target { get; set; } = [];
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

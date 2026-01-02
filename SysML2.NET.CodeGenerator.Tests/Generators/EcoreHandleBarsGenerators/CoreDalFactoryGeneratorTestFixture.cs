@@ -30,9 +30,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using SysML2.NET.CodeGenerator.Generators.HandleBarsGenerators;
     using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
 
-    /// <summary>
-    /// Suite of tests for the <see cref="CoreDalFactoryGenerator"/> class
-    /// </summary>
+    [Explicit("we are about to drop Ecore based code gen, these are present for reference only until permanently removed")]
     [TestFixture]
     public class CoreDalFactoryGeneratorTestFixture
     {

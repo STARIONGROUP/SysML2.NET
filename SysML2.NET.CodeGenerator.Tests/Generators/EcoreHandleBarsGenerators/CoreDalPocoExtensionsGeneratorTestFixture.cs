@@ -27,9 +27,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using System.IO;
     using System.Threading.Tasks;
 
-    /// <summary>
-    /// Suite of tests for the <see cref="CoreDalPocoExtensionsGeneratorTestFixture"/> class
-    /// </summary>
+    [Explicit("we are about to drop Ecore based code gen, these are present for reference only until permanently removed")]
     [TestFixture]
     public class CoreDalPocoExtensionsGeneratorTestFixture
     {

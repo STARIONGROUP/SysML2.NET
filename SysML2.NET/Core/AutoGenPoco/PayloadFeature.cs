@@ -56,7 +56,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.AliasIds")]
-        public List<string> AliasIds { get; set; }
+        public List<string> AliasIds { get; set; } = [];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -684,7 +684,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwnedRelationship")]
-        public List<IRelationship> OwnedRelationship { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; } = [];
 
         /// <summary>
         /// The ownedRelationships of this Type that are Specializations, for which the Type is the specific

@@ -56,7 +56,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.AliasIds")]
-        public List<string> AliasIds { get; set; }
+        public List<string> AliasIds { get; set; } = [];
 
         /// <summary>
         /// The type of this ConjugatedPortTyping considered as a FeatureTyping, which must be a
@@ -185,7 +185,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IRelationship.OwnedRelatedElement")]
-        public List<IElement> OwnedRelatedElement { get; set; }
+        public List<IElement> OwnedRelatedElement { get; set; } = [];
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
@@ -193,7 +193,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwnedRelationship")]
-        public List<IRelationship> OwnedRelationship { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; } = [];
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
@@ -327,7 +327,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("ISpecialization.Specific")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; }
+        public List<IElement> Source { get; set; } = [];
 
         /// <summary>
         /// A Type with a subset of all instances of the general Type, which might be the same set.
@@ -345,7 +345,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("ISpecialization.General")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; }
+        public List<IElement> Target { get; set; } = [];
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

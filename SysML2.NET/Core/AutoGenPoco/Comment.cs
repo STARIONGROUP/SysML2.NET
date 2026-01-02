@@ -51,7 +51,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.AliasIds")]
-        public List<string> AliasIds { get; set; }
+        public List<string> AliasIds { get; set; } = [];
 
         /// <summary>
         /// The Elements that are annotated by this AnnotatingElement. If annotation is not empty, these are the
@@ -207,7 +207,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwnedRelationship")]
-        public List<IRelationship> OwnedRelationship { get; set; }
+        public List<IRelationship> OwnedRelationship { get; set; } = [];
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this

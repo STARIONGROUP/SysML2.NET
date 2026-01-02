@@ -27,6 +27,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     using System.IO;
     using System.Threading.Tasks;
 
+    [Explicit("we are about to drop Ecore based code gen, these are present for reference only until permanently removed")]
     [TestFixture]
     public class CoreDtoGeneratorTestGenerator
     {
