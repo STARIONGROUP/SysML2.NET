@@ -306,6 +306,10 @@
       <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\AnnotatingElementMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackPayload\Payload.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackPayload\PayloadFactory.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackPayload\PayloadMessagePackFormatter.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\AnnotatingElementExtensions.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\AssociationExtensions.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\DependencyExtensions.cs" />
@@ -700,6 +704,18 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Compile Remove="Expected\UML\Core\AutoGenPoco\AnnotatingElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\AnnotatingElementMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackPayload\Payload.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackPayload\PayloadFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackPayload\PayloadMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Include="Expected\UML\Core\AutoGenPocoExtend\AnnotatingElementExtensions.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

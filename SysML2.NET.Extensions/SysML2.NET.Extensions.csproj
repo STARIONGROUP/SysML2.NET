@@ -33,6 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Comparers\" />
       <Folder Include="PIM\" />
     </ItemGroup>
 

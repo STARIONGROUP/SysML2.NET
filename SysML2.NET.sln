@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Extensions", "Sy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Extensions.Tests", "SysML2.NET.Extensions.Tests\SysML2.NET.Extensions.Tests.csproj", "{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.MessagePack", "SysML2.NET.Serializer.MessagePack\SysML2.NET.Serializer.MessagePack.csproj", "{C0042B33-37AD-4D2A-8052-3CAB585C30D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0042B33-37AD-4D2A-8052-3CAB585C30D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0042B33-37AD-4D2A-8052-3CAB585C30D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0042B33-37AD-4D2A-8052-3CAB585C30D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0042B33-37AD-4D2A-8052-3CAB585C30D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

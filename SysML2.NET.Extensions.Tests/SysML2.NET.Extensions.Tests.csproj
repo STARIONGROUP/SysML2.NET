@@ -38,4 +38,8 @@
       <ProjectReference Include="..\SysML2.NET.Extensions\SysML2.NET.Extensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Comparers\" />
+    </ItemGroup>
+
 </Project>
