@@ -27,7 +27,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using HandlebarsDotNet;
 
     using SysML2.NET.CodeGenerator.Extensions;
-
+    using uml4net.CommonStructure;
     using uml4net.Extensions;
     using uml4net.SimpleClassifiers;
     using uml4net.StructuredClassifiers;
@@ -92,7 +92,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 var namespacePrefix = arguments[1].ToString();
-                
+
                 var superClasses = @class.SuperClass;
 
                 var uniqueNamespaces = new HashSet<string>();
@@ -109,6 +109,20 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     foreach (var prop in allProperties.Where(x => x.QueryIsReferenceProperty()))
                     {
                         uniqueNamespaces.Add(prop.Type.QueryNamespace());
+                    }
+
+                    var interfaceDerivedProperties =
+                        superClasses.SelectMany(x => x.QueryAllProperties()
+                            .Where(y => y.IsDerived || y.IsDerivedUnion))
+                            .ToList();
+
+                    foreach (var interfaceDerivedProperty in interfaceDerivedProperties)
+                    {
+                        if (interfaceDerivedProperty.Possessor is INamedElement owner)
+                        {
+                            var @namespace = owner.QueryNamespace();
+                            uniqueNamespaces.Add(@namespace);
+                        }
                     }
                 }
 

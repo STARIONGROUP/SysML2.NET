@@ -50,6 +50,7 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
         {{ #Decorator.WriteSubsettedPropertyAttribute property }}
         {{ #Decorator.WriteRedefinedPropertyAttribute property }}
         {{ #Decorator.WriteRedefinedByPropertyAttribute property ../ }}
+        {{ #Decorator.WriteImplementsAttribute property }}
         {{ #Property.WriteForPOCOClass property ../ }}
         
         {{/each}}
