@@ -227,6 +227,9 @@
       <None Update="Templates\Uml\core-dal-element-uml-extensions.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Templates\Uml\core-dal-poco-uml-extensions.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

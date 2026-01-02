@@ -91,6 +91,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("kind"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.Kind.ToString().ToLower());
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.MemberElement);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.MemberName);
 

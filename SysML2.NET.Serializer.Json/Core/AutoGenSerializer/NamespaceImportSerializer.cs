@@ -82,6 +82,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iNamespaceImport.ElementId);
 
+            writer.WritePropertyName("importedNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iNamespaceImport.ImportedNamespace);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iNamespaceImport.IsImplied);
 

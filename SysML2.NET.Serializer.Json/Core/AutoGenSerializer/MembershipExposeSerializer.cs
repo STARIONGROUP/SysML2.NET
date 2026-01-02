@@ -82,6 +82,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iMembershipExpose.ElementId);
 
+            writer.WritePropertyName("importedMembership"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iMembershipExpose.ImportedMembership);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iMembershipExpose.IsImplied);
 

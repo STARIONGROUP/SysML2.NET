@@ -79,6 +79,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iDifferencing.DeclaredShortName);
 
+            writer.WritePropertyName("differencingType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iDifferencing.DifferencingType);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iDifferencing.ElementId);
 

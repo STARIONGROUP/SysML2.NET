@@ -82,6 +82,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iFeatureInverting.ElementId);
 
+            writer.WritePropertyName("featureInverted"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFeatureInverting.FeatureInverted);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("invertingFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFeatureInverting.InvertingFeature);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iFeatureInverting.IsImplied);
 

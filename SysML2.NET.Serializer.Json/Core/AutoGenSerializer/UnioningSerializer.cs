@@ -164,6 +164,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("unioningType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iUnioning.UnioningType);
+            writer.WriteEndObject();
+
             writer.WriteEndObject();
         }
     }

@@ -73,6 +73,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WriteStartArray("client"u8);
+
+            foreach (var item in iDependency.Client)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iDependency.DeclaredName);
 
@@ -143,6 +155,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("source"u8);
 
             foreach (var item in iDependency.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("supplier"u8);
+
+            foreach (var item in iDependency.Supplier)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);

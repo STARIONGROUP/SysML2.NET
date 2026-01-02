@@ -94,6 +94,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isInitial"u8);
             writer.WriteBooleanValue(iFeatureValue.IsInitial);
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFeatureValue.MemberElement);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iFeatureValue.MemberName);
 

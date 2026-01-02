@@ -73,6 +73,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("conjugatedType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iConjugation.ConjugatedType);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConjugation.DeclaredName);
 
@@ -87,6 +93,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iConjugation.IsImpliedIncluded);
+
+            writer.WritePropertyName("originalType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iConjugation.OriginalType);
+            writer.WriteEndObject();
 
             writer.WriteStartArray("ownedRelatedElement"u8);
 

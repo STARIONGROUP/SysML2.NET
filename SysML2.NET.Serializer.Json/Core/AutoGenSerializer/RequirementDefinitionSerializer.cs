@@ -123,6 +123,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("reqId"u8);
+            writer.WriteStringValue(iRequirementDefinition.ReqId);
+
             writer.WriteEndObject();
         }
     }

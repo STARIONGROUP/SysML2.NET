@@ -73,6 +73,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("crossedFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iCrossSubsetting.CrossedFeature);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iCrossSubsetting.DeclaredName);
 
@@ -81,6 +87,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iCrossSubsetting.ElementId);
+
+            writer.WritePropertyName("general"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iCrossSubsetting.General);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iCrossSubsetting.IsImplied);
@@ -151,6 +163,24 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
+
+            writer.WritePropertyName("specific"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iCrossSubsetting.Specific);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("subsettedFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iCrossSubsetting.SubsettedFeature);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("subsettingFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iCrossSubsetting.SubsettingFeature);
+            writer.WriteEndObject();
 
             writer.WriteStartArray("target"u8);
 

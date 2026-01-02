@@ -82,6 +82,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iTypeFeaturing.ElementId);
 
+            writer.WritePropertyName("featureOfType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iTypeFeaturing.FeatureOfType);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("featuringType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iTypeFeaturing.FeaturingType);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iTypeFeaturing.IsImplied);
 

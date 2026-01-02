@@ -79,6 +79,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iDisjoining.DeclaredShortName);
 
+            writer.WritePropertyName("disjoiningType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iDisjoining.DisjoiningType);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iDisjoining.ElementId);
 
@@ -163,6 +169,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
+
+            writer.WritePropertyName("typeDisjoined"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iDisjoining.TypeDisjoined);
+            writer.WriteEndObject();
 
             writer.WriteEndObject();
         }

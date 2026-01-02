@@ -73,6 +73,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("conjugatedType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iPortConjugation.ConjugatedType);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iPortConjugation.DeclaredName);
 
@@ -87,6 +93,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iPortConjugation.IsImpliedIncluded);
+
+            writer.WritePropertyName("originalPortDefinition"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iPortConjugation.OriginalPortDefinition);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("originalType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iPortConjugation.OriginalType);
+            writer.WriteEndObject();
 
             writer.WriteStartArray("ownedRelatedElement"u8);
 

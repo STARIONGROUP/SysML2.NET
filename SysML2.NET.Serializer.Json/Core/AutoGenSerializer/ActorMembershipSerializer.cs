@@ -88,6 +88,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iActorMembership.IsImpliedIncluded);
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iActorMembership.MemberElement);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("memberName"u8);
             writer.WriteStringValue(iActorMembership.MemberName);
 
