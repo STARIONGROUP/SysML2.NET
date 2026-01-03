@@ -74,8 +74,6 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
                     Path.Combine(this.rootDirectory, "PrimitiveTypes.xmi")
             };
 
-
-
             this.modelFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
                 "SysML_xmi.uml"));
 
@@ -99,8 +97,8 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
                              </div>
                              """;
 
-            Assert.That(() => this.htmlReportGenerator.GenerateReport(this.modelFileInfo, this.rootDirectoryInfo, false, this.pathMaps,
-            this.outputFileInfo, customHtml),
+            Assert.That(() => this.htmlReportGenerator.GenerateReport(this.modelFileInfo, this.rootDirectoryInfo, "_h6bQED_xEfCL-qw9_9p9XQ", "SysML", 
+                    true, this.pathMaps, this.outputFileInfo, customHtml),
             Throws.Nothing);
         }
     }

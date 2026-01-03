@@ -142,7 +142,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-enumeration-uml-template"];
 
-            var enumerations = xmiReaderResult.Root.QueryPackages()
+            var enumerations = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IEnumeration>())
                 .ToList();
 
@@ -177,7 +177,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-enumeration-uml-template"];
 
-            var enumerations = xmiReaderResult.Root.QueryPackages()
+            var enumerations = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IEnumeration>())
                 .ToList();
 

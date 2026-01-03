@@ -92,7 +92,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[ExtendTemplateName];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => x.OwnedAttribute.Select(y => y.IsDerived || y.IsDerivedUnion).Any())
                 .ToList();
@@ -141,7 +141,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[ExtendTemplateName];
 
-            var umlClass = xmiReaderResult.Root.QueryPackages()
+            var umlClass = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Single(x => x.Name == className);
 

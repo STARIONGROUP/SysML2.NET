@@ -80,9 +80,9 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
                     Path.Combine(rootPath, "PrimitiveTypes.xmi")
             };
 
-            Assert.That(
-                () => this.modelInspector.GenerateReport(this.modelFileInfo, this.modelFileInfo.Directory, true,
-                    pathMaps, this.reportFileInfo), Throws.Nothing);
+            Assert.That(() => this.modelInspector.GenerateReport(this.modelFileInfo, 
+                this.modelFileInfo.Directory, "_h6bQED_xEfCL-qw9_9p9XQ", "SysML", 
+                true, pathMaps, this.reportFileInfo), Throws.Nothing);
         }
     }
 }

@@ -99,7 +99,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             var orderedClasses = classes.OrderBy(x => x.Name);
             var orderedInterfaces = interfaces.OrderBy(x => x.Name);
 
-            var payload = new HandlebarsPayload(xmiReaderResult.Root, xmiReaderResult.Packages, orderedEnumerations, orderedPrimitiveTypes, orderedDataTypes, orderedClasses, orderedInterfaces);
+            var payload = new HandlebarsPayload(xmiReaderResult.QueryRoot(null, name: "SysML"), xmiReaderResult.Packages, orderedEnumerations, orderedPrimitiveTypes, orderedDataTypes, orderedClasses, orderedInterfaces);
 
             return payload;
         }

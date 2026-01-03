@@ -200,7 +200,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-interface-uml-template"];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .ToList();
 
@@ -235,7 +235,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-interface-uml-template"];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .ToList();
 
@@ -268,7 +268,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-class-uml-template"];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .ToList();
@@ -304,7 +304,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-class-uml-template"];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .ToList();
 

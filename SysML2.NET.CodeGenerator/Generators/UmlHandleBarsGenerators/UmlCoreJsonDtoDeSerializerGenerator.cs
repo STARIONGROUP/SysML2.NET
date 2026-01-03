@@ -105,7 +105,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[EnumDeSerializerTemplateName];
 
-            var enumerations = xmiReaderResult.Root.QueryPackages()
+            var enumerations = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IEnumeration>())
                 .ToList();
 
@@ -176,7 +176,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[DtoDeSerializerProviderTemplateName];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .OrderBy(x => x.Name)
@@ -223,7 +223,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[DtoDeSerializerTemplateName];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .ToList();
@@ -276,7 +276,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[DtoDeSerializerTemplateName];
 
-            var classToGenerate = xmiReaderResult.Root.QueryPackages()
+            var classToGenerate = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Single(x => x.Name == className);
             

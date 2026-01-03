@@ -172,7 +172,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[ClassTemplateName];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .ToList();
 
@@ -200,7 +200,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[InterfaceTemplateName];
 
-            var classes = xmiReaderResult.Root.QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .ToList();
 
@@ -227,7 +227,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[InterfaceTemplateName];
 
-            var umlClass = xmiReaderResult.Root.QueryPackages()
+            var umlClass = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Single(x => x.Name == className);
 
@@ -273,7 +273,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[ClassTemplateName];
 
-            var umlClass = xmiReaderResult.Root.QueryPackages()
+            var umlClass = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Single(x => x.Name == className);
 
