@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The FeatureTypingDeSerializer can only be used to deserialize objects of type IFeatureTyping, a {@type.GetString()} was provided");
             }
 
-            IFeatureTyping dtoInstance = new SysML2.NET.Core.DTO.Core.Features.FeatureTyping();
+            var dtoInstance = new SysML2.NET.Core.DTO.Core.Features.FeatureTyping();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -132,31 +132,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the elementId Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("general"u8, out var generalProperty))
-            {
-                if (generalProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.General = Guid.Empty;
-                    logger.LogDebug($"the FeatureTyping.General property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (generalProperty.TryGetProperty("@id"u8, out var generalIdProperty))
-                    {
-                        var propertyValue = generalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.General = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the general Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
@@ -269,71 +244,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the owningRelationship Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceIdProperty))
-                    {
-                        var propertyValue = sourceIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("specific"u8, out var specificProperty))
-            {
-                if (specificProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.Specific = Guid.Empty;
-                    logger.LogDebug($"the FeatureTyping.Specific property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (specificProperty.TryGetProperty("@id"u8, out var specificIdProperty))
-                    {
-                        var propertyValue = specificIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Specific = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the specific Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetIdProperty))
-                    {
-                        var propertyValue = targetIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the FeatureTyping: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("type"u8, out var typeProperty))

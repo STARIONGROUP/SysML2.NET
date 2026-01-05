@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
-        public List<Guid> Documentation { get; internal set; }
+        public List<Guid> documentation { get; internal set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -125,7 +125,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
-        public bool IsLibraryElement { get; internal set; }
+        public bool isLibraryElement { get; internal set; }
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -135,7 +135,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string Name { get; internal set; }
+        public string name { get; internal set; }
 
         /// <summary>
         /// The Type to be conjugated.
@@ -153,7 +153,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
-        public List<Guid> OwnedAnnotation { get; internal set; }
+        public List<Guid> ownedAnnotation { get; internal set; }
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -161,7 +161,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
-        public List<Guid> OwnedElement { get; internal set; }
+        public List<Guid> ownedElement { get; internal set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -185,7 +185,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
-        public Guid? Owner { get; internal set; }
+        public Guid? owner { get; internal set; }
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -194,7 +194,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
-        public Guid? OwningMembership { get; internal set; }
+        public Guid? owningMembership { get; internal set; }
 
         /// <summary>
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
@@ -203,7 +203,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public Guid? OwningNamespace { get; internal set; }
+        public Guid? owningNamespace { get; internal set; }
 
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
@@ -228,7 +228,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490143_721644_299")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [Implements(implementation: "IConjugation.OwningType")]
-        public Guid? OwningType { get; internal set; }
+        public Guid? owningType { get; internal set; }
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -240,7 +240,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string QualifiedName { get; internal set; }
+        public string qualifiedName { get; internal set; }
 
         /// <summary>
         /// The Elements that are related by this Relationship, derived as the union of the source and target
@@ -248,7 +248,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        public List<Guid> RelatedElement { get; internal set; }
+        public List<Guid> relatedElement { get; internal set; }
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -258,7 +258,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string ShortName { get; internal set; }
+        public string shortName { get; internal set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.
@@ -267,7 +267,11 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConjugation.ConjugatedType")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => throw new InvalidOperationException("Redefined by property IConjugation.ConjugatedType");
+            set => throw new InvalidOperationException("Redefined by property IConjugation.ConjugatedType");
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -276,7 +280,11 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConjugation.OriginalType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => throw new InvalidOperationException("Redefined by property IConjugation.OriginalType");
+            set => throw new InvalidOperationException("Redefined by property IConjugation.OriginalType");
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -285,7 +293,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
-        public List<Guid> TextualRepresentation { get; internal set; }
+        public List<Guid> textualRepresentation { get; internal set; }
 
     }
 }

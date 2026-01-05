@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The AcceptActionUsageDeSerializer can only be used to deserialize objects of type IAcceptActionUsage, a {@type.GetString()} was provided");
             }
 
-            IAcceptActionUsage dtoInstance = new SysML2.NET.Core.DTO.Systems.Actions.AcceptActionUsage();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Actions.AcceptActionUsage();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -273,18 +273,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isUnique Json property was not found in the AcceptActionUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the AcceptActionUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))

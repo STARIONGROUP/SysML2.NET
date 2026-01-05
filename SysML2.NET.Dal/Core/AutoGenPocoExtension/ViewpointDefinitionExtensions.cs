@@ -68,23 +68,13 @@ namespace SysML2.NET.Dal
             var identifiersOfObjectsToDelete = new List<Guid>();
 
             poco.AliasIds = dto.AliasIds;
-
             poco.DeclaredName = dto.DeclaredName;
-
-            poco.DeclaredShortName = dto.DeclaredShortName;
-
             poco.ElementId = dto.ElementId;
-
             poco.IsAbstract = dto.IsAbstract;
-
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
-
             poco.IsIndividual = dto.IsIndividual;
-
             poco.IsSufficient = dto.IsSufficient;
-
             poco.IsVariation = dto.IsVariation;
-
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
 
             foreach (var identifier in ownedRelationshipToDelete)
@@ -93,9 +83,7 @@ namespace SysML2.NET.Dal
             }
 
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
-
             poco.ReqId = dto.ReqId;
-
 
             return identifiersOfObjectsToDelete;
         }
@@ -171,7 +159,6 @@ namespace SysML2.NET.Dal
             dto.Id = poco.Id;
             dto.AliasIds = poco.AliasIds;
             dto.DeclaredName = poco.DeclaredName;
-            dto.DeclaredShortName = poco.DeclaredShortName;
             dto.ElementId = poco.ElementId;
             dto.IsAbstract = poco.IsAbstract;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;

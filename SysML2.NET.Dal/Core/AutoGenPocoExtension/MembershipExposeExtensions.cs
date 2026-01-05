@@ -68,23 +68,13 @@ namespace SysML2.NET.Dal
             var identifiersOfObjectsToDelete = new List<Guid>();
 
             poco.AliasIds = dto.AliasIds;
-
             poco.DeclaredName = dto.DeclaredName;
-
             poco.DeclaredShortName = dto.DeclaredShortName;
-
             poco.ElementId = dto.ElementId;
-
             poco.IsImplied = dto.IsImplied;
-
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
-
-            ((Core.POCO.Root.Namespaces.IImport)poco).IsImportAll = ((Core.DTO.Root.Namespaces.IImport)dto).IsImportAll;
-
-            ((Core.POCO.Systems.Views.IExpose)poco).IsImportAll = ((Core.DTO.Systems.Views.IExpose)dto).IsImportAll;
-
+            poco.IsImportAll = dto.IsImportAll;
             poco.IsRecursive = dto.IsRecursive;
-
             var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
 
             foreach (var identifier in ownedRelatedElementToDelete)
@@ -93,7 +83,6 @@ namespace SysML2.NET.Dal
             }
 
             identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
-
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
 
             foreach (var identifier in ownedRelationshipToDelete)
@@ -102,27 +91,7 @@ namespace SysML2.NET.Dal
             }
 
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
-
-            var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
-
-            foreach (var identifier in sourceToDelete)
-            {
-                poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
-            }
-
-
-            var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
-
-            foreach (var identifier in targetToDelete)
-            {
-                poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
-            }
-
-
-                        ((Core.POCO.Root.Namespaces.IImport)poco).Visibility = ((Core.DTO.Root.Namespaces.IImport)dto).Visibility;
-
-            ((Core.POCO.Systems.Views.IExpose)poco).Visibility = ((Core.DTO.Systems.Views.IExpose)dto).Visibility;
-
+            poco.Visibility = dto.Visibility;
 
             return identifiersOfObjectsToDelete;
         }
@@ -208,26 +177,6 @@ namespace SysML2.NET.Dal
                 poco.OwningRelationship = null;
             }
 
-            var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
-
-            foreach (var identifier in sourceToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Source.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
-            var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
-
-            foreach (var identifier in targetToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Target.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
         }
 
         /// <summary>
@@ -251,17 +200,13 @@ namespace SysML2.NET.Dal
             dto.ImportedMembership = poco.ImportedMembership.Id;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
-            ((Core.DTO.Root.Namespaces.IImport)dto).IsImportAll = ((Core.POCO.Root.Namespaces.IImport)poco).IsImportAll;
-            ((Core.DTO.Systems.Views.IExpose)dto).IsImportAll = ((Core.POCO.Systems.Views.IExpose)poco).IsImportAll;
+            dto.IsImportAll = poco.IsImportAll;
             dto.IsRecursive = poco.IsRecursive;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
-            dto.Source = poco.Source.Select(x => x.Id).ToList();
-            dto.Target = poco.Target.Select(x => x.Id).ToList();
-            ((Core.DTO.Root.Namespaces.IImport)dto).Visibility = ((Core.POCO.Root.Namespaces.IImport)poco).Visibility;
-            ((Core.DTO.Systems.Views.IExpose)dto).Visibility = ((Core.POCO.Systems.Views.IExpose)poco).Visibility;
+            dto.Visibility = poco.Visibility;
 
             return dto;
         }

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The CollectExpressionDeSerializer can only be used to deserialize objects of type ICollectExpression, a {@type.GetString()} was provided");
             }
 
-            ICollectExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.CollectExpression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.CollectExpression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The EnumerationDefinitionDeSerializer can only be used to deserialize objects of type IEnumerationDefinition, a {@type.GetString()} was provided");
             }
 
-            IEnumerationDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Enumerations.EnumerationDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Enumerations.EnumerationDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

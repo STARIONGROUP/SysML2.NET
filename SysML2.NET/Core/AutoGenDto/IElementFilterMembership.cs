@@ -48,7 +48,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Packages
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1605762464250_876969_157", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
-        Guid Condition { get; }
+        Guid condition { get; }
 
     }
 }

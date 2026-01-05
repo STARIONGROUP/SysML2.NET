@@ -88,18 +88,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iReturnParameterMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iReturnParameterMembership.MemberElement);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberName"u8);
-            writer.WriteStringValue(iReturnParameterMembership.MemberName);
-
-            writer.WritePropertyName("memberShortName"u8);
-            writer.WriteStringValue(iReturnParameterMembership.MemberShortName);
-
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iReturnParameterMembership.OwnedRelatedElement)
@@ -151,30 +139,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iReturnParameterMembership.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iReturnParameterMembership.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iReturnParameterMembership.Visibility.ToString().ToLower());

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The NullExpressionDeSerializer can only be used to deserialize objects of type INullExpression, a {@type.GetString()} was provided");
             }
 
-            INullExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.NullExpression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.NullExpression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

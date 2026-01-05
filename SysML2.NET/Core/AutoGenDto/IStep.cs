@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Behaviors
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        List<Guid> Behavior { get; }
+        List<Guid> behavior { get; }
 
         /// <summary>
         /// The parameters of this Step, which are defined as its directedFeatures, whose values are passed into
@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Behaviors
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
-        List<Guid> Parameter { get; }
+        List<Guid> parameter { get; }
 
     }
 }

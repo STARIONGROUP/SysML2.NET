@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617052514912_780627_2256", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1583000408905_769743_1223")]
-        IConcernDefinition QueryConcernDefinition();
+        IConcernDefinition concernDefinition { get; }
 
     }
 }

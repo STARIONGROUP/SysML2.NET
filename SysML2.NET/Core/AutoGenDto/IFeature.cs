@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// Feature in chainingFeatures, and so on, to values of the last Feature.
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1619792219511_543311_445", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        List<Guid> ChainingFeature { get; }
+        List<Guid> chainingFeature { get; }
 
         /// <summary>
         /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
@@ -71,7 +71,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// owningType.
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1689616227528_355910_218", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? CrossFeature { get; }
+        Guid? crossFeature { get; }
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -87,13 +87,13 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_18_5_3_12e503d9_1563834516279_920295_20653", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168386_366266_22107")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
-        Guid? EndOwningType { get; }
+        Guid? endOwningType { get; }
 
         /// <summary>
         /// The last of the chainingFeatures of this Feature, if it has any. Otherwise, this Feature itself.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1715790852907_110671_19", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid FeatureTarget { get; }
+        Guid featureTarget { get; }
 
         /// <summary>
         /// Types that feature this Feature, such that any instance in the domain of the Feature must be
@@ -102,7 +102,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// featuringTypes of the chained Feature.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1603905619975_304385_743", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> FeaturingType { get; }
+        List<Guid> featuringType { get; }
 
         /// <summary>
         /// Whether the Feature is a composite feature of its featuringType. If so, the values of the Feature
@@ -170,7 +170,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1689616916594_145818_277", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
-        Guid? OwnedCrossSubsetting { get; }
+        Guid? ownedCrossSubsetting { get; }
 
         /// <summary>
         /// The ownedRelationships of this Feature that are FeatureChainings, for which the Feature will be the
@@ -179,7 +179,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_19_0_4_b9102da_1622125589880_791465_72", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
-        List<Guid> OwnedFeatureChaining { get; }
+        List<Guid> ownedFeatureChaining { get; }
 
         /// <summary>
         /// The ownedRelationships of this Feature that are FeatureInvertings and for which the Feature is the
@@ -188,7 +188,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_19_0_4_b9102da_1653567738671_359235_43", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838861_768019_145")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
-        List<Guid> OwnedFeatureInverting { get; }
+        List<Guid> ownedFeatureInverting { get; }
 
         /// <summary>
         /// The ownedSubsettings of this Feature that are Redefinitions, for which the Feature is the
@@ -196,7 +196,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_161813_43220", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
-        List<Guid> OwnedRedefinition { get; }
+        List<Guid> ownedRedefinition { get; }
 
         /// <summary>
         /// The one ownedSubsetting of this Feature, if any, that is a ReferenceSubsetting, for which the
@@ -204,7 +204,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661555161564_247405_255", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
-        Guid? OwnedReferenceSubsetting { get; }
+        Guid? ownedReferenceSubsetting { get; }
 
         /// <summary>
         /// The ownedSpecializations of this Feature that are Subsettings, for which the Feature is the
@@ -213,7 +213,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_472382_43221", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674966_718145_43205")]
-        List<Guid> OwnedSubsetting { get; }
+        List<Guid> ownedSubsetting { get; }
 
         /// <summary>
         /// The ownedRelationships of this Feature that are TypeFeaturings and for which the Feature is the
@@ -222,7 +222,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_19_0_4_12e503d9_1603905673975_310948_762", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_196800_580")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
-        List<Guid> OwnedTypeFeaturing { get; }
+        List<Guid> ownedTypeFeaturing { get; }
 
         /// <summary>
         /// The ownedSpecializations of this Feature that are FeatureTypings, for which the Feature is the
@@ -231,14 +231,14 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_19_0_2_12e503d9_1596597427751_965862_42", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_804591_21100")]
-        List<Guid> OwnedTyping { get; }
+        List<Guid> ownedTyping { get; }
 
         /// <summary>
         /// The FeatureMembership that owns this Feature as an ownedMemberFeature, determining its owningType.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_68441_43223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674972_622493_43236")]
-        Guid? OwningFeatureMembership { get; }
+        Guid? owningFeatureMembership { get; }
 
         /// <summary>
         /// The Type that is the owningType of the owningFeatureMembership of this Feature.
@@ -247,7 +247,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674987_297074_43308")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603905619975_304385_743")]
-        Guid? OwningType { get; }
+        Guid? owningType { get; }
 
         /// <summary>
         /// Types that restrict the values of this Feature, such that the values must be instances of all the
@@ -256,7 +256,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         /// Feature.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> Type { get; }
+        List<Guid> type { get; }
 
     }
 }

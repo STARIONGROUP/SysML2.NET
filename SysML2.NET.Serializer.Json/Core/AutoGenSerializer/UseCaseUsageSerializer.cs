@@ -126,9 +126,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iUseCaseUsage.IsUnique);
 
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iUseCaseUsage.IsVariable);
-
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iUseCaseUsage.IsVariation);
 

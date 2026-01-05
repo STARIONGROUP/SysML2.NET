@@ -59,12 +59,10 @@ namespace SysML2.NET.Dal
                     {{#each (Class.QueryAllProperties this) as | property |}}
                     {{#unless property.IsDerived }}
                     {{#unless property.IsTransient }}
-                    {{#unless (Property.QueryIsReferenceProperty property) }}
-                        {{#if (Property.IsRedefinedOrRedifines this ../this)}}
-                            ((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})poco).{{String.CapitalizeFirstLetter property.Name }} = ((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})dto).{{String.CapitalizeFirstLetter property.Name }};
-                        {{else}}
+                    {{#unless (Property.QueryIsReferenceProperty property) }}                
+                    {{#unless (Property.IsPropertyRedefinedInClass this ../this)}}
                             poco.{{String.CapitalizeFirstLetter property.Name }} = dto.{{String.CapitalizeFirstLetter property.Name }};
-                        {{/if}}
+                    {{/unless}}
                     {{/unless}}
                     {{/unless}}
                     {{/unless}}

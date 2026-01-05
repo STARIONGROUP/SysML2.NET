@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The ConnectionUsageDeSerializer can only be used to deserialize objects of type IConnectionUsage, a {@type.GetString()} was provided");
             }
 
-            IConnectionUsage dtoInstance = new SysML2.NET.Core.DTO.Systems.Connections.ConnectionUsage();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Connections.ConnectionUsage();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -287,18 +287,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the isUnique Json property was not found in the ConnectionUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the ConnectionUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
             {
                 if (isVariationProperty.ValueKind != JsonValueKind.Null)
@@ -406,46 +394,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the portionKind Json property was not found in the ConnectionUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceIdProperty))
-                    {
-                        var propertyValue = sourceIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the ConnectionUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetIdProperty))
-                    {
-                        var propertyValue = targetIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the ConnectionUsage: { Id }", dtoInstance.Id);
             }
 
 

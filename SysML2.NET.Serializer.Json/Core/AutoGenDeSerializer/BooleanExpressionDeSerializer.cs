@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The BooleanExpressionDeSerializer can only be used to deserialize objects of type IBooleanExpression, a {@type.GetString()} was provided");
             }
 
-            IBooleanExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.BooleanExpression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.BooleanExpression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The FunctionDeSerializer can only be used to deserialize objects of type IFunction, a {@type.GetString()} was provided");
             }
 
-            IFunction dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Function();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Function();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

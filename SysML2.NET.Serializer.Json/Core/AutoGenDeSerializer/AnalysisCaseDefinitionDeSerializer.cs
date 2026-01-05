@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The AnalysisCaseDefinitionDeSerializer can only be used to deserialize objects of type IAnalysisCaseDefinition, a {@type.GetString()} was provided");
             }
 
-            IAnalysisCaseDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.AnalysisCases.AnalysisCaseDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.AnalysisCases.AnalysisCaseDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

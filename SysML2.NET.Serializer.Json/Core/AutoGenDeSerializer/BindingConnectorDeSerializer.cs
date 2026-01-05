@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The BindingConnectorDeSerializer can only be used to deserialize objects of type IBindingConnector, a {@type.GetString()} was provided");
             }
 
-            IBindingConnector dtoInstance = new SysML2.NET.Core.DTO.Kernel.Connectors.BindingConnector();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Connectors.BindingConnector();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -373,46 +373,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the owningRelationship Json property was not found in the BindingConnector: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceIdProperty))
-                    {
-                        var propertyValue = sourceIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the BindingConnector: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetIdProperty))
-                    {
-                        var propertyValue = targetIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the BindingConnector: { Id }", dtoInstance.Id);
             }
 
 

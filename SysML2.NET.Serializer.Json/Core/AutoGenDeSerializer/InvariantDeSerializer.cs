@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The InvariantDeSerializer can only be used to deserialize objects of type IInvariant, a {@type.GetString()} was provided");
             }
 
-            IInvariant dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Invariant();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Invariant();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

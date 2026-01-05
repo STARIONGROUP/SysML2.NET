@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The UseCaseDefinitionDeSerializer can only be used to deserialize objects of type IUseCaseDefinition, a {@type.GetString()} was provided");
             }
 
-            IUseCaseDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.UseCases.UseCaseDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.UseCases.UseCaseDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

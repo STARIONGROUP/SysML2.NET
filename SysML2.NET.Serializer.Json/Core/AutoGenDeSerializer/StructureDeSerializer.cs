@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The StructureDeSerializer can only be used to deserialize objects of type IStructure, a {@type.GetString()} was provided");
             }
 
-            IStructure dtoInstance = new SysML2.NET.Core.DTO.Kernel.Structures.Structure();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Structures.Structure();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

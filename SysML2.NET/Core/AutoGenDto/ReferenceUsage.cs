@@ -66,7 +66,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1619792219511_543311_445", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [Implements(implementation: "IFeature.ChainingFeature")]
-        public List<Guid> ChainingFeature { get; internal set; }
+        public List<Guid> chainingFeature { get; internal set; }
 
         /// <summary>
         /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
@@ -76,7 +76,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1689616227528_355910_218", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.CrossFeature")]
-        public Guid? CrossFeature { get; internal set; }
+        public Guid? crossFeature { get; internal set; }
 
         /// <summary>
         /// The declared name of this Element.
@@ -103,7 +103,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<Guid> Definition { get; internal set; }
+        public List<Guid> definition { get; internal set; }
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -116,7 +116,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661975883472_645501_1372", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.DifferencingType")]
-        public List<Guid> DifferencingType { get; internal set; }
+        public List<Guid> differencingType { get; internal set; }
 
         /// <summary>
         /// The features of this Type that have a non-null direction.
@@ -124,7 +124,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<Guid> DirectedFeature { get; internal set; }
+        public List<Guid> directedFeature { get; internal set; }
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -133,7 +133,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.DirectedUsage")]
-        public List<Guid> DirectedUsage { get; internal set; }
+        public List<Guid> directedUsage { get; internal set; }
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -150,7 +150,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
-        public List<Guid> Documentation { get; internal set; }
+        public List<Guid> documentation { get; internal set; }
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -166,7 +166,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.EndFeature")]
-        public List<Guid> EndFeature { get; internal set; }
+        public List<Guid> endFeature { get; internal set; }
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -176,7 +176,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168386_366266_22107")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [Implements(implementation: "IFeature.EndOwningType")]
-        public Guid? EndOwningType { get; internal set; }
+        public Guid? endOwningType { get; internal set; }
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -184,7 +184,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         [Implements(implementation: "IType.Feature")]
-        public List<Guid> Feature { get; internal set; }
+        public List<Guid> feature { get; internal set; }
 
         /// <summary>
         /// The FeatureMemberships for features of this Type, which include all ownedFeatureMemberships and
@@ -193,14 +193,14 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651076866512_962346_485", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.FeatureMembership")]
-        public List<Guid> FeatureMembership { get; internal set; }
+        public List<Guid> featureMembership { get; internal set; }
 
         /// <summary>
         /// The last of the chainingFeatures of this Feature, if it has any. Otherwise, this Feature itself.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1715790852907_110671_19", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.FeatureTarget")]
-        public Guid FeatureTarget { get; internal set; }
+        public Guid featureTarget { get; internal set; }
 
         /// <summary>
         /// Types that feature this Feature, such that any instance in the domain of the Feature must be
@@ -210,7 +210,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1603905619975_304385_743", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.FeaturingType")]
-        public List<Guid> FeaturingType { get; internal set; }
+        public List<Guid> featuringType { get; internal set; }
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
@@ -218,7 +218,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [Implements(implementation: "INamespace.ImportedMembership")]
-        public List<Guid> ImportedMembership { get; internal set; }
+        public List<Guid> importedMembership { get; internal set; }
 
         /// <summary>
         /// All the memberFeatures of the inheritedMemberships of this Type that are FeatureMemberships.
@@ -226,7 +226,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1575499020770_15576_2334", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.InheritedFeature")]
-        public List<Guid> InheritedFeature { get; internal set; }
+        public List<Guid> inheritedFeature { get; internal set; }
 
         /// <summary>
         /// All Memberships inherited by this Type via Specialization or Conjugation. These are included in the
@@ -235,7 +235,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1551972927538_787976_19004", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [Implements(implementation: "IType.InheritedMembership")]
-        public List<Guid> InheritedMembership { get; internal set; }
+        public List<Guid> inheritedMembership { get; internal set; }
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction in or inout.
@@ -243,7 +243,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_37384_43169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IType.Input")]
-        public List<Guid> Input { get; internal set; }
+        public List<Guid> input { get; internal set; }
 
         /// <summary>
         /// The interpretations of a Type with intersectingTypes are asserted to be those in common among the
@@ -256,7 +256,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661973922199_584242_1045", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.IntersectingType")]
-        public List<Guid> IntersectingType { get; internal set; }
+        public List<Guid> intersectingType { get; internal set; }
 
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized
@@ -280,7 +280,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575485930816_796088_1933", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.IsConjugated")]
-        public bool IsConjugated { get; internal set; }
+        public bool isConjugated { get; internal set; }
 
         /// <summary>
         /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
@@ -327,7 +327,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
-        public bool IsLibraryElement { get; internal set; }
+        public bool isLibraryElement { get; internal set; }
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.
@@ -350,7 +350,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1624035133434_200283_41434", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         [Implements(implementation: "IReferenceUsage.IsReference")]
-        bool IReferenceUsage.IsReference { get; }
+        public bool isReference { get; internal set; }
 
         /// <summary>
         /// Whether this Usage is a referential Usage, that is, it has isComposite = false.
@@ -358,7 +358,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IReferenceUsage.IsReference")]
         [Implements(implementation: "IUsage.IsReference")]
-        bool IUsage.IsReference { get; }
+        bool IUsage.isReference => throw new InvalidOperationException("Redefined by property IReferenceUsage.IsReference");
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -386,7 +386,11 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => throw new InvalidOperationException("Redefined by property IUsage.MayTimeVary");
+            set => throw new InvalidOperationException("Redefined by property IUsage.MayTimeVary");
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -407,7 +411,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool MayTimeVary { get; internal set; }
+        public bool mayTimeVary { get; internal set; }
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -415,7 +419,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "INamespace.Member")]
-        public List<Guid> Member { get; internal set; }
+        public List<Guid> member { get; internal set; }
 
         /// <summary>
         /// All Memberships in this Namespace, including (at least) the union of ownedMemberships and
@@ -423,7 +427,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
         [Implements(implementation: "INamespace.Membership")]
-        public List<Guid> Membership { get; internal set; }
+        public List<Guid> membership { get; internal set; }
 
         /// <summary>
         /// An ownedMember of this Type that is a Multiplicity, which constraints the cardinality of the Type.
@@ -433,7 +437,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IType.Multiplicity")]
-        public Guid? Multiplicity { get; internal set; }
+        public Guid? multiplicity { get; internal set; }
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -443,7 +447,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string Name { get; internal set; }
+        public string name { get; internal set; }
 
         /// <summary>
         /// The ActionUsages that are nestedUsages of this Usage.
@@ -451,7 +455,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1565501745142_70952_31609", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         [Implements(implementation: "IUsage.NestedAction")]
-        public List<Guid> NestedAction { get; internal set; }
+        public List<Guid> nestedAction { get; internal set; }
 
         /// <summary>
         /// The AllocationUsages that are nestedUsages of this Usage.
@@ -459,7 +463,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1611430983774_648557_1053", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         [Implements(implementation: "IUsage.NestedAllocation")]
-        public List<Guid> NestedAllocation { get; internal set; }
+        public List<Guid> nestedAllocation { get; internal set; }
 
         /// <summary>
         /// The AnalysisCaseUsages that are nestedUsages of this Usage.
@@ -467,7 +471,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591152666850_226358_3749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         [Implements(implementation: "IUsage.NestedAnalysisCase")]
-        public List<Guid> NestedAnalysisCase { get; internal set; }
+        public List<Guid> nestedAnalysisCase { get; internal set; }
 
         /// <summary>
         /// The code>AttributeUsages that are nestedUsages of this Usage.
@@ -475,7 +479,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591500785349_111324_4486", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedAttribute")]
-        public List<Guid> NestedAttribute { get; internal set; }
+        public List<Guid> nestedAttribute { get; internal set; }
 
         /// <summary>
         /// The CalculationUsage that are nestedUsages of this Usage.
@@ -483,7 +487,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1588215112283_215964_632", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
         [Implements(implementation: "IUsage.NestedCalculation")]
-        public List<Guid> NestedCalculation { get; internal set; }
+        public List<Guid> nestedCalculation { get; internal set; }
 
         /// <summary>
         /// The CaseUsages that are nestedUsages of this Usage.
@@ -491,7 +495,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591135021853_494751_737", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1588215112283_215964_632")]
         [Implements(implementation: "IUsage.NestedCase")]
-        public List<Guid> NestedCase { get; internal set; }
+        public List<Guid> nestedCase { get; internal set; }
 
         /// <summary>
         /// The ConcernUsages that are nestedUsages of this Usage.
@@ -499,7 +503,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1617051711833_106553_1460", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
         [Implements(implementation: "IUsage.NestedConcern")]
-        public List<Guid> NestedConcern { get; internal set; }
+        public List<Guid> nestedConcern { get; internal set; }
 
         /// <summary>
         /// The ConnectorAsUsages that are nestedUsages of this Usage. Note that this list includes
@@ -509,7 +513,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591479754895_422988_1242", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedConnection")]
-        public List<Guid> NestedConnection { get; internal set; }
+        public List<Guid> nestedConnection { get; internal set; }
 
         /// <summary>
         /// The ConstraintUsages that are nestedUsages of this Usage.
@@ -517,7 +521,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1578067664051_434365_1774", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         [Implements(implementation: "IUsage.NestedConstraint")]
-        public List<Guid> NestedConstraint { get; internal set; }
+        public List<Guid> nestedConstraint { get; internal set; }
 
         /// <summary>
         /// The code>EnumerationUsages that are nestedUsages of this Usage.
@@ -525,7 +529,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1606946589000_158124_239", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591500785349_111324_4486")]
         [Implements(implementation: "IUsage.NestedEnumeration")]
-        public List<Guid> NestedEnumeration { get; internal set; }
+        public List<Guid> nestedEnumeration { get; internal set; }
 
         /// <summary>
         /// The code>FlowUsages that are nestedUsages of this Usage.
@@ -533,7 +537,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1624054938718_124518_1464", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         [Implements(implementation: "IUsage.NestedFlow")]
-        public List<Guid> NestedFlow { get; internal set; }
+        public List<Guid> nestedFlow { get; internal set; }
 
         /// <summary>
         /// The InterfaceUsages that are nestedUsages of this Usage.
@@ -541,7 +545,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591498454569_383419_3839", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         [Implements(implementation: "IUsage.NestedInterface")]
-        public List<Guid> NestedInterface { get; internal set; }
+        public List<Guid> nestedInterface { get; internal set; }
 
         /// <summary>
         /// The ItemUsages that are nestedUsages of this Usage.
@@ -549,7 +553,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591482421103_284620_2978", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         [Implements(implementation: "IUsage.NestedItem")]
-        public List<Guid> NestedItem { get; internal set; }
+        public List<Guid> nestedItem { get; internal set; }
 
         /// <summary>
         /// The MetadataUsages that are nestedUsages of this of this Usage.
@@ -557,7 +561,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1661488589862_120785_2970", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
         [Implements(implementation: "IUsage.NestedMetadata")]
-        public List<Guid> NestedMetadata { get; internal set; }
+        public List<Guid> nestedMetadata { get; internal set; }
 
         /// <summary>
         /// The OccurrenceUsages that are nestedUsages of this Usage.
@@ -565,7 +569,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1618943853976_48759_278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedOccurrence")]
-        public List<Guid> NestedOccurrence { get; internal set; }
+        public List<Guid> nestedOccurrence { get; internal set; }
 
         /// <summary>
         /// The PartUsages that are nestedUsages of this Usage.
@@ -573,7 +577,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591496406876_479979_3188", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
         [Implements(implementation: "IUsage.NestedPart")]
-        public List<Guid> NestedPart { get; internal set; }
+        public List<Guid> nestedPart { get; internal set; }
 
         /// <summary>
         /// The PortUsages that are nestedUsages of this Usage.
@@ -581,7 +585,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1565494459494_859367_26042", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedPort")]
-        public List<Guid> NestedPort { get; internal set; }
+        public List<Guid> nestedPort { get; internal set; }
 
         /// <summary>
         /// The ReferenceUsages that are nestedUsages of this Usage.
@@ -589,7 +593,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591477541360_47573_933", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedReference")]
-        public List<Guid> NestedReference { get; internal set; }
+        public List<Guid> nestedReference { get; internal set; }
 
         /// <summary>
         /// The RenderingUsages that are nestedUsages of this Usage.
@@ -597,7 +601,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1596741501454_147708_6545", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
         [Implements(implementation: "IUsage.NestedRendering")]
-        public List<Guid> NestedRendering { get; internal set; }
+        public List<Guid> nestedRendering { get; internal set; }
 
         /// <summary>
         /// The RequirementUsages that are nestedUsages of this Usage.
@@ -605,7 +609,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1583000447195_878123_1244", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1578067664051_434365_1774")]
         [Implements(implementation: "IUsage.NestedRequirement")]
-        public List<Guid> NestedRequirement { get; internal set; }
+        public List<Guid> nestedRequirement { get; internal set; }
 
         /// <summary>
         /// The StateUsages that are nestedUsages of this Usage.
@@ -613,7 +617,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1575587743891_973819_756", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
         [Implements(implementation: "IUsage.NestedState")]
-        public List<Guid> NestedState { get; internal set; }
+        public List<Guid> nestedState { get; internal set; }
 
         /// <summary>
         /// The TransitionUsages that are nestedUsages of this Usage.
@@ -621,7 +625,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1578597913303_768272_3894", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedTransition")]
-        public List<Guid> NestedTransition { get; internal set; }
+        public List<Guid> nestedTransition { get; internal set; }
 
         /// <summary>
         /// The Usages that are ownedFeatures of this Usage.
@@ -630,7 +634,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.NestedUsage")]
-        public List<Guid> NestedUsage { get; internal set; }
+        public List<Guid> nestedUsage { get; internal set; }
 
         /// <summary>
         /// The UseCaseUsages that are nestedUsages of this Usage.
@@ -638,7 +642,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1621463992900_247262_1080", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         [Implements(implementation: "IUsage.NestedUseCase")]
-        public List<Guid> NestedUseCase { get; internal set; }
+        public List<Guid> nestedUseCase { get; internal set; }
 
         /// <summary>
         /// The VerificationCaseUsages that are nestedUsages of this Usage.
@@ -646,7 +650,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1596821592100_42801_10499", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         [Implements(implementation: "IUsage.NestedVerificationCase")]
-        public List<Guid> NestedVerificationCase { get; internal set; }
+        public List<Guid> nestedVerificationCase { get; internal set; }
 
         /// <summary>
         /// The ViewUsages that are nestedUsages of this Usage.
@@ -654,7 +658,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1596644669126_858176_809", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
         [Implements(implementation: "IUsage.NestedView")]
-        public List<Guid> NestedView { get; internal set; }
+        public List<Guid> nestedView { get; internal set; }
 
         /// <summary>
         /// The ViewpointUsages that are nestedUsages of this Usage.
@@ -662,7 +666,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1596649930212_443356_3818", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
         [Implements(implementation: "IUsage.NestedViewpoint")]
-        public List<Guid> NestedViewpoint { get; internal set; }
+        public List<Guid> nestedViewpoint { get; internal set; }
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -670,7 +674,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_365618_43170", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IType.Output")]
-        public List<Guid> Output { get; internal set; }
+        public List<Guid> output { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -680,7 +684,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
-        public List<Guid> OwnedAnnotation { get; internal set; }
+        public List<Guid> ownedAnnotation { get; internal set; }
 
         /// <summary>
         /// A Conjugation owned by this Type for which the Type is the originalType.
@@ -689,7 +693,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490144_309557_300")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedConjugator")]
-        public Guid? OwnedConjugator { get; internal set; }
+        public Guid? ownedConjugator { get; internal set; }
 
         /// <summary>
         /// The one ownedSubsetting of this Feature, if any, that is a CrossSubsetting}, for which the Feature
@@ -698,7 +702,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_b9102da_1689616916594_145818_277", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedCrossSubsetting")]
-        public Guid? OwnedCrossSubsetting { get; internal set; }
+        public Guid? ownedCrossSubsetting { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Differencings, having this Type as their
@@ -708,7 +712,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedDifferencing")]
-        public List<Guid> OwnedDifferencing { get; internal set; }
+        public List<Guid> ownedDifferencing { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Disjoinings, for which the Type is the typeDisjoined
@@ -718,7 +722,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623183194914_502526_616")]
         [Implements(implementation: "IType.OwnedDisjoining")]
-        public List<Guid> OwnedDisjoining { get; internal set; }
+        public List<Guid> ownedDisjoining { get; internal set; }
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -726,7 +730,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
-        public List<Guid> OwnedElement { get; internal set; }
+        public List<Guid> ownedElement { get; internal set; }
 
         /// <summary>
         /// All endFeatures of this Type that are ownedFeatures.
@@ -735,7 +739,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         [Implements(implementation: "IType.OwnedEndFeature")]
-        public List<Guid> OwnedEndFeature { get; internal set; }
+        public List<Guid> ownedEndFeature { get; internal set; }
 
         /// <summary>
         /// The ownedMemberFeatures of the ownedFeatureMemberships of this Type.
@@ -743,7 +747,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_226999_43167", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IType.OwnedFeature")]
-        public List<Guid> OwnedFeature { get; internal set; }
+        public List<Guid> ownedFeature { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Feature that are FeatureChainings, for which the Feature will be the
@@ -753,7 +757,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "IFeature.OwnedFeatureChaining")]
-        public List<Guid> OwnedFeatureChaining { get; internal set; }
+        public List<Guid> ownedFeatureChaining { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Feature that are FeatureInvertings and for which the Feature is the
@@ -763,7 +767,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838861_768019_145")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IFeature.OwnedFeatureInverting")]
-        public List<Guid> OwnedFeatureInverting { get; internal set; }
+        public List<Guid> ownedFeatureInverting { get; internal set; }
 
         /// <summary>
         /// The ownedMemberships of this Type that are FeatureMemberships, for which the Type is the owningType.
@@ -773,7 +777,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866512_962346_485")]
         [Implements(implementation: "IType.OwnedFeatureMembership")]
-        public List<Guid> OwnedFeatureMembership { get; internal set; }
+        public List<Guid> ownedFeatureMembership { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Namespace that are Imports, for which the Namespace is the
@@ -783,7 +787,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "INamespace.OwnedImport")]
-        public List<Guid> OwnedImport { get; internal set; }
+        public List<Guid> ownedImport { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Intersectings, have the Type as their typeIntersected.
@@ -792,7 +796,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedIntersecting")]
-        public List<Guid> OwnedIntersecting { get; internal set; }
+        public List<Guid> ownedIntersecting { get; internal set; }
 
         /// <summary>
         /// The owned members of this Namespace, which are the <cpde>ownedMemberElements of the ownedMemberships
@@ -801,7 +805,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         [Implements(implementation: "INamespace.OwnedMember")]
-        public List<Guid> OwnedMember { get; internal set; }
+        public List<Guid> ownedMember { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Namespace that are Memberships, for which the Namespace is the
@@ -812,7 +816,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "INamespace.OwnedMembership")]
-        public List<Guid> OwnedMembership { get; internal set; }
+        public List<Guid> ownedMembership { get; internal set; }
 
         /// <summary>
         /// The ownedSubsettings of this Feature that are Redefinitions, for which the Feature is the
@@ -821,7 +825,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_161813_43220", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedRedefinition")]
-        public List<Guid> OwnedRedefinition { get; internal set; }
+        public List<Guid> ownedRedefinition { get; internal set; }
 
         /// <summary>
         /// The one ownedSubsetting of this Feature, if any, that is a ReferenceSubsetting, for which the
@@ -830,7 +834,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1661555161564_247405_255", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedReferenceSubsetting")]
-        public Guid? OwnedReferenceSubsetting { get; internal set; }
+        public Guid? ownedReferenceSubsetting { get; internal set; }
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
@@ -848,7 +852,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674984_558067_43292")]
         [Implements(implementation: "IType.OwnedSpecialization")]
-        public List<Guid> OwnedSpecialization { get; internal set; }
+        public List<Guid> ownedSpecialization { get; internal set; }
 
         /// <summary>
         /// The ownedSpecializations of this Feature that are Subsettings, for which the Feature is the
@@ -858,7 +862,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674966_718145_43205")]
         [Implements(implementation: "IFeature.OwnedSubsetting")]
-        public List<Guid> OwnedSubsetting { get; internal set; }
+        public List<Guid> ownedSubsetting { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Feature that are TypeFeaturings and for which the Feature is the
@@ -868,7 +872,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_196800_580")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IFeature.OwnedTypeFeaturing")]
-        public List<Guid> OwnedTypeFeaturing { get; internal set; }
+        public List<Guid> ownedTypeFeaturing { get; internal set; }
 
         /// <summary>
         /// The ownedSpecializations of this Feature that are FeatureTypings, for which the Feature is the
@@ -878,7 +882,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_804591_21100")]
         [Implements(implementation: "IFeature.OwnedTyping")]
-        public List<Guid> OwnedTyping { get; internal set; }
+        public List<Guid> ownedTyping { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Unionings, having the Type as their typeUnioned.
@@ -887,7 +891,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "IType.OwnedUnioning")]
-        public List<Guid> OwnedUnioning { get; internal set; }
+        public List<Guid> ownedUnioning { get; internal set; }
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
@@ -895,7 +899,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
-        public Guid? Owner { get; internal set; }
+        public Guid? owner { get; internal set; }
 
         /// <summary>
         /// The Definition that owns this Usage (if any).
@@ -904,7 +908,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
         [Implements(implementation: "IUsage.OwningDefinition")]
-        public Guid? OwningDefinition { get; internal set; }
+        public Guid? owningDefinition { get; internal set; }
 
         /// <summary>
         /// The FeatureMembership that owns this Feature as an ownedMemberFeature, determining its owningType.
@@ -912,7 +916,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_68441_43223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674972_622493_43236")]
         [Implements(implementation: "IFeature.OwningFeatureMembership")]
-        public Guid? OwningFeatureMembership { get; internal set; }
+        public Guid? owningFeatureMembership { get; internal set; }
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -921,7 +925,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
-        public Guid? OwningMembership { get; internal set; }
+        public Guid? owningMembership { get; internal set; }
 
         /// <summary>
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
@@ -930,7 +934,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public Guid? OwningNamespace { get; internal set; }
+        public Guid? owningNamespace { get; internal set; }
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
@@ -948,7 +952,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603905619975_304385_743")]
         [Implements(implementation: "IFeature.OwningType")]
-        public Guid? OwningType { get; internal set; }
+        public Guid? owningType { get; internal set; }
 
         /// <summary>
         /// The Usage in which this Usage is nested (if any).
@@ -956,7 +960,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_504924_21260", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [Implements(implementation: "IUsage.OwningUsage")]
-        public Guid? OwningUsage { get; internal set; }
+        public Guid? owningUsage { get; internal set; }
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -968,7 +972,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string QualifiedName { get; internal set; }
+        public string qualifiedName { get; internal set; }
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -978,7 +982,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string ShortName { get; internal set; }
+        public string shortName { get; internal set; }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -987,7 +991,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
-        public List<Guid> TextualRepresentation { get; internal set; }
+        public List<Guid> textualRepresentation { get; internal set; }
 
         /// <summary>
         /// Types that restrict the values of this Feature, such that the values must be instances of all the
@@ -998,7 +1002,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        public List<Guid> Type { get; internal set; }
+        List<Guid> Core.Features.IFeature.type => throw new InvalidOperationException("Redefined by property IUsage.Definition");
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the
@@ -1009,7 +1013,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.UnioningType")]
-        public List<Guid> UnioningType { get; internal set; }
+        public List<Guid> unioningType { get; internal set; }
 
         /// <summary>
         /// The Usages that are features of this Usage (not necessarily owned).
@@ -1017,7 +1021,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1591217543254_26688_475", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IUsage.Usage")]
-        public List<Guid> Usage { get; internal set; }
+        public List<Guid> usage { get; internal set; }
 
         /// <summary>
         /// The Usages which represent the variants of this Usage as a variation point Usage, if isVariation =
@@ -1026,7 +1030,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1590979649160_380466_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IUsage.Variant")]
-        public List<Guid> Variant { get; internal set; }
+        public List<Guid> variant { get; internal set; }
 
         /// <summary>
         /// The ownedMemberships of this Usage that are VariantMemberships. If isVariation = true, then this
@@ -1035,7 +1039,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_2_12e503d9_1590979136735_982171_914", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         [Implements(implementation: "IUsage.VariantMembership")]
-        public List<Guid> VariantMembership { get; internal set; }
+        public List<Guid> variantMembership { get; internal set; }
 
     }
 }

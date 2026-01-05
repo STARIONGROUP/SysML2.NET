@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The PortConjugationDeSerializer can only be used to deserialize objects of type IPortConjugation, a {@type.GetString()} was provided");
             }
 
-            IPortConjugation dtoInstance = new SysML2.NET.Core.DTO.Systems.Ports.PortConjugation();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Ports.PortConjugation();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -208,31 +208,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the originalPortDefinition Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("originalType"u8, out var originalTypeProperty))
-            {
-                if (originalTypeProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.OriginalType = Guid.Empty;
-                    logger.LogDebug($"the PortConjugation.OriginalType property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (originalTypeProperty.TryGetProperty("@id"u8, out var originalTypeIdProperty))
-                    {
-                        var propertyValue = originalTypeIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.OriginalType = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the originalType Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
             {
                 foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
@@ -319,46 +294,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the owningRelationship Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceIdProperty))
-                    {
-                        var propertyValue = sourceIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetIdProperty))
-                    {
-                        var propertyValue = targetIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the PortConjugation: { Id }", dtoInstance.Id);
             }
 
 

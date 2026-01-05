@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The UsageDeSerializer can only be used to deserialize objects of type IUsage, a {@type.GetString()} was provided");
             }
 
-            IUsage dtoInstance = new SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.Usage();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.Usage();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -261,18 +261,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isUnique Json property was not found in the Usage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the Usage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))

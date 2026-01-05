@@ -66,8 +66,7 @@ namespace SysML2.NET.Dal.Tests
             var membershipDto = new Core.DTO.Root.Namespaces.Membership
             {
                 Id = Guid.Parse("215054ad-eb1d-45f6-8537-d43a3470e73c"),
-                Source = new List<Guid> { packageDto.Id },
-                Target = new List<Guid> { featureDto.Id },
+                OwnedRelatedElement = new List<Guid> { packageDto.Id, featureDto.Id }
             };
             
             dtos.Add(packageDto);
@@ -84,16 +83,19 @@ namespace SysML2.NET.Dal.Tests
                 featurePoco = (Core.POCO.Core.Features.Feature)this.lazyPoco.Value;
             }
 
-            Assert.That(featurePoco.Id, Is.EqualTo(featureDto.Id));
-            Assert.That(featurePoco.DeclaredName, Is.EqualTo(featureDto.DeclaredName));
-            Assert.That(featurePoco.DeclaredShortName, Is.EqualTo(featureDto.DeclaredShortName));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(featurePoco.Id, Is.EqualTo(featureDto.Id));
+                Assert.That(featurePoco.DeclaredName, Is.EqualTo(featureDto.DeclaredName));
+                Assert.That(featurePoco.DeclaredShortName, Is.EqualTo(featureDto.DeclaredShortName));
+            }
 
             if (this.assembler.Cache.TryGetValue(membershipDto.Id, out this.lazyPoco))
             {
                 membershipPoco = (Core.POCO.Root.Namespaces.Membership)this.lazyPoco.Value;
             }
 
-            Assert.That(membershipPoco.Target.Contains(featurePoco), Is.True);
+            Assert.That(membershipPoco.OwnedRelatedElement.Contains(featurePoco), Is.True);
 
             dtos.Clear();
             

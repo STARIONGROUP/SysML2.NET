@@ -100,12 +100,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iPortConjugation.OriginalPortDefinition);
             writer.WriteEndObject();
 
-            writer.WritePropertyName("originalType"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iPortConjugation.OriginalType);
-            writer.WriteEndObject();
-
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iPortConjugation.OwnedRelatedElement)
@@ -157,30 +151,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iPortConjugation.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iPortConjugation.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteEndObject();
         }

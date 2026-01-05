@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The BehaviorDeSerializer can only be used to deserialize objects of type IBehavior, a {@type.GetString()} was provided");
             }
 
-            IBehavior dtoInstance = new SysML2.NET.Core.DTO.Kernel.Behaviors.Behavior();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Behaviors.Behavior();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

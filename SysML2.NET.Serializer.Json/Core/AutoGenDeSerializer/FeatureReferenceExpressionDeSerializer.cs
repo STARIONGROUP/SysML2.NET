@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The FeatureReferenceExpressionDeSerializer can only be used to deserialize objects of type IFeatureReferenceExpression, a {@type.GetString()} was provided");
             }
 
-            IFeatureReferenceExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.FeatureReferenceExpression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.FeatureReferenceExpression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

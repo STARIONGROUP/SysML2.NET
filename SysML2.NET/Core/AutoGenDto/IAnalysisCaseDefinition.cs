@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Systems.AnalysisCases
         [Property(xmiId: "_19_0_2_59601fc_1590945152798_315308_221", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948400639_301251_20841")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        Guid? ResultExpression { get; }
+        Guid? resultExpression { get; }
 
     }
 }

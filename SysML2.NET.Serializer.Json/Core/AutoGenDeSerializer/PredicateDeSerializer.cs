@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The PredicateDeSerializer can only be used to deserialize objects of type IPredicate, a {@type.GetString()} was provided");
             }
 
-            IPredicate dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Predicate();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Predicate();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

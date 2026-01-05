@@ -48,7 +48,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// the AcceptActionUsage will only accept a Transfer with exactly this payload.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1642710978429_81558_4948", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? PayloadArgument { get; }
+        Guid? payloadArgument { get; }
 
         /// <summary>
         /// The nestedReference of this AcceptActionUsage that redefines the payload output parameter of the
@@ -57,13 +57,13 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1642701018287_478584_4462", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591477541360_47573_933")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        Guid PayloadParameter { get; }
+        Guid payloadParameter { get; }
 
         /// <summary>
         /// An Expression whose result is bound to the receiver input parameter of this AcceptActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1612814670555_311543_168", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? ReceiverArgument { get; }
+        Guid? receiverArgument { get; }
 
     }
 }

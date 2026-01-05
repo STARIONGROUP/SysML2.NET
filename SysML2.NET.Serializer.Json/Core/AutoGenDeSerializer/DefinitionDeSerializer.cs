@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The DefinitionDeSerializer can only be used to deserialize objects of type IDefinition, a {@type.GetString()} was provided");
             }
 
-            IDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.Definition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.Definition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

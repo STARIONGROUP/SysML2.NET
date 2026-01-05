@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The MetadataAccessExpressionDeSerializer can only be used to deserialize objects of type IMetadataAccessExpression, a {@type.GetString()} was provided");
             }
 
-            IMetadataAccessExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.MetadataAccessExpression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.MetadataAccessExpression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

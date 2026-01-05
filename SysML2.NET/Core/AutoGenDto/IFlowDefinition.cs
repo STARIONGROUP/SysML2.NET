@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1733008492358_136366_19515", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
-        List<Guid> FlowEnd { get; }
+        List<Guid> flowEnd { get; }
 
     }
 }

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The ExhibitStateUsageDeSerializer can only be used to deserialize objects of type IExhibitStateUsage, a {@type.GetString()} was provided");
             }
 
-            IExhibitStateUsage dtoInstance = new SysML2.NET.Core.DTO.Systems.States.ExhibitStateUsage();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.States.ExhibitStateUsage();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -285,18 +285,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isUnique Json property was not found in the ExhibitStateUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the ExhibitStateUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The DocumentationDeSerializer can only be used to deserialize objects of type IDocumentation, a {@type.GetString()} was provided");
             }
 
-            IDocumentation dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.Documentation();
+            var dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.Documentation();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

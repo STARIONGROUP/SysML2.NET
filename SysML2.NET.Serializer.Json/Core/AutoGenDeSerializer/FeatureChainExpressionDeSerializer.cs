@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The FeatureChainExpressionDeSerializer can only be used to deserialize objects of type IFeatureChainExpression, a {@type.GetString()} was provided");
             }
 
-            IFeatureChainExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.FeatureChainExpression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.FeatureChainExpression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

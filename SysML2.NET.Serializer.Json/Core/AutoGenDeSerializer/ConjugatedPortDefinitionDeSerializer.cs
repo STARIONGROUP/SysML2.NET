@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The ConjugatedPortDefinitionDeSerializer can only be used to deserialize objects of type IConjugatedPortDefinition, a {@type.GetString()} was provided");
             }
 
-            IConjugatedPortDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Ports.ConjugatedPortDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Ports.ConjugatedPortDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

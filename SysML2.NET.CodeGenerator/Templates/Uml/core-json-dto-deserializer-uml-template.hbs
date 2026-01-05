@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The {{ this.Name }}DeSerializer can only be used to deserialize objects of type I{{ this.Name }}, a {@type.GetString()} was provided");
             }
 
-            I{{ this.Name }} dtoInstance = new SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}();
+            var dtoInstance = new SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -89,7 +89,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 {{ #each (Class.QueryAllProperties this) as | property | }}
                     {{#unless this.IsDerived}}
                         {{#unless this.IsTransient}}
-                            {{#unless (Property.ContainsPropertyRedifinitionWithSameName this class)}}
+                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                             if (jsonElement.TryGetProperty("{{ property.Name }}"u8, out var {{ property.Name }}Property))
                             {
                             {{#if (Property.QueryIsReferenceProperty property)}}

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The VerificationCaseDefinitionDeSerializer can only be used to deserialize objects of type IVerificationCaseDefinition, a {@type.GetString()} was provided");
             }
 
-            IVerificationCaseDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.VerificationCases.VerificationCaseDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.VerificationCases.VerificationCaseDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

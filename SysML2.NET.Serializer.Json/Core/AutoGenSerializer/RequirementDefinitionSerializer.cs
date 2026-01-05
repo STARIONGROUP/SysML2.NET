@@ -76,9 +76,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iRequirementDefinition.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iRequirementDefinition.DeclaredShortName);
-
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iRequirementDefinition.ElementId);
 

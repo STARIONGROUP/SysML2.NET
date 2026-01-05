@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The MetaclassDeSerializer can only be used to deserialize objects of type IMetaclass, a {@type.GetString()} was provided");
             }
 
-            IMetaclass dtoInstance = new SysML2.NET.Core.DTO.Kernel.Metadata.Metaclass();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Metadata.Metaclass();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

@@ -76,21 +76,21 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// (optional) third parameter of the IfActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624203816178_273125_3723", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IActionUsage QueryElseAction();
+        IActionUsage elseAction { get; }
 
         /// <summary>
         /// The Expression whose result determines whether the thenAction or (optionally) the elseAction is
         /// performed. It is the first parameter of the IfActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624203866872_328861_3821", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IExpression QueryIfArgument();
+        IExpression ifArgument { get; }
 
         /// <summary>
         /// The ActionUsage that is to be performed if the result of the ifArgument is true. It is the second
         /// parameter of the IfActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624203835062_413118_3748", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IActionUsage QueryThenAction();
+        IActionUsage thenAction { get; }
 
     }
 }

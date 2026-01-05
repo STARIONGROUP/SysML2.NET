@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The CommentDeSerializer can only be used to deserialize objects of type IComment, a {@type.GetString()} was provided");
             }
 
-            IComment dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.Comment();
+            var dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.Comment();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

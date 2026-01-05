@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The PayloadFeatureDeSerializer can only be used to deserialize objects of type IPayloadFeature, a {@type.GetString()} was provided");
             }
 
-            IPayloadFeature dtoInstance = new SysML2.NET.Core.DTO.Kernel.Interactions.PayloadFeature();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Interactions.PayloadFeature();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

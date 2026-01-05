@@ -48,14 +48,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543948477241_299049_20934", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
-        Guid? Function { get; }
+        Guid? function { get; }
 
         /// <summary>
         /// Whether this Expression meets the constraints necessary to be evaluated at model level, that is,
         /// using metadata within the model.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1609957047704_424471_48", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        bool IsModelLevelEvaluable { get; }
+        bool isModelLevelEvaluable { get; }
 
         /// <summary>
         /// An output parameter of the Expression whose value is the result of the Expression. The result of an
@@ -65,7 +65,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         [Property(xmiId: "_19_0_2_12e503d9_1595188071574_902060_363", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674960_365618_43170")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        Guid Result { get; }
+        Guid result { get; }
 
     }
 }

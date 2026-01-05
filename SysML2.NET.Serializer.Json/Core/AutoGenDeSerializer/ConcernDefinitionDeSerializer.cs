@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The ConcernDefinitionDeSerializer can only be used to deserialize objects of type IConcernDefinition, a {@type.GetString()} was provided");
             }
 
-            IConcernDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Requirements.ConcernDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Requirements.ConcernDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -109,15 +109,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the declaredName Json property was not found in the ConcernDefinition: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the ConcernDefinition: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))

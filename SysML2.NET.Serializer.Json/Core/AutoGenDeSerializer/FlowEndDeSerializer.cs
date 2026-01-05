@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The FlowEndDeSerializer can only be used to deserialize objects of type IFlowEnd, a {@type.GetString()} was provided");
             }
 
-            IFlowEnd dtoInstance = new SysML2.NET.Core.DTO.Kernel.Interactions.FlowEnd();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Interactions.FlowEnd();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

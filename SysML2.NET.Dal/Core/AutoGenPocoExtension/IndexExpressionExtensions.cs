@@ -68,41 +68,22 @@ namespace SysML2.NET.Dal
             var identifiersOfObjectsToDelete = new List<Guid>();
 
             poco.AliasIds = dto.AliasIds;
-
             poco.DeclaredName = dto.DeclaredName;
-
             poco.DeclaredShortName = dto.DeclaredShortName;
-
             poco.Direction = dto.Direction;
-
             poco.ElementId = dto.ElementId;
-
             poco.IsAbstract = dto.IsAbstract;
-
             poco.IsComposite = dto.IsComposite;
-
             poco.IsConstant = dto.IsConstant;
-
             poco.IsDerived = dto.IsDerived;
-
             poco.IsEnd = dto.IsEnd;
-
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
-
             poco.IsOrdered = dto.IsOrdered;
-
             poco.IsPortion = dto.IsPortion;
-
             poco.IsSufficient = dto.IsSufficient;
-
             poco.IsUnique = dto.IsUnique;
-
             poco.IsVariable = dto.IsVariable;
-
-            ((Core.POCO.Kernel.Expressions.IIndexExpression)poco).Operator = ((Core.DTO.Kernel.Expressions.IIndexExpression)dto).Operator;
-
-            ((Core.POCO.Kernel.Expressions.IOperatorExpression)poco).Operator = ((Core.DTO.Kernel.Expressions.IOperatorExpression)dto).Operator;
-
+            poco.Operator = dto.Operator;
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
 
             foreach (var identifier in ownedRelationshipToDelete)
@@ -111,7 +92,6 @@ namespace SysML2.NET.Dal
             }
 
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
-
 
             return identifiersOfObjectsToDelete;
         }
@@ -201,8 +181,7 @@ namespace SysML2.NET.Dal
             dto.IsSufficient = poco.IsSufficient;
             dto.IsUnique = poco.IsUnique;
             dto.IsVariable = poco.IsVariable;
-            ((Core.DTO.Kernel.Expressions.IIndexExpression)dto).Operator = ((Core.POCO.Kernel.Expressions.IIndexExpression)poco).Operator;
-            ((Core.DTO.Kernel.Expressions.IOperatorExpression)dto).Operator = ((Core.POCO.Kernel.Expressions.IOperatorExpression)poco).Operator;
+            dto.Operator = poco.Operator;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;
 

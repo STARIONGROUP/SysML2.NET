@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The TextualRepresentationDeSerializer can only be used to deserialize objects of type ITextualRepresentation, a {@type.GetString()} was provided");
             }
 
-            ITextualRepresentation dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.TextualRepresentation();
+            var dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.TextualRepresentation();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

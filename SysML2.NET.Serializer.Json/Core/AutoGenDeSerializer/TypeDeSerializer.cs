@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The TypeDeSerializer can only be used to deserialize objects of type IType, a {@type.GetString()} was provided");
             }
 
-            IType dtoInstance = new SysML2.NET.Core.DTO.Core.Types.Type();
+            var dtoInstance = new SysML2.NET.Core.DTO.Core.Types.Type();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

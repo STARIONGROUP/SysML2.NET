@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The FeatureDeSerializer can only be used to deserialize objects of type IFeature, a {@type.GetString()} was provided");
             }
 
-            IFeature dtoInstance = new SysML2.NET.Core.DTO.Core.Features.Feature();
+            var dtoInstance = new SysML2.NET.Core.DTO.Core.Features.Feature();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

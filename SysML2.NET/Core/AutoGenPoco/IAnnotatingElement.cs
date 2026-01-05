@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// AnnotatingElement.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1594145755058_99428_86", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<IElement> QueryAnnotatedElement();
+        List<IElement> annotatedElement { get; }
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements. This includes the
@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543094212714_953084_18407", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
-        List<IAnnotation> QueryAnnotation();
+        List<IAnnotation> annotation { get; }
 
         /// <summary>
         /// The ownedRelationships of this AnnotatingElement that are Annotations, for which this
@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_19_0_4_12e503d9_1703019570915_375100_18", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094212714_953084_18407")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
-        List<IAnnotation> QueryOwnedAnnotatingRelationship();
+        List<IAnnotation> ownedAnnotatingRelationship { get; }
 
         /// <summary>
         /// The owningRelationship of this AnnotatingRelationship, if it is an Annotation
@@ -72,7 +72,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_2022x_2_12e503d9_1735188506571_308678_376", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094212714_953084_18407")]
-        IAnnotation QueryOwningAnnotatingRelationship();
+        IAnnotation owningAnnotatingRelationship { get; }
 
     }
 }

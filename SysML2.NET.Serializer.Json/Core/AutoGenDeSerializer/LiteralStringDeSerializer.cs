@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The LiteralStringDeSerializer can only be used to deserialize objects of type ILiteralString, a {@type.GetString()} was provided");
             }
 
-            ILiteralString dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.LiteralString();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.LiteralString();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

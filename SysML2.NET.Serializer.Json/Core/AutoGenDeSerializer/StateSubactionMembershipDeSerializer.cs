@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The StateSubactionMembershipDeSerializer can only be used to deserialize objects of type IStateSubactionMembership, a {@type.GetString()} was provided");
             }
 
-            IStateSubactionMembership dtoInstance = new SysML2.NET.Core.DTO.Systems.States.StateSubactionMembership();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.States.StateSubactionMembership();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -167,49 +167,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the kind Json property was not found in the StateSubactionMembership: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("memberElement"u8, out var memberElementProperty))
-            {
-                if (memberElementProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.MemberElement = Guid.Empty;
-                    logger.LogDebug($"the StateSubactionMembership.MemberElement property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (memberElementProperty.TryGetProperty("@id"u8, out var memberElementIdProperty))
-                    {
-                        var propertyValue = memberElementIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.MemberElement = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the memberElement Json property was not found in the StateSubactionMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("memberName"u8, out var memberNameProperty))
-            {
-                dtoInstance.MemberName = memberNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the memberName Json property was not found in the StateSubactionMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("memberShortName"u8, out var memberShortNameProperty))
-            {
-                dtoInstance.MemberShortName = memberShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the memberShortName Json property was not found in the StateSubactionMembership: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
             {
                 foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
@@ -296,46 +253,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the owningRelationship Json property was not found in the StateSubactionMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceIdProperty))
-                    {
-                        var propertyValue = sourceIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the StateSubactionMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetIdProperty))
-                    {
-                        var propertyValue = targetIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the StateSubactionMembership: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("visibility"u8, out var visibilityProperty))

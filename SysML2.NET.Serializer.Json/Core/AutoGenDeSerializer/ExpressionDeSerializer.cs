@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The ExpressionDeSerializer can only be used to deserialize objects of type IExpression, a {@type.GetString()} was provided");
             }
 
-            IExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Expression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Functions.Expression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

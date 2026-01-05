@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The ConstraintDefinitionDeSerializer can only be used to deserialize objects of type IConstraintDefinition, a {@type.GetString()} was provided");
             }
 
-            IConstraintDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Constraints.ConstraintDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Constraints.ConstraintDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

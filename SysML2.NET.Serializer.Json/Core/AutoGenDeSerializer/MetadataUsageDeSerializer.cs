@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The MetadataUsageDeSerializer can only be used to deserialize objects of type IMetadataUsage, a {@type.GetString()} was provided");
             }
 
-            IMetadataUsage dtoInstance = new SysML2.NET.Core.DTO.Systems.Metadata.MetadataUsage();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Metadata.MetadataUsage();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -273,18 +273,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isUnique Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))

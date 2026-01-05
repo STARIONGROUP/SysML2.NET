@@ -76,9 +76,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iSatisfyRequirementUsage.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iSatisfyRequirementUsage.DeclaredShortName);
-
             writer.WritePropertyName("direction"u8);
 
             if (iSatisfyRequirementUsage.Direction.HasValue)
@@ -128,9 +125,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsVariation);

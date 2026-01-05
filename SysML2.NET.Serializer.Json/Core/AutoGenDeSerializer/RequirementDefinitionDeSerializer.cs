@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The RequirementDefinitionDeSerializer can only be used to deserialize objects of type IRequirementDefinition, a {@type.GetString()} was provided");
             }
 
-            IRequirementDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Requirements.RequirementDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Requirements.RequirementDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -109,15 +109,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the declaredName Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))

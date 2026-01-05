@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The NamespaceDeSerializer can only be used to deserialize objects of type INamespace, a {@type.GetString()} was provided");
             }
 
-            INamespace dtoInstance = new SysML2.NET.Core.DTO.Root.Namespaces.Namespace();
+            var dtoInstance = new SysML2.NET.Core.DTO.Root.Namespaces.Namespace();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

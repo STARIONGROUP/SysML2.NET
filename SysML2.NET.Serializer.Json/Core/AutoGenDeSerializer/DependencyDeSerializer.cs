@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The DependencyDeSerializer can only be used to deserialize objects of type IDependency, a {@type.GetString()} was provided");
             }
 
-            IDependency dtoInstance = new SysML2.NET.Core.DTO.Root.Dependencies.Dependency();
+            var dtoInstance = new SysML2.NET.Core.DTO.Root.Dependencies.Dependency();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -266,26 +266,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the owningRelationship Json property was not found in the Dependency: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceIdProperty))
-                    {
-                        var propertyValue = sourceIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the Dependency: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("supplier"u8, out var supplierProperty))
             {
                 foreach (var arrayItem in supplierProperty.EnumerateArray())
@@ -304,26 +284,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the supplier Json property was not found in the Dependency: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetIdProperty))
-                    {
-                        var propertyValue = targetIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the Dependency: { Id }", dtoInstance.Id);
             }
 
 

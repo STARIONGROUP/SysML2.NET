@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The OccurrenceDefinitionDeSerializer can only be used to deserialize objects of type IOccurrenceDefinition, a {@type.GetString()} was provided");
             }
 
-            IOccurrenceDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Occurrences.OccurrenceDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Occurrences.OccurrenceDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

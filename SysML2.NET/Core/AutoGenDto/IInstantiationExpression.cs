@@ -48,14 +48,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         /// InstantiationExpression.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1739134437590_328753_108", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> Argument { get; }
+        List<Guid> argument { get; }
 
         /// <summary>
         /// The Type that is being instantiated.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1739134352572_416088_80", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
-        Guid InstantiatedType { get; }
+        Guid instantiatedType { get; }
 
     }
 }

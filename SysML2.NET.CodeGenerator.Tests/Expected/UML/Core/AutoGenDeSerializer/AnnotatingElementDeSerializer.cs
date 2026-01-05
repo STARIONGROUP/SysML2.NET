@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The AnnotatingElementDeSerializer can only be used to deserialize objects of type IAnnotatingElement, a {@type.GetString()} was provided");
             }
 
-            IAnnotatingElement dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.AnnotatingElement();
+            var dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.AnnotatingElement();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

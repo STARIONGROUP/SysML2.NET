@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The CalculationDefinitionDeSerializer can only be used to deserialize objects of type ICalculationDefinition, a {@type.GetString()} was provided");
             }
 
-            ICalculationDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Calculations.CalculationDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Calculations.CalculationDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The StepDeSerializer can only be used to deserialize objects of type IStep, a {@type.GetString()} was provided");
             }
 
-            IStep dtoInstance = new SysML2.NET.Core.DTO.Kernel.Behaviors.Step();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Behaviors.Step();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

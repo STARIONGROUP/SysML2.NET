@@ -67,10 +67,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<IBehavior> QueryBehavior()
-        {
-            return this.ComputeBehavior();
-        }
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => throw new InvalidOperationException("Redefined by property IExpression.Function");
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -82,10 +79,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1619792219511_543311_445", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [Implements(implementation: "IFeature.ChainingFeature")]
-        public List<IFeature> QueryChainingFeature()
-        {
-            return this.ComputeChainingFeature();
-        }
+        public List<IFeature> chainingFeature => this.ComputeChainingFeature();
 
         /// <summary>
         /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
@@ -95,10 +89,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1689616227528_355910_218", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.CrossFeature")]
-        public IFeature QueryCrossFeature()
-        {
-            return this.ComputeCrossFeature();
-        }
+        public IFeature crossFeature => this.ComputeCrossFeature();
 
         /// <summary>
         /// The declared name of this Element.
@@ -128,10 +119,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661975883472_645501_1372", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.DifferencingType")]
-        public List<IType> QueryDifferencingType()
-        {
-            return this.ComputeDifferencingType();
-        }
+        public List<IType> differencingType => this.ComputeDifferencingType();
 
         /// <summary>
         /// The features of this Type that have a non-null direction.
@@ -140,10 +128,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<IFeature> QueryDirectedFeature()
-        {
-            return this.ComputeDirectedFeature();
-        }
+        List<IFeature> Core.Types.IType.directedFeature => throw new InvalidOperationException("Redefined by property IStep.Parameter");
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -160,10 +145,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
-        public List<IDocumentation> QueryDocumentation()
-        {
-            return this.ComputeDocumentation();
-        }
+        public List<IDocumentation> documentation => this.ComputeDocumentation();
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -179,10 +161,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.EndFeature")]
-        public List<IFeature> QueryEndFeature()
-        {
-            return this.ComputeEndFeature();
-        }
+        public List<IFeature> endFeature => this.ComputeEndFeature();
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -192,10 +171,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168386_366266_22107")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [Implements(implementation: "IFeature.EndOwningType")]
-        public IType QueryEndOwningType()
-        {
-            return this.ComputeEndOwningType();
-        }
+        public IType endOwningType => this.ComputeEndOwningType();
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -203,10 +179,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         [Implements(implementation: "IType.Feature")]
-        public List<IFeature> QueryFeature()
-        {
-            return this.ComputeFeature();
-        }
+        public List<IFeature> feature => this.ComputeFeature();
 
         /// <summary>
         /// The FeatureMemberships for features of this Type, which include all ownedFeatureMemberships and
@@ -215,20 +188,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651076866512_962346_485", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.FeatureMembership")]
-        public List<IFeatureMembership> QueryFeatureMembership()
-        {
-            return this.ComputeFeatureMembership();
-        }
+        public List<IFeatureMembership> featureMembership => this.ComputeFeatureMembership();
 
         /// <summary>
         /// The last of the chainingFeatures of this Feature, if it has any. Otherwise, this Feature itself.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1715790852907_110671_19", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.FeatureTarget")]
-        public IFeature QueryFeatureTarget()
-        {
-            return this.ComputeFeatureTarget();
-        }
+        public IFeature featureTarget => this.ComputeFeatureTarget();
 
         /// <summary>
         /// Types that feature this Feature, such that any instance in the domain of the Feature must be
@@ -238,10 +205,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1603905619975_304385_743", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.FeaturingType")]
-        public List<IType> QueryFeaturingType()
-        {
-            return this.ComputeFeaturingType();
-        }
+        public List<IType> featuringType => this.ComputeFeaturingType();
 
         /// <summary>
         /// The Function that types this Expression.
@@ -249,10 +213,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1543948477241_299049_20934", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [Implements(implementation: "IExpression.Function")]
-        public IFunction QueryFunction()
-        {
-            return this.ComputeFunction();
-        }
+        public IFunction function => this.ComputeFunction();
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
@@ -260,10 +221,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [Implements(implementation: "INamespace.ImportedMembership")]
-        public List<IMembership> QueryImportedMembership()
-        {
-            return this.ComputeImportedMembership();
-        }
+        public List<IMembership> importedMembership => this.ComputeImportedMembership();
 
         /// <summary>
         /// All the memberFeatures of the inheritedMemberships of this Type that are FeatureMemberships.
@@ -271,10 +229,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_19_0_2_12e503d9_1575499020770_15576_2334", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.InheritedFeature")]
-        public List<IFeature> QueryInheritedFeature()
-        {
-            return this.ComputeInheritedFeature();
-        }
+        public List<IFeature> inheritedFeature => this.ComputeInheritedFeature();
 
         /// <summary>
         /// All Memberships inherited by this Type via Specialization or Conjugation. These are included in the
@@ -283,10 +238,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1551972927538_787976_19004", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [Implements(implementation: "IType.InheritedMembership")]
-        public List<IMembership> QueryInheritedMembership()
-        {
-            return this.ComputeInheritedMembership();
-        }
+        public List<IMembership> inheritedMembership => this.ComputeInheritedMembership();
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction in or inout.
@@ -294,10 +246,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_37384_43169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IType.Input")]
-        public List<IFeature> QueryInput()
-        {
-            return this.ComputeInput();
-        }
+        public List<IFeature> input => this.ComputeInput();
 
         /// <summary>
         /// The interpretations of a Type with intersectingTypes are asserted to be those in common among the
@@ -310,10 +259,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661973922199_584242_1045", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.IntersectingType")]
-        public List<IType> QueryIntersectingType()
-        {
-            return this.ComputeIntersectingType();
-        }
+        public List<IType> intersectingType => this.ComputeIntersectingType();
 
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized
@@ -337,10 +283,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575485930816_796088_1933", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.IsConjugated")]
-        public bool QueryIsConjugated()
-        {
-            return this.ComputeIsConjugated();
-        }
+        public bool isConjugated => this.ComputeIsConjugated();
 
         /// <summary>
         /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
@@ -387,10 +330,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
-        public bool QueryIsLibraryElement()
-        {
-            return this.ComputeIsLibraryElement();
-        }
+        public bool isLibraryElement => this.ComputeIsLibraryElement();
 
         /// <summary>
         /// Whether this Expression meets the constraints necessary to be evaluated at model level, that is,
@@ -398,10 +338,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1609957047704_424471_48", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IExpression.IsModelLevelEvaluable")]
-        public bool QueryIsModelLevelEvaluable()
-        {
-            return this.ComputeIsModelLevelEvaluable();
-        }
+        public bool isModelLevelEvaluable => this.ComputeIsModelLevelEvaluable();
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.
@@ -451,10 +388,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "INamespace.Member")]
-        public List<IElement> QueryMember()
-        {
-            return this.ComputeMember();
-        }
+        public List<IElement> member => this.ComputeMember();
 
         /// <summary>
         /// All Memberships in this Namespace, including (at least) the union of ownedMemberships and
@@ -462,10 +396,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
         [Implements(implementation: "INamespace.Membership")]
-        public List<IMembership> QueryMembership()
-        {
-            return this.ComputeMembership();
-        }
+        public List<IMembership> membership => this.ComputeMembership();
 
         /// <summary>
         /// An ownedMember of this Type that is a Multiplicity, which constraints the cardinality of the Type.
@@ -475,10 +406,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IType.Multiplicity")]
-        public IMultiplicity QueryMultiplicity()
-        {
-            return this.ComputeMultiplicity();
-        }
+        public IMultiplicity multiplicity => this.ComputeMultiplicity();
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -488,10 +416,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string QueryName()
-        {
-            return this.ComputeName();
-        }
+        public string name => this.ComputeName();
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -499,10 +424,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_365618_43170", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IType.Output")]
-        public List<IFeature> QueryOutput()
-        {
-            return this.ComputeOutput();
-        }
+        public List<IFeature> output => this.ComputeOutput();
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -512,10 +434,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
-        public List<IAnnotation> QueryOwnedAnnotation()
-        {
-            return this.ComputeOwnedAnnotation();
-        }
+        public List<IAnnotation> ownedAnnotation => this.ComputeOwnedAnnotation();
 
         /// <summary>
         /// A Conjugation owned by this Type for which the Type is the originalType.
@@ -524,10 +443,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490144_309557_300")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedConjugator")]
-        public IConjugation QueryOwnedConjugator()
-        {
-            return this.ComputeOwnedConjugator();
-        }
+        public IConjugation ownedConjugator => this.ComputeOwnedConjugator();
 
         /// <summary>
         /// The one ownedSubsetting of this Feature, if any, that is a CrossSubsetting}, for which the Feature
@@ -536,10 +452,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_19_0_4_b9102da_1689616916594_145818_277", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedCrossSubsetting")]
-        public ICrossSubsetting QueryOwnedCrossSubsetting()
-        {
-            return this.ComputeOwnedCrossSubsetting();
-        }
+        public ICrossSubsetting ownedCrossSubsetting => this.ComputeOwnedCrossSubsetting();
 
         /// <summary>
         /// The ownedRelationships of this Type that are Differencings, having this Type as their
@@ -549,10 +462,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedDifferencing")]
-        public List<IDifferencing> QueryOwnedDifferencing()
-        {
-            return this.ComputeOwnedDifferencing();
-        }
+        public List<IDifferencing> ownedDifferencing => this.ComputeOwnedDifferencing();
 
         /// <summary>
         /// The ownedRelationships of this Type that are Disjoinings, for which the Type is the typeDisjoined
@@ -562,10 +472,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623183194914_502526_616")]
         [Implements(implementation: "IType.OwnedDisjoining")]
-        public List<IDisjoining> QueryOwnedDisjoining()
-        {
-            return this.ComputeOwnedDisjoining();
-        }
+        public List<IDisjoining> ownedDisjoining => this.ComputeOwnedDisjoining();
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -573,10 +480,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
-        public List<IElement> QueryOwnedElement()
-        {
-            return this.ComputeOwnedElement();
-        }
+        public List<IElement> ownedElement => this.ComputeOwnedElement();
 
         /// <summary>
         /// All endFeatures of this Type that are ownedFeatures.
@@ -585,10 +489,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         [Implements(implementation: "IType.OwnedEndFeature")]
-        public List<IFeature> QueryOwnedEndFeature()
-        {
-            return this.ComputeOwnedEndFeature();
-        }
+        public List<IFeature> ownedEndFeature => this.ComputeOwnedEndFeature();
 
         /// <summary>
         /// The ownedMemberFeatures of the ownedFeatureMemberships of this Type.
@@ -596,10 +497,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_226999_43167", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IType.OwnedFeature")]
-        public List<IFeature> QueryOwnedFeature()
-        {
-            return this.ComputeOwnedFeature();
-        }
+        public List<IFeature> ownedFeature => this.ComputeOwnedFeature();
 
         /// <summary>
         /// The ownedRelationships of this Feature that are FeatureChainings, for which the Feature will be the
@@ -609,10 +507,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "IFeature.OwnedFeatureChaining")]
-        public List<IFeatureChaining> QueryOwnedFeatureChaining()
-        {
-            return this.ComputeOwnedFeatureChaining();
-        }
+        public List<IFeatureChaining> ownedFeatureChaining => this.ComputeOwnedFeatureChaining();
 
         /// <summary>
         /// The ownedRelationships of this Feature that are FeatureInvertings and for which the Feature is the
@@ -622,10 +517,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838861_768019_145")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IFeature.OwnedFeatureInverting")]
-        public List<IFeatureInverting> QueryOwnedFeatureInverting()
-        {
-            return this.ComputeOwnedFeatureInverting();
-        }
+        public List<IFeatureInverting> ownedFeatureInverting => this.ComputeOwnedFeatureInverting();
 
         /// <summary>
         /// The ownedMemberships of this Type that are FeatureMemberships, for which the Type is the owningType.
@@ -635,10 +527,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866512_962346_485")]
         [Implements(implementation: "IType.OwnedFeatureMembership")]
-        public List<IFeatureMembership> QueryOwnedFeatureMembership()
-        {
-            return this.ComputeOwnedFeatureMembership();
-        }
+        public List<IFeatureMembership> ownedFeatureMembership => this.ComputeOwnedFeatureMembership();
 
         /// <summary>
         /// The ownedRelationships of this Namespace that are Imports, for which the Namespace is the
@@ -648,10 +537,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "INamespace.OwnedImport")]
-        public List<IImport> QueryOwnedImport()
-        {
-            return this.ComputeOwnedImport();
-        }
+        public List<IImport> ownedImport => this.ComputeOwnedImport();
 
         /// <summary>
         /// The ownedRelationships of this Type that are Intersectings, have the Type as their typeIntersected.
@@ -660,10 +546,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedIntersecting")]
-        public List<IIntersecting> QueryOwnedIntersecting()
-        {
-            return this.ComputeOwnedIntersecting();
-        }
+        public List<IIntersecting> ownedIntersecting => this.ComputeOwnedIntersecting();
 
         /// <summary>
         /// The owned members of this Namespace, which are the <cpde>ownedMemberElements of the ownedMemberships
@@ -672,10 +555,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         [Implements(implementation: "INamespace.OwnedMember")]
-        public List<IElement> QueryOwnedMember()
-        {
-            return this.ComputeOwnedMember();
-        }
+        public List<IElement> ownedMember => this.ComputeOwnedMember();
 
         /// <summary>
         /// The ownedRelationships of this Namespace that are Memberships, for which the Namespace is the
@@ -686,10 +566,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "INamespace.OwnedMembership")]
-        public List<IMembership> QueryOwnedMembership()
-        {
-            return this.ComputeOwnedMembership();
-        }
+        public List<IMembership> ownedMembership => this.ComputeOwnedMembership();
 
         /// <summary>
         /// The ownedSubsettings of this Feature that are Redefinitions, for which the Feature is the
@@ -698,10 +575,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_161813_43220", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedRedefinition")]
-        public List<IRedefinition> QueryOwnedRedefinition()
-        {
-            return this.ComputeOwnedRedefinition();
-        }
+        public List<IRedefinition> ownedRedefinition => this.ComputeOwnedRedefinition();
 
         /// <summary>
         /// The one ownedSubsetting of this Feature, if any, that is a ReferenceSubsetting, for which the
@@ -710,10 +584,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_19_0_4_12e503d9_1661555161564_247405_255", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedReferenceSubsetting")]
-        public IReferenceSubsetting QueryOwnedReferenceSubsetting()
-        {
-            return this.ComputeOwnedReferenceSubsetting();
-        }
+        public IReferenceSubsetting ownedReferenceSubsetting => this.ComputeOwnedReferenceSubsetting();
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
@@ -731,10 +602,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674984_558067_43292")]
         [Implements(implementation: "IType.OwnedSpecialization")]
-        public List<ISpecialization> QueryOwnedSpecialization()
-        {
-            return this.ComputeOwnedSpecialization();
-        }
+        public List<ISpecialization> ownedSpecialization => this.ComputeOwnedSpecialization();
 
         /// <summary>
         /// The ownedSpecializations of this Feature that are Subsettings, for which the Feature is the
@@ -744,10 +612,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674966_718145_43205")]
         [Implements(implementation: "IFeature.OwnedSubsetting")]
-        public List<ISubsetting> QueryOwnedSubsetting()
-        {
-            return this.ComputeOwnedSubsetting();
-        }
+        public List<ISubsetting> ownedSubsetting => this.ComputeOwnedSubsetting();
 
         /// <summary>
         /// The ownedRelationships of this Feature that are TypeFeaturings and for which the Feature is the
@@ -757,10 +622,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_196800_580")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IFeature.OwnedTypeFeaturing")]
-        public List<ITypeFeaturing> QueryOwnedTypeFeaturing()
-        {
-            return this.ComputeOwnedTypeFeaturing();
-        }
+        public List<ITypeFeaturing> ownedTypeFeaturing => this.ComputeOwnedTypeFeaturing();
 
         /// <summary>
         /// The ownedSpecializations of this Feature that are FeatureTypings, for which the Feature is the
@@ -770,10 +632,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_804591_21100")]
         [Implements(implementation: "IFeature.OwnedTyping")]
-        public List<IFeatureTyping> QueryOwnedTyping()
-        {
-            return this.ComputeOwnedTyping();
-        }
+        public List<IFeatureTyping> ownedTyping => this.ComputeOwnedTyping();
 
         /// <summary>
         /// The ownedRelationships of this Type that are Unionings, having the Type as their typeUnioned.
@@ -782,10 +641,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "IType.OwnedUnioning")]
-        public List<IUnioning> QueryOwnedUnioning()
-        {
-            return this.ComputeOwnedUnioning();
-        }
+        public List<IUnioning> ownedUnioning => this.ComputeOwnedUnioning();
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
@@ -793,10 +649,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
-        public IElement QueryOwner()
-        {
-            return this.ComputeOwner();
-        }
+        public IElement owner => this.ComputeOwner();
 
         /// <summary>
         /// The FeatureMembership that owns this Feature as an ownedMemberFeature, determining its owningType.
@@ -804,10 +657,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_68441_43223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674972_622493_43236")]
         [Implements(implementation: "IFeature.OwningFeatureMembership")]
-        public IFeatureMembership QueryOwningFeatureMembership()
-        {
-            return this.ComputeOwningFeatureMembership();
-        }
+        public IFeatureMembership owningFeatureMembership => this.ComputeOwningFeatureMembership();
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -816,10 +666,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
-        public IOwningMembership QueryOwningMembership()
-        {
-            return this.ComputeOwningMembership();
-        }
+        public IOwningMembership owningMembership => this.ComputeOwningMembership();
 
         /// <summary>
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
@@ -828,10 +675,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public INamespace QueryOwningNamespace()
-        {
-            return this.ComputeOwningNamespace();
-        }
+        public INamespace owningNamespace => this.ComputeOwningNamespace();
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
@@ -849,10 +693,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603905619975_304385_743")]
         [Implements(implementation: "IFeature.OwningType")]
-        public IType QueryOwningType()
-        {
-            return this.ComputeOwningType();
-        }
+        public IType owningType => this.ComputeOwningType();
 
         /// <summary>
         /// The parameters of this Step, which are defined as its directedFeatures, whose values are passed into
@@ -861,10 +702,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> QueryParameter()
-        {
-            return this.ComputeParameter();
-        }
+        public List<IFeature> parameter => this.ComputeParameter();
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -876,10 +714,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string QueryQualifiedName()
-        {
-            return this.ComputeQualifiedName();
-        }
+        public string qualifiedName => this.ComputeQualifiedName();
 
         /// <summary>
         /// An output parameter of the Expression whose value is the result of the Expression. The result of an
@@ -890,10 +725,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674960_365618_43170")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         [Implements(implementation: "IExpression.Result")]
-        public IFeature QueryResult()
-        {
-            return this.ComputeResult();
-        }
+        public IFeature result => this.ComputeResult();
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -903,10 +735,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string QueryShortName()
-        {
-            return this.ComputeShortName();
-        }
+        public string shortName => this.ComputeShortName();
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -915,10 +744,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
-        public List<ITextualRepresentation> QueryTextualRepresentation()
-        {
-            return this.ComputeTextualRepresentation();
-        }
+        public List<ITextualRepresentation> textualRepresentation => this.ComputeTextualRepresentation();
 
         /// <summary>
         /// Types that restrict the values of this Feature, such that the values must be instances of all the
@@ -928,10 +754,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.Type")]
-        public List<IType> QueryType()
-        {
-            return this.ComputeType();
-        }
+        public List<IType> type => this.ComputeType();
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the
@@ -942,10 +765,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.UnioningType")]
-        public List<IType> QueryUnioningType()
-        {
-            return this.ComputeUnioningType();
-        }
+        public List<IType> unioningType => this.ComputeUnioningType();
 
         /// <summary>
         /// The Boolean value that is the result of evaluating this LiteralBoolean.

@@ -75,7 +75,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618958878775_52798_7090", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
-        IOccurrenceDefinition QueryIndividualDefinition();
+        IOccurrenceDefinition individualDefinition { get; }
 
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual represented by its
@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
-        List<IClass> QueryOccurrenceDefinition();
+        List<IClass> occurrenceDefinition { get; }
 
         /// <summary>
         /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If

@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The PackageDeSerializer can only be used to deserialize objects of type IPackage, a {@type.GetString()} was provided");
             }
 
-            IPackage dtoInstance = new SysML2.NET.Core.DTO.Kernel.Packages.Package();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Packages.Package();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

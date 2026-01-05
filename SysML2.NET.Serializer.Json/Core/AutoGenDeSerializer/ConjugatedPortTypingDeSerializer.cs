@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The ConjugatedPortTypingDeSerializer can only be used to deserialize objects of type IConjugatedPortTyping, a {@type.GetString()} was provided");
             }
 
-            IConjugatedPortTyping dtoInstance = new SysML2.NET.Core.DTO.Systems.Ports.ConjugatedPortTyping();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Ports.ConjugatedPortTyping();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -157,31 +157,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the elementId Json property was not found in the ConjugatedPortTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("general"u8, out var generalProperty))
-            {
-                if (generalProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.General = Guid.Empty;
-                    logger.LogDebug($"the ConjugatedPortTyping.General property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (generalProperty.TryGetProperty("@id"u8, out var generalIdProperty))
-                    {
-                        var propertyValue = generalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.General = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the general Json property was not found in the ConjugatedPortTyping: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
@@ -294,96 +269,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the owningRelationship Json property was not found in the ConjugatedPortTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceIdProperty))
-                    {
-                        var propertyValue = sourceIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the ConjugatedPortTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("specific"u8, out var specificProperty))
-            {
-                if (specificProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.Specific = Guid.Empty;
-                    logger.LogDebug($"the ConjugatedPortTyping.Specific property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (specificProperty.TryGetProperty("@id"u8, out var specificIdProperty))
-                    {
-                        var propertyValue = specificIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Specific = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the specific Json property was not found in the ConjugatedPortTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetIdProperty))
-                    {
-                        var propertyValue = targetIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the ConjugatedPortTyping: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
-            {
-                if (typeProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.Type = Guid.Empty;
-                    logger.LogDebug($"the ConjugatedPortTyping.Type property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (typeProperty.TryGetProperty("@id"u8, out var typeIdProperty))
-                    {
-                        var propertyValue = typeIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Type = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the type Json property was not found in the ConjugatedPortTyping: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("typedFeature"u8, out var typedFeatureProperty))

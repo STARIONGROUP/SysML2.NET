@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The OperatorExpressionDeSerializer can only be used to deserialize objects of type IOperatorExpression, a {@type.GetString()} was provided");
             }
 
-            IOperatorExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.OperatorExpression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.OperatorExpression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_19_0_4_b9102da_1623242552145_149730_525", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        Guid TypeIntersected { get; }
+        Guid typeIntersected { get; }
 
     }
 }

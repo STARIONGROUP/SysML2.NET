@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The PortDefinitionDeSerializer can only be used to deserialize objects of type IPortDefinition, a {@type.GetString()} was provided");
             }
 
-            IPortDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Ports.PortDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Ports.PortDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

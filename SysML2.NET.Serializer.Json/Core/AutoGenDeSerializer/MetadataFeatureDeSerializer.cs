@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The MetadataFeatureDeSerializer can only be used to deserialize objects of type IMetadataFeature, a {@type.GetString()} was provided");
             }
 
-            IMetadataFeature dtoInstance = new SysML2.NET.Core.DTO.Kernel.Metadata.MetadataFeature();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Metadata.MetadataFeature();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

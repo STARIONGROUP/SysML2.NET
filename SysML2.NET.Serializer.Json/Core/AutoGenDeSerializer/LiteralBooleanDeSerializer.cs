@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The LiteralBooleanDeSerializer can only be used to deserialize objects of type ILiteralBoolean, a {@type.GetString()} was provided");
             }
 
-            ILiteralBoolean dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.LiteralBoolean();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.LiteralBoolean();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

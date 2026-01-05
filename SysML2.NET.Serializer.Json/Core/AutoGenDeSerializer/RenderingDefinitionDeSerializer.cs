@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The RenderingDefinitionDeSerializer can only be used to deserialize objects of type IRenderingDefinition, a {@type.GetString()} was provided");
             }
 
-            IRenderingDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Views.RenderingDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Views.RenderingDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

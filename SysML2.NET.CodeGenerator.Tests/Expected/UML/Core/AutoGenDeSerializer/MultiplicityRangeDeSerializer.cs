@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The MultiplicityRangeDeSerializer can only be used to deserialize objects of type IMultiplicityRange, a {@type.GetString()} was provided");
             }
 
-            IMultiplicityRange dtoInstance = new SysML2.NET.Core.DTO.Kernel.Multiplicities.MultiplicityRange();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Multiplicities.MultiplicityRange();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

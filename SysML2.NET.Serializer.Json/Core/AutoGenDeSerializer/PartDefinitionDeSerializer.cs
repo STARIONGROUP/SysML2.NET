@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The PartDefinitionDeSerializer can only be used to deserialize objects of type IPartDefinition, a {@type.GetString()} was provided");
             }
 
-            IPartDefinition dtoInstance = new SysML2.NET.Core.DTO.Systems.Parts.PartDefinition();
+            var dtoInstance = new SysML2.NET.Core.DTO.Systems.Parts.PartDefinition();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

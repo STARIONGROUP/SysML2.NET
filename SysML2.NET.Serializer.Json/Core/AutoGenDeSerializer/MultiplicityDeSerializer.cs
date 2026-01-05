@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The MultiplicityDeSerializer can only be used to deserialize objects of type IMultiplicity, a {@type.GetString()} was provided");
             }
 
-            IMultiplicity dtoInstance = new SysML2.NET.Core.DTO.Core.Types.Multiplicity();
+            var dtoInstance = new SysML2.NET.Core.DTO.Core.Types.Multiplicity();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

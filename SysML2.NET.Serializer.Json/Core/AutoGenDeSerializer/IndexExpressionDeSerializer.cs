@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The IndexExpressionDeSerializer can only be used to deserialize objects of type IIndexExpression, a {@type.GetString()} was provided");
             }
 
-            IIndexExpression dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.IndexExpression();
+            var dtoInstance = new SysML2.NET.Core.DTO.Kernel.Expressions.IndexExpression();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {

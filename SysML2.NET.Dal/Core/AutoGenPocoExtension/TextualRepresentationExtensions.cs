@@ -68,19 +68,12 @@ namespace SysML2.NET.Dal
             var identifiersOfObjectsToDelete = new List<Guid>();
 
             poco.AliasIds = dto.AliasIds;
-
             poco.Body = dto.Body;
-
             poco.DeclaredName = dto.DeclaredName;
-
             poco.DeclaredShortName = dto.DeclaredShortName;
-
             poco.ElementId = dto.ElementId;
-
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
-
             poco.Language = dto.Language;
-
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
 
             foreach (var identifier in ownedRelationshipToDelete)
@@ -89,7 +82,6 @@ namespace SysML2.NET.Dal
             }
 
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
-
 
             return identifiersOfObjectsToDelete;
         }
