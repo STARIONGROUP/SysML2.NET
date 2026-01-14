@@ -27,7 +27,7 @@ namespace SysML2.NET.Serializer.Json
     using System.Threading.Tasks;
     
     using SysML2.NET.Common;
-    using SysML2.NET.Core.DTO;
+    using SysML2.NET.Core.DTO.Root.Elements;
     using SysML2.NET.Serializer.Json.PIM.DTO;
     using SysML2.NET.Serializer.Json.Core.DTO;
 
@@ -46,38 +46,40 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        public void Serialize(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void Serialize(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions)
         {
-            using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
+            using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
+
+            writer.WriteStartArray();
+
+            foreach (var dataItem in dataItems)
             {
-                writer.WriteStartArray();
-
-                foreach (var dataItem in dataItems)
+                if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
                 {
-                    if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
-                    {
-                        var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
-                        serializationAction(dataItem, writer, serializationModeKind);
-                        writer.Flush();
-                    }
-                    else
-                    {
-                        var serializationAction = SerializationProvider.Provide(dataItem.GetType());
-                        serializationAction(dataItem, writer, serializationModeKind);
-                        writer.Flush();
-                    }
+                    var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
+                    serializationAction(dataItem, writer, serializationModeKind, includeDerivedProperties);
+                    writer.Flush();
                 }
-
-                writer.WriteEndArray();
-
-                writer.Flush();
+                else
+                {
+                    var serializationAction = SerializationProvider.Provide(dataItem.GetType());
+                    serializationAction(dataItem, writer, serializationModeKind, includeDerivedProperties);
+                    writer.Flush();
+                }
             }
+
+            writer.WriteEndArray();
+
+            writer.Flush();
         }
 
         /// <summary>
@@ -89,28 +91,30 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        public void Serialize(IData dataItem, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions)
+        public void Serialize(IData dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions)
         {
-            using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
+            using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
+
+            if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
             {
-                if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
-                {
-                    var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
-                    serializationAction(dataItem, writer, serializationModeKind);
-                    writer.Flush();
-                }
-                else 
-                {
-                    var serializationAction = SerializationProvider.Provide(dataItem.GetType());
-                    serializationAction(dataItem, writer, serializationModeKind);
-                    writer.Flush();
-                }
+                var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
+                serializationAction(dataItem, writer, serializationModeKind, includeDerivedProperties);
+                writer.Flush();
+            }
+            else 
+            {
+                var serializationAction = SerializationProvider.Provide(dataItem.GetType());
+                serializationAction(dataItem, writer, serializationModeKind, includeDerivedProperties);
+                writer.Flush();
             }
         }
 
@@ -123,6 +127,9 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
@@ -132,32 +139,31 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public async Task SerializeAsync(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeAsync(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
-            using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
+            await using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
+
+            writer.WriteStartArray();
+
+            foreach (var element in dataItems)
             {
-                writer.WriteStartArray();
-
-                foreach (var element in dataItems)
+                if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
                 {
-                    if (ApiSerializationProvider.IsTypeSupported(element.GetType()))
-                    {
-                        var serializationAction = ApiSerializationProvider.Provide(element.GetType());
-                        serializationAction(element, writer, serializationModeKind);
-                        await writer.FlushAsync(cancellationToken);
-                    }
-                    else
-                    {
-                        var serializationAction = SerializationProvider.Provide(element.GetType());
-                        serializationAction(element, writer, serializationModeKind);
-                        await writer.FlushAsync(cancellationToken);
-                    }
+                    var serializationAction = ApiSerializationProvider.Provide(element.GetType());
+                    serializationAction(element, writer, serializationModeKind, includeDerivedProperties);
+                    await writer.FlushAsync(cancellationToken);
                 }
-
-                writer.WriteEndArray();
-
-                await writer.FlushAsync(cancellationToken);
+                else
+                {
+                    var serializationAction = SerializationProvider.Provide(element.GetType());
+                    serializationAction(element, writer, serializationModeKind, includeDerivedProperties);
+                    await writer.FlushAsync(cancellationToken);
+                }
             }
+
+            writer.WriteEndArray();
+
+            await writer.FlushAsync(cancellationToken);
         }
 
         /// <summary>
@@ -169,6 +175,9 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
@@ -178,22 +187,21 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public async Task SerializeAsync(IData dataItem, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
+        public async Task SerializeAsync(IData dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken)
         {
-            using (var writer = new Utf8JsonWriter(stream, jsonWriterOptions))
+            await using var writer = new Utf8JsonWriter(stream, jsonWriterOptions);
+
+            if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
             {
-                if (ApiSerializationProvider.IsTypeSupported(dataItem.GetType()))
-                {
-                    var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
-                    serializationAction(dataItem, writer, serializationModeKind);
-                    await writer.FlushAsync(cancellationToken);
-                }
-                else
-                {
-                    var serializationAction = SerializationProvider.Provide(dataItem.GetType());
-                    serializationAction(dataItem, writer, serializationModeKind);
-                    await writer.FlushAsync(cancellationToken);
-                }
+                var serializationAction = ApiSerializationProvider.Provide(dataItem.GetType());
+                serializationAction(dataItem, writer, serializationModeKind, includeDerivedProperties);
+                await writer.FlushAsync(cancellationToken);
+            }
+            else
+            {
+                var serializationAction = SerializationProvider.Provide(dataItem.GetType());
+                serializationAction(dataItem, writer, serializationModeKind, includeDerivedProperties);
+                await writer.FlushAsync(cancellationToken);
             }
         }
     }

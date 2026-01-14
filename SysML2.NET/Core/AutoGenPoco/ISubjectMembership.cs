@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_59601fc_1590258781117_655788_845", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528016548_548098_110830")]
-        IUsage QueryOwnedSubjectParameter();
+        IUsage ownedSubjectParameter { get; }
 
     }
 }

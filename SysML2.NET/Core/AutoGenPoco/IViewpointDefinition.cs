@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// ViewpointDefinition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617117194003_518610_3310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<IPartUsage> QueryViewpointStakeholder();
+        List<IPartUsage> viewpointStakeholder { get; }
 
     }
 }

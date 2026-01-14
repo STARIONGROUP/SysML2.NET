@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// StateSubactionMembership  with kind = do.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1582975916386_388324_339", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IActionUsage QueryDoAction();
+        IActionUsage doAction { get; }
 
         /// <summary>
         /// The ActionUsage of this StateDefinition to be performed on entry to the state defined by the
@@ -82,7 +82,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// StateSubactionMembership  with kind = entry.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1582975902339_513804_312", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IActionUsage QueryEntryAction();
+        IActionUsage entryAction { get; }
 
         /// <summary>
         /// The ActionUsage of this StateDefinition to be performed on exit to the state defined by the
@@ -90,7 +90,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// StateSubactionMembership  with kind = exit.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1582975927011_696894_352", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IActionUsage QueryExitAction();
+        IActionUsage exitAction { get; }
 
         /// <summary>
         /// Whether the ownedStates of this StateDefinition are to all be performed in parallel. If true, none
@@ -106,7 +106,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575588190693_949879_1156", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565500809065_170841_30688")]
-        List<IStateUsage> QueryState();
+        List<IStateUsage> state { get; }
 
     }
 }

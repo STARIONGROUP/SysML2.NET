@@ -56,12 +56,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 var sb = new StringBuilder();
-                
+
                 if (property.RedefinedProperty.Any(x => x.Name == property.Name))
                 {
                     sb.Append("new ");
                 }
-                
+
                 if (property.Type is IDataType)
                 {
                     if (property.QueryIsEnumerable())
@@ -72,12 +72,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     else
                     {
                         sb.Append($"{property.QueryCSharpTypeName()}");
-                        
+
                         if (property.QueryIsNullableAndNotString())
                         {
                             sb.Append('?');
                         }
-                        
+
                         sb.Append(' ');
                     }
                 }
@@ -99,13 +99,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         sb.Append(' ');
                     }
-                } 
-                
+                }
+
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
 
-                if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
+                if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    propertyName = $"{propertyName}";
+                    propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
                 }
 
                 sb.Append(propertyName);
@@ -135,13 +135,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var sb = new StringBuilder();
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
-                var hasSameNameAsClass = generatedClass.Name == propertyName;
-                var classHaveToImplementTwiceSameProperty = generatedClass.QueryAllProperties().Count(x => x.Name == property.Name) > 1;
-                
-                if (!hasSameNameAsClass && !classHaveToImplementTwiceSameProperty)
+                var isRedefinedByPropertyWithTheSameName = property.TryQueryRedefinedByProperty(generatedClass, out var redefiningProperty) && redefiningProperty.Name == property.Name;
+
+                if (!isRedefinedByPropertyWithTheSameName)
                 {
                     sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
-                    sb.Append(' ');    
+                    sb.Append(' ');
                 }
 
                 if (property.Type is IDataType)
@@ -154,12 +153,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     else
                     {
                         sb.Append($"{property.QueryCSharpTypeName()}");
-                        
+
                         if (property.QueryIsNullableAndNotString())
                         {
                             sb.Append('?');
                         }
-                        
+
                         sb.Append(' ');
                     }
                 }
@@ -183,12 +182,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                 }
 
-                if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
+                if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    propertyName = $"{propertyName}";
+                    propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
                 }
 
-                if (hasSameNameAsClass || classHaveToImplementTwiceSameProperty)
+                if (isRedefinedByPropertyWithTheSameName)
                 {
                     var owner = (INamedElement)property.Owner;
                     propertyName = $"I{owner.Name}.{propertyName}";
@@ -204,9 +203,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 sb.Append(propertyName);
                 sb.Append(' ');
 
-                 if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
+                if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
                 {
-                    sb.Append($"{{ get; {(hasSameNameAsClass || classHaveToImplementTwiceSameProperty ? "" : "internal set;" )}}}");
+                    if(isRedefinedByPropertyWithTheSameName)
+                    {
+                        sb.Append("{ get; }");                        
+                    }
+                    else
+                    {
+                        sb.Append("{ get; internal set; }");
+                    }
+
+                    if (property.QueryIsEnumerable())
+                    {
+                        sb.Append(" = [];");
+                    }
                 }
                 else
                 {
@@ -216,22 +227,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         sb.Append(" = [];");
                     }
-                    else if (property.QueryIsDefaultValueDifferentThanDefault())
+                }
+                
+                if (property.QueryIsDefaultValueDifferentThanDefault())
+                {
+                    if (property.QueryIsString())
                     {
-                        if (property.QueryIsString())
-                        {
-                            sb.Append($" = \"{property.QueryDefaultValueAsString()}\";");
-                        }
-                        else
-                        {
-                            sb.Append($" = {property.QueryDefaultValueAsString()};");
-                        }
+                        sb.Append($" = \"{property.QueryDefaultValueAsString()}\";");
                     }
+                    else
+                    {
+                        sb.Append($" = {property.QueryDefaultValueAsString()};");
+                    }
+                }
+                else if (property.QueryIsEnumPropertyWithDefaultValue())
+                {
+                    sb.Append($" = {StringExtensions.CapitalizeFirstLetter(property.Type.Name)}.{StringExtensions.CapitalizeFirstLetter(property.QueryDefaultValueAsString())};");
                 }
 
                 writer.WriteSafeString(sb + Environment.NewLine);
             });
-            
+
             handlebars.RegisterHelper("Property.WriteForPOCOInterface", (writer, context, _) =>
             {
                 if (context.Value is not IProperty property)
@@ -246,7 +262,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     sb.Append("new ");
                 }
-                
+
                 if (property.Type is not IDataType)
                 {
                     typeName = $"I{typeName}";
@@ -263,25 +279,21 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         sb.Append($"{typeName}? ");
                     }
                     else
-                    { 
+                    {
                         sb.Append($"{typeName} ");
                     }
                 }
-                
+
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
 
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    propertyName = $"Query{propertyName}";
+                    propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
                 }
 
                 sb.Append(propertyName);
 
-                if (property.IsDerived || property.IsDerivedUnion)
-                {
-                    sb.Append("();");
-                }
-                else if (property.IsReadOnly)
+                if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
                 {
                     sb.Append(" { get; }");
                 }
@@ -292,7 +304,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 writer.WriteSafeString(sb + Environment.NewLine);
             });
-            
+
             handlebars.RegisterHelper("Property.WriteForPOCOClass", (writer, context, arguments) =>
             {
                 if (context.Value is not IProperty property)
@@ -311,18 +323,17 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 var sb = new StringBuilder();
+                var isRedefinedByPropertyWithTheSameName = property.TryQueryRedefinedByProperty(generatedClass, out var redefiningProperty) && redefiningProperty.Name == property.Name;
                 var typeName = property.QueryCSharpTypeName();
 
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
-                var hasSameNameAsClass = !property.IsDerived && !property.IsDerivedUnion && generatedClass.Name == propertyName;
-                var classHaveToImplementTwiceSameProperty =  generatedClass.QueryAllProperties().Count(x => x.Name == property.Name) > 1;
-                
-                if (!hasSameNameAsClass && !classHaveToImplementTwiceSameProperty)
+
+                if (!isRedefinedByPropertyWithTheSameName)
                 {
                     sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
-                    sb.Append(' ');    
+                    sb.Append(' ');
                 }
-                
+
                 if (property.Type is not IDataType)
                 {
                     typeName = $"I{typeName}";
@@ -334,22 +345,22 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    if (property.QueryIsNullableAndNotString()  && !property.QueryIsReferenceProperty())
+                    if (property.QueryIsNullableAndNotString() && !property.QueryIsReferenceProperty())
                     {
                         sb.Append($"{typeName}? ");
                     }
                     else
-                    { 
+                    {
                         sb.Append($"{typeName} ");
                     }
                 }
-                
+
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    propertyName = $"Query{propertyName}";
+                    propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
                 }
 
-                if (hasSameNameAsClass || classHaveToImplementTwiceSameProperty)
+                if (isRedefinedByPropertyWithTheSameName)
                 {
                     var owner = (INamedElement)property.Owner;
                     propertyName = $"I{owner.Name}.{propertyName}";
@@ -361,28 +372,60 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         propertyName = $"{ownerNamespace}.{propertyName}";
                     }
                 }
-                
+
                 sb.Append(propertyName);
 
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    sb.Append("()");
-                    sb.AppendLine("{");
-                    sb.AppendLine($"\treturn this.Compute{StringExtensions.CapitalizeFirstLetter(property.Name)}();");
-                    sb.Append('}');
+                    if (isRedefinedByPropertyWithTheSameName)
+                    {
+                        var owningClass = redefiningProperty.Owner as IClass;
+                        sb.Append($"=> throw new InvalidOperationException(\"Redefined by property I{owningClass?.Name}.{StringExtensions.CapitalizeFirstLetter(redefiningProperty.Name)}\");");
+                    }
+                    else
+                    {
+                        sb.Append($"=> this.Compute{StringExtensions.CapitalizeFirstLetter(property.Name)}();");
+                    }
                 }
                 else if (property.IsReadOnly)
                 {
-                    sb.Append(" { get; }");
+                    if (isRedefinedByPropertyWithTheSameName)
+                    {
+                        var owningClass = redefiningProperty.Owner as IClass;
+                        sb.Append($"=> throw new InvalidOperationException(\"Redefined by property I{owningClass?.Name}.{StringExtensions.CapitalizeFirstLetter(redefiningProperty.Name)}\");");
+                    }
+                    else
+                    {
+                        sb.Append(" { get; }");
+                    }
                 }
                 else
                 {
                     sb.Append(" { get; set; }");
+
+                    if (property.QueryIsEnumerable())
+                    {
+                        sb.Append(" = [];");
+                    }
                 }
 
-                if (!property.IsReadOnly && !property.IsDerived && !property.IsDerivedUnion && property.QueryIsEnumerable())
+                if (!property.IsDerived || property.IsDerivedUnion)
                 {
-                    sb.Append(" = [];");
+                    if (property.QueryIsDefaultValueDifferentThanDefault())
+                    {
+                        if (property.QueryIsString())
+                        {
+                            sb.Append($" = \"{property.QueryDefaultValueAsString()}\";");
+                        }
+                        else
+                        {
+                            sb.Append($" = {property.QueryDefaultValueAsString()};");
+                        }
+                    }
+                    else if (property.QueryIsEnumPropertyWithDefaultValue())
+                    {
+                        sb.Append($" = {StringExtensions.CapitalizeFirstLetter(property.Type.Name)}.{StringExtensions.CapitalizeFirstLetter(property.QueryDefaultValueAsString())};");
+                    }
                 }
 
                 writer.WriteSafeString(sb + Environment.NewLine);
@@ -420,39 +463,33 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(sb);
             });
 
-            handlebars.RegisterHelper("Property.ContainsPropertyRedifinitionWithSameName", (context, arguments) =>
+            handlebars.RegisterHelper("Property.IsPropertyRedefinedInClass", (context, arguments) =>
             {
                 if (context.Value is not IProperty property)
                 {
-                    throw new ArgumentException("The #Property.ContainsPropertyRedifinitionWithSameName context supposed to be IProperty");
+                    throw new ArgumentException("The #Property.IsPropertyRedefinedInClass context supposed to be IProperty");
                 }
 
                 if (arguments.Length != 2)
                 {
-                    throw new ArgumentException("The #Property.ContainsPropertyRedifinitionWithSameName supposed to be have 2 arguments IProperty");
+                    throw new ArgumentException("The #Property.IsPropertyRedefinedInClass supposed to be have 2 arguments IProperty");
                 }
 
                 if (arguments[1] is not IClass generatedClass)
                 {
-                    throw new ArgumentException("The #Property.ContainsPropertyRedifinitionWithSameName supposed to be have an IClass as second argument");
+                    throw new ArgumentException("The #Property.IsPropertyRedefinedInClass supposed to be have an IClass as second argument");
                 }
 
-                if (!property.QueryIsRedefined())
-                {
-                    return false;
-                }
-
-                var allProperties = generatedClass.QueryAllProperties();
-                return property.RedefinedProperty.Where(x => x.Name == property.Name).Any(x => allProperties.Contains(x));
+                return property.TryQueryRedefinedByProperty(generatedClass, out _);
             });
-            
+
             handlebars.RegisterHelper("Property.IsRedefinedOrRedifines", (context, arguments) =>
             {
                 if (context.Value is not IProperty property)
                 {
                     throw new ArgumentException("The #Property.IsRedefinedOrRedifines context supposed to be IProperty");
                 }
-                
+
                 if (arguments.Length != 2)
                 {
                     throw new ArgumentException("The #Property.IsRedefinedOrRedifines supposed to be have 2 arguments IProperty");
@@ -465,9 +502,76 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var allProperties = generatedClass.QueryAllProperties();
                 var propertiesWithSameName = allProperties.SkipWhile(x => x == property).Where(x => x.Name == property.Name);
-                
+
                 return property.RedefinedProperty.Any(x => propertiesWithSameName.Contains(x)) || propertiesWithSameName.Any(x => x.RedefinedProperty.Contains(property));
             });
-        }
+
+            handlebars.RegisterHelper("Property.IsRedefinedByPropertyWithSameName", (context, arguments) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.IsRedefinedByPropertyWithSameName context supposed to be IProperty");
+                }
+
+                if (arguments.Length != 2)
+                {
+                    throw new ArgumentException("The #Property.IsRedefinedByPropertyWithSameName supposed to be have 2 arguments");
+                }
+
+                if (arguments[1] is not IClass generatedClass)
+                {
+                    throw new ArgumentException("The #Property.IsRedefinedByPropertyWithSameName supposed to be have an IClass as second argument");
+                }
+
+                if (!property.TryQueryRedefinedByProperty(generatedClass, out var redefinition))
+                {
+                    return false;
+                }
+
+                return redefinition.Name == property.Name;
+            });
+
+            handlebars.RegisterHelper("Property.WritePropertyName", (writer, context, _) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.WritePropertyName context supposed to be IProperty");
+                }
+
+                var propertyName = property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
+                writer.WriteSafeString(propertyName);
+            });
+
+            handlebars.RegisterHelper("Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO", (writer, context, arguments) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO context supposed to be IProperty");
+                }
+
+                if (arguments.Length != 3)
+                {
+                    throw new ArgumentException("The #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO supposed to be have 3 arguments");
+                }
+
+                if (arguments[1] is not IClass generatedClass)
+                {
+                    throw new ArgumentException("The #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO supposed to be have an IClass as second argument");
+                }
+
+                var variableName = arguments[2].ToString();
+                var propertyName = property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
+                
+                if (property.TryQueryRedefinedByProperty(generatedClass, out var redefinitionProperty) && redefinitionProperty.Name == property.Name)
+                {
+                    var owner = (INamedElement)property.Owner;
+                    writer.WriteSafeString($"((SysML2.NET.Core.DTO.{owner.QueryNamespace()}.I{owner.Name}){variableName}).{propertyName}");   
+                }
+                else
+                {
+                    writer.WriteSafeString($"{variableName}.{propertyName}");   
+                }
+            });
+    }
     }
 }

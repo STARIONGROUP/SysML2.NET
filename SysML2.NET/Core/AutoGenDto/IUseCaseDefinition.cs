@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Systems.UseCases
         /// IncludeUseCaseUsages owned by this UseCaseDefinition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621461043764_27_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> IncludedUseCase { get; }
+        List<Guid> includedUseCase { get; }
 
     }
 }

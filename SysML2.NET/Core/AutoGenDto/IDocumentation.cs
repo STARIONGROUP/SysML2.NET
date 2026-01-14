@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.DTO.Root.Annotations
         [Property(xmiId: "_19_0_2_12e503d9_1594150061166_948466_1622", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_744477_17277")]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594145755058_99428_86")]
-        Guid DocumentedElement { get; }
+        Guid documentedElement { get; }
 
     }
 }

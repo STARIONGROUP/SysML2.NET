@@ -90,10 +90,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
-        public List<IDocumentation> QueryDocumentation()
-        {
-            return this.ComputeDocumentation();
-        }
+        public List<IDocumentation> documentation => this.ComputeDocumentation();
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -136,10 +133,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
-        public bool QueryIsLibraryElement()
-        {
-            return this.ComputeIsLibraryElement();
-        }
+        public bool isLibraryElement => this.ComputeIsLibraryElement();
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -149,10 +143,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string QueryName()
-        {
-            return this.ComputeName();
-        }
+        public string name => this.ComputeName();
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -162,10 +153,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
-        public List<IAnnotation> QueryOwnedAnnotation()
-        {
-            return this.ComputeOwnedAnnotation();
-        }
+        public List<IAnnotation> ownedAnnotation => this.ComputeOwnedAnnotation();
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -173,10 +161,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
-        public List<IElement> QueryOwnedElement()
-        {
-            return this.ComputeOwnedElement();
-        }
+        public List<IElement> ownedElement => this.ComputeOwnedElement();
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -200,10 +185,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
-        public IElement QueryOwner()
-        {
-            return this.ComputeOwner();
-        }
+        public IElement owner => this.ComputeOwner();
 
         /// <summary>
         /// A subsettingFeature that is also the owningRelatedElement of this Subsetting.
@@ -212,10 +194,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
         [Implements(implementation: "ISubsetting.OwningFeature")]
-        public IFeature QueryOwningFeature()
-        {
-            return this.ComputeOwningFeature();
-        }
+        public IFeature owningFeature => this.ComputeOwningFeature();
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -224,10 +203,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
-        public IOwningMembership QueryOwningMembership()
-        {
-            return this.ComputeOwningMembership();
-        }
+        public IOwningMembership owningMembership => this.ComputeOwningMembership();
 
         /// <summary>
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
@@ -236,10 +212,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public INamespace QueryOwningNamespace()
-        {
-            return this.ComputeOwningNamespace();
-        }
+        public INamespace owningNamespace => this.ComputeOwningNamespace();
 
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
@@ -265,10 +238,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
         [RedefinedByProperty("ISubsetting.OwningFeature")]
         [Implements(implementation: "ISpecialization.OwningType")]
-        public IType QueryOwningType()
-        {
-            return this.ComputeOwningType();
-        }
+        public IType owningType => this.ComputeOwningType();
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -280,10 +250,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string QueryQualifiedName()
-        {
-            return this.ComputeQualifiedName();
-        }
+        public string qualifiedName => this.ComputeQualifiedName();
 
         /// <summary>
         /// The Feature that is redefined by the redefiningFeature of this Redefinition.
@@ -307,10 +274,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        public List<IElement> QueryRelatedElement()
-        {
-            return this.ComputeRelatedElement();
-        }
+        public List<IElement> relatedElement => this.ComputeRelatedElement();
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -320,10 +284,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string QueryShortName()
-        {
-            return this.ComputeShortName();
-        }
+        public string shortName => this.ComputeShortName();
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.
@@ -377,10 +338,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
-        public List<ITextualRepresentation> QueryTextualRepresentation()
-        {
-            return this.ComputeTextualRepresentation();
-        }
+        public List<ITextualRepresentation> textualRepresentation => this.ComputeTextualRepresentation();
 
     }
 }

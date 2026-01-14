@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1581029782522_542070_6299", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        List<Guid> EffectAction { get; }
+        List<Guid> effectAction { get; }
 
         /// <summary>
         /// The Expressions that define the guards of this TransitionUsage, which are the ownedFeatures of the
@@ -61,14 +61,14 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1581029720824_747691_6254", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        List<Guid> GuardExpression { get; }
+        List<Guid> guardExpression { get; }
 
         /// <summary>
         /// The source ActionUsage of this TransitionUsage, which becomes the source of the succession for the
         /// TransitionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1581029439311_947395_6114", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid Source { get; }
+        Guid source { get; }
 
         /// <summary>
         /// The Succession that is the ownedFeature of this TransitionUsage, which, if the TransitionUsage is
@@ -76,14 +76,14 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1581030490131_304332_6364", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        Guid Succession { get; }
+        Guid succession { get; }
 
         /// <summary>
         /// The target ActionUsage of this TransitionUsage, which is the targetFeature of the succession for the
         /// TransitionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1581029493366_130491_6153", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid Target { get; }
+        Guid target { get; }
 
         /// <summary>
         /// The AcceptActionUsages that define the triggers of this TransitionUsage, which are the ownedFeatures
@@ -92,7 +92,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1581029662256_985457_6209", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        List<Guid> TriggerAction { get; }
+        List<Guid> triggerAction { get; }
 
     }
 }

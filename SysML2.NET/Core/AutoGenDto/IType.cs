@@ -50,28 +50,28 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// those of that sex are also interpretations of the Classifier for that sex).
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661975883472_645501_1372", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> DifferencingType { get; }
+        List<Guid> differencingType { get; }
 
         /// <summary>
         /// The features of this Type that have a non-null direction.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1623952188842_882068_37169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        List<Guid> DirectedFeature { get; }
+        List<Guid> directedFeature { get; }
 
         /// <summary>
         /// All features of this Type with isEnd = true.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        List<Guid> EndFeature { get; }
+        List<Guid> endFeature { get; }
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
-        List<Guid> Feature { get; }
+        List<Guid> feature { get; }
 
         /// <summary>
         /// The FeatureMemberships for features of this Type, which include all ownedFeatureMemberships and
@@ -79,14 +79,14 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// importedMemberships).
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651076866512_962346_485", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> FeatureMembership { get; }
+        List<Guid> featureMembership { get; }
 
         /// <summary>
         /// All the memberFeatures of the inheritedMemberships of this Type that are FeatureMemberships.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575499020770_15576_2334", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        List<Guid> InheritedFeature { get; }
+        List<Guid> inheritedFeature { get; }
 
         /// <summary>
         /// All Memberships inherited by this Type via Specialization or Conjugation. These are included in the
@@ -94,14 +94,14 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1551972927538_787976_19004", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
-        List<Guid> InheritedMembership { get; }
+        List<Guid> inheritedMembership { get; }
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction in or inout.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_37384_43169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
-        List<Guid> Input { get; }
+        List<Guid> input { get; }
 
         /// <summary>
         /// The interpretations of a Type with intersectingTypes are asserted to be those in common among the
@@ -113,7 +113,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// also interpretations of the Classifier for that sex).
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661973922199_584242_1045", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> IntersectingType { get; }
+        List<Guid> intersectingType { get; }
 
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized
@@ -126,7 +126,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// Indicates whether this Type has an ownedConjugator.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575485930816_796088_1933", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        bool IsConjugated { get; }
+        bool isConjugated { get; }
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -146,14 +146,14 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        Guid? Multiplicity { get; }
+        Guid? multiplicity { get; }
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_365618_43170", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
-        List<Guid> Output { get; }
+        List<Guid> output { get; }
 
         /// <summary>
         /// A Conjugation owned by this Type for which the Type is the originalType.
@@ -161,7 +161,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_19_0_2_12e503d9_1575482646809_280165_440", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490144_309557_300")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
-        Guid? OwnedConjugator { get; }
+        Guid? ownedConjugator { get; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Differencings, having this Type as their
@@ -170,7 +170,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_19_0_4_b9102da_1661871168454_98082_797", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
-        List<Guid> OwnedDifferencing { get; }
+        List<Guid> ownedDifferencing { get; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Disjoinings, for which the Type is the typeDisjoined
@@ -179,7 +179,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_19_0_4_12e503d9_1627447519613_145554_370", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623183194914_502526_616")]
-        List<Guid> OwnedDisjoining { get; }
+        List<Guid> ownedDisjoining { get; }
 
         /// <summary>
         /// All endFeatures of this Type that are ownedFeatures.
@@ -187,14 +187,14 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_18_5_3_12e503d9_1563834516278_687758_20652", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        List<Guid> OwnedEndFeature { get; }
+        List<Guid> ownedEndFeature { get; }
 
         /// <summary>
         /// The ownedMemberFeatures of the ownedFeatureMemberships of this Type.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_226999_43167", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        List<Guid> OwnedFeature { get; }
+        List<Guid> ownedFeature { get; }
 
         /// <summary>
         /// The ownedMemberships of this Type that are FeatureMemberships, for which the Type is the owningType.
@@ -203,7 +203,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_868417_43171", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866512_962346_485")]
-        List<Guid> OwnedFeatureMembership { get; }
+        List<Guid> ownedFeatureMembership { get; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Intersectings, have the Type as their typeIntersected.
@@ -211,7 +211,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_19_0_4_b9102da_1623242552144_910757_524", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
-        List<Guid> OwnedIntersecting { get; }
+        List<Guid> ownedIntersecting { get; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Specializations, for which the Type is the specific
@@ -220,7 +220,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_579676_43168", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674984_558067_43292")]
-        List<Guid> OwnedSpecialization { get; }
+        List<Guid> ownedSpecialization { get; }
 
         /// <summary>
         /// The ownedRelationships of this Type that are Unionings, having the Type as their typeUnioned.
@@ -228,7 +228,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [Property(xmiId: "_19_0_4_b9102da_1661869978505_968809_460", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
-        List<Guid> OwnedUnioning { get; }
+        List<Guid> ownedUnioning { get; }
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the
@@ -238,7 +238,7 @@ namespace SysML2.NET.Core.DTO.Core.Types
         /// same ways as people in general.
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> UnioningType { get; }
+        List<Guid> unioningType { get; }
 
     }
 }

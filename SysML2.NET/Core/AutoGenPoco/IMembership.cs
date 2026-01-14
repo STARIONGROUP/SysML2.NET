@@ -57,7 +57,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// The elementId of the memberElement.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        string QueryMemberElementId();
+        string memberElementId { get; }
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
@@ -72,7 +72,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_531296_43182")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        INamespace QueryMembershipOwningNamespace();
+        INamespace membershipOwningNamespace { get; }
 
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.

@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.DTO.Root.Elements
         /// Elements of the Relationship.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        List<Guid> RelatedElement { get; }
+        List<Guid> relatedElement { get; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.

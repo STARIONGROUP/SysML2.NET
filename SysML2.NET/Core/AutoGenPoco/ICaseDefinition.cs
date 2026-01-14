@@ -74,14 +74,14 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         [Property(xmiId: "_19_0_4_12e503d9_1621464609772_382176_1612", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
-        List<IPartUsage> QueryActorParameter();
+        List<IPartUsage> actorParameter { get; }
 
         /// <summary>
         /// The RequirementUsage representing the objective of this CaseDefinition.
         /// </summary>
         [Property(xmiId: "_19_0_2_59601fc_1590259317710_27529_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
-        IRequirementUsage QueryObjectiveRequirement();
+        IRequirementUsage objectiveRequirement { get; }
 
         /// <summary>
         /// The parameter of this CaseDefinition that represents its subject.
@@ -89,7 +89,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         [Property(xmiId: "_19_0_2_12e503d9_1595189932946_106647_973", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
-        IUsage QuerySubjectParameter();
+        IUsage subjectParameter { get; }
 
     }
 }

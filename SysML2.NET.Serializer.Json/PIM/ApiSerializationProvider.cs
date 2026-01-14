@@ -31,7 +31,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
     /// </summary>
     internal static class ApiSerializationProvider
     {
-        private static readonly Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind>> SerializerActionMap = new Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind>>
+        private static readonly Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind, bool>> SerializerActionMap = new Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind, bool>>
         {
             { typeof(SysML2.NET.PIM.DTO.Branch), BranchSerializer.Serialize },
             { typeof(SysML2.NET.PIM.DTO.Commit), CommitSerializer.Serialize },
@@ -54,7 +54,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         /// <exception cref="NotSupportedException">
         /// Thrown when the <see cref="System.Type"/> is not supported.
         /// </exception>
-        internal static Action<object, Utf8JsonWriter, SerializationModeKind> Provide(System.Type type)
+        internal static Action<object, Utf8JsonWriter, SerializationModeKind, bool> Provide(System.Type type)
         {
             if (!SerializerActionMap.TryGetValue(type, out var action))
             {

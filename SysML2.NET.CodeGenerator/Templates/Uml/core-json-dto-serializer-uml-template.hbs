@@ -49,7 +49,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind, bool includeDerivedProperties)
         {
             if (obj is not I{{ this.Name }} i{{this.Name }})
             {
@@ -64,21 +67,43 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(i{{this.Name }}.Id);
 
+            if(includeDerivedProperties)
+            {
+                SerializeAsJsonWithDerivedProperties(i{{this.Name }}, writer);
+            }
+            else
+            {
+                SerializeAsJsonWithoutDerivedProperties(i{{this.Name }}, writer);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="I{{ this.Name }}"/> using an <see cref="Utf8JsonWriter"/> as JSON including derived properties
+        /// </summary>
+        /// <param name=" i{{this.Name }}">
+        /// The <see cref="I{{ this.Name }}"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithDerivedProperties(I{{ this.Name }} i{{this.Name }}, Utf8JsonWriter writer)
+        {
             {{#with this as |class| }}
-            {{ #each (Class.QueryAllProperties this) as | property | }}
-            {{#unless this.IsDerived}}
+                {{ #each (Class.QueryAllProperties this) as | property | }}
                 {{#unless this.IsTransient}}
-                    {{#unless (Property.ContainsPropertyRedifinitionWithSameName this class)}}
-                    {{#if (Property.QueryIsEnumerable property)}}
-                        writer.WriteStartArray("{{String.LowerCaseFirstLetter property.Name }}"u8);
-                        
-                        foreach (var item in i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name}})
-                        {
+                    {{#unless (Property.IsRedefinedByPropertyWithSameName this class)}}
+                        {{#if (Property.QueryIsEnumerable property)}}
+                            writer.WriteStartArray("{{String.LowerCaseFirstLetter property.Name }}"u8);
+                            
+                            foreach (var item in i{{class.Name}}.{{Property.WritePropertyName property}})
+                            {
                             {{#if (Property.QueryIsReferenceProperty property)}}
-                            writer.WriteStartObject();
-                            writer.WritePropertyName("@id"u8);
-                            writer.WriteStringValue(item);
-                            writer.WriteEndObject();
+                                writer.WriteStartObject();
+                                writer.WritePropertyName("@id"u8);
+                                writer.WriteStringValue(item);
+                                writer.WriteEndObject();
                             {{else if (Property.QueryIsBool property)}}
                                 writer.WriteBooleanValue(item);
                             {{else if (Property.QueryIsEnum property)}}
@@ -88,63 +113,154 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                             {{else}}
                                 writer.WriteStringValue(item);
                             {{/if}}
-                        }
-                        
-                        writer.WriteEndArray();
-                    {{else if (Property.QueryIsNullable property)}}
-                        writer.WritePropertyName("{{ String.LowerCaseFirstLetter property.Name }}"u8);
-                        {{#if (Property.QueryIsString property )}}
-                            writer.WriteStringValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }});
-                        {{ else }}
-                            
-                            if (i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }}.HasValue)
+                            }
+
+                            writer.WriteEndArray();
+                        {{else if (Property.QueryIsNullable property)}}
+                            writer.WritePropertyName("{{ String.LowerCaseFirstLetter property.Name }}"u8);
+                            {{#if (Property.QueryIsString property )}}
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{ else }}
+
+                                if (i{{class.Name}}.{{Property.WritePropertyName property}}.HasValue)
+                                {
+                                {{#if (Property.QueryIsReferenceProperty property)}}
+                                    writer.WriteStartObject();
+                                    writer.WritePropertyName("@id"u8);
+                                    writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value);
+                                    writer.WriteEndObject();
+                                {{else if (Property.QueryIsBool property )}}
+                                    writer.WriteBooleanValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{else if (property.QueryIsEnum property )}}
+                                    writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value.ToString().ToLower());
+                                {{else if (Property.QueryIsNumeric property )}}
+                                    writer.WriteNumberValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{else}}
+                                    writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{/if}}
+                                }
+                                else
+                                {
+                                writer.WriteNullValue();
+                                }
+                            {{/if}}
+                        {{ else if (Property.QueryIsScalar property)}}
+                            writer.WritePropertyName("{{ String.LowerCaseFirstLetter property.Name }}"u8);
+                            {{#if (Property.QueryIsReferenceProperty property)}}
+                                writer.WriteStartObject();
+                                writer.WritePropertyName("@id"u8);
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                                writer.WriteEndObject();
+                            {{else if (Property.QueryIsBool property )}}
+                                writer.WriteBooleanValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{else if (Property.QueryIsString property )}}
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{else if (Property.QueryIsEnum property )}}
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}}.ToString().ToLower());
+                            {{else if (Property.QueryIsNumeric property )}}
+                                writer.WriteNumberValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{else}}
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{/if}}
+                        {{/if}}
+
+                    {{/unless}}
+                {{/unless}}
+            {{/each}}
+        {{/with}}
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="I{{ this.Name }}"/> using an <see cref="Utf8JsonWriter"/> as JSON excluding derived properties
+        /// </summary>
+        /// <param name=" i{{this.Name }}">
+        /// The <see cref="I{{ this.Name }}"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithoutDerivedProperties(I{{ this.Name }} i{{this.Name }}, Utf8JsonWriter writer)
+        {
+        {{#with this as |class| }}
+            {{ #each (Class.QueryAllProperties this) as | property | }}
+            {{#unless this.IsDerived}}
+                {{#unless this.IsTransient}}
+                    {{#unless (Property.IsRedefinedByPropertyWithSameName this class)}}
+                        {{#if (Property.QueryIsEnumerable property)}}
+                            writer.WriteStartArray("{{String.LowerCaseFirstLetter property.Name }}"u8);
+
+                            foreach (var item in i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name}})
                             {
                             {{#if (Property.QueryIsReferenceProperty property)}}
                                 writer.WriteStartObject();
                                 writer.WritePropertyName("@id"u8);
-                                writer.WriteStringValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }}.Value);
+                                writer.WriteStringValue(item);
                                 writer.WriteEndObject();
-                            {{else if (Property.QueryIsBool property )}}
-                                writer.WriteBooleanValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }}.Value);
-                            {{else if (property.QueryIsEnum property )}}
-                                writer.WriteStringValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }}.Value.ToString().ToLower());
-                            {{else if (Property.QueryIsNumeric property )}}
-                                writer.WriteNumberValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }}.Value);
+                            {{else if (Property.QueryIsBool property)}}
+                                writer.WriteBooleanValue(item);
+                            {{else if (Property.QueryIsEnum property)}}
+                                writer.WriteStringValue(item.ToString().ToLower());
+                            {{else if (Property.QueryIsNumeric property)}}
+                                writer.WriteNumberValue(item);
                             {{else}}
-                                writer.WriteStringValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }}.Value);
+                                writer.WriteStringValue(item);
                             {{/if}}
                             }
-                            else
-                            {
+
+                            writer.WriteEndArray();
+                        {{else if (Property.QueryIsNullable property)}}
+                            writer.WritePropertyName("{{ String.LowerCaseFirstLetter property.Name }}"u8);
+                            {{#if (Property.QueryIsString property )}}
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{ else }}
+
+                                if (i{{class.Name}}.{{Property.WritePropertyName property}}.HasValue)
+                                {
+                                {{#if (Property.QueryIsReferenceProperty property)}}
+                                    writer.WriteStartObject();
+                                    writer.WritePropertyName("@id"u8);
+                                    writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value);
+                                    writer.WriteEndObject();
+                                {{else if (Property.QueryIsBool property )}}
+                                    writer.WriteBooleanValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{else if (property.QueryIsEnum property )}}
+                                    writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value.ToString().ToLower());
+                                {{else if (Property.QueryIsNumeric property )}}
+                                    writer.WriteNumberValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{else}}
+                                    writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{/if}}
+                                }
+                                else
+                                {
                                 writer.WriteNullValue();
-                            }
+                                }
+                            {{/if}}
+                        {{ else if (Property.QueryIsScalar property)}}
+                            writer.WritePropertyName("{{ String.LowerCaseFirstLetter property.Name }}"u8);
+                            {{#if (Property.QueryIsReferenceProperty property)}}
+                                writer.WriteStartObject();
+                                writer.WritePropertyName("@id"u8);
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                                writer.WriteEndObject();
+                            {{else if (Property.QueryIsBool property )}}
+                                writer.WriteBooleanValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{else if (Property.QueryIsString property )}}
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{else if (Property.QueryIsEnum property )}}
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}}.ToString().ToLower());
+                            {{else if (Property.QueryIsNumeric property )}}
+                                writer.WriteNumberValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{else}}
+                                writer.WriteStringValue(i{{class.Name}}.{{Property.WritePropertyName property}});
+                            {{/if}}
                         {{/if}}
-                    {{ else if (Property.QueryIsScalar property)}}
-                        writer.WritePropertyName("{{ String.LowerCaseFirstLetter property.Name }}"u8);
-                        {{#if (Property.QueryIsReferenceProperty property)}}
-                            writer.WriteStartObject();
-                            writer.WritePropertyName("@id"u8);
-                            writer.WriteStringValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }});
-                            writer.WriteEndObject();
-                        {{else if (Property.QueryIsBool property )}}
-                            writer.WriteBooleanValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }});
-                        {{else if (Property.QueryIsString property )}}
-                            writer.WriteStringValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }});
-                        {{else if (Property.QueryIsEnum property )}}
-                            writer.WriteStringValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }}.ToString().ToLower());
-                        {{else if (Property.QueryIsNumeric property )}}
-                            writer.WriteNumberValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }});
-                        {{else}}
-                            writer.WriteStringValue(i{{class.Name}}.{{String.CapitalizeFirstLetter property.Name }});
-                        {{/if}}
-                    {{/if}}
-                    
+
                     {{/unless}}
-                    {{/unless}}
+                {{/unless}}
             {{/unless}}
-            {{/each}}
-            {{/with}}
-            writer.WriteEndObject();
+        {{/each}}
+    {{/with}}
         }
     }
 }

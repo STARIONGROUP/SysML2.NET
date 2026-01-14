@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The TextualRepresentationDeSerializer can only be used to deserialize objects of type ITextualRepresentation, a {@type.GetString()} was provided");
             }
 
-            ITextualRepresentation dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.TextualRepresentation();
+            var dtoInstance = new SysML2.NET.Core.DTO.Root.Annotations.TextualRepresentation();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -100,6 +100,46 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the aliasIds Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("annotatedElement"u8, out var annotatedElementProperty))
+            {
+                foreach (var arrayItem in annotatedElementProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var annotatedElementExternalIdProperty))
+                    {
+                        var propertyValue = annotatedElementExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.annotatedElement.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the annotatedElement Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("annotation"u8, out var annotationProperty))
+            {
+                foreach (var arrayItem in annotationProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var annotationExternalIdProperty))
+                    {
+                        var propertyValue = annotationExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.annotation.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the annotation Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("body"u8, out var bodyProperty))
@@ -134,6 +174,26 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredShortName Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
+            {
+                foreach (var arrayItem in documentationProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var documentationExternalIdProperty))
+                    {
+                        var propertyValue = documentationExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.documentation.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the documentation Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();
@@ -160,6 +220,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the isImpliedIncluded Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
+            {
+                if (isLibraryElementProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.isLibraryElement = isLibraryElementProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isLibraryElement Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("language"u8, out var languageProperty))
             {
                 var propertyValue = languageProperty.GetString();
@@ -174,13 +246,82 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the language Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
+            {
+                dtoInstance.name = nameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the name Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedAnnotatingRelationship"u8, out var ownedAnnotatingRelationshipProperty))
+            {
+                foreach (var arrayItem in ownedAnnotatingRelationshipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAnnotatingRelationshipExternalIdProperty))
+                    {
+                        var propertyValue = ownedAnnotatingRelationshipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ownedAnnotatingRelationship.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedAnnotatingRelationship Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
+            {
+                foreach (var arrayItem in ownedAnnotationProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAnnotationExternalIdProperty))
+                    {
+                        var propertyValue = ownedAnnotationExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ownedAnnotation.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedAnnotation Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
+            {
+                foreach (var arrayItem in ownedElementProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedElementExternalIdProperty))
+                    {
+                        var propertyValue = ownedElementExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ownedElement.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedElement Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
             {
                 foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
                     {
-                        var propertyValue = ownedRelationshipIdProperty.GetString();
+                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
 
                         if (propertyValue != null)
                         {
@@ -194,6 +335,102 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the ownedRelationship Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
+            {
+                if (ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.owner = null;
+                }
+                else
+                {
+                    if (ownerProperty.TryGetProperty("@id"u8, out var ownerExternalIdProperty))
+                    {
+                        var propertyValue = ownerExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.owner = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owner Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningAnnotatingRelationship"u8, out var owningAnnotatingRelationshipProperty))
+            {
+                if (owningAnnotatingRelationshipProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.owningAnnotatingRelationship = null;
+                }
+                else
+                {
+                    if (owningAnnotatingRelationshipProperty.TryGetProperty("@id"u8, out var owningAnnotatingRelationshipExternalIdProperty))
+                    {
+                        var propertyValue = owningAnnotatingRelationshipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.owningAnnotatingRelationship = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningAnnotatingRelationship Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
+            {
+                if (owningMembershipProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.owningMembership = null;
+                }
+                else
+                {
+                    if (owningMembershipProperty.TryGetProperty("@id"u8, out var owningMembershipExternalIdProperty))
+                    {
+                        var propertyValue = owningMembershipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.owningMembership = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningMembership Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
+            {
+                if (owningNamespaceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.owningNamespace = null;
+                }
+                else
+                {
+                    if (owningNamespaceProperty.TryGetProperty("@id"u8, out var owningNamespaceExternalIdProperty))
+                    {
+                        var propertyValue = owningNamespaceExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.owningNamespace = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningNamespace Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
             {
                 if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
@@ -202,9 +439,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
                 else
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipIdProperty))
+                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
                     {
-                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
 
                         if (propertyValue != null)
                         {
@@ -216,6 +453,69 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the owningRelationship Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
+            {
+                dtoInstance.qualifiedName = qualifiedNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the qualifiedName Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("representedElement"u8, out var representedElementProperty))
+            {
+                if (representedElementProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.representedElement = Guid.Empty;
+                    logger.LogDebug($"the TextualRepresentation.representedElement property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (representedElementProperty.TryGetProperty("@id"u8, out var representedElementExternalIdProperty))
+                    {
+                        var propertyValue = representedElementExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.representedElement = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the representedElement Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
+            {
+                dtoInstance.shortName = shortNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the shortName Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
+            {
+                foreach (var arrayItem in textualRepresentationProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var textualRepresentationExternalIdProperty))
+                    {
+                        var propertyValue = textualRepresentationExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.textualRepresentation.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the textualRepresentation Json property was not found in the TextualRepresentation: { Id }", dtoInstance.Id);
             }
 
 

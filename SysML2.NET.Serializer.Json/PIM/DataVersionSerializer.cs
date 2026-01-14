@@ -44,7 +44,10 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind, bool includeDerivedProperties)
         {
             if (!(obj is DataVersion dataVersion))
             {
@@ -69,11 +72,11 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteEndArray();
                     writer.WriteString("description"u8, dataVersion.Description);
                     writer.WriteStartObject("identity"u8);
-                    DataIdentitySerializer.Serialize(dataVersion.Identity, writer, serializationModeKind);
+                    DataIdentitySerializer.Serialize(dataVersion.Identity, writer, serializationModeKind, includeDerivedProperties);
                     writer.WriteEndObject();
                     writer.WriteStartObject("payload"u8);
                     var func = SerializationProvider.Provide(dataVersion.Payload.GetType());
-                    func(dataVersion.Payload, writer, serializationModeKind);
+                    func(dataVersion.Payload, writer, serializationModeKind, includeDerivedProperties);
                     writer.WriteEndObject();
                     writer.WriteString("resourceIdentifier"u8, dataVersion.ResourceIdentifier);
                     writer.WriteEndObject();
