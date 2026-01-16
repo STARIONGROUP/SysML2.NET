@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1584048366950_985767_426", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
-        Guid OwnedConstraint { get; }
+        Guid ownedConstraint { get; }
 
         /// <summary>
         /// The ConstraintUsage that is referenced through this RequirementConstraintMembership. It is the
@@ -60,7 +60,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// otherwise, the ownedConstraint itself.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617118807597_77864_3544", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid ReferencedConstraint { get; }
+        Guid referencedConstraint { get; }
 
     }
 }

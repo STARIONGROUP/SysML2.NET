@@ -53,7 +53,7 @@ namespace SysML2.NET.Core.DTO.Kernel.FeatureValues
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1573079011690_119762_1724", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_193857_43197")]
-        Guid FeatureWithValue { get; }
+        Guid featureWithValue { get; }
 
         /// <summary>
         /// Whether this FeatureValue is a concrete specification of the bound or initial value of the
@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.DTO.Kernel.FeatureValues
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1573081851611_231043_3236", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
-        Guid Value { get; }
+        Guid value { get; }
 
     }
 }

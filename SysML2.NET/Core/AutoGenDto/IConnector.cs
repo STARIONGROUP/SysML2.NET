@@ -48,7 +48,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674983_471497_43284", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        List<Guid> Association { get; }
+        List<Guid> association { get; }
 
         /// <summary>
         /// The endFeatures of a Connector, which redefine the endFeatures of the associations of the Connector.
@@ -57,7 +57,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1556735067666_827798_21922", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
-        List<Guid> ConnectorEnd { get; }
+        List<Guid> connectorEnd { get; }
 
         /// <summary>
         /// The innermost Type that is a common direct or indirect featuringType of the relatedFeatures, such
@@ -65,7 +65,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// checkConnectorTypeFeaturing constraint.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1737751598145_444042_71", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? DefaultFeaturingType { get; }
+        Guid? defaultFeaturingType { get; }
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674968_916334_43210", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        List<Guid> RelatedFeature { get; }
+        List<Guid> relatedFeature { get; }
 
         /// <summary>
         /// The source relatedFeature for this Connector. It is the first relatedFeature.
@@ -81,7 +81,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         [Property(xmiId: "_19_0_2_12e503d9_1594953058873_558253_3897", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        Guid? SourceFeature { get; }
+        Guid? sourceFeature { get; }
 
         /// <summary>
         /// The target relatedFeatures for this Connector. This includes all the relatedFeatures other than the
@@ -90,7 +90,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         [Property(xmiId: "_19_0_2_12e503d9_1594953128207_991867_3946", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
-        List<Guid> TargetFeature { get; }
+        List<Guid> targetFeature { get; }
 
     }
 }

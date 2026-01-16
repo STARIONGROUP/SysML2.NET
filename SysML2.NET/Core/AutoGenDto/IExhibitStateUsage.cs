@@ -49,7 +49,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1577070999039_688794_260", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1567740791820_867719_18017")]
-        Guid ExhibitedState { get; }
+        Guid exhibitedState { get; }
 
     }
 }

@@ -49,7 +49,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// with kind = do.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1582976255473_203238_644", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? DoAction { get; }
+        Guid? doAction { get; }
 
         /// <summary>
         /// The ActionUsage of this StateUsage to be performed on entry to the state defined by the
@@ -57,7 +57,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// with kind = entry.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1582976239200_979652_605", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? EntryAction { get; }
+        Guid? entryAction { get; }
 
         /// <summary>
         /// The ActionUsage of this StateUsage to be performed on exit to the state defined by the
@@ -65,7 +65,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// with kind = exit.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1582976283940_998741_691", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? ExitAction { get; }
+        Guid? exitAction { get; }
 
         /// <summary>
         /// Whether the nestedStates of this StateUsage are to all be performed in parallel. If true, none of
@@ -81,7 +81,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575588456737_49200_1438", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
-        List<Guid> StateDefinition { get; }
+        List<Guid> stateDefinition { get; }
 
     }
 }

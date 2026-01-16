@@ -61,11 +61,9 @@ namespace SysML2.NET.Dal
             poco.ElementId = dto.ElementId;
             poco.IsImplied = dto.IsImplied;
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
-            ((Core.POCO.Systems.Views.IExpose)poco).IsImportAll = ((Core.DTO.Systems.Views.IExpose)dto).IsImportAll;
-            ((Core.POCO.Root.Namespaces.IImport)poco).IsImportAll = ((Core.DTO.Root.Namespaces.IImport)dto).IsImportAll;
+            poco.IsImportAll = dto.IsImportAll;
             poco.IsRecursive = dto.IsRecursive;
-            ((Core.POCO.Systems.Views.IExpose)poco).Visibility = ((Core.DTO.Systems.Views.IExpose)dto).Visibility;
-            ((Core.POCO.Root.Namespaces.IImport)poco).Visibility = ((Core.DTO.Root.Namespaces.IImport)dto).Visibility;
+            poco.Visibility = dto.Visibility;
 
             return poco;
         }

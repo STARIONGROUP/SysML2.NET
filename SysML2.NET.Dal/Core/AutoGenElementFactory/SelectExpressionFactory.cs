@@ -71,8 +71,7 @@ namespace SysML2.NET.Dal
             poco.IsSufficient = dto.IsSufficient;
             poco.IsUnique = dto.IsUnique;
             poco.IsVariable = dto.IsVariable;
-            ((Core.POCO.Kernel.Expressions.ISelectExpression)poco).Operator = ((Core.DTO.Kernel.Expressions.ISelectExpression)dto).Operator;
-            ((Core.POCO.Kernel.Expressions.IOperatorExpression)poco).Operator = ((Core.DTO.Kernel.Expressions.IOperatorExpression)dto).Operator;
+            poco.Operator = dto.Operator;
 
             return poco;
         }

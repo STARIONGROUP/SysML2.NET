@@ -97,8 +97,6 @@ namespace SysML2.NET.Dal
 
             poco.IsUnique = dto.IsUnique;
 
-            poco.IsVariable = dto.IsVariable;
-
             poco.IsVariation = dto.IsVariation;
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
@@ -198,7 +196,6 @@ namespace SysML2.NET.Dal
             dto.IsPortion = poco.IsPortion;
             dto.IsSufficient = poco.IsSufficient;
             dto.IsUnique = poco.IsUnique;
-            dto.IsVariable = poco.IsVariable;
             dto.IsVariation = poco.IsVariation;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;

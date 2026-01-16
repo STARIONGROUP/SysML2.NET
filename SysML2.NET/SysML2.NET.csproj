@@ -38,4 +38,8 @@
       <Folder Include="Extend\" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="SysML2.NET.Serializer.Json" />
+        <InternalsVisibleTo Include="SysML2.NET.Dal" />
+    </ItemGroup>
 </Project>

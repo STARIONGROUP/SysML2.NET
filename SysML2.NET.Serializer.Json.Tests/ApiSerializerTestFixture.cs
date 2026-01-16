@@ -26,6 +26,7 @@ namespace SysML2.NET.Serializer.Json.Tests
     using System.Text;
     using System.Text.Json;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using NUnit.Framework;
 
@@ -90,39 +91,45 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
 
         [Test]
-        public void Verify_that_PIM_IDatas_can_be_serialized()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_PIM_IDatas_can_be_serialized(bool includeDerivedProperties)
         {
             var dataItems = new List<IData> { this.project, this.commit, this.branch };
 
             var stream = new MemoryStream();
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
-            Assert.That(() => this.serializer.Serialize(dataItems, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing); ;
+            Assert.That(() => this.serializer.Serialize(dataItems, SerializationModeKind.JSON, includeDerivedProperties, stream, jsonWriterOptions), Throws.Nothing); ;
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
         }
 
         [Test]
-        public void Verify_that_PIM_IData_can_be_serialized()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_PIM_IData_can_be_serialized(bool includeDerivedProperties)
         {
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
             var stream = new MemoryStream();
-            Assert.That(() => this.serializer.Serialize(this.project, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
+            Assert.That(() => this.serializer.Serialize(this.project, SerializationModeKind.JSON, includeDerivedProperties, stream, jsonWriterOptions), Throws.Nothing);
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
 
             stream = new MemoryStream();
-            Assert.That(() => this.serializer.Serialize(this.project, SerializationModeKind.JSON, stream, jsonWriterOptions), Throws.Nothing);
+            Assert.That(() => this.serializer.Serialize(this.project, SerializationModeKind.JSON, includeDerivedProperties, stream, jsonWriterOptions), Throws.Nothing);
 
             json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
         }
 
         [Test]
-        public void Verify_that_PIM_IDatas_can_be_serialized_async()
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task Verify_that_PIM_IDatas_can_be_serialized_async(bool includeDerivedProperties)
         {
             var dataItems = new List<IData> { this.project, this.commit, this.branch };
             var stream = new MemoryStream();
@@ -130,21 +137,23 @@ namespace SysML2.NET.Serializer.Json.Tests
 
             var cts = new CancellationTokenSource();
 
-            Assert.That(async () => await this.serializer.SerializeAsync(dataItems, SerializationModeKind.JSON, stream, jsonWriterOptions, cts.Token), Throws.Nothing); ;
+            await Assert.ThatAsync(() => this.serializer.SerializeAsync(dataItems, SerializationModeKind.JSON, includeDerivedProperties, stream, jsonWriterOptions, cts.Token), Throws.Nothing);
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);
         }
 
         [Test]
-        public void Verify_that_PIM_IData_can_be_serialized_async()
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task Verify_that_PIM_IData_can_be_serialized_async(bool includeDerivedProperties)
         {
             var stream = new MemoryStream();
             var jsonWriterOptions = new JsonWriterOptions { Indented = true };
 
             var cts = new CancellationTokenSource();
 
-            Assert.That(async () => await this.serializer.SerializeAsync(this.project, SerializationModeKind.JSON, stream, jsonWriterOptions, cts.Token), Throws.Nothing); ;
+            await Assert.ThatAsync(() => this.serializer.SerializeAsync(this.project, SerializationModeKind.JSON, includeDerivedProperties, stream, jsonWriterOptions, cts.Token), Throws.Nothing);
 
             var json = Encoding.UTF8.GetString(stream.ToArray());
             Console.WriteLine(json);

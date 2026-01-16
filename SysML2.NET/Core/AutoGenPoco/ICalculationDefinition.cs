@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
         [Property(xmiId: "_19_0_2_12e503d9_1588214479224_101961_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565500809065_170841_30688")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948400639_301251_20841")]
-        List<ICalculationUsage> QueryCalculation();
+        List<ICalculationUsage> calculation { get; }
 
     }
 }

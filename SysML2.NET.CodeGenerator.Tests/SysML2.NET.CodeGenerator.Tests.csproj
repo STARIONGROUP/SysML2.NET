@@ -262,46 +262,6 @@
       <Compile Remove="Expected\Ecore\Core\AutoGenSerializer\TextualRepresentationSerializer.cs" />
       <Compile Remove="Expected\Ecore\Core\AutoGenSerializer\TriggerInvocationExpressionSerializer.cs" />
       <Compile Remove="Expected\Ecore\Core\AutoGenSerializer\UsageSerializer.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\AnnotatingElement.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\Association.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\Dependency.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\EnumerationDefinition.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\Feature.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\FeatureTyping.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\Flow.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\FramedConcernMembership.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IAnnotatingElement.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IAssociation.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IDependency.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IElement.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IEnumerationDefinition.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IFeature.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IFeatureTyping.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IFlow.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IFramedConcernMembership.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\ILiteralInteger.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\ILiteralRational.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IMembership.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IMultiplicityRange.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IOwningMembership.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IReferenceSubsetting.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IRelationship.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IRequirementUsage.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\ISelectExpression.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\ISubclassification.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\ITextualRepresentation.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\IUsage.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\LiteralInteger.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\LiteralRational.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\Membership.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\MultiplicityRange.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\OwningMembership.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\ReferenceSubsetting.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\RequirementUsage.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\SelectExpression.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\Subclassification.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\TextualRepresentation.cs" />
-      <Compile Remove="Expected\UML\Core\AutoGenDto\Usage.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs" />
@@ -1231,6 +1191,166 @@
       <None Include="Expected\UML\Core\AutoGenElementFactory\UsageFactory.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\AnnotatingElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\AnnotatingElement.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\Association.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\Association.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\Dependency.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\Dependency.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\EnumerationDefinition.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\EnumerationDefinition.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\Feature.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\Feature.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\FeatureTyping.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\FeatureTyping.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\Flow.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\Flow.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\FramedConcernMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\FramedConcernMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IAnnotatingElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IAnnotatingElement.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IAssociation.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IAssociation.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IDependency.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IDependency.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IElement.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IEnumerationDefinition.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IEnumerationDefinition.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IFeature.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IFeature.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IFeatureTyping.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IFeatureTyping.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IFlow.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IFlow.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IFramedConcernMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IFramedConcernMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\ILiteralInteger.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\ILiteralInteger.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\ILiteralRational.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\ILiteralRational.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IMultiplicityRange.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IMultiplicityRange.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IOwningMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IOwningMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IReferenceSubsetting.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IReferenceSubsetting.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IRelationship.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IRelationship.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IRequirementUsage.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IRequirementUsage.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\ISelectExpression.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\ISelectExpression.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\ISubclassification.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\ISubclassification.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\ITextualRepresentation.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\ITextualRepresentation.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\IUsage.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\IUsage.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\LiteralInteger.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\LiteralInteger.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\LiteralRational.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\LiteralRational.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\Membership.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\Membership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\MultiplicityRange.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\MultiplicityRange.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\OwningMembership.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\OwningMembership.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\ReferenceSubsetting.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\ReferenceSubsetting.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\RequirementUsage.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\RequirementUsage.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\SelectExpression.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\SelectExpression.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\Subclassification.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\Subclassification.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\TextualRepresentation.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\TextualRepresentation.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenDto\Usage.cs" />
+      <None Include="Expected\UML\Core\AutoGenDto\Usage.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -1454,126 +1574,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Include="Expected\Ecore\Core\AutoGenSerializer\UsageSerializer.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\AnnotatingElement.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\Association.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\Dependency.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\EnumerationDefinition.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\Feature.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\FeatureTyping.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\Flow.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\FramedConcernMembership.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IAnnotatingElement.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IAssociation.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IDependency.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IElement.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IEnumerationDefinition.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IFeature.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IFeatureTyping.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IFlow.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IFramedConcernMembership.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\ILiteralInteger.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\ILiteralRational.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IMembership.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IMultiplicityRange.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IOwningMembership.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IReferenceSubsetting.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IRelationship.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IRequirementUsage.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\ISelectExpression.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\ISubclassification.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\ITextualRepresentation.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\IUsage.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\LiteralInteger.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\LiteralRational.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\Membership.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\MultiplicityRange.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\OwningMembership.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\ReferenceSubsetting.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\RequirementUsage.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\SelectExpression.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\Subclassification.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\TextualRepresentation.cs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="Expected\UML\Core\AutoGenDto\Usage.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Include="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs">

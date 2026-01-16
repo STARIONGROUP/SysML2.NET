@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Behaviors
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1557528016548_548098_110830", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
-        Guid OwnedMemberParameter { get; }
+        Guid ownedMemberParameter { get; }
 
     }
 }

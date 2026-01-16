@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1562477648742_24204_22901", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
-        List<IFeature> QueryAssociationEnd();
+        List<IFeature> associationEnd { get; }
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the
@@ -60,7 +60,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674994_4339_43349", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        List<IType> QueryRelatedType();
+        List<IType> relatedType { get; }
 
         /// <summary>
         /// The source relatedType for this Association. It is the first relatedType of the Association.
@@ -68,7 +68,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [Property(xmiId: "_19_0_2_12e503d9_1594939013292_377668_3566", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        IType QuerySourceType();
+        IType sourceType { get; }
 
         /// <summary>
         /// The target relatedTypes for this Association. This includes all the relatedTypes other than the
@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
         [Property(xmiId: "_19_0_2_12e503d9_1594939237325_861933_3707", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
-        List<IType> QueryTargetType();
+        List<IType> targetType { get; }
 
     }
 }

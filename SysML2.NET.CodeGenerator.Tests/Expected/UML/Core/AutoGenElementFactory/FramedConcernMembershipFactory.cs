@@ -61,10 +61,7 @@ namespace SysML2.NET.Dal
             poco.ElementId = dto.ElementId;
             poco.IsImplied = dto.IsImplied;
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
-            ((Core.POCO.Systems.Requirements.IFramedConcernMembership)poco).Kind = ((Core.DTO.Systems.Requirements.IFramedConcernMembership)dto).Kind;
-            ((Core.POCO.Systems.Requirements.IRequirementConstraintMembership)poco).Kind = ((Core.DTO.Systems.Requirements.IRequirementConstraintMembership)dto).Kind;
-            poco.MemberName = dto.MemberName;
-            poco.MemberShortName = dto.MemberShortName;
+            poco.Kind = dto.Kind;
             poco.Visibility = dto.Visibility;
 
             return poco;

@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Systems.Parts
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591475180488_929065_121", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565471361757_649736_20796")]
-        List<Guid> PartDefinition { get; }
+        List<Guid> partDefinition { get; }
 
     }
 }

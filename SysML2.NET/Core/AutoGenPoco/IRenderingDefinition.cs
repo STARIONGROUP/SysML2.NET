@@ -70,7 +70,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596741367270_249607_6373", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
-        List<IRenderingUsage> QueryRendering();
+        List<IRenderingUsage> rendering { get; }
 
     }
 }

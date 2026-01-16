@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// </summary>
         [Property(xmiId: "_19_0_2_59601fc_1590258776804_538578_832", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
-        IRequirementUsage QueryOwnedObjectiveRequirement();
+        IRequirementUsage ownedObjectiveRequirement { get; }
 
     }
 }

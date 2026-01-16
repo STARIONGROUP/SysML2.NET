@@ -69,7 +69,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 throw new InvalidOperationException($"The NamespaceDeSerializer can only be used to deserialize objects of type INamespace, a {@type.GetString()} was provided");
             }
 
-            INamespace dtoInstance = new SysML2.NET.Core.DTO.Root.Namespaces.Namespace();
+            var dtoInstance = new SysML2.NET.Core.DTO.Root.Namespaces.Namespace();
 
             if (jsonElement.TryGetProperty("@id"u8, out var idProperty))
             {
@@ -120,6 +120,26 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredShortName Json property was not found in the Namespace: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
+            {
+                foreach (var arrayItem in documentationProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var documentationExternalIdProperty))
+                    {
+                        var propertyValue = documentationExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.documentation.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the documentation Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
             {
                 var propertyValue = elementIdProperty.GetString();
@@ -134,6 +154,26 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the Namespace: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
+            {
+                foreach (var arrayItem in importedMembershipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var importedMembershipExternalIdProperty))
+                    {
+                        var propertyValue = importedMembershipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.importedMembership.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the importedMembership Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
             {
                 if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
@@ -146,13 +186,174 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the isImpliedIncluded Json property was not found in the Namespace: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
+            {
+                if (isLibraryElementProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.isLibraryElement = isLibraryElementProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isLibraryElement Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("member"u8, out var memberProperty))
+            {
+                foreach (var arrayItem in memberProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var memberExternalIdProperty))
+                    {
+                        var propertyValue = memberExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.member.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the member Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("membership"u8, out var membershipProperty))
+            {
+                foreach (var arrayItem in membershipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var membershipExternalIdProperty))
+                    {
+                        var propertyValue = membershipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.membership.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the membership Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
+            {
+                dtoInstance.name = nameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the name Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
+            {
+                foreach (var arrayItem in ownedAnnotationProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedAnnotationExternalIdProperty))
+                    {
+                        var propertyValue = ownedAnnotationExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ownedAnnotation.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedAnnotation Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
+            {
+                foreach (var arrayItem in ownedElementProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedElementExternalIdProperty))
+                    {
+                        var propertyValue = ownedElementExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ownedElement.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedElement Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedImport"u8, out var ownedImportProperty))
+            {
+                foreach (var arrayItem in ownedImportProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedImportExternalIdProperty))
+                    {
+                        var propertyValue = ownedImportExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ownedImport.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedImport Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedMember"u8, out var ownedMemberProperty))
+            {
+                foreach (var arrayItem in ownedMemberProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedMemberExternalIdProperty))
+                    {
+                        var propertyValue = ownedMemberExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ownedMember.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedMember Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedMembership"u8, out var ownedMembershipProperty))
+            {
+                foreach (var arrayItem in ownedMembershipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedMembershipExternalIdProperty))
+                    {
+                        var propertyValue = ownedMembershipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.ownedMembership.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedMembership Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
             {
                 foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
                 {
-                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipIdProperty))
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
                     {
-                        var propertyValue = ownedRelationshipIdProperty.GetString();
+                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
 
                         if (propertyValue != null)
                         {
@@ -166,6 +367,78 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the ownedRelationship Json property was not found in the Namespace: { Id }", dtoInstance.Id);
             }
 
+            if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
+            {
+                if (ownerProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.owner = null;
+                }
+                else
+                {
+                    if (ownerProperty.TryGetProperty("@id"u8, out var ownerExternalIdProperty))
+                    {
+                        var propertyValue = ownerExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.owner = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owner Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
+            {
+                if (owningMembershipProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.owningMembership = null;
+                }
+                else
+                {
+                    if (owningMembershipProperty.TryGetProperty("@id"u8, out var owningMembershipExternalIdProperty))
+                    {
+                        var propertyValue = owningMembershipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.owningMembership = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningMembership Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
+            {
+                if (owningNamespaceProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.owningNamespace = null;
+                }
+                else
+                {
+                    if (owningNamespaceProperty.TryGetProperty("@id"u8, out var owningNamespaceExternalIdProperty))
+                    {
+                        var propertyValue = owningNamespaceExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.owningNamespace = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningNamespace Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
             {
                 if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
@@ -174,9 +447,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
                 else
                 {
-                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipIdProperty))
+                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
                     {
-                        var propertyValue = owningRelationshipIdProperty.GetString();
+                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
 
                         if (propertyValue != null)
                         {
@@ -188,6 +461,44 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the owningRelationship Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
+            {
+                dtoInstance.qualifiedName = qualifiedNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the qualifiedName Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
+            {
+                dtoInstance.shortName = shortNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the shortName Json property was not found in the Namespace: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
+            {
+                foreach (var arrayItem in textualRepresentationProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var textualRepresentationExternalIdProperty))
+                    {
+                        var propertyValue = textualRepresentationExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.textualRepresentation.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the textualRepresentation Json property was not found in the Namespace: { Id }", dtoInstance.Id);
             }
 
 

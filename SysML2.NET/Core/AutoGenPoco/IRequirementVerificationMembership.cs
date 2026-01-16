@@ -61,7 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1603921329650_612380_147", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048366950_985767_426")]
-        IRequirementUsage QueryOwnedRequirement();
+        IRequirementUsage ownedRequirement { get; }
 
         /// <summary>
         /// The RequirementUsage that is identified as being verified. It is the referencedConstraint of the
@@ -70,7 +70,7 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1603921870169_98378_309", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1617118807597_77864_3544")]
-        IRequirementUsage QueryVerifiedRequirement();
+        IRequirementUsage verifiedRequirement { get; }
 
     }
 }

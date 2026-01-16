@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1563219311176_506548_20966", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 2, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1556735067666_827798_21922")]
-        List<Guid> FlowEnd { get; }
+        List<Guid> flowEnd { get; }
 
         /// <summary>
         /// The Interactions that type this Flow. Interactions are both Associations and Behaviors, which can
@@ -55,34 +55,34 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [Property(xmiId: "_19_0_4_12e503d9_1661900477937_518125_727", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674983_471497_43284")]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
-        List<Guid> Interaction { get; }
+        List<Guid> interaction { get; }
 
         /// <summary>
         /// The ownedFeature of the Flow that is a PayloadFeature (if any).
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1563219424870_347345_21142", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        Guid? PayloadFeature { get; }
+        Guid? payloadFeature { get; }
 
         /// <summary>
         /// The type of values transferred, which is the type of the payloadFeature of the Flow.
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536870569046_1672_18020", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        List<Guid> PayloadType { get; }
+        List<Guid> payloadType { get; }
 
         /// <summary>
         /// The Feature that provides the items carried by the Flow. It must be a feature of the source of the
         /// Flow.
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536870707078_57525_18088", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        Guid? SourceOutputFeature { get; }
+        Guid? sourceOutputFeature { get; }
 
         /// <summary>
         /// The Feature that receives the values carried by the Flow. It must be a feature of the target of the
         /// Flow.
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536870573474_966268_18041", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        Guid? TargetInputFeature { get; }
+        Guid? targetInputFeature { get; }
 
     }
 }

@@ -49,7 +49,7 @@ namespace SysML2.NET.Core.DTO.Core.Classifiers
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543189170643_419862_25507", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
-        List<Guid> OwnedSubclassification { get; }
+        List<Guid> ownedSubclassification { get; }
 
     }
 }

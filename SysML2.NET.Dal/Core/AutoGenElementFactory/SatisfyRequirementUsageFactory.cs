@@ -57,7 +57,6 @@ namespace SysML2.NET.Dal
             poco.Id = dto.Id;
             poco.AliasIds = dto.AliasIds;
             poco.DeclaredName = dto.DeclaredName;
-            poco.DeclaredShortName = dto.DeclaredShortName;
             poco.Direction = dto.Direction;
             poco.ElementId = dto.ElementId;
             poco.IsAbstract = dto.IsAbstract;
@@ -72,7 +71,6 @@ namespace SysML2.NET.Dal
             poco.IsPortion = dto.IsPortion;
             poco.IsSufficient = dto.IsSufficient;
             poco.IsUnique = dto.IsUnique;
-            poco.IsVariable = dto.IsVariable;
             poco.IsVariation = dto.IsVariation;
             poco.PortionKind = dto.PortionKind;
             poco.ReqId = dto.ReqId;

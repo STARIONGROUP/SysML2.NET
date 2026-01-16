@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// AssertConstraintUsage itself.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1581045158665_239617_9458", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IConstraintUsage QueryAssertedConstraint();
+        IConstraintUsage assertedConstraint { get; }
 
     }
 }

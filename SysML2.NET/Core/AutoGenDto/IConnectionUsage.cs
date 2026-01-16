@@ -51,7 +51,7 @@ namespace SysML2.NET.Core.DTO.Systems.Connections
         [Property(xmiId: "_19_0_2_12e503d9_1594853499656_139435_802", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565471361757_649736_20796")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674983_471497_43284")]
-        List<Guid> ConnectionDefinition { get; }
+        List<Guid> connectionDefinition { get; }
 
     }
 }

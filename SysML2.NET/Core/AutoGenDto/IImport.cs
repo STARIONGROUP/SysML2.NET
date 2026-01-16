@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.DTO.Root.Namespaces
         /// of the importedMembership. For a NamespaceImport, it is the importedNamespace.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1668801846848_909736_64", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid ImportedElement { get; }
+        Guid importedElement { get; }
 
         /// <summary>
         /// The Namespace into which Memberships are imported by this Import, which must be the
@@ -59,7 +59,7 @@ namespace SysML2.NET.Core.DTO.Root.Namespaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674974_548878_43248", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
-        Guid ImportOwningNamespace { get; }
+        Guid importOwningNamespace { get; }
 
         /// <summary>
         /// Whether to import memberships without regard to declared visibility.

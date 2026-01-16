@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543948400639_301251_20841", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_b9102da_1536346067212_587255_17343")]
-        List<Guid> Expression { get; }
+        List<Guid> expression { get; }
 
         /// <summary>
         /// Whether this Function can be used as the function of a model-level evaluable InvocationExpression.
@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         /// model-level evaluable.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617395221463_139517_26381", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        bool IsModelLevelEvaluable { get; }
+        bool isModelLevelEvaluable { get; }
 
         /// <summary>
         /// The object or value that is the result of evaluating the Function.
@@ -63,7 +63,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         [Property(xmiId: "_18_5_3_12e503d9_1543948912268_88159_21323", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674960_365618_43170")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
-        Guid Result { get; }
+        Guid result { get; }
 
     }
 }

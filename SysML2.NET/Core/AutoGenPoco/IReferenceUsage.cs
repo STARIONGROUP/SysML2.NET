@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624035133434_200283_41434", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
-        new bool QueryIsReference();
+        new bool isReference { get; }
 
     }
 }

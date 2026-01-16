@@ -61,8 +61,6 @@ namespace SysML2.NET.Dal
             poco.ElementId = dto.ElementId;
             poco.IsImplied = dto.IsImplied;
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
-            poco.MemberName = dto.MemberName;
-            poco.MemberShortName = dto.MemberShortName;
             poco.Visibility = dto.Visibility;
 
             return poco;

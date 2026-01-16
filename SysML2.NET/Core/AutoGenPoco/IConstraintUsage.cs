@@ -79,7 +79,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1578067546711_751168_1745", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578025035149_386_969")]
-        IPredicate QueryConstraintDefinition();
+        IPredicate constraintDefinition { get; }
 
     }
 }

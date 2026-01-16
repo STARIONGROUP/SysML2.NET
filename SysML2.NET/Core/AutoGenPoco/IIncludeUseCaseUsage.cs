@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621532149711_865323_1172", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1567740791820_867719_18017")]
-        IUseCaseUsage QueryUseCaseIncluded();
+        IUseCaseUsage useCaseIncluded { get; }
 
     }
 }

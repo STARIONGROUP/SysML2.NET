@@ -50,14 +50,14 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583185037725_699150_2332", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1581045158665_239617_9458")]
-        Guid SatisfiedRequirement { get; }
+        Guid satisfiedRequirement { get; }
 
         /// <summary>
         /// The Feature that represents the actual subject that is asserted to satisfy the satisfiedRequirement.
         /// The satisfyingFeature is bound to the subjectParameter of the SatisfyRequirementUsage.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583378847285_929988_1396", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid SatisfyingFeature { get; }
+        Guid satisfyingFeature { get; }
 
     }
 }

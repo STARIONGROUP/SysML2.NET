@@ -56,7 +56,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         [Property(xmiId: "_19_0_4_12e503d9_1627447519614_499771_371", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623183194914_955906_617")]
-        IType QueryOwningType();
+        IType owningType { get; }
 
         /// <summary>
         /// Type asserted to be disjoint with the disjoiningType.

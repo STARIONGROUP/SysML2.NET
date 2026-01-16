@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Metadata
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1606345564958_925589_327", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
-        Guid? Metaclass { get; }
+        Guid? metaclass { get; }
 
     }
 }

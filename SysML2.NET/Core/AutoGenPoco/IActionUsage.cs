@@ -79,7 +79,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1565500905804_589845_30779", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
-        List<IBehavior> QueryActionDefinition();
+        List<IBehavior> actionDefinition { get; }
 
     }
 }

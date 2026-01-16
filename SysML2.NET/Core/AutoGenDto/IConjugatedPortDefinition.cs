@@ -49,7 +49,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575484364017_387810_990", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
-        Guid OriginalPortDefinition { get; }
+        Guid originalPortDefinition { get; }
 
         /// <summary>
         /// The PortConjugation that is the ownedConjugator of this ConjugatedPortDefinition, linking it to its
@@ -57,7 +57,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575484344901_850046_947", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_280165_440")]
-        Guid OwnedPortConjugator { get; }
+        Guid ownedPortConjugator { get; }
 
     }
 }

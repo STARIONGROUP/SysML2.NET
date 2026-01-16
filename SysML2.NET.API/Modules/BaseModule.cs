@@ -103,7 +103,7 @@ namespace SysML2.NET.API.Modules
             this.logger.LogDebug("start serializing {DtoTypeName} objects to result Stream", dtoTypeName);
 
             var resultStream = new MemoryStream();
-            await this.serializer.SerializeAsync(dataItems, serializationModeKind, resultStream, jsonWriterOptions, cancellationToken);
+            await this.serializer.SerializeAsync(dataItems, serializationModeKind, false, resultStream, jsonWriterOptions, cancellationToken);
 
             this.logger.LogDebug("{DtoTypeName} objects serialized to stream in {Elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
 
@@ -143,7 +143,7 @@ namespace SysML2.NET.API.Modules
             this.logger.LogDebug("start serializing {DtoTypeName} objects to result Stream", dtoTypeName);
 
             var resultStream = new MemoryStream();
-            await this.serializer.SerializeAsync(dataItem, serializationModeKind, resultStream, jsonWriterOptions, cancellationToken);
+            await this.serializer.SerializeAsync(dataItem, serializationModeKind, false, resultStream, jsonWriterOptions, cancellationToken);
 
             this.logger.LogDebug("{DtoTypeName} object serialized to stream in {Elapsed} [ms]", dtoTypeName, sw.ElapsedMilliseconds);
 

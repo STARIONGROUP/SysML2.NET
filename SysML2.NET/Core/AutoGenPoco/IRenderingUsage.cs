@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596741320785_268295_6306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591475180488_929065_121")]
-        IRenderingDefinition QueryRenderingDefinition();
+        IRenderingDefinition renderingDefinition { get; }
 
     }
 }

@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// LoopActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624203902575_509097_3869", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid BodyAction { get; }
+        Guid bodyAction { get; }
 
     }
 }

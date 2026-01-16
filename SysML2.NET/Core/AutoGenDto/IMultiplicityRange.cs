@@ -51,7 +51,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Multiplicities
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1573095221994_519580_5095", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 2, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        List<Guid> Bound { get; }
+        List<Guid> bound { get; }
 
         /// <summary>
         /// The Expression whose result provides the lower bound of the MultiplicityRange. If no lowerBound
@@ -60,14 +60,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Multiplicities
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1573094905677_801324_4744", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1573095221994_519580_5095")]
-        Guid? LowerBound { get; }
+        Guid? lowerBound { get; }
 
         /// <summary>
         /// The Expression whose result is the upper bound of the MultiplicityRange.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1573094947427_797440_4796", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1573095221994_519580_5095")]
-        Guid UpperBound { get; }
+        Guid upperBound { get; }
 
     }
 }

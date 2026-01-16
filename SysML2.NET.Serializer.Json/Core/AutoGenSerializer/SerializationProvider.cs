@@ -36,10 +36,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
     internal static class SerializationProvider
     {
         /// <summary>
-        /// Caches the delegate <see cref="Action{object, Utf8JsonWriter, SerializationModeKind}"/> for the
+        /// Caches the delegate <see cref="Action{object, Utf8JsonWriter, SerializationModeKind, bool}"/> for the
         /// <see cref="System.Type"/> that is to be serialized
         /// </summary>
-        private static readonly Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind>> SerializerActionMap = new Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind>>
+        private static readonly Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind, bool>> SerializerActionMap = new Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind, bool>>
         {
             { typeof(SysML2.NET.Core.DTO.Systems.Actions.AcceptActionUsage), AcceptActionUsageSerializer.Serialize },
             { typeof(SysML2.NET.Core.DTO.Systems.Actions.ActionDefinition), ActionDefinitionSerializer.Serialize },
@@ -211,19 +211,19 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         };
 
         /// <summary>
-        /// Provides the delegate <see cref="Action{object, Utf8JsonWriter, SerializationModeKind}"/> for the
+        /// Provides the delegate <see cref="Action{object, Utf8JsonWriter, SerializationModeKind, bool}"/> for the
         /// <see cref="System.Type"/> that is to be serialized
         /// </summary>
         /// <param name="type">
         /// The subject <see cref="System.Type"/> that is to be serialized
         /// </param>
         /// <returns>
-        /// A Delegate of <see cref="Action{object, Utf8JsonWriter, SerializationModeKind}"/>
+        /// A Delegate of <see cref="Action{object, Utf8JsonWriter, SerializationModeKind, bool}"/>
         /// </returns>
         /// <exception cref="NotSupportedException">
         /// Thrown when the <see cref="System.Type"/> is not supported.
         /// </exception>
-        internal static Action<object, Utf8JsonWriter, SerializationModeKind> Provide(System.Type type)
+        internal static Action<object, Utf8JsonWriter, SerializationModeKind, bool> Provide(System.Type type)
         {
             return !SerializerActionMap.TryGetValue(type, out var action) ? throw new NotSupportedException($"The {type.Name} is not supported by the SerializationProvider.") : action;
         }

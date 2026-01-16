@@ -71,7 +71,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1606946962858_570633_331", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565471811429_523492_20975")]
-        IEnumerationDefinition QueryEnumerationDefinition();
+        IEnumerationDefinition enumerationDefinition { get; }
 
     }
 }

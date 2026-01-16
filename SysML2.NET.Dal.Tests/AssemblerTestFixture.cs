@@ -66,8 +66,8 @@ namespace SysML2.NET.Dal.Tests
             var membershipDto = new Core.DTO.Root.Namespaces.Membership
             {
                 Id = Guid.Parse("215054ad-eb1d-45f6-8537-d43a3470e73c"),
-                Source = new List<Guid> { packageDto.Id },
-                Target = new List<Guid> { featureDto.Id },
+                OwnedRelatedElement = new List<Guid> { packageDto.Id },
+                OwningRelatedElement =  featureDto.Id ,
             };
             
             dtos.Add(packageDto);
@@ -93,8 +93,20 @@ namespace SysML2.NET.Dal.Tests
                 membershipPoco = (Core.POCO.Root.Namespaces.Membership)this.lazyPoco.Value;
             }
 
-            Assert.That(membershipPoco.Target.Contains(featurePoco), Is.True);
+            Assert.That(membershipPoco.OwningRelatedElement, Is.EqualTo(featurePoco));
+            
+            Core.POCO.Root.Elements.IRelationship relation = membershipPoco;
 
+            Assert.That(membershipPoco.MemberElement, Is.Null);
+            
+            relation.Target = [featurePoco, membershipPoco];
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(membershipPoco.MemberElement, Is.EqualTo(featurePoco));
+                Assert.That(relation.Target, Is.EquivalentTo([featurePoco]));
+            }
+            
             dtos.Clear();
             
             featureDto.DeclaredName = "some updated feature";

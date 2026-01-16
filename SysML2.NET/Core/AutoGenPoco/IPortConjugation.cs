@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575484344899_880331_946", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_778895_441")]
-        IConjugatedPortDefinition QueryConjugatedPortDefinition();
+        IConjugatedPortDefinition conjugatedPortDefinition { get; }
 
         /// <summary>
         /// The PortDefinition being conjugated.

@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1645049897369_762611_49", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
-        Guid TargetFeature { get; }
+        Guid targetFeature { get; }
 
     }
 }

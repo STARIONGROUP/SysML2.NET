@@ -45,14 +45,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Behaviors
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543948010065_362066_20413", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
-        List<Guid> Parameter { get; }
+        List<Guid> parameter { get; }
 
         /// <summary>
         /// The Steps that make up this Behavior.
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1536346067212_587255_17343", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        List<Guid> Step { get; }
+        List<Guid> step { get; }
 
     }
 }

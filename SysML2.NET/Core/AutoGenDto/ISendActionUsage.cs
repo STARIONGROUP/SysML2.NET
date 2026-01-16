@@ -48,19 +48,19 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// An Expression whose result is bound to the payload input parameter of this SendActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1612814399422_336683_143", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid PayloadArgument { get; }
+        Guid payloadArgument { get; }
 
         /// <summary>
         /// An Expression whose result is bound to the receiver input parameter of this SendActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1567742374932_10504_18141", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? ReceiverArgument { get; }
+        Guid? receiverArgument { get; }
 
         /// <summary>
         /// An Expression whose result is bound to the sender input parameter of this SendActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665504224536_894018_944", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? SenderArgument { get; }
+        Guid? senderArgument { get; }
 
     }
 }

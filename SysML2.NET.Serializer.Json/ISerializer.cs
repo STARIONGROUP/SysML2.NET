@@ -27,7 +27,6 @@ namespace SysML2.NET.Serializer.Json
     using System.Threading.Tasks;
 
     using SysML2.NET.Common;
-    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// The purpose of the <see cref="ISerializer"/> is to write an <see cref="IData"/> and <see cref="IEnumerable{IData}"/>
@@ -44,13 +43,16 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        void Serialize(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions);
+        void Serialize(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions);
 
         /// <summary>
         /// Serialize an <see cref="IData"/> as JSON to a target <see cref="Stream"/>
@@ -61,13 +63,16 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
         /// <param name="jsonWriterOptions">
         /// The <see cref="JsonWriterOptions"/> to use
         /// </param>
-        void Serialize(IData dataItem, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions);
+        void Serialize(IData dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions);
 
         /// <summary>
         /// Asynchronously serialize an <see cref="IEnumerable{IData}"/> as JSON to a target <see cref="Stream"/>
@@ -78,6 +83,9 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
@@ -87,7 +95,7 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        Task SerializeAsync(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
+        Task SerializeAsync(IEnumerable<IData> dataItems, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
 
         /// <summary>
         /// Asynchronously serialize an <see cref="IData"/> as JSON to a target <see cref="Stream"/>
@@ -98,6 +106,9 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationModeKind">
         /// The <see cref="SerializationModeKind"/> to use
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
@@ -107,6 +118,6 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        Task SerializeAsync(IData dataItem, SerializationModeKind serializationModeKind, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
+        Task SerializeAsync(IData dataItem, SerializationModeKind serializationModeKind, bool includeDerivedProperties, Stream stream, JsonWriterOptions jsonWriterOptions, CancellationToken cancellationToken);
     }
 }

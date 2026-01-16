@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624202269076_561550_3109", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
-        Guid Referent { get; }
+        Guid referent { get; }
 
         /// <summary>
         /// The Expression whose value is an occurrence in the domain of the referent Feature, for which the
@@ -55,13 +55,13 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// AssignmentActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624201786354_844501_2835", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? TargetArgument { get; }
+        Guid? targetArgument { get; }
 
         /// <summary>
         /// The Expression whose result is to be assigned to the referent Feature.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624201792996_104394_2856", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? ValueExpression { get; }
+        Guid? valueExpression { get; }
 
     }
 }

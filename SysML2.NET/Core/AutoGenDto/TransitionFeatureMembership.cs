@@ -80,7 +80,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
-        public List<Guid> Documentation { get; internal set; }
+        public List<Guid> documentation { get; internal set; } = [];
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -114,7 +114,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
-        public bool IsLibraryElement { get; internal set; }
+        public bool isLibraryElement { get; internal set; }
 
         /// <summary>
         /// Whether this TransitionFeatureMembership  is for a trigger, guard or effect.
@@ -130,7 +130,11 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElement")]
         [Implements(implementation: "IMembership.MemberElement")]
-        public Guid MemberElement { get; set; }
+        Guid Root.Namespaces.IMembership.MemberElement
+        {
+            get => ((SysML2.NET.Core.DTO.Root.Namespaces.IOwningMembership)this).ownedMemberElement;
+            set { }
+        }
 
         /// <summary>
         /// The elementId of the memberElement.
@@ -138,7 +142,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
         [Implements(implementation: "IMembership.MemberElementId")]
-        public string MemberElementId { get; internal set; }
+        string Root.Namespaces.IMembership.memberElementId => this.ownedMemberElementId;
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
@@ -146,7 +150,11 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_35293_43192", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberName")]
         [Implements(implementation: "IMembership.MemberName")]
-        public string MemberName { get; set; }
+        string Root.Namespaces.IMembership.MemberName
+        {
+            get => this.ownedMemberName;
+            set { }
+        }
 
         /// <summary>
         /// The Namespace of which the memberElement becomes a member due to this Membership.
@@ -157,7 +165,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [RedefinedByProperty("IFeatureMembership.OwningType")]
         [Implements(implementation: "IMembership.MembershipOwningNamespace")]
-        public Guid MembershipOwningNamespace { get; internal set; }
+        Guid Root.Namespaces.IMembership.membershipOwningNamespace => this.owningType;
 
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.
@@ -165,7 +173,11 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1651721174176_601088_238", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberShortName")]
         [Implements(implementation: "IMembership.MemberShortName")]
-        public string MemberShortName { get; set; }
+        string Root.Namespaces.IMembership.MemberShortName
+        {
+            get => this.ownedMemberShortName;
+            set { }
+        }
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -175,7 +187,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string Name { get; internal set; }
+        public string name { get; internal set; }
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -185,7 +197,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
-        public List<Guid> OwnedAnnotation { get; internal set; }
+        public List<Guid> ownedAnnotation { get; internal set; } = [];
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -193,7 +205,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
-        public List<Guid> OwnedElement { get; internal set; }
+        public List<Guid> ownedElement { get; internal set; } = [];
 
         /// <summary>
         /// The Element that becomes an ownedMember of the membershipOwningNamespace due to this
@@ -204,7 +216,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_819490_43195")]
         [RedefinedByProperty("IFeatureMembership.OwnedMemberFeature")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElement")]
-        public Guid OwnedMemberElement { get; internal set; }
+        Guid Root.Namespaces.IOwningMembership.ownedMemberElement => ((SysML2.NET.Core.DTO.Core.Types.IFeatureMembership)this).ownedMemberFeature;
 
         /// <summary>
         /// The elementId of the ownedMemberElement.
@@ -212,7 +224,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1651721234828_904219_244", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721199802_246768_242")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElementId")]
-        public string OwnedMemberElementId { get; internal set; }
+        public string ownedMemberElementId { get; internal set; }
 
         /// <summary>
         /// The Feature that this FeatureMembership relates to its owningType, making it an ownedFeature of the
@@ -222,7 +234,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         [RedefinedByProperty("ITransitionFeatureMembership.TransitionFeature")]
         [Implements(implementation: "IFeatureMembership.OwnedMemberFeature")]
-        public Guid OwnedMemberFeature { get; internal set; }
+        Guid Core.Types.IFeatureMembership.ownedMemberFeature => this.transitionFeature;
 
         /// <summary>
         /// The name of the ownedMemberElement.
@@ -230,7 +242,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1648181616390_323441_387", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_35293_43192")]
         [Implements(implementation: "IOwningMembership.OwnedMemberName")]
-        public string OwnedMemberName { get; internal set; }
+        public string ownedMemberName { get; internal set; }
 
         /// <summary>
         /// The shortName of the ownedMemberElement.
@@ -238,7 +250,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1651721262092_909505_246", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721174176_601088_238")]
         [Implements(implementation: "IOwningMembership.OwnedMemberShortName")]
-        public string OwnedMemberShortName { get; internal set; }
+        public string ownedMemberShortName { get; internal set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -262,7 +274,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
-        public Guid? Owner { get; internal set; }
+        public Guid? owner { get; internal set; }
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -271,7 +283,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
-        public Guid? OwningMembership { get; internal set; }
+        public Guid? owningMembership { get; internal set; }
 
         /// <summary>
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
@@ -280,7 +292,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public Guid? OwningNamespace { get; internal set; }
+        public Guid? owningNamespace { get; internal set; }
 
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
@@ -305,7 +317,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866524_738482_486")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_193857_43197")]
         [Implements(implementation: "IFeatureMembership.OwningType")]
-        public Guid OwningType { get; internal set; }
+        public Guid owningType { get; internal set; }
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -317,7 +329,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string QualifiedName { get; internal set; }
+        public string qualifiedName { get; internal set; }
 
         /// <summary>
         /// The Elements that are related by this Relationship, derived as the union of the source and target
@@ -325,7 +337,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        public List<Guid> RelatedElement { get; internal set; }
+        public List<Guid> relatedElement { get; internal set; } = [];
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -335,7 +347,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string ShortName { get; internal set; }
+        public string shortName { get; internal set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.
@@ -344,7 +356,11 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IMembership.MembershipOwningNamespace")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => [((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)this).membershipOwningNamespace];
+            set { }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -353,7 +369,18 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IMembership.MemberElement")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => [((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)this).MemberElement];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)this).MemberElement = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -362,7 +389,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
-        public List<Guid> TextualRepresentation { get; internal set; }
+        public List<Guid> textualRepresentation { get; internal set; } = [];
 
         /// <summary>
         /// The Step that is the ownedMemberFeature of this TransitionFeatureMembership.
@@ -370,7 +397,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_19_0_2_12e503d9_1582975046568_736161_148", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         [Implements(implementation: "ITransitionFeatureMembership.TransitionFeature")]
-        public Guid TransitionFeature { get; internal set; }
+        public Guid transitionFeature { get; internal set; }
 
         /// <summary>
         /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly
@@ -378,7 +405,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_42975_43193", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "public")]
         [Implements(implementation: "IMembership.Visibility")]
-        public VisibilityKind Visibility { get; set; }
+        public VisibilityKind Visibility { get; set; } = VisibilityKind.Public;
 
     }
 }

@@ -73,14 +73,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596645596183_374903_1209", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000559760_444344_1273")]
-        List<IViewpointUsage> QuerySatisfiedViewpoint();
+        List<IViewpointUsage> satisfiedViewpoint { get; }
 
         /// <summary>
         /// The usages of this ViewDefinition that are ViewUsages.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596644452170_21813_753", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
-        List<IViewUsage> QueryView();
+        List<IViewUsage> view { get; }
 
         /// <summary>
         /// The Expressions related to this ViewDefinition by ElementFilterMemberships, which specify conditions
@@ -88,14 +88,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1606938929077_183245_4796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        List<IExpression> QueryViewCondition();
+        List<IExpression> viewCondition { get; }
 
         /// <summary>
         /// The RenderingUsage to be used to render views defined by this ViewDefinition, which is the
         /// referencedRendering of the ViewRenderingMembership of the ViewDefinition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596657187664_758418_4914", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IRenderingUsage QueryViewRendering();
+        IRenderingUsage viewRendering { get; }
 
     }
 }

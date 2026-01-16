@@ -75,7 +75,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [Property(xmiId: "_19_0_4_12e503d9_1621564075474_350859_2735", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
-        List<IPartUsage> QueryActorParameter();
+        List<IPartUsage> actorParameter { get; }
 
         /// <summary>
         /// The owned ConstraintUsages that represent assumptions of this RequirementUsage, derived as the
@@ -84,7 +84,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583377612865_991722_535", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        List<IConstraintUsage> QueryAssumedConstraint();
+        List<IConstraintUsage> assumedConstraint { get; }
 
         /// <summary>
         /// The ConcernUsages framed by this RequirementUsage, which are the ownedConcerns of all
@@ -92,7 +92,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617116922864_514612_3264", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583377448339_252740_390")]
-        List<IConcernUsage> QueryFramedConcern();
+        List<IConcernUsage> framedConcern { get; }
 
         /// <summary>
         /// An optional modeler-specified identifier for this RequirementUsage (used, e.g., to link it to an
@@ -110,14 +110,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583377448339_252740_390", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        List<IConstraintUsage> QueryRequiredConstraint();
+        List<IConstraintUsage> requiredConstraint { get; }
 
         /// <summary>
         /// The RequirementDefinition that is the single definition of this RequirementUsage.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583000408905_769743_1223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578067546711_751168_1745")]
-        IRequirementDefinition QueryRequirementDefinition();
+        IRequirementDefinition requirementDefinition { get; }
 
         /// <summary>
         /// The parameters of this RequirementUsage that represent stakeholders for the requirement.
@@ -125,7 +125,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [Property(xmiId: "_19_0_4_12e503d9_1624032823963_328647_40107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
-        List<IPartUsage> QueryStakeholderParameter();
+        List<IPartUsage> stakeholderParameter { get; }
 
         /// <summary>
         /// The parameter of this RequirementUsage that represents its subject.
@@ -133,14 +133,14 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         [Property(xmiId: "_19_0_2_12e503d9_1595189397261_941898_844", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
-        IUsage QuerySubjectParameter();
+        IUsage subjectParameter { get; }
 
         /// <summary>
         /// An optional textual statement of the requirement represented by this RequirementUsage, derived from
         /// the bodies of the documentation of the RequirementUsage.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583376480942_745679_99", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<string> QueryText();
+        List<string> text { get; }
 
     }
 }

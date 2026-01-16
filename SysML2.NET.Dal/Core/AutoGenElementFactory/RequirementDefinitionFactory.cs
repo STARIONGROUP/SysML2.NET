@@ -57,7 +57,6 @@ namespace SysML2.NET.Dal
             poco.Id = dto.Id;
             poco.AliasIds = dto.AliasIds;
             poco.DeclaredName = dto.DeclaredName;
-            poco.DeclaredShortName = dto.DeclaredShortName;
             poco.ElementId = dto.ElementId;
             poco.IsAbstract = dto.IsAbstract;
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;

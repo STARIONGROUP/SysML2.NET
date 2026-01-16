@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674993_898044_43344", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
-        IFeature QueryOwnedMemberFeature();
+        IFeature ownedMemberFeature { get; }
 
         /// <summary>
         /// The Type that owns this FeatureMembership.
@@ -60,7 +60,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         [Property(xmiId: "_18_5_3_12e503d9_1533160674992_418504_43339", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866524_738482_486")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_193857_43197")]
-        IType QueryOwningType();
+        IType owningType { get; }
 
     }
 }

@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.DTO.Systems.Items
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565471361757_649736_20796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
-        List<Guid> ItemDefinition { get; }
+        List<Guid> itemDefinition { get; }
 
     }
 }

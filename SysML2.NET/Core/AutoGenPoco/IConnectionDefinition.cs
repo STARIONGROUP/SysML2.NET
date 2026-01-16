@@ -71,7 +71,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591476421094_685440_682", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
-        List<IUsage> QueryConnectionEnd();
+        List<IUsage> connectionEnd { get; }
 
         /// <summary>
         /// A ConnectionDefinition always has isSufficient = true.

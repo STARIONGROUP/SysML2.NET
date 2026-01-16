@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Packages
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1607033896050_867332_6206", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        List<Guid> FilterCondition { get; }
+        List<Guid> filterCondition { get; }
 
     }
 }

@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.DTO.Core.Features
         [Property(xmiId: "_19_0_2_12e503d9_1596597427753_801746_43", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_13273_21101")]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
-        Guid? OwningFeature { get; }
+        Guid? owningFeature { get; }
 
         /// <summary>
         /// The Type that is being applied by this FeatureTyping.

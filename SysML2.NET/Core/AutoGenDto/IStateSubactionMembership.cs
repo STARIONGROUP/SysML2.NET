@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1582974847979_606181_96", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
-        Guid Action { get; }
+        Guid action { get; }
 
         /// <summary>
         /// Whether this StateSubactionMembership is for an entry, do or exit ActionUsage.
