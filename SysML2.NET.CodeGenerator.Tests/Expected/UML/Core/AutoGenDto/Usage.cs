@@ -996,7 +996,7 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<Guid> Core.Features.IFeature.type => this.definition;
+        List<Guid> Core.Features.IFeature.type => [.. this.definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the
