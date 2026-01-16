@@ -157,7 +157,14 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [RedefinedByProperty("IPortConjugation.OriginalPortDefinition")]
         [Implements(implementation: "IConjugation.OriginalType")]
-        public Guid OriginalType { get; set; }
+        Guid Core.Types.IConjugation.OriginalType
+        {
+            get => this.OriginalPortDefinition;
+            set
+            {
+                this.OriginalPortDefinition = value;
+            }
+        }
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -243,7 +250,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedByProperty("IPortConjugation.ConjugatedPortDefinition")]
         [Implements(implementation: "IConjugation.OwningType")]
-        public Guid? owningType { get; internal set; }
+        Guid? Core.Types.IConjugation.owningType => this.conjugatedPortDefinition;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -282,7 +289,18 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConjugation.ConjugatedType")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => [this.ConjugatedType];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.ConjugatedType = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -291,7 +309,18 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConjugation.OriginalType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => [((SysML2.NET.Core.DTO.Core.Types.IConjugation)this).OriginalType];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    ((SysML2.NET.Core.DTO.Core.Types.IConjugation)this).OriginalType = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

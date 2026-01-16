@@ -118,7 +118,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IBehavior.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<Guid> directedFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.directedFeature => this.parameter;
 
         /// <summary>
         /// The usages of this Definition that are directedFeatures.

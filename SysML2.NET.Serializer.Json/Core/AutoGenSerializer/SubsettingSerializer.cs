@@ -120,12 +120,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iSubsetting.ElementId);
 
-            writer.WritePropertyName("general"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iSubsetting.General);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iSubsetting.IsImplied);
 
@@ -270,20 +264,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WritePropertyName("owningType"u8);
-
-            if (iSubsetting.owningType.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iSubsetting.owningType.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iSubsetting.qualifiedName);
 
@@ -302,24 +282,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iSubsetting.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iSubsetting.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iSubsetting.Specific);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("subsettedFeature"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
@@ -331,18 +293,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubsetting.SubsettingFeature);
             writer.WriteEndObject();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iSubsetting.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("textualRepresentation"u8);
 
@@ -386,12 +336,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iSubsetting.ElementId);
-
-            writer.WritePropertyName("general"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iSubsetting.General);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iSubsetting.IsImplied);
@@ -451,24 +395,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iSubsetting.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iSubsetting.Specific);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("subsettedFeature"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
@@ -480,18 +406,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubsetting.SubsettingFeature);
             writer.WriteEndObject();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iSubsetting.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
         }
     }

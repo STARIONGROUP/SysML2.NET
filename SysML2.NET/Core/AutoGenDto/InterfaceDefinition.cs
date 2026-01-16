@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [RedefinedByProperty("IConnectionDefinition.ConnectionEnd")]
         [Implements(implementation: "IAssociation.AssociationEnd")]
-        public List<Guid> associationEnd { get; internal set; } = [];
+        List<Guid> Kernel.Associations.IAssociation.associationEnd => ((SysML2.NET.Core.DTO.Systems.Connections.IConnectionDefinition)this).connectionEnd;
 
         /// <summary>
         /// The Usages that define the things related by the ConnectionDefinition.
@@ -71,7 +71,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
         [RedefinedByProperty("IInterfaceDefinition.InterfaceEnd")]
         [Implements(implementation: "IConnectionDefinition.ConnectionEnd")]
-        public List<Guid> connectionEnd { get; internal set; } = [];
+        List<Guid> Systems.Connections.IConnectionDefinition.connectionEnd => this.interfaceEnd;
 
         /// <summary>
         /// The declared name of this Element.
@@ -144,7 +144,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IAssociation.AssociationEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        public List<Guid> endFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.endFeature => ((SysML2.NET.Core.DTO.Kernel.Associations.IAssociation)this).associationEnd;
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -284,7 +284,14 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IConnectionDefinition.IsSufficient")]
         [Implements(implementation: "IType.IsSufficient")]
-        bool Core.Types.IType.IsSufficient { get; set; }
+        bool Core.Types.IType.IsSufficient
+        {
+            get => this.IsSufficient;
+            set
+            {
+                this.IsSufficient = value;
+            }
+        }
 
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
@@ -775,7 +782,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IAssociation.RelatedType")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        public List<Guid> relatedElement { get; internal set; } = [];
+        List<Guid> Root.Elements.IRelationship.relatedElement => this.relatedType;
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the
@@ -803,7 +810,11 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IAssociation.SourceType")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => this.sourceType.HasValue ? [this.sourceType.Value] : [];
+            set { }
+        }
 
         /// <summary>
         /// The source relatedType for this Association. It is the first relatedType of the Association.
@@ -821,7 +832,11 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IAssociation.TargetType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => this.targetType;
+            set { }
+        }
 
         /// <summary>
         /// The target relatedTypes for this Association. This includes all the relatedTypes other than the

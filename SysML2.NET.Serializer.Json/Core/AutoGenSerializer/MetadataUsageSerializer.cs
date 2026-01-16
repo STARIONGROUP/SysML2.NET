@@ -155,18 +155,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iMetadataUsage.DeclaredShortName);
 
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iMetadataUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iMetadataUsage.differencingType)
@@ -413,23 +401,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsUnique);
 
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iMetadataUsage.IsVariable);
-
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsVariation);
-
-            writer.WriteStartArray("itemDefinition"u8);
-
-            foreach (var item in iMetadataUsage.itemDefinition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WritePropertyName("mayTimeVary"u8);
             writer.WriteBooleanValue(iMetadataUsage.mayTimeVary);
@@ -457,20 +430,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
-
-            writer.WritePropertyName("metaclass"u8);
-
-            if (iMetadataUsage.metaclass.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iMetadataUsage.metaclass.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
 
             writer.WritePropertyName("metadataDefinition"u8);
 
@@ -1300,18 +1259,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iMetadataUsage.type)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("unioningType"u8);
 
             foreach (var item in iMetadataUsage.unioningType)
@@ -1434,9 +1381,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iMetadataUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iMetadataUsage.IsVariation);

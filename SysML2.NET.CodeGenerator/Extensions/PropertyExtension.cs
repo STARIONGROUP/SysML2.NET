@@ -72,5 +72,17 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             return false;
         }
+
+        /// <summary>
+        /// Gets the name of the property.
+        /// </summary>
+        /// <param name="property">The <see cref="IProperty"/></param>
+        /// <returns>The <see cref="IProperty.Name"/> with the first letter lowered case in case of derived property, in upper case otherwise</returns>
+        public static string QueryPropertyNameBasedOnUmlProperties(this IProperty property)
+        {
+            ArgumentNullException.ThrowIfNull(property);
+
+            return property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
+        }
     }
 }

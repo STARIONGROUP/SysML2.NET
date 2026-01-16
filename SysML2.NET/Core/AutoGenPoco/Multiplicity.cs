@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;

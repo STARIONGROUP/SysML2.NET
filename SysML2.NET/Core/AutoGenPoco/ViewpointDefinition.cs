@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -116,7 +117,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IRequirementDefinition.ReqId")]
         [Implements(implementation: "IElement.DeclaredShortName")]
-        public string DeclaredShortName { get; set; }
+        string Root.Elements.IElement.DeclaredShortName
+        {
+            get => this.ReqId;
+            set
+            {
+                this.ReqId = value;
+            }
+        }
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -138,7 +146,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IBehavior.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<IFeature> directedFeature => this.ComputeDirectedFeature();
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The usages of this Definition that are directedFeatures.

@@ -57,7 +57,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [RedefinedByProperty("IFlowUsage.FlowDefinition")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        public List<Guid> actionDefinition { get; internal set; } = [];
+        List<Guid> Systems.Actions.IActionUsage.actionDefinition => this.flowDefinition;
 
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IFlow.Interaction")]
         [Implements(implementation: "IConnector.Association")]
-        public List<Guid> association { get; internal set; } = [];
+        List<Guid> Kernel.Connectors.IConnector.association => ((SysML2.NET.Core.DTO.Kernel.Interactions.IFlow)this).interaction;
 
         /// <summary>
         /// The Behaviors that type this Step.
@@ -82,7 +82,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IFlow.Interaction")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<Guid> behavior { get; internal set; } = [];
+        List<Guid> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.DTO.Kernel.Interactions.IFlow)this).interaction;
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -151,7 +151,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<Guid> definition { get; internal set; } = [];
+        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => ((SysML2.NET.Core.DTO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition;
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -173,7 +173,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<Guid> directedFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.directedFeature => this.parameter;
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -216,7 +216,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IConnector.ConnectorEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        public List<Guid> endFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.endFeature => this.connectorEnd;
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -331,7 +331,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedByProperty("IFlowUsage.FlowDefinition")]
         [Implements(implementation: "IFlow.Interaction")]
-        public List<Guid> interaction { get; internal set; } = [];
+        List<Guid> Kernel.Interactions.IFlow.interaction => this.flowDefinition;
 
         /// <summary>
         /// The interpretations of a Type with intersectingTypes are asserted to be those in common among the
@@ -481,7 +481,11 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => this.mayTimeVary;
+            set { }
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -768,7 +772,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        public List<Guid> occurrenceDefinition { get; internal set; } = [];
+        List<Guid> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => ((SysML2.NET.Core.DTO.Systems.Actions.IActionUsage)this).actionDefinition;
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1132,7 +1136,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IConnector.RelatedFeature")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        public List<Guid> relatedElement { get; internal set; } = [];
+        List<Guid> Root.Elements.IRelationship.relatedElement => this.relatedFeature;
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -1160,7 +1164,11 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConnector.SourceFeature")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => this.sourceFeature.HasValue ? [this.sourceFeature.Value] : [];
+            set { }
+        }
 
         /// <summary>
         /// The source relatedFeature for this Connector. It is the first relatedFeature.
@@ -1186,7 +1194,11 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConnector.TargetFeature")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => this.targetFeature;
+            set { }
+        }
 
         /// <summary>
         /// The target relatedFeatures for this Connector. This includes all the relatedFeatures other than the
@@ -1224,7 +1236,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IConnector.Association")]
         [Implements(implementation: "IFeature.Type")]
-        public List<Guid> type { get; internal set; } = [];
+        List<Guid> Core.Features.IFeature.type => ((SysML2.NET.Core.DTO.Kernel.Connectors.IConnector)this).association;
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

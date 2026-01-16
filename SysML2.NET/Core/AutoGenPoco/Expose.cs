@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -141,7 +142,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         [Property(xmiId: "_19_0_4_12e503d9_1622577942205_869984_64", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IExpose.IsImportAll")]
         [Implements(implementation: "IImport.IsImportAll")]
-        bool Root.Namespaces.IImport.IsImportAll { get; set; }
+        bool Root.Namespaces.IImport.IsImportAll
+        {
+            get => this.IsImportAll;
+            set
+            {
+                this.IsImportAll = value;
+            }
+        }
 
         /// <summary>
         /// Whether this Element is contained in the ownership tree of a library model.
@@ -280,7 +288,11 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IImport.ImportOwningNamespace")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Source
+        {
+            get => this.importOwningNamespace != null ? [this.importOwningNamespace] : [];
+            set { }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -314,7 +326,14 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         [Property(xmiId: "_18_5_3_12e503d9_1533160674976_798509_43257", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "private")]
         [RedefinedByProperty("IExpose.Visibility")]
         [Implements(implementation: "IImport.Visibility")]
-        VisibilityKind Root.Namespaces.IImport.Visibility { get; set; } = VisibilityKind.Private;
+        VisibilityKind Root.Namespaces.IImport.Visibility
+        {
+            get => this.Visibility;
+            set
+            {
+                this.Visibility = value;
+            }
+        }
 
     }
 }

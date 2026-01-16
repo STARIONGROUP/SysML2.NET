@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -152,7 +153,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<IClassifier> definition => this.ComputeDefinition();
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -442,7 +443,11 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => this.mayTimeVary;
+            set { }
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -461,7 +466,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [RedefinedByProperty("IMetadataUsage.MetadataDefinition")]
         [Implements(implementation: "IItemUsage.ItemDefinition")]
-        public List<IStructure> itemDefinition => this.ComputeItemDefinition();
+        List<IStructure> Systems.Items.IItemUsage.itemDefinition => this.metadataDefinition != null ? [this.metadataDefinition] : [];
 
         /// <summary>
         /// Whether this Usage may be time varying (that is, whether it is featured by the snapshots of its
@@ -499,7 +504,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IMetadataUsage.MetadataDefinition")]
         [Implements(implementation: "IMetadataFeature.Metaclass")]
-        public IMetaclass metaclass => this.ComputeMetaclass();
+        IMetaclass Kernel.Metadata.IMetadataFeature.metaclass => this.metadataDefinition;
 
         /// <summary>
         /// The MetadataDefinition that is the definition of this MetadataUsage.
@@ -1121,7 +1126,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        public List<IType> type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -285,7 +286,14 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [Property(xmiId: "_19_0_2_12e503d9_1590978283180_265362_419", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IEnumerationDefinition.IsVariation")]
         [Implements(implementation: "IDefinition.IsVariation")]
-        bool Systems.DefinitionAndUsage.IDefinition.IsVariation { get; set; }
+        bool Systems.DefinitionAndUsage.IDefinition.IsVariation
+        {
+            get => this.IsVariation;
+            set
+            {
+                this.IsVariation = value;
+            }
+        }
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -791,7 +799,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [RedefinedByProperty("IEnumerationDefinition.EnumeratedValue")]
         [Implements(implementation: "IDefinition.Variant")]
-        public List<IUsage> variant => this.ComputeVariant();
+        List<IUsage> Systems.DefinitionAndUsage.IDefinition.variant => [.. this.enumeratedValue];
 
         /// <summary>
         /// The ownedMemberships of this Definition that are VariantMemberships. If isVariation = true, then

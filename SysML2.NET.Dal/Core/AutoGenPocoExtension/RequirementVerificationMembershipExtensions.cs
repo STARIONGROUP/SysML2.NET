@@ -79,13 +79,7 @@ namespace SysML2.NET.Dal
 
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
 
-            ((Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership)poco).Kind = ((Core.DTO.Systems.VerificationCases.IRequirementVerificationMembership)dto).Kind;
-
-            ((Core.POCO.Systems.Requirements.IRequirementConstraintMembership)poco).Kind = ((Core.DTO.Systems.Requirements.IRequirementConstraintMembership)dto).Kind;
-
-            poco.MemberName = dto.MemberName;
-
-            poco.MemberShortName = dto.MemberShortName;
+            poco.Kind = dto.Kind;
 
             var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
 
@@ -104,22 +98,6 @@ namespace SysML2.NET.Dal
             }
 
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
-
-            var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
-
-            foreach (var identifier in sourceToDelete)
-            {
-                poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
-            }
-
-
-            var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
-
-            foreach (var identifier in targetToDelete)
-            {
-                poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
-            }
-
 
             poco.Visibility = dto.Visibility;
 
@@ -161,15 +139,6 @@ namespace SysML2.NET.Dal
 
             Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
 
-            if (cache.TryGetValue(dto.MemberElement, out lazyPoco))
-            {
-                poco.MemberElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
-            }
-            else
-            {
-                poco.MemberElement = null;
-            }
-
             var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
 
             foreach (var identifier in ownedRelatedElementToAdd)
@@ -208,26 +177,6 @@ namespace SysML2.NET.Dal
                 poco.OwningRelationship = null;
             }
 
-            var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
-
-            foreach (var identifier in sourceToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Source.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
-            var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
-
-            foreach (var identifier in targetToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Target.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
         }
 
         /// <summary>
@@ -250,17 +199,11 @@ namespace SysML2.NET.Dal
             dto.ElementId = poco.ElementId;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
-            ((Core.DTO.Systems.VerificationCases.IRequirementVerificationMembership)dto).Kind = ((Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership)poco).Kind;
-            ((Core.DTO.Systems.Requirements.IRequirementConstraintMembership)dto).Kind = ((Core.POCO.Systems.Requirements.IRequirementConstraintMembership)poco).Kind;
-            dto.MemberElement = poco.MemberElement.Id;
-            dto.MemberName = poco.MemberName;
-            dto.MemberShortName = poco.MemberShortName;
+            dto.Kind = poco.Kind;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
-            dto.Source = poco.Source.Select(x => x.Id).ToList();
-            dto.Target = poco.Target.Select(x => x.Id).ToList();
             dto.Visibility = poco.Visibility;
 
             return dto;

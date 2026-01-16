@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -385,7 +386,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IReferenceUsage.IsReference")]
         [Implements(implementation: "IUsage.IsReference")]
-        bool IUsage.isReference => throw new InvalidOperationException("Redefined by property IReferenceUsage.IsReference");
+        bool IUsage.isReference => this.isReference;
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -413,7 +414,11 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => this.mayTimeVary;
+            set { }
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -1025,7 +1030,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        public List<IType> type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. this.definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

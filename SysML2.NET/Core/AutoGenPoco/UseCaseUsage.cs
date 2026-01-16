@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -86,7 +87,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        public List<IBehavior> actionDefinition => this.ComputeActionDefinition();
+        List<IBehavior> Systems.Actions.IActionUsage.actionDefinition => ((SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage)this).calculationDefinition != null ? [((SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage)this).calculationDefinition] : [];
 
         /// <summary>
         /// The parameters of this CaseUsage that represent actors involved in the case.
@@ -111,7 +112,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<IBehavior> behavior => this.ComputeBehavior();
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function != null ? [((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function] : [];
 
         /// <summary>
         /// The <ode>Function that is the type of this CalculationUsage. Nominally, this would be a
@@ -123,7 +124,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
         [RedefinedByProperty("ICaseUsage.CaseDefinition")]
         [Implements(implementation: "ICalculationUsage.CalculationDefinition")]
-        public IFunction calculationDefinition => this.ComputeCalculationDefinition();
+        IFunction Systems.Calculations.ICalculationUsage.calculationDefinition => ((SysML2.NET.Core.POCO.Systems.Cases.ICaseUsage)this).caseDefinition;
 
         /// <summary>
         /// The CaseDefinition that is the type of this CaseUsage.
@@ -132,7 +133,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1588213526305_899324_302")]
         [RedefinedByProperty("IUseCaseUsage.UseCaseDefinition")]
         [Implements(implementation: "ICaseUsage.CaseDefinition")]
-        public ICaseDefinition caseDefinition => this.ComputeCaseDefinition();
+        ICaseDefinition Systems.Cases.ICaseUsage.caseDefinition => this.useCaseDefinition;
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -182,7 +183,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<IClassifier> definition => this.ComputeDefinition();
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -204,7 +205,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<IFeature> directedFeature => this.ComputeDirectedFeature();
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -299,7 +300,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
         [Implements(implementation: "IExpression.Function")]
-        public IFunction function => this.ComputeFunction();
+        IFunction Kernel.Functions.IExpression.function => ((SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage)this).calculationDefinition;
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
@@ -498,7 +499,11 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => this.mayTimeVary;
+            set { }
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -793,7 +798,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        public List<IClass> occurrenceDefinition => this.ComputeOccurrenceDefinition();
+        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.POCO.Systems.Actions.IActionUsage)this).actionDefinition];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1167,7 +1172,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        public List<IType> type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

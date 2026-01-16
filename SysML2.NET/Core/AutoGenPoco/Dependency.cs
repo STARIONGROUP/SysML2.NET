@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -248,7 +249,14 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IDependency.Client")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Source
+        {
+            get => [.. this.Client];
+            set
+            {
+                this.Client = value;
+            }
+        }
 
         /// <summary>
         /// The Element or Elements on which the client Elements depend in some respect.
@@ -265,7 +273,14 @@ namespace SysML2.NET.Core.POCO.Root.Dependencies
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IDependency.Supplier")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Target
+        {
+            get => [.. this.Supplier];
+            set
+            {
+                this.Supplier = value;
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

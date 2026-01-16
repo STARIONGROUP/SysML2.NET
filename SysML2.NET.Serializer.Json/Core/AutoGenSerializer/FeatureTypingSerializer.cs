@@ -120,12 +120,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iFeatureTyping.ElementId);
 
-            writer.WritePropertyName("general"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iFeatureTyping.General);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iFeatureTyping.IsImplied);
 
@@ -270,20 +264,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WritePropertyName("owningType"u8);
-
-            if (iFeatureTyping.owningType.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iFeatureTyping.owningType.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iFeatureTyping.qualifiedName);
 
@@ -301,36 +281,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iFeatureTyping.shortName);
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iFeatureTyping.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iFeatureTyping.Specific);
-            writer.WriteEndObject();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iFeatureTyping.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("textualRepresentation"u8);
 
@@ -386,12 +336,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iFeatureTyping.ElementId);
-
-            writer.WritePropertyName("general"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iFeatureTyping.General);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iFeatureTyping.IsImplied);
@@ -450,36 +394,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iFeatureTyping.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("specific"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iFeatureTyping.Specific);
-            writer.WriteEndObject();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iFeatureTyping.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WritePropertyName("type"u8);
             writer.WriteStartObject();

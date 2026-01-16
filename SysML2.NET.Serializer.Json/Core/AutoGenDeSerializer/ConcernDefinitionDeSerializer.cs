@@ -151,15 +151,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredName Json property was not found in the ConcernDefinition: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
-            {
-                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the declaredShortName Json property was not found in the ConcernDefinition: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
             {
                 foreach (var arrayItem in differencingTypeProperty.EnumerateArray())
@@ -178,26 +169,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the differencingType Json property was not found in the ConcernDefinition: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
-            {
-                foreach (var arrayItem in directedFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = directedFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.directedFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the directedFeature Json property was not found in the ConcernDefinition: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))

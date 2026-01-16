@@ -129,26 +129,11 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isLibraryElement"u8);
             writer.WriteBooleanValue(iOwningMembership.isLibraryElement);
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iOwningMembership.MemberElement);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberElementId"u8);
-            writer.WriteStringValue(iOwningMembership.memberElementId);
-
-            writer.WritePropertyName("memberName"u8);
-            writer.WriteStringValue(iOwningMembership.MemberName);
-
             writer.WritePropertyName("membershipOwningNamespace"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iOwningMembership.membershipOwningNamespace);
             writer.WriteEndObject();
-
-            writer.WritePropertyName("memberShortName"u8);
-            writer.WriteStringValue(iOwningMembership.MemberShortName);
 
             writer.WritePropertyName("name"u8);
             writer.WriteStringValue(iOwningMembership.name);
@@ -304,30 +289,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iOwningMembership.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iOwningMembership.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iOwningMembership.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iOwningMembership.textualRepresentation)
@@ -380,18 +341,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iOwningMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iOwningMembership.MemberElement);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberName"u8);
-            writer.WriteStringValue(iOwningMembership.MemberName);
-
-            writer.WritePropertyName("memberShortName"u8);
-            writer.WriteStringValue(iOwningMembership.MemberShortName);
-
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iOwningMembership.OwnedRelatedElement)
@@ -443,30 +392,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iOwningMembership.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iOwningMembership.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iOwningMembership.Visibility.ToString().ToLower());

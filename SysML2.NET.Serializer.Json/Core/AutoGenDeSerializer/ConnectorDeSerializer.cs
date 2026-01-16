@@ -311,26 +311,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the Connector: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("endFeature"u8, out var endFeatureProperty))
-            {
-                foreach (var arrayItem in endFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var endFeatureExternalIdProperty))
-                    {
-                        var propertyValue = endFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.endFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the endFeature Json property was not found in the Connector: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("endOwningType"u8, out var endOwningTypeProperty))
             {
                 if (endOwningTypeProperty.ValueKind == JsonValueKind.Null)
@@ -1470,26 +1450,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the qualifiedName Json property was not found in the Connector: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("relatedElement"u8, out var relatedElementProperty))
-            {
-                foreach (var arrayItem in relatedElementProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var relatedElementExternalIdProperty))
-                    {
-                        var propertyValue = relatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.relatedElement.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the relatedElement Json property was not found in the Connector: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("relatedFeature"u8, out var relatedFeatureProperty))
             {
                 foreach (var arrayItem in relatedFeatureProperty.EnumerateArray())
@@ -1519,26 +1479,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the shortName Json property was not found in the Connector: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceExternalIdProperty))
-                    {
-                        var propertyValue = sourceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the Connector: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("sourceFeature"u8, out var sourceFeatureProperty))
             {
                 if (sourceFeatureProperty.ValueKind == JsonValueKind.Null)
@@ -1561,26 +1501,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the sourceFeature Json property was not found in the Connector: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetExternalIdProperty))
-                    {
-                        var propertyValue = targetExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the Connector: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("targetFeature"u8, out var targetFeatureProperty))
@@ -1621,26 +1541,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the textualRepresentation Json property was not found in the Connector: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
-            {
-                foreach (var arrayItem in typeProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var typeExternalIdProperty))
-                    {
-                        var propertyValue = typeExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.type.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the type Json property was not found in the Connector: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))

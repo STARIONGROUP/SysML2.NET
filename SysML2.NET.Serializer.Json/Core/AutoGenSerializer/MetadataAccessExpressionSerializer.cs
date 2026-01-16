@@ -99,18 +99,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("behavior"u8);
-
-            foreach (var item in iMetadataAccessExpression.behavior)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("chainingFeature"u8);
 
             foreach (var item in iMetadataAccessExpression.chainingFeature)
@@ -146,18 +134,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iMetadataAccessExpression.differencingType)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("directedFeature"u8);
-
-            foreach (var item in iMetadataAccessExpression.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);

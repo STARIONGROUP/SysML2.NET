@@ -62,8 +62,7 @@ namespace SysML2.NET.Dal
             poco.IsAbstract = dto.IsAbstract;
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
             poco.IsSufficient = dto.IsSufficient;
-            ((Core.POCO.Systems.Enumerations.IEnumerationDefinition)poco).IsVariation = ((Core.DTO.Systems.Enumerations.IEnumerationDefinition)dto).IsVariation;
-            ((Core.POCO.Systems.DefinitionAndUsage.IDefinition)poco).IsVariation = ((Core.DTO.Systems.DefinitionAndUsage.IDefinition)dto).IsVariation;
+            poco.IsVariation = dto.IsVariation;
 
             return poco;
         }

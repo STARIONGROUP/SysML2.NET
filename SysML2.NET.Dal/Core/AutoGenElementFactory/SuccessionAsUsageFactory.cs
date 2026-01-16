@@ -71,7 +71,6 @@ namespace SysML2.NET.Dal
             poco.IsPortion = dto.IsPortion;
             poco.IsSufficient = dto.IsSufficient;
             poco.IsUnique = dto.IsUnique;
-            poco.IsVariable = dto.IsVariable;
             poco.IsVariation = dto.IsVariation;
 
             return poco;

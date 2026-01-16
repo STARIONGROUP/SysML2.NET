@@ -387,7 +387,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [RedefinedByProperty("IConjugatedPortDefinition.OwnedPortConjugator")]
         [Implements(implementation: "IType.OwnedConjugator")]
-        public Guid? ownedConjugator { get; internal set; }
+        Guid? Core.Types.IType.ownedConjugator => this.ownedPortConjugator;
 
         /// <summary>
         /// The ConnectorAsUsages that are ownedUsages of this Definition. Note that this list includes
@@ -716,7 +716,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [RedefinedByProperty("IConjugatedPortDefinition.OriginalPortDefinition")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public Guid? owningNamespace { get; internal set; }
+        Guid? Root.Elements.IElement.owningNamespace => this.originalPortDefinition;
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.

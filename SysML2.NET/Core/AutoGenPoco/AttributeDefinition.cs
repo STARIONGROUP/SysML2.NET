@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;

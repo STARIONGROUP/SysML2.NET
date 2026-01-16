@@ -126,24 +126,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConcernDefinition.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iConcernDefinition.DeclaredShortName);
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iConcernDefinition.differencingType)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("directedFeature"u8);
-
-            foreach (var item in iConcernDefinition.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1113,9 +1098,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConcernDefinition.DeclaredName);
-
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iConcernDefinition.DeclaredShortName);
 
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iConcernDefinition.ElementId);

@@ -204,26 +204,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredShortName Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
-            {
-                foreach (var arrayItem in definitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var definitionExternalIdProperty))
-                    {
-                        var propertyValue = definitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.definition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the definition Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
             {
                 foreach (var arrayItem in differencingTypeProperty.EnumerateArray())
@@ -748,18 +728,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the isUnique Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
             {
                 if (isVariationProperty.ValueKind != JsonValueKind.Null)
@@ -770,26 +738,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isVariation Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("itemDefinition"u8, out var itemDefinitionProperty))
-            {
-                foreach (var arrayItem in itemDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var itemDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = itemDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.itemDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the itemDefinition Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("mayTimeVary"u8, out var mayTimeVaryProperty))
@@ -842,30 +790,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the membership Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("metaclass"u8, out var metaclassProperty))
-            {
-                if (metaclassProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.metaclass = null;
-                }
-                else
-                {
-                    if (metaclassProperty.TryGetProperty("@id"u8, out var metaclassExternalIdProperty))
-                    {
-                        var propertyValue = metaclassExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.metaclass = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the metaclass Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("metadataDefinition"u8, out var metadataDefinitionProperty))
@@ -2258,26 +2182,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the textualRepresentation Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
-            {
-                foreach (var arrayItem in typeProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var typeExternalIdProperty))
-                    {
-                        var propertyValue = typeExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.type.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the type Json property was not found in the MetadataUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))

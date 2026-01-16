@@ -123,18 +123,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("behavior"u8);
-
-            foreach (var item in iRequirementUsage.behavior)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("chainingFeature"u8);
 
             foreach (var item in iRequirementUsage.chainingFeature)
@@ -146,20 +134,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
-
-            writer.WritePropertyName("constraintDefinition"u8);
-
-            if (iRequirementUsage.constraintDefinition.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iRequirementUsage.constraintDefinition.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
 
             writer.WritePropertyName("crossFeature"u8);
 
@@ -178,36 +152,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iRequirementUsage.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iRequirementUsage.DeclaredShortName);
-
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iRequirementUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iRequirementUsage.differencingType)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("directedFeature"u8);
-
-            foreach (var item in iRequirementUsage.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -335,20 +282,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WritePropertyName("function"u8);
-
-            if (iRequirementUsage.function.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iRequirementUsage.function.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WriteStartArray("importedMembership"u8);
 
             foreach (var item in iRequirementUsage.importedMembership)
@@ -467,9 +400,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iRequirementUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iRequirementUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iRequirementUsage.IsVariation);
@@ -1283,20 +1213,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WritePropertyName("predicate"u8);
-
-            if (iRequirementUsage.predicate.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iRequirementUsage.predicate.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iRequirementUsage.qualifiedName);
 
@@ -1368,18 +1284,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iRequirementUsage.textualRepresentation)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iRequirementUsage.type)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1462,9 +1366,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iRequirementUsage.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iRequirementUsage.DeclaredShortName);
-
             writer.WritePropertyName("direction"u8);
 
             if (iRequirementUsage.Direction.HasValue)
@@ -1511,9 +1412,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iRequirementUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iRequirementUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iRequirementUsage.IsVariation);

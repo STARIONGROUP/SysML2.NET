@@ -38,7 +38,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     /// <summary>
     /// A handlebars block helper for the <see cref="IProperty"/> interface
     /// </summary>
-     public static class PropertyHelper
+    public static class PropertyHelper
     {
         /// <summary>
         /// Registers the <see cref="PropertyHelper"/>
@@ -131,13 +131,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 var property = (parameters[0] as IProperty)!;
-                var generatedClass = (parameters[1] as IClass)!;
+                var classContext = (parameters[1] as IClass)!;
 
                 var sb = new StringBuilder();
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
-                var isRedefinedByPropertyWithTheSameName = property.TryQueryRedefinedByProperty(generatedClass, out var redefiningProperty) && redefiningProperty.Name == property.Name;
+                var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var redefiningProperty);
 
-                if (!isRedefinedByPropertyWithTheSameName)
+                if (!isRedefinedPropertyInContext)
                 {
                     sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
                     sb.Append(' ');
@@ -187,14 +187,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
                 }
 
-                if (isRedefinedByPropertyWithTheSameName)
+                if (isRedefinedPropertyInContext)
                 {
                     var owner = (INamedElement)property.Owner;
                     propertyName = $"I{owner.Name}.{propertyName}";
 
                     var ownerNamespace = owner.QueryNamespace();
 
-                    if (ownerNamespace != generatedClass.QueryNamespace())
+                    if (ownerNamespace != classContext.QueryNamespace())
                     {
                         propertyName = $"{ownerNamespace}.{propertyName}";
                     }
@@ -205,44 +205,70 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
                 {
-                    if(isRedefinedByPropertyWithTheSameName)
+                    if (isRedefinedPropertyInContext)
                     {
-                        sb.Append("{ get; }");                        
+                        sb.Append($"=> {GetRedefinedPropertyGetterImplementationForDto(property, redefiningProperty, classContext)}");
                     }
                     else
                     {
                         sb.Append("{ get; internal set; }");
-                    }
 
-                    if (property.QueryIsEnumerable())
-                    {
-                        sb.Append(" = [];");
+                        if (property.QueryIsEnumerable())
+                        {
+                            sb.Append(" = [];");
+                        }
                     }
                 }
                 else
                 {
-                    sb.Append("{ get; set; }");
+                    if (isRedefinedPropertyInContext)
+                    {
+                        sb.AppendLine("{");
+                        sb.AppendLine($"\tget => {GetRedefinedPropertyGetterImplementationForDto(property, redefiningProperty, classContext)}");
+                        var setterImplementation = GetRedefinedPropertySetterImplementationForDto(property, redefiningProperty, classContext);
 
-                    if (property.QueryIsEnumerable())
-                    {
-                        sb.Append(" = [];");
-                    }
-                }
-                
-                if (property.QueryIsDefaultValueDifferentThanDefault())
-                {
-                    if (property.QueryIsString())
-                    {
-                        sb.Append($" = \"{property.QueryDefaultValueAsString()}\";");
+                        if (string.IsNullOrWhiteSpace(setterImplementation))
+                        {
+                            sb.AppendLine("\tset { }");
+                        }
+                        else
+                        {
+                            sb.AppendLine("\tset ");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"\t{setterImplementation}");
+                            sb.Append('}');
+                        }
+
+                        sb.Append('}');
                     }
                     else
                     {
-                        sb.Append($" = {property.QueryDefaultValueAsString()};");
+                        sb.Append("{ get; set; }");
+
+                        if (property.QueryIsEnumerable())
+                        {
+                            sb.Append(" = [];");
+                        }
                     }
                 }
-                else if (property.QueryIsEnumPropertyWithDefaultValue())
+
+                if (!isRedefinedPropertyInContext)
                 {
-                    sb.Append($" = {StringExtensions.CapitalizeFirstLetter(property.Type.Name)}.{StringExtensions.CapitalizeFirstLetter(property.QueryDefaultValueAsString())};");
+                    if (property.QueryIsDefaultValueDifferentThanDefault())
+                    {
+                        if (property.QueryIsString())
+                        {
+                            sb.Append($" = \"{property.QueryDefaultValueAsString()}\";");
+                        }
+                        else
+                        {
+                            sb.Append($" = {property.QueryDefaultValueAsString()};");
+                        }
+                    }
+                    else if (property.QueryIsEnumPropertyWithDefaultValue())
+                    {
+                        sb.Append($" = {StringExtensions.CapitalizeFirstLetter(property.Type.Name)}.{StringExtensions.CapitalizeFirstLetter(property.QueryDefaultValueAsString())};");
+                    }
                 }
 
                 writer.WriteSafeString(sb + Environment.NewLine);
@@ -317,18 +343,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("The #Property.WriteForPOCOClass supposed to be have 2 arguments IProperty");
                 }
 
-                if (arguments[1] is not IClass generatedClass)
+                if (arguments[1] is not IClass classContext)
                 {
                     throw new ArgumentException("The #Property.WriteForPOCOClass supposed to be have an IClass as second argument");
                 }
 
                 var sb = new StringBuilder();
-                var isRedefinedByPropertyWithTheSameName = property.TryQueryRedefinedByProperty(generatedClass, out var redefiningProperty) && redefiningProperty.Name == property.Name;
+                var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var redefiningProperty);
                 var typeName = property.QueryCSharpTypeName();
 
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
 
-                if (!isRedefinedByPropertyWithTheSameName)
+                if (!isRedefinedPropertyInContext)
                 {
                     sb.Append(property.Visibility.ToString().ToLower(CultureInfo.InvariantCulture));
                     sb.Append(' ');
@@ -360,14 +386,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     propertyName = StringExtensions.LowerCaseFirstLetter(propertyName);
                 }
 
-                if (isRedefinedByPropertyWithTheSameName)
+                if (isRedefinedPropertyInContext)
                 {
                     var owner = (INamedElement)property.Owner;
                     propertyName = $"I{owner.Name}.{propertyName}";
 
                     var ownerNamespace = owner.QueryNamespace();
 
-                    if (ownerNamespace != generatedClass.QueryNamespace())
+                    if (ownerNamespace != classContext.QueryNamespace())
                     {
                         propertyName = $"{ownerNamespace}.{propertyName}";
                     }
@@ -377,10 +403,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.IsDerived || property.IsDerivedUnion)
                 {
-                    if (isRedefinedByPropertyWithTheSameName)
+                    if (isRedefinedPropertyInContext)
                     {
-                        var owningClass = redefiningProperty.Owner as IClass;
-                        sb.Append($"=> throw new InvalidOperationException(\"Redefined by property I{owningClass?.Name}.{StringExtensions.CapitalizeFirstLetter(redefiningProperty.Name)}\");");
+                        sb.Append($"=> {GetRedefinedPropertyGetterImplementationForPoco(property, redefiningProperty, classContext)}");
                     }
                     else
                     {
@@ -389,10 +414,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else if (property.IsReadOnly)
                 {
-                    if (isRedefinedByPropertyWithTheSameName)
+                    if (isRedefinedPropertyInContext)
                     {
-                        var owningClass = redefiningProperty.Owner as IClass;
-                        sb.Append($"=> throw new InvalidOperationException(\"Redefined by property I{owningClass?.Name}.{StringExtensions.CapitalizeFirstLetter(redefiningProperty.Name)}\");");
+                        sb.Append($"=> {GetRedefinedPropertyGetterImplementationForPoco(property, redefiningProperty, classContext)}");
                     }
                     else
                     {
@@ -401,15 +425,39 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    sb.Append(" { get; set; }");
-
-                    if (property.QueryIsEnumerable())
+                    if (isRedefinedPropertyInContext)
                     {
-                        sb.Append(" = [];");
+                        sb.AppendLine("{");
+                        sb.AppendLine($"\tget => {GetRedefinedPropertyGetterImplementationForPoco(property, redefiningProperty, classContext)}");
+                        
+                        var setterImplementation = GetRedefinedPropertySetterImplementationForPoco(property, redefiningProperty, classContext);
+                        
+                        if (string.IsNullOrWhiteSpace(setterImplementation))
+                        {
+                            sb.AppendLine("\tset { }");
+                        }
+                        else
+                        {
+                            sb.AppendLine("\tset ");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"\t{setterImplementation}");
+                            sb.Append('}');
+                        }
+                        
+                        sb.Append('}');
+                    }
+                    else
+                    {
+                        sb.Append(" { get; set; }");
+
+                        if (property.QueryIsEnumerable())
+                        {
+                            sb.Append(" = [];");
+                        }
                     }
                 }
 
-                if (!property.IsDerived || property.IsDerivedUnion)
+                if ((!property.IsDerived || property.IsDerivedUnion) && !isRedefinedPropertyInContext)
                 {
                     if (property.QueryIsDefaultValueDifferentThanDefault())
                     {
@@ -538,8 +586,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("The #Property.WritePropertyName context supposed to be IProperty");
                 }
 
-                var propertyName = property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
-                writer.WriteSafeString(propertyName);
+                writer.WriteSafeString(property.QueryPropertyNameBasedOnUmlProperties());
             });
 
             handlebars.RegisterHelper("Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO", (writer, context, arguments) =>
@@ -561,17 +608,212 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var variableName = arguments[2].ToString();
                 var propertyName = property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
-                
+
                 if (property.TryQueryRedefinedByProperty(generatedClass, out var redefinitionProperty) && redefinitionProperty.Name == property.Name)
                 {
                     var owner = (INamedElement)property.Owner;
-                    writer.WriteSafeString($"((SysML2.NET.Core.DTO.{owner.QueryNamespace()}.I{owner.Name}){variableName}).{propertyName}");   
+                    writer.WriteSafeString($"((SysML2.NET.Core.DTO.{owner.QueryNamespace()}.I{owner.Name}){variableName}).{propertyName}");
                 }
                 else
                 {
-                    writer.WriteSafeString($"{variableName}.{propertyName}");   
+                    writer.WriteSafeString($"{variableName}.{propertyName}");
                 }
             });
-    }
+        }
+
+        /// <summary>
+        /// Gets the getter implementation for an <see cref="IProperty"/> that has been redefined, for DTO generation
+        /// </summary>
+        /// <param name="redefinedProperty">The redefined property</param>
+        /// <param name="redefinition">The property that redefines <paramref name="redefinedProperty"/></param>
+        /// <param name="context">Gets the <see cref="IClass"/> context</param>
+        /// <returns>The getter imlementation</returns>
+        private static string GetRedefinedPropertyGetterImplementationForDto(IProperty redefinedProperty, IProperty redefinition, IClass context)
+        {
+            string redefinitionPropertyName;
+
+            if (redefinition.TryQueryRedefinedByProperty(context, out _))
+            {
+                var owner = (INamedElement)redefinition.Owner;
+                redefinitionPropertyName = $"((SysML2.NET.Core.DTO.{owner.QueryNamespace()}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+            else
+            {
+                redefinitionPropertyName = $"this.{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+
+            if (redefinedProperty.QueryIsEnumerable() && redefinition.QueryIsEnumerable())
+            {
+                return $"{redefinitionPropertyName};";
+            }
+
+            if (redefinedProperty.QueryIsEnumerable() && !redefinition.QueryIsEnumerable())
+            {
+                return redefinition.QueryIsNullableAndNotString()
+                    ? $"{redefinitionPropertyName}.HasValue ? [{redefinitionPropertyName}.Value] : [];"
+                    : $"[{redefinitionPropertyName}];";
+            }
+
+            return redefinition.QueryIsNullableAndNotString()
+                ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : {(redefinedProperty.QueryIsReferenceProperty() ? "Guid.Empty" : "default")};"
+                : $"{redefinitionPropertyName};";
+        }
+
+        /// <summary>
+        /// Gets the getter implementation for an <see cref="IProperty"/> that has been redefined, for POCO generation
+        /// </summary>
+        /// <param name="redefinedProperty">The redefined property</param>
+        /// <param name="redefinition">The property that redefines <paramref name="redefinedProperty"/></param>
+        /// <param name="context">Gets the <see cref="IClass"/> context</param>
+        /// <returns>The getter imlementation</returns>
+        private static string GetRedefinedPropertyGetterImplementationForPoco(IProperty redefinedProperty, IProperty redefinition, IClass context)
+        {
+            string redefinitionPropertyName;
+
+            if (redefinition.TryQueryRedefinedByProperty(context, out _))
+            {
+                var owner = (INamedElement)redefinition.Owner;
+                redefinitionPropertyName = $"((SysML2.NET.Core.POCO.{owner.QueryNamespace()}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+            else
+            {
+                redefinitionPropertyName = $"this.{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+
+            if (redefinedProperty.QueryIsEnumerable() && redefinition.QueryIsEnumerable())
+            {
+                return $"[..{redefinitionPropertyName}];";
+            }
+
+            if (redefinedProperty.QueryIsEnumerable() && !redefinition.QueryIsEnumerable())
+            {
+                if (redefinedProperty.QueryIsReferenceProperty())
+                {
+                    return $"{redefinitionPropertyName} != null ? [{redefinitionPropertyName}] : [];";
+                }
+
+                if (redefinedProperty.QueryIsString())
+                {
+                    return $"string.IsNullOrWhiteSpace({redefinitionPropertyName}) ? [{redefinitionPropertyName}] : [];";
+                }
+
+                return redefinition.QueryIsNullableAndNotString()
+                    ? $"{redefinitionPropertyName}.HasValue ? [{redefinitionPropertyName}.Value] : [];"
+                    : $"[{redefinitionPropertyName}];";
+            }
+
+            return redefinition.QueryIsNullableAndNotString() && !redefinedProperty.QueryIsReferenceProperty()
+                ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : default;"
+                : $"{redefinitionPropertyName};";
+        }
+
+        /// <summary>
+        /// Gets the setter implementation for an <see cref="IProperty"/> that has been redefined, for DTO generation
+        /// </summary>
+        /// <param name="redefinedProperty">The redefined property</param>
+        /// <param name="redefinition">The property that redefines <paramref name="redefinedProperty"/></param>
+        /// <param name="context">Gets the <see cref="IClass"/> context</param>
+        /// <returns>The setter imlementation</returns>
+        private static string GetRedefinedPropertySetterImplementationForDto(IProperty redefinedProperty, IProperty redefinition, IClass context)
+        {
+            if (redefinition.IsDerived || redefinition.IsDerivedUnion || redefinition.IsReadOnly)
+            {
+                return string.Empty;
+            }
+
+            string redefinitionPropertyName;
+
+            if (redefinition.TryQueryRedefinedByProperty(context, out _))
+            {
+                var owner = (INamedElement)redefinition.Owner;
+                redefinitionPropertyName = $"((SysML2.NET.Core.DTO.{owner.QueryNamespace()}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+            else
+            {
+                redefinitionPropertyName = $"this.{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+
+            if (redefinedProperty.QueryIsEnumerable() == redefinition.QueryIsEnumerable())
+            {
+                return $"{redefinitionPropertyName} = value;";
+            }
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("if(value.Count != 0)");
+            stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine($"\t{redefinitionPropertyName} = value[0];");
+            stringBuilder.AppendLine("}");
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Gets the setter implementation for an <see cref="IProperty"/> that has been redefined, for POCO generation
+        /// </summary>
+        /// <param name="redefinedProperty">The redefined property</param>
+        /// <param name="redefinition">The property that redefines <paramref name="redefinedProperty"/></param>
+        /// <param name="context">Gets the <see cref="IClass"/> context</param>
+        /// <returns>The setter imlementation</returns>
+        private static string GetRedefinedPropertySetterImplementationForPoco(IProperty redefinedProperty, IProperty redefinition, IClass context)
+        {
+            if (redefinition.IsDerived || redefinition.IsDerivedUnion || redefinition.IsReadOnly)
+            {
+                return string.Empty;
+            }
+
+            string redefinitionPropertyName;
+
+            if (redefinition.TryQueryRedefinedByProperty(context, out _))
+            {
+                var owner = (INamedElement)redefinition.Owner;
+                redefinitionPropertyName = $"((SysML2.NET.Core.POCO.{owner.QueryNamespace()}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+            else
+            {
+                redefinitionPropertyName = $"this.{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+            }
+
+            var redefinitionPropertyTypeName = redefinition.QueryIsReferenceProperty() ? $"I{redefinition.Type.Name}" : redefinition.QueryCSharpTypeName();
+            
+            if (redefinedProperty.QueryIsEnumerable() && redefinition.QueryIsEnumerable())
+            {
+                return redefinedProperty.Type == redefinition.Type ? $"{redefinitionPropertyName} = value;" : $"{redefinitionPropertyName} = [..value.OfType<{redefinitionPropertyTypeName}>()];";
+            }
+
+            var stringBuilder = new StringBuilder();
+
+            if (redefinedProperty.QueryIsEnumerable())
+            {
+                if (redefinedProperty.Type == redefinition.Type)
+                {
+                    stringBuilder.AppendLine("if(value.Count != 0)");
+                    stringBuilder.AppendLine("{");
+                    stringBuilder.AppendLine($"\t{redefinitionPropertyName} = value[0];");
+                }
+                else
+                {
+                    stringBuilder.AppendLine($"if(value.OfType<{redefinitionPropertyTypeName}>().FirstOrDefault() is {{ }} firstValue)");
+                    stringBuilder.AppendLine("{");
+                    stringBuilder.AppendLine($"\t{redefinitionPropertyName} = firstValue;");
+                }
+                
+                stringBuilder.Append('}');
+            }
+            else
+            {
+                if (redefinedProperty.Type == redefinition.Type)
+                {
+                    stringBuilder.Append($"{redefinitionPropertyName} = value;");
+                }
+                else
+                {
+                    stringBuilder.AppendLine($"if(value is {redefinitionPropertyTypeName} castedValue)");
+                    stringBuilder.AppendLine("{");
+                    stringBuilder.AppendLine($"\t{redefinitionPropertyName} = castedValue;");
+                    stringBuilder.Append('}');
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
     }
 }

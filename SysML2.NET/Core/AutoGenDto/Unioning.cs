@@ -235,7 +235,11 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IUnioning.TypeUnioned")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => [this.typeUnioned];
+            set { }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -244,7 +248,18 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IUnioning.UnioningType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => [this.UnioningType];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.UnioningType = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

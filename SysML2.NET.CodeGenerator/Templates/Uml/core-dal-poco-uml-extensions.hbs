@@ -67,9 +67,11 @@ namespace SysML2.NET.Dal
 
             var identifiersOfObjectsToDelete = new List<Guid>();
 
+            {{#with this as |class |}}
             {{#each (Class.QueryAllProperties this) as | property |}}
             {{#unless property.IsDerived }}
             {{#unless property.IsTransient }}
+                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                 {{#if (Property.QueryIsReferenceProperty property)}}
                     {{#if (Property.QueryIsEnumerable property) }}
                             var {{ property.Name}}ToDelete = poco.{{ String.PascalCase property.Name}}.Select(x => x.Id).Except(dto.{{ String.PascalCase property.Name}});
@@ -85,16 +87,14 @@ namespace SysML2.NET.Dal
 
                     {{/if}}
                 {{else}}
-                    {{#if (Property.IsRedefinedOrRedifines this ../this)}}
-                        ((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})poco).{{ String.PascalCase property.Name }} = ((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})dto).{{ String.PascalCase property.Name }};
-                    {{else}}
                         poco.{{ String.PascalCase property.Name }} = dto.{{ String.PascalCase property.Name }};
-                    {{/if}}
-
+                
                 {{/if}}
             {{/unless}}
             {{/unless}}
+            {{/unless}}
             {{/each}}
+            {{/with}}
 
             return identifiersOfObjectsToDelete;
         }
@@ -132,11 +132,13 @@ namespace SysML2.NET.Dal
             }
 
             Lazy<Core.POCO.Root.Elements.IElement> lazyPoco;
-
+                
+            {{#with this as | class |}}
             {{#each (Class.QueryAllProperties this) as | property |}}
                 {{#unless property.IsDerived }}
                 {{#unless property.IsTransient }}
-                {{#if (Property.QueryIsReferenceProperty property)}}
+                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                    {{#if (Property.QueryIsReferenceProperty property)}}
                     {{#if (Property.QueryIsEnumerable property) }}
                         var {{ property.Name}}ToAdd = dto.{{ String.PascalCase property.Name}}.Except(poco.{{ String.PascalCase property.Name}}.Select(x => x.Id));
                         
@@ -184,7 +186,9 @@ namespace SysML2.NET.Dal
                 {{/if}}
             {{/unless}}
             {{/unless}}
+            {{/unless}}
             {{/each}}
+            {{/with}}
         }
 
         /// <summary>
@@ -201,10 +205,12 @@ namespace SysML2.NET.Dal
             var dto = new Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}();
 
             dto.Id = poco.Id;
+            {{#with this as | class |}}
             {{#each (Class.QueryAllProperties this) as | property |}}
             {{#unless property.IsDerived }}
             {{#unless property.IsTransient }}
-            {{#if (Property.QueryIsReferenceProperty property) }}
+                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                {{#if (Property.QueryIsReferenceProperty property) }}
                 {{#if (Property.QueryIsEnumerable property)}}
                     dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }}.Select(x => x.Id).ToList();
                 {{ else if (Property.QueryIsNullable property)}}
@@ -213,16 +219,14 @@ namespace SysML2.NET.Dal
                     dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }}.Id;
                 {{/if}}
             {{ else }}
-                {{#if (Property.IsRedefinedOrRedifines this ../this)}}
-                    ((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})dto).{{ String.PascalCase property.Name }} = ((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Owner }}.I{{property.Owner.Name}})poco).{{ String.PascalCase property.Name }};
-                {{else}}
                     dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }};
-                {{/if}}
             {{/if}}
             {{/unless}}
             {{/unless}}
+            {{/unless}}
             {{/each}}
-
+            {{/with}}
+            
             return dto;
         }
     }

@@ -172,7 +172,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IConnector.ConnectorEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        public List<Guid> endFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.endFeature => this.connectorEnd;
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -733,7 +733,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IConnector.RelatedFeature")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        public List<Guid> relatedElement { get; internal set; } = [];
+        List<Guid> Root.Elements.IRelationship.relatedElement => this.relatedFeature;
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -761,7 +761,11 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConnector.SourceFeature")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => this.sourceFeature.HasValue ? [this.sourceFeature.Value] : [];
+            set { }
+        }
 
         /// <summary>
         /// The source relatedFeature for this Connector. It is the first relatedFeature.
@@ -779,7 +783,11 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConnector.TargetFeature")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => this.targetFeature;
+            set { }
+        }
 
         /// <summary>
         /// The target relatedFeatures for this Connector. This includes all the relatedFeatures other than the
@@ -809,7 +817,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IConnector.Association")]
         [Implements(implementation: "IFeature.Type")]
-        public List<Guid> type { get; internal set; } = [];
+        List<Guid> Core.Features.IFeature.type => this.association;
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

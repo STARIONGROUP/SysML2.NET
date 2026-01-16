@@ -129,7 +129,14 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [Property(xmiId: "_19_0_2_12e503d9_1584048161309_821854_390", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IRequirementVerificationMembership.Kind")]
         [Implements(implementation: "IRequirementConstraintMembership.Kind")]
-        RequirementConstraintKind Systems.Requirements.IRequirementConstraintMembership.Kind { get; set; }
+        RequirementConstraintKind Systems.Requirements.IRequirementConstraintMembership.Kind
+        {
+            get => this.Kind;
+            set
+            {
+                this.Kind = value;
+            }
+        }
 
         /// <summary>
         /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
@@ -138,7 +145,11 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElement")]
         [Implements(implementation: "IMembership.MemberElement")]
-        public Guid MemberElement { get; set; }
+        Guid Root.Namespaces.IMembership.MemberElement
+        {
+            get => ((SysML2.NET.Core.DTO.Root.Namespaces.IOwningMembership)this).ownedMemberElement;
+            set { }
+        }
 
         /// <summary>
         /// The elementId of the memberElement.
@@ -146,7 +157,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
         [Implements(implementation: "IMembership.MemberElementId")]
-        public string memberElementId { get; internal set; }
+        string Root.Namespaces.IMembership.memberElementId => this.ownedMemberElementId;
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
@@ -154,7 +165,11 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [Property(xmiId: "_18_5_3_12e503d9_1533160674964_35293_43192", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberName")]
         [Implements(implementation: "IMembership.MemberName")]
-        public string MemberName { get; set; }
+        string Root.Namespaces.IMembership.MemberName
+        {
+            get => this.ownedMemberName;
+            set { }
+        }
 
         /// <summary>
         /// The Namespace of which the memberElement becomes a member due to this Membership.
@@ -165,7 +180,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [RedefinedByProperty("IFeatureMembership.OwningType")]
         [Implements(implementation: "IMembership.MembershipOwningNamespace")]
-        public Guid membershipOwningNamespace { get; internal set; }
+        Guid Root.Namespaces.IMembership.membershipOwningNamespace => this.owningType;
 
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.
@@ -173,7 +188,11 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1651721174176_601088_238", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberShortName")]
         [Implements(implementation: "IMembership.MemberShortName")]
-        public string MemberShortName { get; set; }
+        string Root.Namespaces.IMembership.MemberShortName
+        {
+            get => this.ownedMemberShortName;
+            set { }
+        }
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -202,7 +221,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         [RedefinedByProperty("IRequirementVerificationMembership.OwnedRequirement")]
         [Implements(implementation: "IRequirementConstraintMembership.OwnedConstraint")]
-        public Guid ownedConstraint { get; internal set; }
+        Guid Systems.Requirements.IRequirementConstraintMembership.ownedConstraint => this.ownedRequirement;
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -221,7 +240,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_819490_43195")]
         [RedefinedByProperty("IFeatureMembership.OwnedMemberFeature")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElement")]
-        public Guid ownedMemberElement { get; internal set; }
+        Guid Root.Namespaces.IOwningMembership.ownedMemberElement => ((SysML2.NET.Core.DTO.Core.Types.IFeatureMembership)this).ownedMemberFeature;
 
         /// <summary>
         /// The elementId of the ownedMemberElement.
@@ -239,7 +258,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         [RedefinedByProperty("IRequirementConstraintMembership.OwnedConstraint")]
         [Implements(implementation: "IFeatureMembership.OwnedMemberFeature")]
-        public Guid ownedMemberFeature { get; internal set; }
+        Guid Core.Types.IFeatureMembership.ownedMemberFeature => ((SysML2.NET.Core.DTO.Systems.Requirements.IRequirementConstraintMembership)this).ownedConstraint;
 
         /// <summary>
         /// The name of the ownedMemberElement.
@@ -354,7 +373,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [Property(xmiId: "_19_0_4_12e503d9_1617118807597_77864_3544", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IRequirementVerificationMembership.VerifiedRequirement")]
         [Implements(implementation: "IRequirementConstraintMembership.ReferencedConstraint")]
-        public Guid referencedConstraint { get; internal set; }
+        Guid Systems.Requirements.IRequirementConstraintMembership.referencedConstraint => this.verifiedRequirement;
 
         /// <summary>
         /// The Elements that are related by this Relationship, derived as the union of the source and target
@@ -381,7 +400,11 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IMembership.MembershipOwningNamespace")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => [((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)this).membershipOwningNamespace];
+            set { }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -390,7 +413,18 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IMembership.MemberElement")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => [((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)this).MemberElement];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    ((SysML2.NET.Core.DTO.Root.Namespaces.IMembership)this).MemberElement = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

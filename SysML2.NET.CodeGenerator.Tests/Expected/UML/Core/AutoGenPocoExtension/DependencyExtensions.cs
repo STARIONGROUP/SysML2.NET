@@ -105,27 +105,11 @@ namespace SysML2.NET.Dal
 
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
-            var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
-
-            foreach (var identifier in sourceToDelete)
-            {
-                poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
-            }
-
-
             var supplierToDelete = poco.Supplier.Select(x => x.Id).Except(dto.Supplier);
 
             foreach (var identifier in supplierToDelete)
             {
                 poco.Supplier.Remove(poco.Supplier.Single(x => x.Id == identifier));
-            }
-
-
-            var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
-
-            foreach (var identifier in targetToDelete)
-            {
-                poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
             }
 
 
@@ -215,16 +199,6 @@ namespace SysML2.NET.Dal
                 poco.OwningRelationship = null;
             }
 
-            var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
-
-            foreach (var identifier in sourceToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Source.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
             var supplierToAdd = dto.Supplier.Except(poco.Supplier.Select(x => x.Id));
 
             foreach (var identifier in supplierToAdd)
@@ -232,16 +206,6 @@ namespace SysML2.NET.Dal
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
                     poco.Supplier.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
-            var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
-
-            foreach (var identifier in targetToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Target.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
                 }
             }
 
@@ -272,9 +236,7 @@ namespace SysML2.NET.Dal
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
-            dto.Source = poco.Source.Select(x => x.Id).ToList();
             dto.Supplier = poco.Supplier.Select(x => x.Id).ToList();
-            dto.Target = poco.Target.Select(x => x.Id).ToList();
 
             return dto;
         }

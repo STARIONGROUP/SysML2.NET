@@ -129,27 +129,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isLibraryElement"u8);
             writer.WriteBooleanValue(iParameterMembership.isLibraryElement);
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iParameterMembership.MemberElement);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberElementId"u8);
-            writer.WriteStringValue(iParameterMembership.memberElementId);
-
-            writer.WritePropertyName("memberName"u8);
-            writer.WriteStringValue(iParameterMembership.MemberName);
-
-            writer.WritePropertyName("membershipOwningNamespace"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iParameterMembership.membershipOwningNamespace);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberShortName"u8);
-            writer.WriteStringValue(iParameterMembership.MemberShortName);
-
             writer.WritePropertyName("name"u8);
             writer.WriteStringValue(iParameterMembership.name);
 
@@ -177,20 +156,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WritePropertyName("ownedMemberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iParameterMembership.ownedMemberElement);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("ownedMemberElementId"u8);
             writer.WriteStringValue(iParameterMembership.ownedMemberElementId);
-
-            writer.WritePropertyName("ownedMemberFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iParameterMembership.ownedMemberFeature);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("ownedMemberName"u8);
             writer.WriteStringValue(iParameterMembership.ownedMemberName);
@@ -322,30 +289,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iParameterMembership.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iParameterMembership.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iParameterMembership.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iParameterMembership.textualRepresentation)
@@ -398,18 +341,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iParameterMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iParameterMembership.MemberElement);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberName"u8);
-            writer.WriteStringValue(iParameterMembership.MemberName);
-
-            writer.WritePropertyName("memberShortName"u8);
-            writer.WriteStringValue(iParameterMembership.MemberShortName);
-
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iParameterMembership.OwnedRelatedElement)
@@ -461,30 +392,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iParameterMembership.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iParameterMembership.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iParameterMembership.Visibility.ToString().ToLower());

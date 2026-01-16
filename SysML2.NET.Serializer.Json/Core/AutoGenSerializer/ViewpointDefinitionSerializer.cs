@@ -126,24 +126,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iViewpointDefinition.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iViewpointDefinition.DeclaredShortName);
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iViewpointDefinition.differencingType)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("directedFeature"u8);
-
-            foreach (var item in iViewpointDefinition.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1125,9 +1110,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iViewpointDefinition.DeclaredName);
-
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iViewpointDefinition.DeclaredShortName);
 
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iViewpointDefinition.ElementId);

@@ -160,26 +160,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the differencingType Json property was not found in the ActionDefinition: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
-            {
-                foreach (var arrayItem in directedFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = directedFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.directedFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the directedFeature Json property was not found in the ActionDefinition: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))
             {
                 foreach (var arrayItem in directedUsageProperty.EnumerateArray())

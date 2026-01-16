@@ -154,31 +154,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the elementId Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("general"u8, out var generalProperty))
-            {
-                if (generalProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.General = Guid.Empty;
-                    logger.LogDebug($"the Subclassification.General property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (generalProperty.TryGetProperty("@id"u8, out var generalExternalIdProperty))
-                    {
-                        var propertyValue = generalExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.General = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the general Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
             {
                 if (isImpliedProperty.ValueKind != JsonValueKind.Null)
@@ -448,30 +423,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the owningRelationship Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("owningType"u8, out var owningTypeProperty))
-            {
-                if (owningTypeProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningType = null;
-                }
-                else
-                {
-                    if (owningTypeProperty.TryGetProperty("@id"u8, out var owningTypeExternalIdProperty))
-                    {
-                        var propertyValue = owningTypeExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.owningType = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningType Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
             {
                 dtoInstance.qualifiedName = qualifiedNameProperty.GetString();
@@ -508,51 +459,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the shortName Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceExternalIdProperty))
-                    {
-                        var propertyValue = sourceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("specific"u8, out var specificProperty))
-            {
-                if (specificProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.Specific = Guid.Empty;
-                    logger.LogDebug($"the Subclassification.Specific property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (specificProperty.TryGetProperty("@id"u8, out var specificExternalIdProperty))
-                    {
-                        var propertyValue = specificExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Specific = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the specific Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("subclassifier"u8, out var subclassifierProperty))
@@ -603,26 +509,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the superclassifier Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetExternalIdProperty))
-                    {
-                        var propertyValue = targetExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the Subclassification: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
