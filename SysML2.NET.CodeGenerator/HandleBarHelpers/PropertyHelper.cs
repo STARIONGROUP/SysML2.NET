@@ -644,7 +644,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (redefinedProperty.QueryIsEnumerable() && redefinition.QueryIsEnumerable())
             {
-                return $"{redefinitionPropertyName};";
+                return $"[..{redefinitionPropertyName}];";
             }
 
             if (redefinedProperty.QueryIsEnumerable() && !redefinition.QueryIsEnumerable())

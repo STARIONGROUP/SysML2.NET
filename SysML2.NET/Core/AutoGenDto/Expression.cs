@@ -125,7 +125,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<Guid> Core.Types.IType.directedFeature => this.parameter;
+        List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the

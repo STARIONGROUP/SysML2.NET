@@ -191,7 +191,7 @@ namespace SysML2.NET.Core.DTO.Systems.Connections
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IConnector.ConnectorEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<Guid> Core.Types.IType.endFeature => this.connectorEnd;
+        List<Guid> Core.Types.IType.endFeature => [.. this.connectorEnd];
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -1021,7 +1021,7 @@ namespace SysML2.NET.Core.DTO.Systems.Connections
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IConnector.RelatedFeature")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<Guid> Root.Elements.IRelationship.relatedElement => this.relatedFeature;
+        List<Guid> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -1073,7 +1073,7 @@ namespace SysML2.NET.Core.DTO.Systems.Connections
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {
-            get => this.targetFeature;
+            get => [.. this.targetFeature];
             set { }
         }
 
@@ -1105,7 +1105,7 @@ namespace SysML2.NET.Core.DTO.Systems.Connections
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<Guid> Core.Features.IFeature.type => this.definition;
+        List<Guid> Core.Features.IFeature.type => [.. this.definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

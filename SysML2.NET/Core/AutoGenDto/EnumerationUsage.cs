@@ -112,7 +112,7 @@ namespace SysML2.NET.Core.DTO.Systems.Enumerations
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IAttributeUsage.AttributeDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => ((SysML2.NET.Core.DTO.Systems.Attributes.IAttributeUsage)this).attributeDefinition;
+        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.DTO.Systems.Attributes.IAttributeUsage)this).attributeDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -1019,7 +1019,7 @@ namespace SysML2.NET.Core.DTO.Systems.Enumerations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<Guid> Core.Features.IFeature.type => ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition;
+        List<Guid> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

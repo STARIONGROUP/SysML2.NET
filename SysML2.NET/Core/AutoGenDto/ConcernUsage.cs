@@ -159,7 +159,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => this.occurrenceDefinition;
+        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -181,7 +181,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<Guid> Core.Types.IType.directedFeature => this.parameter;
+        List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -1195,7 +1195,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<Guid> Core.Features.IFeature.type => ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition;
+        List<Guid> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

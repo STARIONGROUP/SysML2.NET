@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IConnectionUsage.ConnectionDefinition")]
         [Implements(implementation: "IConnector.Association")]
-        List<Guid> Kernel.Connectors.IConnector.association => ((SysML2.NET.Core.DTO.Systems.Connections.IConnectionUsage)this).connectionDefinition;
+        List<Guid> Kernel.Connectors.IConnector.association => [.. ((SysML2.NET.Core.DTO.Systems.Connections.IConnectionUsage)this).connectionDefinition];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -86,7 +86,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674983_471497_43284")]
         [RedefinedByProperty("IInterfaceUsage.InterfaceDefinition")]
         [Implements(implementation: "IConnectionUsage.ConnectionDefinition")]
-        List<Guid> Systems.Connections.IConnectionUsage.connectionDefinition => this.interfaceDefinition;
+        List<Guid> Systems.Connections.IConnectionUsage.connectionDefinition => [.. this.interfaceDefinition];
 
         /// <summary>
         /// The endFeatures of a Connector, which redefine the endFeatures of the associations of the Connector.
@@ -143,7 +143,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => this.occurrenceDefinition;
+        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -207,7 +207,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IConnector.ConnectorEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<Guid> Core.Types.IType.endFeature => this.connectorEnd;
+        List<Guid> Core.Types.IType.endFeature => [.. this.connectorEnd];
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -1098,7 +1098,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IConnector.RelatedFeature")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<Guid> Root.Elements.IRelationship.relatedElement => this.relatedFeature;
+        List<Guid> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -1150,7 +1150,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {
-            get => this.targetFeature;
+            get => [.. this.targetFeature];
             set { }
         }
 
@@ -1182,7 +1182,7 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<Guid> Core.Features.IFeature.type => ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition;
+        List<Guid> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

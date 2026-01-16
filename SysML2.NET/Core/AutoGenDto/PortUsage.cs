@@ -103,7 +103,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => ((SysML2.NET.Core.DTO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition;
+        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.DTO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -684,7 +684,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IPortUsage.PortDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        List<Guid> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => this.portDefinition;
+        List<Guid> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. this.portDefinition];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1037,7 +1037,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        List<Guid> Core.Features.IFeature.type => ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition;
+        List<Guid> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

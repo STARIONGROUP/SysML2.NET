@@ -91,7 +91,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IBehavior.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<Guid> Core.Types.IType.directedFeature => this.parameter;
+        List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The Documentation owned by this Element.

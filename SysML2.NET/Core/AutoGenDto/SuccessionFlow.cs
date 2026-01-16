@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IFlow.Interaction")]
         [Implements(implementation: "IConnector.Association")]
-        List<Guid> Kernel.Connectors.IConnector.association => this.interaction;
+        List<Guid> Kernel.Connectors.IConnector.association => [.. this.interaction];
 
         /// <summary>
         /// The Behaviors that type this Step.
@@ -71,7 +71,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IFlow.Interaction")]
         [Implements(implementation: "IStep.Behavior")]
-        List<Guid> Kernel.Behaviors.IStep.behavior => this.interaction;
+        List<Guid> Kernel.Behaviors.IStep.behavior => [.. this.interaction];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -151,7 +151,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<Guid> Core.Types.IType.directedFeature => this.parameter;
+        List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -185,7 +185,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IConnector.ConnectorEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<Guid> Core.Types.IType.endFeature => this.connectorEnd;
+        List<Guid> Core.Types.IType.endFeature => [.. this.connectorEnd];
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -788,7 +788,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IConnector.RelatedFeature")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<Guid> Root.Elements.IRelationship.relatedElement => this.relatedFeature;
+        List<Guid> Root.Elements.IRelationship.relatedElement => [.. this.relatedFeature];
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
@@ -848,7 +848,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {
-            get => this.targetFeature;
+            get => [.. this.targetFeature];
             set { }
         }
 
@@ -888,7 +888,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IConnector.Association")]
         [Implements(implementation: "IFeature.Type")]
-        List<Guid> Core.Features.IFeature.type => ((SysML2.NET.Core.DTO.Kernel.Connectors.IConnector)this).association;
+        List<Guid> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.DTO.Kernel.Connectors.IConnector)this).association];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

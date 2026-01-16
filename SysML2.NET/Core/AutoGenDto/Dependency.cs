@@ -248,7 +248,7 @@ namespace SysML2.NET.Core.DTO.Root.Dependencies
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
         {
-            get => this.Client;
+            get => [.. this.Client];
             set
             {
                 this.Client = value;
@@ -272,7 +272,7 @@ namespace SysML2.NET.Core.DTO.Root.Dependencies
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {
-            get => this.Supplier;
+            get => [.. this.Supplier];
             set
             {
                 this.Supplier = value;

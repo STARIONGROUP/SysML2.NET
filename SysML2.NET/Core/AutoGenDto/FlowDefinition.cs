@@ -73,7 +73,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [RedefinedByProperty("IFlowDefinition.FlowEnd")]
         [Implements(implementation: "IAssociation.AssociationEnd")]
-        List<Guid> Kernel.Associations.IAssociation.associationEnd => this.flowEnd;
+        List<Guid> Kernel.Associations.IAssociation.associationEnd => [.. this.flowEnd];
 
         /// <summary>
         /// The declared name of this Element.
@@ -112,7 +112,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IBehavior.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        List<Guid> Core.Types.IType.directedFeature => this.parameter;
+        List<Guid> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The usages of this Definition that are directedFeatures.
@@ -147,7 +147,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IAssociation.AssociationEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        List<Guid> Core.Types.IType.endFeature => ((SysML2.NET.Core.DTO.Kernel.Associations.IAssociation)this).associationEnd;
+        List<Guid> Core.Types.IType.endFeature => [.. ((SysML2.NET.Core.DTO.Kernel.Associations.IAssociation)this).associationEnd];
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -778,7 +778,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IAssociation.RelatedType")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        List<Guid> Root.Elements.IRelationship.relatedElement => this.relatedType;
+        List<Guid> Root.Elements.IRelationship.relatedElement => [.. this.relatedType];
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the
@@ -838,7 +838,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
         {
-            get => this.targetType;
+            get => [.. this.targetType];
             set { }
         }
 

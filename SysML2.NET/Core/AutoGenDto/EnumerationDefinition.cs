@@ -772,7 +772,7 @@ namespace SysML2.NET.Core.DTO.Systems.Enumerations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [RedefinedByProperty("IEnumerationDefinition.EnumeratedValue")]
         [Implements(implementation: "IDefinition.Variant")]
-        List<Guid> Systems.DefinitionAndUsage.IDefinition.variant => this.enumeratedValue;
+        List<Guid> Systems.DefinitionAndUsage.IDefinition.variant => [.. this.enumeratedValue];
 
         /// <summary>
         /// The ownedMemberships of this Definition that are VariantMemberships. If isVariation = true, then
