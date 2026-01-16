@@ -111,18 +111,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("associationEnd"u8);
-
-            foreach (var item in iAllocationDefinition.associationEnd)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("connectionEnd"u8);
 
             foreach (var item in iAllocationDefinition.connectionEnd)
@@ -191,18 +179,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iAllocationDefinition.ElementId);
-
-            writer.WriteStartArray("endFeature"u8);
-
-            foreach (var item in iAllocationDefinition.endFeature)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("feature"u8);
 
@@ -968,18 +944,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iAllocationDefinition.qualifiedName);
 
-            writer.WriteStartArray("relatedElement"u8);
-
-            foreach (var item in iAllocationDefinition.relatedElement)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("relatedType"u8);
 
             foreach (var item in iAllocationDefinition.relatedType)
@@ -995,18 +959,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iAllocationDefinition.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iAllocationDefinition.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WritePropertyName("sourceType"u8);
 
             if (iAllocationDefinition.sourceType.HasValue)
@@ -1020,18 +972,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iAllocationDefinition.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("targetType"u8);
 
@@ -1205,30 +1145,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iAllocationDefinition.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iAllocationDefinition.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
         }
     }

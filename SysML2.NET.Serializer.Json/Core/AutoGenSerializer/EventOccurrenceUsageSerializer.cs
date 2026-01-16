@@ -131,18 +131,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iEventOccurrenceUsage.DeclaredShortName);
 
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iEventOccurrenceUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iEventOccurrenceUsage.differencingType)
@@ -394,9 +382,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iEventOccurrenceUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsVariation);
@@ -1216,18 +1201,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iEventOccurrenceUsage.type)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("unioningType"u8);
 
             foreach (var item in iEventOccurrenceUsage.unioningType)
@@ -1350,9 +1323,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iEventOccurrenceUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iEventOccurrenceUsage.IsVariation);

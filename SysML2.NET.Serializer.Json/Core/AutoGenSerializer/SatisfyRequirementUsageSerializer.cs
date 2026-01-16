@@ -111,27 +111,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WritePropertyName("assertedConstraint"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iSatisfyRequirementUsage.assertedConstraint);
-            writer.WriteEndObject();
-
             writer.WriteStartArray("assumedConstraint"u8);
 
             foreach (var item in iSatisfyRequirementUsage.assumedConstraint)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("behavior"u8);
-
-            foreach (var item in iSatisfyRequirementUsage.behavior)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -153,20 +135,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WritePropertyName("constraintDefinition"u8);
-
-            if (iSatisfyRequirementUsage.constraintDefinition.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iSatisfyRequirementUsage.constraintDefinition.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("crossFeature"u8);
 
             if (iSatisfyRequirementUsage.crossFeature.HasValue)
@@ -184,36 +152,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iSatisfyRequirementUsage.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iSatisfyRequirementUsage.DeclaredShortName);
-
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iSatisfyRequirementUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iSatisfyRequirementUsage.differencingType)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("directedFeature"u8);
-
-            foreach (var item in iSatisfyRequirementUsage.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -341,20 +282,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WritePropertyName("function"u8);
-
-            if (iSatisfyRequirementUsage.function.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iSatisfyRequirementUsage.function.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WriteStartArray("importedMembership"u8);
 
             foreach (var item in iSatisfyRequirementUsage.importedMembership)
@@ -476,9 +403,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsVariation);
@@ -1292,20 +1216,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WritePropertyName("predicate"u8);
-
-            if (iSatisfyRequirementUsage.predicate.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iSatisfyRequirementUsage.predicate.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iSatisfyRequirementUsage.qualifiedName);
 
@@ -1398,18 +1308,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iSatisfyRequirementUsage.type)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("unioningType"u8);
 
             foreach (var item in iSatisfyRequirementUsage.unioningType)
@@ -1483,9 +1381,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iSatisfyRequirementUsage.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iSatisfyRequirementUsage.DeclaredShortName);
-
             writer.WritePropertyName("direction"u8);
 
             if (iSatisfyRequirementUsage.Direction.HasValue)
@@ -1535,9 +1430,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iSatisfyRequirementUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iSatisfyRequirementUsage.IsVariation);

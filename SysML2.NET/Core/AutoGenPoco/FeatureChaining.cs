@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Root.Annotations;
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -257,7 +258,11 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IFeatureChaining.FeatureChained")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Source
+        {
+            get => this.featureChained != null ? [this.featureChained] : [];
+            set { }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -266,7 +271,17 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IFeatureChaining.ChainingFeature")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Target
+        {
+            get => this.ChainingFeature != null ? [this.ChainingFeature] : [];
+            set
+            {
+                if (value.OfType<IFeature>().FirstOrDefault() is { } firstValue)
+                {
+                    this.ChainingFeature = firstValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

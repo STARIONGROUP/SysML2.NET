@@ -122,26 +122,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the aliasIds Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("behavior"u8, out var behaviorProperty))
-            {
-                foreach (var arrayItem in behaviorProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var behaviorExternalIdProperty))
-                    {
-                        var propertyValue = behaviorExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.behavior.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the behavior Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("bodyAction"u8, out var bodyActionProperty))
             {
                 if (bodyActionProperty.ValueKind == JsonValueKind.Null)
@@ -229,26 +209,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredShortName Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
-            {
-                foreach (var arrayItem in definitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var definitionExternalIdProperty))
-                    {
-                        var propertyValue = definitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.definition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the definition Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
             {
                 foreach (var arrayItem in differencingTypeProperty.EnumerateArray())
@@ -267,26 +227,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the differencingType Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
-            {
-                foreach (var arrayItem in directedFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = directedFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.directedFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the directedFeature Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))
@@ -771,18 +711,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isUnique Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
@@ -1445,26 +1373,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the nestedViewpoint Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("occurrenceDefinition"u8, out var occurrenceDefinitionProperty))
-            {
-                foreach (var arrayItem in occurrenceDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var occurrenceDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = occurrenceDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.occurrenceDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the occurrenceDefinition Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
@@ -2241,26 +2149,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the textualRepresentation Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
-            {
-                foreach (var arrayItem in typeProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var typeExternalIdProperty))
-                    {
-                        var propertyValue = typeExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.type.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the type Json property was not found in the ForLoopActionUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))

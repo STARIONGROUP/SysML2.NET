@@ -143,18 +143,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iAttributeUsage.DeclaredShortName);
 
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iAttributeUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iAttributeUsage.differencingType)
@@ -383,9 +371,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iAttributeUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iAttributeUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iAttributeUsage.IsVariation);
@@ -1182,18 +1167,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iAttributeUsage.type)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("unioningType"u8);
 
             foreach (var item in iAttributeUsage.unioningType)
@@ -1313,9 +1286,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iAttributeUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iAttributeUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iAttributeUsage.IsVariation);

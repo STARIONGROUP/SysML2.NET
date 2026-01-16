@@ -246,7 +246,14 @@ namespace SysML2.NET.Core.DTO.Root.Dependencies
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IDependency.Client")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => this.Client;
+            set
+            {
+                this.Client = value;
+            }
+        }
 
         /// <summary>
         /// The Element or Elements on which the client Elements depend in some respect.
@@ -263,7 +270,14 @@ namespace SysML2.NET.Core.DTO.Root.Dependencies
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IDependency.Supplier")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => this.Supplier;
+            set
+            {
+                this.Supplier = value;
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

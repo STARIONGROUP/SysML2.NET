@@ -156,18 +156,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iAssociation.ElementId);
 
-            writer.WriteStartArray("endFeature"u8);
-
-            foreach (var item in iAssociation.endFeature)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("feature"u8);
 
             foreach (var item in iAssociation.feature)
@@ -602,18 +590,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iAssociation.qualifiedName);
 
-            writer.WriteStartArray("relatedElement"u8);
-
-            foreach (var item in iAssociation.relatedElement)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("relatedType"u8);
 
             foreach (var item in iAssociation.relatedType)
@@ -629,18 +605,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iAssociation.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iAssociation.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WritePropertyName("sourceType"u8);
 
             if (iAssociation.sourceType.HasValue)
@@ -654,18 +618,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iAssociation.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("targetType"u8);
 
@@ -797,30 +749,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iAssociation.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iAssociation.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
         }
     }

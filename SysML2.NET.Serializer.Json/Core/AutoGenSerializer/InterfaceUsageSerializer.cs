@@ -99,33 +99,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("association"u8);
-
-            foreach (var item in iInterfaceUsage.association)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("chainingFeature"u8);
 
             foreach (var item in iInterfaceUsage.chainingFeature)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("connectionDefinition"u8);
-
-            foreach (var item in iInterfaceUsage.connectionDefinition)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -180,18 +156,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iInterfaceUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("differencingType"u8);
 
@@ -254,18 +218,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iInterfaceUsage.ElementId);
-
-            writer.WriteStartArray("endFeature"u8);
-
-            foreach (var item in iInterfaceUsage.endFeature)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WritePropertyName("endOwningType"u8);
 
@@ -453,9 +405,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iInterfaceUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsVariation);
@@ -1310,18 +1259,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iInterfaceUsage.qualifiedName);
 
-            writer.WriteStartArray("relatedElement"u8);
-
-            foreach (var item in iInterfaceUsage.relatedElement)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("relatedFeature"u8);
 
             foreach (var item in iInterfaceUsage.relatedFeature)
@@ -1337,18 +1274,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iInterfaceUsage.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iInterfaceUsage.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WritePropertyName("sourceFeature"u8);
 
             if (iInterfaceUsage.sourceFeature.HasValue)
@@ -1362,18 +1287,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iInterfaceUsage.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("targetFeature"u8);
 
@@ -1390,18 +1303,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iInterfaceUsage.textualRepresentation)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iInterfaceUsage.type)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1537,9 +1438,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsUnique);
 
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iInterfaceUsage.IsVariable);
-
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iInterfaceUsage.IsVariation);
 
@@ -1605,30 +1503,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iInterfaceUsage.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iInterfaceUsage.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
         }
     }

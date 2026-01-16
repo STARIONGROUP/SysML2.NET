@@ -63,8 +63,7 @@ namespace SysML2.NET.Dal
             poco.IsImplied = dto.IsImplied;
             poco.IsImpliedIncluded = dto.IsImpliedIncluded;
             poco.IsIndividual = dto.IsIndividual;
-            ((Core.POCO.Systems.Connections.IConnectionDefinition)poco).IsSufficient = ((Core.DTO.Systems.Connections.IConnectionDefinition)dto).IsSufficient;
-            ((Core.POCO.Core.Types.IType)poco).IsSufficient = ((Core.DTO.Core.Types.IType)dto).IsSufficient;
+            poco.IsSufficient = dto.IsSufficient;
             poco.IsVariation = dto.IsVariation;
 
             return poco;

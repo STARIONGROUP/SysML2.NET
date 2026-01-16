@@ -372,9 +372,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iUsage.IsUnique);
 
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iUsage.IsVariable);
-
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iUsage.IsVariation);
 
@@ -1170,18 +1167,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iUsage.type)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("unioningType"u8);
 
             foreach (var item in iUsage.unioningType)
@@ -1301,9 +1286,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iUsage.IsVariation);

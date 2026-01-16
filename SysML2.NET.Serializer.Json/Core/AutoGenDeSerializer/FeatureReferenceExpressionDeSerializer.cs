@@ -102,26 +102,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the aliasIds Json property was not found in the FeatureReferenceExpression: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("behavior"u8, out var behaviorProperty))
-            {
-                foreach (var arrayItem in behaviorProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var behaviorExternalIdProperty))
-                    {
-                        var propertyValue = behaviorExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.behavior.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the behavior Json property was not found in the FeatureReferenceExpression: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("chainingFeature"u8, out var chainingFeatureProperty))
             {
                 foreach (var arrayItem in chainingFeatureProperty.EnumerateArray())
@@ -202,26 +182,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the differencingType Json property was not found in the FeatureReferenceExpression: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
-            {
-                foreach (var arrayItem in directedFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = directedFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.directedFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the directedFeature Json property was not found in the FeatureReferenceExpression: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("direction"u8, out var directionProperty))

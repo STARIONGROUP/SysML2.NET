@@ -254,7 +254,18 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("ISpecialization.Specific")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => [this.Specific];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.Specific = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// A Type with a subset of all instances of the general Type, which might be the same set.
@@ -271,7 +282,18 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("ISpecialization.General")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => [this.General];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.General = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

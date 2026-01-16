@@ -101,7 +101,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IBehavior.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<Guid> directedFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.directedFeature => this.parameter;
 
         /// <summary>
         /// The Documentation owned by this Element.
@@ -127,7 +127,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IAssociation.AssociationEnd")]
         [Implements(implementation: "IType.EndFeature")]
-        public List<Guid> endFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.endFeature => this.associationEnd;
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -516,7 +516,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [RedefinedByProperty("IAssociation.RelatedType")]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        public List<Guid> relatedElement { get; internal set; } = [];
+        List<Guid> Root.Elements.IRelationship.relatedElement => this.relatedType;
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the
@@ -544,7 +544,11 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IAssociation.SourceType")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => this.sourceType.HasValue ? [this.sourceType.Value] : [];
+            set { }
+        }
 
         /// <summary>
         /// The source relatedType for this Association. It is the first relatedType of the Association.
@@ -570,7 +574,11 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IAssociation.TargetType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => this.targetType;
+            set { }
+        }
 
         /// <summary>
         /// The target relatedTypes for this Association. This includes all the relatedTypes other than the

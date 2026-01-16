@@ -60,7 +60,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [RedefinedByProperty("IStateUsage.StateDefinition")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        public List<Guid> actionDefinition { get; internal set; } = [];
+        List<Guid> Systems.Actions.IActionUsage.actionDefinition => this.stateDefinition;
 
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
@@ -76,7 +76,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<Guid> behavior { get; internal set; } = [];
+        List<Guid> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.DTO.Systems.Actions.IActionUsage)this).actionDefinition;
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -126,7 +126,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<Guid> definition { get; internal set; } = [];
+        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => ((SysML2.NET.Core.DTO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition;
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -148,7 +148,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<Guid> directedFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.directedFeature => this.parameter;
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -228,7 +228,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1622831790393_676695_195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IPerformActionUsage.PerformedAction")]
         [Implements(implementation: "IEventOccurrenceUsage.EventOccurrence")]
-        public Guid eventOccurrence { get; internal set; }
+        Guid Systems.Occurrences.IEventOccurrenceUsage.eventOccurrence => ((SysML2.NET.Core.DTO.Systems.Actions.IPerformActionUsage)this).performedAction;
 
         /// <summary>
         /// The StateUsage to be exhibited by the ExhibitStateUsage. It is the performedAction of the
@@ -445,7 +445,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IEventOccurrenceUsage.IsReference")]
         [Implements(implementation: "IUsage.IsReference")]
-        bool Systems.DefinitionAndUsage.IUsage.isReference { get; }
+        bool Systems.DefinitionAndUsage.IUsage.isReference => this.isReference;
 
         /// <summary>
         /// Always true for an EventOccurrenceUsage.
@@ -481,7 +481,11 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => this.mayTimeVary;
+            set { }
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -768,7 +772,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        public List<Guid> occurrenceDefinition { get; internal set; } = [];
+        List<Guid> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => ((SysML2.NET.Core.DTO.Systems.Actions.IActionUsage)this).actionDefinition;
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1081,7 +1085,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622831790393_676695_195")]
         [RedefinedByProperty("IExhibitStateUsage.ExhibitedState")]
         [Implements(implementation: "IPerformActionUsage.PerformedAction")]
-        public Guid performedAction { get; internal set; }
+        Guid Systems.Actions.IPerformActionUsage.performedAction => this.exhibitedState;
 
         /// <summary>
         /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
@@ -1141,7 +1145,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        public List<Guid> type { get; internal set; } = [];
+        List<Guid> Core.Features.IFeature.type => ((SysML2.NET.Core.DTO.Systems.DefinitionAndUsage.IUsage)this).definition;
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

@@ -102,26 +102,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the aliasIds Json property was not found in the Documentation: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("annotatedElement"u8, out var annotatedElementProperty))
-            {
-                foreach (var arrayItem in annotatedElementProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var annotatedElementExternalIdProperty))
-                    {
-                        var propertyValue = annotatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.annotatedElement.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the annotatedElement Json property was not found in the Documentation: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("annotation"u8, out var annotationProperty))
             {
                 foreach (var arrayItem in annotationProperty.EnumerateArray())

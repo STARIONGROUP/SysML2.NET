@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Root.Namespaces;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -282,7 +283,11 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IMembership.MembershipOwningNamespace")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Source
+        {
+            get => this.membershipOwningNamespace != null ? [this.membershipOwningNamespace] : [];
+            set { }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -291,7 +296,17 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IMembership.MemberElement")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Target
+        {
+            get => this.MemberElement != null ? [this.MemberElement] : [];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.MemberElement = value[0];
+                }
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

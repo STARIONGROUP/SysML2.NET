@@ -111,18 +111,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("behavior"u8);
-
-            foreach (var item in iIfActionUsage.behavior)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("chainingFeature"u8);
 
             foreach (var item in iIfActionUsage.chainingFeature)
@@ -155,33 +143,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iIfActionUsage.DeclaredShortName);
 
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iIfActionUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iIfActionUsage.differencingType)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("directedFeature"u8);
-
-            foreach (var item in iIfActionUsage.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -432,9 +396,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iIfActionUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iIfActionUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iIfActionUsage.IsVariation);
@@ -798,18 +759,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("nestedViewpoint"u8);
 
             foreach (var item in iIfActionUsage.nestedViewpoint)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("occurrenceDefinition"u8);
-
-            foreach (var item in iIfActionUsage.occurrenceDefinition)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1272,18 +1221,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iIfActionUsage.thenAction);
             writer.WriteEndObject();
 
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iIfActionUsage.type)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("unioningType"u8);
 
             foreach (var item in iIfActionUsage.unioningType)
@@ -1406,9 +1343,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iIfActionUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iIfActionUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iIfActionUsage.IsVariation);

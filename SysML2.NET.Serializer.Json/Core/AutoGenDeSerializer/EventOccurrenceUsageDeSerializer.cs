@@ -164,26 +164,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredShortName Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
-            {
-                foreach (var arrayItem in definitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var definitionExternalIdProperty))
-                    {
-                        var propertyValue = definitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.definition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the definition Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
             {
                 foreach (var arrayItem in differencingTypeProperty.EnumerateArray())
@@ -731,18 +711,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isUnique Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
@@ -2131,26 +2099,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the textualRepresentation Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
-            {
-                foreach (var arrayItem in typeProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var typeExternalIdProperty))
-                    {
-                        var propertyValue = typeExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.type.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the type Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))

@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -89,7 +90,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IEnumerationUsage.EnumerationDefinition")]
         [Implements(implementation: "IAttributeUsage.AttributeDefinition")]
-        public List<IDataType> attributeDefinition => this.ComputeAttributeDefinition();
+        List<IDataType> Systems.Attributes.IAttributeUsage.attributeDefinition => this.enumerationDefinition != null ? [this.enumerationDefinition] : [];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -139,7 +140,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IAttributeUsage.AttributeDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<IClassifier> definition => this.ComputeDefinition();
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage)this).attributeDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -402,7 +403,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IAttributeUsage.IsReference")]
         [Implements(implementation: "IUsage.IsReference")]
-        bool Systems.DefinitionAndUsage.IUsage.isReference => throw new InvalidOperationException("Redefined by property IAttributeUsage.IsReference");
+        bool Systems.DefinitionAndUsage.IUsage.isReference => this.isReference;
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -430,7 +431,11 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => this.mayTimeVary;
+            set { }
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -1042,7 +1047,7 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        public List<IType> type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

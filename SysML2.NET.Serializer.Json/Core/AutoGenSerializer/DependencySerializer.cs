@@ -280,33 +280,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iDependency.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iDependency.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("supplier"u8);
 
             foreach (var item in iDependency.Supplier)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iDependency.Target)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -429,33 +405,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iDependency.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("supplier"u8);
 
             foreach (var item in iDependency.Supplier)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iDependency.Target)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);

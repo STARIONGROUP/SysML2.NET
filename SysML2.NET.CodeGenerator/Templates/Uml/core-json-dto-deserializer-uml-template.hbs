@@ -88,7 +88,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {{#with this as |class| }}
                 {{ #each (Class.QueryAllProperties this) as | property | }}
                         {{#unless this.IsTransient}}
-                            {{#unless (Property.IsRedefinedByPropertyWithSameName this class)}}
+                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                             if (jsonElement.TryGetProperty("{{ property.Name }}"u8, out var {{ property.Name }}Property))
                             {
                             {{#if (Property.QueryIsReferenceProperty property)}}

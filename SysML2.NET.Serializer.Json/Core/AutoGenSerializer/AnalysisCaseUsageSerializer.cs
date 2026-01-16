@@ -90,18 +90,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// </param>
         private static void SerializeAsJsonWithDerivedProperties(IAnalysisCaseUsage iAnalysisCaseUsage, Utf8JsonWriter writer)
         {
-            writer.WriteStartArray("actionDefinition"u8);
-
-            foreach (var item in iAnalysisCaseUsage.actionDefinition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("actorParameter"u8);
 
             foreach (var item in iAnalysisCaseUsage.actorParameter)
@@ -130,46 +118,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iAnalysisCaseUsage.analysisCaseDefinition.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WriteStartArray("behavior"u8);
-
-            foreach (var item in iAnalysisCaseUsage.behavior)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("calculationDefinition"u8);
-
-            if (iAnalysisCaseUsage.calculationDefinition.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iAnalysisCaseUsage.calculationDefinition.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
-            writer.WritePropertyName("caseDefinition"u8);
-
-            if (iAnalysisCaseUsage.caseDefinition.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iAnalysisCaseUsage.caseDefinition.Value);
                 writer.WriteEndObject();
             }
             else
@@ -209,33 +157,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredShortName"u8);
             writer.WriteStringValue(iAnalysisCaseUsage.DeclaredShortName);
 
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iAnalysisCaseUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iAnalysisCaseUsage.differencingType)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("directedFeature"u8);
-
-            foreach (var item in iAnalysisCaseUsage.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -350,20 +274,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
-
-            writer.WritePropertyName("function"u8);
-
-            if (iAnalysisCaseUsage.function.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iAnalysisCaseUsage.function.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
 
             writer.WriteStartArray("importedMembership"u8);
 
@@ -483,9 +393,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iAnalysisCaseUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsVariation);
@@ -871,18 +778,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("occurrenceDefinition"u8);
-
-            foreach (var item in iAnalysisCaseUsage.occurrenceDefinition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("output"u8);
 
@@ -1357,18 +1252,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iAnalysisCaseUsage.type)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("unioningType"u8);
 
             foreach (var item in iAnalysisCaseUsage.unioningType)
@@ -1491,9 +1374,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iAnalysisCaseUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iAnalysisCaseUsage.IsVariation);

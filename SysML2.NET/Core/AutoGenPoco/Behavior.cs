@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -96,7 +97,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IBehavior.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<IFeature> directedFeature => this.ComputeDirectedFeature();
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The Documentation owned by this Element.

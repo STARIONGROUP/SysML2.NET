@@ -85,26 +85,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
-            if (jsonElement.TryGetProperty("actionDefinition"u8, out var actionDefinitionProperty))
-            {
-                foreach (var arrayItem in actionDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var actionDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = actionDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.actionDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the actionDefinition Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
             {
                 foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
@@ -120,46 +100,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the aliasIds Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("association"u8, out var associationProperty))
-            {
-                foreach (var arrayItem in associationProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var associationExternalIdProperty))
-                    {
-                        var propertyValue = associationExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.association.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the association Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("behavior"u8, out var behaviorProperty))
-            {
-                foreach (var arrayItem in behaviorProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var behaviorExternalIdProperty))
-                    {
-                        var propertyValue = behaviorExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.behavior.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the behavior Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("chainingFeature"u8, out var chainingFeatureProperty))
@@ -268,26 +208,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the defaultFeaturingType Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
-            {
-                foreach (var arrayItem in definitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var definitionExternalIdProperty))
-                    {
-                        var propertyValue = definitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.definition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the definition Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
             {
                 foreach (var arrayItem in differencingTypeProperty.EnumerateArray())
@@ -306,26 +226,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the differencingType Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
-            {
-                foreach (var arrayItem in directedFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = directedFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.directedFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the directedFeature Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))
@@ -389,26 +289,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the elementId Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("endFeature"u8, out var endFeatureProperty))
-            {
-                foreach (var arrayItem in endFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var endFeatureExternalIdProperty))
-                    {
-                        var propertyValue = endFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.endFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the endFeature Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("endOwningType"u8, out var endOwningTypeProperty))
@@ -664,26 +544,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the input Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("interaction"u8, out var interactionProperty))
-            {
-                foreach (var arrayItem in interactionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var interactionExternalIdProperty))
-                    {
-                        var propertyValue = interactionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.interaction.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the interaction Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("intersectingType"u8, out var intersectingTypeProperty))
             {
                 foreach (var arrayItem in intersectingTypeProperty.EnumerateArray())
@@ -882,18 +742,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isUnique Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
@@ -1531,26 +1379,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the nestedViewpoint Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("occurrenceDefinition"u8, out var occurrenceDefinitionProperty))
-            {
-                foreach (var arrayItem in occurrenceDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var occurrenceDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = occurrenceDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.occurrenceDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the occurrenceDefinition Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
@@ -2363,26 +2191,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the qualifiedName Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("relatedElement"u8, out var relatedElementProperty))
-            {
-                foreach (var arrayItem in relatedElementProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var relatedElementExternalIdProperty))
-                    {
-                        var propertyValue = relatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.relatedElement.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the relatedElement Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("relatedFeature"u8, out var relatedFeatureProperty))
             {
                 foreach (var arrayItem in relatedFeatureProperty.EnumerateArray())
@@ -2410,26 +2218,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the shortName Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceExternalIdProperty))
-                    {
-                        var propertyValue = sourceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("sourceFeature"u8, out var sourceFeatureProperty))
@@ -2478,26 +2266,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the sourceOutputFeature Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetExternalIdProperty))
-                    {
-                        var propertyValue = targetExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("targetFeature"u8, out var targetFeatureProperty))
@@ -2562,26 +2330,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the textualRepresentation Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
-            {
-                foreach (var arrayItem in typeProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var typeExternalIdProperty))
-                    {
-                        var propertyValue = typeExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.type.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the type Json property was not found in the SuccessionFlowUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))

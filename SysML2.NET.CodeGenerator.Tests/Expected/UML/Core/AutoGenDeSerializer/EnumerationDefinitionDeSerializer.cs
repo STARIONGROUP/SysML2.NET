@@ -1597,26 +1597,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the usage Json property was not found in the EnumerationDefinition: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("variant"u8, out var variantProperty))
-            {
-                foreach (var arrayItem in variantProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var variantExternalIdProperty))
-                    {
-                        var propertyValue = variantExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.variant.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the variant Json property was not found in the EnumerationDefinition: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("variantMembership"u8, out var variantMembershipProperty))
             {
                 foreach (var arrayItem in variantMembershipProperty.EnumerateArray())

@@ -70,7 +70,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<Guid> behavior { get; internal set; } = [];
+        List<Guid> Kernel.Behaviors.IStep.behavior => this.function.HasValue ? [this.function.Value] : [];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -131,7 +131,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<Guid> directedFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.directedFeature => this.parameter;
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -443,7 +443,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         [Property(xmiId: "_18_5_3_12e503d9_1557528808100_646606_111674", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("ICollectExpression.Operator")]
         [Implements(implementation: "IOperatorExpression.Operator")]
-        string IOperatorExpression.Operator { get; set; }
+        string IOperatorExpression.Operator
+        {
+            get => this.Operator;
+            set
+            {
+                this.Operator = value;
+            }
+        }
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.

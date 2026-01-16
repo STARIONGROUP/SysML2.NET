@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -281,7 +282,11 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IAnnotation.AnnotatingElement")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Source
+        {
+            get => this.annotatingElement != null ? [this.annotatingElement] : [];
+            set { }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -290,7 +295,17 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IAnnotation.AnnotatedElement")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Target
+        {
+            get => this.AnnotatedElement != null ? [this.AnnotatedElement] : [];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.AnnotatedElement = value[0];
+                }
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

@@ -122,26 +122,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the aliasIds Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("associationEnd"u8, out var associationEndProperty))
-            {
-                foreach (var arrayItem in associationEndProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var associationEndExternalIdProperty))
-                    {
-                        var propertyValue = associationEndExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.associationEnd.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the associationEnd Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
             {
                 dtoInstance.DeclaredName = declaredNameProperty.GetString();
@@ -178,26 +158,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the differencingType Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
-            {
-                foreach (var arrayItem in directedFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = directedFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.directedFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the directedFeature Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))
@@ -252,26 +212,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the elementId Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("endFeature"u8, out var endFeatureProperty))
-            {
-                foreach (var arrayItem in endFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var endFeatureExternalIdProperty))
-                    {
-                        var propertyValue = endFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.endFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the endFeature Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("feature"u8, out var featureProperty))
@@ -1656,26 +1596,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the qualifiedName Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("relatedElement"u8, out var relatedElementProperty))
-            {
-                foreach (var arrayItem in relatedElementProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var relatedElementExternalIdProperty))
-                    {
-                        var propertyValue = relatedElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.relatedElement.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the relatedElement Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("relatedType"u8, out var relatedTypeProperty))
             {
                 foreach (var arrayItem in relatedTypeProperty.EnumerateArray())
@@ -1703,26 +1623,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the shortName Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceExternalIdProperty))
-                    {
-                        var propertyValue = sourceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("sourceType"u8, out var sourceTypeProperty))
@@ -1767,26 +1667,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the step Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetExternalIdProperty))
-                    {
-                        var propertyValue = targetExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the FlowDefinition: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("targetType"u8, out var targetTypeProperty))

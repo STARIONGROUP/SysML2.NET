@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -414,7 +415,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [RedefinedByProperty("IConjugatedPortDefinition.OwnedPortConjugator")]
         [Implements(implementation: "IType.OwnedConjugator")]
-        public IConjugation ownedConjugator => this.ComputeOwnedConjugator();
+        IConjugation Core.Types.IType.ownedConjugator => this.ownedPortConjugator;
 
         /// <summary>
         /// The ConnectorAsUsages that are ownedUsages of this Definition. Note that this list includes
@@ -743,7 +744,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [RedefinedByProperty("IConjugatedPortDefinition.OriginalPortDefinition")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public INamespace owningNamespace => this.ComputeOwningNamespace();
+        INamespace Root.Elements.IElement.owningNamespace => this.originalPortDefinition;
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.

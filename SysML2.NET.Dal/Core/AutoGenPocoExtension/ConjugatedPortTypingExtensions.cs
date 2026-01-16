@@ -97,22 +97,6 @@ namespace SysML2.NET.Dal
 
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
-            var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
-
-            foreach (var identifier in sourceToDelete)
-            {
-                poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
-            }
-
-
-            var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
-
-            foreach (var identifier in targetToDelete)
-            {
-                poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
-            }
-
-
 
             return identifiersOfObjectsToDelete;
         }
@@ -160,15 +144,6 @@ namespace SysML2.NET.Dal
                 poco.ConjugatedPortDefinition = null;
             }
 
-            if (cache.TryGetValue(dto.General, out lazyPoco))
-            {
-                poco.General = (Core.POCO.Core.Types.Type)lazyPoco.Value;
-            }
-            else
-            {
-                poco.General = null;
-            }
-
             var ownedRelatedElementToAdd = dto.OwnedRelatedElement.Except(poco.OwnedRelatedElement.Select(x => x.Id));
 
             foreach (var identifier in ownedRelatedElementToAdd)
@@ -207,44 +182,6 @@ namespace SysML2.NET.Dal
                 poco.OwningRelationship = null;
             }
 
-            var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
-
-            foreach (var identifier in sourceToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Source.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
-            if (cache.TryGetValue(dto.Specific, out lazyPoco))
-            {
-                poco.Specific = (Core.POCO.Core.Types.Type)lazyPoco.Value;
-            }
-            else
-            {
-                poco.Specific = null;
-            }
-
-            var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
-
-            foreach (var identifier in targetToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Target.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
-            if (cache.TryGetValue(dto.Type, out lazyPoco))
-            {
-                poco.Type = (Core.POCO.Core.Types.Type)lazyPoco.Value;
-            }
-            else
-            {
-                poco.Type = null;
-            }
-
             if (cache.TryGetValue(dto.TypedFeature, out lazyPoco))
             {
                 poco.TypedFeature = (Core.POCO.Core.Features.Feature)lazyPoco.Value;
@@ -275,17 +212,12 @@ namespace SysML2.NET.Dal
             dto.DeclaredName = poco.DeclaredName;
             dto.DeclaredShortName = poco.DeclaredShortName;
             dto.ElementId = poco.ElementId;
-            dto.General = poco.General.Id;
             dto.IsImplied = poco.IsImplied;
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
-            dto.Source = poco.Source.Select(x => x.Id).ToList();
-            dto.Specific = poco.Specific.Id;
-            dto.Target = poco.Target.Select(x => x.Id).ToList();
-            dto.Type = poco.Type.Id;
             dto.TypedFeature = poco.TypedFeature.Id;
 
             return dto;

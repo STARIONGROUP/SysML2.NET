@@ -129,27 +129,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isLibraryElement"u8);
             writer.WriteBooleanValue(iViewRenderingMembership.isLibraryElement);
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iViewRenderingMembership.MemberElement);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberElementId"u8);
-            writer.WriteStringValue(iViewRenderingMembership.memberElementId);
-
-            writer.WritePropertyName("memberName"u8);
-            writer.WriteStringValue(iViewRenderingMembership.MemberName);
-
-            writer.WritePropertyName("membershipOwningNamespace"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iViewRenderingMembership.membershipOwningNamespace);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberShortName"u8);
-            writer.WriteStringValue(iViewRenderingMembership.MemberShortName);
-
             writer.WritePropertyName("name"u8);
             writer.WriteStringValue(iViewRenderingMembership.name);
 
@@ -177,20 +156,8 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WritePropertyName("ownedMemberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iViewRenderingMembership.ownedMemberElement);
-            writer.WriteEndObject();
-
             writer.WritePropertyName("ownedMemberElementId"u8);
             writer.WriteStringValue(iViewRenderingMembership.ownedMemberElementId);
-
-            writer.WritePropertyName("ownedMemberFeature"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iViewRenderingMembership.ownedMemberFeature);
-            writer.WriteEndObject();
 
             writer.WritePropertyName("ownedMemberName"u8);
             writer.WriteStringValue(iViewRenderingMembership.ownedMemberName);
@@ -328,30 +295,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iViewRenderingMembership.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iViewRenderingMembership.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iViewRenderingMembership.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iViewRenderingMembership.textualRepresentation)
@@ -404,18 +347,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iViewRenderingMembership.IsImpliedIncluded);
 
-            writer.WritePropertyName("memberElement"u8);
-            writer.WriteStartObject();
-            writer.WritePropertyName("@id"u8);
-            writer.WriteStringValue(iViewRenderingMembership.MemberElement);
-            writer.WriteEndObject();
-
-            writer.WritePropertyName("memberName"u8);
-            writer.WriteStringValue(iViewRenderingMembership.MemberName);
-
-            writer.WritePropertyName("memberShortName"u8);
-            writer.WriteStringValue(iViewRenderingMembership.MemberShortName);
-
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iViewRenderingMembership.OwnedRelatedElement)
@@ -467,30 +398,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iViewRenderingMembership.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iViewRenderingMembership.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iViewRenderingMembership.Visibility.ToString().ToLower());

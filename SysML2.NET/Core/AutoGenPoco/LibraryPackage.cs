@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Kernel.Functions;
     using SysML2.NET.Core.POCO.Root.Annotations;

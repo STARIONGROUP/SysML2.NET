@@ -85,26 +85,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
-            if (jsonElement.TryGetProperty("actionDefinition"u8, out var actionDefinitionProperty))
-            {
-                foreach (var arrayItem in actionDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var actionDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = actionDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.actionDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the actionDefinition Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("actorParameter"u8, out var actorParameterProperty))
             {
                 foreach (var arrayItem in actorParameterProperty.EnumerateArray())
@@ -140,74 +120,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the aliasIds Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("behavior"u8, out var behaviorProperty))
-            {
-                foreach (var arrayItem in behaviorProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var behaviorExternalIdProperty))
-                    {
-                        var propertyValue = behaviorExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.behavior.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the behavior Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("calculationDefinition"u8, out var calculationDefinitionProperty))
-            {
-                if (calculationDefinitionProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.calculationDefinition = null;
-                }
-                else
-                {
-                    if (calculationDefinitionProperty.TryGetProperty("@id"u8, out var calculationDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = calculationDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.calculationDefinition = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the calculationDefinition Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("caseDefinition"u8, out var caseDefinitionProperty))
-            {
-                if (caseDefinitionProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.caseDefinition = null;
-                }
-                else
-                {
-                    if (caseDefinitionProperty.TryGetProperty("@id"u8, out var caseDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = caseDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.caseDefinition = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the caseDefinition Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("chainingFeature"u8, out var chainingFeatureProperty))
@@ -272,26 +184,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the declaredShortName Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("definition"u8, out var definitionProperty))
-            {
-                foreach (var arrayItem in definitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var definitionExternalIdProperty))
-                    {
-                        var propertyValue = definitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.definition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the definition Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
             {
                 foreach (var arrayItem in differencingTypeProperty.EnumerateArray())
@@ -310,26 +202,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the differencingType Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
-            {
-                foreach (var arrayItem in directedFeatureProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var directedFeatureExternalIdProperty))
-                    {
-                        var propertyValue = directedFeatureExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.directedFeature.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the directedFeature Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))
@@ -522,30 +394,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the featuringType Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("function"u8, out var functionProperty))
-            {
-                if (functionProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.function = null;
-                }
-                else
-                {
-                    if (functionProperty.TryGetProperty("@id"u8, out var functionExternalIdProperty))
-                    {
-                        var propertyValue = functionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.function = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the function Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
@@ -870,18 +718,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the isUnique Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
-            {
-                if (isVariableProperty.ValueKind != JsonValueKind.Null)
-                {
-                    dtoInstance.IsVariable = isVariableProperty.GetBoolean();
-                }
-            }
-            else
-            {
-                logger.LogDebug("the isVariable Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
@@ -1543,26 +1379,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the objectiveRequirement Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("occurrenceDefinition"u8, out var occurrenceDefinitionProperty))
-            {
-                foreach (var arrayItem in occurrenceDefinitionProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var occurrenceDefinitionExternalIdProperty))
-                    {
-                        var propertyValue = occurrenceDefinitionExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.occurrenceDefinition.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the occurrenceDefinition Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
@@ -2364,26 +2180,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the textualRepresentation Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
-            {
-                foreach (var arrayItem in typeProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var typeExternalIdProperty))
-                    {
-                        var propertyValue = typeExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.type.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the type Json property was not found in the UseCaseUsage: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))

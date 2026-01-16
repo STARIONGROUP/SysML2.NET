@@ -486,26 +486,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the shortName Json property was not found in the Specialization: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceExternalIdProperty))
-                    {
-                        var propertyValue = sourceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the Specialization: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("specific"u8, out var specificProperty))
             {
                 if (specificProperty.ValueKind == JsonValueKind.Null)
@@ -529,26 +509,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the specific Json property was not found in the Specialization: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetExternalIdProperty))
-                    {
-                        var propertyValue = targetExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the Specialization: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))

@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -264,7 +265,17 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("ITypeFeaturing.FeatureOfType")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Source
+        {
+            get => this.FeatureOfType != null ? [this.FeatureOfType] : [];
+            set
+            {
+                if (value.OfType<IFeature>().FirstOrDefault() is { } firstValue)
+                {
+                    this.FeatureOfType = firstValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -273,7 +284,17 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("ITypeFeaturing.FeaturingType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Target
+        {
+            get => this.FeaturingType != null ? [this.FeaturingType] : [];
+            set
+            {
+                if (value.OfType<IType>().FirstOrDefault() is { } firstValue)
+                {
+                    this.FeaturingType = firstValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

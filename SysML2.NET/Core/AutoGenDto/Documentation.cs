@@ -59,7 +59,7 @@ namespace SysML2.NET.Core.DTO.Root.Annotations
         [Property(xmiId: "_19_0_2_12e503d9_1594145755058_99428_86", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IDocumentation.DocumentedElement")]
         [Implements(implementation: "IAnnotatingElement.AnnotatedElement")]
-        public List<Guid> annotatedElement { get; internal set; } = [];
+        List<Guid> IAnnotatingElement.annotatedElement => [this.documentedElement];
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements. This includes the

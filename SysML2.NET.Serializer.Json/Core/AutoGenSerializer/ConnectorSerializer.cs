@@ -219,18 +219,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iConnector.ElementId);
 
-            writer.WriteStartArray("endFeature"u8);
-
-            foreach (var item in iConnector.endFeature)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WritePropertyName("endOwningType"u8);
 
             if (iConnector.endOwningType.HasValue)
@@ -837,18 +825,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iConnector.qualifiedName);
 
-            writer.WriteStartArray("relatedElement"u8);
-
-            foreach (var item in iConnector.relatedElement)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("relatedFeature"u8);
 
             foreach (var item in iConnector.relatedFeature)
@@ -864,18 +840,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iConnector.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iConnector.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WritePropertyName("sourceFeature"u8);
 
             if (iConnector.sourceFeature.HasValue)
@@ -889,18 +853,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iConnector.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("targetFeature"u8);
 
@@ -917,18 +869,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iConnector.textualRepresentation)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iConnector.type)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1079,30 +1019,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iConnector.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iConnector.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
         }
     }

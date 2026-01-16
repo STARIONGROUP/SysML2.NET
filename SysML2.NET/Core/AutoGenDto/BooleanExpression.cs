@@ -60,7 +60,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<Guid> behavior { get; internal set; } = [];
+        List<Guid> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.DTO.Kernel.Functions.IExpression)this).function.HasValue ? [((SysML2.NET.Core.DTO.Kernel.Functions.IExpression)this).function.Value] : [];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -121,7 +121,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<Guid> directedFeature { get; internal set; } = [];
+        List<Guid> Core.Types.IType.directedFeature => this.parameter;
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -207,7 +207,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedByProperty("IBooleanExpression.Predicate")]
         [Implements(implementation: "IExpression.Function")]
-        public Guid? function { get; internal set; }
+        Guid? IExpression.function => this.predicate.HasValue ? this.predicate.Value : Guid.Empty;
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.

@@ -219,18 +219,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iBindingConnector.ElementId);
 
-            writer.WriteStartArray("endFeature"u8);
-
-            foreach (var item in iBindingConnector.endFeature)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WritePropertyName("endOwningType"u8);
 
             if (iBindingConnector.endOwningType.HasValue)
@@ -837,18 +825,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iBindingConnector.qualifiedName);
 
-            writer.WriteStartArray("relatedElement"u8);
-
-            foreach (var item in iBindingConnector.relatedElement)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("relatedFeature"u8);
 
             foreach (var item in iBindingConnector.relatedFeature)
@@ -864,18 +840,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iBindingConnector.shortName);
 
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iBindingConnector.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WritePropertyName("sourceFeature"u8);
 
             if (iBindingConnector.sourceFeature.HasValue)
@@ -889,18 +853,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iBindingConnector.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
             writer.WriteStartArray("targetFeature"u8);
 
@@ -917,18 +869,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iBindingConnector.textualRepresentation)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iBindingConnector.type)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1079,30 +1019,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
-
-            writer.WriteStartArray("source"u8);
-
-            foreach (var item in iBindingConnector.Source)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("target"u8);
-
-            foreach (var item in iBindingConnector.Target)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
 
         }
     }

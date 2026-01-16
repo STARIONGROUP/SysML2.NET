@@ -280,7 +280,11 @@ namespace SysML2.NET.Core.DTO.Root.Annotations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IAnnotation.AnnotatingElement")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => [this.annotatingElement];
+            set { }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -289,7 +293,18 @@ namespace SysML2.NET.Core.DTO.Root.Annotations
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IAnnotation.AnnotatedElement")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => [this.AnnotatedElement];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.AnnotatedElement = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

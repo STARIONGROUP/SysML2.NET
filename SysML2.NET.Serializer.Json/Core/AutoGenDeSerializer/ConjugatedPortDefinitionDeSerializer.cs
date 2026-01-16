@@ -760,30 +760,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the ownedConcern Json property was not found in the ConjugatedPortDefinition: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("ownedConjugator"u8, out var ownedConjugatorProperty))
-            {
-                if (ownedConjugatorProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.ownedConjugator = null;
-                }
-                else
-                {
-                    if (ownedConjugatorProperty.TryGetProperty("@id"u8, out var ownedConjugatorExternalIdProperty))
-                    {
-                        var propertyValue = ownedConjugatorExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.ownedConjugator = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the ownedConjugator Json property was not found in the ConjugatedPortDefinition: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("ownedConnection"u8, out var ownedConnectionProperty))
             {
                 foreach (var arrayItem in ownedConnectionProperty.EnumerateArray())
@@ -1535,30 +1511,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the owningMembership Json property was not found in the ConjugatedPortDefinition: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
-            {
-                if (owningNamespaceProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.owningNamespace = null;
-                }
-                else
-                {
-                    if (owningNamespaceProperty.TryGetProperty("@id"u8, out var owningNamespaceExternalIdProperty))
-                    {
-                        var propertyValue = owningNamespaceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.owningNamespace = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the owningNamespace Json property was not found in the ConjugatedPortDefinition: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))

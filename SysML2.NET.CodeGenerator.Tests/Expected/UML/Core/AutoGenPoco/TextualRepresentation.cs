@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Root.Elements;
     using SysML2.NET.Core.POCO.Root.Namespaces;
@@ -84,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         [Property(xmiId: "_19_0_2_12e503d9_1594145755058_99428_86", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("ITextualRepresentation.RepresentedElement")]
         [Implements(implementation: "IAnnotatingElement.AnnotatedElement")]
-        public List<IElement> annotatedElement => this.ComputeAnnotatedElement();
+        List<IElement> IAnnotatingElement.annotatedElement => this.representedElement != null ? [this.representedElement] : [];
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements. This includes the

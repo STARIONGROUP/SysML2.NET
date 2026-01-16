@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -160,7 +161,17 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [RedefinedByProperty("IPortConjugation.OriginalPortDefinition")]
         [Implements(implementation: "IConjugation.OriginalType")]
-        public IType OriginalType { get; set; }
+        IType Core.Types.IConjugation.OriginalType
+        {
+            get => this.OriginalPortDefinition;
+            set
+            {
+                if (value is IPortDefinition castedValue)
+                {
+                    this.OriginalPortDefinition = castedValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -246,7 +257,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedByProperty("IPortConjugation.ConjugatedPortDefinition")]
         [Implements(implementation: "IConjugation.OwningType")]
-        public IType owningType => this.ComputeOwningType();
+        IType Core.Types.IConjugation.owningType => this.conjugatedPortDefinition;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -285,7 +296,17 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConjugation.ConjugatedType")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Source
+        {
+            get => this.ConjugatedType != null ? [this.ConjugatedType] : [];
+            set
+            {
+                if (value.OfType<IType>().FirstOrDefault() is { } firstValue)
+                {
+                    this.ConjugatedType = firstValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -294,7 +315,17 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConjugation.OriginalType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Target
+        {
+            get => ((SysML2.NET.Core.POCO.Core.Types.IConjugation)this).OriginalType != null ? [((SysML2.NET.Core.POCO.Core.Types.IConjugation)this).OriginalType] : [];
+            set
+            {
+                if (value.OfType<IType>().FirstOrDefault() is { } firstValue)
+                {
+                    ((SysML2.NET.Core.POCO.Core.Types.IConjugation)this).OriginalType = firstValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

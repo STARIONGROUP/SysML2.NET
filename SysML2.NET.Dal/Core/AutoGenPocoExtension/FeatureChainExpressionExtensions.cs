@@ -99,9 +99,7 @@ namespace SysML2.NET.Dal
 
             poco.IsVariable = dto.IsVariable;
 
-            ((Core.POCO.Kernel.Expressions.IFeatureChainExpression)poco).Operator = ((Core.DTO.Kernel.Expressions.IFeatureChainExpression)dto).Operator;
-
-            ((Core.POCO.Kernel.Expressions.IOperatorExpression)poco).Operator = ((Core.DTO.Kernel.Expressions.IOperatorExpression)dto).Operator;
+            poco.Operator = dto.Operator;
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
 
@@ -201,8 +199,7 @@ namespace SysML2.NET.Dal
             dto.IsSufficient = poco.IsSufficient;
             dto.IsUnique = poco.IsUnique;
             dto.IsVariable = poco.IsVariable;
-            ((Core.DTO.Kernel.Expressions.IFeatureChainExpression)dto).Operator = ((Core.POCO.Kernel.Expressions.IFeatureChainExpression)poco).Operator;
-            ((Core.DTO.Kernel.Expressions.IOperatorExpression)dto).Operator = ((Core.POCO.Kernel.Expressions.IOperatorExpression)poco).Operator;
+            dto.Operator = poco.Operator;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;
 

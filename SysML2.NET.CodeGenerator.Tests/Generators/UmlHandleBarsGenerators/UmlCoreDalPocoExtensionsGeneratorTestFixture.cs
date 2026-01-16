@@ -54,7 +54,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         [TestCaseSource(typeof(ExpectedConcreteClasses))]
         [Category("Expected")]
-        public async Task VerifyExpectedPocoExtensionsMachtes(string className)
+        public async Task VerifyExpectedPocoExtensionsMatches(string className)
         {
             var generatedCode = await this.umlCoreDalPocoExtensionsGenerator.GenerateDalPocoExtension(GeneratorSetupFixture.XmiReaderResult,
                 this.umlPocoExtensionDirectoryInfo,

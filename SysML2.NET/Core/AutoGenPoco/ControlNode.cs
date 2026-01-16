@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -102,7 +103,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<IBehavior> behavior => this.ComputeBehavior();
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => [.. this.actionDefinition];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -152,7 +153,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<IClassifier> definition => this.ComputeDefinition();
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -174,7 +175,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<IFeature> directedFeature => this.ComputeDirectedFeature();
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -443,7 +444,11 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => this.mayTimeVary;
+            set { }
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -730,7 +735,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        public List<IClass> occurrenceDefinition => this.ComputeOccurrenceDefinition();
+        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. this.actionDefinition];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -1084,7 +1089,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        public List<IType> type => this.ComputeType();
+        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the

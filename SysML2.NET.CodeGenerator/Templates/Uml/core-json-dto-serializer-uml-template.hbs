@@ -93,7 +93,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {{#with this as |class| }}
                 {{ #each (Class.QueryAllProperties this) as | property | }}
                 {{#unless this.IsTransient}}
-                    {{#unless (Property.IsRedefinedByPropertyWithSameName this class)}}
+                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                         {{#if (Property.QueryIsEnumerable property)}}
                             writer.WriteStartArray("{{String.LowerCaseFirstLetter property.Name }}"u8);
                             
@@ -185,7 +185,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {{ #each (Class.QueryAllProperties this) as | property | }}
             {{#unless this.IsDerived}}
                 {{#unless this.IsTransient}}
-                    {{#unless (Property.IsRedefinedByPropertyWithSameName this class)}}
+                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
                         {{#if (Property.QueryIsEnumerable property)}}
                             writer.WriteStartArray("{{String.LowerCaseFirstLetter property.Name }}"u8);
 

@@ -190,54 +190,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the isLibraryElement Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
             }
 
-            if (jsonElement.TryGetProperty("memberElement"u8, out var memberElementProperty))
-            {
-                if (memberElementProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.MemberElement = Guid.Empty;
-                    logger.LogDebug($"the OwningMembership.MemberElement property was not found in the Json. The value is set to Guid.Empty");
-                }
-                else
-                {
-                    if (memberElementProperty.TryGetProperty("@id"u8, out var memberElementExternalIdProperty))
-                    {
-                        var propertyValue = memberElementExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.MemberElement = Guid.Parse(propertyValue);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the memberElement Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("memberElementId"u8, out var memberElementIdProperty))
-            {
-                var propertyValue = memberElementIdProperty.GetString();
-
-                if (propertyValue != null)
-                {
-                    dtoInstance.memberElementId = propertyValue;
-                }
-            }
-            else
-            {
-                logger.LogDebug("the memberElementId Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("memberName"u8, out var memberNameProperty))
-            {
-                dtoInstance.MemberName = memberNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the memberName Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
-            }
-
             if (jsonElement.TryGetProperty("membershipOwningNamespace"u8, out var membershipOwningNamespaceProperty))
             {
                 if (membershipOwningNamespaceProperty.ValueKind == JsonValueKind.Null)
@@ -261,15 +213,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the membershipOwningNamespace Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("memberShortName"u8, out var memberShortNameProperty))
-            {
-                dtoInstance.MemberShortName = memberShortNameProperty.GetString();
-            }
-            else
-            {
-                logger.LogDebug("the memberShortName Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
@@ -574,46 +517,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             else
             {
                 logger.LogDebug("the shortName Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("source"u8, out var sourceProperty))
-            {
-                foreach (var arrayItem in sourceProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var sourceExternalIdProperty))
-                    {
-                        var propertyValue = sourceExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Source.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the source Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
-            }
-
-            if (jsonElement.TryGetProperty("target"u8, out var targetProperty))
-            {
-                foreach (var arrayItem in targetProperty.EnumerateArray())
-                {
-                    if (arrayItem.TryGetProperty("@id"u8, out var targetExternalIdProperty))
-                    {
-                        var propertyValue = targetExternalIdProperty.GetString();
-
-                        if (propertyValue != null)
-                        {
-                            dtoInstance.Target.Add(Guid.Parse(propertyValue));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                logger.LogDebug("the target Json property was not found in the OwningMembership: { Id }", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))

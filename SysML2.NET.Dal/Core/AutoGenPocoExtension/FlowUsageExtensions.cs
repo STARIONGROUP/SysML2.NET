@@ -101,8 +101,6 @@ namespace SysML2.NET.Dal
 
             poco.IsUnique = dto.IsUnique;
 
-            poco.IsVariable = dto.IsVariable;
-
             poco.IsVariation = dto.IsVariation;
 
             var ownedRelatedElementToDelete = poco.OwnedRelatedElement.Select(x => x.Id).Except(dto.OwnedRelatedElement);
@@ -124,22 +122,6 @@ namespace SysML2.NET.Dal
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
             poco.PortionKind = dto.PortionKind;
-
-            var sourceToDelete = poco.Source.Select(x => x.Id).Except(dto.Source);
-
-            foreach (var identifier in sourceToDelete)
-            {
-                poco.Source.Remove(poco.Source.Single(x => x.Id == identifier));
-            }
-
-
-            var targetToDelete = poco.Target.Select(x => x.Id).Except(dto.Target);
-
-            foreach (var identifier in targetToDelete)
-            {
-                poco.Target.Remove(poco.Target.Single(x => x.Id == identifier));
-            }
-
 
 
             return identifiersOfObjectsToDelete;
@@ -217,26 +199,6 @@ namespace SysML2.NET.Dal
                 poco.OwningRelationship = null;
             }
 
-            var sourceToAdd = dto.Source.Except(poco.Source.Select(x => x.Id));
-
-            foreach (var identifier in sourceToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Source.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
-            var targetToAdd = dto.Target.Except(poco.Target.Select(x => x.Id));
-
-            foreach (var identifier in targetToAdd)
-            {
-                if (cache.TryGetValue(identifier, out lazyPoco))
-                {
-                    poco.Target.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
-                }
-            }
-
         }
 
         /// <summary>
@@ -270,15 +232,12 @@ namespace SysML2.NET.Dal
             dto.IsPortion = poco.IsPortion;
             dto.IsSufficient = poco.IsSufficient;
             dto.IsUnique = poco.IsUnique;
-            dto.IsVariable = poco.IsVariable;
             dto.IsVariation = poco.IsVariation;
             dto.OwnedRelatedElement = poco.OwnedRelatedElement.Select(x => x.Id).ToList();
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             dto.PortionKind = poco.PortionKind;
-            dto.Source = poco.Source.Select(x => x.Id).ToList();
-            dto.Target = poco.Target.Select(x => x.Id).ToList();
 
             return dto;
         }

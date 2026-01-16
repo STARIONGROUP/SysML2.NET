@@ -123,18 +123,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteStartArray("behavior"u8);
-
-            foreach (var item in iConcernUsage.behavior)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("chainingFeature"u8);
 
             foreach (var item in iConcernUsage.chainingFeature)
@@ -161,20 +149,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WritePropertyName("constraintDefinition"u8);
-
-            if (iConcernUsage.constraintDefinition.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iConcernUsage.constraintDefinition.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("crossFeature"u8);
 
             if (iConcernUsage.crossFeature.HasValue)
@@ -192,36 +166,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConcernUsage.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iConcernUsage.DeclaredShortName);
-
-            writer.WriteStartArray("definition"u8);
-
-            foreach (var item in iConcernUsage.definition)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iConcernUsage.differencingType)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("directedFeature"u8);
-
-            foreach (var item in iConcernUsage.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -349,20 +296,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WritePropertyName("function"u8);
-
-            if (iConcernUsage.function.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iConcernUsage.function.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WriteStartArray("importedMembership"u8);
 
             foreach (var item in iConcernUsage.importedMembership)
@@ -481,9 +414,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iConcernUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iConcernUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iConcernUsage.IsVariation);
@@ -1297,20 +1227,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WritePropertyName("predicate"u8);
-
-            if (iConcernUsage.predicate.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iConcernUsage.predicate.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
-
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iConcernUsage.qualifiedName);
 
@@ -1328,20 +1244,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
-
-            writer.WritePropertyName("requirementDefinition"u8);
-
-            if (iConcernUsage.requirementDefinition.HasValue)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(iConcernUsage.requirementDefinition.Value);
-                writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteNullValue();
-            }
 
             writer.WritePropertyName("result"u8);
             writer.WriteStartObject();
@@ -1382,18 +1284,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iConcernUsage.textualRepresentation)
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("@id"u8);
-                writer.WriteStringValue(item);
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-
-            writer.WriteStartArray("type"u8);
-
-            foreach (var item in iConcernUsage.type)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1476,9 +1366,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iConcernUsage.DeclaredName);
 
-            writer.WritePropertyName("declaredShortName"u8);
-            writer.WriteStringValue(iConcernUsage.DeclaredShortName);
-
             writer.WritePropertyName("direction"u8);
 
             if (iConcernUsage.Direction.HasValue)
@@ -1525,9 +1412,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iConcernUsage.IsUnique);
-
-            writer.WritePropertyName("isVariable"u8);
-            writer.WriteBooleanValue(iConcernUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iConcernUsage.IsVariation);

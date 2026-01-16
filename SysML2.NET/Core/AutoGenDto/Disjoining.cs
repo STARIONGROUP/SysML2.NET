@@ -255,7 +255,18 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IDisjoining.TypeDisjoined")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<Guid> Source { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Source
+        {
+            get => [this.TypeDisjoined];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.TypeDisjoined = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -264,7 +275,18 @@ namespace SysML2.NET.Core.DTO.Core.Types
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IDisjoining.DisjoiningType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<Guid> Target { get; set; } = [];
+        List<Guid> Root.Elements.IRelationship.Target
+        {
+            get => [this.DisjoiningType];
+            set
+            {
+                if (value.Count != 0)
+                {
+                    this.DisjoiningType = value[0];
+                }
+
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.

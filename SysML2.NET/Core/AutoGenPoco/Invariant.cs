@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.POCO.Core.Features;
@@ -67,7 +68,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IExpression.Function")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<IBehavior> behavior => this.ComputeBehavior();
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => ((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function != null ? [((SysML2.NET.Core.POCO.Kernel.Functions.IExpression)this).function] : [];
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -128,7 +129,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<IFeature> directedFeature => this.ComputeDirectedFeature();
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -214,7 +215,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedByProperty("IBooleanExpression.Predicate")]
         [Implements(implementation: "IExpression.Function")]
-        public IFunction function => this.ComputeFunction();
+        IFunction IExpression.function => this.predicate;
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
