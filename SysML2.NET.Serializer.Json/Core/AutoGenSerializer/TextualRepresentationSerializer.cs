@@ -99,6 +99,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WriteStartArray("annotatedElement"u8);
+
+            foreach (var item in iTextualRepresentation.annotatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("annotation"u8);
 
             foreach (var item in iTextualRepresentation.annotation)

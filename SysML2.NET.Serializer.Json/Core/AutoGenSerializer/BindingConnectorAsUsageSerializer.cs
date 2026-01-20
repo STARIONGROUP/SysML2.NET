@@ -243,6 +243,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iBindingConnectorAsUsage.ElementId);
 
+            writer.WriteStartArray("endFeature"u8);
+
+            foreach (var item in iBindingConnectorAsUsage.endFeature)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WritePropertyName("endOwningType"u8);
 
             if (iBindingConnectorAsUsage.endOwningType.HasValue)
@@ -400,6 +412,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsUnique);
+
+            writer.WritePropertyName("isVariable"u8);
+            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsVariation);
@@ -1207,6 +1222,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iBindingConnectorAsUsage.qualifiedName);
 
+            writer.WriteStartArray("relatedElement"u8);
+
+            foreach (var item in iBindingConnectorAsUsage.relatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("relatedFeature"u8);
 
             foreach (var item in iBindingConnectorAsUsage.relatedFeature)
@@ -1222,6 +1249,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iBindingConnectorAsUsage.shortName);
 
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iBindingConnectorAsUsage.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WritePropertyName("sourceFeature"u8);
 
             if (iBindingConnectorAsUsage.sourceFeature.HasValue)
@@ -1235,6 +1274,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iBindingConnectorAsUsage.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
             writer.WriteStartArray("targetFeature"u8);
 
@@ -1251,6 +1302,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iBindingConnectorAsUsage.textualRepresentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("type"u8);
+
+            foreach (var item in iBindingConnectorAsUsage.type)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1383,6 +1446,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsUnique);
 
+            writer.WritePropertyName("isVariable"u8);
+            writer.WriteBooleanValue(iBindingConnectorAsUsage.IsVariable);
+
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iBindingConnectorAsUsage.IsVariation);
 
@@ -1437,6 +1503,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iBindingConnectorAsUsage.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iBindingConnectorAsUsage.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
         }
     }

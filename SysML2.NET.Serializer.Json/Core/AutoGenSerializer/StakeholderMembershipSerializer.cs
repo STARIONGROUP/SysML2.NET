@@ -129,6 +129,27 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isLibraryElement"u8);
             writer.WriteBooleanValue(iStakeholderMembership.isLibraryElement);
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStakeholderMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberElementId"u8);
+            writer.WriteStringValue(iStakeholderMembership.memberElementId);
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iStakeholderMembership.MemberName);
+
+            writer.WritePropertyName("membershipOwningNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStakeholderMembership.membershipOwningNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iStakeholderMembership.MemberShortName);
+
             writer.WritePropertyName("name"u8);
             writer.WriteStringValue(iStakeholderMembership.name);
 
@@ -156,11 +177,29 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("ownedMemberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStakeholderMembership.ownedMemberElement);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("ownedMemberElementId"u8);
             writer.WriteStringValue(iStakeholderMembership.ownedMemberElementId);
 
+            writer.WritePropertyName("ownedMemberFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStakeholderMembership.ownedMemberFeature);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("ownedMemberName"u8);
             writer.WriteStringValue(iStakeholderMembership.ownedMemberName);
+
+            writer.WritePropertyName("ownedMemberParameter"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStakeholderMembership.ownedMemberParameter);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("ownedMemberShortName"u8);
             writer.WriteStringValue(iStakeholderMembership.ownedMemberShortName);
@@ -289,6 +328,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iStakeholderMembership.shortName);
 
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iStakeholderMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iStakeholderMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iStakeholderMembership.textualRepresentation)
@@ -341,6 +404,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iStakeholderMembership.IsImpliedIncluded);
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStakeholderMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iStakeholderMembership.MemberName);
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iStakeholderMembership.MemberShortName);
+
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iStakeholderMembership.OwnedRelatedElement)
@@ -392,6 +467,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iStakeholderMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iStakeholderMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iStakeholderMembership.Visibility.ToString().ToLower());

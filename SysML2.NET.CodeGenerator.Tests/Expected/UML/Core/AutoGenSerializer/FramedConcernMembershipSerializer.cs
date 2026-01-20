@@ -132,6 +132,27 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("kind"u8);
             writer.WriteStringValue(iFramedConcernMembership.Kind.ToString().ToLower());
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFramedConcernMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberElementId"u8);
+            writer.WriteStringValue(iFramedConcernMembership.memberElementId);
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iFramedConcernMembership.MemberName);
+
+            writer.WritePropertyName("membershipOwningNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFramedConcernMembership.membershipOwningNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iFramedConcernMembership.MemberShortName);
+
             writer.WritePropertyName("name"u8);
             writer.WriteStringValue(iFramedConcernMembership.name);
 
@@ -153,6 +174,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iFramedConcernMembership.ownedConcern);
             writer.WriteEndObject();
 
+            writer.WritePropertyName("ownedConstraint"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFramedConcernMembership.ownedConstraint);
+            writer.WriteEndObject();
+
             writer.WriteStartArray("ownedElement"u8);
 
             foreach (var item in iFramedConcernMembership.ownedElement)
@@ -165,8 +192,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("ownedMemberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFramedConcernMembership.ownedMemberElement);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("ownedMemberElementId"u8);
             writer.WriteStringValue(iFramedConcernMembership.ownedMemberElementId);
+
+            writer.WritePropertyName("ownedMemberFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFramedConcernMembership.ownedMemberFeature);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("ownedMemberName"u8);
             writer.WriteStringValue(iFramedConcernMembership.ownedMemberName);
@@ -283,6 +322,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStringValue(iFramedConcernMembership.referencedConcern);
             writer.WriteEndObject();
 
+            writer.WritePropertyName("referencedConstraint"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFramedConcernMembership.referencedConstraint);
+            writer.WriteEndObject();
+
             writer.WriteStartArray("relatedElement"u8);
 
             foreach (var item in iFramedConcernMembership.relatedElement)
@@ -297,6 +342,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iFramedConcernMembership.shortName);
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iFramedConcernMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iFramedConcernMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
             writer.WriteStartArray("textualRepresentation"u8);
 
@@ -353,6 +422,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("kind"u8);
             writer.WriteStringValue(iFramedConcernMembership.Kind.ToString().ToLower());
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFramedConcernMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iFramedConcernMembership.MemberName);
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iFramedConcernMembership.MemberShortName);
+
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iFramedConcernMembership.OwnedRelatedElement)
@@ -404,6 +485,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iFramedConcernMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iFramedConcernMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iFramedConcernMembership.Visibility.ToString().ToLower());

@@ -99,6 +99,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WriteStartArray("behavior"u8);
+
+            foreach (var item in iInvariant.behavior)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("chainingFeature"u8);
 
             foreach (var item in iInvariant.chainingFeature)
@@ -134,6 +146,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iInvariant.differencingType)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("directedFeature"u8);
+
+            foreach (var item in iInvariant.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -236,6 +260,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
+
+            writer.WritePropertyName("function"u8);
+
+            if (iInvariant.function.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iInvariant.function.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
 
             writer.WriteStartArray("importedMembership"u8);
 

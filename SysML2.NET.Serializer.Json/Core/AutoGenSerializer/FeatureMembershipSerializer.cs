@@ -129,6 +129,27 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isLibraryElement"u8);
             writer.WriteBooleanValue(iFeatureMembership.isLibraryElement);
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFeatureMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberElementId"u8);
+            writer.WriteStringValue(iFeatureMembership.memberElementId);
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iFeatureMembership.MemberName);
+
+            writer.WritePropertyName("membershipOwningNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFeatureMembership.membershipOwningNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iFeatureMembership.MemberShortName);
+
             writer.WritePropertyName("name"u8);
             writer.WriteStringValue(iFeatureMembership.name);
 
@@ -155,6 +176,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
+
+            writer.WritePropertyName("ownedMemberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFeatureMembership.ownedMemberElement);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("ownedMemberElementId"u8);
             writer.WriteStringValue(iFeatureMembership.ownedMemberElementId);
@@ -289,6 +316,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iFeatureMembership.shortName);
 
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iFeatureMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iFeatureMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iFeatureMembership.textualRepresentation)
@@ -341,6 +392,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("isImpliedIncluded"u8);
             writer.WriteBooleanValue(iFeatureMembership.IsImpliedIncluded);
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iFeatureMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iFeatureMembership.MemberName);
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iFeatureMembership.MemberShortName);
+
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iFeatureMembership.OwnedRelatedElement)
@@ -392,6 +455,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iFeatureMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iFeatureMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iFeatureMembership.Visibility.ToString().ToLower());

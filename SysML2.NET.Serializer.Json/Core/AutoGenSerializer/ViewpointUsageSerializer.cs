@@ -123,6 +123,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WriteStartArray("behavior"u8);
+
+            foreach (var item in iViewpointUsage.behavior)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("chainingFeature"u8);
 
             foreach (var item in iViewpointUsage.chainingFeature)
@@ -134,6 +146,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
+
+            writer.WritePropertyName("constraintDefinition"u8);
+
+            if (iViewpointUsage.constraintDefinition.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iViewpointUsage.constraintDefinition.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
 
             writer.WritePropertyName("crossFeature"u8);
 
@@ -152,9 +178,36 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iViewpointUsage.DeclaredName);
 
+            writer.WritePropertyName("declaredShortName"u8);
+            writer.WriteStringValue(iViewpointUsage.DeclaredShortName);
+
+            writer.WriteStartArray("definition"u8);
+
+            foreach (var item in iViewpointUsage.definition)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("differencingType"u8);
 
             foreach (var item in iViewpointUsage.differencingType)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("directedFeature"u8);
+
+            foreach (var item in iViewpointUsage.directedFeature)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -282,6 +335,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("function"u8);
+
+            if (iViewpointUsage.function.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iViewpointUsage.function.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
             writer.WriteStartArray("importedMembership"u8);
 
             foreach (var item in iViewpointUsage.importedMembership)
@@ -400,6 +467,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iViewpointUsage.IsUnique);
+
+            writer.WritePropertyName("isVariable"u8);
+            writer.WriteBooleanValue(iViewpointUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iViewpointUsage.IsVariation);
@@ -1213,6 +1283,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("predicate"u8);
+
+            if (iViewpointUsage.predicate.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iViewpointUsage.predicate.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iViewpointUsage.qualifiedName);
 
@@ -1230,6 +1314,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
 
             writer.WriteEndArray();
+
+            writer.WritePropertyName("requirementDefinition"u8);
+
+            if (iViewpointUsage.requirementDefinition.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iViewpointUsage.requirementDefinition.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
 
             writer.WritePropertyName("result"u8);
             writer.WriteStartObject();
@@ -1270,6 +1368,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iViewpointUsage.textualRepresentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("type"u8);
+
+            foreach (var item in iViewpointUsage.type)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
@@ -1378,6 +1488,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("declaredName"u8);
             writer.WriteStringValue(iViewpointUsage.DeclaredName);
 
+            writer.WritePropertyName("declaredShortName"u8);
+            writer.WriteStringValue(iViewpointUsage.DeclaredShortName);
+
             writer.WritePropertyName("direction"u8);
 
             if (iViewpointUsage.Direction.HasValue)
@@ -1424,6 +1537,9 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("isUnique"u8);
             writer.WriteBooleanValue(iViewpointUsage.IsUnique);
+
+            writer.WritePropertyName("isVariable"u8);
+            writer.WriteBooleanValue(iViewpointUsage.IsVariable);
 
             writer.WritePropertyName("isVariation"u8);
             writer.WriteBooleanValue(iViewpointUsage.IsVariation);

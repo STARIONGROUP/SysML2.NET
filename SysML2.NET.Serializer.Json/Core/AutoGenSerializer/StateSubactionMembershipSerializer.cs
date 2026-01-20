@@ -138,6 +138,27 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("kind"u8);
             writer.WriteStringValue(iStateSubactionMembership.Kind.ToString().ToLower());
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStateSubactionMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberElementId"u8);
+            writer.WriteStringValue(iStateSubactionMembership.memberElementId);
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iStateSubactionMembership.MemberName);
+
+            writer.WritePropertyName("membershipOwningNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStateSubactionMembership.membershipOwningNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iStateSubactionMembership.MemberShortName);
+
             writer.WritePropertyName("name"u8);
             writer.WriteStringValue(iStateSubactionMembership.name);
 
@@ -165,8 +186,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("ownedMemberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStateSubactionMembership.ownedMemberElement);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("ownedMemberElementId"u8);
             writer.WriteStringValue(iStateSubactionMembership.ownedMemberElementId);
+
+            writer.WritePropertyName("ownedMemberFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStateSubactionMembership.ownedMemberFeature);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("ownedMemberName"u8);
             writer.WriteStringValue(iStateSubactionMembership.ownedMemberName);
@@ -292,6 +325,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iStateSubactionMembership.shortName);
 
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iStateSubactionMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iStateSubactionMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("textualRepresentation"u8);
 
             foreach (var item in iStateSubactionMembership.textualRepresentation)
@@ -347,6 +404,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("kind"u8);
             writer.WriteStringValue(iStateSubactionMembership.Kind.ToString().ToLower());
 
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iStateSubactionMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iStateSubactionMembership.MemberName);
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iStateSubactionMembership.MemberShortName);
+
             writer.WriteStartArray("ownedRelatedElement"u8);
 
             foreach (var item in iStateSubactionMembership.OwnedRelatedElement)
@@ -398,6 +467,30 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             {
                 writer.WriteNullValue();
             }
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iStateSubactionMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iStateSubactionMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iStateSubactionMembership.Visibility.ToString().ToLower());

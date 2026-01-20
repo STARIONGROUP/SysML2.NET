@@ -951,6 +951,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WriteStartArray("variant"u8);
+
+            foreach (var item in iEnumerationDefinition.variant)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WriteStartArray("variantMembership"u8);
 
             foreach (var item in iEnumerationDefinition.variantMembership)

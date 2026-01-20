@@ -120,6 +120,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iSubclassification.ElementId);
 
+            writer.WritePropertyName("general"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iSubclassification.General);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iSubclassification.IsImplied);
 
@@ -264,6 +270,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
+            writer.WritePropertyName("owningType"u8);
+
+            if (iSubclassification.owningType.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iSubclassification.owningType.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
             writer.WritePropertyName("qualifiedName"u8);
             writer.WriteStringValue(iSubclassification.qualifiedName);
 
@@ -282,6 +302,24 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iSubclassification.shortName);
 
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iSubclassification.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("specific"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iSubclassification.Specific);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("subclassifier"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
@@ -293,6 +331,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubclassification.Superclassifier);
             writer.WriteEndObject();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iSubclassification.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
             writer.WriteStartArray("textualRepresentation"u8);
 
@@ -336,6 +386,12 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WritePropertyName("elementId"u8);
             writer.WriteStringValue(iSubclassification.ElementId);
+
+            writer.WritePropertyName("general"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iSubclassification.General);
+            writer.WriteEndObject();
 
             writer.WritePropertyName("isImplied"u8);
             writer.WriteBooleanValue(iSubclassification.IsImplied);
@@ -395,6 +451,24 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iSubclassification.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("specific"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iSubclassification.Specific);
+            writer.WriteEndObject();
+
             writer.WritePropertyName("subclassifier"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
@@ -406,6 +480,18 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSubclassification.Superclassifier);
             writer.WriteEndObject();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iSubclassification.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
         }
     }

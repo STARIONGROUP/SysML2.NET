@@ -288,11 +288,35 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("shortName"u8);
             writer.WriteStringValue(iSpecialization.shortName);
 
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iSpecialization.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WritePropertyName("specific"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSpecialization.Specific);
             writer.WriteEndObject();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iSpecialization.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
             writer.WriteStartArray("textualRepresentation"u8);
 
@@ -401,11 +425,35 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iSpecialization.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
             writer.WritePropertyName("specific"u8);
             writer.WriteStartObject();
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iSpecialization.Specific);
             writer.WriteEndObject();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iSpecialization.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
 
         }
     }

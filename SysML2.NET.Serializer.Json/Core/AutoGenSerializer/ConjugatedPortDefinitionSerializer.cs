@@ -442,6 +442,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
+            writer.WritePropertyName("ownedConjugator"u8);
+
+            if (iConjugatedPortDefinition.ownedConjugator.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iConjugatedPortDefinition.ownedConjugator.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
             writer.WriteStartArray("ownedConnection"u8);
 
             foreach (var item in iConjugatedPortDefinition.ownedConnection)
@@ -877,6 +891,20 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteStartObject();
                 writer.WritePropertyName("@id"u8);
                 writer.WriteStringValue(iConjugatedPortDefinition.owningMembership.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningNamespace"u8);
+
+            if (iConjugatedPortDefinition.owningNamespace.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iConjugatedPortDefinition.owningNamespace.Value);
                 writer.WriteEndObject();
             }
             else
