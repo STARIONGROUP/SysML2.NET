@@ -49,7 +49,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind, bool includeDerivedProperties)
         {
             if (obj is not IReturnParameterMembership iReturnParameterMembership)
             {
@@ -64,6 +67,313 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iReturnParameterMembership.Id);
 
+            if (includeDerivedProperties)
+            {
+                SerializeAsJsonWithDerivedProperties(iReturnParameterMembership, writer);
+            }
+            else
+            {
+                SerializeAsJsonWithoutDerivedProperties(iReturnParameterMembership, writer);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IReturnParameterMembership"/> using an <see cref="Utf8JsonWriter"/> as JSON including derived properties
+        /// </summary>
+        /// <param name=" iReturnParameterMembership">
+        /// The <see cref="IReturnParameterMembership"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithDerivedProperties(IReturnParameterMembership iReturnParameterMembership, Utf8JsonWriter writer)
+        {
+            writer.WriteStartArray("aliasIds"u8);
+
+            foreach (var item in iReturnParameterMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("declaredName"u8);
+            writer.WriteStringValue(iReturnParameterMembership.DeclaredName);
+
+            writer.WritePropertyName("declaredShortName"u8);
+            writer.WriteStringValue(iReturnParameterMembership.DeclaredShortName);
+
+            writer.WriteStartArray("documentation"u8);
+
+            foreach (var item in iReturnParameterMembership.documentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId"u8);
+            writer.WriteStringValue(iReturnParameterMembership.ElementId);
+
+            writer.WritePropertyName("isImplied"u8);
+            writer.WriteBooleanValue(iReturnParameterMembership.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded"u8);
+            writer.WriteBooleanValue(iReturnParameterMembership.IsImpliedIncluded);
+
+            writer.WritePropertyName("isLibraryElement"u8);
+            writer.WriteBooleanValue(iReturnParameterMembership.isLibraryElement);
+
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iReturnParameterMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberElementId"u8);
+            writer.WriteStringValue(iReturnParameterMembership.memberElementId);
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iReturnParameterMembership.MemberName);
+
+            writer.WritePropertyName("membershipOwningNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iReturnParameterMembership.membershipOwningNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iReturnParameterMembership.MemberShortName);
+
+            writer.WritePropertyName("name"u8);
+            writer.WriteStringValue(iReturnParameterMembership.name);
+
+            writer.WriteStartArray("ownedAnnotation"u8);
+
+            foreach (var item in iReturnParameterMembership.ownedAnnotation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedElement"u8);
+
+            foreach (var item in iReturnParameterMembership.ownedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("ownedMemberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iReturnParameterMembership.ownedMemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("ownedMemberElementId"u8);
+            writer.WriteStringValue(iReturnParameterMembership.ownedMemberElementId);
+
+            writer.WritePropertyName("ownedMemberFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iReturnParameterMembership.ownedMemberFeature);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("ownedMemberName"u8);
+            writer.WriteStringValue(iReturnParameterMembership.ownedMemberName);
+
+            writer.WritePropertyName("ownedMemberParameter"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iReturnParameterMembership.ownedMemberParameter);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("ownedMemberShortName"u8);
+            writer.WriteStringValue(iReturnParameterMembership.ownedMemberShortName);
+
+            writer.WriteStartArray("ownedRelatedElement"u8);
+
+            foreach (var item in iReturnParameterMembership.OwnedRelatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship"u8);
+
+            foreach (var item in iReturnParameterMembership.OwnedRelationship)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("owner"u8);
+
+            if (iReturnParameterMembership.owner.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iReturnParameterMembership.owner.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningMembership"u8);
+
+            if (iReturnParameterMembership.owningMembership.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iReturnParameterMembership.owningMembership.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningNamespace"u8);
+
+            if (iReturnParameterMembership.owningNamespace.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iReturnParameterMembership.owningNamespace.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelatedElement"u8);
+
+            if (iReturnParameterMembership.OwningRelatedElement.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iReturnParameterMembership.OwningRelatedElement.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelationship"u8);
+
+            if (iReturnParameterMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iReturnParameterMembership.OwningRelationship.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iReturnParameterMembership.owningType);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("qualifiedName"u8);
+            writer.WriteStringValue(iReturnParameterMembership.qualifiedName);
+
+            writer.WriteStartArray("relatedElement"u8);
+
+            foreach (var item in iReturnParameterMembership.relatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("shortName"u8);
+            writer.WriteStringValue(iReturnParameterMembership.shortName);
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iReturnParameterMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iReturnParameterMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("textualRepresentation"u8);
+
+            foreach (var item in iReturnParameterMembership.textualRepresentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("visibility"u8);
+            writer.WriteStringValue(iReturnParameterMembership.Visibility.ToString().ToLower());
+
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IReturnParameterMembership"/> using an <see cref="Utf8JsonWriter"/> as JSON excluding derived properties
+        /// </summary>
+        /// <param name=" iReturnParameterMembership">
+        /// The <see cref="IReturnParameterMembership"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithoutDerivedProperties(IReturnParameterMembership iReturnParameterMembership, Utf8JsonWriter writer)
+        {
             writer.WriteStartArray("aliasIds"u8);
 
             foreach (var item in iReturnParameterMembership.AliasIds)
@@ -179,7 +489,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iReturnParameterMembership.Visibility.ToString().ToLower());
 
-            writer.WriteEndObject();
         }
     }
 }

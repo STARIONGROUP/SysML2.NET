@@ -49,7 +49,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind, bool includeDerivedProperties)
         {
             if (obj is not IRequirementVerificationMembership iRequirementVerificationMembership)
             {
@@ -64,6 +67,334 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.Id);
 
+            if (includeDerivedProperties)
+            {
+                SerializeAsJsonWithDerivedProperties(iRequirementVerificationMembership, writer);
+            }
+            else
+            {
+                SerializeAsJsonWithoutDerivedProperties(iRequirementVerificationMembership, writer);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IRequirementVerificationMembership"/> using an <see cref="Utf8JsonWriter"/> as JSON including derived properties
+        /// </summary>
+        /// <param name=" iRequirementVerificationMembership">
+        /// The <see cref="IRequirementVerificationMembership"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithDerivedProperties(IRequirementVerificationMembership iRequirementVerificationMembership, Utf8JsonWriter writer)
+        {
+            writer.WriteStartArray("aliasIds"u8);
+
+            foreach (var item in iRequirementVerificationMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("declaredName"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.DeclaredName);
+
+            writer.WritePropertyName("declaredShortName"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.DeclaredShortName);
+
+            writer.WriteStartArray("documentation"u8);
+
+            foreach (var item in iRequirementVerificationMembership.documentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.ElementId);
+
+            writer.WritePropertyName("isImplied"u8);
+            writer.WriteBooleanValue(iRequirementVerificationMembership.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded"u8);
+            writer.WriteBooleanValue(iRequirementVerificationMembership.IsImpliedIncluded);
+
+            writer.WritePropertyName("isLibraryElement"u8);
+            writer.WriteBooleanValue(iRequirementVerificationMembership.isLibraryElement);
+
+            writer.WritePropertyName("kind"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.Kind.ToString().ToLower());
+
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberElementId"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.memberElementId);
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.MemberName);
+
+            writer.WritePropertyName("membershipOwningNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.membershipOwningNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.MemberShortName);
+
+            writer.WritePropertyName("name"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.name);
+
+            writer.WriteStartArray("ownedAnnotation"u8);
+
+            foreach (var item in iRequirementVerificationMembership.ownedAnnotation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("ownedConstraint"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.ownedConstraint);
+            writer.WriteEndObject();
+
+            writer.WriteStartArray("ownedElement"u8);
+
+            foreach (var item in iRequirementVerificationMembership.ownedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("ownedMemberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.ownedMemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("ownedMemberElementId"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.ownedMemberElementId);
+
+            writer.WritePropertyName("ownedMemberFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.ownedMemberFeature);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("ownedMemberName"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.ownedMemberName);
+
+            writer.WritePropertyName("ownedMemberShortName"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.ownedMemberShortName);
+
+            writer.WriteStartArray("ownedRelatedElement"u8);
+
+            foreach (var item in iRequirementVerificationMembership.OwnedRelatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship"u8);
+
+            foreach (var item in iRequirementVerificationMembership.OwnedRelationship)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("ownedRequirement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.ownedRequirement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("owner"u8);
+
+            if (iRequirementVerificationMembership.owner.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRequirementVerificationMembership.owner.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningMembership"u8);
+
+            if (iRequirementVerificationMembership.owningMembership.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRequirementVerificationMembership.owningMembership.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningNamespace"u8);
+
+            if (iRequirementVerificationMembership.owningNamespace.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRequirementVerificationMembership.owningNamespace.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelatedElement"u8);
+
+            if (iRequirementVerificationMembership.OwningRelatedElement.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRequirementVerificationMembership.OwningRelatedElement.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelationship"u8);
+
+            if (iRequirementVerificationMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRequirementVerificationMembership.OwningRelationship.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.owningType);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("qualifiedName"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.qualifiedName);
+
+            writer.WritePropertyName("referencedConstraint"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.referencedConstraint);
+            writer.WriteEndObject();
+
+            writer.WriteStartArray("relatedElement"u8);
+
+            foreach (var item in iRequirementVerificationMembership.relatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("shortName"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.shortName);
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iRequirementVerificationMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iRequirementVerificationMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("textualRepresentation"u8);
+
+            foreach (var item in iRequirementVerificationMembership.textualRepresentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("verifiedRequirement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.verifiedRequirement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("visibility"u8);
+            writer.WriteStringValue(iRequirementVerificationMembership.Visibility.ToString().ToLower());
+
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IRequirementVerificationMembership"/> using an <see cref="Utf8JsonWriter"/> as JSON excluding derived properties
+        /// </summary>
+        /// <param name=" iRequirementVerificationMembership">
+        /// The <see cref="IRequirementVerificationMembership"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithoutDerivedProperties(IRequirementVerificationMembership iRequirementVerificationMembership, Utf8JsonWriter writer)
+        {
             writer.WriteStartArray("aliasIds"u8);
 
             foreach (var item in iRequirementVerificationMembership.AliasIds)
@@ -182,7 +513,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iRequirementVerificationMembership.Visibility.ToString().ToLower());
 
-            writer.WriteEndObject();
         }
     }
 }

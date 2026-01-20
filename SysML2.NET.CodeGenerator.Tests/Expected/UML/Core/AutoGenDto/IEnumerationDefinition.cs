@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Systems.Enumerations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1606946634788_959145_265", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1590979457191_746167_951")]
-        List<Guid> EnumeratedValue { get; }
+        List<Guid> enumeratedValue { get; }
 
         /// <summary>
         /// An EnumerationDefinition is considered semantically to be a variation whose allowed variants are its

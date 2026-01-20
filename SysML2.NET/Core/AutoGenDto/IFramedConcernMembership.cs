@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617120590170_490370_3748", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048366950_985767_426")]
-        Guid OwnedConcern { get; }
+        Guid ownedConcern { get; }
 
         /// <summary>
         /// The ConcernUsage that is referenced through this FramedConcernMembership. It is the
@@ -61,7 +61,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617120658044_92083_3773", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1617118807597_77864_3544")]
-        Guid ReferencedConcern { get; }
+        Guid referencedConcern { get; }
 
     }
 }

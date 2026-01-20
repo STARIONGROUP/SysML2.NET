@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.POCO.Core.Types;
     using SysML2.NET.Core.POCO.Root.Annotations;
@@ -65,10 +66,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [Property(xmiId: "_19_0_2_12e503d9_1575484344899_880331_946", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_778895_441")]
         [Implements(implementation: "IPortConjugation.ConjugatedPortDefinition")]
-        public IConjugatedPortDefinition QueryConjugatedPortDefinition()
-        {
-            return this.ComputeConjugatedPortDefinition();
-        }
+        public IConjugatedPortDefinition conjugatedPortDefinition => this.ComputeConjugatedPortDefinition();
 
         /// <summary>
         /// The Type that is the result of applying Conjugation to the originalType.
@@ -102,10 +100,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
-        public List<IDocumentation> QueryDocumentation()
-        {
-            return this.ComputeDocumentation();
-        }
+        public List<IDocumentation> documentation => this.ComputeDocumentation();
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -139,10 +134,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
-        public bool QueryIsLibraryElement()
-        {
-            return this.ComputeIsLibraryElement();
-        }
+        public bool isLibraryElement => this.ComputeIsLibraryElement();
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -152,10 +144,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string QueryName()
-        {
-            return this.ComputeName();
-        }
+        public string name => this.ComputeName();
 
         /// <summary>
         /// The PortDefinition being conjugated.
@@ -172,7 +161,17 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [RedefinedByProperty("IPortConjugation.OriginalPortDefinition")]
         [Implements(implementation: "IConjugation.OriginalType")]
-        public IType OriginalType { get; set; }
+        IType Core.Types.IConjugation.OriginalType
+        {
+            get => this.OriginalPortDefinition;
+            set
+            {
+                if (value is IPortDefinition castedValue)
+                {
+                    this.OriginalPortDefinition = castedValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -182,10 +181,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
-        public List<IAnnotation> QueryOwnedAnnotation()
-        {
-            return this.ComputeOwnedAnnotation();
-        }
+        public List<IAnnotation> ownedAnnotation => this.ComputeOwnedAnnotation();
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -193,10 +189,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
-        public List<IElement> QueryOwnedElement()
-        {
-            return this.ComputeOwnedElement();
-        }
+        public List<IElement> ownedElement => this.ComputeOwnedElement();
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
@@ -220,10 +213,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
-        public IElement QueryOwner()
-        {
-            return this.ComputeOwner();
-        }
+        public IElement owner => this.ComputeOwner();
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -232,10 +222,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
-        public IOwningMembership QueryOwningMembership()
-        {
-            return this.ComputeOwningMembership();
-        }
+        public IOwningMembership owningMembership => this.ComputeOwningMembership();
 
         /// <summary>
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
@@ -244,10 +231,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public INamespace QueryOwningNamespace()
-        {
-            return this.ComputeOwningNamespace();
-        }
+        public INamespace owningNamespace => this.ComputeOwningNamespace();
 
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
@@ -273,10 +257,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [RedefinedByProperty("IPortConjugation.ConjugatedPortDefinition")]
         [Implements(implementation: "IConjugation.OwningType")]
-        public IType QueryOwningType()
-        {
-            return this.ComputeOwningType();
-        }
+        IType Core.Types.IConjugation.owningType => this.conjugatedPortDefinition;
 
         /// <summary>
         /// The full ownership-qualified name of this Element, represented in a form that is valid according to
@@ -288,10 +269,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string QueryQualifiedName()
-        {
-            return this.ComputeQualifiedName();
-        }
+        public string qualifiedName => this.ComputeQualifiedName();
 
         /// <summary>
         /// The Elements that are related by this Relationship, derived as the union of the source and target
@@ -299,10 +277,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [Implements(implementation: "IRelationship.RelatedElement")]
-        public List<IElement> QueryRelatedElement()
-        {
-            return this.ComputeRelatedElement();
-        }
+        public List<IElement> relatedElement => this.ComputeRelatedElement();
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -312,10 +287,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string QueryShortName()
-        {
-            return this.ComputeShortName();
-        }
+        public string shortName => this.ComputeShortName();
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.
@@ -324,7 +296,17 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConjugation.ConjugatedType")]
         [Implements(implementation: "IRelationship.Source")]
-        public List<IElement> Source { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Source
+        {
+            get => this.ConjugatedType != null ? [this.ConjugatedType] : [];
+            set
+            {
+                if (value.OfType<IType>().FirstOrDefault() is { } firstValue)
+                {
+                    this.ConjugatedType = firstValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
@@ -333,7 +315,17 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IConjugation.OriginalType")]
         [Implements(implementation: "IRelationship.Target")]
-        public List<IElement> Target { get; set; } = [];
+        List<IElement> Root.Elements.IRelationship.Target
+        {
+            get => ((SysML2.NET.Core.POCO.Core.Types.IConjugation)this).OriginalType != null ? [((SysML2.NET.Core.POCO.Core.Types.IConjugation)this).OriginalType] : [];
+            set
+            {
+                if (value.OfType<IType>().FirstOrDefault() is { } firstValue)
+                {
+                    ((SysML2.NET.Core.POCO.Core.Types.IConjugation)this).OriginalType = firstValue;
+                }
+            }
+        }
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -342,10 +334,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
-        public List<ITextualRepresentation> QueryTextualRepresentation()
-        {
-            return this.ComputeTextualRepresentation();
-        }
+        public List<ITextualRepresentation> textualRepresentation => this.ComputeTextualRepresentation();
 
     }
 }

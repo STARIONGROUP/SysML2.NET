@@ -58,7 +58,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1582975046568_736161_148", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
-        IStep QueryTransitionFeature();
+        IStep transitionFeature { get; }
 
     }
 }

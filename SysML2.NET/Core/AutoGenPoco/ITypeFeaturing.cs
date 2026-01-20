@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.POCO.Core.Features
         [Property(xmiId: "_19_0_4_12e503d9_1603905673976_689994_763", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_912234_579")]
-        IFeature QueryOwningFeatureOfType();
+        IFeature owningFeatureOfType { get; }
 
     }
 }

@@ -79,7 +79,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1565495064714_974634_26150", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
-        List<IUsage> QueryDirectedUsage();
+        List<IUsage> directedUsage { get; }
 
         /// <summary>
         /// Whether this Definition is for a variation point or not. If true, then all the memberships of the
@@ -93,49 +93,49 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591479011613_547927_1091", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
-        List<IActionUsage> QueryOwnedAction();
+        List<IActionUsage> ownedAction { get; }
 
         /// <summary>
         /// The AllocationUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611430819239_430196_1024", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
-        List<IAllocationUsage> QueryOwnedAllocation();
+        List<IAllocationUsage> ownedAllocation { get; }
 
         /// <summary>
         /// The AnalysisCaseUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591152747086_367030_3846", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
-        List<IAnalysisCaseUsage> QueryOwnedAnalysisCase();
+        List<IAnalysisCaseUsage> ownedAnalysisCase { get; }
 
         /// <summary>
         /// The AttributeUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591500614097_490259_4413", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
-        List<IAttributeUsage> QueryOwnedAttribute();
+        List<IAttributeUsage> ownedAttribute { get; }
 
         /// <summary>
         /// The CalculationUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1588215335104_898924_667", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479011613_547927_1091")]
-        List<ICalculationUsage> QueryOwnedCalculation();
+        List<ICalculationUsage> ownedCalculation { get; }
 
         /// <summary>
         /// The code>CaseUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_59601fc_1590257108055_7496_483", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1588215335104_898924_667")]
-        List<ICaseUsage> QueryOwnedCase();
+        List<ICaseUsage> ownedCase { get; }
 
         /// <summary>
         /// The ConcernUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617051597354_928367_1357", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000559760_444344_1273")]
-        List<IConcernUsage> QueryOwnedConcern();
+        List<IConcernUsage> ownedConcern { get; }
 
         /// <summary>
         /// The ConnectorAsUsages that are ownedUsages of this Definition. Note that this list includes
@@ -144,105 +144,105 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591480607506_951212_2333", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
-        List<IConnectorAsUsage> QueryOwnedConnection();
+        List<IConnectorAsUsage> ownedConnection { get; }
 
         /// <summary>
         /// The ConstraintUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1578068081992_244000_1803", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
-        List<IConstraintUsage> QueryOwnedConstraint();
+        List<IConstraintUsage> ownedConstraint { get; }
 
         /// <summary>
         /// The EnumerationUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1606946600508_763872_252", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591500614097_490259_4413")]
-        List<IEnumerationUsage> QueryOwnedEnumeration();
+        List<IEnumerationUsage> ownedEnumeration { get; }
 
         /// <summary>
         /// The FlowUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624055201422_104863_1697", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
-        List<IFlowUsage> QueryOwnedFlow();
+        List<IFlowUsage> ownedFlow { get; }
 
         /// <summary>
         /// The InterfaceUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591498709150_220812_4128", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591480607506_951212_2333")]
-        List<IInterfaceUsage> QueryOwnedInterface();
+        List<IInterfaceUsage> ownedInterface { get; }
 
         /// <summary>
         /// The ItemUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591482567975_649284_3005", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943849505_989631_257")]
-        List<IItemUsage> QueryOwnedItem();
+        List<IItemUsage> ownedItem { get; }
 
         /// <summary>
         /// The MetadataUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1661488358064_457109_2881", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]
-        List<IMetadataUsage> QueryOwnedMetadata();
+        List<IMetadataUsage> ownedMetadata { get; }
 
         /// <summary>
         /// The OccurrenceUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618943849505_989631_257", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
-        List<IOccurrenceUsage> QueryOwnedOccurrence();
+        List<IOccurrenceUsage> ownedOccurrence { get; }
 
         /// <summary>
         /// The PartUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591496643392_630316_3279", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482567975_649284_3005")]
-        List<IPartUsage> QueryOwnedPart();
+        List<IPartUsage> ownedPart { get; }
 
         /// <summary>
         /// The PortUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565494319970_455996_25799", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
-        List<IPortUsage> QueryOwnedPort();
+        List<IPortUsage> ownedPort { get; }
 
         /// <summary>
         /// The ReferenceUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591477471991_39731_908", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
-        List<IReferenceUsage> QueryOwnedReference();
+        List<IReferenceUsage> ownedReference { get; }
 
         /// <summary>
         /// The RenderingUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596741437225_963350_6474", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496643392_630316_3279")]
-        List<IRenderingUsage> QueryOwnedRendering();
+        List<IRenderingUsage> ownedRendering { get; }
 
         /// <summary>
         /// The RequirementUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1583000559760_444344_1273", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1578068081992_244000_1803")]
-        List<IRequirementUsage> QueryOwnedRequirement();
+        List<IRequirementUsage> ownedRequirement { get; }
 
         /// <summary>
         /// The StateUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575587977045_745776_941", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479011613_547927_1091")]
-        List<IStateUsage> QueryOwnedState();
+        List<IStateUsage> ownedState { get; }
 
         /// <summary>
         /// The TransitionUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1578598061680_350995_3923", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565479686637_967933_23236")]
-        List<ITransitionUsage> QueryOwnedTransition();
+        List<ITransitionUsage> ownedTransition { get; }
 
         /// <summary>
         /// The Usages that are ownedFeatures of this Definition.
@@ -250,42 +250,42 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         [Property(xmiId: "_18_5_3_12e503d9_1565479686637_967933_23236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
-        List<IUsage> QueryOwnedUsage();
+        List<IUsage> ownedUsage { get; }
 
         /// <summary>
         /// The UseCaseUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621461106608_978605_945", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
-        List<IUseCaseUsage> QueryOwnedUseCase();
+        List<IUseCaseUsage> ownedUseCase { get; }
 
         /// <summary>
         /// The VerificationCaseUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596821523387_872104_10416", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257108055_7496_483")]
-        List<IVerificationCaseUsage> QueryOwnedVerificationCase();
+        List<IVerificationCaseUsage> ownedVerificationCase { get; }
 
         /// <summary>
         /// The ViewUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596644570381_840567_784", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496643392_630316_3279")]
-        List<IViewUsage> QueryOwnedView();
+        List<IViewUsage> ownedView { get; }
 
         /// <summary>
         /// The ViewpointUsages that are ownedUsages of this Definition.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596649828408_673531_3683", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000559760_444344_1273")]
-        List<IViewpointUsage> QueryOwnedViewpoint();
+        List<IViewpointUsage> ownedViewpoint { get; }
 
         /// <summary>
         /// The Usages that are features of this Definition (not necessarily owned).
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565498571495_48981_27786", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
-        List<IUsage> QueryUsage();
+        List<IUsage> usage { get; }
 
         /// <summary>
         /// The Usages which represent the variants of this Definition as a variation point Definition, if
@@ -293,7 +293,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1590979457191_746167_951", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
-        List<IUsage> QueryVariant();
+        List<IUsage> variant { get; }
 
         /// <summary>
         /// The ownedMemberships of this Definition that are VariantMemberships. If isVariation = true, then
@@ -302,7 +302,7 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1590979005861_503124_894", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
-        List<IVariantMembership> QueryVariantMembership();
+        List<IVariantMembership> variantMembership { get; }
 
     }
 }

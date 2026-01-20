@@ -49,7 +49,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind, bool includeDerivedProperties)
         {
             if (obj is not IDependency iDependency)
             {
@@ -64,6 +67,280 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iDependency.Id);
 
+            if (includeDerivedProperties)
+            {
+                SerializeAsJsonWithDerivedProperties(iDependency, writer);
+            }
+            else
+            {
+                SerializeAsJsonWithoutDerivedProperties(iDependency, writer);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IDependency"/> using an <see cref="Utf8JsonWriter"/> as JSON including derived properties
+        /// </summary>
+        /// <param name=" iDependency">
+        /// The <see cref="IDependency"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithDerivedProperties(IDependency iDependency, Utf8JsonWriter writer)
+        {
+            writer.WriteStartArray("aliasIds"u8);
+
+            foreach (var item in iDependency.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("client"u8);
+
+            foreach (var item in iDependency.Client)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("declaredName"u8);
+            writer.WriteStringValue(iDependency.DeclaredName);
+
+            writer.WritePropertyName("declaredShortName"u8);
+            writer.WriteStringValue(iDependency.DeclaredShortName);
+
+            writer.WriteStartArray("documentation"u8);
+
+            foreach (var item in iDependency.documentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId"u8);
+            writer.WriteStringValue(iDependency.ElementId);
+
+            writer.WritePropertyName("isImplied"u8);
+            writer.WriteBooleanValue(iDependency.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded"u8);
+            writer.WriteBooleanValue(iDependency.IsImpliedIncluded);
+
+            writer.WritePropertyName("isLibraryElement"u8);
+            writer.WriteBooleanValue(iDependency.isLibraryElement);
+
+            writer.WritePropertyName("name"u8);
+            writer.WriteStringValue(iDependency.name);
+
+            writer.WriteStartArray("ownedAnnotation"u8);
+
+            foreach (var item in iDependency.ownedAnnotation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedElement"u8);
+
+            foreach (var item in iDependency.ownedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelatedElement"u8);
+
+            foreach (var item in iDependency.OwnedRelatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship"u8);
+
+            foreach (var item in iDependency.OwnedRelationship)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("owner"u8);
+
+            if (iDependency.owner.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iDependency.owner.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningMembership"u8);
+
+            if (iDependency.owningMembership.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iDependency.owningMembership.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningNamespace"u8);
+
+            if (iDependency.owningNamespace.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iDependency.owningNamespace.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelatedElement"u8);
+
+            if (iDependency.OwningRelatedElement.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iDependency.OwningRelatedElement.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelationship"u8);
+
+            if (iDependency.OwningRelationship.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iDependency.OwningRelationship.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("qualifiedName"u8);
+            writer.WriteStringValue(iDependency.qualifiedName);
+
+            writer.WriteStartArray("relatedElement"u8);
+
+            foreach (var item in iDependency.relatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("shortName"u8);
+            writer.WriteStringValue(iDependency.shortName);
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iDependency.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("supplier"u8);
+
+            foreach (var item in iDependency.Supplier)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iDependency.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("textualRepresentation"u8);
+
+            foreach (var item in iDependency.textualRepresentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IDependency"/> using an <see cref="Utf8JsonWriter"/> as JSON excluding derived properties
+        /// </summary>
+        /// <param name=" iDependency">
+        /// The <see cref="IDependency"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithoutDerivedProperties(IDependency iDependency, Utf8JsonWriter writer)
+        {
             writer.WriteStartArray("aliasIds"u8);
 
             foreach (var item in iDependency.AliasIds)
@@ -188,7 +465,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
 
             writer.WriteEndArray();
 
-            writer.WriteEndObject();
         }
     }
 }

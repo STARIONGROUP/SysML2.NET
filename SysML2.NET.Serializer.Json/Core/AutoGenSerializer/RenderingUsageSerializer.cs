@@ -49,7 +49,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind, bool includeDerivedProperties)
         {
             if (obj is not IRenderingUsage iRenderingUsage)
             {
@@ -64,6 +67,1260 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iRenderingUsage.Id);
 
+            if (includeDerivedProperties)
+            {
+                SerializeAsJsonWithDerivedProperties(iRenderingUsage, writer);
+            }
+            else
+            {
+                SerializeAsJsonWithoutDerivedProperties(iRenderingUsage, writer);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IRenderingUsage"/> using an <see cref="Utf8JsonWriter"/> as JSON including derived properties
+        /// </summary>
+        /// <param name=" iRenderingUsage">
+        /// The <see cref="IRenderingUsage"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithDerivedProperties(IRenderingUsage iRenderingUsage, Utf8JsonWriter writer)
+        {
+            writer.WriteStartArray("aliasIds"u8);
+
+            foreach (var item in iRenderingUsage.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("chainingFeature"u8);
+
+            foreach (var item in iRenderingUsage.chainingFeature)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("crossFeature"u8);
+
+            if (iRenderingUsage.crossFeature.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.crossFeature.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("declaredName"u8);
+            writer.WriteStringValue(iRenderingUsage.DeclaredName);
+
+            writer.WritePropertyName("declaredShortName"u8);
+            writer.WriteStringValue(iRenderingUsage.DeclaredShortName);
+
+            writer.WriteStartArray("definition"u8);
+
+            foreach (var item in iRenderingUsage.definition)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("differencingType"u8);
+
+            foreach (var item in iRenderingUsage.differencingType)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("directedFeature"u8);
+
+            foreach (var item in iRenderingUsage.directedFeature)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("directedUsage"u8);
+
+            foreach (var item in iRenderingUsage.directedUsage)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("direction"u8);
+
+            if (iRenderingUsage.Direction.HasValue)
+            {
+                writer.WriteStringValue(iRenderingUsage.Direction.Value.ToString().ToLower());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WriteStartArray("documentation"u8);
+
+            foreach (var item in iRenderingUsage.documentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId"u8);
+            writer.WriteStringValue(iRenderingUsage.ElementId);
+
+            writer.WriteStartArray("endFeature"u8);
+
+            foreach (var item in iRenderingUsage.endFeature)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("endOwningType"u8);
+
+            if (iRenderingUsage.endOwningType.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.endOwningType.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WriteStartArray("feature"u8);
+
+            foreach (var item in iRenderingUsage.feature)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("featureMembership"u8);
+
+            foreach (var item in iRenderingUsage.featureMembership)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("featureTarget"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iRenderingUsage.featureTarget);
+            writer.WriteEndObject();
+
+            writer.WriteStartArray("featuringType"u8);
+
+            foreach (var item in iRenderingUsage.featuringType)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("importedMembership"u8);
+
+            foreach (var item in iRenderingUsage.importedMembership)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("individualDefinition"u8);
+
+            if (iRenderingUsage.individualDefinition.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.individualDefinition.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WriteStartArray("inheritedFeature"u8);
+
+            foreach (var item in iRenderingUsage.inheritedFeature)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("inheritedMembership"u8);
+
+            foreach (var item in iRenderingUsage.inheritedMembership)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("input"u8);
+
+            foreach (var item in iRenderingUsage.input)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("intersectingType"u8);
+
+            foreach (var item in iRenderingUsage.intersectingType)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("isAbstract"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsAbstract);
+
+            writer.WritePropertyName("isComposite"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsComposite);
+
+            writer.WritePropertyName("isConjugated"u8);
+            writer.WriteBooleanValue(iRenderingUsage.isConjugated);
+
+            writer.WritePropertyName("isConstant"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsConstant);
+
+            writer.WritePropertyName("isDerived"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsDerived);
+
+            writer.WritePropertyName("isEnd"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsEnd);
+
+            writer.WritePropertyName("isImpliedIncluded"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsImpliedIncluded);
+
+            writer.WritePropertyName("isIndividual"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsIndividual);
+
+            writer.WritePropertyName("isLibraryElement"u8);
+            writer.WriteBooleanValue(iRenderingUsage.isLibraryElement);
+
+            writer.WritePropertyName("isOrdered"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsOrdered);
+
+            writer.WritePropertyName("isPortion"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsPortion);
+
+            writer.WritePropertyName("isReference"u8);
+            writer.WriteBooleanValue(iRenderingUsage.isReference);
+
+            writer.WritePropertyName("isSufficient"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsSufficient);
+
+            writer.WritePropertyName("isUnique"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsUnique);
+
+            writer.WritePropertyName("isVariable"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsVariable);
+
+            writer.WritePropertyName("isVariation"u8);
+            writer.WriteBooleanValue(iRenderingUsage.IsVariation);
+
+            writer.WriteStartArray("itemDefinition"u8);
+
+            foreach (var item in iRenderingUsage.itemDefinition)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("mayTimeVary"u8);
+            writer.WriteBooleanValue(iRenderingUsage.mayTimeVary);
+
+            writer.WriteStartArray("member"u8);
+
+            foreach (var item in iRenderingUsage.member)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("membership"u8);
+
+            foreach (var item in iRenderingUsage.membership)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("multiplicity"u8);
+
+            if (iRenderingUsage.multiplicity.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.multiplicity.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("name"u8);
+            writer.WriteStringValue(iRenderingUsage.name);
+
+            writer.WriteStartArray("nestedAction"u8);
+
+            foreach (var item in iRenderingUsage.nestedAction)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedAllocation"u8);
+
+            foreach (var item in iRenderingUsage.nestedAllocation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedAnalysisCase"u8);
+
+            foreach (var item in iRenderingUsage.nestedAnalysisCase)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedAttribute"u8);
+
+            foreach (var item in iRenderingUsage.nestedAttribute)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedCalculation"u8);
+
+            foreach (var item in iRenderingUsage.nestedCalculation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedCase"u8);
+
+            foreach (var item in iRenderingUsage.nestedCase)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedConcern"u8);
+
+            foreach (var item in iRenderingUsage.nestedConcern)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedConnection"u8);
+
+            foreach (var item in iRenderingUsage.nestedConnection)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedConstraint"u8);
+
+            foreach (var item in iRenderingUsage.nestedConstraint)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedEnumeration"u8);
+
+            foreach (var item in iRenderingUsage.nestedEnumeration)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedFlow"u8);
+
+            foreach (var item in iRenderingUsage.nestedFlow)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedInterface"u8);
+
+            foreach (var item in iRenderingUsage.nestedInterface)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedItem"u8);
+
+            foreach (var item in iRenderingUsage.nestedItem)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedMetadata"u8);
+
+            foreach (var item in iRenderingUsage.nestedMetadata)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedOccurrence"u8);
+
+            foreach (var item in iRenderingUsage.nestedOccurrence)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedPart"u8);
+
+            foreach (var item in iRenderingUsage.nestedPart)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedPort"u8);
+
+            foreach (var item in iRenderingUsage.nestedPort)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedReference"u8);
+
+            foreach (var item in iRenderingUsage.nestedReference)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedRendering"u8);
+
+            foreach (var item in iRenderingUsage.nestedRendering)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedRequirement"u8);
+
+            foreach (var item in iRenderingUsage.nestedRequirement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedState"u8);
+
+            foreach (var item in iRenderingUsage.nestedState)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedTransition"u8);
+
+            foreach (var item in iRenderingUsage.nestedTransition)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedUsage"u8);
+
+            foreach (var item in iRenderingUsage.nestedUsage)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedUseCase"u8);
+
+            foreach (var item in iRenderingUsage.nestedUseCase)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedVerificationCase"u8);
+
+            foreach (var item in iRenderingUsage.nestedVerificationCase)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedView"u8);
+
+            foreach (var item in iRenderingUsage.nestedView)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("nestedViewpoint"u8);
+
+            foreach (var item in iRenderingUsage.nestedViewpoint)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("occurrenceDefinition"u8);
+
+            foreach (var item in iRenderingUsage.occurrenceDefinition)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("output"u8);
+
+            foreach (var item in iRenderingUsage.output)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedAnnotation"u8);
+
+            foreach (var item in iRenderingUsage.ownedAnnotation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("ownedConjugator"u8);
+
+            if (iRenderingUsage.ownedConjugator.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.ownedConjugator.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("ownedCrossSubsetting"u8);
+
+            if (iRenderingUsage.ownedCrossSubsetting.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.ownedCrossSubsetting.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WriteStartArray("ownedDifferencing"u8);
+
+            foreach (var item in iRenderingUsage.ownedDifferencing)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedDisjoining"u8);
+
+            foreach (var item in iRenderingUsage.ownedDisjoining)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedElement"u8);
+
+            foreach (var item in iRenderingUsage.ownedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedEndFeature"u8);
+
+            foreach (var item in iRenderingUsage.ownedEndFeature)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedFeature"u8);
+
+            foreach (var item in iRenderingUsage.ownedFeature)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedFeatureChaining"u8);
+
+            foreach (var item in iRenderingUsage.ownedFeatureChaining)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedFeatureInverting"u8);
+
+            foreach (var item in iRenderingUsage.ownedFeatureInverting)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedFeatureMembership"u8);
+
+            foreach (var item in iRenderingUsage.ownedFeatureMembership)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedImport"u8);
+
+            foreach (var item in iRenderingUsage.ownedImport)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedIntersecting"u8);
+
+            foreach (var item in iRenderingUsage.ownedIntersecting)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedMember"u8);
+
+            foreach (var item in iRenderingUsage.ownedMember)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedMembership"u8);
+
+            foreach (var item in iRenderingUsage.ownedMembership)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRedefinition"u8);
+
+            foreach (var item in iRenderingUsage.ownedRedefinition)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("ownedReferenceSubsetting"u8);
+
+            if (iRenderingUsage.ownedReferenceSubsetting.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.ownedReferenceSubsetting.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WriteStartArray("ownedRelationship"u8);
+
+            foreach (var item in iRenderingUsage.OwnedRelationship)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedSpecialization"u8);
+
+            foreach (var item in iRenderingUsage.ownedSpecialization)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedSubsetting"u8);
+
+            foreach (var item in iRenderingUsage.ownedSubsetting)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedTypeFeaturing"u8);
+
+            foreach (var item in iRenderingUsage.ownedTypeFeaturing)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedTyping"u8);
+
+            foreach (var item in iRenderingUsage.ownedTyping)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedUnioning"u8);
+
+            foreach (var item in iRenderingUsage.ownedUnioning)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("owner"u8);
+
+            if (iRenderingUsage.owner.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.owner.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningDefinition"u8);
+
+            if (iRenderingUsage.owningDefinition.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.owningDefinition.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningFeatureMembership"u8);
+
+            if (iRenderingUsage.owningFeatureMembership.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.owningFeatureMembership.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningMembership"u8);
+
+            if (iRenderingUsage.owningMembership.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.owningMembership.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningNamespace"u8);
+
+            if (iRenderingUsage.owningNamespace.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.owningNamespace.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelationship"u8);
+
+            if (iRenderingUsage.OwningRelationship.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.OwningRelationship.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningType"u8);
+
+            if (iRenderingUsage.owningType.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.owningType.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningUsage"u8);
+
+            if (iRenderingUsage.owningUsage.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.owningUsage.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WriteStartArray("partDefinition"u8);
+
+            foreach (var item in iRenderingUsage.partDefinition)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("portionKind"u8);
+
+            if (iRenderingUsage.PortionKind.HasValue)
+            {
+                writer.WriteStringValue(iRenderingUsage.PortionKind.Value.ToString().ToLower());
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("qualifiedName"u8);
+            writer.WriteStringValue(iRenderingUsage.qualifiedName);
+
+            writer.WritePropertyName("renderingDefinition"u8);
+
+            if (iRenderingUsage.renderingDefinition.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iRenderingUsage.renderingDefinition.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("shortName"u8);
+            writer.WriteStringValue(iRenderingUsage.shortName);
+
+            writer.WriteStartArray("textualRepresentation"u8);
+
+            foreach (var item in iRenderingUsage.textualRepresentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("type"u8);
+
+            foreach (var item in iRenderingUsage.type)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("unioningType"u8);
+
+            foreach (var item in iRenderingUsage.unioningType)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("usage"u8);
+
+            foreach (var item in iRenderingUsage.usage)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("variant"u8);
+
+            foreach (var item in iRenderingUsage.variant)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("variantMembership"u8);
+
+            foreach (var item in iRenderingUsage.variantMembership)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IRenderingUsage"/> using an <see cref="Utf8JsonWriter"/> as JSON excluding derived properties
+        /// </summary>
+        /// <param name=" iRenderingUsage">
+        /// The <see cref="IRenderingUsage"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithoutDerivedProperties(IRenderingUsage iRenderingUsage, Utf8JsonWriter writer)
+        {
             writer.WriteStartArray("aliasIds"u8);
 
             foreach (var item in iRenderingUsage.AliasIds)
@@ -169,7 +1426,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 writer.WriteNullValue();
             }
 
-            writer.WriteEndObject();
         }
     }
 }

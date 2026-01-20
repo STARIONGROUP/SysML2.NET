@@ -50,7 +50,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617134244546_130200_6000", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
-        IRenderingUsage QueryOwnedRendering();
+        IRenderingUsage ownedRendering { get; }
 
         /// <summary>
         /// The RenderingUsage that is referenced through this ViewRenderingMembership. It is the
@@ -58,7 +58,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// otherwise, the ownedRendering itself.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617134300857_286392_6081", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IRenderingUsage QueryReferencedRendering();
+        IRenderingUsage referencedRendering { get; }
 
     }
 }

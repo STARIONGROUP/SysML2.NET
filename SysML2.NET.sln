@@ -38,10 +38,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SySML2.NET.REST.Tests", "Sy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.Viewer.Tests", "SysML2.NET.Viewer.Tests\SysML2.NET.Viewer.Tests.csproj", "{2E1877CB-255F-49C9-A0F0-5DCB34FCD06A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.Serializer.Dictionary", "SysML2.NET.Serializer.Dictionary\SysML2.NET.Serializer.Dictionary.csproj", "{03D37FC3-CFEC-4B90-852D-CE1BAA504C84}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.Serializer.Dictionary.Tests", "SysML2.NET.Serializer.Dictionary.Tests\SysML2.NET.Serializer.Dictionary.Tests.csproj", "{102AD589-6440-4D27-84BA-BB5DB9A43B21}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "htmldocs", "htmldocs", "{3C4D5413-519A-406D-A9DB-7A63B4225DA4}"
 	ProjectSection(SolutionItems) = preProject
 		HtmlDocs\Dockerfile = HtmlDocs\Dockerfile
@@ -103,14 +99,6 @@ Global
 		{2E1877CB-255F-49C9-A0F0-5DCB34FCD06A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E1877CB-255F-49C9-A0F0-5DCB34FCD06A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E1877CB-255F-49C9-A0F0-5DCB34FCD06A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03D37FC3-CFEC-4B90-852D-CE1BAA504C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03D37FC3-CFEC-4B90-852D-CE1BAA504C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03D37FC3-CFEC-4B90-852D-CE1BAA504C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03D37FC3-CFEC-4B90-852D-CE1BAA504C84}.Release|Any CPU.Build.0 = Release|Any CPU
-		{102AD589-6440-4D27-84BA-BB5DB9A43B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{102AD589-6440-4D27-84BA-BB5DB9A43B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{102AD589-6440-4D27-84BA-BB5DB9A43B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{102AD589-6440-4D27-84BA-BB5DB9A43B21}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E57385C-C63B-41B9-BA51-4B72070DFAF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E57385C-C63B-41B9-BA51-4B72070DFAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E57385C-C63B-41B9-BA51-4B72070DFAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU

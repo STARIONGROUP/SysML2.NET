@@ -48,14 +48,14 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// performed. It is the (optional) third owned parameter of the WhileLoopActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624290717721_449719_4195", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid? UntilArgument { get; }
+        Guid? untilArgument { get; }
 
         /// <summary>
         /// The Expression whose result, if true, determines that the bodyAction should continue to be
         /// performed. It is the first owned parameter of the WhileLoopActionUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624203871924_371126_3842", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid WhileArgument { get; }
+        Guid whileArgument { get; }
 
     }
 }

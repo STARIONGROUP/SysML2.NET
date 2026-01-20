@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
         /// The originalPortDefinition of the conjugatedPortDefinition of this ConjugatedPortTyping.
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1577915013583_787601_133", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        Guid PortDefinition { get; }
+        Guid portDefinition { get; }
 
     }
 }

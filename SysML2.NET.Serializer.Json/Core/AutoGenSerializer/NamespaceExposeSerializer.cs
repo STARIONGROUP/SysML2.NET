@@ -49,7 +49,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind, bool includeDerivedProperties)
         {
             if (obj is not INamespaceExpose iNamespaceExpose)
             {
@@ -64,6 +67,283 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iNamespaceExpose.Id);
 
+            if (includeDerivedProperties)
+            {
+                SerializeAsJsonWithDerivedProperties(iNamespaceExpose, writer);
+            }
+            else
+            {
+                SerializeAsJsonWithoutDerivedProperties(iNamespaceExpose, writer);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="INamespaceExpose"/> using an <see cref="Utf8JsonWriter"/> as JSON including derived properties
+        /// </summary>
+        /// <param name=" iNamespaceExpose">
+        /// The <see cref="INamespaceExpose"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithDerivedProperties(INamespaceExpose iNamespaceExpose, Utf8JsonWriter writer)
+        {
+            writer.WriteStartArray("aliasIds"u8);
+
+            foreach (var item in iNamespaceExpose.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("declaredName"u8);
+            writer.WriteStringValue(iNamespaceExpose.DeclaredName);
+
+            writer.WritePropertyName("declaredShortName"u8);
+            writer.WriteStringValue(iNamespaceExpose.DeclaredShortName);
+
+            writer.WriteStartArray("documentation"u8);
+
+            foreach (var item in iNamespaceExpose.documentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId"u8);
+            writer.WriteStringValue(iNamespaceExpose.ElementId);
+
+            writer.WritePropertyName("importedElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iNamespaceExpose.importedElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("importedNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iNamespaceExpose.ImportedNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("importOwningNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iNamespaceExpose.importOwningNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("isImplied"u8);
+            writer.WriteBooleanValue(iNamespaceExpose.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded"u8);
+            writer.WriteBooleanValue(iNamespaceExpose.IsImpliedIncluded);
+
+            writer.WritePropertyName("isImportAll"u8);
+            writer.WriteBooleanValue(iNamespaceExpose.IsImportAll);
+
+            writer.WritePropertyName("isLibraryElement"u8);
+            writer.WriteBooleanValue(iNamespaceExpose.isLibraryElement);
+
+            writer.WritePropertyName("isRecursive"u8);
+            writer.WriteBooleanValue(iNamespaceExpose.IsRecursive);
+
+            writer.WritePropertyName("name"u8);
+            writer.WriteStringValue(iNamespaceExpose.name);
+
+            writer.WriteStartArray("ownedAnnotation"u8);
+
+            foreach (var item in iNamespaceExpose.ownedAnnotation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedElement"u8);
+
+            foreach (var item in iNamespaceExpose.ownedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelatedElement"u8);
+
+            foreach (var item in iNamespaceExpose.OwnedRelatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship"u8);
+
+            foreach (var item in iNamespaceExpose.OwnedRelationship)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("owner"u8);
+
+            if (iNamespaceExpose.owner.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iNamespaceExpose.owner.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningMembership"u8);
+
+            if (iNamespaceExpose.owningMembership.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iNamespaceExpose.owningMembership.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningNamespace"u8);
+
+            if (iNamespaceExpose.owningNamespace.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iNamespaceExpose.owningNamespace.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelatedElement"u8);
+
+            if (iNamespaceExpose.OwningRelatedElement.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iNamespaceExpose.OwningRelatedElement.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelationship"u8);
+
+            if (iNamespaceExpose.OwningRelationship.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iNamespaceExpose.OwningRelationship.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("qualifiedName"u8);
+            writer.WriteStringValue(iNamespaceExpose.qualifiedName);
+
+            writer.WriteStartArray("relatedElement"u8);
+
+            foreach (var item in iNamespaceExpose.relatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("shortName"u8);
+            writer.WriteStringValue(iNamespaceExpose.shortName);
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iNamespaceExpose.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iNamespaceExpose.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("textualRepresentation"u8);
+
+            foreach (var item in iNamespaceExpose.textualRepresentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("visibility"u8);
+            writer.WriteStringValue(iNamespaceExpose.Visibility.ToString().ToLower());
+
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="INamespaceExpose"/> using an <see cref="Utf8JsonWriter"/> as JSON excluding derived properties
+        /// </summary>
+        /// <param name=" iNamespaceExpose">
+        /// The <see cref="INamespaceExpose"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithoutDerivedProperties(INamespaceExpose iNamespaceExpose, Utf8JsonWriter writer)
+        {
             writer.WriteStartArray("aliasIds"u8);
 
             foreach (var item in iNamespaceExpose.AliasIds)
@@ -179,7 +459,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iNamespaceExpose.Visibility.ToString().ToLower());
 
-            writer.WriteEndObject();
         }
     }
 }

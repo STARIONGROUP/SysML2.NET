@@ -54,7 +54,7 @@ namespace SysML2.NET.Dal
         /// Gets the Cache that contains all the <see cref="Core.POCO.Root.Elements.IElement"/>s
         /// </summary>
         public ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> Cache { get; private set; }
-
+        
         /// <summary>
         /// Synchronize the Cache based on the provided <paramref name="dtos"/>
         /// </summary>

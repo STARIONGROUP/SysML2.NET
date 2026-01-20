@@ -75,7 +75,7 @@ namespace SysML2.NET.Core.POCO.Systems.Allocations
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611430644481_402036_964", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
-        List<IAllocationUsage> QueryAllocation();
+        List<IAllocationUsage> allocation { get; }
 
     }
 }

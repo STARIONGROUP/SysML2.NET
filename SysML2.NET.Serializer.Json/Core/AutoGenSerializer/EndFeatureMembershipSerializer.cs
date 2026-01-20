@@ -49,7 +49,10 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
-        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        internal static void Serialize(object obj, Utf8JsonWriter writer, SerializationModeKind serializationModeKind, bool includeDerivedProperties)
         {
             if (obj is not IEndFeatureMembership iEndFeatureMembership)
             {
@@ -64,6 +67,307 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("@id"u8);
             writer.WriteStringValue(iEndFeatureMembership.Id);
 
+            if (includeDerivedProperties)
+            {
+                SerializeAsJsonWithDerivedProperties(iEndFeatureMembership, writer);
+            }
+            else
+            {
+                SerializeAsJsonWithoutDerivedProperties(iEndFeatureMembership, writer);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IEndFeatureMembership"/> using an <see cref="Utf8JsonWriter"/> as JSON including derived properties
+        /// </summary>
+        /// <param name=" iEndFeatureMembership">
+        /// The <see cref="IEndFeatureMembership"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithDerivedProperties(IEndFeatureMembership iEndFeatureMembership, Utf8JsonWriter writer)
+        {
+            writer.WriteStartArray("aliasIds"u8);
+
+            foreach (var item in iEndFeatureMembership.AliasIds)
+            {
+                writer.WriteStringValue(item);
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("declaredName"u8);
+            writer.WriteStringValue(iEndFeatureMembership.DeclaredName);
+
+            writer.WritePropertyName("declaredShortName"u8);
+            writer.WriteStringValue(iEndFeatureMembership.DeclaredShortName);
+
+            writer.WriteStartArray("documentation"u8);
+
+            foreach (var item in iEndFeatureMembership.documentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("elementId"u8);
+            writer.WriteStringValue(iEndFeatureMembership.ElementId);
+
+            writer.WritePropertyName("isImplied"u8);
+            writer.WriteBooleanValue(iEndFeatureMembership.IsImplied);
+
+            writer.WritePropertyName("isImpliedIncluded"u8);
+            writer.WriteBooleanValue(iEndFeatureMembership.IsImpliedIncluded);
+
+            writer.WritePropertyName("isLibraryElement"u8);
+            writer.WriteBooleanValue(iEndFeatureMembership.isLibraryElement);
+
+            writer.WritePropertyName("memberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iEndFeatureMembership.MemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberElementId"u8);
+            writer.WriteStringValue(iEndFeatureMembership.memberElementId);
+
+            writer.WritePropertyName("memberName"u8);
+            writer.WriteStringValue(iEndFeatureMembership.MemberName);
+
+            writer.WritePropertyName("membershipOwningNamespace"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iEndFeatureMembership.membershipOwningNamespace);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("memberShortName"u8);
+            writer.WriteStringValue(iEndFeatureMembership.MemberShortName);
+
+            writer.WritePropertyName("name"u8);
+            writer.WriteStringValue(iEndFeatureMembership.name);
+
+            writer.WriteStartArray("ownedAnnotation"u8);
+
+            foreach (var item in iEndFeatureMembership.ownedAnnotation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedElement"u8);
+
+            foreach (var item in iEndFeatureMembership.ownedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("ownedMemberElement"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iEndFeatureMembership.ownedMemberElement);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("ownedMemberElementId"u8);
+            writer.WriteStringValue(iEndFeatureMembership.ownedMemberElementId);
+
+            writer.WritePropertyName("ownedMemberFeature"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iEndFeatureMembership.ownedMemberFeature);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("ownedMemberName"u8);
+            writer.WriteStringValue(iEndFeatureMembership.ownedMemberName);
+
+            writer.WritePropertyName("ownedMemberShortName"u8);
+            writer.WriteStringValue(iEndFeatureMembership.ownedMemberShortName);
+
+            writer.WriteStartArray("ownedRelatedElement"u8);
+
+            foreach (var item in iEndFeatureMembership.OwnedRelatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("ownedRelationship"u8);
+
+            foreach (var item in iEndFeatureMembership.OwnedRelationship)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("owner"u8);
+
+            if (iEndFeatureMembership.owner.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iEndFeatureMembership.owner.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningMembership"u8);
+
+            if (iEndFeatureMembership.owningMembership.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iEndFeatureMembership.owningMembership.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningNamespace"u8);
+
+            if (iEndFeatureMembership.owningNamespace.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iEndFeatureMembership.owningNamespace.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelatedElement"u8);
+
+            if (iEndFeatureMembership.OwningRelatedElement.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iEndFeatureMembership.OwningRelatedElement.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningRelationship"u8);
+
+            if (iEndFeatureMembership.OwningRelationship.HasValue)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(iEndFeatureMembership.OwningRelationship.Value);
+                writer.WriteEndObject();
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            writer.WritePropertyName("owningType"u8);
+            writer.WriteStartObject();
+            writer.WritePropertyName("@id"u8);
+            writer.WriteStringValue(iEndFeatureMembership.owningType);
+            writer.WriteEndObject();
+
+            writer.WritePropertyName("qualifiedName"u8);
+            writer.WriteStringValue(iEndFeatureMembership.qualifiedName);
+
+            writer.WriteStartArray("relatedElement"u8);
+
+            foreach (var item in iEndFeatureMembership.relatedElement)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("shortName"u8);
+            writer.WriteStringValue(iEndFeatureMembership.shortName);
+
+            writer.WriteStartArray("source"u8);
+
+            foreach (var item in iEndFeatureMembership.Source)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("target"u8);
+
+            foreach (var item in iEndFeatureMembership.Target)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WriteStartArray("textualRepresentation"u8);
+
+            foreach (var item in iEndFeatureMembership.textualRepresentation)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("@id"u8);
+                writer.WriteStringValue(item);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("visibility"u8);
+            writer.WriteStringValue(iEndFeatureMembership.Visibility.ToString().ToLower());
+
+        }
+
+        /// <summary>
+        /// Serializes an instance of <see cref="IEndFeatureMembership"/> using an <see cref="Utf8JsonWriter"/> as JSON excluding derived properties
+        /// </summary>
+        /// <param name=" iEndFeatureMembership">
+        /// The <see cref="IEndFeatureMembership"/> to serialize
+        /// </param>
+        /// <param name="writer">
+        /// The target <see cref="Utf8JsonWriter"/>
+        /// </param>
+        private static void SerializeAsJsonWithoutDerivedProperties(IEndFeatureMembership iEndFeatureMembership, Utf8JsonWriter writer)
+        {
             writer.WriteStartArray("aliasIds"u8);
 
             foreach (var item in iEndFeatureMembership.AliasIds)
@@ -179,7 +483,6 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             writer.WritePropertyName("visibility"u8);
             writer.WriteStringValue(iEndFeatureMembership.Visibility.ToString().ToLower());
 
-            writer.WriteEndObject();
         }
     }
 }

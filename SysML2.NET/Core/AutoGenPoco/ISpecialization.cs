@@ -55,7 +55,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
         [Property(xmiId: "_18_5_3_12e503d9_1533160674971_573157_43226", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
-        IType QueryOwningType();
+        IType owningType { get; }
 
         /// <summary>
         /// A Type with a subset of all instances of the general Type, which might be the same set.

@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591152217935_225164_2921", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_59601fc_1590257465225_855208_512")]
-        IAnalysisCaseDefinition QueryAnalysisCaseDefinition();
+        IAnalysisCaseDefinition analysisCaseDefinition { get; }
 
         /// <summary>
         /// An Expression used to compute the result of the AnalysisCaseUsage, owned via a
@@ -82,7 +82,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591151453868_910052_2600", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        IExpression QueryResultExpression();
+        IExpression resultExpression { get; }
 
     }
 }

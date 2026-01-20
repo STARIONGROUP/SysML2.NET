@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_59601fc_1590258781117_655788_845", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528016548_548098_110830")]
-        Guid OwnedSubjectParameter { get; }
+        Guid ownedSubjectParameter { get; }
 
     }
 }

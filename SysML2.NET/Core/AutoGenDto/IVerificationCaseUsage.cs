@@ -45,14 +45,14 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1596821408366_748769_10316", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_59601fc_1590257465225_855208_512")]
-        Guid? VerificationCaseDefinition { get; }
+        Guid? verificationCaseDefinition { get; }
 
         /// <summary>
         /// The RequirementUsages verified by this VerificationCaseUsage, which are the verifiedRequirements of
         /// all RequirementVerificationMemberships of the objectiveRequirement.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1603922396599_812331_357", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        List<Guid> VerifiedRequirement { get; }
+        List<Guid> verifiedRequirement { get; }
 
     }
 }

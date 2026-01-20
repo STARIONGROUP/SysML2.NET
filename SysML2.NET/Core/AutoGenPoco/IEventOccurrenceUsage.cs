@@ -78,14 +78,14 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// EventOccurrenceUsage itself.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1622831790393_676695_195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IOccurrenceUsage QueryEventOccurrence();
+        IOccurrenceUsage eventOccurrence { get; }
 
         /// <summary>
         /// Always true for an EventOccurrenceUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1672526906017_786343_306", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
-        new bool QueryIsReference();
+        new bool isReference { get; }
 
     }
 }

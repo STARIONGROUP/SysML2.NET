@@ -52,7 +52,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         }
         
         [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
-        public async Task VerifyMatchesExpectedSerializerClass(string className)
+        public async Task VerifyMatchesExpectedDeSerializerClass(string className)
         {
             var generatedCode = await this.umlCoreDtoDeSerializerGenerator.GenerateDtoDeSerializerClass(GeneratorSetupFixture.XmiReaderResult, this.umlDtoDeserializerDirectoryInfo, className);
 

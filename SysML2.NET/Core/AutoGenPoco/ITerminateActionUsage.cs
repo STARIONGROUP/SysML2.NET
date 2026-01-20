@@ -78,7 +78,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// TerminateActionUsage.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1724451750939_948290_107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        IExpression QueryTerminatedOccurrenceArgument();
+        IExpression terminatedOccurrenceArgument { get; }
 
     }
 }

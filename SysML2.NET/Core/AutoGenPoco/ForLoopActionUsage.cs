@@ -27,6 +27,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Linq;
 
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.Systems.Occurrences;
@@ -87,10 +88,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        public List<IBehavior> QueryActionDefinition()
-        {
-            return this.ComputeActionDefinition();
-        }
+        public List<IBehavior> actionDefinition => this.ComputeActionDefinition();
 
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
@@ -106,10 +104,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IStep.Behavior")]
-        public List<IBehavior> QueryBehavior()
-        {
-            return this.ComputeBehavior();
-        }
+        List<IBehavior> Kernel.Behaviors.IStep.behavior => [.. this.actionDefinition];
 
         /// <summary>
         /// The ActionUsage to be performed repeatedly by the LoopActionUsage. It is the second parameter of the
@@ -117,10 +112,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624203902575_509097_3869", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "ILoopActionUsage.BodyAction")]
-        public IActionUsage QueryBodyAction()
-        {
-            return this.ComputeBodyAction();
-        }
+        public IActionUsage bodyAction => this.ComputeBodyAction();
 
         /// <summary>
         /// The Feature that are chained together to determine the values of this Feature, derived from the
@@ -132,10 +124,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1619792219511_543311_445", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [Implements(implementation: "IFeature.ChainingFeature")]
-        public List<IFeature> QueryChainingFeature()
-        {
-            return this.ComputeChainingFeature();
-        }
+        public List<IFeature> chainingFeature => this.ComputeChainingFeature();
 
         /// <summary>
         /// The second chainingFeature of the crossedFeature of the ownedCrossSubsetting of this Feature, if it
@@ -145,10 +134,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1689616227528_355910_218", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.CrossFeature")]
-        public IFeature QueryCrossFeature()
-        {
-            return this.ComputeCrossFeature();
-        }
+        public IFeature crossFeature => this.ComputeCrossFeature();
 
         /// <summary>
         /// The declared name of this Element.
@@ -176,10 +162,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        public List<IClassifier> QueryDefinition()
-        {
-            return this.ComputeDefinition();
-        }
+        List<IClassifier> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -192,10 +175,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661975883472_645501_1372", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.DifferencingType")]
-        public List<IType> QueryDifferencingType()
-        {
-            return this.ComputeDifferencingType();
-        }
+        public List<IType> differencingType => this.ComputeDifferencingType();
 
         /// <summary>
         /// The features of this Type that have a non-null direction.
@@ -204,10 +184,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [RedefinedByProperty("IStep.Parameter")]
         [Implements(implementation: "IType.DirectedFeature")]
-        public List<IFeature> QueryDirectedFeature()
-        {
-            return this.ComputeDirectedFeature();
-        }
+        List<IFeature> Core.Types.IType.directedFeature => [.. this.parameter];
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
@@ -216,10 +193,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.DirectedUsage")]
-        public List<IUsage> QueryDirectedUsage()
-        {
-            return this.ComputeDirectedUsage();
-        }
+        public List<IUsage> directedUsage => this.ComputeDirectedUsage();
 
         /// <summary>
         /// Indicates how values of this Feature are determined or used (as specified for the
@@ -236,10 +210,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
-        public List<IDocumentation> QueryDocumentation()
-        {
-            return this.ComputeDocumentation();
-        }
+        public List<IDocumentation> documentation => this.ComputeDocumentation();
 
         /// <summary>
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
@@ -255,10 +226,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1562476168385_824569_22106", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.EndFeature")]
-        public List<IFeature> QueryEndFeature()
-        {
-            return this.ComputeEndFeature();
-        }
+        public List<IFeature> endFeature => this.ComputeEndFeature();
 
         /// <summary>
         /// The Type that is related to this Feature by an EndFeatureMembership in which the Feature is an
@@ -268,10 +236,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168386_366266_22107")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [Implements(implementation: "IFeature.EndOwningType")]
-        public IType QueryEndOwningType()
-        {
-            return this.ComputeEndOwningType();
-        }
+        public IType endOwningType => this.ComputeEndOwningType();
 
         /// <summary>
         /// The ownedMemberFeatures of the featureMemberships of this Type.
@@ -279,10 +244,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_326391_43166", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         [Implements(implementation: "IType.Feature")]
-        public List<IFeature> QueryFeature()
-        {
-            return this.ComputeFeature();
-        }
+        public List<IFeature> feature => this.ComputeFeature();
 
         /// <summary>
         /// The FeatureMemberships for features of this Type, which include all ownedFeatureMemberships and
@@ -291,20 +253,14 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1651076866512_962346_485", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.FeatureMembership")]
-        public List<IFeatureMembership> QueryFeatureMembership()
-        {
-            return this.ComputeFeatureMembership();
-        }
+        public List<IFeatureMembership> featureMembership => this.ComputeFeatureMembership();
 
         /// <summary>
         /// The last of the chainingFeatures of this Feature, if it has any. Otherwise, this Feature itself.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1715790852907_110671_19", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.FeatureTarget")]
-        public IFeature QueryFeatureTarget()
-        {
-            return this.ComputeFeatureTarget();
-        }
+        public IFeature featureTarget => this.ComputeFeatureTarget();
 
         /// <summary>
         /// Types that feature this Feature, such that any instance in the domain of the Feature must be
@@ -314,10 +270,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1603905619975_304385_743", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IFeature.FeaturingType")]
-        public List<IType> QueryFeaturingType()
-        {
-            return this.ComputeFeaturingType();
-        }
+        public List<IType> featuringType => this.ComputeFeaturingType();
 
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
@@ -325,10 +278,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [Implements(implementation: "INamespace.ImportedMembership")]
-        public List<IMembership> QueryImportedMembership()
-        {
-            return this.ComputeImportedMembership();
-        }
+        public List<IMembership> importedMembership => this.ComputeImportedMembership();
 
         /// <summary>
         /// The at most one occurrenceDefinition that has isIndividual = true.
@@ -336,10 +286,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1618958878775_52798_7090", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         [Implements(implementation: "IOccurrenceUsage.IndividualDefinition")]
-        public IOccurrenceDefinition QueryIndividualDefinition()
-        {
-            return this.ComputeIndividualDefinition();
-        }
+        public IOccurrenceDefinition individualDefinition => this.ComputeIndividualDefinition();
 
         /// <summary>
         /// All the memberFeatures of the inheritedMemberships of this Type that are FeatureMemberships.
@@ -347,10 +294,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1575499020770_15576_2334", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IType.InheritedFeature")]
-        public List<IFeature> QueryInheritedFeature()
-        {
-            return this.ComputeInheritedFeature();
-        }
+        public List<IFeature> inheritedFeature => this.ComputeInheritedFeature();
 
         /// <summary>
         /// All Memberships inherited by this Type via Specialization or Conjugation. These are included in the
@@ -359,10 +303,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1551972927538_787976_19004", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         [Implements(implementation: "IType.InheritedMembership")]
-        public List<IMembership> QueryInheritedMembership()
-        {
-            return this.ComputeInheritedMembership();
-        }
+        public List<IMembership> inheritedMembership => this.ComputeInheritedMembership();
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction in or inout.
@@ -370,10 +311,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_37384_43169", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IType.Input")]
-        public List<IFeature> QueryInput()
-        {
-            return this.ComputeInput();
-        }
+        public List<IFeature> input => this.ComputeInput();
 
         /// <summary>
         /// The interpretations of a Type with intersectingTypes are asserted to be those in common among the
@@ -386,10 +324,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661973922199_584242_1045", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.IntersectingType")]
-        public List<IType> QueryIntersectingType()
-        {
-            return this.ComputeIntersectingType();
-        }
+        public List<IType> intersectingType => this.ComputeIntersectingType();
 
         /// <summary>
         /// Indicates whether instances of this Type must also be instances of at least one of its specialized
@@ -413,10 +348,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1575485930816_796088_1933", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.IsConjugated")]
-        public bool QueryIsConjugated()
-        {
-            return this.ComputeIsConjugated();
-        }
+        public bool isConjugated => this.ComputeIsConjugated();
 
         /// <summary>
         /// If isVariable is true, then whether the value of this Feature nevertheless does not change over all
@@ -471,10 +403,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
-        public bool QueryIsLibraryElement()
-        {
-            return this.ComputeIsLibraryElement();
-        }
+        public bool isLibraryElement => this.ComputeIsLibraryElement();
 
         /// <summary>
         /// Whether an order exists for the values of this Feature or not.
@@ -496,10 +425,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IUsage.IsReference")]
-        public bool QueryIsReference()
-        {
-            return this.ComputeIsReference();
-        }
+        public bool isReference => this.ComputeIsReference();
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
@@ -518,7 +444,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674968_321342_43214", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
         [Implements(implementation: "IFeature.IsUnique")]
-        public bool IsUnique { get; set; }
+        public bool IsUnique { get; set; } = true;
 
         /// <summary>
         /// Whether the value of this Feature might vary over time. That is, whether the Feature may have a
@@ -527,7 +453,11 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_2022x_2_12e503d9_1725998273002_23711_212", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [RedefinedByProperty("IUsage.MayTimeVary")]
         [Implements(implementation: "IFeature.IsVariable")]
-        public bool IsVariable { get; set; }
+        bool Core.Features.IFeature.IsVariable
+        {
+            get => this.mayTimeVary;
+            set { }
+        }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
@@ -544,10 +474,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1640325378400_227367_3662", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IForLoopActionUsage.LoopVariable")]
-        public IReferenceUsage QueryLoopVariable()
-        {
-            return this.ComputeLoopVariable();
-        }
+        public IReferenceUsage loopVariable => this.ComputeLoopVariable();
 
         /// <summary>
         /// Whether this Usage may be time varying (that is, whether it is featured by the snapshots of its
@@ -560,10 +487,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         [Implements(implementation: "IUsage.MayTimeVary")]
-        public bool QueryMayTimeVary()
-        {
-            return this.ComputeMayTimeVary();
-        }
+        public bool mayTimeVary => this.ComputeMayTimeVary();
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
@@ -571,10 +495,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "INamespace.Member")]
-        public List<IElement> QueryMember()
-        {
-            return this.ComputeMember();
-        }
+        public List<IElement> member => this.ComputeMember();
 
         /// <summary>
         /// All Memberships in this Namespace, including (at least) the union of ownedMemberships and
@@ -582,10 +503,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
         [Implements(implementation: "INamespace.Membership")]
-        public List<IMembership> QueryMembership()
-        {
-            return this.ComputeMembership();
-        }
+        public List<IMembership> membership => this.ComputeMembership();
 
         /// <summary>
         /// An ownedMember of this Type that is a Multiplicity, which constraints the cardinality of the Type.
@@ -595,10 +513,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1573095852093_324833_5396", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IType.Multiplicity")]
-        public IMultiplicity QueryMultiplicity()
-        {
-            return this.ComputeMultiplicity();
-        }
+        public IMultiplicity multiplicity => this.ComputeMultiplicity();
 
         /// <summary>
         /// The name to be used for this Element during name resolution within its owningNamespace. This is
@@ -608,10 +523,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
-        public string QueryName()
-        {
-            return this.ComputeName();
-        }
+        public string name => this.ComputeName();
 
         /// <summary>
         /// The ActionUsages that are nestedUsages of this Usage.
@@ -619,10 +531,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1565501745142_70952_31609", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         [Implements(implementation: "IUsage.NestedAction")]
-        public List<IActionUsage> QueryNestedAction()
-        {
-            return this.ComputeNestedAction();
-        }
+        public List<IActionUsage> nestedAction => this.ComputeNestedAction();
 
         /// <summary>
         /// The AllocationUsages that are nestedUsages of this Usage.
@@ -630,10 +539,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1611430983774_648557_1053", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         [Implements(implementation: "IUsage.NestedAllocation")]
-        public List<IAllocationUsage> QueryNestedAllocation()
-        {
-            return this.ComputeNestedAllocation();
-        }
+        public List<IAllocationUsage> nestedAllocation => this.ComputeNestedAllocation();
 
         /// <summary>
         /// The AnalysisCaseUsages that are nestedUsages of this Usage.
@@ -641,10 +547,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591152666850_226358_3749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         [Implements(implementation: "IUsage.NestedAnalysisCase")]
-        public List<IAnalysisCaseUsage> QueryNestedAnalysisCase()
-        {
-            return this.ComputeNestedAnalysisCase();
-        }
+        public List<IAnalysisCaseUsage> nestedAnalysisCase => this.ComputeNestedAnalysisCase();
 
         /// <summary>
         /// The code>AttributeUsages that are nestedUsages of this Usage.
@@ -652,10 +555,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591500785349_111324_4486", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedAttribute")]
-        public List<IAttributeUsage> QueryNestedAttribute()
-        {
-            return this.ComputeNestedAttribute();
-        }
+        public List<IAttributeUsage> nestedAttribute => this.ComputeNestedAttribute();
 
         /// <summary>
         /// The CalculationUsage that are nestedUsages of this Usage.
@@ -663,10 +563,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1588215112283_215964_632", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
         [Implements(implementation: "IUsage.NestedCalculation")]
-        public List<ICalculationUsage> QueryNestedCalculation()
-        {
-            return this.ComputeNestedCalculation();
-        }
+        public List<ICalculationUsage> nestedCalculation => this.ComputeNestedCalculation();
 
         /// <summary>
         /// The CaseUsages that are nestedUsages of this Usage.
@@ -674,10 +571,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591135021853_494751_737", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1588215112283_215964_632")]
         [Implements(implementation: "IUsage.NestedCase")]
-        public List<ICaseUsage> QueryNestedCase()
-        {
-            return this.ComputeNestedCase();
-        }
+        public List<ICaseUsage> nestedCase => this.ComputeNestedCase();
 
         /// <summary>
         /// The ConcernUsages that are nestedUsages of this Usage.
@@ -685,10 +579,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1617051711833_106553_1460", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
         [Implements(implementation: "IUsage.NestedConcern")]
-        public List<IConcernUsage> QueryNestedConcern()
-        {
-            return this.ComputeNestedConcern();
-        }
+        public List<IConcernUsage> nestedConcern => this.ComputeNestedConcern();
 
         /// <summary>
         /// The ConnectorAsUsages that are nestedUsages of this Usage. Note that this list includes
@@ -698,10 +589,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591479754895_422988_1242", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedConnection")]
-        public List<IConnectorAsUsage> QueryNestedConnection()
-        {
-            return this.ComputeNestedConnection();
-        }
+        public List<IConnectorAsUsage> nestedConnection => this.ComputeNestedConnection();
 
         /// <summary>
         /// The ConstraintUsages that are nestedUsages of this Usage.
@@ -709,10 +597,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1578067664051_434365_1774", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         [Implements(implementation: "IUsage.NestedConstraint")]
-        public List<IConstraintUsage> QueryNestedConstraint()
-        {
-            return this.ComputeNestedConstraint();
-        }
+        public List<IConstraintUsage> nestedConstraint => this.ComputeNestedConstraint();
 
         /// <summary>
         /// The code>EnumerationUsages that are nestedUsages of this Usage.
@@ -720,10 +605,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1606946589000_158124_239", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591500785349_111324_4486")]
         [Implements(implementation: "IUsage.NestedEnumeration")]
-        public List<IEnumerationUsage> QueryNestedEnumeration()
-        {
-            return this.ComputeNestedEnumeration();
-        }
+        public List<IEnumerationUsage> nestedEnumeration => this.ComputeNestedEnumeration();
 
         /// <summary>
         /// The code>FlowUsages that are nestedUsages of this Usage.
@@ -731,10 +613,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1624054938718_124518_1464", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         [Implements(implementation: "IUsage.NestedFlow")]
-        public List<IFlowUsage> QueryNestedFlow()
-        {
-            return this.ComputeNestedFlow();
-        }
+        public List<IFlowUsage> nestedFlow => this.ComputeNestedFlow();
 
         /// <summary>
         /// The InterfaceUsages that are nestedUsages of this Usage.
@@ -742,10 +621,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591498454569_383419_3839", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         [Implements(implementation: "IUsage.NestedInterface")]
-        public List<IInterfaceUsage> QueryNestedInterface()
-        {
-            return this.ComputeNestedInterface();
-        }
+        public List<IInterfaceUsage> nestedInterface => this.ComputeNestedInterface();
 
         /// <summary>
         /// The ItemUsages that are nestedUsages of this Usage.
@@ -753,10 +629,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591482421103_284620_2978", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         [Implements(implementation: "IUsage.NestedItem")]
-        public List<IItemUsage> QueryNestedItem()
-        {
-            return this.ComputeNestedItem();
-        }
+        public List<IItemUsage> nestedItem => this.ComputeNestedItem();
 
         /// <summary>
         /// The MetadataUsages that are nestedUsages of this of this Usage.
@@ -764,10 +637,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1661488589862_120785_2970", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
         [Implements(implementation: "IUsage.NestedMetadata")]
-        public List<IMetadataUsage> QueryNestedMetadata()
-        {
-            return this.ComputeNestedMetadata();
-        }
+        public List<IMetadataUsage> nestedMetadata => this.ComputeNestedMetadata();
 
         /// <summary>
         /// The OccurrenceUsages that are nestedUsages of this Usage.
@@ -775,10 +645,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1618943853976_48759_278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedOccurrence")]
-        public List<IOccurrenceUsage> QueryNestedOccurrence()
-        {
-            return this.ComputeNestedOccurrence();
-        }
+        public List<IOccurrenceUsage> nestedOccurrence => this.ComputeNestedOccurrence();
 
         /// <summary>
         /// The PartUsages that are nestedUsages of this Usage.
@@ -786,10 +653,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591496406876_479979_3188", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
         [Implements(implementation: "IUsage.NestedPart")]
-        public List<IPartUsage> QueryNestedPart()
-        {
-            return this.ComputeNestedPart();
-        }
+        public List<IPartUsage> nestedPart => this.ComputeNestedPart();
 
         /// <summary>
         /// The PortUsages that are nestedUsages of this Usage.
@@ -797,10 +661,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1565494459494_859367_26042", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedPort")]
-        public List<IPortUsage> QueryNestedPort()
-        {
-            return this.ComputeNestedPort();
-        }
+        public List<IPortUsage> nestedPort => this.ComputeNestedPort();
 
         /// <summary>
         /// The ReferenceUsages that are nestedUsages of this Usage.
@@ -808,10 +669,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591477541360_47573_933", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedReference")]
-        public List<IReferenceUsage> QueryNestedReference()
-        {
-            return this.ComputeNestedReference();
-        }
+        public List<IReferenceUsage> nestedReference => this.ComputeNestedReference();
 
         /// <summary>
         /// The RenderingUsages that are nestedUsages of this Usage.
@@ -819,10 +677,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1596741501454_147708_6545", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
         [Implements(implementation: "IUsage.NestedRendering")]
-        public List<IRenderingUsage> QueryNestedRendering()
-        {
-            return this.ComputeNestedRendering();
-        }
+        public List<IRenderingUsage> nestedRendering => this.ComputeNestedRendering();
 
         /// <summary>
         /// The RequirementUsages that are nestedUsages of this Usage.
@@ -830,10 +685,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1583000447195_878123_1244", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1578067664051_434365_1774")]
         [Implements(implementation: "IUsage.NestedRequirement")]
-        public List<IRequirementUsage> QueryNestedRequirement()
-        {
-            return this.ComputeNestedRequirement();
-        }
+        public List<IRequirementUsage> nestedRequirement => this.ComputeNestedRequirement();
 
         /// <summary>
         /// The StateUsages that are nestedUsages of this Usage.
@@ -841,10 +693,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1575587743891_973819_756", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
         [Implements(implementation: "IUsage.NestedState")]
-        public List<IStateUsage> QueryNestedState()
-        {
-            return this.ComputeNestedState();
-        }
+        public List<IStateUsage> nestedState => this.ComputeNestedState();
 
         /// <summary>
         /// The TransitionUsages that are nestedUsages of this Usage.
@@ -852,10 +701,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1578597913303_768272_3894", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         [Implements(implementation: "IUsage.NestedTransition")]
-        public List<ITransitionUsage> QueryNestedTransition()
-        {
-            return this.ComputeNestedTransition();
-        }
+        public List<ITransitionUsage> nestedTransition => this.ComputeNestedTransition();
 
         /// <summary>
         /// The Usages that are ownedFeatures of this Usage.
@@ -864,10 +710,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.NestedUsage")]
-        public List<IUsage> QueryNestedUsage()
-        {
-            return this.ComputeNestedUsage();
-        }
+        public List<IUsage> nestedUsage => this.ComputeNestedUsage();
 
         /// <summary>
         /// The UseCaseUsages that are nestedUsages of this Usage.
@@ -875,10 +718,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1621463992900_247262_1080", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         [Implements(implementation: "IUsage.NestedUseCase")]
-        public List<IUseCaseUsage> QueryNestedUseCase()
-        {
-            return this.ComputeNestedUseCase();
-        }
+        public List<IUseCaseUsage> nestedUseCase => this.ComputeNestedUseCase();
 
         /// <summary>
         /// The VerificationCaseUsages that are nestedUsages of this Usage.
@@ -886,10 +726,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1596821592100_42801_10499", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         [Implements(implementation: "IUsage.NestedVerificationCase")]
-        public List<IVerificationCaseUsage> QueryNestedVerificationCase()
-        {
-            return this.ComputeNestedVerificationCase();
-        }
+        public List<IVerificationCaseUsage> nestedVerificationCase => this.ComputeNestedVerificationCase();
 
         /// <summary>
         /// The ViewUsages that are nestedUsages of this Usage.
@@ -897,10 +734,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1596644669126_858176_809", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
         [Implements(implementation: "IUsage.NestedView")]
-        public List<IViewUsage> QueryNestedView()
-        {
-            return this.ComputeNestedView();
-        }
+        public List<IViewUsage> nestedView => this.ComputeNestedView();
 
         /// <summary>
         /// The ViewpointUsages that are nestedUsages of this Usage.
@@ -908,10 +742,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1596649930212_443356_3818", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
         [Implements(implementation: "IUsage.NestedViewpoint")]
-        public List<IViewpointUsage> QueryNestedViewpoint()
-        {
-            return this.ComputeNestedViewpoint();
-        }
+        public List<IViewpointUsage> nestedViewpoint => this.ComputeNestedViewpoint();
 
         /// <summary>
         /// The Classes that are the types of this OccurrenceUsage. Nominally, these are OccurrenceDefinitions,
@@ -922,10 +753,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        public List<IClass> QueryOccurrenceDefinition()
-        {
-            return this.ComputeOccurrenceDefinition();
-        }
+        List<IClass> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. this.actionDefinition];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -933,10 +761,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674960_365618_43170", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IType.Output")]
-        public List<IFeature> QueryOutput()
-        {
-            return this.ComputeOutput();
-        }
+        public List<IFeature> output => this.ComputeOutput();
 
         /// <summary>
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
@@ -946,10 +771,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
-        public List<IAnnotation> QueryOwnedAnnotation()
-        {
-            return this.ComputeOwnedAnnotation();
-        }
+        public List<IAnnotation> ownedAnnotation => this.ComputeOwnedAnnotation();
 
         /// <summary>
         /// A Conjugation owned by this Type for which the Type is the originalType.
@@ -958,10 +780,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490144_309557_300")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedConjugator")]
-        public IConjugation QueryOwnedConjugator()
-        {
-            return this.ComputeOwnedConjugator();
-        }
+        public IConjugation ownedConjugator => this.ComputeOwnedConjugator();
 
         /// <summary>
         /// The one ownedSubsetting of this Feature, if any, that is a CrossSubsetting}, for which the Feature
@@ -970,10 +789,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_b9102da_1689616916594_145818_277", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedCrossSubsetting")]
-        public ICrossSubsetting QueryOwnedCrossSubsetting()
-        {
-            return this.ComputeOwnedCrossSubsetting();
-        }
+        public ICrossSubsetting ownedCrossSubsetting => this.ComputeOwnedCrossSubsetting();
 
         /// <summary>
         /// The ownedRelationships of this Type that are Differencings, having this Type as their
@@ -983,10 +799,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedDifferencing")]
-        public List<IDifferencing> QueryOwnedDifferencing()
-        {
-            return this.ComputeOwnedDifferencing();
-        }
+        public List<IDifferencing> ownedDifferencing => this.ComputeOwnedDifferencing();
 
         /// <summary>
         /// The ownedRelationships of this Type that are Disjoinings, for which the Type is the typeDisjoined
@@ -996,10 +809,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623183194914_502526_616")]
         [Implements(implementation: "IType.OwnedDisjoining")]
-        public List<IDisjoining> QueryOwnedDisjoining()
-        {
-            return this.ComputeOwnedDisjoining();
-        }
+        public List<IDisjoining> ownedDisjoining => this.ComputeOwnedDisjoining();
 
         /// <summary>
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
@@ -1007,10 +817,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
-        public List<IElement> QueryOwnedElement()
-        {
-            return this.ComputeOwnedElement();
-        }
+        public List<IElement> ownedElement => this.ComputeOwnedElement();
 
         /// <summary>
         /// All endFeatures of this Type that are ownedFeatures.
@@ -1019,10 +826,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         [Implements(implementation: "IType.OwnedEndFeature")]
-        public List<IFeature> QueryOwnedEndFeature()
-        {
-            return this.ComputeOwnedEndFeature();
-        }
+        public List<IFeature> ownedEndFeature => this.ComputeOwnedEndFeature();
 
         /// <summary>
         /// The ownedMemberFeatures of the ownedFeatureMemberships of this Type.
@@ -1030,10 +834,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674959_226999_43167", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IType.OwnedFeature")]
-        public List<IFeature> QueryOwnedFeature()
-        {
-            return this.ComputeOwnedFeature();
-        }
+        public List<IFeature> ownedFeature => this.ComputeOwnedFeature();
 
         /// <summary>
         /// The ownedRelationships of this Feature that are FeatureChainings, for which the Feature will be the
@@ -1043,10 +844,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "IFeature.OwnedFeatureChaining")]
-        public List<IFeatureChaining> QueryOwnedFeatureChaining()
-        {
-            return this.ComputeOwnedFeatureChaining();
-        }
+        public List<IFeatureChaining> ownedFeatureChaining => this.ComputeOwnedFeatureChaining();
 
         /// <summary>
         /// The ownedRelationships of this Feature that are FeatureInvertings and for which the Feature is the
@@ -1056,10 +854,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838861_768019_145")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IFeature.OwnedFeatureInverting")]
-        public List<IFeatureInverting> QueryOwnedFeatureInverting()
-        {
-            return this.ComputeOwnedFeatureInverting();
-        }
+        public List<IFeatureInverting> ownedFeatureInverting => this.ComputeOwnedFeatureInverting();
 
         /// <summary>
         /// The ownedMemberships of this Type that are FeatureMemberships, for which the Type is the owningType.
@@ -1069,10 +864,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866512_962346_485")]
         [Implements(implementation: "IType.OwnedFeatureMembership")]
-        public List<IFeatureMembership> QueryOwnedFeatureMembership()
-        {
-            return this.ComputeOwnedFeatureMembership();
-        }
+        public List<IFeatureMembership> ownedFeatureMembership => this.ComputeOwnedFeatureMembership();
 
         /// <summary>
         /// The ownedRelationships of this Namespace that are Imports, for which the Namespace is the
@@ -1082,10 +874,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "INamespace.OwnedImport")]
-        public List<IImport> QueryOwnedImport()
-        {
-            return this.ComputeOwnedImport();
-        }
+        public List<IImport> ownedImport => this.ComputeOwnedImport();
 
         /// <summary>
         /// The ownedRelationships of this Type that are Intersectings, have the Type as their typeIntersected.
@@ -1094,10 +883,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IType.OwnedIntersecting")]
-        public List<IIntersecting> QueryOwnedIntersecting()
-        {
-            return this.ComputeOwnedIntersecting();
-        }
+        public List<IIntersecting> ownedIntersecting => this.ComputeOwnedIntersecting();
 
         /// <summary>
         /// The owned members of this Namespace, which are the <cpde>ownedMemberElements of the ownedMemberships
@@ -1106,10 +892,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         [Implements(implementation: "INamespace.OwnedMember")]
-        public List<IElement> QueryOwnedMember()
-        {
-            return this.ComputeOwnedMember();
-        }
+        public List<IElement> ownedMember => this.ComputeOwnedMember();
 
         /// <summary>
         /// The ownedRelationships of this Namespace that are Memberships, for which the Namespace is the
@@ -1120,10 +903,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "INamespace.OwnedMembership")]
-        public List<IMembership> QueryOwnedMembership()
-        {
-            return this.ComputeOwnedMembership();
-        }
+        public List<IMembership> ownedMembership => this.ComputeOwnedMembership();
 
         /// <summary>
         /// The ownedSubsettings of this Feature that are Redefinitions, for which the Feature is the
@@ -1132,10 +912,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_161813_43220", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedRedefinition")]
-        public List<IRedefinition> QueryOwnedRedefinition()
-        {
-            return this.ComputeOwnedRedefinition();
-        }
+        public List<IRedefinition> ownedRedefinition => this.ComputeOwnedRedefinition();
 
         /// <summary>
         /// The one ownedSubsetting of this Feature, if any, that is a ReferenceSubsetting, for which the
@@ -1144,10 +921,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_4_12e503d9_1661555161564_247405_255", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674970_472382_43221")]
         [Implements(implementation: "IFeature.OwnedReferenceSubsetting")]
-        public IReferenceSubsetting QueryOwnedReferenceSubsetting()
-        {
-            return this.ComputeOwnedReferenceSubsetting();
-        }
+        public IReferenceSubsetting ownedReferenceSubsetting => this.ComputeOwnedReferenceSubsetting();
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
@@ -1165,10 +939,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674984_558067_43292")]
         [Implements(implementation: "IType.OwnedSpecialization")]
-        public List<ISpecialization> QueryOwnedSpecialization()
-        {
-            return this.ComputeOwnedSpecialization();
-        }
+        public List<ISpecialization> ownedSpecialization => this.ComputeOwnedSpecialization();
 
         /// <summary>
         /// The ownedSpecializations of this Feature that are Subsettings, for which the Feature is the
@@ -1178,10 +949,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674966_718145_43205")]
         [Implements(implementation: "IFeature.OwnedSubsetting")]
-        public List<ISubsetting> QueryOwnedSubsetting()
-        {
-            return this.ComputeOwnedSubsetting();
-        }
+        public List<ISubsetting> ownedSubsetting => this.ComputeOwnedSubsetting();
 
         /// <summary>
         /// The ownedRelationships of this Feature that are TypeFeaturings and for which the Feature is the
@@ -1191,10 +959,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603904928950_196800_580")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [Implements(implementation: "IFeature.OwnedTypeFeaturing")]
-        public List<ITypeFeaturing> QueryOwnedTypeFeaturing()
-        {
-            return this.ComputeOwnedTypeFeaturing();
-        }
+        public List<ITypeFeaturing> ownedTypeFeaturing => this.ComputeOwnedTypeFeaturing();
 
         /// <summary>
         /// The ownedSpecializations of this Feature that are FeatureTypings, for which the Feature is the
@@ -1204,10 +969,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_804591_21100")]
         [Implements(implementation: "IFeature.OwnedTyping")]
-        public List<IFeatureTyping> QueryOwnedTyping()
-        {
-            return this.ComputeOwnedTyping();
-        }
+        public List<IFeatureTyping> ownedTyping => this.ComputeOwnedTyping();
 
         /// <summary>
         /// The ownedRelationships of this Type that are Unionings, having the Type as their typeUnioned.
@@ -1216,10 +978,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         [Implements(implementation: "IType.OwnedUnioning")]
-        public List<IUnioning> QueryOwnedUnioning()
-        {
-            return this.ComputeOwnedUnioning();
-        }
+        public List<IUnioning> ownedUnioning => this.ComputeOwnedUnioning();
 
         /// <summary>
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
@@ -1227,10 +986,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
-        public IElement QueryOwner()
-        {
-            return this.ComputeOwner();
-        }
+        public IElement owner => this.ComputeOwner();
 
         /// <summary>
         /// The Definition that owns this Usage (if any).
@@ -1239,10 +995,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
         [Implements(implementation: "IUsage.OwningDefinition")]
-        public IDefinition QueryOwningDefinition()
-        {
-            return this.ComputeOwningDefinition();
-        }
+        public IDefinition owningDefinition => this.ComputeOwningDefinition();
 
         /// <summary>
         /// The FeatureMembership that owns this Feature as an ownedMemberFeature, determining its owningType.
@@ -1250,10 +1003,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674970_68441_43223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674972_622493_43236")]
         [Implements(implementation: "IFeature.OwningFeatureMembership")]
-        public IFeatureMembership QueryOwningFeatureMembership()
-        {
-            return this.ComputeOwningFeatureMembership();
-        }
+        public IFeatureMembership owningFeatureMembership => this.ComputeOwningFeatureMembership();
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
@@ -1262,10 +1012,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
-        public IOwningMembership QueryOwningMembership()
-        {
-            return this.ComputeOwningMembership();
-        }
+        public IOwningMembership owningMembership => this.ComputeOwningMembership();
 
         /// <summary>
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
@@ -1274,10 +1021,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
-        public INamespace QueryOwningNamespace()
-        {
-            return this.ComputeOwningNamespace();
-        }
+        public INamespace owningNamespace => this.ComputeOwningNamespace();
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
@@ -1295,10 +1039,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1603905619975_304385_743")]
         [Implements(implementation: "IFeature.OwningType")]
-        public IType QueryOwningType()
-        {
-            return this.ComputeOwningType();
-        }
+        public IType owningType => this.ComputeOwningType();
 
         /// <summary>
         /// The Usage in which this Usage is nested (if any).
@@ -1306,10 +1047,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_504924_21260", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         [Implements(implementation: "IUsage.OwningUsage")]
-        public IUsage QueryOwningUsage()
-        {
-            return this.ComputeOwningUsage();
-        }
+        public IUsage owningUsage => this.ComputeOwningUsage();
 
         /// <summary>
         /// The parameters of this Step, which are defined as its directedFeatures, whose values are passed into
@@ -1318,10 +1056,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         [Implements(implementation: "IStep.Parameter")]
-        public List<IFeature> QueryParameter()
-        {
-            return this.ComputeParameter();
-        }
+        public List<IFeature> parameter => this.ComputeParameter();
 
         /// <summary>
         /// The kind of temporal portion (time slice or snapshot) is represented by this OccurrenceUsage. If
@@ -1342,10 +1077,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
-        public string QueryQualifiedName()
-        {
-            return this.ComputeQualifiedName();
-        }
+        public string qualifiedName => this.ComputeQualifiedName();
 
         /// <summary>
         /// The Expression whose result provides the sequence of values to which the loopVariable is set for
@@ -1354,10 +1086,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624306920911_355291_5769", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IForLoopActionUsage.SeqArgument")]
-        public IExpression QuerySeqArgument()
-        {
-            return this.ComputeSeqArgument();
-        }
+        public IExpression seqArgument => this.ComputeSeqArgument();
 
         /// <summary>
         /// The short name to be used for this Element during name resolution within its owningNamespace. This
@@ -1367,10 +1096,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
-        public string QueryShortName()
-        {
-            return this.ComputeShortName();
-        }
+        public string shortName => this.ComputeShortName();
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
@@ -1379,10 +1105,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
-        public List<ITextualRepresentation> QueryTextualRepresentation()
-        {
-            return this.ComputeTextualRepresentation();
-        }
+        public List<ITextualRepresentation> textualRepresentation => this.ComputeTextualRepresentation();
 
         /// <summary>
         /// Types that restrict the values of this Feature, such that the values must be instances of all the
@@ -1393,10 +1116,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_18_5_3_12e503d9_1533160674969_376003_43216", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IUsage.Definition")]
         [Implements(implementation: "IFeature.Type")]
-        public List<IType> QueryType()
-        {
-            return this.ComputeType();
-        }
+        List<IType> Core.Features.IFeature.type => [.. ((SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage)this).definition];
 
         /// <summary>
         /// The interpretations of a Type with unioningTypes are asserted to be the same as those of all the
@@ -1407,10 +1127,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// </summary>
         [Property(xmiId: "_19_0_4_b9102da_1661974896766_783268_1231", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IType.UnioningType")]
-        public List<IType> QueryUnioningType()
-        {
-            return this.ComputeUnioningType();
-        }
+        public List<IType> unioningType => this.ComputeUnioningType();
 
         /// <summary>
         /// The Usages that are features of this Usage (not necessarily owned).
@@ -1418,10 +1135,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1591217543254_26688_475", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         [Implements(implementation: "IUsage.Usage")]
-        public List<IUsage> QueryUsage()
-        {
-            return this.ComputeUsage();
-        }
+        public List<IUsage> usage => this.ComputeUsage();
 
         /// <summary>
         /// The Usages which represent the variants of this Usage as a variation point Usage, if isVariation =
@@ -1430,10 +1144,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1590979649160_380466_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         [Implements(implementation: "IUsage.Variant")]
-        public List<IUsage> QueryVariant()
-        {
-            return this.ComputeVariant();
-        }
+        public List<IUsage> variant => this.ComputeVariant();
 
         /// <summary>
         /// The ownedMemberships of this Usage that are VariantMemberships. If isVariation = true, then this
@@ -1442,10 +1153,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         [Property(xmiId: "_19_0_2_12e503d9_1590979136735_982171_914", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         [Implements(implementation: "IUsage.VariantMembership")]
-        public List<IVariantMembership> QueryVariantMembership()
-        {
-            return this.ComputeVariantMembership();
-        }
+        public List<IVariantMembership> variantMembership => this.ComputeVariantMembership();
 
     }
 }
