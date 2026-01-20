@@ -50,19 +50,25 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
         
         [Test]
-        public void Verify_that_idada_from_sysmlcore_json_can_be_deserialized()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_idada_from_sysmlcore_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json");
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, shouldDeserializeDerivedProperties);
+
+            using (Assert.EnterMultipleScope())
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE);
-
                 Assert.That(data.Count(), Is.EqualTo(100));
-
                 Assert.That(data.OfType<IFeature>().Count(), Is.EqualTo(30));
+            }
 
-                var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("00a6ef10-d3dc-4741-9029-2c9978c2f083"));
+            var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("00a6ef10-d3dc-4741-9029-2c9978c2f083"));
 
+            using (Assert.EnterMultipleScope())
+            {
                 Assert.That(feature.AliasIds, Is.Empty);
                 Assert.That(feature.ElementId, Is.EqualTo("00a6ef10-d3dc-4741-9029-2c9978c2f083"));
                 Assert.That(feature.IsAbstract, Is.False);
@@ -79,21 +85,29 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
 
         [Test]
-        public async Task Verify_that_idada_from_sysmlcore_json_can_be_deserialized_async()
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task Verify_that_idada_from_sysmlcore_json_can_be_deserialized_async(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json");
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+
+            await using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            var cts = new CancellationTokenSource();
+
+            var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, shouldDeserializeDerivedProperties, cts.Token);
+
+            using (Assert.EnterMultipleScope())
             {
-                var cts = new CancellationTokenSource();
-
-                var data = await this.deSerializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.CORE, cts.Token);
-
                 Assert.That(data.Count(), Is.EqualTo(100));
 
                 Assert.That(data.OfType<IFeature>().Count(), Is.EqualTo(30));
+            }
 
-                var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("00a6ef10-d3dc-4741-9029-2c9978c2f083"));
+            var feature = data.OfType<IFeature>().Single(x => x.Id == Guid.Parse("00a6ef10-d3dc-4741-9029-2c9978c2f083"));
 
+            using (Assert.EnterMultipleScope())
+            {
                 Assert.That(feature.AliasIds, Is.Empty);
                 Assert.That(feature.ElementId, Is.EqualTo("00a6ef10-d3dc-4741-9029-2c9978c2f083"));
                 Assert.That(feature.IsAbstract, Is.False);
@@ -110,17 +124,21 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
 
         [Test]
-        public void Verify_that_projects_from_restapi_json_can_be_deserialized()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_projects_from_restapi_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.json");
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, shouldDeserializeDerivedProperties);
+
+            Assert.That(data.Count(), Is.EqualTo(43));
+
+            var project = data.OfType<Project>().Single(x => x.Id == Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c"));
+
+            using (Assert.EnterMultipleScope())
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
-
-                Assert.That(data.Count(), Is.EqualTo(43));
-
-                var project = data.OfType<Project>().Single(x => x.Id == Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c"));
-
                 Assert.That(project.DefaultBranch, Is.EqualTo(Guid.Parse("c294a463-6c9c-47a8-b592-01252c5ab2a7")));
                 Assert.That(project.Name, Is.EqualTo("7b-Variant Configurations Mon Mar 13 17:54:29 EDT 2023"));
                 Assert.That(project.Description, Is.Null);
@@ -128,17 +146,21 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
 
         [Test]
-        public void Verify_that_particular_project_from_restapi_json_can_be_deserialized()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_particular_project_from_restapi_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.json");
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, shouldDeserializeDerivedProperties);
+
+            Assert.That(data.Count(), Is.EqualTo(1));
+
+            var project = data.OfType<Project>().Single(x => x.Id == Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c"));
+
+            using (Assert.EnterMultipleScope())
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
-
-                Assert.That(data.Count(), Is.EqualTo(1));
-
-                var project = data.OfType<Project>().Single(x => x.Id == Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c"));
-
                 Assert.That(project.DefaultBranch, Is.EqualTo(Guid.Parse("c294a463-6c9c-47a8-b592-01252c5ab2a7")));
                 Assert.That(project.Name, Is.EqualTo("7b-Variant Configurations Mon Mar 13 17:54:29 EDT 2023"));
                 Assert.That(project.Description, Is.Null);
@@ -146,16 +168,21 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
 
         [Test]
-        public void Verify_that_particular_project_and_commits_from_restapi_json_can_be_deserialized()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_particular_project_and_commits_from_restapi_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.json");
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, shouldDeserializeDerivedProperties);
+
+            Assert.That(data.Count(), Is.EqualTo(1));
+
+            var firstCommit = data.OfType<Commit>().Single(x => x.Id == Guid.Parse("6d7ad9fd-6520-4ff2-885b-8c5c129e6c27"));
+
+            using (Assert.EnterMultipleScope())
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
-
-                Assert.That(data.Count(), Is.EqualTo(1));
-
-                var firstCommit = data.OfType<Commit>().Single(x => x.Id == Guid.Parse("6d7ad9fd-6520-4ff2-885b-8c5c129e6c27"));
                 Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
                 Assert.That(firstCommit.PreviousCommit, Is.EqualTo(Guid.Empty));
                 Assert.That(firstCommit.Description, Is.Null);
@@ -164,16 +191,21 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
 
         [Test]
-        public void Verify_that_particular_project_and_particular_commit_from_restapi_json_can_be_deserialized()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_particular_project_and_particular_commit_from_restapi_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.json");
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, shouldDeserializeDerivedProperties);
+
+            Assert.That(data.Count(), Is.EqualTo(1));
+
+            var firstCommit = data.OfType<Commit>().Single(x => x.Id == Guid.Parse("6d7ad9fd-6520-4ff2-885b-8c5c129e6c27"));
+
+            using (Assert.EnterMultipleScope())
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
-
-                Assert.That(data.Count(), Is.EqualTo(1));
-
-                var firstCommit = data.OfType<Commit>().Single(x => x.Id == Guid.Parse("6d7ad9fd-6520-4ff2-885b-8c5c129e6c27"));
                 Assert.That(firstCommit.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
                 Assert.That(firstCommit.PreviousCommit, Is.EqualTo(Guid.Empty));
                 Assert.That(firstCommit.Description, Is.Null);
@@ -182,16 +214,21 @@ namespace SysML2.NET.Serializer.Json.Tests
         }
 
         [Test]
-        public void Verify_that_particular_project_and_branches_from_restapi_json_can_be_deserialized()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Verify_that_particular_project_and_branches_from_restapi_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.branches.json");
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+            var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, shouldDeserializeDerivedProperties);
+
+            Assert.That(data.Count(), Is.EqualTo(1));
+
+            var branch = data.OfType<Branch>().Single(x => x.Id == Guid.Parse("c294a463-6c9c-47a8-b592-01252c5ab2a7"));
+
+            using (Assert.EnterMultipleScope())
             {
-                var data = this.deSerializer.DeSerialize(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM);
-
-                Assert.That(data.Count(), Is.EqualTo(1));
-
-                var branch = data.OfType<Branch>().Single(x => x.Id == Guid.Parse("c294a463-6c9c-47a8-b592-01252c5ab2a7"));
                 Assert.That(branch.OwningProject, Is.EqualTo(Guid.Parse("000e9890-6935-43e6-a5d7-5d7cac601f4c")));
                 Assert.That(branch.Name, Is.EqualTo("main"));
                 Assert.That(branch.Description, Is.Null);

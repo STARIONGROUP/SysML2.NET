@@ -38,9 +38,9 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         /// <summary>
         /// a dictionary that provides delegates for deserialization
         /// </summary>
-        private static readonly Dictionary<string, Func<JsonElement, SerializationModeKind, ILoggerFactory, IData>>
+        private static readonly Dictionary<string, Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData>>
             DeSerializerActionMap =
-                new Dictionary<string, Func<JsonElement, SerializationModeKind, ILoggerFactory, IData>>
+                new Dictionary<string, Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData>>
                 {
                     { "Branch", BranchDeserializer.DeSerialize },
                     { "Commit", CommitDeSerializer.DeSerialize },
@@ -50,19 +50,19 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 };
     
         /// <summary>
-        /// Provides the delegate <see cref="Func{JsonElement, SerializationModeKind, ILoggerFactory, IData}"/> for the
+        /// Provides the delegate <see cref="Func{JsonElement, SerializationModeKind, bool,  ILoggerFactory, IData}"/> for the
         /// <see cref="System.Type"/> that is to be deserialized
         /// </summary>
         /// <param name="typeName">
         /// The name of the subject <see cref="System.Type"/> that is to be serialized
         /// </param>
         /// <returns>
-        /// A Delegate of <see cref="Func{JsonElement, SerializationModeKind, ILoggerFactory, IData}"/>
+        /// A Delegate of <see cref="Func{JsonElement, SerializationModeKind, bool, ILoggerFactory, IData}"/>
         /// </returns>
         /// <exception cref="NotSupportedException">
         /// Thrown when the <see cref="System.Type"/> is not supported.
         /// </exception>
-        internal static Func<JsonElement, SerializationModeKind, ILoggerFactory, IData> Provide(string typeName)
+        internal static Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData> Provide(string typeName)
         {
             if (!DeSerializerActionMap.TryGetValue(typeName, out var func))
             {

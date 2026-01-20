@@ -140,7 +140,7 @@ namespace SysML2.NET.API.Modules
                     var stream = new MemoryStream();
                     await req.Body.CopyToAsync(stream, cancellationToken);
 
-                    var dataItems = await this.deserializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, CancellationToken.None);
+                    var dataItems = await this.deserializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, CancellationToken.None);
 
                     var project = (Project)dataItems.Single();
                     

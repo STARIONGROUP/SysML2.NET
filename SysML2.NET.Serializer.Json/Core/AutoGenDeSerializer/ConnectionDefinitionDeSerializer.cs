@@ -49,13 +49,16 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
+        /// <param name="deserializeDerivedProperties">
+        /// Asserts that the deserializer should deserialize derived properties if present or if they are ignored
+        /// </param>
         /// <param name="loggerFactory">
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
         /// an instance of <see cref="IConnectionDefinition"/>
         /// </returns>
-        internal static IConnectionDefinition DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static IConnectionDefinition DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("ConnectionDefinitionDeSerializer");
 
@@ -85,6 +88,33 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
+            if (deserializeDerivedProperties)
+            {
+                DeserializeDtoIncludingDerivedProperties(dtoInstance, jsonElement, logger);
+            }
+            else
+            {
+                DeserializeDtoExcludingDerivedProperties(dtoInstance, jsonElement, logger);
+            }
+
+            return dtoInstance;
+        }
+
+        /// <summary>
+        /// Deserializes properties of a <see cref="ConnectionDefinition" />
+        /// from a <see cref="JsonElement" />, including derived properties
+        /// </summary>
+        /// <param name="dtoInstance">
+        /// The <see cref="ConnectionDefinition"/> instance holding deserialized values
+        /// </param>
+        /// <param name="jsonElement">
+        /// The <see cref="JsonElement"/> that contains the <see cref="IConnectionDefinition"/> json object
+        /// </param>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/> to produce logging statement
+        /// </param>
+        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Connections.ConnectionDefinition dtoInstance, JsonElement jsonElement, ILogger logger)
+        {
             if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
             {
                 foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
@@ -1749,8 +1779,232 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the variantMembership Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
             }
 
+        }
 
-            return dtoInstance;
+        /// <summary>
+        /// Deserializes properties of a <see cref="ConnectionDefinition" />
+        /// from a <see cref="JsonElement" />, excluding derived properties
+        /// </summary>
+        /// <param name="dtoInstance">
+        /// The <see cref="ConnectionDefinition"/> instance holding deserialized values
+        /// </param>
+        /// <param name="jsonElement">
+        /// The <see cref="JsonElement"/> that contains the <see cref="IConnectionDefinition"/> json object
+        /// </param>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/> to produce logging statement
+        /// </param>
+        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Systems.Connections.ConnectionDefinition dtoInstance, JsonElement jsonElement, ILogger logger)
+        {
+            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
+            {
+                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
+                {
+                    var propertyValue = arrayItem.GetString();
+
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.AliasIds.Add(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the aliasIds Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
+            {
+                dtoInstance.DeclaredName = declaredNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the declaredName Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
+            {
+                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the declaredShortName Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
+            {
+                var propertyValue = elementIdProperty.GetString();
+
+                if (propertyValue != null)
+                {
+                    dtoInstance.ElementId = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug("the elementId Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
+            {
+                if (isAbstractProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsAbstract = isAbstractProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isAbstract Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
+            {
+                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isImplied Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
+            {
+                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("isIndividual"u8, out var isIndividualProperty))
+            {
+                if (isIndividualProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsIndividual = isIndividualProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isIndividual Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
+            {
+                if (isSufficientProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsSufficient = isSufficientProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isSufficient Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
+            {
+                if (isVariationProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsVariation = isVariationProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isVariation Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
+            {
+                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelatedElementExternalIdProperty))
+                    {
+                        var propertyValue = ownedRelatedElementExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedRelatedElement Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
+            {
+                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
+                    {
+                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedRelationship Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
+            {
+                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.OwningRelatedElement = null;
+                }
+                else
+                {
+                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out var owningRelatedElementExternalIdProperty))
+                    {
+                        var propertyValue = owningRelatedElementExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningRelatedElement Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
+            {
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
+                    {
+                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningRelationship Json property was not found in the ConnectionDefinition: { Id }", dtoInstance.Id);
+            }
+
         }
     }
 }

@@ -49,13 +49,16 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
+        /// <param name="deserializeDerivedProperties">
+        /// Asserts that the deserializer should deserialize derived properties if present or if they are ignored
+        /// </param>
         /// <param name="loggerFactory">
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
         /// an instance of <see cref="ISubsetting"/>
         /// </returns>
-        internal static ISubsetting DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static ISubsetting DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("SubsettingDeSerializer");
 
@@ -85,6 +88,33 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
+            if (deserializeDerivedProperties)
+            {
+                DeserializeDtoIncludingDerivedProperties(dtoInstance, jsonElement, logger);
+            }
+            else
+            {
+                DeserializeDtoExcludingDerivedProperties(dtoInstance, jsonElement, logger);
+            }
+
+            return dtoInstance;
+        }
+
+        /// <summary>
+        /// Deserializes properties of a <see cref="Subsetting" />
+        /// from a <see cref="JsonElement" />, including derived properties
+        /// </summary>
+        /// <param name="dtoInstance">
+        /// The <see cref="Subsetting"/> instance holding deserialized values
+        /// </param>
+        /// <param name="jsonElement">
+        /// The <see cref="JsonElement"/> that contains the <see cref="ISubsetting"/> json object
+        /// </param>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/> to produce logging statement
+        /// </param>
+        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.Core.Features.Subsetting dtoInstance, JsonElement jsonElement, ILogger logger)
+        {
             if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
             {
                 foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
@@ -531,8 +561,234 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 logger.LogDebug("the textualRepresentation Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
             }
 
+        }
 
-            return dtoInstance;
+        /// <summary>
+        /// Deserializes properties of a <see cref="Subsetting" />
+        /// from a <see cref="JsonElement" />, excluding derived properties
+        /// </summary>
+        /// <param name="dtoInstance">
+        /// The <see cref="Subsetting"/> instance holding deserialized values
+        /// </param>
+        /// <param name="jsonElement">
+        /// The <see cref="JsonElement"/> that contains the <see cref="ISubsetting"/> json object
+        /// </param>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/> to produce logging statement
+        /// </param>
+        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.Core.Features.Subsetting dtoInstance, JsonElement jsonElement, ILogger logger)
+        {
+            if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
+            {
+                foreach (var arrayItem in aliasIdsProperty.EnumerateArray())
+                {
+                    var propertyValue = arrayItem.GetString();
+
+                    if (propertyValue != null)
+                    {
+                        dtoInstance.AliasIds.Add(propertyValue);
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the aliasIds Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
+            {
+                dtoInstance.DeclaredName = declaredNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the declaredName Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
+            {
+                dtoInstance.DeclaredShortName = declaredShortNameProperty.GetString();
+            }
+            else
+            {
+                logger.LogDebug("the declaredShortName Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
+            {
+                var propertyValue = elementIdProperty.GetString();
+
+                if (propertyValue != null)
+                {
+                    dtoInstance.ElementId = propertyValue;
+                }
+            }
+            else
+            {
+                logger.LogDebug("the elementId Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
+            {
+                if (isImpliedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImplied = isImpliedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isImplied Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
+            {
+                if (isImpliedIncludedProperty.ValueKind != JsonValueKind.Null)
+                {
+                    dtoInstance.IsImpliedIncluded = isImpliedIncludedProperty.GetBoolean();
+                }
+            }
+            else
+            {
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
+            {
+                foreach (var arrayItem in ownedRelatedElementProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelatedElementExternalIdProperty))
+                    {
+                        var propertyValue = ownedRelatedElementExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelatedElement.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedRelatedElement Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
+            {
+                foreach (var arrayItem in ownedRelationshipProperty.EnumerateArray())
+                {
+                    if (arrayItem.TryGetProperty("@id"u8, out var ownedRelationshipExternalIdProperty))
+                    {
+                        var propertyValue = ownedRelationshipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwnedRelationship.Add(Guid.Parse(propertyValue));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the ownedRelationship Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
+            {
+                if (owningRelatedElementProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.OwningRelatedElement = null;
+                }
+                else
+                {
+                    if (owningRelatedElementProperty.TryGetProperty("@id"u8, out var owningRelatedElementExternalIdProperty))
+                    {
+                        var propertyValue = owningRelatedElementExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelatedElement = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningRelatedElement Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
+            {
+                if (owningRelationshipProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.OwningRelationship = null;
+                }
+                else
+                {
+                    if (owningRelationshipProperty.TryGetProperty("@id"u8, out var owningRelationshipExternalIdProperty))
+                    {
+                        var propertyValue = owningRelationshipExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.OwningRelationship = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the owningRelationship Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("subsettedFeature"u8, out var subsettedFeatureProperty))
+            {
+                if (subsettedFeatureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.SubsettedFeature = Guid.Empty;
+                    logger.LogDebug($"the Subsetting.SubsettedFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (subsettedFeatureProperty.TryGetProperty("@id"u8, out var subsettedFeatureExternalIdProperty))
+                    {
+                        var propertyValue = subsettedFeatureExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.SubsettedFeature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the subsettedFeature Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
+            if (jsonElement.TryGetProperty("subsettingFeature"u8, out var subsettingFeatureProperty))
+            {
+                if (subsettingFeatureProperty.ValueKind == JsonValueKind.Null)
+                {
+                    dtoInstance.SubsettingFeature = Guid.Empty;
+                    logger.LogDebug($"the Subsetting.SubsettingFeature property was not found in the Json. The value is set to Guid.Empty");
+                }
+                else
+                {
+                    if (subsettingFeatureProperty.TryGetProperty("@id"u8, out var subsettingFeatureExternalIdProperty))
+                    {
+                        var propertyValue = subsettingFeatureExternalIdProperty.GetString();
+
+                        if (propertyValue != null)
+                        {
+                            dtoInstance.SubsettingFeature = Guid.Parse(propertyValue);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                logger.LogDebug("the subsettingFeature Json property was not found in the Subsetting: { Id }", dtoInstance.Id);
+            }
+
         }
     }
 }

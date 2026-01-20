@@ -410,7 +410,7 @@ namespace SySML2.NET.REST
 
             using var stream = await response.Content.ReadAsStreamAsync();
 
-            var result = await this.deserializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, cancellationToken);
+            var result = await this.deserializer.DeSerializeAsync(stream, SerializationModeKind.JSON, SerializationTargetKind.PSM, false, cancellationToken);
 
             return result;
         }
