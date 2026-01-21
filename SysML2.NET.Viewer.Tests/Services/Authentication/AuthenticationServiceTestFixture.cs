@@ -36,6 +36,7 @@ namespace SysML2.NET.Viewer.Tests.Services.Authentication
     /// <summary>
     /// Suite of tests for the <see cref="AuthenticationService"/>
     /// </summary>
+    [Category("Integration")]
     [TestFixture]
     public class AuthenticationServiceTestFixture
     {
