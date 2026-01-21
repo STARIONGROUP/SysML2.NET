@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FeatureChainingFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Features.FeatureChaining"/> based on a <see cref="Core.DTO.Core.Features.FeatureChaining"/>
     /// </summary>
-    public class FeatureChainingFactory
+    public static class FeatureChainingFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Features.FeatureChaining"/> and sets the value properties

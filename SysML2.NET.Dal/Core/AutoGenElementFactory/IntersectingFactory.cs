@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="IntersectingFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Types.Intersecting"/> based on a <see cref="Core.DTO.Core.Types.Intersecting"/>
     /// </summary>
-    public class IntersectingFactory
+    public static class IntersectingFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Types.Intersecting"/> and sets the value properties

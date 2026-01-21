@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AnalysisCaseDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition"/> based on a <see cref="Core.DTO.Systems.AnalysisCases.AnalysisCaseDefinition"/>
     /// </summary>
-    public class AnalysisCaseDefinitionFactory
+    public static class AnalysisCaseDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition"/> and sets the value properties

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="VariantMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.DefinitionAndUsage.VariantMembership"/> based on a <see cref="Core.DTO.Systems.DefinitionAndUsage.VariantMembership"/>
     /// </summary>
-    public class VariantMembershipFactory
+    public static class VariantMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.DefinitionAndUsage.VariantMembership"/> and sets the value properties

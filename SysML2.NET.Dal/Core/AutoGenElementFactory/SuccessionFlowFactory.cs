@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="SuccessionFlowFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Interactions.SuccessionFlow"/> based on a <see cref="Core.DTO.Kernel.Interactions.SuccessionFlow"/>
     /// </summary>
-    public class SuccessionFlowFactory
+    public static class SuccessionFlowFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Interactions.SuccessionFlow"/> and sets the value properties

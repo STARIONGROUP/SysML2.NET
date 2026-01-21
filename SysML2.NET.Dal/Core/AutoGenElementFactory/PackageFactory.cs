@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="PackageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Packages.Package"/> based on a <see cref="Core.DTO.Kernel.Packages.Package"/>
     /// </summary>
-    public class PackageFactory
+    public static class PackageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Packages.Package"/> and sets the value properties

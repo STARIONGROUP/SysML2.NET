@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="OccurrenceDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Occurrences.OccurrenceDefinition"/> based on a <see cref="Core.DTO.Systems.Occurrences.OccurrenceDefinition"/>
     /// </summary>
-    public class OccurrenceDefinitionFactory
+    public static class OccurrenceDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Occurrences.OccurrenceDefinition"/> and sets the value properties

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="EventOccurrenceUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Occurrences.EventOccurrenceUsage"/> based on a <see cref="Core.DTO.Systems.Occurrences.EventOccurrenceUsage"/>
     /// </summary>
-    public class EventOccurrenceUsageFactory
+    public static class EventOccurrenceUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Occurrences.EventOccurrenceUsage"/> and sets the value properties

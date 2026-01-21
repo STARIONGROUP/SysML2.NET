@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FlowUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Flows.FlowUsage"/> based on a <see cref="Core.DTO.Systems.Flows.FlowUsage"/>
     /// </summary>
-    public class FlowUsageFactory
+    public static class FlowUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Flows.FlowUsage"/> and sets the value properties

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="DecisionNodeFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.DecisionNode"/> based on a <see cref="Core.DTO.Systems.Actions.DecisionNode"/>
     /// </summary>
-    public class DecisionNodeFactory
+    public static class DecisionNodeFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.DecisionNode"/> and sets the value properties

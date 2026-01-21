@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="CalculationUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Calculations.CalculationUsage"/> based on a <see cref="Core.DTO.Systems.Calculations.CalculationUsage"/>
     /// </summary>
-    public class CalculationUsageFactory
+    public static class CalculationUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Calculations.CalculationUsage"/> and sets the value properties

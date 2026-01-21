@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FramedConcernMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Requirements.FramedConcernMembership"/> based on a <see cref="Core.DTO.Systems.Requirements.FramedConcernMembership"/>
     /// </summary>
-    public class FramedConcernMembershipFactory
+    public static class FramedConcernMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.FramedConcernMembership"/> and sets the value properties

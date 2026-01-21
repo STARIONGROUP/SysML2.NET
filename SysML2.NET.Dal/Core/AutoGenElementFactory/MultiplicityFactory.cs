@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="MultiplicityFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Types.Multiplicity"/> based on a <see cref="Core.DTO.Core.Types.Multiplicity"/>
     /// </summary>
-    public class MultiplicityFactory
+    public static class MultiplicityFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Types.Multiplicity"/> and sets the value properties

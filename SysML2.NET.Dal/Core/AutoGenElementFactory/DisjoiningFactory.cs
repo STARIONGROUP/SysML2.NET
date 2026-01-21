@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="DisjoiningFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Types.Disjoining"/> based on a <see cref="Core.DTO.Core.Types.Disjoining"/>
     /// </summary>
-    public class DisjoiningFactory
+    public static class DisjoiningFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Types.Disjoining"/> and sets the value properties

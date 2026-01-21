@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ViewDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Views.ViewDefinition"/> based on a <see cref="Core.DTO.Systems.Views.ViewDefinition"/>
     /// </summary>
-    public class ViewDefinitionFactory
+    public static class ViewDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Views.ViewDefinition"/> and sets the value properties

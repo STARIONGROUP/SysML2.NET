@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="LiteralBooleanFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.LiteralBoolean"/> based on a <see cref="Core.DTO.Kernel.Expressions.LiteralBoolean"/>
     /// </summary>
-    public class LiteralBooleanFactory
+    public static class LiteralBooleanFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.LiteralBoolean"/> and sets the value properties

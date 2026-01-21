@@ -619,6 +619,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"{variableName}.{propertyName}");
                 }
             });
+            
+            handlebars.RegisterHelper("Property.IsOfTypeBaseElement", (_, arguments) =>
+            {
+                if (arguments.Single() is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.IsOfTypeBaseElement argument supposed to be IProperty");
+                }
+
+                return property.Type.Name == "Element";
+            });
         }
 
         /// <summary>
@@ -627,7 +637,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="redefinedProperty">The redefined property</param>
         /// <param name="redefinition">The property that redefines <paramref name="redefinedProperty"/></param>
         /// <param name="context">Gets the <see cref="IClass"/> context</param>
-        /// <returns>The getter imlementation</returns>
+        /// <returns>The getter implementation</returns>
         private static string GetRedefinedPropertyGetterImplementationForDto(IProperty redefinedProperty, IProperty redefinition, IClass context)
         {
             string redefinitionPropertyName;

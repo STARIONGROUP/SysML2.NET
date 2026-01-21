@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="InvariantFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Functions.Invariant"/> based on a <see cref="Core.DTO.Kernel.Functions.Invariant"/>
     /// </summary>
-    public class InvariantFactory
+    public static class InvariantFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Functions.Invariant"/> and sets the value properties

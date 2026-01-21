@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="DependencyFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Dependencies.Dependency"/> based on a <see cref="Core.DTO.Root.Dependencies.Dependency"/>
     /// </summary>
-    public class DependencyFactory
+    public static class DependencyFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Dependencies.Dependency"/> and sets the value properties

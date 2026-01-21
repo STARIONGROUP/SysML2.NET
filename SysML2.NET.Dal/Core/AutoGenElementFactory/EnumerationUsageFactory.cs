@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="EnumerationUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Enumerations.EnumerationUsage"/> based on a <see cref="Core.DTO.Systems.Enumerations.EnumerationUsage"/>
     /// </summary>
-    public class EnumerationUsageFactory
+    public static class EnumerationUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Enumerations.EnumerationUsage"/> and sets the value properties

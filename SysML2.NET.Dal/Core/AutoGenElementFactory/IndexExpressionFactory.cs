@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="IndexExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.IndexExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.IndexExpression"/>
     /// </summary>
-    public class IndexExpressionFactory
+    public static class IndexExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.IndexExpression"/> and sets the value properties

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ConnectionUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Connections.ConnectionUsage"/> based on a <see cref="Core.DTO.Systems.Connections.ConnectionUsage"/>
     /// </summary>
-    public class ConnectionUsageFactory
+    public static class ConnectionUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Connections.ConnectionUsage"/> and sets the value properties

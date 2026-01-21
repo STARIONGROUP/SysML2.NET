@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ClassifierFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Classifiers.Classifier"/> based on a <see cref="Core.DTO.Core.Classifiers.Classifier"/>
     /// </summary>
-    public class ClassifierFactory
+    public static class ClassifierFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Classifiers.Classifier"/> and sets the value properties

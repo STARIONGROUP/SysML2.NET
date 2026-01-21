@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ParameterMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Behaviors.ParameterMembership"/> based on a <see cref="Core.DTO.Kernel.Behaviors.ParameterMembership"/>
     /// </summary>
-    public class ParameterMembershipFactory
+    public static class ParameterMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Behaviors.ParameterMembership"/> and sets the value properties

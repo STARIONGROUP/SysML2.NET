@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ReturnParameterMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Functions.ReturnParameterMembership"/> based on a <see cref="Core.DTO.Kernel.Functions.ReturnParameterMembership"/>
     /// </summary>
-    public class ReturnParameterMembershipFactory
+    public static class ReturnParameterMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Functions.ReturnParameterMembership"/> and sets the value properties

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="TriggerInvocationExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.TriggerInvocationExpression"/> based on a <see cref="Core.DTO.Systems.Actions.TriggerInvocationExpression"/>
     /// </summary>
-    public class TriggerInvocationExpressionFactory
+    public static class TriggerInvocationExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.TriggerInvocationExpression"/> and sets the value properties

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="DataTypeFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.DataTypes.DataType"/> based on a <see cref="Core.DTO.Kernel.DataTypes.DataType"/>
     /// </summary>
-    public class DataTypeFactory
+    public static class DataTypeFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.DataTypes.DataType"/> and sets the value properties

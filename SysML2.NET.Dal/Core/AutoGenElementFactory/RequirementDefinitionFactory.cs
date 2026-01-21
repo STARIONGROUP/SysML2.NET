@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="RequirementDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Requirements.RequirementDefinition"/> based on a <see cref="Core.DTO.Systems.Requirements.RequirementDefinition"/>
     /// </summary>
-    public class RequirementDefinitionFactory
+    public static class RequirementDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.RequirementDefinition"/> and sets the value properties

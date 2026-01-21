@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FeatureMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Types.FeatureMembership"/> based on a <see cref="Core.DTO.Core.Types.FeatureMembership"/>
     /// </summary>
-    public class FeatureMembershipFactory
+    public static class FeatureMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Types.FeatureMembership"/> and sets the value properties

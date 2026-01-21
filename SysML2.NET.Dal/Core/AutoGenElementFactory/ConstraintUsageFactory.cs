@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ConstraintUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Constraints.ConstraintUsage"/> based on a <see cref="Core.DTO.Systems.Constraints.ConstraintUsage"/>
     /// </summary>
-    public class ConstraintUsageFactory
+    public static class ConstraintUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Constraints.ConstraintUsage"/> and sets the value properties

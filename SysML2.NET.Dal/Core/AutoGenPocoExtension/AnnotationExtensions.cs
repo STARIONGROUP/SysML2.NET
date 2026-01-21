@@ -137,7 +137,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.AnnotatedElement, out lazyPoco))
             {
-                poco.AnnotatedElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
+                poco.AnnotatedElement = lazyPoco.Value;
             }
             else
             {
@@ -150,7 +150,7 @@ namespace SysML2.NET.Dal
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelatedElement.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
+                    poco.OwnedRelatedElement.Add(lazyPoco.Value);
                 }
             }
 
@@ -166,7 +166,7 @@ namespace SysML2.NET.Dal
 
             if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
             {
-                poco.OwningRelatedElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
+                poco.OwningRelatedElement = lazyPoco.Value;
             }
             else
             {

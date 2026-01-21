@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="StepFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Behaviors.Step"/> based on a <see cref="Core.DTO.Kernel.Behaviors.Step"/>
     /// </summary>
-    public class StepFactory
+    public static class StepFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Behaviors.Step"/> and sets the value properties

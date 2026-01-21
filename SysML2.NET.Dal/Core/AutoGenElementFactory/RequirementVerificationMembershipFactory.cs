@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="RequirementVerificationMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.VerificationCases.RequirementVerificationMembership"/> based on a <see cref="Core.DTO.Systems.VerificationCases.RequirementVerificationMembership"/>
     /// </summary>
-    public class RequirementVerificationMembershipFactory
+    public static class RequirementVerificationMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.VerificationCases.RequirementVerificationMembership"/> and sets the value properties

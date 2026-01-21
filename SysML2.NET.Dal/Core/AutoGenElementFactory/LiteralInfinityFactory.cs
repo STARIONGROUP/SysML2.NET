@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="LiteralInfinityFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.LiteralInfinity"/> based on a <see cref="Core.DTO.Kernel.Expressions.LiteralInfinity"/>
     /// </summary>
-    public class LiteralInfinityFactory
+    public static class LiteralInfinityFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.LiteralInfinity"/> and sets the value properties

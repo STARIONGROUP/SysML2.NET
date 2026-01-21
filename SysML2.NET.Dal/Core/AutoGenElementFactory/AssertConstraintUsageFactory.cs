@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AssertConstraintUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Constraints.AssertConstraintUsage"/> based on a <see cref="Core.DTO.Systems.Constraints.AssertConstraintUsage"/>
     /// </summary>
-    public class AssertConstraintUsageFactory
+    public static class AssertConstraintUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Constraints.AssertConstraintUsage"/> and sets the value properties

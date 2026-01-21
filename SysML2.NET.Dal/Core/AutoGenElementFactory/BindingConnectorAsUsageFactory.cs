@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="BindingConnectorAsUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Connections.BindingConnectorAsUsage"/> based on a <see cref="Core.DTO.Systems.Connections.BindingConnectorAsUsage"/>
     /// </summary>
-    public class BindingConnectorAsUsageFactory
+    public static class BindingConnectorAsUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Connections.BindingConnectorAsUsage"/> and sets the value properties

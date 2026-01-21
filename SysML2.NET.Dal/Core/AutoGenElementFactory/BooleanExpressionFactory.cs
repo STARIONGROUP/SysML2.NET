@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="BooleanExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Functions.BooleanExpression"/> based on a <see cref="Core.DTO.Kernel.Functions.BooleanExpression"/>
     /// </summary>
-    public class BooleanExpressionFactory
+    public static class BooleanExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Functions.BooleanExpression"/> and sets the value properties

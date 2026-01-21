@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AnnotatingElementFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Annotations.AnnotatingElement"/> based on a <see cref="Core.DTO.Root.Annotations.AnnotatingElement"/>
     /// </summary>
-    public class AnnotatingElementFactory
+    public static class AnnotatingElementFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Annotations.AnnotatingElement"/> and sets the value properties

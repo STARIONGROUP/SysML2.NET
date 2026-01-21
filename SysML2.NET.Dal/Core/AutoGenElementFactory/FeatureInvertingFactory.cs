@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FeatureInvertingFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Features.FeatureInverting"/> based on a <see cref="Core.DTO.Core.Features.FeatureInverting"/>
     /// </summary>
-    public class FeatureInvertingFactory
+    public static class FeatureInvertingFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Features.FeatureInverting"/> and sets the value properties

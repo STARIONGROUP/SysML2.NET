@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="UseCaseDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.UseCases.UseCaseDefinition"/> based on a <see cref="Core.DTO.Systems.UseCases.UseCaseDefinition"/>
     /// </summary>
-    public class UseCaseDefinitionFactory
+    public static class UseCaseDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.UseCases.UseCaseDefinition"/> and sets the value properties

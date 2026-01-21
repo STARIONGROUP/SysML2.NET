@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="PredicateFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Functions.Predicate"/> based on a <see cref="Core.DTO.Kernel.Functions.Predicate"/>
     /// </summary>
-    public class PredicateFactory
+    public static class PredicateFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Functions.Predicate"/> and sets the value properties

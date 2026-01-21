@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ConjugationFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Types.Conjugation"/> based on a <see cref="Core.DTO.Core.Types.Conjugation"/>
     /// </summary>
-    public class ConjugationFactory
+    public static class ConjugationFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Types.Conjugation"/> and sets the value properties

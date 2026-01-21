@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="TypeFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Types.Type"/> based on a <see cref="Core.DTO.Core.Types.Type"/>
     /// </summary>
-    public class TypeFactory
+    public static class TypeFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Types.Type"/> and sets the value properties

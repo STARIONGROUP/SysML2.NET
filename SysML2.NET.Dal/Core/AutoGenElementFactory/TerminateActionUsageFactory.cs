@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="TerminateActionUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.TerminateActionUsage"/> based on a <see cref="Core.DTO.Systems.Actions.TerminateActionUsage"/>
     /// </summary>
-    public class TerminateActionUsageFactory
+    public static class TerminateActionUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.TerminateActionUsage"/> and sets the value properties

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="MergeNodeFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.MergeNode"/> based on a <see cref="Core.DTO.Systems.Actions.MergeNode"/>
     /// </summary>
-    public class MergeNodeFactory
+    public static class MergeNodeFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.MergeNode"/> and sets the value properties

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="StateUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.States.StateUsage"/> based on a <see cref="Core.DTO.Systems.States.StateUsage"/>
     /// </summary>
-    public class StateUsageFactory
+    public static class StateUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.States.StateUsage"/> and sets the value properties

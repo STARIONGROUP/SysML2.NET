@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ConnectionDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Connections.ConnectionDefinition"/> based on a <see cref="Core.DTO.Systems.Connections.ConnectionDefinition"/>
     /// </summary>
-    public class ConnectionDefinitionFactory
+    public static class ConnectionDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Connections.ConnectionDefinition"/> and sets the value properties

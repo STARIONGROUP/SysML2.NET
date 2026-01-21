@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="RequirementConstraintMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Requirements.RequirementConstraintMembership"/> based on a <see cref="Core.DTO.Systems.Requirements.RequirementConstraintMembership"/>
     /// </summary>
-    public class RequirementConstraintMembershipFactory
+    public static class RequirementConstraintMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.RequirementConstraintMembership"/> and sets the value properties

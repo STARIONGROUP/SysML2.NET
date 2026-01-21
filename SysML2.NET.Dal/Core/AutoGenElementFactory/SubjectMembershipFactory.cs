@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="SubjectMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Requirements.SubjectMembership"/> based on a <see cref="Core.DTO.Systems.Requirements.SubjectMembership"/>
     /// </summary>
-    public class SubjectMembershipFactory
+    public static class SubjectMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.SubjectMembership"/> and sets the value properties

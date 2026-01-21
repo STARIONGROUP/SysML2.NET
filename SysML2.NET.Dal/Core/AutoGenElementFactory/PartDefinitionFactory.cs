@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="PartDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Parts.PartDefinition"/> based on a <see cref="Core.DTO.Systems.Parts.PartDefinition"/>
     /// </summary>
-    public class PartDefinitionFactory
+    public static class PartDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Parts.PartDefinition"/> and sets the value properties

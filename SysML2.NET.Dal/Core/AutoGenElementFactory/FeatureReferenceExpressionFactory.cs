@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FeatureReferenceExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.FeatureReferenceExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.FeatureReferenceExpression"/>
     /// </summary>
-    public class FeatureReferenceExpressionFactory
+    public static class FeatureReferenceExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.FeatureReferenceExpression"/> and sets the value properties

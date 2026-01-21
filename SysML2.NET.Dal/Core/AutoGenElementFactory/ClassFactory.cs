@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ClassFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Classes.Class"/> based on a <see cref="Core.DTO.Kernel.Classes.Class"/>
     /// </summary>
-    public class ClassFactory
+    public static class ClassFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Classes.Class"/> and sets the value properties

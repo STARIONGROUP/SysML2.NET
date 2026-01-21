@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="CommentFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Annotations.Comment"/> based on a <see cref="Core.DTO.Root.Annotations.Comment"/>
     /// </summary>
-    public class CommentFactory
+    public static class CommentFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Annotations.Comment"/> and sets the value properties

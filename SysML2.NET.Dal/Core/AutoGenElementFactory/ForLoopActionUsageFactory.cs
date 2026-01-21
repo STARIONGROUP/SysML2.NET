@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ForLoopActionUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.ForLoopActionUsage"/> based on a <see cref="Core.DTO.Systems.Actions.ForLoopActionUsage"/>
     /// </summary>
-    public class ForLoopActionUsageFactory
+    public static class ForLoopActionUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.ForLoopActionUsage"/> and sets the value properties

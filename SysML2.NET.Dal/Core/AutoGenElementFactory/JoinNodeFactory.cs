@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="JoinNodeFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.JoinNode"/> based on a <see cref="Core.DTO.Systems.Actions.JoinNode"/>
     /// </summary>
-    public class JoinNodeFactory
+    public static class JoinNodeFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.JoinNode"/> and sets the value properties

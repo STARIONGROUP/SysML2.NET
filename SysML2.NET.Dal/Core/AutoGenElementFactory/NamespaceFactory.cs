@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="NamespaceFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Namespaces.Namespace"/> based on a <see cref="Core.DTO.Root.Namespaces.Namespace"/>
     /// </summary>
-    public class NamespaceFactory
+    public static class NamespaceFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Namespaces.Namespace"/> and sets the value properties
