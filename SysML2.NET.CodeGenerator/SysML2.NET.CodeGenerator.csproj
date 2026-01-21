@@ -236,6 +236,15 @@
       <None Update="Templates\Uml\core-poco-dal-uml-factory.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Templates\Uml\Partials\core-dal-poco-uml-partial-extensions.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\Partials\core-json-dto-deserializer-uml-partial-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\Partials\core-json-dto-serializer-uml-partial-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

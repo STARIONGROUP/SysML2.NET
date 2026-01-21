@@ -197,10 +197,13 @@ namespace SysML2.NET.Dal
         /// <param name="poco">
         /// The subject <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/> from which a DTO is to be created
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/>
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/>
         /// </returns>
-        public static Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} ToDto(this Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} poco)
+        public static Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} ToDto(this Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} poco, bool includeDerivedProperties = false)
         {
             var dto = new Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}();
 
@@ -210,23 +213,26 @@ namespace SysML2.NET.Dal
             {{#unless property.IsDerived }}
             {{#unless property.IsTransient }}
                 {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                {{#if (Property.QueryIsReferenceProperty property) }}
-                {{#if (Property.QueryIsEnumerable property)}}
-                    dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }}.Select(x => x.Id).ToList();
-                {{ else if (Property.QueryIsNullable property)}}
-                    dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }}?.Id;
-                {{ else }}
-                    dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }}.Id;
-                {{/if}}
-            {{ else }}
-                    dto.{{ String.PascalCase property.Name }} = poco.{{ String.PascalCase property.Name }};
-            {{/if}}
-            {{/unless}}
+                    {{> core-dal-poco-uml-partial-extensions property}}
+                {{/unless}}
             {{/unless}}
             {{/unless}}
             {{/each}}
             {{/with}}
             
+            if(includeDerivedProperties)
+            {
+                {{#with this as | class |}}
+                {{#each (Class.QueryAllProperties this) as | property |}}
+                    {{#if property.IsDerived }}
+                        {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                            {{> core-dal-poco-uml-partial-extensions property}}
+                        {{/unless}}
+                    {{/if}}
+                {{/each}}
+                {{/with}}
+            }
+                
             return dto;
         }
     }

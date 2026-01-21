@@ -183,10 +183,13 @@ namespace SysML2.NET.Dal
         /// <param name="poco">
         /// The subject <see cref="Core.POCO.Systems.Views.ViewRenderingMembership"/> from which a DTO is to be created
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Systems.Views.ViewRenderingMembership"/>
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Systems.Views.ViewRenderingMembership"/>
         /// </returns>
-        public static Core.DTO.Systems.Views.ViewRenderingMembership ToDto(this Core.POCO.Systems.Views.ViewRenderingMembership poco)
+        public static Core.DTO.Systems.Views.ViewRenderingMembership ToDto(this Core.POCO.Systems.Views.ViewRenderingMembership poco, bool includeDerivedProperties = false)
         {
             var dto = new Core.DTO.Systems.Views.ViewRenderingMembership();
 
@@ -202,6 +205,28 @@ namespace SysML2.NET.Dal
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             dto.Visibility = poco.Visibility;
+
+            if (includeDerivedProperties)
+            {
+                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
+                dto.isLibraryElement = poco.isLibraryElement;
+                dto.name = poco.name;
+                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
+                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
+                dto.ownedMemberElementId = poco.ownedMemberElementId;
+                dto.ownedMemberName = poco.ownedMemberName;
+                dto.ownedMemberShortName = poco.ownedMemberShortName;
+                dto.ownedRendering = poco.ownedRendering.Id;
+                dto.owner = poco.owner?.Id;
+                dto.owningMembership = poco.owningMembership?.Id;
+                dto.owningNamespace = poco.owningNamespace?.Id;
+                dto.owningType = poco.owningType.Id;
+                dto.qualifiedName = poco.qualifiedName;
+                dto.referencedRendering = poco.referencedRendering.Id;
+                dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList();
+                dto.shortName = poco.shortName;
+                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+            }
 
             return dto;
         }

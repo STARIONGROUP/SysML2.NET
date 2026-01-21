@@ -81,5 +81,19 @@ namespace SysML2.NET.CodeGenerator.Generators
 
             Templates.Add(name, compiledTemplate);
         }
+
+        /// <summary>
+        /// Register handle-bars partial templates based on the template (file) name (without extension)
+        /// </summary>
+        /// <param name="name">
+        /// (file) name (without extension)
+        /// </param>
+        protected void RegisterPartialTemplate(string name)
+        {
+            var templatePath = Path.Combine(this.TemplateFolderPath, "Partials", $"{name}.hbs");
+            var template = File.ReadAllText(templatePath);
+
+            this.Handlebars.RegisterTemplate(name, template);
+        }
     }
 }

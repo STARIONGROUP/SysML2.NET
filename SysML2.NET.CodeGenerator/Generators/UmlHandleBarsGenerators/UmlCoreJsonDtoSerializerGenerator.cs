@@ -25,11 +25,14 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.HandleBarHelpers;
+
     using uml4net.Extensions;
     using uml4net.HandleBars;
     using uml4net.StructuredClassifiers;
     using uml4net.xmi.Readers;
 
+    using ClassHelper = uml4net.HandleBars.ClassHelper;
     using NamedElementHelper = SysML2.NET.CodeGenerator.HandleBarHelpers.NamedElementHelper;
     using PropertyHelper = SysML2.NET.CodeGenerator.HandleBarHelpers.PropertyHelper;
 
@@ -72,11 +75,12 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         protected override void RegisterHelpers()
         {
             this.Handlebars.RegisterStringHelper();
-            this.Handlebars.RegisterClassHelper();
-            this.Handlebars.RegisterPropertyHelper();
+            ClassHelper.RegisterClassHelper(this.Handlebars);
+            uml4net.HandleBars.PropertyHelper.RegisterPropertyHelper(this.Handlebars);
 
             NamedElementHelper.RegisterNamedElementHelper(this.Handlebars);
             PropertyHelper.RegisterPropertyHelper(this.Handlebars);
+            this.Handlebars.RegisterSafeContextHelper();
         }
 
         /// <summary>
@@ -86,6 +90,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             this.RegisterTemplate(DtoSerializerTemplateName);
             this.RegisterTemplate(DtoSerializerProviderTemplateName);
+            this.RegisterPartialTemplate("core-json-dto-serializer-uml-partial-template");
         }
 
         /// <summary>

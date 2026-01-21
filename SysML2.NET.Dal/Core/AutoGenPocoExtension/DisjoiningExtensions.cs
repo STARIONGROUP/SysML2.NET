@@ -199,10 +199,13 @@ namespace SysML2.NET.Dal
         /// <param name="poco">
         /// The subject <see cref="Core.POCO.Core.Types.Disjoining"/> from which a DTO is to be created
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Core.Types.Disjoining"/>
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Core.Types.Disjoining"/>
         /// </returns>
-        public static Core.DTO.Core.Types.Disjoining ToDto(this Core.POCO.Core.Types.Disjoining poco)
+        public static Core.DTO.Core.Types.Disjoining ToDto(this Core.POCO.Core.Types.Disjoining poco, bool includeDerivedProperties = false)
         {
             var dto = new Core.DTO.Core.Types.Disjoining();
 
@@ -219,6 +222,23 @@ namespace SysML2.NET.Dal
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             dto.TypeDisjoined = poco.TypeDisjoined.Id;
+
+            if (includeDerivedProperties)
+            {
+                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
+                dto.isLibraryElement = poco.isLibraryElement;
+                dto.name = poco.name;
+                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
+                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
+                dto.owner = poco.owner?.Id;
+                dto.owningMembership = poco.owningMembership?.Id;
+                dto.owningNamespace = poco.owningNamespace?.Id;
+                dto.owningType = poco.owningType?.Id;
+                dto.qualifiedName = poco.qualifiedName;
+                dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList();
+                dto.shortName = poco.shortName;
+                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+            }
 
             return dto;
         }

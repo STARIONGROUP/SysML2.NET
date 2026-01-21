@@ -151,10 +151,13 @@ namespace SysML2.NET.Dal
         /// <param name="poco">
         /// The subject <see cref="Core.POCO.Root.Annotations.AnnotatingElement"/> from which a DTO is to be created
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Root.Annotations.AnnotatingElement"/>
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Root.Annotations.AnnotatingElement"/>
         /// </returns>
-        public static Core.DTO.Root.Annotations.AnnotatingElement ToDto(this Core.POCO.Root.Annotations.AnnotatingElement poco)
+        public static Core.DTO.Root.Annotations.AnnotatingElement ToDto(this Core.POCO.Root.Annotations.AnnotatingElement poco, bool includeDerivedProperties = false)
         {
             var dto = new Core.DTO.Root.Annotations.AnnotatingElement();
 
@@ -166,6 +169,25 @@ namespace SysML2.NET.Dal
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            if (includeDerivedProperties)
+            {
+                dto.annotatedElement = poco.annotatedElement.Select(x => x.Id).ToList();
+                dto.annotation = poco.annotation.Select(x => x.Id).ToList();
+                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
+                dto.isLibraryElement = poco.isLibraryElement;
+                dto.name = poco.name;
+                dto.ownedAnnotatingRelationship = poco.ownedAnnotatingRelationship.Select(x => x.Id).ToList();
+                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
+                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
+                dto.owner = poco.owner?.Id;
+                dto.owningAnnotatingRelationship = poco.owningAnnotatingRelationship?.Id;
+                dto.owningMembership = poco.owningMembership?.Id;
+                dto.owningNamespace = poco.owningNamespace?.Id;
+                dto.qualifiedName = poco.qualifiedName;
+                dto.shortName = poco.shortName;
+                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+            }
 
             return dto;
         }

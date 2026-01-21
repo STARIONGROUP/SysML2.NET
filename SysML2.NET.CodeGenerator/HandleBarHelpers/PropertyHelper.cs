@@ -579,9 +579,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return redefinition.Name == property.Name;
             });
 
-            handlebars.RegisterHelper("Property.WritePropertyName", (writer, context, _) =>
+            handlebars.RegisterHelper("Property.WritePropertyName", (writer, _, arguments) =>
             {
-                if (context.Value is not IProperty property)
+                if (arguments.Single() is not IProperty property)
                 {
                     throw new ArgumentException("The #Property.WritePropertyName context supposed to be IProperty");
                 }
