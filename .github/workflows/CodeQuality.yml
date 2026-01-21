@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
     types: [opened, synchronize, reopened]
-    
+
 jobs:
   build:
     name: Build
@@ -26,21 +26,20 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore SysML2.NET.sln
-        
+
       - name: Sonarqube Begin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet tool install --global dotnet-coverage
           dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
 
       - name: Build
-        run: dotnet build --no-restore -c Release /p:ContinuousIntegrationBuild=true
+        run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
 
       - name: Run Tests and Compute Coverage
-        run: dotnet-coverage collect "dotnet test SysML2.NET.sln --filter Category!='Expected' --no-build --configuration Release" -f xml -o "coverage.xml"
+        run: dotnet test SysML2.NET.sln --filter Category!="Expected" --no-restore --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
 
       - name: Sonarqube end
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
