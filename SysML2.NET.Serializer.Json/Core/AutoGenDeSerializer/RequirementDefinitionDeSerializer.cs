@@ -132,7 +132,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the actorParameter Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the actorParameter Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("aliasIds"u8, out var aliasIdsProperty))
@@ -149,7 +149,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("assumedConstraint"u8, out var assumedConstraintProperty))
@@ -169,7 +169,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the assumedConstraint Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the assumedConstraint Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -178,7 +178,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
@@ -198,7 +198,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the differencingType Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the differencingType Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))
@@ -218,7 +218,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the directedUsage Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the directedUsage Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
@@ -238,7 +238,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the documentation Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the documentation Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -252,7 +252,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("endFeature"u8, out var endFeatureProperty))
@@ -272,7 +272,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the endFeature Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the endFeature Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("expression"u8, out var expressionProperty))
@@ -292,7 +292,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the expression Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the expression Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("feature"u8, out var featureProperty))
@@ -312,7 +312,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the feature Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the feature Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("featureMembership"u8, out var featureMembershipProperty))
@@ -332,7 +332,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the featureMembership Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the featureMembership Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("framedConcern"u8, out var framedConcernProperty))
@@ -352,7 +352,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the framedConcern Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the framedConcern Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
@@ -372,7 +372,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the importedMembership Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the importedMembership Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("inheritedFeature"u8, out var inheritedFeatureProperty))
@@ -392,7 +392,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the inheritedFeature Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the inheritedFeature Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("inheritedMembership"u8, out var inheritedMembershipProperty))
@@ -412,7 +412,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the inheritedMembership Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the inheritedMembership Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("input"u8, out var inputProperty))
@@ -432,7 +432,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the input Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the input Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("intersectingType"u8, out var intersectingTypeProperty))
@@ -452,7 +452,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the intersectingType Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the intersectingType Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
@@ -464,7 +464,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isAbstract Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isAbstract Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isConjugated"u8, out var isConjugatedProperty))
@@ -476,7 +476,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isConjugated Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isConjugated Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -488,7 +488,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isIndividual"u8, out var isIndividualProperty))
@@ -500,7 +500,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isIndividual Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isIndividual Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
@@ -512,7 +512,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isLibraryElement Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isLibraryElement Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isModelLevelEvaluable"u8, out var isModelLevelEvaluableProperty))
@@ -524,7 +524,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isModelLevelEvaluable Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isModelLevelEvaluable Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
@@ -536,7 +536,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isSufficient Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isSufficient Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
@@ -548,7 +548,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isVariation Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isVariation Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("member"u8, out var memberProperty))
@@ -568,7 +568,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the member Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the member Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("membership"u8, out var membershipProperty))
@@ -588,7 +588,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the membership Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the membership Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("multiplicity"u8, out var multiplicityProperty))
@@ -612,7 +612,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the multiplicity Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the multiplicity Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
@@ -621,7 +621,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the name Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
@@ -641,7 +641,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the output Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the output Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAction"u8, out var ownedActionProperty))
@@ -661,7 +661,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAction Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAction Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAllocation"u8, out var ownedAllocationProperty))
@@ -681,7 +681,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAllocation Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAllocation Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAnalysisCase"u8, out var ownedAnalysisCaseProperty))
@@ -701,7 +701,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAnalysisCase Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAnalysisCase Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
@@ -721,7 +721,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAnnotation Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAttribute"u8, out var ownedAttributeProperty))
@@ -741,7 +741,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAttribute Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAttribute Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedCalculation"u8, out var ownedCalculationProperty))
@@ -761,7 +761,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedCalculation Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedCalculation Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedCase"u8, out var ownedCaseProperty))
@@ -781,7 +781,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedCase Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedCase Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedConcern"u8, out var ownedConcernProperty))
@@ -801,7 +801,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedConcern Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedConcern Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedConjugator"u8, out var ownedConjugatorProperty))
@@ -825,7 +825,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedConjugator Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedConjugator Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedConnection"u8, out var ownedConnectionProperty))
@@ -845,7 +845,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedConnection Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedConnection Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedConstraint"u8, out var ownedConstraintProperty))
@@ -865,7 +865,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedConstraint Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedConstraint Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedDifferencing"u8, out var ownedDifferencingProperty))
@@ -885,7 +885,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedDifferencing Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedDifferencing Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedDisjoining"u8, out var ownedDisjoiningProperty))
@@ -905,7 +905,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedDisjoining Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedDisjoining Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
@@ -925,7 +925,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedElement Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedElement Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedEndFeature"u8, out var ownedEndFeatureProperty))
@@ -945,7 +945,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedEndFeature Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedEndFeature Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedEnumeration"u8, out var ownedEnumerationProperty))
@@ -965,7 +965,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedEnumeration Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedEnumeration Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeature"u8, out var ownedFeatureProperty))
@@ -985,7 +985,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeature Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeature Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeatureMembership"u8, out var ownedFeatureMembershipProperty))
@@ -1005,7 +1005,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeatureMembership Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeatureMembership Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFlow"u8, out var ownedFlowProperty))
@@ -1025,7 +1025,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFlow Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFlow Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedImport"u8, out var ownedImportProperty))
@@ -1045,7 +1045,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedImport Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedImport Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedInterface"u8, out var ownedInterfaceProperty))
@@ -1065,7 +1065,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedInterface Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedInterface Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedIntersecting"u8, out var ownedIntersectingProperty))
@@ -1085,7 +1085,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedIntersecting Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedIntersecting Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedItem"u8, out var ownedItemProperty))
@@ -1105,7 +1105,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedItem Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedItem Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMember"u8, out var ownedMemberProperty))
@@ -1125,7 +1125,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMember Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMember Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMembership"u8, out var ownedMembershipProperty))
@@ -1145,7 +1145,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMembership Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMembership Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMetadata"u8, out var ownedMetadataProperty))
@@ -1165,7 +1165,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMetadata Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMetadata Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedOccurrence"u8, out var ownedOccurrenceProperty))
@@ -1185,7 +1185,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedOccurrence Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedOccurrence Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedPart"u8, out var ownedPartProperty))
@@ -1205,7 +1205,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedPart Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedPart Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedPort"u8, out var ownedPortProperty))
@@ -1225,7 +1225,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedPort Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedPort Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedReference"u8, out var ownedReferenceProperty))
@@ -1245,7 +1245,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedReference Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedReference Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -1265,7 +1265,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRendering"u8, out var ownedRenderingProperty))
@@ -1285,7 +1285,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRendering Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRendering Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRequirement"u8, out var ownedRequirementProperty))
@@ -1305,7 +1305,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRequirement Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRequirement Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedSpecialization"u8, out var ownedSpecializationProperty))
@@ -1325,7 +1325,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedSpecialization Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedSpecialization Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedState"u8, out var ownedStateProperty))
@@ -1345,7 +1345,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedState Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedState Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedSubclassification"u8, out var ownedSubclassificationProperty))
@@ -1365,7 +1365,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedSubclassification Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedSubclassification Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedTransition"u8, out var ownedTransitionProperty))
@@ -1385,7 +1385,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedTransition Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedTransition Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedUnioning"u8, out var ownedUnioningProperty))
@@ -1405,7 +1405,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedUnioning Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedUnioning Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedUsage"u8, out var ownedUsageProperty))
@@ -1425,7 +1425,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedUsage Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedUsage Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedUseCase"u8, out var ownedUseCaseProperty))
@@ -1445,7 +1445,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedUseCase Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedUseCase Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedVerificationCase"u8, out var ownedVerificationCaseProperty))
@@ -1465,7 +1465,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedVerificationCase Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedVerificationCase Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedView"u8, out var ownedViewProperty))
@@ -1485,7 +1485,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedView Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedView Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedViewpoint"u8, out var ownedViewpointProperty))
@@ -1505,7 +1505,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedViewpoint Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedViewpoint Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
@@ -1529,7 +1529,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owner Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owner Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
@@ -1553,7 +1553,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningMembership Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningMembership Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
@@ -1577,7 +1577,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningNamespace Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningNamespace Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -1601,7 +1601,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("parameter"u8, out var parameterProperty))
@@ -1621,7 +1621,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the parameter Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the parameter Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
@@ -1630,7 +1630,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the qualifiedName Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the qualifiedName Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("reqId"u8, out var reqIdProperty))
@@ -1639,7 +1639,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the reqId Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the reqId Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("requiredConstraint"u8, out var requiredConstraintProperty))
@@ -1659,7 +1659,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the requiredConstraint Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the requiredConstraint Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("result"u8, out var resultProperty))
@@ -1684,7 +1684,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the result Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the result Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
@@ -1693,7 +1693,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the shortName Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the shortName Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("stakeholderParameter"u8, out var stakeholderParameterProperty))
@@ -1713,7 +1713,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the stakeholderParameter Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the stakeholderParameter Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("step"u8, out var stepProperty))
@@ -1733,7 +1733,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the step Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the step Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("subjectParameter"u8, out var subjectParameterProperty))
@@ -1758,7 +1758,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the subjectParameter Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the subjectParameter Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("text"u8, out var textProperty))
@@ -1775,7 +1775,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the text Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the text Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
@@ -1795,7 +1795,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the textualRepresentation Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the textualRepresentation Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))
@@ -1815,7 +1815,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the unioningType Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the unioningType Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("usage"u8, out var usageProperty))
@@ -1835,7 +1835,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the usage Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the usage Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("variant"u8, out var variantProperty))
@@ -1855,7 +1855,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the variant Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the variant Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("variantMembership"u8, out var variantMembershipProperty))
@@ -1875,7 +1875,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the variantMembership Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the variantMembership Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
         }
@@ -1909,7 +1909,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -1918,7 +1918,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -1932,7 +1932,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
@@ -1944,7 +1944,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isAbstract Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isAbstract Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -1956,7 +1956,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isIndividual"u8, out var isIndividualProperty))
@@ -1968,7 +1968,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isIndividual Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isIndividual Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
@@ -1980,7 +1980,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isSufficient Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isSufficient Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
@@ -1992,7 +1992,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isVariation Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isVariation Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -2012,7 +2012,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -2036,7 +2036,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("reqId"u8, out var reqIdProperty))
@@ -2045,7 +2045,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the reqId Json property was not found in the RequirementDefinition: { Id }", dtoInstance.Id);
+                logger.LogDebug("the reqId Json property was not found in the RequirementDefinition: {Id}", dtoInstance.Id);
             }
 
         }

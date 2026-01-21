@@ -129,7 +129,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("argument"u8, out var argumentProperty))
@@ -149,7 +149,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the argument Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the argument Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("chainingFeature"u8, out var chainingFeatureProperty))
@@ -169,7 +169,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the chainingFeature Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the chainingFeature Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("crossFeature"u8, out var crossFeatureProperty))
@@ -193,7 +193,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the crossFeature Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the crossFeature Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -202,7 +202,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
@@ -211,7 +211,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredShortName Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredShortName Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
@@ -231,7 +231,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the differencingType Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the differencingType Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("direction"u8, out var directionProperty))
@@ -240,7 +240,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the direction Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the direction Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
@@ -260,7 +260,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the documentation Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the documentation Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -274,7 +274,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("endFeature"u8, out var endFeatureProperty))
@@ -294,7 +294,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the endFeature Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the endFeature Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("endOwningType"u8, out var endOwningTypeProperty))
@@ -318,7 +318,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the endOwningType Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the endOwningType Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("feature"u8, out var featureProperty))
@@ -338,7 +338,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the feature Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the feature Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("featureMembership"u8, out var featureMembershipProperty))
@@ -358,7 +358,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the featureMembership Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the featureMembership Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("featureTarget"u8, out var featureTargetProperty))
@@ -383,7 +383,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the featureTarget Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the featureTarget Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("featuringType"u8, out var featuringTypeProperty))
@@ -403,7 +403,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the featuringType Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the featuringType Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("function"u8, out var functionProperty))
@@ -427,7 +427,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the function Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the function Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
@@ -447,7 +447,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the importedMembership Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the importedMembership Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("inheritedFeature"u8, out var inheritedFeatureProperty))
@@ -467,7 +467,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the inheritedFeature Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the inheritedFeature Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("inheritedMembership"u8, out var inheritedMembershipProperty))
@@ -487,7 +487,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the inheritedMembership Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the inheritedMembership Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("input"u8, out var inputProperty))
@@ -507,7 +507,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the input Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the input Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("instantiatedType"u8, out var instantiatedTypeProperty))
@@ -532,7 +532,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the instantiatedType Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the instantiatedType Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("intersectingType"u8, out var intersectingTypeProperty))
@@ -552,7 +552,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the intersectingType Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the intersectingType Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
@@ -564,7 +564,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isAbstract Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isAbstract Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isComposite"u8, out var isCompositeProperty))
@@ -576,7 +576,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isComposite Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isComposite Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isConjugated"u8, out var isConjugatedProperty))
@@ -588,7 +588,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isConjugated Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isConjugated Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isConstant"u8, out var isConstantProperty))
@@ -600,7 +600,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isConstant Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isConstant Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isDerived"u8, out var isDerivedProperty))
@@ -612,7 +612,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isDerived Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isDerived Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isEnd"u8, out var isEndProperty))
@@ -624,7 +624,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isEnd Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isEnd Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -636,7 +636,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
@@ -648,7 +648,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isLibraryElement Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isLibraryElement Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isModelLevelEvaluable"u8, out var isModelLevelEvaluableProperty))
@@ -660,7 +660,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isModelLevelEvaluable Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isModelLevelEvaluable Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isOrdered"u8, out var isOrderedProperty))
@@ -672,7 +672,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isOrdered Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isOrdered Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isPortion"u8, out var isPortionProperty))
@@ -684,7 +684,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isPortion Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isPortion Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
@@ -696,7 +696,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isSufficient Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isSufficient Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isUnique"u8, out var isUniqueProperty))
@@ -708,7 +708,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isUnique Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isUnique Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
@@ -720,7 +720,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isVariable Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isVariable Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("kind"u8, out var kindProperty))
@@ -729,7 +729,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the kind Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the kind Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("member"u8, out var memberProperty))
@@ -749,7 +749,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the member Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the member Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("membership"u8, out var membershipProperty))
@@ -769,7 +769,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the membership Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the membership Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("multiplicity"u8, out var multiplicityProperty))
@@ -793,7 +793,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the multiplicity Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the multiplicity Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
@@ -802,7 +802,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the name Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
@@ -822,7 +822,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the output Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the output Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
@@ -842,7 +842,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAnnotation Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedConjugator"u8, out var ownedConjugatorProperty))
@@ -866,7 +866,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedConjugator Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedConjugator Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedCrossSubsetting"u8, out var ownedCrossSubsettingProperty))
@@ -890,7 +890,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedCrossSubsetting Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedCrossSubsetting Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedDifferencing"u8, out var ownedDifferencingProperty))
@@ -910,7 +910,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedDifferencing Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedDifferencing Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedDisjoining"u8, out var ownedDisjoiningProperty))
@@ -930,7 +930,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedDisjoining Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedDisjoining Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
@@ -950,7 +950,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedElement Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedElement Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedEndFeature"u8, out var ownedEndFeatureProperty))
@@ -970,7 +970,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedEndFeature Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedEndFeature Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeature"u8, out var ownedFeatureProperty))
@@ -990,7 +990,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeature Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeature Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeatureChaining"u8, out var ownedFeatureChainingProperty))
@@ -1010,7 +1010,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeatureChaining Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeatureChaining Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeatureInverting"u8, out var ownedFeatureInvertingProperty))
@@ -1030,7 +1030,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeatureInverting Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeatureInverting Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeatureMembership"u8, out var ownedFeatureMembershipProperty))
@@ -1050,7 +1050,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeatureMembership Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeatureMembership Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedImport"u8, out var ownedImportProperty))
@@ -1070,7 +1070,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedImport Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedImport Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedIntersecting"u8, out var ownedIntersectingProperty))
@@ -1090,7 +1090,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedIntersecting Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedIntersecting Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMember"u8, out var ownedMemberProperty))
@@ -1110,7 +1110,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMember Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMember Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMembership"u8, out var ownedMembershipProperty))
@@ -1130,7 +1130,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMembership Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMembership Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRedefinition"u8, out var ownedRedefinitionProperty))
@@ -1150,7 +1150,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRedefinition Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRedefinition Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedReferenceSubsetting"u8, out var ownedReferenceSubsettingProperty))
@@ -1174,7 +1174,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedReferenceSubsetting Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedReferenceSubsetting Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -1194,7 +1194,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedSpecialization"u8, out var ownedSpecializationProperty))
@@ -1214,7 +1214,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedSpecialization Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedSpecialization Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedSubsetting"u8, out var ownedSubsettingProperty))
@@ -1234,7 +1234,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedSubsetting Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedSubsetting Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedTypeFeaturing"u8, out var ownedTypeFeaturingProperty))
@@ -1254,7 +1254,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedTypeFeaturing Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedTypeFeaturing Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedTyping"u8, out var ownedTypingProperty))
@@ -1274,7 +1274,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedTyping Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedTyping Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedUnioning"u8, out var ownedUnioningProperty))
@@ -1294,7 +1294,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedUnioning Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedUnioning Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
@@ -1318,7 +1318,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owner Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owner Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningFeatureMembership"u8, out var owningFeatureMembershipProperty))
@@ -1342,7 +1342,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningFeatureMembership Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningFeatureMembership Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
@@ -1366,7 +1366,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningMembership Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningMembership Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
@@ -1390,7 +1390,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningNamespace Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningNamespace Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -1414,7 +1414,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningType"u8, out var owningTypeProperty))
@@ -1438,7 +1438,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningType Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningType Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("parameter"u8, out var parameterProperty))
@@ -1458,7 +1458,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the parameter Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the parameter Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
@@ -1467,7 +1467,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the qualifiedName Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the qualifiedName Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("result"u8, out var resultProperty))
@@ -1492,7 +1492,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the result Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the result Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
@@ -1501,7 +1501,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the shortName Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the shortName Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
@@ -1521,7 +1521,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the textualRepresentation Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the textualRepresentation Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("type"u8, out var typeProperty))
@@ -1541,7 +1541,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the type Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the type Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))
@@ -1561,7 +1561,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the unioningType Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the unioningType Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
         }
@@ -1595,7 +1595,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -1604,7 +1604,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
@@ -1613,7 +1613,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredShortName Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredShortName Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("direction"u8, out var directionProperty))
@@ -1622,7 +1622,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the direction Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the direction Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -1636,7 +1636,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
@@ -1648,7 +1648,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isAbstract Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isAbstract Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isComposite"u8, out var isCompositeProperty))
@@ -1660,7 +1660,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isComposite Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isComposite Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isConstant"u8, out var isConstantProperty))
@@ -1672,7 +1672,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isConstant Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isConstant Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isDerived"u8, out var isDerivedProperty))
@@ -1684,7 +1684,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isDerived Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isDerived Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isEnd"u8, out var isEndProperty))
@@ -1696,7 +1696,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isEnd Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isEnd Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -1708,7 +1708,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isOrdered"u8, out var isOrderedProperty))
@@ -1720,7 +1720,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isOrdered Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isOrdered Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isPortion"u8, out var isPortionProperty))
@@ -1732,7 +1732,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isPortion Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isPortion Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
@@ -1744,7 +1744,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isSufficient Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isSufficient Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isUnique"u8, out var isUniqueProperty))
@@ -1756,7 +1756,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isUnique Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isUnique Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariable"u8, out var isVariableProperty))
@@ -1768,7 +1768,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isVariable Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isVariable Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("kind"u8, out var kindProperty))
@@ -1777,7 +1777,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the kind Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the kind Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -1797,7 +1797,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -1821,7 +1821,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the TriggerInvocationExpression: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the TriggerInvocationExpression: {Id}", dtoInstance.Id);
             }
 
         }

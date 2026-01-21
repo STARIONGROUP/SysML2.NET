@@ -129,7 +129,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("chainingFeature"u8, out var chainingFeatureProperty))
@@ -149,7 +149,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the chainingFeature Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the chainingFeature Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("crossFeature"u8, out var crossFeatureProperty))
@@ -173,7 +173,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the crossFeature Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the crossFeature Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -182,7 +182,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
@@ -191,7 +191,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredShortName Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredShortName Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
@@ -211,7 +211,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the differencingType Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the differencingType Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
@@ -231,7 +231,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the directedFeature Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the directedFeature Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedUsage"u8, out var directedUsageProperty))
@@ -251,7 +251,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the directedUsage Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the directedUsage Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("direction"u8, out var directionProperty))
@@ -260,7 +260,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the direction Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the direction Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
@@ -280,7 +280,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the documentation Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the documentation Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -294,7 +294,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("endFeature"u8, out var endFeatureProperty))
@@ -314,7 +314,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the endFeature Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the endFeature Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("endOwningType"u8, out var endOwningTypeProperty))
@@ -338,7 +338,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the endOwningType Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the endOwningType Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("eventOccurrence"u8, out var eventOccurrenceProperty))
@@ -363,7 +363,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the eventOccurrence Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the eventOccurrence Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("feature"u8, out var featureProperty))
@@ -383,7 +383,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the feature Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the feature Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("featureMembership"u8, out var featureMembershipProperty))
@@ -403,7 +403,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the featureMembership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the featureMembership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("featureTarget"u8, out var featureTargetProperty))
@@ -428,7 +428,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the featureTarget Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the featureTarget Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("featuringType"u8, out var featuringTypeProperty))
@@ -448,7 +448,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the featuringType Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the featuringType Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
@@ -468,7 +468,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the importedMembership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the importedMembership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("individualDefinition"u8, out var individualDefinitionProperty))
@@ -492,7 +492,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the individualDefinition Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the individualDefinition Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("inheritedFeature"u8, out var inheritedFeatureProperty))
@@ -512,7 +512,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the inheritedFeature Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the inheritedFeature Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("inheritedMembership"u8, out var inheritedMembershipProperty))
@@ -532,7 +532,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the inheritedMembership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the inheritedMembership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("input"u8, out var inputProperty))
@@ -552,7 +552,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the input Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the input Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("intersectingType"u8, out var intersectingTypeProperty))
@@ -572,7 +572,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the intersectingType Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the intersectingType Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
@@ -584,7 +584,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isAbstract Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isAbstract Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isComposite"u8, out var isCompositeProperty))
@@ -596,7 +596,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isComposite Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isComposite Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isConjugated"u8, out var isConjugatedProperty))
@@ -608,7 +608,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isConjugated Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isConjugated Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isConstant"u8, out var isConstantProperty))
@@ -620,7 +620,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isConstant Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isConstant Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isDerived"u8, out var isDerivedProperty))
@@ -632,7 +632,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isDerived Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isDerived Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isEnd"u8, out var isEndProperty))
@@ -644,7 +644,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isEnd Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isEnd Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -656,7 +656,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isIndividual"u8, out var isIndividualProperty))
@@ -668,7 +668,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isIndividual Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isIndividual Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
@@ -680,7 +680,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isLibraryElement Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isLibraryElement Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isOrdered"u8, out var isOrderedProperty))
@@ -692,7 +692,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isOrdered Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isOrdered Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isPortion"u8, out var isPortionProperty))
@@ -704,7 +704,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isPortion Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isPortion Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isReference"u8, out var isReferenceProperty))
@@ -716,7 +716,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isReference Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isReference Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
@@ -728,7 +728,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isSufficient Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isSufficient Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isUnique"u8, out var isUniqueProperty))
@@ -740,7 +740,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isUnique Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isUnique Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
@@ -752,7 +752,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isVariation Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isVariation Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("mayTimeVary"u8, out var mayTimeVaryProperty))
@@ -764,7 +764,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the mayTimeVary Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the mayTimeVary Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("member"u8, out var memberProperty))
@@ -784,7 +784,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the member Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the member Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("membership"u8, out var membershipProperty))
@@ -804,7 +804,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the membership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the membership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("multiplicity"u8, out var multiplicityProperty))
@@ -828,7 +828,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the multiplicity Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the multiplicity Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
@@ -837,7 +837,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the name Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedAction"u8, out var nestedActionProperty))
@@ -857,7 +857,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedAction Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedAction Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedAllocation"u8, out var nestedAllocationProperty))
@@ -877,7 +877,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedAllocation Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedAllocation Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedAnalysisCase"u8, out var nestedAnalysisCaseProperty))
@@ -897,7 +897,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedAnalysisCase Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedAnalysisCase Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedAttribute"u8, out var nestedAttributeProperty))
@@ -917,7 +917,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedAttribute Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedAttribute Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedCalculation"u8, out var nestedCalculationProperty))
@@ -937,7 +937,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedCalculation Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedCalculation Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedCase"u8, out var nestedCaseProperty))
@@ -957,7 +957,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedCase Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedCase Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedConcern"u8, out var nestedConcernProperty))
@@ -977,7 +977,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedConcern Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedConcern Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedConnection"u8, out var nestedConnectionProperty))
@@ -997,7 +997,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedConnection Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedConnection Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedConstraint"u8, out var nestedConstraintProperty))
@@ -1017,7 +1017,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedConstraint Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedConstraint Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedEnumeration"u8, out var nestedEnumerationProperty))
@@ -1037,7 +1037,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedEnumeration Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedEnumeration Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedFlow"u8, out var nestedFlowProperty))
@@ -1057,7 +1057,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedFlow Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedFlow Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedInterface"u8, out var nestedInterfaceProperty))
@@ -1077,7 +1077,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedInterface Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedInterface Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedItem"u8, out var nestedItemProperty))
@@ -1097,7 +1097,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedItem Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedItem Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedMetadata"u8, out var nestedMetadataProperty))
@@ -1117,7 +1117,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedMetadata Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedMetadata Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedOccurrence"u8, out var nestedOccurrenceProperty))
@@ -1137,7 +1137,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedOccurrence Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedOccurrence Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedPart"u8, out var nestedPartProperty))
@@ -1157,7 +1157,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedPart Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedPart Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedPort"u8, out var nestedPortProperty))
@@ -1177,7 +1177,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedPort Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedPort Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedReference"u8, out var nestedReferenceProperty))
@@ -1197,7 +1197,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedReference Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedReference Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedRendering"u8, out var nestedRenderingProperty))
@@ -1217,7 +1217,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedRendering Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedRendering Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedRequirement"u8, out var nestedRequirementProperty))
@@ -1237,7 +1237,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedRequirement Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedRequirement Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedState"u8, out var nestedStateProperty))
@@ -1257,7 +1257,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedState Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedState Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedTransition"u8, out var nestedTransitionProperty))
@@ -1277,7 +1277,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedTransition Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedTransition Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedUsage"u8, out var nestedUsageProperty))
@@ -1297,7 +1297,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedUsage Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedUsage Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedUseCase"u8, out var nestedUseCaseProperty))
@@ -1317,7 +1317,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedUseCase Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedUseCase Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedVerificationCase"u8, out var nestedVerificationCaseProperty))
@@ -1337,7 +1337,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedVerificationCase Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedVerificationCase Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedView"u8, out var nestedViewProperty))
@@ -1357,7 +1357,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedView Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedView Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("nestedViewpoint"u8, out var nestedViewpointProperty))
@@ -1377,7 +1377,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the nestedViewpoint Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the nestedViewpoint Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("occurrenceDefinition"u8, out var occurrenceDefinitionProperty))
@@ -1397,7 +1397,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the occurrenceDefinition Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the occurrenceDefinition Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
@@ -1417,7 +1417,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the output Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the output Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
@@ -1437,7 +1437,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAnnotation Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedConjugator"u8, out var ownedConjugatorProperty))
@@ -1461,7 +1461,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedConjugator Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedConjugator Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedCrossSubsetting"u8, out var ownedCrossSubsettingProperty))
@@ -1485,7 +1485,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedCrossSubsetting Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedCrossSubsetting Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedDifferencing"u8, out var ownedDifferencingProperty))
@@ -1505,7 +1505,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedDifferencing Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedDifferencing Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedDisjoining"u8, out var ownedDisjoiningProperty))
@@ -1525,7 +1525,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedDisjoining Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedDisjoining Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
@@ -1545,7 +1545,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedElement Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedElement Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedEndFeature"u8, out var ownedEndFeatureProperty))
@@ -1565,7 +1565,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedEndFeature Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedEndFeature Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeature"u8, out var ownedFeatureProperty))
@@ -1585,7 +1585,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeature Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeature Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeatureChaining"u8, out var ownedFeatureChainingProperty))
@@ -1605,7 +1605,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeatureChaining Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeatureChaining Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeatureInverting"u8, out var ownedFeatureInvertingProperty))
@@ -1625,7 +1625,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeatureInverting Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeatureInverting Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeatureMembership"u8, out var ownedFeatureMembershipProperty))
@@ -1645,7 +1645,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeatureMembership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeatureMembership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedImport"u8, out var ownedImportProperty))
@@ -1665,7 +1665,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedImport Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedImport Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedIntersecting"u8, out var ownedIntersectingProperty))
@@ -1685,7 +1685,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedIntersecting Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedIntersecting Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMember"u8, out var ownedMemberProperty))
@@ -1705,7 +1705,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMember Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMember Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMembership"u8, out var ownedMembershipProperty))
@@ -1725,7 +1725,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMembership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMembership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRedefinition"u8, out var ownedRedefinitionProperty))
@@ -1745,7 +1745,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRedefinition Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRedefinition Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedReferenceSubsetting"u8, out var ownedReferenceSubsettingProperty))
@@ -1769,7 +1769,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedReferenceSubsetting Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedReferenceSubsetting Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -1789,7 +1789,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedSpecialization"u8, out var ownedSpecializationProperty))
@@ -1809,7 +1809,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedSpecialization Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedSpecialization Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedSubsetting"u8, out var ownedSubsettingProperty))
@@ -1829,7 +1829,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedSubsetting Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedSubsetting Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedTypeFeaturing"u8, out var ownedTypeFeaturingProperty))
@@ -1849,7 +1849,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedTypeFeaturing Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedTypeFeaturing Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedTyping"u8, out var ownedTypingProperty))
@@ -1869,7 +1869,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedTyping Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedTyping Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedUnioning"u8, out var ownedUnioningProperty))
@@ -1889,7 +1889,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedUnioning Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedUnioning Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
@@ -1913,7 +1913,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owner Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owner Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningDefinition"u8, out var owningDefinitionProperty))
@@ -1937,7 +1937,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningDefinition Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningDefinition Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningFeatureMembership"u8, out var owningFeatureMembershipProperty))
@@ -1961,7 +1961,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningFeatureMembership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningFeatureMembership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
@@ -1985,7 +1985,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningMembership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningMembership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
@@ -2009,7 +2009,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningNamespace Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningNamespace Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -2033,7 +2033,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningType"u8, out var owningTypeProperty))
@@ -2057,7 +2057,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningType Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningType Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningUsage"u8, out var owningUsageProperty))
@@ -2081,7 +2081,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningUsage Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningUsage Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("portionKind"u8, out var portionKindProperty))
@@ -2090,7 +2090,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the portionKind Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the portionKind Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
@@ -2099,7 +2099,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the qualifiedName Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the qualifiedName Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
@@ -2108,7 +2108,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the shortName Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the shortName Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
@@ -2128,7 +2128,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the textualRepresentation Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the textualRepresentation Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))
@@ -2148,7 +2148,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the unioningType Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the unioningType Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("usage"u8, out var usageProperty))
@@ -2168,7 +2168,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the usage Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the usage Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("variant"u8, out var variantProperty))
@@ -2188,7 +2188,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the variant Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the variant Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("variantMembership"u8, out var variantMembershipProperty))
@@ -2208,7 +2208,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the variantMembership Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the variantMembership Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
         }
@@ -2242,7 +2242,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -2251,7 +2251,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
@@ -2260,7 +2260,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredShortName Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredShortName Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("direction"u8, out var directionProperty))
@@ -2269,7 +2269,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the direction Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the direction Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -2283,7 +2283,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
@@ -2295,7 +2295,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isAbstract Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isAbstract Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isComposite"u8, out var isCompositeProperty))
@@ -2307,7 +2307,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isComposite Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isComposite Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isConstant"u8, out var isConstantProperty))
@@ -2319,7 +2319,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isConstant Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isConstant Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isDerived"u8, out var isDerivedProperty))
@@ -2331,7 +2331,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isDerived Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isDerived Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isEnd"u8, out var isEndProperty))
@@ -2343,7 +2343,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isEnd Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isEnd Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -2355,7 +2355,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isIndividual"u8, out var isIndividualProperty))
@@ -2367,7 +2367,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isIndividual Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isIndividual Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isOrdered"u8, out var isOrderedProperty))
@@ -2379,7 +2379,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isOrdered Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isOrdered Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isPortion"u8, out var isPortionProperty))
@@ -2391,7 +2391,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isPortion Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isPortion Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
@@ -2403,7 +2403,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isSufficient Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isSufficient Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isUnique"u8, out var isUniqueProperty))
@@ -2415,7 +2415,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isUnique Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isUnique Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isVariation"u8, out var isVariationProperty))
@@ -2427,7 +2427,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isVariation Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isVariation Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -2447,7 +2447,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -2471,7 +2471,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("portionKind"u8, out var portionKindProperty))
@@ -2480,7 +2480,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the portionKind Json property was not found in the EventOccurrenceUsage: { Id }", dtoInstance.Id);
+                logger.LogDebug("the portionKind Json property was not found in the EventOccurrenceUsage: {Id}", dtoInstance.Id);
             }
 
         }
