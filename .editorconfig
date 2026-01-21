@@ -1,0 +1,3 @@
+[*.cs]
+# Disable S3776: Cognitive Complexity Warning
+dotnet_diagnostic.S3776.severity = none
