@@ -30,6 +30,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.HandleBarsGenerators
     /// <summary>
     /// Suite of tests for the <see cref="CoreDtoDictionaryReaderGenerator"/> class.
     /// </summary>
+    [Explicit("we are about to drop Ecore based code gen, these are present for reference only until permanently removed")]
     [TestFixture]
     public class CoreDtoDictionaryReaderGeneratorTestFixture
     {
