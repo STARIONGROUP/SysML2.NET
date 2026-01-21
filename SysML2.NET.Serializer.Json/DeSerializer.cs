@@ -77,10 +77,11 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        public IEnumerable<IData> DeSerialize(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind)
+        public IEnumerable<IData> DeSerialize(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
         {
             var sw = Stopwatch.StartNew();
 
@@ -93,10 +94,10 @@ namespace SysML2.NET.Serializer.Json
                 switch (root.ValueKind)
                 {
                     case JsonValueKind.Object:
-                        result.Add(this.DeserializeObject(root, serializationModeKind, serializationTargetKind));
+                        result.Add(this.DeserializeObject(root, serializationModeKind, serializationTargetKind, deserializeDerivedProperties));
                         break;
                     case JsonValueKind.Array:
-                        result.AddRange(this.DeserializeArray(root, serializationModeKind, serializationTargetKind));
+                        result.AddRange(this.DeserializeArray(root, serializationModeKind, serializationTargetKind, deserializeDerivedProperties));
                         break;
                     default:
                         throw new SerializationException();
@@ -107,7 +108,7 @@ namespace SysML2.NET.Serializer.Json
 
             return result;
         }
-        
+
         /// <summary>
         /// Asynchronously deserializes the JSON stream to an <see cref="IEnumerable{IData}"/>
         /// </summary>
@@ -120,13 +121,14 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        public async Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, CancellationToken cancellationToken)
+        public async Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties, CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
 
@@ -141,10 +143,10 @@ namespace SysML2.NET.Serializer.Json
                 switch (root.ValueKind)
                 {
                     case JsonValueKind.Object:
-                        result.Add(this.DeserializeObject(root, serializationModeKind, serializationTargetKind));
+                        result.Add(this.DeserializeObject(root, serializationModeKind, serializationTargetKind, deserializeDerivedProperties));
                         break;
                     case JsonValueKind.Array:
-                        result.AddRange(this.DeserializeArray(root, serializationModeKind, serializationTargetKind));
+                        result.AddRange(this.DeserializeArray(root, serializationModeKind, serializationTargetKind, deserializeDerivedProperties));
                         break;
                     default:
                         throw new SerializationException();
@@ -168,10 +170,11 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>
         /// an instance of <see cref="IData"/>
         /// </returns>
-        private IData DeserializeObject(JsonElement jsonObject, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind)
+        private IData DeserializeObject(JsonElement jsonObject, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
         {
             if (jsonObject.ValueKind != JsonValueKind.Object)
             {
@@ -182,24 +185,24 @@ namespace SysML2.NET.Serializer.Json
             {
                 var typeName = typeElement.GetString();
 
-                Func<JsonElement, SerializationModeKind, ILoggerFactory, IData> func;
+                Func<JsonElement, SerializationModeKind, bool, ILoggerFactory, IData> func;
 
                 if (serializationTargetKind == SerializationTargetKind.PSM)
                 {
                     if (ApiDeSerializationProvider.IsTypeSupported(typeName))
                     {
                         func = ApiDeSerializationProvider.Provide(typeName);
-                        return func(jsonObject, serializationModeKind, this.loggerFactory);
+                        return func(jsonObject, serializationModeKind, deserializeDerivedProperties, this.loggerFactory);
                     }
                     else
                     {
                         func = DeSerializationProvider.Provide(typeName);
-                        return func(jsonObject, serializationModeKind, this.loggerFactory);
+                        return func(jsonObject, serializationModeKind,deserializeDerivedProperties, this.loggerFactory);
                     }
                 }
 
                 func = DeSerializationProvider.Provide(typeName);
-                return func(jsonObject, serializationModeKind, this.loggerFactory);
+                return func(jsonObject, serializationModeKind, deserializeDerivedProperties, this.loggerFactory);
             }
 
             throw new SerializationException("The @type Json property is not available, the DeSerializer cannot be used to deserialize this JsonElement");
@@ -217,10 +220,11 @@ namespace SysML2.NET.Serializer.Json
         /// <param name="serializationTargetKind">
         /// The <see cref="SerializationTargetKind"/> to use
         /// </param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <returns>
         /// an <see cref="IEnumerable{IData}"/>
         /// </returns>
-        private IEnumerable<IData> DeserializeArray(JsonElement jsonArray, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind)
+        private IEnumerable<IData> DeserializeArray(JsonElement jsonArray, SerializationModeKind serializationModeKind, SerializationTargetKind serializationTargetKind, bool deserializeDerivedProperties)
         {
             if (jsonArray.ValueKind != JsonValueKind.Array)
             {
@@ -231,7 +235,7 @@ namespace SysML2.NET.Serializer.Json
 
             foreach (var jsonElement in jsonArray.EnumerateArray())
             {
-                var dataItem = this.DeserializeObject(jsonElement, serializationModeKind, serializationTargetKind);
+                var dataItem = this.DeserializeObject(jsonElement, serializationModeKind, serializationTargetKind, deserializeDerivedProperties);
                 result.Add(dataItem);
             }
 

@@ -45,13 +45,14 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
+        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
         /// <param name="loggerFactory">
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
         /// an instance of <see cref="DataVersion"/>
         /// </returns>
-        internal static DataVersion DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static DataVersion DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("DataVersionDeSerializer");
 
@@ -107,7 +108,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
             if (jsonElement.TryGetProperty("identity"u8, out JsonElement identityObject))
             {
-                dtoInstance.Identity = DataIdentityDeSerializer.DeSerialize(identityObject, serializationModeKind, loggerFactory);
+                dtoInstance.Identity = DataIdentityDeSerializer.DeSerialize(identityObject, serializationModeKind, deserializeDerivedProperties, loggerFactory);
             }
             else
             {
@@ -121,7 +122,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     var typeName = typeElement.GetString();
 
                     var func = DeSerializationProvider.Provide(typeName);
-                    dtoInstance.Payload = func(payloadObject, serializationModeKind, loggerFactory);
+                    dtoInstance.Payload = func(payloadObject, serializationModeKind,deserializeDerivedProperties, loggerFactory);
                 }
             }
             else

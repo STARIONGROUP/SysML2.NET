@@ -49,13 +49,16 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
         /// <param name="serializationModeKind">
         /// enumeration specifying what kind of serialization shall be used
         /// </param>
+        /// <param name="deserializeDerivedProperties">
+        /// Asserts that the deserializer should deserialize derived properties if present or if they are ignored
+        /// </param>
         /// <param name="loggerFactory">
         /// The <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
         /// <returns>
         /// an instance of <see cref="I{{ this.Name }}"/>
         /// </returns>
-        internal static I{{ this.Name }} DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, ILoggerFactory loggerFactory = null)
+        internal static I{{ this.Name }} DeSerialize(JsonElement jsonElement, SerializationModeKind serializationModeKind, bool deserializeDerivedProperties, ILoggerFactory loggerFactory = null)
         {
             var logger = loggerFactory == null ? NullLogger.Instance : loggerFactory.CreateLogger("{{ this.Name }}DeSerializer");
 
@@ -85,133 +88,302 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
                 }
             }
 
+            if(deserializeDerivedProperties)
+            {
+                DeserializeDtoIncludingDerivedProperties(dtoInstance, jsonElement, logger);
+            }
+            else
+            {
+                DeserializeDtoExcludingDerivedProperties(dtoInstance, jsonElement, logger);
+            }
+
+            return dtoInstance;
+        }
+            
+        /// <summary>
+        /// Deserializes properties of a <see cref="{{ this.Name }}" />
+        /// from a <see cref="JsonElement" />, including derived properties
+        /// </summary>
+        /// <param name="dtoInstance">
+        /// The <see cref="{{ this.Name }}"/> instance holding deserialized values
+        /// </param>
+        /// <param name="jsonElement">
+        /// The <see cref="JsonElement"/> that contains the <see cref="I{{ this.Name }}"/> json object
+        /// </param>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/> to produce logging statement
+        /// </param>
+        private static void DeserializeDtoIncludingDerivedProperties(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dtoInstance, JsonElement jsonElement, ILogger logger)
+        {
             {{#with this as |class| }}
                 {{ #each (Class.QueryAllProperties this) as | property | }}
-                        {{#unless this.IsTransient}}
-                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                            if (jsonElement.TryGetProperty("{{ property.Name }}"u8, out var {{ property.Name }}Property))
-                            {
-                            {{#if (Property.QueryIsReferenceProperty property)}}
-                                {{#if (Property.QueryIsEnumerable property)}}
-                                    foreach (var arrayItem in {{ property.Name }}Property.EnumerateArray())
-                                    {
-                                        if (arrayItem.TryGetProperty("@id"u8, out var {{ property.Name }}ExternalIdProperty))
-                                        {
-                                            var propertyValue = {{ property.Name }}ExternalIdProperty.GetString();
-                                    
-                                            if (propertyValue != null)
-                                            {
-                                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(Guid.Parse(propertyValue));
-                                            }
-                                        }
-                                    }
-                                {{ else }}
-                                    if ({{ property.Name }}Property.ValueKind == JsonValueKind.Null)
-                                    {
-                                    {{#if (Property.QueryIsNullable property) }}
-                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = null;
-                                    {{else}}
-                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = Guid.Empty;
-                                        logger.LogDebug($"the {{ class.Name }}.{{Property.WritePropertyName property}} property was not found in the Json. The value is set to Guid.Empty");
-                                    {{/if}}
-                                    }
-                                    else
-                                    {
-                                        if ({{ property.Name }}Property.TryGetProperty("@id"u8, out var {{ property.Name }}ExternalIdProperty))
-                                        {
-                                            var propertyValue = {{ property.Name }}ExternalIdProperty.GetString();
-                                    
-                                            if (propertyValue != null)
-                                            {
-                                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = Guid.Parse(propertyValue);
-                                            }
-                                        }
-                                    }
-                                {{/if}}
+                {{#unless this.IsTransient}}
+                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                        if (jsonElement.TryGetProperty("{{ property.Name }}"u8, out var {{ property.Name }}Property))
+                        {
+                        {{#if (Property.QueryIsReferenceProperty property)}}
+                            {{#if (Property.QueryIsEnumerable property)}}
+                                foreach (var arrayItem in {{ property.Name }}Property.EnumerateArray())
+                                {
+                                if (arrayItem.TryGetProperty("@id"u8, out var {{ property.Name }}ExternalIdProperty))
+                                {
+                                var propertyValue = {{ property.Name }}ExternalIdProperty.GetString();
+            
+                                if (propertyValue != null)
+                                {
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(Guid.Parse(propertyValue));
+                                }
+                                }
+                                }
                             {{ else }}
-                                {{#if (Property.QueryIsEnumerable property)}}
-                                    foreach (var arrayItem in {{ property.Name }}Property.EnumerateArray())
-                                    {
-                                    {{#if (Property.QueryIsBool property )}}
-                                        var propertyValue = arrayItem.GetBoolean();
-                                        
-                                        if (propertyValue != null)
-                                        {
-                                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(propertyValue);
-                                        }
-                                    {{else if (Property.QueryIsEnum property )}}
-                                        throw new NotImplementedException("Enumerable Enum - {{class.Name}}.{{property.Name}} is not yet supported");
-                                    {{else if (Property.QueryIsNumeric property )}}
-                                        {{#if (Property.QueryIsInteger property) }}
-                                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(arrayItem.GetInt32());
-                                        {{else if (Property.QueryIsDouble property) }}
-                                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(arrayItem.GetDouble());
-                                        {{ else }}
-                                            throw new NotImplementedException("Enumerable Double - {{class.Name}}.{{property.Name}} is not yet supported");
-                                        {{/if}}
-                                    {{else}}
-                                        var propertyValue = arrayItem.GetString();
-                                        
-                                        if (propertyValue != null)
-                                        {
-                                         {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(propertyValue);
-                                        }
-                                    {{/if}}
-                                    }
-                                {{ else if (Property.QueryIsNullable property) }}
-                                    {{#if (Property.QueryIsBool property )}}
-                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetBoolean();
-                                    {{else if (Property.QueryIsEnum property )}}
-                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Type.Name }}DeSerializer.DeserializeNullable({{ property.Name }}Property.GetString());
-                                    {{else if (Property.QueryIsNumeric property )}}
-                                        {{#if (Property.QueryIsInteger property) }}
-                                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetInt32();
-                                        {{else if (Property.QueryIsDouble property) }}
-                                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetDouble();
-                                        {{ else }}
-                                            new NotImplementedException("nullable - {{class.Name}}.{{property.Name}} is not yet supported");
-                                        {{/if}}
-                                    {{else}}
-                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetString();
-                                    {{/if}}
-                                {{ else if (Property.QueryIsScalar property) }}
-                                    {{#if (Property.QueryIsBool property )}}
-                                        if ({{ property.Name }}Property.ValueKind != JsonValueKind.Null)
-                                        {
-                                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetBoolean();
-                                        }
-                                    {{else if (Property.QueryIsEnum property )}}
-                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Type.Name }}DeSerializer.Deserialize({{ property.Name }}Property.GetString());
-                                    {{else if (Property.QueryIsNumeric property )}}
-                                        {{#if (Property.QueryIsInteger property) }}
-                                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetInt32();
-                                        {{else if (Property.QueryIsDouble property) }}
-                                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetDouble();
-                                        {{ else }}
-                                            new NotImplementedException("Scalar - {{class.Name}}.{{property.Name}} is not yet supported");
-                                        {{/if}}
-                                    {{else}}
-                                        var propertyValue = {{property.Name }}Property.GetString();
-                                        
-                                        if (propertyValue != null)
-                                        {
-                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = propertyValue;
-                                        }
-                                    {{/if}}
+                                if ({{ property.Name }}Property.ValueKind == JsonValueKind.Null)
+                                {
+                                {{#if (Property.QueryIsNullable property) }}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = null;
+                                {{else}}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = Guid.Empty;
+                                    logger.LogDebug($"the {{ class.Name }}.{{Property.WritePropertyName property}} property was not found in the Json. The value is set to Guid.Empty");
                                 {{/if}}
+                                }
+                                else
+                                {
+                                if ({{ property.Name }}Property.TryGetProperty("@id"u8, out var {{ property.Name }}ExternalIdProperty))
+                                {
+                                var propertyValue = {{ property.Name }}ExternalIdProperty.GetString();
+            
+                                if (propertyValue != null)
+                                {
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = Guid.Parse(propertyValue);
+                                }
+                                }
+                                }
+                            {{/if}}
+                        {{ else }}
+                            {{#if (Property.QueryIsEnumerable property)}}
+                                foreach (var arrayItem in {{ property.Name }}Property.EnumerateArray())
+                                {
+                                {{#if (Property.QueryIsBool property )}}
+                                    var propertyValue = arrayItem.GetBoolean();
+            
+                                    if (propertyValue != null)
+                                    {
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(propertyValue);
+                                    }
+                                {{else if (Property.QueryIsEnum property )}}
+                                    throw new NotImplementedException("Enumerable Enum - {{class.Name}}.{{property.Name}} is not yet supported");
+                                {{else if (Property.QueryIsNumeric property )}}
+                                    {{#if (Property.QueryIsInteger property) }}
+                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(arrayItem.GetInt32());
+                                    {{else if (Property.QueryIsDouble property) }}
+                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(arrayItem.GetDouble());
+                                    {{ else }}
+                                        throw new NotImplementedException("Enumerable Double - {{class.Name}}.{{property.Name}} is not yet supported");
+                                    {{/if}}
+                                {{else}}
+                                    var propertyValue = arrayItem.GetString();
+            
+                                    if (propertyValue != null)
+                                    {
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(propertyValue);
+                                    }
+                                {{/if}}
+                                }
+                            {{ else if (Property.QueryIsNullable property) }}
+                                {{#if (Property.QueryIsBool property )}}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetBoolean();
+                                {{else if (Property.QueryIsEnum property )}}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Type.Name }}DeSerializer.DeserializeNullable({{ property.Name }}Property.GetString());
+                                {{else if (Property.QueryIsNumeric property )}}
+                                    {{#if (Property.QueryIsInteger property) }}
+                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetInt32();
+                                    {{else if (Property.QueryIsDouble property) }}
+                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetDouble();
+                                    {{ else }}
+                                        new NotImplementedException("nullable - {{class.Name}}.{{property.Name}} is not yet supported");
+                                    {{/if}}
+                                {{else}}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetString();
+                                {{/if}}
+                            {{ else if (Property.QueryIsScalar property) }}
+                                {{#if (Property.QueryIsBool property )}}
+                                    if ({{ property.Name }}Property.ValueKind != JsonValueKind.Null)
+                                    {
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetBoolean();
+                                    }
+                                {{else if (Property.QueryIsEnum property )}}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Type.Name }}DeSerializer.Deserialize({{ property.Name }}Property.GetString());
+                                {{else if (Property.QueryIsNumeric property )}}
+                                    {{#if (Property.QueryIsInteger property) }}
+                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetInt32();
+                                    {{else if (Property.QueryIsDouble property) }}
+                                        {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetDouble();
+                                    {{ else }}
+                                        new NotImplementedException("Scalar - {{class.Name}}.{{property.Name}} is not yet supported");
+                                    {{/if}}
+                                {{else}}
+                                    var propertyValue = {{property.Name }}Property.GetString();
+            
+                                    if (propertyValue != null)
+                                    {
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = propertyValue;
+                                    }
+                                {{/if}}
+                            {{/if}}
+                        {{/if}}
+                        }
+                        else
+                        {
+                        logger.LogDebug("the {{ property.Name }} Json property was not found in the {{ class.Name }}: { Id }", dtoInstance.Id);
+                        }
+            
+                    {{/unless}}
+                {{/unless}}
+            {{/each}}
+            {{/with}}
+        }
+
+        /// <summary>
+        /// Deserializes properties of a <see cref="{{ this.Name }}" />
+        /// from a <see cref="JsonElement" />, excluding derived properties
+        /// </summary>
+        /// <param name="dtoInstance">
+        /// The <see cref="{{ this.Name }}"/> instance holding deserialized values
+        /// </param>
+        /// <param name="jsonElement">
+        /// The <see cref="JsonElement"/> that contains the <see cref="I{{ this.Name }}"/> json object
+        /// </param>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/> to produce logging statement
+        /// </param>
+        private static void DeserializeDtoExcludingDerivedProperties(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} dtoInstance, JsonElement jsonElement, ILogger logger)
+        {
+        {{#with this as |class| }}
+            {{ #each (Class.QueryAllProperties this) as | property | }}
+            {{#unless this.IsTransient}}
+            {{#unless this.IsDerived}}
+                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                    if (jsonElement.TryGetProperty("{{ property.Name }}"u8, out var {{ property.Name }}Property))
+                    {
+                    {{#if (Property.QueryIsReferenceProperty property)}}
+                        {{#if (Property.QueryIsEnumerable property)}}
+                            foreach (var arrayItem in {{ property.Name }}Property.EnumerateArray())
+                            {
+                            if (arrayItem.TryGetProperty("@id"u8, out var {{ property.Name }}ExternalIdProperty))
+                            {
+                            var propertyValue = {{ property.Name }}ExternalIdProperty.GetString();
+
+                            if (propertyValue != null)
+                            {
+                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(Guid.Parse(propertyValue));
+                            }
+                            }
+                            }
+                        {{ else }}
+                            if ({{ property.Name }}Property.ValueKind == JsonValueKind.Null)
+                            {
+                            {{#if (Property.QueryIsNullable property) }}
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = null;
+                            {{else}}
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = Guid.Empty;
+                                logger.LogDebug($"the {{ class.Name }}.{{Property.WritePropertyName property}} property was not found in the Json. The value is set to Guid.Empty");
                             {{/if}}
                             }
                             else
                             {
-                                logger.LogDebug("the {{ property.Name }} Json property was not found in the {{ class.Name }}: { Id }", dtoInstance.Id);
-                            }
-            
-                        {{/unless}}
-                    {{/unless}}
-                {{/each}}
-            {{/with}}
+                            if ({{ property.Name }}Property.TryGetProperty("@id"u8, out var {{ property.Name }}ExternalIdProperty))
+                            {
+                            var propertyValue = {{ property.Name }}ExternalIdProperty.GetString();
 
-            return dtoInstance;
+                            if (propertyValue != null)
+                            {
+                            {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = Guid.Parse(propertyValue);
+                            }
+                            }
+                            }
+                        {{/if}}
+                    {{ else }}
+                        {{#if (Property.QueryIsEnumerable property)}}
+                            foreach (var arrayItem in {{ property.Name }}Property.EnumerateArray())
+                            {
+                            {{#if (Property.QueryIsBool property )}}
+                                var propertyValue = arrayItem.GetBoolean();
+
+                                if (propertyValue != null)
+                                {
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(propertyValue);
+                                }
+                            {{else if (Property.QueryIsEnum property )}}
+                                throw new NotImplementedException("Enumerable Enum - {{class.Name}}.{{property.Name}} is not yet supported");
+                            {{else if (Property.QueryIsNumeric property )}}
+                                {{#if (Property.QueryIsInteger property) }}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(arrayItem.GetInt32());
+                                {{else if (Property.QueryIsDouble property) }}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(arrayItem.GetDouble());
+                                {{ else }}
+                                    throw new NotImplementedException("Enumerable Double - {{class.Name}}.{{property.Name}} is not yet supported");
+                                {{/if}}
+                            {{else}}
+                                var propertyValue = arrayItem.GetString();
+
+                                if (propertyValue != null)
+                                {
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }}.Add(propertyValue);
+                                }
+                            {{/if}}
+                            }
+                        {{ else if (Property.QueryIsNullable property) }}
+                            {{#if (Property.QueryIsBool property )}}
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetBoolean();
+                            {{else if (Property.QueryIsEnum property )}}
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Type.Name }}DeSerializer.DeserializeNullable({{ property.Name }}Property.GetString());
+                            {{else if (Property.QueryIsNumeric property )}}
+                                {{#if (Property.QueryIsInteger property) }}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetInt32();
+                                {{else if (Property.QueryIsDouble property) }}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetDouble();
+                                {{ else }}
+                                    new NotImplementedException("nullable - {{class.Name}}.{{property.Name}} is not yet supported");
+                                {{/if}}
+                            {{else}}
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetString();
+                            {{/if}}
+                        {{ else if (Property.QueryIsScalar property) }}
+                            {{#if (Property.QueryIsBool property )}}
+                                if ({{ property.Name }}Property.ValueKind != JsonValueKind.Null)
+                                {
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetBoolean();
+                                }
+                            {{else if (Property.QueryIsEnum property )}}
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Type.Name }}DeSerializer.Deserialize({{ property.Name }}Property.GetString());
+                            {{else if (Property.QueryIsNumeric property )}}
+                                {{#if (Property.QueryIsInteger property) }}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetInt32();
+                                {{else if (Property.QueryIsDouble property) }}
+                                    {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = {{ property.Name }}Property.GetDouble();
+                                {{ else }}
+                                    new NotImplementedException("Scalar - {{class.Name}}.{{property.Name}} is not yet supported");
+                                {{/if}}
+                            {{else}}
+                                var propertyValue = {{property.Name }}Property.GetString();
+
+                                if (propertyValue != null)
+                                {
+                                {{ #Property.WritePropertyWithExplicitInterfaceIfRequiredForDTO property class dtoInstance }} = propertyValue;
+                                }
+                            {{/if}}
+                        {{/if}}
+                    {{/if}}
+                    }
+                    else
+                    {
+                    logger.LogDebug("the {{ property.Name }} Json property was not found in the {{ class.Name }}: { Id }", dtoInstance.Id);
+                    }
+
+                {{/unless}}
+            {{/unless}}
+            {{/unless}}
+        {{/each}}
+{{/with}}
         }
     }
 }
