@@ -38,15 +38,16 @@ jobs:
           SONAR_SCANNER_OPTS: "-Xmx4096m"
         run: |
           dotnet tool install --global dotnet-sonarscanner
-       # dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
+          dotnet tool install --global dotnet-coverage
+          dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 
       - name: Build
-        run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
+        run: dotnet build --no-restore --no-incremental /p:ContinuousIntegrationBuild=true
 
       - name: Run Tests and Compute Coverage
-        run: dotnet test SysML2.NET.sln --filter Category!="Integration" --no-restore --no-build --verbosity quiet /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\" -- RunConfiguration.TestSessionTimeout=300000
+        run: dotnet-coverage collect "dotnet test SysML2.NET.sln --filter Category!='Integration' --no-restore --no-build --verbosity quiet" -f xml -o "coverage.xml" 
 
-     # - name: Sonarqube end
-     #   run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-     #   env:
-     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sonarqube end
+        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
