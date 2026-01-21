@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Items.ItemDefinition Create(Core.DTO.Systems.Items.ItemDefinition dto)
+        public static Core.POCO.Systems.Items.ItemDefinition Create(Core.DTO.Systems.Items.ItemDefinition dto)
         {
             if (dto == null)
             {

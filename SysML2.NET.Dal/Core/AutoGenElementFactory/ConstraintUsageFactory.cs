@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Constraints.ConstraintUsage Create(Core.DTO.Systems.Constraints.ConstraintUsage dto)
+        public static Core.POCO.Systems.Constraints.ConstraintUsage Create(Core.DTO.Systems.Constraints.ConstraintUsage dto)
         {
             if (dto == null)
             {

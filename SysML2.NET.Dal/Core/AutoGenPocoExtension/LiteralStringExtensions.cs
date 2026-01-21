@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO.Kernel.Expressions;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="LiteralString"/> class
+    /// A static class that provides extension methods for the <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> class
     /// </summary>
     public static class LiteralStringExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="LiteralString"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="LiteralString"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="LiteralString"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Expressions.LiteralString"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -115,17 +115,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="LiteralString"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="LiteralString"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="LiteralString"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Expressions.LiteralString"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>

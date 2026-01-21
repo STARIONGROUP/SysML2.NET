@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Metadata.MetadataDefinition Create(Core.DTO.Systems.Metadata.MetadataDefinition dto)
+        public static Core.POCO.Systems.Metadata.MetadataDefinition Create(Core.DTO.Systems.Metadata.MetadataDefinition dto)
         {
             if (dto == null)
             {

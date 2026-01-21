@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Connections.ConnectionUsage Create(Core.DTO.Systems.Connections.ConnectionUsage dto)
+        public static Core.POCO.Systems.Connections.ConnectionUsage Create(Core.DTO.Systems.Connections.ConnectionUsage dto)
         {
             if (dto == null)
             {

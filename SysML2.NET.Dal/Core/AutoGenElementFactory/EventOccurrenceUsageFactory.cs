@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Occurrences.EventOccurrenceUsage Create(Core.DTO.Systems.Occurrences.EventOccurrenceUsage dto)
+        public static Core.POCO.Systems.Occurrences.EventOccurrenceUsage Create(Core.DTO.Systems.Occurrences.EventOccurrenceUsage dto)
         {
             if (dto == null)
             {

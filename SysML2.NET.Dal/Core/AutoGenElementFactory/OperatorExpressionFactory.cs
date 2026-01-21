@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.OperatorExpression Create(Core.DTO.Kernel.Expressions.OperatorExpression dto)
+        public static Core.POCO.Kernel.Expressions.OperatorExpression Create(Core.DTO.Kernel.Expressions.OperatorExpression dto)
         {
             if (dto == null)
             {

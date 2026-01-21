@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO.Systems.DefinitionAndUsage;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="ReferenceUsage"/> class
+    /// A static class that provides extension methods for the <see cref="Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage"/> class
     /// </summary>
     public static class ReferenceUsageExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="ReferenceUsage"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="ReferenceUsage"/> that is to be updated
+        /// The <see cref="Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="ReferenceUsage"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Systems.DefinitionAndUsage.ReferenceUsage"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -113,17 +113,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="ReferenceUsage"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="ReferenceUsage"/> that is to be updated
+        /// The <see cref="Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="ReferenceUsage"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Systems.DefinitionAndUsage.ReferenceUsage"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>

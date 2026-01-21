@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Behaviors.ParameterMembership Create(Core.DTO.Kernel.Behaviors.ParameterMembership dto)
+        public static Core.POCO.Kernel.Behaviors.ParameterMembership Create(Core.DTO.Kernel.Behaviors.ParameterMembership dto)
         {
             if (dto == null)
             {

@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Features.FeatureChaining Create(Core.DTO.Core.Features.FeatureChaining dto)
+        public static Core.POCO.Core.Features.FeatureChaining Create(Core.DTO.Core.Features.FeatureChaining dto)
         {
             if (dto == null)
             {

@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Parts.PartUsage Create(Core.DTO.Systems.Parts.PartUsage dto)
+        public static Core.POCO.Systems.Parts.PartUsage Create(Core.DTO.Systems.Parts.PartUsage dto)
         {
             if (dto == null)
             {

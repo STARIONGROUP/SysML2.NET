@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Structures.Structure Create(Core.DTO.Kernel.Structures.Structure dto)
+        public static Core.POCO.Kernel.Structures.Structure Create(Core.DTO.Kernel.Structures.Structure dto)
         {
             if (dto == null)
             {

@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Root.Namespaces.Membership Create(Core.DTO.Root.Namespaces.Membership dto)
+        public static Core.POCO.Root.Namespaces.Membership Create(Core.DTO.Root.Namespaces.Membership dto)
         {
             if (dto == null)
             {

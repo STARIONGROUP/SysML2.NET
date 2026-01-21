@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Types.Type Create(Core.DTO.Core.Types.Type dto)
+        public static Core.POCO.Core.Types.Type Create(Core.DTO.Core.Types.Type dto)
         {
             if (dto == null)
             {

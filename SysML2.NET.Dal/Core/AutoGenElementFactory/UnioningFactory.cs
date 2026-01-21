@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Types.Unioning Create(Core.DTO.Core.Types.Unioning dto)
+        public static Core.POCO.Core.Types.Unioning Create(Core.DTO.Core.Types.Unioning dto)
         {
             if (dto == null)
             {

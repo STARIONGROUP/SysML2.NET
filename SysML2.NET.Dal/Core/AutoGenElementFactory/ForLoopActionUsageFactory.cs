@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Actions.ForLoopActionUsage Create(Core.DTO.Systems.Actions.ForLoopActionUsage dto)
+        public static Core.POCO.Systems.Actions.ForLoopActionUsage Create(Core.DTO.Systems.Actions.ForLoopActionUsage dto)
         {
             if (dto == null)
             {

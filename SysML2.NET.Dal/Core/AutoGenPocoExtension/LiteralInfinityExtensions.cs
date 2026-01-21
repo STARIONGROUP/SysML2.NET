@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO.Kernel.Expressions;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="LiteralInfinity"/> class
+    /// A static class that provides extension methods for the <see cref="Core.POCO.Kernel.Expressions.LiteralInfinity"/> class
     /// </summary>
     public static class LiteralInfinityExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="LiteralInfinity"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="Core.POCO.Kernel.Expressions.LiteralInfinity"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="LiteralInfinity"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Expressions.LiteralInfinity"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="LiteralInfinity"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Expressions.LiteralInfinity"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -113,17 +113,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="LiteralInfinity"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Core.POCO.Kernel.Expressions.LiteralInfinity"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="LiteralInfinity"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Expressions.LiteralInfinity"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="LiteralInfinity"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Expressions.LiteralInfinity"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>

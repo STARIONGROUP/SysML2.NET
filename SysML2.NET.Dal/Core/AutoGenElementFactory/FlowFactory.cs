@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Interactions.Flow Create(Core.DTO.Kernel.Interactions.Flow dto)
+        public static Core.POCO.Kernel.Interactions.Flow Create(Core.DTO.Kernel.Interactions.Flow dto)
         {
             if (dto == null)
             {

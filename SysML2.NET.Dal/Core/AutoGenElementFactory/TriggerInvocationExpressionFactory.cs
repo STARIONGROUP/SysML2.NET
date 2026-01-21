@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Actions.TriggerInvocationExpression Create(Core.DTO.Systems.Actions.TriggerInvocationExpression dto)
+        public static Core.POCO.Systems.Actions.TriggerInvocationExpression Create(Core.DTO.Systems.Actions.TriggerInvocationExpression dto)
         {
             if (dto == null)
             {

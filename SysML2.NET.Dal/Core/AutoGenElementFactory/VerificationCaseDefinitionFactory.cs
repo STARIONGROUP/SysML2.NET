@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.VerificationCases.VerificationCaseDefinition Create(Core.DTO.Systems.VerificationCases.VerificationCaseDefinition dto)
+        public static Core.POCO.Systems.VerificationCases.VerificationCaseDefinition Create(Core.DTO.Systems.VerificationCases.VerificationCaseDefinition dto)
         {
             if (dto == null)
             {

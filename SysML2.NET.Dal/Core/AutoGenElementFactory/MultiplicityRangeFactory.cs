@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Multiplicities.MultiplicityRange Create(Core.DTO.Kernel.Multiplicities.MultiplicityRange dto)
+        public static Core.POCO.Kernel.Multiplicities.MultiplicityRange Create(Core.DTO.Kernel.Multiplicities.MultiplicityRange dto)
         {
             if (dto == null)
             {

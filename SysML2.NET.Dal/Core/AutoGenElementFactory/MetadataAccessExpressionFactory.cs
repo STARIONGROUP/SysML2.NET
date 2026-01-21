@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.MetadataAccessExpression Create(Core.DTO.Kernel.Expressions.MetadataAccessExpression dto)
+        public static Core.POCO.Kernel.Expressions.MetadataAccessExpression Create(Core.DTO.Kernel.Expressions.MetadataAccessExpression dto)
         {
             if (dto == null)
             {

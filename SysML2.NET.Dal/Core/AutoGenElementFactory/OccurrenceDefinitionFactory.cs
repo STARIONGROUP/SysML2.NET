@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Occurrences.OccurrenceDefinition Create(Core.DTO.Systems.Occurrences.OccurrenceDefinition dto)
+        public static Core.POCO.Systems.Occurrences.OccurrenceDefinition Create(Core.DTO.Systems.Occurrences.OccurrenceDefinition dto)
         {
             if (dto == null)
             {

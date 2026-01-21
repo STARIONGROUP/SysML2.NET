@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Types.Disjoining Create(Core.DTO.Core.Types.Disjoining dto)
+        public static Core.POCO.Core.Types.Disjoining Create(Core.DTO.Core.Types.Disjoining dto)
         {
             if (dto == null)
             {

@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Connectors.Succession Create(Core.DTO.Kernel.Connectors.Succession dto)
+        public static Core.POCO.Kernel.Connectors.Succession Create(Core.DTO.Kernel.Connectors.Succession dto)
         {
             if (dto == null)
             {

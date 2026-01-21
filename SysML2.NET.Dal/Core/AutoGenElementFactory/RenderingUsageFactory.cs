@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Views.RenderingUsage Create(Core.DTO.Systems.Views.RenderingUsage dto)
+        public static Core.POCO.Systems.Views.RenderingUsage Create(Core.DTO.Systems.Views.RenderingUsage dto)
         {
             if (dto == null)
             {

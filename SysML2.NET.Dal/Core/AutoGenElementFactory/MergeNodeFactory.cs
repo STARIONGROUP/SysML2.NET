@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Actions.MergeNode Create(Core.DTO.Systems.Actions.MergeNode dto)
+        public static Core.POCO.Systems.Actions.MergeNode Create(Core.DTO.Systems.Actions.MergeNode dto)
         {
             if (dto == null)
             {

@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Views.MembershipExpose Create(Core.DTO.Systems.Views.MembershipExpose dto)
+        public static Core.POCO.Systems.Views.MembershipExpose Create(Core.DTO.Systems.Views.MembershipExpose dto)
         {
             if (dto == null)
             {

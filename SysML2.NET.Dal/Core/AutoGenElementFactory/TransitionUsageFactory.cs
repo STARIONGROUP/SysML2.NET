@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.States.TransitionUsage Create(Core.DTO.Systems.States.TransitionUsage dto)
+        public static Core.POCO.Systems.States.TransitionUsage Create(Core.DTO.Systems.States.TransitionUsage dto)
         {
             if (dto == null)
             {

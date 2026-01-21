@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Associations.AssociationStructure Create(Core.DTO.Kernel.Associations.AssociationStructure dto)
+        public static Core.POCO.Kernel.Associations.AssociationStructure Create(Core.DTO.Kernel.Associations.AssociationStructure dto)
         {
             if (dto == null)
             {

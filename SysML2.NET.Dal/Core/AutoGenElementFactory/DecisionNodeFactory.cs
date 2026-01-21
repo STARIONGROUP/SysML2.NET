@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Actions.DecisionNode Create(Core.DTO.Systems.Actions.DecisionNode dto)
+        public static Core.POCO.Systems.Actions.DecisionNode Create(Core.DTO.Systems.Actions.DecisionNode dto)
         {
             if (dto == null)
             {

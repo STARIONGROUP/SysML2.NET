@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.DefinitionAndUsage.VariantMembership Create(Core.DTO.Systems.DefinitionAndUsage.VariantMembership dto)
+        public static Core.POCO.Systems.DefinitionAndUsage.VariantMembership Create(Core.DTO.Systems.DefinitionAndUsage.VariantMembership dto)
         {
             if (dto == null)
             {

@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Features.CrossSubsetting Create(Core.DTO.Core.Features.CrossSubsetting dto)
+        public static Core.POCO.Core.Features.CrossSubsetting Create(Core.DTO.Core.Features.CrossSubsetting dto)
         {
             if (dto == null)
             {

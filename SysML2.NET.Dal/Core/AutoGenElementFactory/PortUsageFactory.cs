@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Ports.PortUsage Create(Core.DTO.Systems.Ports.PortUsage dto)
+        public static Core.POCO.Systems.Ports.PortUsage Create(Core.DTO.Systems.Ports.PortUsage dto)
         {
             if (dto == null)
             {

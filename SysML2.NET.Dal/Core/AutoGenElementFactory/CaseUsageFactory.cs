@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Cases.CaseUsage Create(Core.DTO.Systems.Cases.CaseUsage dto)
+        public static Core.POCO.Systems.Cases.CaseUsage Create(Core.DTO.Systems.Cases.CaseUsage dto)
         {
             if (dto == null)
             {

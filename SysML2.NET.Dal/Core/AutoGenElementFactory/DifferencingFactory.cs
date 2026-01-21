@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Types.Differencing Create(Core.DTO.Core.Types.Differencing dto)
+        public static Core.POCO.Core.Types.Differencing Create(Core.DTO.Core.Types.Differencing dto)
         {
             if (dto == null)
             {

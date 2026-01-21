@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Root.Annotations.Comment Create(Core.DTO.Root.Annotations.Comment dto)
+        public static Core.POCO.Root.Annotations.Comment Create(Core.DTO.Root.Annotations.Comment dto)
         {
             if (dto == null)
             {

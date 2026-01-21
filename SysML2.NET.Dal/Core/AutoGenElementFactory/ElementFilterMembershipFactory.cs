@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Packages.ElementFilterMembership Create(Core.DTO.Kernel.Packages.ElementFilterMembership dto)
+        public static Core.POCO.Kernel.Packages.ElementFilterMembership Create(Core.DTO.Kernel.Packages.ElementFilterMembership dto)
         {
             if (dto == null)
             {

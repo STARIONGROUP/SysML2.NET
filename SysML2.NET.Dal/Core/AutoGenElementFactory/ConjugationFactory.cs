@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Types.Conjugation Create(Core.DTO.Core.Types.Conjugation dto)
+        public static Core.POCO.Core.Types.Conjugation Create(Core.DTO.Core.Types.Conjugation dto)
         {
             if (dto == null)
             {

@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.VerificationCases.RequirementVerificationMembership Create(Core.DTO.Systems.VerificationCases.RequirementVerificationMembership dto)
+        public static Core.POCO.Systems.VerificationCases.RequirementVerificationMembership Create(Core.DTO.Systems.VerificationCases.RequirementVerificationMembership dto)
         {
             if (dto == null)
             {

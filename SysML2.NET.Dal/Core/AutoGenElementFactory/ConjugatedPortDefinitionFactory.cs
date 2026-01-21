@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Ports.ConjugatedPortDefinition Create(Core.DTO.Systems.Ports.ConjugatedPortDefinition dto)
+        public static Core.POCO.Systems.Ports.ConjugatedPortDefinition Create(Core.DTO.Systems.Ports.ConjugatedPortDefinition dto)
         {
             if (dto == null)
             {

@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Views.ViewpointDefinition Create(Core.DTO.Systems.Views.ViewpointDefinition dto)
+        public static Core.POCO.Systems.Views.ViewpointDefinition Create(Core.DTO.Systems.Views.ViewpointDefinition dto)
         {
             if (dto == null)
             {

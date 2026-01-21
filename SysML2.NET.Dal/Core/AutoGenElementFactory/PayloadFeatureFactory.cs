@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Interactions.PayloadFeature Create(Core.DTO.Kernel.Interactions.PayloadFeature dto)
+        public static Core.POCO.Kernel.Interactions.PayloadFeature Create(Core.DTO.Kernel.Interactions.PayloadFeature dto)
         {
             if (dto == null)
             {

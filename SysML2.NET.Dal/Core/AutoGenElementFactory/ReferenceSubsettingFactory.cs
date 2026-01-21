@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Features.ReferenceSubsetting Create(Core.DTO.Core.Features.ReferenceSubsetting dto)
+        public static Core.POCO.Core.Features.ReferenceSubsetting Create(Core.DTO.Core.Features.ReferenceSubsetting dto)
         {
             if (dto == null)
             {

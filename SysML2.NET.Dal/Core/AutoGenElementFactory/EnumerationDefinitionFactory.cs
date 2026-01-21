@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Enumerations.EnumerationDefinition Create(Core.DTO.Systems.Enumerations.EnumerationDefinition dto)
+        public static Core.POCO.Systems.Enumerations.EnumerationDefinition Create(Core.DTO.Systems.Enumerations.EnumerationDefinition dto)
         {
             if (dto == null)
             {

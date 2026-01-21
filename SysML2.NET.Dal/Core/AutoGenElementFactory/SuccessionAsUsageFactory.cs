@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Connections.SuccessionAsUsage Create(Core.DTO.Systems.Connections.SuccessionAsUsage dto)
+        public static Core.POCO.Systems.Connections.SuccessionAsUsage Create(Core.DTO.Systems.Connections.SuccessionAsUsage dto)
         {
             if (dto == null)
             {
