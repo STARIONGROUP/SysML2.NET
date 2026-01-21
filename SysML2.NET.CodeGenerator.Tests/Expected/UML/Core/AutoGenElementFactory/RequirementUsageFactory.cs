@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Requirements.RequirementUsage Create(Core.DTO.Systems.Requirements.RequirementUsage dto)
+        public static Core.POCO.Systems.Requirements.RequirementUsage Create(Core.DTO.Systems.Requirements.RequirementUsage dto)
         {
             if (dto == null)
             {

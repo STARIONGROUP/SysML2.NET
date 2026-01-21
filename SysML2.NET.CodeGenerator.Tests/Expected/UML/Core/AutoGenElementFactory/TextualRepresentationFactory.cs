@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Root.Annotations.TextualRepresentation Create(Core.DTO.Root.Annotations.TextualRepresentation dto)
+        public static Core.POCO.Root.Annotations.TextualRepresentation Create(Core.DTO.Root.Annotations.TextualRepresentation dto)
         {
             if (dto == null)
             {

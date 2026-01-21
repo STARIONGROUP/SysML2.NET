@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.LiteralRational Create(Core.DTO.Kernel.Expressions.LiteralRational dto)
+        public static Core.POCO.Kernel.Expressions.LiteralRational Create(Core.DTO.Kernel.Expressions.LiteralRational dto)
         {
             if (dto == null)
             {

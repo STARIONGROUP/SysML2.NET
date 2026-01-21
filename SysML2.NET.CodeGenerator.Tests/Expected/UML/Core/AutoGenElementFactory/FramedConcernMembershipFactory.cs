@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Requirements.FramedConcernMembership Create(Core.DTO.Systems.Requirements.FramedConcernMembership dto)
+        public static Core.POCO.Systems.Requirements.FramedConcernMembership Create(Core.DTO.Systems.Requirements.FramedConcernMembership dto)
         {
             if (dto == null)
             {
