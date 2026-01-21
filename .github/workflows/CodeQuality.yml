@@ -34,7 +34,7 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet tool install --global dotnet-coverage
-          dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
+          dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 
       - name: Build
         run: dotnet build --no-restore -c Release /p:ContinuousIntegrationBuild=true
