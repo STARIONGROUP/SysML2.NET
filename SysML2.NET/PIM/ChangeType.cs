@@ -20,12 +20,24 @@
 
 namespace SysML2.NET.PIM
 {
+    /// <summary>
+    /// Defines changes type
+    /// </summary>
     public enum ChangeType
     {
+        /// <summary>
+        /// To be used in case of creation
+        /// </summary>
         CREATED,
 
+        /// <summary>
+        /// To be used in case of deletion
+        /// </summary>
         DELETED,
 
+        /// <summary>
+        /// To be used in case of update
+        /// </summary>
         UPDATED,
     }
 }

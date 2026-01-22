@@ -24,6 +24,7 @@ namespace SysML2.NET.PIM.POCO
     using System.Collections.Generic;
     using System.Linq;
 
+    using SysML2.NET.Common;
     using SysML2.NET.PIM;
 
     /// <summary>

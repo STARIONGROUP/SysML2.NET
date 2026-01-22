@@ -24,7 +24,7 @@ namespace SysML2.NET.PIM.POCO
 
     /// <summary>
     /// a subtype of Constraint that represents simple conditions that be modeled using the
-    /// property-operator -value tuple. e.g. mass <= 4 kg, or type instanceOf Generalization
+    /// property-operator -value tuple. e.g. mass &lt;= 4 kg, or type instanceOf Generalization
     /// </summary>
     public class PrimitiveConstraint : Constraint
     {

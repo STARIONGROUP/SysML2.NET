@@ -31,6 +31,9 @@ namespace SysML2.NET.PIM.DTO
     /// </summary>
     public class Project : Record
     {
+        /// <summary>
+        /// Gets or sets the collection of <see cref="Commit" />
+        /// </summary>
         public List<Guid> Commits { get; set; } = new List<Guid>();
 
         /// <summary>
@@ -41,13 +44,16 @@ namespace SysML2.NET.PIM.DTO
         /// <summary>
         /// Gets or sets the human readable name
         /// </summary>
-        public string Name { get; set; }
+        public new string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the default <see cref="Branch"/> in the <see cref="Project"/> which is a subset of <see cref="Branch"/>
         /// </summary>
         public Guid DefaultBranch { get; set; }
 
+        /// <summary>
+        /// Gets or sets the collection of <see cref="Query" />
+        /// </summary>
         public List<Guid> Queries { get; set; } = [];
     }
 }

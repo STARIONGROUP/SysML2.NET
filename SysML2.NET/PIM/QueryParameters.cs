@@ -24,6 +24,9 @@ namespace SysML2.NET.PIM
 	using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// Provide object structure for parameters than could be defined inside a queyr
+    /// </summary>
     public class QueryParameters
     {
         /// <summary>
@@ -83,26 +86,38 @@ namespace SysML2.NET.PIM
         /// <summary>
         /// Creates an instance 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A <see cref="QueryParameters"/></returns>
         /// <exception cref="NotImplementedException"></exception>
         public static QueryParameters FromString()
         {
-
-
             throw new NotImplementedException();
         }
     }
 
+    /// <summary>
+    /// Defines the structure of the page for the pagination process
+    /// </summary>
     public struct Page
     {
+        /// <summary>
+        /// the epoch time
+        /// </summary>
         public int Epoch { get; set; }
 
+        /// <summary>
+        /// The page identifier
+        /// </summary>
         public Guid Identifier { get; set; }
 
+        /// <summary>
+        /// Returns a string that represents the <see cref="Page"/>
+        /// </summary>
+        /// <returns>
+        /// a string representation
+        /// </returns>
         public override string ToString()
         {
             return $"{this.Epoch}|{this.Identifier}";
         }
     }
-
 }
