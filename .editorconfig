@@ -3,5 +3,7 @@
 dotnet_diagnostic.S3776.severity = none
 
 [**/AutoGen*/*.cs]
-# Disable CS1570 for all codegen
+# Disable CS1570/CS1584/CS1658 for all codegen
 dotnet_diagnostic.CS1570.severity = none
+dotnet_diagnostic.CS1584.severity = none
+dotnet_diagnostic.CS1658.severity = none
