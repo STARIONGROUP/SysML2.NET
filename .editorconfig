@@ -1,3 +1,7 @@
 [*.cs]
 # Disable S3776: Cognitive Complexity Warning
 dotnet_diagnostic.S3776.severity = none
+
+[**/AutoGen*/*.cs]
+# Disable CS1570 for all codegen
+dotnet_diagnostic.CS1570.severity = none
