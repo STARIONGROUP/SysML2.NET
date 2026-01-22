@@ -45,7 +45,7 @@ jobs:
         run: dotnet build --no-restore --no-incremental /p:ContinuousIntegrationBuild=true
 
       - name: Run Tests and Compute Coverage
-        run: dotnet-coverage collect "dotnet test SysML2.NET.sln --filter Category!='Integration' --no-restore --no-build --verbosity quiet" -f xml -o "coverage.xml" 
+        run: dotnet-coverage collect "dotnet test SysML2.NET.sln --no-restore --no-build --verbosity quiet" -f xml -o "coverage.xml" 
 
       - name: Sonarqube end
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
