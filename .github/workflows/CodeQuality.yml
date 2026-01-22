@@ -39,7 +39,7 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet tool install --global dotnet-coverage
-          dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 
       - name: Build
         run: dotnet build --no-restore --no-incremental /p:ContinuousIntegrationBuild=true
@@ -48,6 +48,7 @@ jobs:
         run: dotnet-coverage collect "dotnet test SysML2.NET.sln --no-restore --no-build --verbosity quiet" -f xml -o "coverage.xml" 
 
       - name: Sonarqube end
-        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
