@@ -58,7 +58,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 foreach (var prop in allProperties.Where(x => x.QueryIsEnum()))
                 {
-                    uniqueNamespaces.Add(prop.Type.QueryNamespace());
+                    uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(prop.Type));
                 }
 
                 var orderedNamespaces = uniqueNamespaces.Order().ToList();
@@ -76,7 +76,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("#Class.WriteEnumerationNameSpace supposed to be an IEnumeration");
                 }
 
-                writer.WriteSafeString($"using SysML2.NET.Core.{enumeration.QueryNamespace()};{Environment.NewLine}");
+                writer.WriteSafeString($"using SysML2.NET.Core.{Extensions.NamedElementExtensions.QueryNamespace(enumeration)};{Environment.NewLine}");
             });
 
             handlebars.RegisterHelper("Class.WriteNameSpaces", (writer, context, arguments) =>
@@ -99,7 +99,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 foreach (var superClass in superClasses)
                 {
-                    uniqueNamespaces.Add(superClass.QueryNamespace());
+                    uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(superClass));
                 }
 
                 if (namespacePrefix == "POCO")
@@ -108,7 +108,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     foreach (var prop in allProperties.Where(x => x.QueryIsReferenceProperty()))
                     {
-                        uniqueNamespaces.Add(prop.Type.QueryNamespace());
+                        uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(prop.Type));
                     }
 
                     var interfaceDerivedProperties =
@@ -120,13 +120,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         if (interfaceDerivedProperty.Possessor is INamedElement owner)
                         {
-                            var @namespace = owner.QueryNamespace();
+                            var @namespace = Extensions.NamedElementExtensions.QueryNamespace(owner);
                             uniqueNamespaces.Add(@namespace);
                         }
                     }
                 }
 
-                uniqueNamespaces.Remove(@class.QueryNamespace());
+                uniqueNamespaces.Remove(Extensions.NamedElementExtensions.QueryNamespace(@class));
                 var orderedNamespaces = uniqueNamespaces.Order().ToList();
 
                 foreach (var orderedNamespace in orderedNamespaces)

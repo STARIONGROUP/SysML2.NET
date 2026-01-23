@@ -33,16 +33,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
     public static class PropertyExtension
     {
         /// <summary>
-        /// Asserts that the current <see cref="IProperty" /> is C# nullable and not a string primitive 
-        /// </summary>
-        /// <param name="property">The <see cref="IProperty"/> to assert</param>
-        /// <returns>True is the <see cref="IProperty"/> is C# nullable and not a string</returns>
-        public static bool QueryIsNullableAndNotString(this IProperty property)
-        {
-            return property.QueryIsNullable() && property.QueryCSharpTypeName() != "string";
-        }
-
-        /// <summary>
         /// Asserts that the <see cref="IProperty"/> is an enum type with a default value provided
         /// </summary>
         /// <param name="property">The <see cref="IProperty"/> to assert</param>

@@ -27,9 +27,9 @@
 
         <!--
          -->
-        <PackageReference Include="uml4net.HandleBars" Version="6.1.0" />
-        <PackageReference Include="uml4net.Reporting" Version="6.1.0" />
-        <PackageReference Include="uml4net.xmi" Version="5.1.0" />
+        <PackageReference Include="uml4net.HandleBars" Version="6.3.1" />
+        <PackageReference Include="uml4net.Reporting" Version="6.3.1" />
+        <PackageReference Include="uml4net.xmi" Version="5.3.1" />
 
         <!--
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.HandleBars\uml4net.HandleBars.csproj" />
