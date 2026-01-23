@@ -73,7 +73,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         sb.Append($"{property.QueryCSharpTypeName()}");
 
-                        if (property.QueryIsNullableAndNotString())
+                        if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property))
                         {
                             sb.Append('?');
                         }
@@ -92,7 +92,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         sb.Append("Guid");
 
-                        if (property.QueryIsNullableAndNotString())
+                        if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property))
                         {
                             sb.Append('?');
                         }
@@ -154,7 +154,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         sb.Append($"{property.QueryCSharpTypeName()}");
 
-                        if (property.QueryIsNullableAndNotString())
+                        if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property))
                         {
                             sb.Append('?');
                         }
@@ -173,7 +173,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         sb.Append("Guid");
 
-                        if (property.QueryIsNullableAndNotString())
+                        if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property))
                         {
                             sb.Append('?');
                         }
@@ -192,9 +192,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     var owner = (INamedElement)property.Owner;
                     propertyName = $"I{owner.Name}.{propertyName}";
 
-                    var ownerNamespace = owner.QueryNamespace();
+                    var ownerNamespace = Extensions.NamedElementExtensions.QueryNamespace(owner);
 
-                    if (ownerNamespace != classContext.QueryNamespace())
+                    if (ownerNamespace != Extensions.NamedElementExtensions.QueryNamespace(classContext))
                     {
                         propertyName = $"{ownerNamespace}.{propertyName}";
                     }
@@ -300,7 +300,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    if (property.QueryIsNullableAndNotString() && !property.QueryIsReferenceProperty())
+                    if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property) && !property.QueryIsReferenceProperty())
                     {
                         sb.Append($"{typeName}? ");
                     }
@@ -371,7 +371,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
-                    if (property.QueryIsNullableAndNotString() && !property.QueryIsReferenceProperty())
+                    if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property) && !property.QueryIsReferenceProperty())
                     {
                         sb.Append($"{typeName}? ");
                     }
@@ -391,9 +391,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     var owner = (INamedElement)property.Owner;
                     propertyName = $"I{owner.Name}.{propertyName}";
 
-                    var ownerNamespace = owner.QueryNamespace();
+                    var ownerNamespace = Extensions.NamedElementExtensions.QueryNamespace(owner);
 
-                    if (ownerNamespace != classContext.QueryNamespace())
+                    if (ownerNamespace != Extensions.NamedElementExtensions.QueryNamespace(classContext))
                     {
                         propertyName = $"{ownerNamespace}.{propertyName}";
                     }
@@ -612,7 +612,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 if (property.TryQueryRedefinedByProperty(generatedClass, out var redefinitionProperty) && redefinitionProperty.Name == property.Name)
                 {
                     var owner = (INamedElement)property.Owner;
-                    writer.WriteSafeString($"((SysML2.NET.Core.DTO.{owner.QueryNamespace()}.I{owner.Name}){variableName}).{propertyName}");
+                    writer.WriteSafeString($"((SysML2.NET.Core.DTO.{Extensions.NamedElementExtensions.QueryNamespace(owner)}.I{owner.Name}){variableName}).{propertyName}");
                 }
                 else
                 {
@@ -645,7 +645,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (redefinition.TryQueryRedefinedByProperty(context, out _))
             {
                 var owner = (INamedElement)redefinition.Owner;
-                redefinitionPropertyName = $"((SysML2.NET.Core.DTO.{owner.QueryNamespace()}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+                redefinitionPropertyName = $"((SysML2.NET.Core.DTO.{Extensions.NamedElementExtensions.QueryNamespace(owner)}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
             }
             else
             {
@@ -659,12 +659,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             if (redefinedProperty.QueryIsEnumerable() && !redefinition.QueryIsEnumerable())
             {
-                return redefinition.QueryIsNullableAndNotString()
+                return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(redefinition)
                     ? $"{redefinitionPropertyName}.HasValue ? [{redefinitionPropertyName}.Value] : [];"
                     : $"[{redefinitionPropertyName}];";
             }
 
-            return redefinition.QueryIsNullableAndNotString()
+            return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(redefinition)
                 ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : {(redefinedProperty.QueryIsReferenceProperty() ? "Guid.Empty" : "default")};"
                 : $"{redefinitionPropertyName};";
         }
@@ -675,7 +675,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="redefinedProperty">The redefined property</param>
         /// <param name="redefinition">The property that redefines <paramref name="redefinedProperty"/></param>
         /// <param name="context">Gets the <see cref="IClass"/> context</param>
-        /// <returns>The getter imlementation</returns>
+        /// <returns>The getter implementation</returns>
         private static string GetRedefinedPropertyGetterImplementationForPoco(IProperty redefinedProperty, IProperty redefinition, IClass context)
         {
             string redefinitionPropertyName;
@@ -683,7 +683,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (redefinition.TryQueryRedefinedByProperty(context, out _))
             {
                 var owner = (INamedElement)redefinition.Owner;
-                redefinitionPropertyName = $"((SysML2.NET.Core.POCO.{owner.QueryNamespace()}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+                redefinitionPropertyName = $"((SysML2.NET.Core.POCO.{Extensions.NamedElementExtensions.QueryNamespace(owner)}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
             }
             else
             {
@@ -707,12 +707,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     return $"string.IsNullOrWhiteSpace({redefinitionPropertyName}) ? [{redefinitionPropertyName}] : [];";
                 }
 
-                return redefinition.QueryIsNullableAndNotString()
+                return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(redefinition)
                     ? $"{redefinitionPropertyName}.HasValue ? [{redefinitionPropertyName}.Value] : [];"
                     : $"[{redefinitionPropertyName}];";
             }
 
-            return redefinition.QueryIsNullableAndNotString() && !redefinedProperty.QueryIsReferenceProperty()
+            return uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(redefinition) && !redefinedProperty.QueryIsReferenceProperty()
                 ? $"{redefinitionPropertyName}.HasValue ? {redefinitionPropertyName}.Value : default;"
                 : $"{redefinitionPropertyName};";
         }
@@ -736,7 +736,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (redefinition.TryQueryRedefinedByProperty(context, out _))
             {
                 var owner = (INamedElement)redefinition.Owner;
-                redefinitionPropertyName = $"((SysML2.NET.Core.DTO.{owner.QueryNamespace()}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+                redefinitionPropertyName = $"((SysML2.NET.Core.DTO.{Extensions.NamedElementExtensions.QueryNamespace(owner)}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
             }
             else
             {
@@ -775,7 +775,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             if (redefinition.TryQueryRedefinedByProperty(context, out _))
             {
                 var owner = (INamedElement)redefinition.Owner;
-                redefinitionPropertyName = $"((SysML2.NET.Core.POCO.{owner.QueryNamespace()}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
+                redefinitionPropertyName = $"((SysML2.NET.Core.POCO.{Extensions.NamedElementExtensions.QueryNamespace(owner)}.I{owner.Name})this).{redefinition.QueryPropertyNameBasedOnUmlProperties()}";
             }
             else
             {
