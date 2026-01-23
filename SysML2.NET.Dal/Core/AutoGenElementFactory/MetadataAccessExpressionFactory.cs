@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="MetadataAccessExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.MetadataAccessExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.MetadataAccessExpression"/>
     /// </summary>
-    public class MetadataAccessExpressionFactory
+    public static class MetadataAccessExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.MetadataAccessExpression"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.MetadataAccessExpression Create(Core.DTO.Kernel.Expressions.MetadataAccessExpression dto)
+        public static Core.POCO.Kernel.Expressions.MetadataAccessExpression Create(Core.DTO.Kernel.Expressions.MetadataAccessExpression dto)
         {
             if (dto == null)
             {

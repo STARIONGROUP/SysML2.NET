@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO.Root.Namespaces;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="Membership"/> class
+    /// A static class that provides extension methods for the <see cref="Core.POCO.Root.Namespaces.Membership"/> class
     /// </summary>
     public static class MembershipExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="Membership"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="Core.POCO.Root.Namespaces.Membership"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Membership"/> that is to be updated
+        /// The <see cref="Core.POCO.Root.Namespaces.Membership"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Membership"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Root.Namespaces.Membership"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -108,17 +108,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Membership"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Core.POCO.Root.Namespaces.Membership"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Membership"/> that is to be updated
+        /// The <see cref="Core.POCO.Root.Namespaces.Membership"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Membership"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Root.Namespaces.Membership"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
@@ -143,7 +143,7 @@ namespace SysML2.NET.Dal
 
             if (cache.TryGetValue(dto.MemberElement, out lazyPoco))
             {
-                poco.MemberElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
+                poco.MemberElement = lazyPoco.Value;
             }
             else
             {
@@ -156,7 +156,7 @@ namespace SysML2.NET.Dal
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelatedElement.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
+                    poco.OwnedRelatedElement.Add(lazyPoco.Value);
                 }
             }
 
@@ -172,7 +172,7 @@ namespace SysML2.NET.Dal
 
             if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
             {
-                poco.OwningRelatedElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
+                poco.OwningRelatedElement = lazyPoco.Value;
             }
             else
             {
@@ -196,10 +196,13 @@ namespace SysML2.NET.Dal
         /// <param name="poco">
         /// The subject <see cref="Core.POCO.Root.Namespaces.Membership"/> from which a DTO is to be created
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Root.Namespaces.Membership"/>
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Root.Namespaces.Membership"/>
         /// </returns>
-        public static Core.DTO.Root.Namespaces.Membership ToDto(this Core.POCO.Root.Namespaces.Membership poco)
+        public static Core.DTO.Root.Namespaces.Membership ToDto(this Core.POCO.Root.Namespaces.Membership poco, bool includeDerivedProperties = false)
         {
             var dto = new Core.DTO.Root.Namespaces.Membership();
 
@@ -218,6 +221,24 @@ namespace SysML2.NET.Dal
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             dto.Visibility = poco.Visibility;
+
+            if (includeDerivedProperties)
+            {
+                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
+                dto.isLibraryElement = poco.isLibraryElement;
+                dto.memberElementId = poco.memberElementId;
+                dto.membershipOwningNamespace = poco.membershipOwningNamespace.Id;
+                dto.name = poco.name;
+                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
+                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
+                dto.owner = poco.owner?.Id;
+                dto.owningMembership = poco.owningMembership?.Id;
+                dto.owningNamespace = poco.owningNamespace?.Id;
+                dto.qualifiedName = poco.qualifiedName;
+                dto.relatedElement = poco.relatedElement.Select(x => x.Id).ToList();
+                dto.shortName = poco.shortName;
+                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+            }
 
             return dto;
         }

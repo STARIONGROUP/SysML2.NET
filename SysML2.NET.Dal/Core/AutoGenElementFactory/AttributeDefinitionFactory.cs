@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AttributeDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Attributes.AttributeDefinition"/> based on a <see cref="Core.DTO.Systems.Attributes.AttributeDefinition"/>
     /// </summary>
-    public class AttributeDefinitionFactory
+    public static class AttributeDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Attributes.AttributeDefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Attributes.AttributeDefinition Create(Core.DTO.Systems.Attributes.AttributeDefinition dto)
+        public static Core.POCO.Systems.Attributes.AttributeDefinition Create(Core.DTO.Systems.Attributes.AttributeDefinition dto)
         {
             if (dto == null)
             {

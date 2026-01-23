@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AllocationDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Allocations.AllocationDefinition"/> based on a <see cref="Core.DTO.Systems.Allocations.AllocationDefinition"/>
     /// </summary>
-    public class AllocationDefinitionFactory
+    public static class AllocationDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Allocations.AllocationDefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Allocations.AllocationDefinition Create(Core.DTO.Systems.Allocations.AllocationDefinition dto)
+        public static Core.POCO.Systems.Allocations.AllocationDefinition Create(Core.DTO.Systems.Allocations.AllocationDefinition dto)
         {
             if (dto == null)
             {

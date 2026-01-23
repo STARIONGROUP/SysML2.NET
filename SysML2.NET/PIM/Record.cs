@@ -36,7 +36,7 @@ namespace SysML2.NET.PIM
         /// </summary>
         protected Record()
         {
-            Alias = new List<string>();
+            this.Alias = new List<string>();
         }
 
         /// <summary>

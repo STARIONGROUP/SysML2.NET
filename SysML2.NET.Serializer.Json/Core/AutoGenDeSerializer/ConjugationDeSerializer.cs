@@ -129,7 +129,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("conjugatedType"u8, out var conjugatedTypeProperty))
@@ -154,7 +154,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the conjugatedType Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the conjugatedType Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -163,7 +163,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
@@ -172,7 +172,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredShortName Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredShortName Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
@@ -192,7 +192,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the documentation Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the documentation Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -206,7 +206,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
@@ -218,7 +218,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImplied Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImplied Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -230,7 +230,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
@@ -242,7 +242,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isLibraryElement Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isLibraryElement Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
@@ -251,7 +251,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the name Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("originalType"u8, out var originalTypeProperty))
@@ -276,7 +276,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the originalType Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the originalType Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
@@ -296,7 +296,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAnnotation Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
@@ -316,7 +316,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedElement Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedElement Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
@@ -336,7 +336,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelatedElement Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -356,7 +356,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
@@ -380,7 +380,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owner Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owner Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
@@ -404,7 +404,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningMembership Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningMembership Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
@@ -428,7 +428,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningNamespace Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningNamespace Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
@@ -452,7 +452,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelatedElement Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -476,7 +476,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningType"u8, out var owningTypeProperty))
@@ -500,7 +500,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningType Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningType Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
@@ -509,7 +509,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the qualifiedName Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the qualifiedName Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("relatedElement"u8, out var relatedElementProperty))
@@ -529,7 +529,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the relatedElement Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the relatedElement Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
@@ -538,7 +538,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the shortName Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the shortName Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
@@ -558,7 +558,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the textualRepresentation Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the textualRepresentation Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
         }
@@ -592,7 +592,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("conjugatedType"u8, out var conjugatedTypeProperty))
@@ -617,7 +617,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the conjugatedType Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the conjugatedType Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -626,7 +626,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
@@ -635,7 +635,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredShortName Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredShortName Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -649,7 +649,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
@@ -661,7 +661,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImplied Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImplied Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -673,7 +673,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("originalType"u8, out var originalTypeProperty))
@@ -698,7 +698,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the originalType Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the originalType Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
@@ -718,7 +718,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelatedElement Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -738,7 +738,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
@@ -762,7 +762,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelatedElement Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -786,7 +786,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the Conjugation: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the Conjugation: {Id}", dtoInstance.Id);
             }
 
         }

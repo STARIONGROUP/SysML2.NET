@@ -1,0 +1,70 @@
+﻿{{#if (Property.QueryIsEnumerable property)}}
+                            writer.WriteStartArray("{{String.LowerCaseFirstLetter property.Name }}"u8);
+                            
+                            foreach (var item in i{{classContext.Name}}.{{Property.WritePropertyName property}})
+                            {
+                            {{#if (Property.QueryIsReferenceProperty property)}}
+                                writer.WriteStartObject();
+                                writer.WritePropertyName("@id"u8);
+                                writer.WriteStringValue(item);
+                                writer.WriteEndObject();
+                            {{else if (Property.QueryIsBool property)}}
+                                writer.WriteBooleanValue(item);
+                            {{else if (Property.QueryIsEnum property)}}
+                                writer.WriteStringValue(item.ToString().ToLower());
+                            {{else if (Property.QueryIsNumeric property)}}
+                                writer.WriteNumberValue(item);
+                            {{else}}
+                                writer.WriteStringValue(item);
+                            {{/if}}
+                            }
+
+                            writer.WriteEndArray();
+                        {{else if (Property.QueryIsNullable property)}}
+                            writer.WritePropertyName("{{ String.LowerCaseFirstLetter property.Name }}"u8);
+                            {{#if (Property.QueryIsString property )}}
+                                writer.WriteStringValue(i{{classContext.Name}}.{{Property.WritePropertyName property}});
+                            {{ else }}
+
+                                if (i{{classContext.Name}}.{{Property.WritePropertyName property}}.HasValue)
+                                {
+                                {{#if (Property.QueryIsReferenceProperty property)}}
+                                    writer.WriteStartObject();
+                                    writer.WritePropertyName("@id"u8);
+                                    writer.WriteStringValue(i{{classContext.Name}}.{{Property.WritePropertyName property}}.Value);
+                                    writer.WriteEndObject();
+                                {{else if (Property.QueryIsBool property )}}
+                                    writer.WriteBooleanValue(i{{classContext.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{else if (property.QueryIsEnum property )}}
+                                    writer.WriteStringValue(i{{classContext.Name}}.{{Property.WritePropertyName property}}.Value.ToString().ToLower());
+                                {{else if (Property.QueryIsNumeric property )}}
+                                    writer.WriteNumberValue(i{{classContext.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{else}}
+                                    writer.WriteStringValue(i{{classContext.Name}}.{{Property.WritePropertyName property}}.Value);
+                                {{/if}}
+                                }
+                                else
+                                {
+                                writer.WriteNullValue();
+                                }
+                            {{/if}}
+                        {{ else if (Property.QueryIsScalar property)}}
+                            writer.WritePropertyName("{{ String.LowerCaseFirstLetter property.Name }}"u8);
+                            {{#if (Property.QueryIsReferenceProperty property)}}
+                                writer.WriteStartObject();
+                                writer.WritePropertyName("@id"u8);
+                                writer.WriteStringValue(i{{classContext.Name}}.{{Property.WritePropertyName property}});
+                                writer.WriteEndObject();
+                            {{else if (Property.QueryIsBool property )}}
+                                writer.WriteBooleanValue(i{{classContext.Name}}.{{Property.WritePropertyName property}});
+                            {{else if (Property.QueryIsString property )}}
+                                writer.WriteStringValue(i{{classContext.Name}}.{{Property.WritePropertyName property}});
+                            {{else if (Property.QueryIsEnum property )}}
+                                writer.WriteStringValue(i{{classContext.Name}}.{{Property.WritePropertyName property}}.ToString().ToLower());
+                            {{else if (Property.QueryIsNumeric property )}}
+                                writer.WriteNumberValue(i{{classContext.Name}}.{{Property.WritePropertyName property}});
+                            {{else}}
+                                writer.WriteStringValue(i{{classContext.Name}}.{{Property.WritePropertyName property}});
+                            {{/if}}
+                        {{/if}}
+

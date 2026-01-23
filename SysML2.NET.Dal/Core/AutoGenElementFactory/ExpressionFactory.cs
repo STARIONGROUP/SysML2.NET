@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Functions.Expression"/> based on a <see cref="Core.DTO.Kernel.Functions.Expression"/>
     /// </summary>
-    public class ExpressionFactory
+    public static class ExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Functions.Expression"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Functions.Expression Create(Core.DTO.Kernel.Functions.Expression dto)
+        public static Core.POCO.Kernel.Functions.Expression Create(Core.DTO.Kernel.Functions.Expression dto)
         {
             if (dto == null)
             {

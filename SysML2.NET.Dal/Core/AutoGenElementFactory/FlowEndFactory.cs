@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FlowEndFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Interactions.FlowEnd"/> based on a <see cref="Core.DTO.Kernel.Interactions.FlowEnd"/>
     /// </summary>
-    public class FlowEndFactory
+    public static class FlowEndFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Interactions.FlowEnd"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Interactions.FlowEnd Create(Core.DTO.Kernel.Interactions.FlowEnd dto)
+        public static Core.POCO.Kernel.Interactions.FlowEnd Create(Core.DTO.Kernel.Interactions.FlowEnd dto)
         {
             if (dto == null)
             {

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="CrossSubsettingFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Features.CrossSubsetting"/> based on a <see cref="Core.DTO.Core.Features.CrossSubsetting"/>
     /// </summary>
-    public class CrossSubsettingFactory
+    public static class CrossSubsettingFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Features.CrossSubsetting"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Features.CrossSubsetting Create(Core.DTO.Core.Features.CrossSubsetting dto)
+        public static Core.POCO.Core.Features.CrossSubsetting Create(Core.DTO.Core.Features.CrossSubsetting dto)
         {
             if (dto == null)
             {

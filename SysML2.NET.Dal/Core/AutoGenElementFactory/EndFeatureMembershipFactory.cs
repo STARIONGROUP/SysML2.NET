@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="EndFeatureMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Features.EndFeatureMembership"/> based on a <see cref="Core.DTO.Core.Features.EndFeatureMembership"/>
     /// </summary>
-    public class EndFeatureMembershipFactory
+    public static class EndFeatureMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Features.EndFeatureMembership"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Features.EndFeatureMembership Create(Core.DTO.Core.Features.EndFeatureMembership dto)
+        public static Core.POCO.Core.Features.EndFeatureMembership Create(Core.DTO.Core.Features.EndFeatureMembership dto)
         {
             if (dto == null)
             {

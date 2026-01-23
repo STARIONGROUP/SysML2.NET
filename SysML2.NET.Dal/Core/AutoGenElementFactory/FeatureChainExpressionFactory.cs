@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FeatureChainExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.FeatureChainExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.FeatureChainExpression"/>
     /// </summary>
-    public class FeatureChainExpressionFactory
+    public static class FeatureChainExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.FeatureChainExpression"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.FeatureChainExpression Create(Core.DTO.Kernel.Expressions.FeatureChainExpression dto)
+        public static Core.POCO.Kernel.Expressions.FeatureChainExpression Create(Core.DTO.Kernel.Expressions.FeatureChainExpression dto)
         {
             if (dto == null)
             {

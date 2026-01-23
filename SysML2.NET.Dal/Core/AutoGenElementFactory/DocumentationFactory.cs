@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="DocumentationFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Annotations.Documentation"/> based on a <see cref="Core.DTO.Root.Annotations.Documentation"/>
     /// </summary>
-    public class DocumentationFactory
+    public static class DocumentationFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Annotations.Documentation"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Root.Annotations.Documentation Create(Core.DTO.Root.Annotations.Documentation dto)
+        public static Core.POCO.Root.Annotations.Documentation Create(Core.DTO.Root.Annotations.Documentation dto)
         {
             if (dto == null)
             {

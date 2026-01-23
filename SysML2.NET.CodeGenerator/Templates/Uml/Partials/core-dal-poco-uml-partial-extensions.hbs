@@ -1,0 +1,13 @@
+﻿{{#with this as |parameter|}}
+    {{#if (Property.QueryIsReferenceProperty property) }}
+        {{#if (Property.QueryIsEnumerable property)}}
+            dto.{{Property.WritePropertyName property}} = poco.{{Property.WritePropertyName property}}.Select(x => x.Id).ToList();
+        {{ else if (Property.QueryIsNullable property)}}
+            dto.{{Property.WritePropertyName property}} = poco.{{Property.WritePropertyName property}}?.Id;
+        {{ else }}
+            dto.{{Property.WritePropertyName property}} = poco.{{Property.WritePropertyName property}}.Id;
+        {{/if}}
+    {{ else }}
+        dto.{{Property.WritePropertyName property}} = poco.{{Property.WritePropertyName property}};
+    {{/if}}
+{{/with}}

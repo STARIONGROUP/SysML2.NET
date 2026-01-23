@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO.Kernel.Expressions;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="LiteralString"/> class
+    /// A static class that provides extension methods for the <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> class
     /// </summary>
     public static class LiteralStringExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="LiteralString"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="LiteralString"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="LiteralString"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Expressions.LiteralString"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -115,17 +115,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="LiteralString"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="LiteralString"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="LiteralString"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Expressions.LiteralString"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
@@ -175,10 +175,13 @@ namespace SysML2.NET.Dal
         /// <param name="poco">
         /// The subject <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> from which a DTO is to be created
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Kernel.Expressions.LiteralString"/>
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Kernel.Expressions.LiteralString"/>
         /// </returns>
-        public static Core.DTO.Kernel.Expressions.LiteralString ToDto(this Core.POCO.Kernel.Expressions.LiteralString poco)
+        public static Core.DTO.Kernel.Expressions.LiteralString ToDto(this Core.POCO.Kernel.Expressions.LiteralString poco, bool includeDerivedProperties = false)
         {
             var dto = new Core.DTO.Kernel.Expressions.LiteralString();
 
@@ -202,6 +205,68 @@ namespace SysML2.NET.Dal
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;
             dto.Value = poco.Value;
+
+            if (includeDerivedProperties)
+            {
+                dto.chainingFeature = poco.chainingFeature.Select(x => x.Id).ToList();
+                dto.crossFeature = poco.crossFeature?.Id;
+                dto.differencingType = poco.differencingType.Select(x => x.Id).ToList();
+                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
+                dto.endFeature = poco.endFeature.Select(x => x.Id).ToList();
+                dto.endOwningType = poco.endOwningType?.Id;
+                dto.feature = poco.feature.Select(x => x.Id).ToList();
+                dto.featureMembership = poco.featureMembership.Select(x => x.Id).ToList();
+                dto.featureTarget = poco.featureTarget.Id;
+                dto.featuringType = poco.featuringType.Select(x => x.Id).ToList();
+                dto.function = poco.function?.Id;
+                dto.importedMembership = poco.importedMembership.Select(x => x.Id).ToList();
+                dto.inheritedFeature = poco.inheritedFeature.Select(x => x.Id).ToList();
+                dto.inheritedMembership = poco.inheritedMembership.Select(x => x.Id).ToList();
+                dto.input = poco.input.Select(x => x.Id).ToList();
+                dto.intersectingType = poco.intersectingType.Select(x => x.Id).ToList();
+                dto.isConjugated = poco.isConjugated;
+                dto.isLibraryElement = poco.isLibraryElement;
+                dto.isModelLevelEvaluable = poco.isModelLevelEvaluable;
+                dto.member = poco.member.Select(x => x.Id).ToList();
+                dto.membership = poco.membership.Select(x => x.Id).ToList();
+                dto.multiplicity = poco.multiplicity?.Id;
+                dto.name = poco.name;
+                dto.output = poco.output.Select(x => x.Id).ToList();
+                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
+                dto.ownedConjugator = poco.ownedConjugator?.Id;
+                dto.ownedCrossSubsetting = poco.ownedCrossSubsetting?.Id;
+                dto.ownedDifferencing = poco.ownedDifferencing.Select(x => x.Id).ToList();
+                dto.ownedDisjoining = poco.ownedDisjoining.Select(x => x.Id).ToList();
+                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
+                dto.ownedEndFeature = poco.ownedEndFeature.Select(x => x.Id).ToList();
+                dto.ownedFeature = poco.ownedFeature.Select(x => x.Id).ToList();
+                dto.ownedFeatureChaining = poco.ownedFeatureChaining.Select(x => x.Id).ToList();
+                dto.ownedFeatureInverting = poco.ownedFeatureInverting.Select(x => x.Id).ToList();
+                dto.ownedFeatureMembership = poco.ownedFeatureMembership.Select(x => x.Id).ToList();
+                dto.ownedImport = poco.ownedImport.Select(x => x.Id).ToList();
+                dto.ownedIntersecting = poco.ownedIntersecting.Select(x => x.Id).ToList();
+                dto.ownedMember = poco.ownedMember.Select(x => x.Id).ToList();
+                dto.ownedMembership = poco.ownedMembership.Select(x => x.Id).ToList();
+                dto.ownedRedefinition = poco.ownedRedefinition.Select(x => x.Id).ToList();
+                dto.ownedReferenceSubsetting = poco.ownedReferenceSubsetting?.Id;
+                dto.ownedSpecialization = poco.ownedSpecialization.Select(x => x.Id).ToList();
+                dto.ownedSubsetting = poco.ownedSubsetting.Select(x => x.Id).ToList();
+                dto.ownedTypeFeaturing = poco.ownedTypeFeaturing.Select(x => x.Id).ToList();
+                dto.ownedTyping = poco.ownedTyping.Select(x => x.Id).ToList();
+                dto.ownedUnioning = poco.ownedUnioning.Select(x => x.Id).ToList();
+                dto.owner = poco.owner?.Id;
+                dto.owningFeatureMembership = poco.owningFeatureMembership?.Id;
+                dto.owningMembership = poco.owningMembership?.Id;
+                dto.owningNamespace = poco.owningNamespace?.Id;
+                dto.owningType = poco.owningType?.Id;
+                dto.parameter = poco.parameter.Select(x => x.Id).ToList();
+                dto.qualifiedName = poco.qualifiedName;
+                dto.result = poco.result.Id;
+                dto.shortName = poco.shortName;
+                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+                dto.type = poco.type.Select(x => x.Id).ToList();
+                dto.unioningType = poco.unioningType.Select(x => x.Id).ToList();
+            }
 
             return dto;
         }

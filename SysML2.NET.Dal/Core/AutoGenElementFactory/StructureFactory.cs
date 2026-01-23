@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="StructureFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Structures.Structure"/> based on a <see cref="Core.DTO.Kernel.Structures.Structure"/>
     /// </summary>
-    public class StructureFactory
+    public static class StructureFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Structures.Structure"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Structures.Structure Create(Core.DTO.Kernel.Structures.Structure dto)
+        public static Core.POCO.Kernel.Structures.Structure Create(Core.DTO.Kernel.Structures.Structure dto)
         {
             if (dto == null)
             {

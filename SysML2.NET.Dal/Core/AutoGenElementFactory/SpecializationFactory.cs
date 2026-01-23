@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="SpecializationFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Types.Specialization"/> based on a <see cref="Core.DTO.Core.Types.Specialization"/>
     /// </summary>
-    public class SpecializationFactory
+    public static class SpecializationFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Types.Specialization"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Types.Specialization Create(Core.DTO.Core.Types.Specialization dto)
+        public static Core.POCO.Core.Types.Specialization Create(Core.DTO.Core.Types.Specialization dto)
         {
             if (dto == null)
             {

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="PartUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Parts.PartUsage"/> based on a <see cref="Core.DTO.Systems.Parts.PartUsage"/>
     /// </summary>
-    public class PartUsageFactory
+    public static class PartUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Parts.PartUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Parts.PartUsage Create(Core.DTO.Systems.Parts.PartUsage dto)
+        public static Core.POCO.Systems.Parts.PartUsage Create(Core.DTO.Systems.Parts.PartUsage dto)
         {
             if (dto == null)
             {

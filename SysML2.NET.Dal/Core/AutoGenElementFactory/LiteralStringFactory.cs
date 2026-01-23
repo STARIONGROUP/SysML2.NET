@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="LiteralStringFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> based on a <see cref="Core.DTO.Kernel.Expressions.LiteralString"/>
     /// </summary>
-    public class LiteralStringFactory
+    public static class LiteralStringFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.LiteralString"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.LiteralString Create(Core.DTO.Kernel.Expressions.LiteralString dto)
+        public static Core.POCO.Kernel.Expressions.LiteralString Create(Core.DTO.Kernel.Expressions.LiteralString dto)
         {
             if (dto == null)
             {

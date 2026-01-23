@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="RenderingUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Views.RenderingUsage"/> based on a <see cref="Core.DTO.Systems.Views.RenderingUsage"/>
     /// </summary>
-    public class RenderingUsageFactory
+    public static class RenderingUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Views.RenderingUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Views.RenderingUsage Create(Core.DTO.Systems.Views.RenderingUsage dto)
+        public static Core.POCO.Systems.Views.RenderingUsage Create(Core.DTO.Systems.Views.RenderingUsage dto)
         {
             if (dto == null)
             {

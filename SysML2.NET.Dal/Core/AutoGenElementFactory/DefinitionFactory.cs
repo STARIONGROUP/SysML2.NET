@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="DefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.DefinitionAndUsage.Definition"/> based on a <see cref="Core.DTO.Systems.DefinitionAndUsage.Definition"/>
     /// </summary>
-    public class DefinitionFactory
+    public static class DefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.DefinitionAndUsage.Definition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.DefinitionAndUsage.Definition Create(Core.DTO.Systems.DefinitionAndUsage.Definition dto)
+        public static Core.POCO.Systems.DefinitionAndUsage.Definition Create(Core.DTO.Systems.DefinitionAndUsage.Definition dto)
         {
             if (dto == null)
             {

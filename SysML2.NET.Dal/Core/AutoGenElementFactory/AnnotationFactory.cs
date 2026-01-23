@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AnnotationFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Annotations.Annotation"/> based on a <see cref="Core.DTO.Root.Annotations.Annotation"/>
     /// </summary>
-    public class AnnotationFactory
+    public static class AnnotationFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Annotations.Annotation"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Root.Annotations.Annotation Create(Core.DTO.Root.Annotations.Annotation dto)
+        public static Core.POCO.Root.Annotations.Annotation Create(Core.DTO.Root.Annotations.Annotation dto)
         {
             if (dto == null)
             {

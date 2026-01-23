@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="OwningMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Namespaces.OwningMembership"/> based on a <see cref="Core.DTO.Root.Namespaces.OwningMembership"/>
     /// </summary>
-    public class OwningMembershipFactory
+    public static class OwningMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Namespaces.OwningMembership"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Root.Namespaces.OwningMembership Create(Core.DTO.Root.Namespaces.OwningMembership dto)
+        public static Core.POCO.Root.Namespaces.OwningMembership Create(Core.DTO.Root.Namespaces.OwningMembership dto)
         {
             if (dto == null)
             {

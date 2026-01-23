@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="TextualRepresentationFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Annotations.TextualRepresentation"/> based on a <see cref="Core.DTO.Root.Annotations.TextualRepresentation"/>
     /// </summary>
-    public class TextualRepresentationFactory
+    public static class TextualRepresentationFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Annotations.TextualRepresentation"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Root.Annotations.TextualRepresentation Create(Core.DTO.Root.Annotations.TextualRepresentation dto)
+        public static Core.POCO.Root.Annotations.TextualRepresentation Create(Core.DTO.Root.Annotations.TextualRepresentation dto)
         {
             if (dto == null)
             {

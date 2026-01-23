@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="UseCaseUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.UseCases.UseCaseUsage"/> based on a <see cref="Core.DTO.Systems.UseCases.UseCaseUsage"/>
     /// </summary>
-    public class UseCaseUsageFactory
+    public static class UseCaseUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.UseCases.UseCaseUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.UseCases.UseCaseUsage Create(Core.DTO.Systems.UseCases.UseCaseUsage dto)
+        public static Core.POCO.Systems.UseCases.UseCaseUsage Create(Core.DTO.Systems.UseCases.UseCaseUsage dto)
         {
             if (dto == null)
             {

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ActorMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Requirements.ActorMembership"/> based on a <see cref="Core.DTO.Systems.Requirements.ActorMembership"/>
     /// </summary>
-    public class ActorMembershipFactory
+    public static class ActorMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.ActorMembership"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Requirements.ActorMembership Create(Core.DTO.Systems.Requirements.ActorMembership dto)
+        public static Core.POCO.Systems.Requirements.ActorMembership Create(Core.DTO.Systems.Requirements.ActorMembership dto)
         {
             if (dto == null)
             {

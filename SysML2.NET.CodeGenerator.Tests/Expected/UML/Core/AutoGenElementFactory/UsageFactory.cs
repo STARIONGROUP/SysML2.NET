@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="UsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.DefinitionAndUsage.Usage"/> based on a <see cref="Core.DTO.Systems.DefinitionAndUsage.Usage"/>
     /// </summary>
-    public class UsageFactory
+    public static class UsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.DefinitionAndUsage.Usage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.DefinitionAndUsage.Usage Create(Core.DTO.Systems.DefinitionAndUsage.Usage dto)
+        public static Core.POCO.Systems.DefinitionAndUsage.Usage Create(Core.DTO.Systems.DefinitionAndUsage.Usage dto)
         {
             if (dto == null)
             {

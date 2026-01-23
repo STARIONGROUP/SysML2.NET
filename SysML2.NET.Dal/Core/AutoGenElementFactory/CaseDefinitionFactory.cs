@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="CaseDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> based on a <see cref="Core.DTO.Systems.Cases.CaseDefinition"/>
     /// </summary>
-    public class CaseDefinitionFactory
+    public static class CaseDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Cases.CaseDefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Cases.CaseDefinition Create(Core.DTO.Systems.Cases.CaseDefinition dto)
+        public static Core.POCO.Systems.Cases.CaseDefinition Create(Core.DTO.Systems.Cases.CaseDefinition dto)
         {
             if (dto == null)
             {

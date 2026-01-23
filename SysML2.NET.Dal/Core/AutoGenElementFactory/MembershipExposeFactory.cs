@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="MembershipExposeFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Views.MembershipExpose"/> based on a <see cref="Core.DTO.Systems.Views.MembershipExpose"/>
     /// </summary>
-    public class MembershipExposeFactory
+    public static class MembershipExposeFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Views.MembershipExpose"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Views.MembershipExpose Create(Core.DTO.Systems.Views.MembershipExpose dto)
+        public static Core.POCO.Systems.Views.MembershipExpose Create(Core.DTO.Systems.Views.MembershipExpose dto)
         {
             if (dto == null)
             {

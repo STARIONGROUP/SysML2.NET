@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ConstraintDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Constraints.ConstraintDefinition"/> based on a <see cref="Core.DTO.Systems.Constraints.ConstraintDefinition"/>
     /// </summary>
-    public class ConstraintDefinitionFactory
+    public static class ConstraintDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Constraints.ConstraintDefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Constraints.ConstraintDefinition Create(Core.DTO.Systems.Constraints.ConstraintDefinition dto)
+        public static Core.POCO.Systems.Constraints.ConstraintDefinition Create(Core.DTO.Systems.Constraints.ConstraintDefinition dto)
         {
             if (dto == null)
             {

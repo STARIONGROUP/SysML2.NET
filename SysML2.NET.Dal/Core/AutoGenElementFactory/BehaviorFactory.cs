@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="BehaviorFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Behaviors.Behavior"/> based on a <see cref="Core.DTO.Kernel.Behaviors.Behavior"/>
     /// </summary>
-    public class BehaviorFactory
+    public static class BehaviorFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Behaviors.Behavior"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Behaviors.Behavior Create(Core.DTO.Kernel.Behaviors.Behavior dto)
+        public static Core.POCO.Kernel.Behaviors.Behavior Create(Core.DTO.Kernel.Behaviors.Behavior dto)
         {
             if (dto == null)
             {

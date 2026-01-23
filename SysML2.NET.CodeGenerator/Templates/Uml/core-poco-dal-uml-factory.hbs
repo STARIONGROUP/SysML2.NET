@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="{{this.Name}}Factory"/> is to create a new instance of a
     /// <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/> based on a <see cref="Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/>
     /// </summary>
-    public class {{this.Name}}Factory
+    public static class {{this.Name}}Factory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}} Create(Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}} dto)
+        public static Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}} Create(Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}} dto)
         {
             if (dto == null)
             {

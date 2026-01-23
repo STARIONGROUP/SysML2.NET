@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FlowFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Interactions.Flow"/> based on a <see cref="Core.DTO.Kernel.Interactions.Flow"/>
     /// </summary>
-    public class FlowFactory
+    public static class FlowFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Interactions.Flow"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Interactions.Flow Create(Core.DTO.Kernel.Interactions.Flow dto)
+        public static Core.POCO.Kernel.Interactions.Flow Create(Core.DTO.Kernel.Interactions.Flow dto)
         {
             if (dto == null)
             {

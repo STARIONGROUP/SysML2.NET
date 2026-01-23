@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="LiteralRationalFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.LiteralRational"/> based on a <see cref="Core.DTO.Kernel.Expressions.LiteralRational"/>
     /// </summary>
-    public class LiteralRationalFactory
+    public static class LiteralRationalFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.LiteralRational"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.LiteralRational Create(Core.DTO.Kernel.Expressions.LiteralRational dto)
+        public static Core.POCO.Kernel.Expressions.LiteralRational Create(Core.DTO.Kernel.Expressions.LiteralRational dto)
         {
             if (dto == null)
             {

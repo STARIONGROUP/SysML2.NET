@@ -4,7 +4,11 @@ on:
   push:
   pull_request:
     types: [opened, synchronize, reopened]
-    
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build
@@ -26,22 +30,25 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore SysML2.NET.sln
-        
+
       - name: Sonarqube Begin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_SCANNER_OPTS: "-Xmx4096m"
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="./CoverageResults/coverage.opencover.xml"
+          dotnet tool install --global dotnet-coverage
+          dotnet sonarscanner begin /k:"STARIONGROUP_SysML2.NET" /o:"stariongroup" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 
       - name: Build
-        run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
+        run: dotnet build --no-restore --no-incremental /p:ContinuousIntegrationBuild=true
 
       - name: Run Tests and Compute Coverage
-        run: dotnet test SysML2.NET.sln --filter Category!="Expected" --no-restore --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
+        run: dotnet-coverage collect "dotnet test SysML2.NET.sln --no-restore --no-build --verbosity normal" -f xml -o "coverage.xml" 
 
       - name: Sonarqube end
-        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"

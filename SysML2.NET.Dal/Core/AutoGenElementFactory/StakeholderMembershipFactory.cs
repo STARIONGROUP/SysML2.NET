@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="StakeholderMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Requirements.StakeholderMembership"/> based on a <see cref="Core.DTO.Systems.Requirements.StakeholderMembership"/>
     /// </summary>
-    public class StakeholderMembershipFactory
+    public static class StakeholderMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.StakeholderMembership"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Requirements.StakeholderMembership Create(Core.DTO.Systems.Requirements.StakeholderMembership dto)
+        public static Core.POCO.Systems.Requirements.StakeholderMembership Create(Core.DTO.Systems.Requirements.StakeholderMembership dto)
         {
             if (dto == null)
             {

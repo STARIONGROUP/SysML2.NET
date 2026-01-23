@@ -240,14 +240,14 @@ namespace SysML2.NET.Dal
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref=""/> that is to be updated
+        /// The <see cref="Core.POCO.Root.Elements.IElement"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Core.POCO.Root.Elements.IElement"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Root.Elements.IElement"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{String, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
-        /// <see cref="ModelThing"/>s that are know and cached.
+        /// The <see cref="ConcurrentDictionary{String, Lazy}"/> that contains the
+        /// ModelThings that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
         public static void UpdateReferenceProperties(this Core.POCO.Root.Elements.IElement poco, Core.DTO.Root.Elements.IElement dto, ConcurrentDictionary<Guid, Lazy<Core.POCO.Root.Elements.IElement>> cache)

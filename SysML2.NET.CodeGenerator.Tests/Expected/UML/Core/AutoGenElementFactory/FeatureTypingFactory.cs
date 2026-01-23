@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="FeatureTypingFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Features.FeatureTyping"/> based on a <see cref="Core.DTO.Core.Features.FeatureTyping"/>
     /// </summary>
-    public class FeatureTypingFactory
+    public static class FeatureTypingFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Features.FeatureTyping"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Features.FeatureTyping Create(Core.DTO.Core.Features.FeatureTyping dto)
+        public static Core.POCO.Core.Features.FeatureTyping Create(Core.DTO.Core.Features.FeatureTyping dto)
         {
             if (dto == null)
             {

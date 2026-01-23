@@ -22,6 +22,8 @@ namespace SysML2.NET.PIM.DTO
 {
     using System;
 
+    using SysML2.NET.Common;
+
     /// <summary>
     /// An abstract subclass of <see cref="Record"/> that references a specific <see cref="Commit"/> (Commit Reference.referencedCommit). Project.commit is the set of all the Commit records for a given Project.
     /// <see cref="Project.CommitRefererence"/> identifies specific <see cref="Commit"/> records in a <see cref="Project"/> that provide the context for navigating the

@@ -20,13 +20,21 @@
 
 namespace SysML2.NET.PIM
 {
+    using SysML2.NET.PIM.DTO;
+
     /// <summary>
-    /// Enumeration whose literals are logical operator for composing <see cref="Constraints"/>
+    /// Enumeration whose literals are logical operator for composing <see cref="Constraint"/>
     /// </summary>
     public enum JoinOperator
     {
+        /// <summary>
+        /// The logical AND join operator
+        /// </summary>
         AND,
 
+        /// <summary>
+        /// The logical OR join operator
+        /// </summary>
         OR
     }
 }

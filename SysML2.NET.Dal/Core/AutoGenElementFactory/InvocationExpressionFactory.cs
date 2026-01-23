@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="InvocationExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.InvocationExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.InvocationExpression"/>
     /// </summary>
-    public class InvocationExpressionFactory
+    public static class InvocationExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.InvocationExpression"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.InvocationExpression Create(Core.DTO.Kernel.Expressions.InvocationExpression dto)
+        public static Core.POCO.Kernel.Expressions.InvocationExpression Create(Core.DTO.Kernel.Expressions.InvocationExpression dto)
         {
             if (dto == null)
             {

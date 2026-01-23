@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="RedefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Features.Redefinition"/> based on a <see cref="Core.DTO.Core.Features.Redefinition"/>
     /// </summary>
-    public class RedefinitionFactory
+    public static class RedefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Features.Redefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Features.Redefinition Create(Core.DTO.Core.Features.Redefinition dto)
+        public static Core.POCO.Core.Features.Redefinition Create(Core.DTO.Core.Features.Redefinition dto)
         {
             if (dto == null)
             {

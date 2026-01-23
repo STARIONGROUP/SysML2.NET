@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="InteractionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Interactions.Interaction"/> based on a <see cref="Core.DTO.Kernel.Interactions.Interaction"/>
     /// </summary>
-    public class InteractionFactory
+    public static class InteractionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Interactions.Interaction"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Interactions.Interaction Create(Core.DTO.Kernel.Interactions.Interaction dto)
+        public static Core.POCO.Kernel.Interactions.Interaction Create(Core.DTO.Kernel.Interactions.Interaction dto)
         {
             if (dto == null)
             {

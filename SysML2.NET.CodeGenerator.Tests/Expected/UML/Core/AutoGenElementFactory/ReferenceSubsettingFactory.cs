@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ReferenceSubsettingFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Core.Features.ReferenceSubsetting"/> based on a <see cref="Core.DTO.Core.Features.ReferenceSubsetting"/>
     /// </summary>
-    public class ReferenceSubsettingFactory
+    public static class ReferenceSubsettingFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Core.Features.ReferenceSubsetting"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Core.Features.ReferenceSubsetting Create(Core.DTO.Core.Features.ReferenceSubsetting dto)
+        public static Core.POCO.Core.Features.ReferenceSubsetting Create(Core.DTO.Core.Features.ReferenceSubsetting dto)
         {
             if (dto == null)
             {

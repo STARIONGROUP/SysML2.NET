@@ -129,7 +129,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("associationEnd"u8, out var associationEndProperty))
@@ -149,7 +149,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the associationEnd Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the associationEnd Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -158,7 +158,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
@@ -167,7 +167,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredShortName Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredShortName Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("differencingType"u8, out var differencingTypeProperty))
@@ -187,7 +187,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the differencingType Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the differencingType Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("directedFeature"u8, out var directedFeatureProperty))
@@ -207,7 +207,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the directedFeature Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the directedFeature Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("documentation"u8, out var documentationProperty))
@@ -227,7 +227,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the documentation Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the documentation Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -241,7 +241,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("feature"u8, out var featureProperty))
@@ -261,7 +261,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the feature Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the feature Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("featureMembership"u8, out var featureMembershipProperty))
@@ -281,7 +281,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the featureMembership Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the featureMembership Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("importedMembership"u8, out var importedMembershipProperty))
@@ -301,7 +301,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the importedMembership Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the importedMembership Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("inheritedFeature"u8, out var inheritedFeatureProperty))
@@ -321,7 +321,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the inheritedFeature Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the inheritedFeature Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("inheritedMembership"u8, out var inheritedMembershipProperty))
@@ -341,7 +341,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the inheritedMembership Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the inheritedMembership Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("input"u8, out var inputProperty))
@@ -361,7 +361,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the input Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the input Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("intersectingType"u8, out var intersectingTypeProperty))
@@ -381,7 +381,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the intersectingType Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the intersectingType Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
@@ -393,7 +393,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isAbstract Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isAbstract Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isConjugated"u8, out var isConjugatedProperty))
@@ -405,7 +405,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isConjugated Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isConjugated Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
@@ -417,7 +417,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImplied Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImplied Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -429,7 +429,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isLibraryElement"u8, out var isLibraryElementProperty))
@@ -441,7 +441,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isLibraryElement Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isLibraryElement Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
@@ -453,7 +453,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isSufficient Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isSufficient Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("member"u8, out var memberProperty))
@@ -473,7 +473,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the member Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the member Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("membership"u8, out var membershipProperty))
@@ -493,7 +493,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the membership Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the membership Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("multiplicity"u8, out var multiplicityProperty))
@@ -517,7 +517,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the multiplicity Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the multiplicity Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("name"u8, out var nameProperty))
@@ -526,7 +526,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the name Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the name Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("output"u8, out var outputProperty))
@@ -546,7 +546,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the output Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the output Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedAnnotation"u8, out var ownedAnnotationProperty))
@@ -566,7 +566,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedAnnotation Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedAnnotation Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedConjugator"u8, out var ownedConjugatorProperty))
@@ -590,7 +590,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedConjugator Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedConjugator Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedDifferencing"u8, out var ownedDifferencingProperty))
@@ -610,7 +610,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedDifferencing Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedDifferencing Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedDisjoining"u8, out var ownedDisjoiningProperty))
@@ -630,7 +630,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedDisjoining Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedDisjoining Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedElement"u8, out var ownedElementProperty))
@@ -650,7 +650,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedElement Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedElement Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedEndFeature"u8, out var ownedEndFeatureProperty))
@@ -670,7 +670,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedEndFeature Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedEndFeature Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeature"u8, out var ownedFeatureProperty))
@@ -690,7 +690,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeature Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeature Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedFeatureMembership"u8, out var ownedFeatureMembershipProperty))
@@ -710,7 +710,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedFeatureMembership Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedFeatureMembership Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedImport"u8, out var ownedImportProperty))
@@ -730,7 +730,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedImport Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedImport Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedIntersecting"u8, out var ownedIntersectingProperty))
@@ -750,7 +750,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedIntersecting Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedIntersecting Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMember"u8, out var ownedMemberProperty))
@@ -770,7 +770,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMember Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMember Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedMembership"u8, out var ownedMembershipProperty))
@@ -790,7 +790,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedMembership Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedMembership Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
@@ -810,7 +810,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelatedElement Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -830,7 +830,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedSpecialization"u8, out var ownedSpecializationProperty))
@@ -850,7 +850,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedSpecialization Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedSpecialization Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedSubclassification"u8, out var ownedSubclassificationProperty))
@@ -870,7 +870,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedSubclassification Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedSubclassification Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedUnioning"u8, out var ownedUnioningProperty))
@@ -890,7 +890,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedUnioning Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedUnioning Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owner"u8, out var ownerProperty))
@@ -914,7 +914,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owner Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owner Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningMembership"u8, out var owningMembershipProperty))
@@ -938,7 +938,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningMembership Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningMembership Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningNamespace"u8, out var owningNamespaceProperty))
@@ -962,7 +962,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningNamespace Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningNamespace Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
@@ -986,7 +986,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelatedElement Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -1010,7 +1010,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("qualifiedName"u8, out var qualifiedNameProperty))
@@ -1019,7 +1019,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the qualifiedName Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the qualifiedName Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("relatedType"u8, out var relatedTypeProperty))
@@ -1039,7 +1039,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the relatedType Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the relatedType Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("shortName"u8, out var shortNameProperty))
@@ -1048,7 +1048,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the shortName Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the shortName Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("sourceType"u8, out var sourceTypeProperty))
@@ -1072,7 +1072,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the sourceType Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the sourceType Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("targetType"u8, out var targetTypeProperty))
@@ -1092,7 +1092,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the targetType Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the targetType Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("textualRepresentation"u8, out var textualRepresentationProperty))
@@ -1112,7 +1112,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the textualRepresentation Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the textualRepresentation Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("unioningType"u8, out var unioningTypeProperty))
@@ -1132,7 +1132,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the unioningType Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the unioningType Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
         }
@@ -1166,7 +1166,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the aliasIds Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the aliasIds Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredName"u8, out var declaredNameProperty))
@@ -1175,7 +1175,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredName Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredName Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("declaredShortName"u8, out var declaredShortNameProperty))
@@ -1184,7 +1184,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the declaredShortName Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the declaredShortName Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("elementId"u8, out var elementIdProperty))
@@ -1198,7 +1198,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the elementId Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the elementId Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isAbstract"u8, out var isAbstractProperty))
@@ -1210,7 +1210,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isAbstract Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isAbstract Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImplied"u8, out var isImpliedProperty))
@@ -1222,7 +1222,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImplied Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImplied Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isImpliedIncluded"u8, out var isImpliedIncludedProperty))
@@ -1234,7 +1234,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isImpliedIncluded Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isImpliedIncluded Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("isSufficient"u8, out var isSufficientProperty))
@@ -1246,7 +1246,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the isSufficient Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the isSufficient Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelatedElement"u8, out var ownedRelatedElementProperty))
@@ -1266,7 +1266,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelatedElement Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelatedElement Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("ownedRelationship"u8, out var ownedRelationshipProperty))
@@ -1286,7 +1286,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the ownedRelationship Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the ownedRelationship Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelatedElement"u8, out var owningRelatedElementProperty))
@@ -1310,7 +1310,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelatedElement Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelatedElement Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("owningRelationship"u8, out var owningRelationshipProperty))
@@ -1334,7 +1334,7 @@ namespace SysML2.NET.Serializer.Json.Core.DTO
             }
             else
             {
-                logger.LogDebug("the owningRelationship Json property was not found in the Association: { Id }", dtoInstance.Id);
+                logger.LogDebug("the owningRelationship Json property was not found in the Association: {Id}", dtoInstance.Id);
             }
 
         }

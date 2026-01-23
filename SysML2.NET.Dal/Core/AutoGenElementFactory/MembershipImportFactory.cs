@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="MembershipImportFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Root.Namespaces.MembershipImport"/> based on a <see cref="Core.DTO.Root.Namespaces.MembershipImport"/>
     /// </summary>
-    public class MembershipImportFactory
+    public static class MembershipImportFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Root.Namespaces.MembershipImport"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Root.Namespaces.MembershipImport Create(Core.DTO.Root.Namespaces.MembershipImport dto)
+        public static Core.POCO.Root.Namespaces.MembershipImport Create(Core.DTO.Root.Namespaces.MembershipImport dto)
         {
             if (dto == null)
             {

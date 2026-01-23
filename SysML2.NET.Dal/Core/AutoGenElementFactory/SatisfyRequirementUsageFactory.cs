@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="SatisfyRequirementUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Requirements.SatisfyRequirementUsage"/> based on a <see cref="Core.DTO.Systems.Requirements.SatisfyRequirementUsage"/>
     /// </summary>
-    public class SatisfyRequirementUsageFactory
+    public static class SatisfyRequirementUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.SatisfyRequirementUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Requirements.SatisfyRequirementUsage Create(Core.DTO.Systems.Requirements.SatisfyRequirementUsage dto)
+        public static Core.POCO.Systems.Requirements.SatisfyRequirementUsage Create(Core.DTO.Systems.Requirements.SatisfyRequirementUsage dto)
         {
             if (dto == null)
             {

@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO.Kernel.Packages;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="Package"/> class
+    /// A static class that provides extension methods for the <see cref="Core.POCO.Kernel.Packages.Package"/> class
     /// </summary>
     public static class PackageExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="Package"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="Core.POCO.Kernel.Packages.Package"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Package"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Packages.Package"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Package"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Packages.Package"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -91,17 +91,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Package"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Core.POCO.Kernel.Packages.Package"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Package"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Packages.Package"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Package"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Packages.Package"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
@@ -151,10 +151,13 @@ namespace SysML2.NET.Dal
         /// <param name="poco">
         /// The subject <see cref="Core.POCO.Kernel.Packages.Package"/> from which a DTO is to be created
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Kernel.Packages.Package"/>
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Kernel.Packages.Package"/>
         /// </returns>
-        public static Core.DTO.Kernel.Packages.Package ToDto(this Core.POCO.Kernel.Packages.Package poco)
+        public static Core.DTO.Kernel.Packages.Package ToDto(this Core.POCO.Kernel.Packages.Package poco, bool includeDerivedProperties = false)
         {
             var dto = new Core.DTO.Kernel.Packages.Package();
 
@@ -166,6 +169,28 @@ namespace SysML2.NET.Dal
             dto.IsImpliedIncluded = poco.IsImpliedIncluded;
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            if (includeDerivedProperties)
+            {
+                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
+                dto.filterCondition = poco.filterCondition.Select(x => x.Id).ToList();
+                dto.importedMembership = poco.importedMembership.Select(x => x.Id).ToList();
+                dto.isLibraryElement = poco.isLibraryElement;
+                dto.member = poco.member.Select(x => x.Id).ToList();
+                dto.membership = poco.membership.Select(x => x.Id).ToList();
+                dto.name = poco.name;
+                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
+                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
+                dto.ownedImport = poco.ownedImport.Select(x => x.Id).ToList();
+                dto.ownedMember = poco.ownedMember.Select(x => x.Id).ToList();
+                dto.ownedMembership = poco.ownedMembership.Select(x => x.Id).ToList();
+                dto.owner = poco.owner?.Id;
+                dto.owningMembership = poco.owningMembership?.Id;
+                dto.owningNamespace = poco.owningNamespace?.Id;
+                dto.qualifiedName = poco.qualifiedName;
+                dto.shortName = poco.shortName;
+                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+            }
 
             return dto;
         }

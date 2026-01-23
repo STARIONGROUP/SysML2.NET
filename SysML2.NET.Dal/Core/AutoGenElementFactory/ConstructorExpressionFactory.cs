@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ConstructorExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.ConstructorExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.ConstructorExpression"/>
     /// </summary>
-    public class ConstructorExpressionFactory
+    public static class ConstructorExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.ConstructorExpression"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.ConstructorExpression Create(Core.DTO.Kernel.Expressions.ConstructorExpression dto)
+        public static Core.POCO.Kernel.Expressions.ConstructorExpression Create(Core.DTO.Kernel.Expressions.ConstructorExpression dto)
         {
             if (dto == null)
             {

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="WhileLoopActionUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.WhileLoopActionUsage"/> based on a <see cref="Core.DTO.Systems.Actions.WhileLoopActionUsage"/>
     /// </summary>
-    public class WhileLoopActionUsageFactory
+    public static class WhileLoopActionUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.WhileLoopActionUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Actions.WhileLoopActionUsage Create(Core.DTO.Systems.Actions.WhileLoopActionUsage dto)
+        public static Core.POCO.Systems.Actions.WhileLoopActionUsage Create(Core.DTO.Systems.Actions.WhileLoopActionUsage dto)
         {
             if (dto == null)
             {

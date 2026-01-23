@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ConjugatedPortTypingFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Ports.ConjugatedPortTyping"/> based on a <see cref="Core.DTO.Systems.Ports.ConjugatedPortTyping"/>
     /// </summary>
-    public class ConjugatedPortTypingFactory
+    public static class ConjugatedPortTypingFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Ports.ConjugatedPortTyping"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Ports.ConjugatedPortTyping Create(Core.DTO.Systems.Ports.ConjugatedPortTyping dto)
+        public static Core.POCO.Systems.Ports.ConjugatedPortTyping Create(Core.DTO.Systems.Ports.ConjugatedPortTyping dto)
         {
             if (dto == null)
             {

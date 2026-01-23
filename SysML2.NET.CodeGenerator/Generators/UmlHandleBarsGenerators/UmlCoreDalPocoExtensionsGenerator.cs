@@ -185,6 +185,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             this.RegisterTemplate(ElementExtensionsTemplateName);
             this.RegisterTemplate(PocoExtensionsTemplateName);
+            this.RegisterPartialTemplate("core-dal-poco-uml-partial-extensions");
         }
 
         /// <summary>

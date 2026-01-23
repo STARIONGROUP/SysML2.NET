@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="VerificationCaseUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.VerificationCases.VerificationCaseUsage"/> based on a <see cref="Core.DTO.Systems.VerificationCases.VerificationCaseUsage"/>
     /// </summary>
-    public class VerificationCaseUsageFactory
+    public static class VerificationCaseUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.VerificationCases.VerificationCaseUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.VerificationCases.VerificationCaseUsage Create(Core.DTO.Systems.VerificationCases.VerificationCaseUsage dto)
+        public static Core.POCO.Systems.VerificationCases.VerificationCaseUsage Create(Core.DTO.Systems.VerificationCases.VerificationCaseUsage dto)
         {
             if (dto == null)
             {

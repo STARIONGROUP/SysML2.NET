@@ -39,7 +39,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         {
             var directoryInfo = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
 
-            var path = Path.Combine("UML", "_SysML2.NET.Core.AutoGenPocoExtension");
+            var path = Path.Combine("UML", "_SysML2.NET.Dal.AutoGenPocoExtension");
 
             this.umlPocoExtensionDirectoryInfo = directoryInfo.CreateSubdirectory(path);
             this.umlCoreDalPocoExtensionsGenerator = new UmlCoreDalPocoExtensionsGenerator();

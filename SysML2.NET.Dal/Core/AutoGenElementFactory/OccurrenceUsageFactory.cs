@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="OccurrenceUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Occurrences.OccurrenceUsage"/> based on a <see cref="Core.DTO.Systems.Occurrences.OccurrenceUsage"/>
     /// </summary>
-    public class OccurrenceUsageFactory
+    public static class OccurrenceUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Occurrences.OccurrenceUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Occurrences.OccurrenceUsage Create(Core.DTO.Systems.Occurrences.OccurrenceUsage dto)
+        public static Core.POCO.Systems.Occurrences.OccurrenceUsage Create(Core.DTO.Systems.Occurrences.OccurrenceUsage dto)
         {
             if (dto == null)
             {

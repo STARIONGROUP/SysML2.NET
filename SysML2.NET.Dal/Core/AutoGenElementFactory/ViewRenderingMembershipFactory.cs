@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ViewRenderingMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Views.ViewRenderingMembership"/> based on a <see cref="Core.DTO.Systems.Views.ViewRenderingMembership"/>
     /// </summary>
-    public class ViewRenderingMembershipFactory
+    public static class ViewRenderingMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Views.ViewRenderingMembership"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Views.ViewRenderingMembership Create(Core.DTO.Systems.Views.ViewRenderingMembership dto)
+        public static Core.POCO.Systems.Views.ViewRenderingMembership Create(Core.DTO.Systems.Views.ViewRenderingMembership dto)
         {
             if (dto == null)
             {

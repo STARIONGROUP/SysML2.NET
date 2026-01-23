@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="PortConjugationFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Ports.PortConjugation"/> based on a <see cref="Core.DTO.Systems.Ports.PortConjugation"/>
     /// </summary>
-    public class PortConjugationFactory
+    public static class PortConjugationFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Ports.PortConjugation"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Ports.PortConjugation Create(Core.DTO.Systems.Ports.PortConjugation dto)
+        public static Core.POCO.Systems.Ports.PortConjugation Create(Core.DTO.Systems.Ports.PortConjugation dto)
         {
             if (dto == null)
             {

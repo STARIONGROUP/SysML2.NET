@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="InterfaceUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Interfaces.InterfaceUsage"/> based on a <see cref="Core.DTO.Systems.Interfaces.InterfaceUsage"/>
     /// </summary>
-    public class InterfaceUsageFactory
+    public static class InterfaceUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Interfaces.InterfaceUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Interfaces.InterfaceUsage Create(Core.DTO.Systems.Interfaces.InterfaceUsage dto)
+        public static Core.POCO.Systems.Interfaces.InterfaceUsage Create(Core.DTO.Systems.Interfaces.InterfaceUsage dto)
         {
             if (dto == null)
             {

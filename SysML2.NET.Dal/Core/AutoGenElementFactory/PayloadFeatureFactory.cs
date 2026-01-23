@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="PayloadFeatureFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Interactions.PayloadFeature"/> based on a <see cref="Core.DTO.Kernel.Interactions.PayloadFeature"/>
     /// </summary>
-    public class PayloadFeatureFactory
+    public static class PayloadFeatureFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Interactions.PayloadFeature"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Interactions.PayloadFeature Create(Core.DTO.Kernel.Interactions.PayloadFeature dto)
+        public static Core.POCO.Kernel.Interactions.PayloadFeature Create(Core.DTO.Kernel.Interactions.PayloadFeature dto)
         {
             if (dto == null)
             {

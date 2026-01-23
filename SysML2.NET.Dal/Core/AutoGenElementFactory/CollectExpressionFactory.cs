@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="CollectExpressionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Expressions.CollectExpression"/> based on a <see cref="Core.DTO.Kernel.Expressions.CollectExpression"/>
     /// </summary>
-    public class CollectExpressionFactory
+    public static class CollectExpressionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Expressions.CollectExpression"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Expressions.CollectExpression Create(Core.DTO.Kernel.Expressions.CollectExpression dto)
+        public static Core.POCO.Kernel.Expressions.CollectExpression Create(Core.DTO.Kernel.Expressions.CollectExpression dto)
         {
             if (dto == null)
             {

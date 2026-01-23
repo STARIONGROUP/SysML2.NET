@@ -32,6 +32,7 @@ namespace SySML2.NET.REST.Tests
     /// <summary>
     /// Suite of tests for the <see cref="RestClient"/> class
     /// </summary>
+    [TestFixture]
     public class RestClientTestFixture
     {
         private string baseUri;

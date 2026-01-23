@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ExhibitStateUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.States.ExhibitStateUsage"/> based on a <see cref="Core.DTO.Systems.States.ExhibitStateUsage"/>
     /// </summary>
-    public class ExhibitStateUsageFactory
+    public static class ExhibitStateUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.States.ExhibitStateUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.States.ExhibitStateUsage Create(Core.DTO.Systems.States.ExhibitStateUsage dto)
+        public static Core.POCO.Systems.States.ExhibitStateUsage Create(Core.DTO.Systems.States.ExhibitStateUsage dto)
         {
             if (dto == null)
             {

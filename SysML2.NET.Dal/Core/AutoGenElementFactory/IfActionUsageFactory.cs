@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="IfActionUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.IfActionUsage"/> based on a <see cref="Core.DTO.Systems.Actions.IfActionUsage"/>
     /// </summary>
-    public class IfActionUsageFactory
+    public static class IfActionUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.IfActionUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Actions.IfActionUsage Create(Core.DTO.Systems.Actions.IfActionUsage dto)
+        public static Core.POCO.Systems.Actions.IfActionUsage Create(Core.DTO.Systems.Actions.IfActionUsage dto)
         {
             if (dto == null)
             {

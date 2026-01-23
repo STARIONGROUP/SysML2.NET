@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ElementFilterMembershipFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Packages.ElementFilterMembership"/> based on a <see cref="Core.DTO.Kernel.Packages.ElementFilterMembership"/>
     /// </summary>
-    public class ElementFilterMembershipFactory
+    public static class ElementFilterMembershipFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Packages.ElementFilterMembership"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Packages.ElementFilterMembership Create(Core.DTO.Kernel.Packages.ElementFilterMembership dto)
+        public static Core.POCO.Kernel.Packages.ElementFilterMembership Create(Core.DTO.Kernel.Packages.ElementFilterMembership dto)
         {
             if (dto == null)
             {

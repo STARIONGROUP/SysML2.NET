@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="MetadataDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Metadata.MetadataDefinition"/> based on a <see cref="Core.DTO.Systems.Metadata.MetadataDefinition"/>
     /// </summary>
-    public class MetadataDefinitionFactory
+    public static class MetadataDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Metadata.MetadataDefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Metadata.MetadataDefinition Create(Core.DTO.Systems.Metadata.MetadataDefinition dto)
+        public static Core.POCO.Systems.Metadata.MetadataDefinition Create(Core.DTO.Systems.Metadata.MetadataDefinition dto)
         {
             if (dto == null)
             {

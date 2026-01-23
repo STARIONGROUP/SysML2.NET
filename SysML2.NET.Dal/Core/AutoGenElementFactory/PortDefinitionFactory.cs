@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="PortDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Ports.PortDefinition"/> based on a <see cref="Core.DTO.Systems.Ports.PortDefinition"/>
     /// </summary>
-    public class PortDefinitionFactory
+    public static class PortDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Ports.PortDefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Ports.PortDefinition Create(Core.DTO.Systems.Ports.PortDefinition dto)
+        public static Core.POCO.Systems.Ports.PortDefinition Create(Core.DTO.Systems.Ports.PortDefinition dto)
         {
             if (dto == null)
             {

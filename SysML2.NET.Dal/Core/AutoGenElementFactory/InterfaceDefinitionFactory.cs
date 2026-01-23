@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="InterfaceDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Interfaces.InterfaceDefinition"/> based on a <see cref="Core.DTO.Systems.Interfaces.InterfaceDefinition"/>
     /// </summary>
-    public class InterfaceDefinitionFactory
+    public static class InterfaceDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Interfaces.InterfaceDefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Interfaces.InterfaceDefinition Create(Core.DTO.Systems.Interfaces.InterfaceDefinition dto)
+        public static Core.POCO.Systems.Interfaces.InterfaceDefinition Create(Core.DTO.Systems.Interfaces.InterfaceDefinition dto)
         {
             if (dto == null)
             {

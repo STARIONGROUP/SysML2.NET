@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AttributeUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Attributes.AttributeUsage"/> based on a <see cref="Core.DTO.Systems.Attributes.AttributeUsage"/>
     /// </summary>
-    public class AttributeUsageFactory
+    public static class AttributeUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Attributes.AttributeUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Attributes.AttributeUsage Create(Core.DTO.Systems.Attributes.AttributeUsage dto)
+        public static Core.POCO.Systems.Attributes.AttributeUsage Create(Core.DTO.Systems.Attributes.AttributeUsage dto)
         {
             if (dto == null)
             {

@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AssociationStructureFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Kernel.Associations.AssociationStructure"/> based on a <see cref="Core.DTO.Kernel.Associations.AssociationStructure"/>
     /// </summary>
-    public class AssociationStructureFactory
+    public static class AssociationStructureFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Kernel.Associations.AssociationStructure"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Kernel.Associations.AssociationStructure Create(Core.DTO.Kernel.Associations.AssociationStructure dto)
+        public static Core.POCO.Kernel.Associations.AssociationStructure Create(Core.DTO.Kernel.Associations.AssociationStructure dto)
         {
             if (dto == null)
             {

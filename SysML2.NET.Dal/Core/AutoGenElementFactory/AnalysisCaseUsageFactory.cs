@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="AnalysisCaseUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.AnalysisCases.AnalysisCaseUsage"/> based on a <see cref="Core.DTO.Systems.AnalysisCases.AnalysisCaseUsage"/>
     /// </summary>
-    public class AnalysisCaseUsageFactory
+    public static class AnalysisCaseUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.AnalysisCases.AnalysisCaseUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.AnalysisCases.AnalysisCaseUsage Create(Core.DTO.Systems.AnalysisCases.AnalysisCaseUsage dto)
+        public static Core.POCO.Systems.AnalysisCases.AnalysisCaseUsage Create(Core.DTO.Systems.AnalysisCases.AnalysisCaseUsage dto)
         {
             if (dto == null)
             {

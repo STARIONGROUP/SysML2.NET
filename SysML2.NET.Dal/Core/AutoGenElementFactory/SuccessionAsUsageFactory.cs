@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="SuccessionAsUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Connections.SuccessionAsUsage"/> based on a <see cref="Core.DTO.Systems.Connections.SuccessionAsUsage"/>
     /// </summary>
-    public class SuccessionAsUsageFactory
+    public static class SuccessionAsUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Connections.SuccessionAsUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Connections.SuccessionAsUsage Create(Core.DTO.Systems.Connections.SuccessionAsUsage dto)
+        public static Core.POCO.Systems.Connections.SuccessionAsUsage Create(Core.DTO.Systems.Connections.SuccessionAsUsage dto)
         {
             if (dto == null)
             {

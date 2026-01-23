@@ -32,20 +32,20 @@ namespace SysML2.NET.Dal
     using Core.POCO.Kernel.Connectors;
 
     /// <summary>
-    /// A static class that provides extension methods for the <see cref="Connector"/> class
+    /// A static class that provides extension methods for the <see cref="Core.POCO.Kernel.Connectors.Connector"/> class
     /// </summary>
     public static class ConnectorExtensions
     {
         /// <summary>
-        /// Updates the value properties of the <see cref="Connector"/> by setting the value equal to that of the dto
+        /// Updates the value properties of the <see cref="Core.POCO.Kernel.Connectors.Connector"/> by setting the value equal to that of the dto
         /// Removes deleted objects from the reference properties and returns the unique identifiers
         /// of the objects that have been removed from contained properties
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Connector"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Connectors.Connector"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Connector"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Connectors.Connector"/> with
         /// </param>
         /// <returns>
         /// The unique identifiers of the objects that have been removed from contained properties
@@ -124,17 +124,17 @@ namespace SysML2.NET.Dal
         }
 
         /// <summary>
-        /// Updates the Reference properties of the <see cref="Connector"/> using the data (identifiers) encapsulated in the DTO
+        /// Updates the Reference properties of the <see cref="Core.POCO.Kernel.Connectors.Connector"/> using the data (identifiers) encapsulated in the DTO
         /// and the provided cache to find the referenced object.
         /// </summary>
         /// <param name="poco">
-        /// The <see cref="Connector"/> that is to be updated
+        /// The <see cref="Core.POCO.Kernel.Connectors.Connector"/> that is to be updated
         /// </param>
         /// <param name="dto">
-        /// The DTO that is used to update the <see cref="Connector"/> with
+        /// The DTO that is used to update the <see cref="Core.DTO.Kernel.Connectors.Connector"/> with
         /// </param>
         /// <param name="cache">
-        /// The <see cref="ConcurrentDictionary{Guid, Lazy{Core.POCO.Root.Elements.IElement}}"/> that contains the
+        /// The <see cref="ConcurrentDictionary{Guid, Lazy}"/> that contains the
         /// <see cref="Core.POCO.Root.Elements.IElement"/>s that are know and cached.
         /// </param>
         /// <exception cref="ArgumentNullException"></exception>
@@ -163,7 +163,7 @@ namespace SysML2.NET.Dal
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelatedElement.Add((Core.POCO.Root.Elements.IElement)lazyPoco.Value);
+                    poco.OwnedRelatedElement.Add(lazyPoco.Value);
                 }
             }
 
@@ -179,7 +179,7 @@ namespace SysML2.NET.Dal
 
             if (dto.OwningRelatedElement.HasValue && cache.TryGetValue(dto.OwningRelatedElement.Value, out lazyPoco))
             {
-                poco.OwningRelatedElement = (Core.POCO.Root.Elements.IElement)lazyPoco.Value;
+                poco.OwningRelatedElement = lazyPoco.Value;
             }
             else
             {
@@ -203,10 +203,13 @@ namespace SysML2.NET.Dal
         /// <param name="poco">
         /// The subject <see cref="Core.POCO.Kernel.Connectors.Connector"/> from which a DTO is to be created
         /// </param>
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be mapped during the creation of the <see cref="Core.DTO.Kernel.Connectors.Connector"/>
+        /// </param>
         /// <returns>
         /// An instance of <see cref="Core.POCO.Kernel.Connectors.Connector"/>
         /// </returns>
-        public static Core.DTO.Kernel.Connectors.Connector ToDto(this Core.POCO.Kernel.Connectors.Connector poco)
+        public static Core.DTO.Kernel.Connectors.Connector ToDto(this Core.POCO.Kernel.Connectors.Connector poco, bool includeDerivedProperties = false)
         {
             var dto = new Core.DTO.Kernel.Connectors.Connector();
 
@@ -232,6 +235,69 @@ namespace SysML2.NET.Dal
             dto.OwnedRelationship = poco.OwnedRelationship.Select(x => x.Id).ToList();
             dto.OwningRelatedElement = poco.OwningRelatedElement?.Id;
             dto.OwningRelationship = poco.OwningRelationship?.Id;
+
+            if (includeDerivedProperties)
+            {
+                dto.association = poco.association.Select(x => x.Id).ToList();
+                dto.chainingFeature = poco.chainingFeature.Select(x => x.Id).ToList();
+                dto.connectorEnd = poco.connectorEnd.Select(x => x.Id).ToList();
+                dto.crossFeature = poco.crossFeature?.Id;
+                dto.defaultFeaturingType = poco.defaultFeaturingType?.Id;
+                dto.differencingType = poco.differencingType.Select(x => x.Id).ToList();
+                dto.directedFeature = poco.directedFeature.Select(x => x.Id).ToList();
+                dto.documentation = poco.documentation.Select(x => x.Id).ToList();
+                dto.endOwningType = poco.endOwningType?.Id;
+                dto.feature = poco.feature.Select(x => x.Id).ToList();
+                dto.featureMembership = poco.featureMembership.Select(x => x.Id).ToList();
+                dto.featureTarget = poco.featureTarget.Id;
+                dto.featuringType = poco.featuringType.Select(x => x.Id).ToList();
+                dto.importedMembership = poco.importedMembership.Select(x => x.Id).ToList();
+                dto.inheritedFeature = poco.inheritedFeature.Select(x => x.Id).ToList();
+                dto.inheritedMembership = poco.inheritedMembership.Select(x => x.Id).ToList();
+                dto.input = poco.input.Select(x => x.Id).ToList();
+                dto.intersectingType = poco.intersectingType.Select(x => x.Id).ToList();
+                dto.isConjugated = poco.isConjugated;
+                dto.isLibraryElement = poco.isLibraryElement;
+                dto.member = poco.member.Select(x => x.Id).ToList();
+                dto.membership = poco.membership.Select(x => x.Id).ToList();
+                dto.multiplicity = poco.multiplicity?.Id;
+                dto.name = poco.name;
+                dto.output = poco.output.Select(x => x.Id).ToList();
+                dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
+                dto.ownedConjugator = poco.ownedConjugator?.Id;
+                dto.ownedCrossSubsetting = poco.ownedCrossSubsetting?.Id;
+                dto.ownedDifferencing = poco.ownedDifferencing.Select(x => x.Id).ToList();
+                dto.ownedDisjoining = poco.ownedDisjoining.Select(x => x.Id).ToList();
+                dto.ownedElement = poco.ownedElement.Select(x => x.Id).ToList();
+                dto.ownedEndFeature = poco.ownedEndFeature.Select(x => x.Id).ToList();
+                dto.ownedFeature = poco.ownedFeature.Select(x => x.Id).ToList();
+                dto.ownedFeatureChaining = poco.ownedFeatureChaining.Select(x => x.Id).ToList();
+                dto.ownedFeatureInverting = poco.ownedFeatureInverting.Select(x => x.Id).ToList();
+                dto.ownedFeatureMembership = poco.ownedFeatureMembership.Select(x => x.Id).ToList();
+                dto.ownedImport = poco.ownedImport.Select(x => x.Id).ToList();
+                dto.ownedIntersecting = poco.ownedIntersecting.Select(x => x.Id).ToList();
+                dto.ownedMember = poco.ownedMember.Select(x => x.Id).ToList();
+                dto.ownedMembership = poco.ownedMembership.Select(x => x.Id).ToList();
+                dto.ownedRedefinition = poco.ownedRedefinition.Select(x => x.Id).ToList();
+                dto.ownedReferenceSubsetting = poco.ownedReferenceSubsetting?.Id;
+                dto.ownedSpecialization = poco.ownedSpecialization.Select(x => x.Id).ToList();
+                dto.ownedSubsetting = poco.ownedSubsetting.Select(x => x.Id).ToList();
+                dto.ownedTypeFeaturing = poco.ownedTypeFeaturing.Select(x => x.Id).ToList();
+                dto.ownedTyping = poco.ownedTyping.Select(x => x.Id).ToList();
+                dto.ownedUnioning = poco.ownedUnioning.Select(x => x.Id).ToList();
+                dto.owner = poco.owner?.Id;
+                dto.owningFeatureMembership = poco.owningFeatureMembership?.Id;
+                dto.owningMembership = poco.owningMembership?.Id;
+                dto.owningNamespace = poco.owningNamespace?.Id;
+                dto.owningType = poco.owningType?.Id;
+                dto.qualifiedName = poco.qualifiedName;
+                dto.relatedFeature = poco.relatedFeature.Select(x => x.Id).ToList();
+                dto.shortName = poco.shortName;
+                dto.sourceFeature = poco.sourceFeature?.Id;
+                dto.targetFeature = poco.targetFeature.Select(x => x.Id).ToList();
+                dto.textualRepresentation = poco.textualRepresentation.Select(x => x.Id).ToList();
+                dto.unioningType = poco.unioningType.Select(x => x.Id).ToList();
+            }
 
             return dto;
         }

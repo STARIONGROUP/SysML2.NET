@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ConcernUsageFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Requirements.ConcernUsage"/> based on a <see cref="Core.DTO.Systems.Requirements.ConcernUsage"/>
     /// </summary>
-    public class ConcernUsageFactory
+    public static class ConcernUsageFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Requirements.ConcernUsage"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Requirements.ConcernUsage Create(Core.DTO.Systems.Requirements.ConcernUsage dto)
+        public static Core.POCO.Systems.Requirements.ConcernUsage Create(Core.DTO.Systems.Requirements.ConcernUsage dto)
         {
             if (dto == null)
             {

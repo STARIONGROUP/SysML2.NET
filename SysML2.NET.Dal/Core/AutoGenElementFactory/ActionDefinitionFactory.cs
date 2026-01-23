@@ -30,7 +30,7 @@ namespace SysML2.NET.Dal
     /// The purpose of the <see cref="ActionDefinitionFactory"/> is to create a new instance of a
     /// <see cref="Core.POCO.Systems.Actions.ActionDefinition"/> based on a <see cref="Core.DTO.Systems.Actions.ActionDefinition"/>
     /// </summary>
-    public class ActionDefinitionFactory
+    public static class ActionDefinitionFactory
     {
         /// <summary>
         /// Creates an instance of the <see cref="Core.POCO.Systems.Actions.ActionDefinition"/> and sets the value properties
@@ -45,7 +45,7 @@ namespace SysML2.NET.Dal
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public Core.POCO.Systems.Actions.ActionDefinition Create(Core.DTO.Systems.Actions.ActionDefinition dto)
+        public static Core.POCO.Systems.Actions.ActionDefinition Create(Core.DTO.Systems.Actions.ActionDefinition dto)
         {
             if (dto == null)
             {
