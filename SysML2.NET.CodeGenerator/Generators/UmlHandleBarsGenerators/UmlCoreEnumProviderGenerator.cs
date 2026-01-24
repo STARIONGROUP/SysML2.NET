@@ -117,6 +117,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             DecoratorHelper.RegisterDecoratorHelper(this.Handlebars);
 
             EnumerationLiteralHelper.RegisterTypeNameHelper(this.Handlebars);
+            EnumerationHelper.RegisterEnumerationHelper(this.Handlebars);
             ClassHelper.RegisterClassHelper(this.Handlebars);
         }
 

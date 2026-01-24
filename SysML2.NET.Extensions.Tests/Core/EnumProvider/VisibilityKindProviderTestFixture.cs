@@ -21,6 +21,7 @@
 namespace SysML2.NET.Extensions.Tests.Core.EnumProvider
 {
     using System;
+    using System.Buffers;
 
     using SysML2.NET.Extensions.Core;
 
@@ -63,6 +64,93 @@ namespace SysML2.NET.Extensions.Tests.Core.EnumProvider
         public void Verify_that_enumvalue_throws_exception_from_unknown_bytes()
         {
             Assert.That(() => VisibilityKindProvider.Parse("Starion"u8), Throws.ArgumentException);
+        }
+
+        [TestCase(VisibilityKind.Private, "private")]
+        [TestCase(VisibilityKind.Protected, "protected")]
+        [TestCase(VisibilityKind.Public, "public")]
+        public void Verify_that_ToUtf8LowerBytes_returns_expected_bytes(VisibilityKind kind, string expected)
+        {
+            ReadOnlySpan<byte> bytes = VisibilityKindProvider.ToUtf8LowerBytes(kind);
+
+            Assert.That(bytes.SequenceEqual(System.Text.Encoding.UTF8.GetBytes(expected)), Is.True);
+        }
+
+        [Test]
+        public void Verify_that_ToUtf8LowerBytes_throws_for_undefined_value()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                _ = VisibilityKindProvider.ToUtf8LowerBytes((VisibilityKind)123456);
+            });
+        }
+
+        [TestCase("private", VisibilityKind.Private)]
+        [TestCase("protected", VisibilityKind.Protected)]
+        [TestCase("public", VisibilityKind.Public)]
+        public void Verify_that_Parse_ReadOnlySequence_single_segment_parses(string text, VisibilityKind expected)
+        {
+            var bytes = System.Text.Encoding.UTF8.GetBytes(text);
+            var seq = new ReadOnlySequence<byte>(bytes);
+
+            var actual = VisibilityKindProvider.Parse(in seq);
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCase("private", VisibilityKind.Private)]
+        [TestCase("protected", VisibilityKind.Protected)]
+        [TestCase("public", VisibilityKind.Public)]
+        public void Verify_that_Parse_ReadOnlySequence_multi_segment_parses(string text, VisibilityKind expected)
+        {
+            var bytes = System.Text.Encoding.UTF8.GetBytes(text);
+
+            // Force a multi-segment ReadOnlySequence by chaining two segments.
+            var split = Math.Max(1, bytes.Length / 2);
+            var first = new BufferSegment(bytes, 0, split);
+            var last = first.Append(bytes, split, bytes.Length - split);
+
+            var seq = new ReadOnlySequence<byte>(first, 0, last, last.Memory.Length);
+
+            var actual = VisibilityKindProvider.Parse(in seq);
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCase("")]
+        [TestCase("x")]
+        [TestCase("privat")]     // off by 1
+        [TestCase("PrivateX")]   // invalid
+        [TestCase("internal")]   // unsupported
+        [TestCase("protectedx")] // invalid (10 bytes)
+        public void Verify_that_Parse_ReadOnlySequence_throws_for_invalid(string text)
+        {
+            var bytes = System.Text.Encoding.UTF8.GetBytes(text);
+            var seq = new ReadOnlySequence<byte>(bytes);
+
+            Assert.Throws<ArgumentException>(() => VisibilityKindProvider.Parse(in seq));
+        }
+
+        /// <summary>
+        /// Minimal helper to create a multi-segment ReadOnlySequence{byte} for tests.
+        /// </summary>
+        private sealed class BufferSegment : ReadOnlySequenceSegment<byte>
+        {
+            public BufferSegment(byte[] buffer, int offset, int count)
+            {
+                Memory = new ReadOnlyMemory<byte>(buffer, offset, count);
+            }
+
+            public BufferSegment Append(byte[] buffer, int offset, int count)
+            {
+                var next = new BufferSegment(buffer, offset, count)
+                {
+                    RunningIndex = RunningIndex + Memory.Length
+                };
+
+                Next = next;
+                return next;
+            }
         }
     }
 }
