@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.CodeGenerator", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ACF2E7D6-C673-420D-88DC-3D7D5D283AD6}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		coverlet.runsettings = coverlet.runsettings
@@ -16,7 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NOTICE = NOTICE
 		Nuget.Config = Nuget.Config
 		README.md = README.md
-		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.CodeGenerator.Tests", "SysML2.NET.CodeGenerator.Tests\SysML2.NET.CodeGenerator.Tests.csproj", "{F7DCD458-E07C-42D5-8247-3A55202C90B6}"
@@ -57,6 +57,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Extensions", "SysML2.NET.Extensions\SysML2.NET.Extensions.csproj", "{3D15714B-3133-45F2-8C79-9BD4F5F05190}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Extensions.Tests", "SysML2.NET.Extensions.Tests\SysML2.NET.Extensions.Tests.csproj", "{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.MessagePack", "SysML2.NET.Serializer.MessagePack\SysML2.NET.Serializer.MessagePack.csproj", "{6916010A-72C8-4BF5-8BE0-624CA0C02B07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.MessagePack.Tests", "SysML2.NET.Serializer.MessagePack.Tests\SysML2.NET.Serializer.MessagePack.Tests.csproj", "{A6909F7B-D348-4F91-8E78-85605F36A628}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -128,6 +132,14 @@ Global
 		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69D5C7A7-9C2E-415F-949C-BB5BF2F87989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6916010A-72C8-4BF5-8BE0-624CA0C02B07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6916010A-72C8-4BF5-8BE0-624CA0C02B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6916010A-72C8-4BF5-8BE0-624CA0C02B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6916010A-72C8-4BF5-8BE0-624CA0C02B07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6909F7B-D348-4F91-8E78-85605F36A628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6909F7B-D348-4F91-8E78-85605F36A628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6909F7B-D348-4F91-8E78-85605F36A628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6909F7B-D348-4F91-8E78-85605F36A628}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

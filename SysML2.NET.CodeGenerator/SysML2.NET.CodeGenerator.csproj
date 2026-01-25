@@ -127,6 +127,9 @@
       <None Update="Templates\Uml\core-dto-interface-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Templates\Uml\core-dto-messagepackformatter-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Templates\Uml\core-enumeration-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -146,6 +149,18 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\Uml\core-json-enum-deserializer-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\core-messagepack-DataResolverGetFormatterHelper.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\core-messagepack-payload-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\core-messagepack-payloadfactory-uml-template.hbs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Templates\Uml\core-messagepack-payloadmessagepackformatter-uml-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Templates\Uml\core-poco-class-uml-template.hbs">

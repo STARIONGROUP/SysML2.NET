@@ -1,0 +1,206 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="PayloadFactory.cs" company="Starion Group S.A.">
+//
+//    Copyright 2022-2026 Starion Group S.A.
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.MessagePack.Core
+{
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.Common;
+
+    using SysML2.NET.Core.DTO.Root.Annotations;
+
+    /// <summary>
+    /// The purpose of the <see cref="PayloadFactory"/> class is to create an
+    /// instance of <see cref="Payload"/>
+    /// </summary>
+    internal static class PayloadFactory
+    {
+        /// <summary>
+        /// Creates an instance of <see cref="Payload"/> from the provided <see cref="IEnumerable{IData}"/>
+        /// </summary>
+        /// <param name="dataItems">
+        /// The <see cref="IEnumerable{IData}"/> on the bases of which the <see cref="Payload"/> will
+        /// be created
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="Payload"/>
+        /// </returns>
+        internal static Payload ToPayload(this IEnumerable<IData> dataItems)
+        {
+            if (dataItems == null)
+            {
+                throw new ArgumentNullException(nameof(dataItems));
+            }
+
+            var payload = new Payload
+            {
+                Created = DateTime.UtcNow,
+            };
+
+            // compute the capacity of each DTO type to optimize the size of the Payload properties
+            var capacity = new Dictionary<Type, int>(capacity: {{ Enumerable.Count this }});
+
+            foreach (var item in dataItems)
+            {
+                var type = item.GetType();
+                capacity.TryGetValue(type, out var current);
+                capacity[type] = current + 1;
+            }
+
+            // based on the computed capacity, set the size of each Payload property
+            {{#each this as | class |}}
+            SetCapacity(payload.{{class.Name}}, capacity, typeof(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{class.Name}}));
+            {{/each}}
+
+            // iterate through the dataItems and allocate to the appropriate Payload property
+            foreach (var dataItem in dataItems)
+            {
+                switch (dataItem)
+                {
+                    {{#each this as | class |}}
+                    case SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{class.Name}} {{String.LowerCaseFirstLetter class.Name}}Dto:
+                        payload.{{class.Name}}.Add({{String.LowerCaseFirstLetter class.Name}}Dto);
+                        break;
+                    {{/each}}
+                }
+            }
+
+            return payload;
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IEnumerable{IData}"/> from the provided <see cref="Payload"/>.
+        /// </summary>
+        /// <param name="payload">
+        /// The <see cref="Payload"/> that carries the <see cref="IData"/>s.
+        /// </param>
+        /// <returns>
+        /// an <see cref="IEnumerable{IData}"/>.
+        /// </returns>
+        internal static IEnumerable<IData> ToDataItems(this Payload payload)
+        {
+            if (payload == null)
+            {
+                throw new ArgumentNullException(nameof(payload));
+            }
+
+            var capacity = 0
+            {{#each this as | class |}}
+                + payload.{{class.Name}}.Count
+            {{/each}}
+            ;
+
+            var result = new List<IData>(capacity);
+
+            {{#each this as | class |}}
+            AddRange(result, payload.{{class.Name}});
+            {{/each}}
+
+            return result;
+        }
+
+        /// <summary>
+        /// Adds all elements from the specified source list to the target list
+        /// without incurring additional allocations or intermediate collections.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The concrete data type of the elements being added. The type must
+        /// implement <see cref="IData"/>.
+        /// </typeparam>
+        /// <param name="target">
+        /// The destination list that receives the elements.
+        /// </param>
+        /// <param name="source">
+        /// The source list whose elements are appended to the <paramref name="target"/> list.
+        /// </param>
+        /// <remarks>
+        /// This method is intentionally implemented using a <c>foreach</c> loop over
+        /// <see cref="List{T}"/> rather than calling <see cref="List{T}.AddRange(System.Collections.Generic.IEnumerable{T})"/>
+        /// in order to:
+        /// <list type="bullet">
+        /// <item>
+        /// Avoid unnecessary interface-based enumeration when aggregating heterogeneous
+        /// collections into a <see cref="List{IData}"/>.
+        /// </item>
+        /// <item>
+        /// Benefit from the struct-based enumerator used by <see cref="List{T}"/>,
+        /// which minimizes overhead in tight loops.
+        /// </item>
+        /// <item>
+        /// Centralize the <see cref="IData"/> constraint and casting logic in a single,
+        /// well-defined location.
+        /// </item>
+        /// </list>
+        /// This method is intended for high-throughput aggregation of DTO payloads
+        /// where predictable performance and minimal allocations are required.
+        /// </remarks>
+        private static void AddRange<T>(List<IData> target, List<T> source) where T : IData
+        {
+            foreach (var item in source)
+            {
+                target.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Ensures that the specified list has sufficient capacity to hold all
+        /// elements of the given runtime type without triggering internal resizing.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The element type of the <paramref name="list"/>.
+        /// </typeparam>
+        /// <param name="list">
+        /// The list whose <see cref="List{T}.Capacity"/> is adjusted, if required.
+        /// </param>
+        /// <param name="counts">
+        /// A lookup table mapping concrete runtime types to the number of elements
+        /// of that type present in the source collection.
+        /// </param>
+        /// <param name="key">
+        /// The concrete runtime <see cref="Type"/> corresponding to the elements
+        /// stored in the <paramref name="list"/>.
+        /// </param>
+        /// <remarks>
+        /// This method is used during payload construction to pre-size collections
+        /// based on a prior counting pass. Pre-sizing avoids repeated internal
+        /// reallocations and array copying that would otherwise occur when elements
+        /// are added incrementally.
+        /// <para/>
+        /// The capacity is only increased when the required size exceeds the current
+        /// capacity; existing capacity is never reduced.
+        /// </remarks>
+        private static void SetCapacity<T>(List<T> list, Dictionary<Type, int> counts, Type key)
+        {
+            if (counts.TryGetValue(key, out var required) && required > list.Capacity)
+            {
+                list.Capacity = required;
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

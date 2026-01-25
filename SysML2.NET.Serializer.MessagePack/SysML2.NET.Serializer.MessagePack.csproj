@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>12.0</LangVersion>
+        <Version>0.17.0</Version>
+        <Description>A .NET implementation of the OMG SysML v2 MessagePack serializer.</Description>
+        <PackageId>SysML2.NET.Serializer.MessagePack</PackageId>
+        <Company>Starion Group S.A.</Company>
+        <Copyright>Copyright © Starion Group S.A.</Copyright>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <Authors>Sam Gerené</Authors>
+        <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+        <PackageReleaseNotes>
+
+        </PackageReleaseNotes>
+        <PackageIcon>cdp4-icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GenerateSBOM>true</GenerateSBOM>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="PIM\**" />
+      <EmbeddedResource Remove="PIM\**" />
+      <None Remove="PIM\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MessagePack" Version="3.1.4" />
+        <PackageReference Include="System.IO.Pipelines" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.5" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SysML2.NET.Extensions\SysML2.NET.Extensions.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -18,10 +18,38 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Extensions\**" />
+      <EmbeddedResource Remove="Extensions\**" />
+      <None Remove="Extensions\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\AnnotatingElementMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\AssociationMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\DependencyMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\EnumerationDefinitionMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\FeatureMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\FeatureTypingMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\FlowMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\FramedConcernMembershipMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\LiteralIntegerMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\LiteralRationalMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\MembershipMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\MultiplicityRangeMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\OwningMembershipMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\ReferenceSubsettingMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\RequirementUsageMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\SelectExpressionMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\SubclassificationMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\TextualRepresentationMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackFormatter\UsageMessagePackFormatter.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackPayload\Payload.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackPayload\PayloadFactory.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenMessagePackPayload\PayloadMessagePackFormatter.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\AnnotatingElementExtensions.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\AssociationExtensions.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenPocoExtend\DependencyExtensions.cs" />
@@ -47,6 +75,72 @@
 
     <ItemGroup>
       <Compile Remove="Expected\UML\Core\AutoGenPoco\AnnotatingElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\AnnotatingElementMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\AssociationMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\DependencyMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\EnumerationDefinitionMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\FeatureMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\FeatureTypingMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\FlowMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\FramedConcernMembershipMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\LiteralIntegerMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\LiteralRationalMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\MembershipMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\MultiplicityRangeMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\OwningMembershipMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\ReferenceSubsettingMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\RequirementUsageMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\SelectExpressionMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\SubclassificationMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\TextualRepresentationMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\UsageMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackPayload\Payload.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackPayload\PayloadFactory.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenMessagePackPayload\PayloadMessagePackFormatter.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Include="Expected\UML\Core\AutoGenPocoExtend\AnnotatingElementExtensions.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -780,10 +874,6 @@
       <None Include="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Extensions\" />
     </ItemGroup>
 
 </Project>

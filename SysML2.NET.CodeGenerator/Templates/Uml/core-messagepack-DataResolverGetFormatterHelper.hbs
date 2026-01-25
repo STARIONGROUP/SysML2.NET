@@ -1,0 +1,70 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="DataResolverGetFormatterHelper.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.MessagePack.Core
+{
+    using System;
+    using System.Collections.Generic;
+
+    using global::MessagePack.Formatters;
+
+    /// <summary>
+    /// Helper class that resolves a <see cref="IMessagePackFormatter"/> based on a <see cref="Type"/>
+    /// </summary>
+    internal static class DataResolverGetFormatterHelper
+    {
+        private static readonly Dictionary<Type, object> FormatterMap = new()
+        {
+            { typeof(Payload), new PayloadMessagePackFormatter() },
+            {{#each this as | class |}}
+            { typeof(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{class.Name}}), new {{class.Name}}MessagePackFormatter() },
+            {{/each}}
+        };
+
+        /// <summary>
+        /// Gets a <see cref="IMessagePackFormatter"/> for the specific <see cref="Type"/>
+        /// </summary>
+        /// <param name="t">
+        /// The subject <see cref="Type"/>
+        /// </param>
+        /// <returns>
+        /// an instance of <see cref="IMessagePackFormatter"/>
+        /// </returns>
+        internal static object GetFormatter(Type t)
+        {
+            object formatter;
+            if (FormatterMap.TryGetValue(t, out formatter))
+            {
+                return formatter;
+            }
+
+            // If type can not get, must return null for fallback mechanism.
+            return null;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
