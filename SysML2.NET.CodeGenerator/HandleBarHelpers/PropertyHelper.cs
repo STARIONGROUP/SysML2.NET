@@ -27,6 +27,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
     using HandlebarsDotNet;
 
+    using SysML2.NET.CodeGenerator.Enumeration;
     using SysML2.NET.CodeGenerator.Extensions;
 
     using uml4net.SimpleClassifiers;
@@ -61,7 +62,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     sb.Append("new ");
                 }
-
+                
                 if (property.Type is IDataType)
                 {
                     if (property.QueryIsEnumerable())
@@ -83,14 +84,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
+                    var typeName = property.Type == null ? "object" : "Guid";
+                    
                     if (property.QueryIsEnumerable())
                     {
-                        sb.Append("List<Guid>");
+                        sb.Append($"List<{typeName}>");
                         sb.Append(' ');
                     }
                     else
                     {
-                        sb.Append("Guid");
+                        sb.Append(typeName);
 
                         if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property))
                         {
@@ -125,13 +128,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
             handlebars.RegisterHelper("Property.WriteForDTOClass", (writer, _, parameters) =>
             {
-                if (parameters.Length != 2)
+                if (parameters.Length != 3)
                 {
-                    throw new HandlebarsException("{{#Property.WriteForDTOClass}} helper must have exactly two arguments");
+                    throw new HandlebarsException("{{#Property.WriteForDTOClass}} helper must have exactly 3 arguments");
                 }
 
                 var property = (parameters[0] as IProperty)!;
                 var classContext = (parameters[1] as IClass)!;
+                var modelKind = Enum.Parse<ModelKind>(parameters[2].ToString()!);
 
                 var sb = new StringBuilder();
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
@@ -143,7 +147,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     sb.Append(' ');
                 }
 
-                if (property.Type is IDataType)
+                if (property.Type is IDataType || property.Type is IClass referenceType )
                 {
                     if (property.QueryIsEnumerable())
                     {
@@ -164,14 +168,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
                 else
                 {
+                    var typeName = property.Type == null ? "object" : "Guid";
+
                     if (property.QueryIsEnumerable())
                     {
-                        sb.Append("List<Guid>");
+                        sb.Append($"List<{typeName}>");
                         sb.Append(' ');
                     }
                     else
                     {
-                        sb.Append("Guid");
+                        sb.Append(typeName);
 
                         if (uml4net.Extensions.PropertyExtensions.QueryIsNullableAndNotString(property))
                         {
@@ -282,14 +288,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 }
 
                 var sb = new StringBuilder();
-                var typeName = property.QueryCSharpTypeName();
+                var typeName = property.Type == null ? "object" : property.QueryCSharpTypeName();
 
                 if (property.RedefinedProperty.Any(x => x.Name == property.Name))
                 {
                     sb.Append("new ");
                 }
 
-                if (property.Type is not IDataType)
+                if (property.Type is not IDataType && property.Type != null)
                 {
                     typeName = $"I{typeName}";
                 }
@@ -350,7 +356,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var sb = new StringBuilder();
                 var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var redefiningProperty);
-                var typeName = property.QueryCSharpTypeName();
+                var typeName = property.Type == null ? "object" : property.QueryCSharpTypeName();
 
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
 
@@ -360,7 +366,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     sb.Append(' ');
                 }
 
-                if (property.Type is not IDataType)
+                if (property.Type is not IDataType && property.Type != null)
                 {
                     typeName = $"I{typeName}";
                 }

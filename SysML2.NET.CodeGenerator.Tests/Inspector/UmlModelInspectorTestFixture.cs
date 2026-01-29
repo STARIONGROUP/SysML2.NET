@@ -34,16 +34,6 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
     [TestFixture]
     public class ModelInspectorTestFixture
     {
-        private ILoggerFactory loggerFactory;
-
-        private ModelInspector modelInspector;
-
-        private string modelPath;
-
-        private FileInfo modelFileInfo;
-
-        private FileInfo reportFileInfo;
-
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -51,28 +41,19 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
                 .MinimumLevel.Verbose()
                 .WriteTo.Console()
                 .CreateLogger();
-
-            this.loggerFactory = LoggerFactory.Create(builder => { builder.AddSerilog(); });
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
-            var rootPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel");
-
-            this.modelPath = Path.Combine(rootPath, "SysML_xmi.uml");
-            this.modelFileInfo = new FileInfo(modelPath);
-
-            var reportPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "uml-inspection-report.txt");
-            this.reportFileInfo = new FileInfo(reportPath);
         }
 
         [Test]
         public void Verify_that_Inspection_report_can_be_generated()
         {
-            this.modelInspector = new ModelInspector(this.loggerFactory);
-
             var rootPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel");
+
+            var modelPath = Path.Combine(rootPath, "SysML_xmi.uml");
+            var modelFileInfo = new FileInfo(modelPath);
+
+            var reportPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "uml-inspection-report.txt");
+            var reportFileInfo = new FileInfo(reportPath);
+            var modelInspector = new ModelInspector( LoggerFactory.Create(builder => { builder.AddSerilog(); }));
 
             var pathMaps = new Dictionary<string, string>
             {
@@ -80,9 +61,32 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
                     Path.Combine(rootPath, "PrimitiveTypes.xmi")
             };
 
-            Assert.That(() => this.modelInspector.GenerateReport(this.modelFileInfo, 
-                this.modelFileInfo.Directory, "_h6bQED_xEfCL-qw9_9p9XQ", "SysML", 
-                true, pathMaps, this.reportFileInfo), Throws.Nothing);
+            Assert.That(() => modelInspector.GenerateReport(modelFileInfo, 
+                modelFileInfo.Directory, "_h6bQED_xEfCL-qw9_9p9XQ", "SysML", 
+                true, pathMaps, reportFileInfo), Throws.Nothing);
+        }
+
+        [Test]
+        public void VerifyInspectionReportForPim()
+        {
+            var rootPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel");
+
+            var modelPath = Path.Combine(rootPath, "SysML_PIM.xmi");
+            var modelFileInfo = new FileInfo(modelPath);
+
+            var reportPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "uml-pim-inspection-report.txt");
+            var reportFileInfo = new FileInfo(reportPath);
+            var modelInspector = new ModelInspector( LoggerFactory.Create(builder => { builder.AddSerilog(); }));
+
+            var pathMaps = new Dictionary<string, string>
+            {
+                ["pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml"] =
+                    Path.Combine(rootPath, "PrimitiveTypes.xmi")
+            };
+
+            Assert.That(() => modelInspector.GenerateReport(modelFileInfo, 
+                modelFileInfo.Directory, "_19_0_4_3fa0198_1689000259946_865221_0", "Systems Modeling API and Services PIM", 
+                true, pathMaps, reportFileInfo), Throws.Nothing);
         }
     }
 }

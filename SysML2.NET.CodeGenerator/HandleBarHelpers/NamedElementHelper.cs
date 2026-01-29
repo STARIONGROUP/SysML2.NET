@@ -50,7 +50,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("supposed to be INamedElement");
                 }
 
-                writer.WriteSafeString(namedElement.QueryNamespace());
+                var namedElementNamespace = namedElement.QueryNamespace();
+
+                if (!string.IsNullOrEmpty(namedElementNamespace))
+                {
+                    writer.WriteSafeString($".{namedElementNamespace}");
+                }
             });
         }
     }

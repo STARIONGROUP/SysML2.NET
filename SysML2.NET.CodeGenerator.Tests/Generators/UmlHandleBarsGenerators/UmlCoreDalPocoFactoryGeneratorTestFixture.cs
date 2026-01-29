@@ -26,10 +26,10 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
-    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+    using SysML2.NET.CodeGenerator.Tests.TestFixtureSourceConfiguration;
 
-    [TestFixture]
-    public class UmlCoreDalPocoFactoryGeneratorTestFixture
+    [TestFixture(typeof(CoreModelKindConfiguration))]
+    public class UmlCoreDalPocoFactoryGeneratorTestFixture<TModelKindConfiguration>: ModelKindDependentTestFixture<TModelKindConfiguration> where TModelKindConfiguration: IModelKindConfiguration, new()
     {
         private DirectoryInfo umlPocoFactoryDirectoryInfo;
         private UmlCoreDalFactoryGenerator umlCoreDalPocoExtensionsGenerator;
@@ -48,20 +48,20 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         public async Task VerifyCanGeneratePocoFactory()
         {
-             await Assert.ThatAsync(() => this.umlCoreDalPocoExtensionsGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlPocoFactoryDirectoryInfo), Throws.Nothing);
+             await Assert.ThatAsync(() => this.umlCoreDalPocoExtensionsGenerator.GenerateAsync(this.XmiReaderResult, this.umlPocoFactoryDirectoryInfo, this.ModelKind), Throws.Nothing);
         }
 
         [Test]
-        [TestCaseSource(typeof(ExpectedConcreteClasses))]
-        [Category("Expected")]
+        [TestCaseSource(nameof(GetConcreteClasses))]
+       [Category("Expected")]
         public async Task VerifyExpectedPocoFactoryMatches(string className)
         {
-            var generatedCode = await this.umlCoreDalPocoExtensionsGenerator.GenerateDalPocoFactory(GeneratorSetupFixture.XmiReaderResult,
+            var generatedCode = await this.umlCoreDalPocoExtensionsGenerator.GenerateDalPocoFactory(this.XmiReaderResult,
                 this.umlPocoFactoryDirectoryInfo,
                 className);
 
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
-                $"Expected/UML/Core/AutoGenElementFactory/{className}Factory.cs"));
+                $"Expected/UML/{this.ModelKind}/AutoGenElementFactory/{className}Factory.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.PIM.DTO;
+    using SysML2.NET.PIM.DTO.API_Model;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -67,7 +67,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
             logger.Log(LogLevel.Trace, "start deserialization: DataIdentity");
 
-            var dtoInstance = new SysML2.NET.PIM.DTO.DataIdentity();
+            var dtoInstance = new SysML2.NET.PIM.DTO.API_Model.DataIdentity();
             
             if (jsonElement.TryGetProperty("@id"u8, out JsonElement idPropertyVersionItem))
             {
@@ -107,7 +107,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
             {
-                dtoInstance.ResourceIdentifier = resourceIdentifierProperty.GetString();
+                dtoInstance.ResourceIdentifier = new Uri(resourceIdentifierProperty.GetString()!);
             }
             else
             {

@@ -26,7 +26,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
     using HandlebarsDotNet;
 
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+    using SysML2.NET.CodeGenerator.Enumeration;
     using SysML2.NET.CodeGenerator.Extensions;
+
     using uml4net.CommonStructure;
     using uml4net.Extensions;
     using uml4net.SimpleClassifiers;
@@ -45,12 +49,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </param>
         public static void RegisterClassHelper(this IHandlebars handlebars)
         {
-            handlebars.RegisterHelper("Class.WriteEnumerationNameSpaces", (writer, context, _) =>
+            handlebars.RegisterHelper("Class.WriteEnumerationNameSpaces", (writer, context, arguments) =>
             {
                 if (context.Value is not IClass @class)
                 {
                     throw new ArgumentException("supposed to be IClass");
                 }
+
+                var modelKind = arguments[1].ToString();
 
                 var uniqueNamespaces = new HashSet<string>();
 
@@ -65,7 +71,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 foreach (var orderedNamespace in orderedNamespaces)
                 {
-                    writer.WriteSafeString($"using SysML2.NET.Core.{orderedNamespace} ;{Environment.NewLine}");
+                    writer.WriteSafeString($"using SysML2.NET.{modelKind}.{orderedNamespace} ;{Environment.NewLine}");
                 }
             });
 
@@ -86,12 +92,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     throw new ArgumentException("supposed to be IClass");
                 }
 
-                if (arguments.Length != 2)
+                if (arguments.Length != 3)
                 {
-                    throw new ArgumentException("#Class.WriteNameSpaces Expects to have 2 arguments");
+                    throw new ArgumentException("#Class.WriteNameSpaces Expects to have 3 arguments");
                 }
 
                 var namespacePrefix = arguments[1].ToString();
+                var modelKind = Enum.Parse<ModelKind>(arguments[2].ToString()!);
 
                 var superClasses = @class.SuperClass;
 
@@ -99,16 +106,38 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 foreach (var superClass in superClasses)
                 {
-                    uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(superClass));
+                    uniqueNamespaces.Add($"{modelKind}.{namespacePrefix}.{Extensions.NamedElementExtensions.QueryNamespace(superClass)}");
+                }
+
+                if (@class.QueryDoesImplementsDataInterface())
+                {
+                    uniqueNamespaces.Add("Common");
                 }
 
                 if (namespacePrefix == "POCO")
                 {
                     var allProperties = @class.QueryAllProperties();
 
-                    foreach (var prop in allProperties.Where(x => x.QueryIsReferenceProperty()))
+                    foreach (var prop in allProperties)
                     {
-                        uniqueNamespaces.Add(Extensions.NamedElementExtensions.QueryNamespace(prop.Type));
+                        if (prop.Type != null && prop.QueryIsReferenceProperty())
+                        {
+                            if (prop.Type is Interface)
+                            {
+                                uniqueNamespaces.Add("Common");
+                            }
+                            else
+                            {
+                                var modelKindTarget = modelKind;
+                                
+                                if (prop.Type.DocumentName != prop.DocumentName)
+                                {
+                                    modelKindTarget = (ModelKind)((int)modelKind ^ 1);
+                                }
+
+                                uniqueNamespaces.Add($"{modelKindTarget}.{namespacePrefix}.{Extensions.NamedElementExtensions.QueryNamespace(prop.Type)}");
+                            }
+                        }
                     }
 
                     var interfaceDerivedProperties =
@@ -121,18 +150,36 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         if (interfaceDerivedProperty.Possessor is INamedElement owner)
                         {
                             var @namespace = Extensions.NamedElementExtensions.QueryNamespace(owner);
-                            uniqueNamespaces.Add(@namespace);
+                            uniqueNamespaces.Add($"{modelKind}.{namespacePrefix}.{@namespace}");
                         }
                     }
                 }
 
-                uniqueNamespaces.Remove(Extensions.NamedElementExtensions.QueryNamespace(@class));
+                uniqueNamespaces.Remove($"{modelKind}.{namespacePrefix}.{Extensions.NamedElementExtensions.QueryNamespace(@class)}");
+                
                 var orderedNamespaces = uniqueNamespaces.Order().ToList();
 
                 foreach (var orderedNamespace in orderedNamespaces)
                 {
-                    writer.WriteSafeString($"using SysML2.NET.Core.{namespacePrefix}.{orderedNamespace} ;{Environment.NewLine}");
+                    writer.WriteSafeString($"using SysML2.NET.{orderedNamespace};{Environment.NewLine}");
                 }
+            });
+            
+            handlebars.RegisterHelper("Class.DoesImplementsDataInterface", (context, arguments) =>
+            {
+                if (context.Value is not IClass @class)
+                {
+                    throw new ArgumentException("#Class.DoesImplementsDataInterface Context supposed to be IClass");
+                }
+
+                if (arguments.Length != 2)
+                {
+                    throw new ArgumentException("#Class.DoesImplementsDataInterface expects to have 2 arguments");
+                }
+
+                var modelKind = Enum.Parse<ModelKind>(arguments[1].ToString()!);
+
+                return modelKind == ModelKind.Core || @class.QueryDoesImplementsDataInterface();
             });
         }
     }

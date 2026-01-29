@@ -23,12 +23,17 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using System.Collections.Generic;
     using System.IO;
 
+    using DocumentFormat.OpenXml.EMMA;
+
     using Microsoft.Extensions.Logging;
 
     using NUnit.Framework;
 
     using Serilog;
 
+    using SysML2.NET.CodeGenerator.Enumeration;
+
+    using uml4net.Extensions;
     using uml4net.xmi;
     using uml4net.xmi.Readers;
 
@@ -53,16 +58,39 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                     Path.Combine(rootPath, "PrimitiveTypes.xmi")
             };
 
-            var reader = XmiReaderBuilder.Create()
-                .UsingSettings(x => x.LocalReferenceBasePath = rootPath)
-                .UsingSettings(x => x.PathMaps = pathMaps)
+            var coreReader = XmiReaderBuilder.Create()
+                .UsingSettings(x =>
+                {
+                    x.LocalReferenceBasePath = rootPath;
+                    x.PathMaps = pathMaps;
+                })
                 .WithLogger(loggerFactory)
                 .Build();
+            
+            var pimReader = XmiReaderBuilder.Create()
+                .UsingSettings(x =>
+                {
+                    x.LocalReferenceBasePath = rootPath;
+                    x.PathMaps = pathMaps;
+                })
+                .WithLogger(loggerFactory)
+                .Build();
+            
+            PropertyExtensions.AddOrOverwriteCSharpTypeMappings(("ISO8601DateTime", "DateTime"));
+            PropertyExtensions.AddOrOverwriteCSharpTypeMappings(("UUID", "Guid"));
+            PropertyExtensions.AddOrOverwriteCSharpTypeMappings(("IRI", "Uri"));
+            
+            var models = new Dictionary<ModelKind, XmiReaderResult>
+            {
+                [ModelKind.Core] = coreReader.Read(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
+                    "SysML_xmi.uml")),
+                [ModelKind.PIM] = pimReader.Read(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
+                    "SysML_PIM.xmi"))
+            };
 
-            XmiReaderResult = reader.Read(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
-                "SysML_xmi.uml"));
+            Models = models;
         }
 
-        public static XmiReaderResult XmiReaderResult;
+        public static IReadOnlyDictionary<ModelKind, XmiReaderResult> Models { get; private set; }
     }
 }

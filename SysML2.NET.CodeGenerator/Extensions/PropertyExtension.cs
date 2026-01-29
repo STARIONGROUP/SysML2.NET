@@ -74,5 +74,10 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             return property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
         }
+
+        public static bool QueryIsEmbededProperty(this IProperty property)
+        {
+            return false;
+        }
     }
 }

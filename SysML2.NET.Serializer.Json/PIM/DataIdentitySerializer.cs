@@ -23,7 +23,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
     using System;
     using System.Text.Json;
 
-    using SysML2.NET.PIM.DTO;
+    using SysML2.NET.PIM.DTO.API_Model;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -70,7 +70,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     }
                     writer.WriteEndArray();
                     writer.WriteString("description"u8, dataIdentity.Description);
-                    writer.WriteString("resourceIdentifier"u8, dataIdentity.ResourceIdentifier);
+                    writer.WriteString("resourceIdentifier"u8, dataIdentity.ResourceIdentifier?.AbsoluteUri);
                     writer.WriteEndObject();
 
                     break;

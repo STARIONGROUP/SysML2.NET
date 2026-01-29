@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.PIM.DTO;
+    using SysML2.NET.PIM.DTO.API_Model;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -67,7 +67,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
             logger.Log(LogLevel.Trace, "start deserialization: Commit");
 
-            var dtoInstance = new SysML2.NET.PIM.DTO.Commit();
+            var dtoInstance = new SysML2.NET.PIM.DTO.API_Model.Commit();
 
             if (jsonElement.TryGetProperty("@id"u8, out JsonElement idProperty))
             {
@@ -137,32 +137,29 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                 logger.LogDebug($"the owningProject Json property was not found in the Commit: {dtoInstance.Id}");
             }
 
-            if (jsonElement.TryGetProperty("previousCommit"u8, out JsonElement previousCommitProperty))
+            if (jsonElement.TryGetProperty("previousCommits"u8, out JsonElement previousCommitsProperty))
             {
-                if (previousCommitProperty.ValueKind == JsonValueKind.Null)
-                {
-                    dtoInstance.PreviousCommit = Guid.Empty;
-                }
-                else
+                foreach (var previousCommitProperty in previousCommitsProperty.EnumerateArray())
                 {
                     if (previousCommitProperty.TryGetProperty("@id"u8, out JsonElement previousCommitPropertyIdProperty))
                     {
                         var propertyValue = previousCommitPropertyIdProperty.GetString();
+                        
                         if (propertyValue != null)
                         {
-                            dtoInstance.PreviousCommit = Guid.Parse(propertyValue);
+                            dtoInstance.PreviousCommits.Add(Guid.Parse(propertyValue));
                         }
                     }
                 }
             }
             else
             {
-                logger.LogDebug($"the owningProject Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug($"the previousCommits Json property was not found in the Commit: {dtoInstance.Id}");
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))
             {
-                dtoInstance.ResourceIdentifier = resourceIdentifierProperty.GetString();
+                dtoInstance.ResourceIdentifier = new Uri(resourceIdentifierProperty.GetString()!);
             }
             else
             {

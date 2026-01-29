@@ -1,0 +1,930 @@
+﻿<xmi:XMI xmlns:uml="http://www.omg.org/spec/UML/20161101" xmlns:xmi="http://www.omg.org/spec/XMI/20161101">
+    <uml:Model xmi:type="uml:Model" xmi:id="_19_0_4_3fa0198_1689000259946_865221_0" name="Systems Modeling API and Services PIM">
+        <packagedElement xmi:type="uml:Package" xmi:id="_19_0_2_12e503d9_1577820468966_485360_65977" name="API_Model">
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_2_12e503d9_1577820468970_543949_65978">
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469724_226337_66058"/>
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469725_462619_66059"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_12e503d9_1577820468971_790808_65979" name="Commit">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820469726_585950_66061" body="&#xA;">
+                    <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                </ownedComment>
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_2_12e503d9_1577820469725_250385_66060" general="_19_0_2_12e503d9_1577820468975_133215_65988"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469724_226337_66058" name="change" visibility="public" type="_19_0_2_12e503d9_1577820468972_486874_65981" association="_19_0_2_12e503d9_1577820468970_543949_65978">
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_12e503d9_1577820469762_769659_66095" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469727_54677_66063" name="created" visibility="public" type="_19_0_2_12e503d9_1577820468976_300561_65991"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469727_74119_66064" name="previousCommits" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_2_12e503d9_1577820468974_567930_65984">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_12e503d9_1577820469766_339894_66101"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_12e503d9_1577820469766_135908_66100" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469728_610810_66065" name="owningProject" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982" association="_19_0_2_12e503d9_1577820468977_252756_65993"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1629496059367_814933_41" name="versionedData" visibility="public" isDerived="true" type="_19_0_2_12e503d9_1577820468972_486874_65981" association="_19_0_4_58901f1_1629496059367_330442_40">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629496094260_663435_51"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1629496094260_918644_52" value="*"/>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_2_12e503d9_1577820468972_91255_65980">
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469729_822777_66066"/>
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469729_652900_66067"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_12e503d9_1577820468972_486874_65981" name="DataVersion">
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_2_12e503d9_1577820469730_261170_66068" general="_19_0_2_12e503d9_1577820468975_133215_65988"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469725_462619_66059" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_2_12e503d9_1577820468970_543949_65978"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469729_652900_66067" name="identity" visibility="public" type="_19_0_2_12e503d9_1577820468974_665346_65985" association="_19_0_2_12e503d9_1577820468972_91255_65980"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469731_381637_66070" name="payload" visibility="public" aggregation="composite" type="_19_0_4_58901f1_1628545298302_366009_233" association="_19_0_2_12e503d9_1577820468976_744920_65990">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_12e503d9_1577820469770_72564_66109"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469730_358203_66069" name="project" visibility="public" isDerived="true" type="_19_0_2_12e503d9_1577820468973_232920_65982" association="_19_0_2_12e503d9_1577820468974_505749_65986"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_12e503d9_1577820468973_232920_65982" name="Project">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820469732_946577_66072">
+                    <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                </ownedComment>
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_2_12e503d9_1577820469732_8898_66071" general="_19_0_2_12e503d9_1577820468975_133215_65988"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469733_493524_66075" name="commits" visibility="public" aggregation="composite" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_2_12e503d9_1577820468977_252756_65993">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_8bf0285_1596773192605_982421_310"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_12e503d9_1577820469774_318965_66116" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597396233220_492135_901" name="queries" visibility="public" aggregation="composite" type="_19_0_2_58901f1_1596546546708_201132_2821" association="_19_0_4_58901f1_1597396233219_77673_900">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1597396257444_140229_912"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597396257444_461928_913" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1614694201382_729306_245" name="branches" visibility="public" aggregation="composite" type="_19_0_4_58901f1_1614653083353_265065_103" association="_19_0_4_58901f1_1614694201381_683835_244">
+                    <subsettedProperty xmi:idref="_19_0_4_58901f1_1628779129336_898482_712"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1614694254505_362499_259" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1614694296040_474053_271" name="defaultBranch" visibility="public" aggregation="composite" type="_19_0_4_58901f1_1614653083353_265065_103" association="_19_0_4_58901f1_1614694296040_352242_270">
+                    <subsettedProperty xmi:idref="_19_0_4_58901f1_1614694201382_729306_245"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628779129336_898482_712" name="commitReferences" visibility="public" aggregation="composite" type="_19_0_4_58901f1_1628778313792_224131_535" association="_19_0_4_58901f1_1628779129336_41152_711">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1628779196487_114448_725"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1628779196487_460240_726" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628779424605_974596_740" name="tags" visibility="public" aggregation="composite" type="_19_0_4_58901f1_1628778623137_473540_604" association="_19_0_4_58901f1_1628779424605_629960_739">
+                    <subsettedProperty xmi:idref="_19_0_4_58901f1_1628779129336_898482_712"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1628779493217_393679_751"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1628779493218_254049_752" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1671293441918_865671_7736" name="name" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <redefinedProperty xmi:idref="_19_0_2_12e503d9_1577820469741_716007_66090"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_f940371_1694730728649_158871_419" name="created" visibility="public" type="_19_0_2_12e503d9_1577820468976_300561_65991"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_2_12e503d9_1577820468974_567930_65984">
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469735_758818_66078"/>
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469727_74119_66064"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469735_758818_66078" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_2_12e503d9_1577820468974_567930_65984">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_8bf0285_1596774694064_230475_323"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_8bf0285_1596774694066_350795_324" value="*"/>
+                </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_12e503d9_1577820468974_665346_65985" name="DataIdentity">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820469735_875411_66080">
+                    <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820468974_665346_65985"/>
+                </ownedComment>
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_2_12e503d9_1577820469735_486256_66079" general="_19_0_2_12e503d9_1577820468975_133215_65988"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469729_822777_66066" name="version" visibility="public" type="_19_0_2_12e503d9_1577820468972_486874_65981" association="_19_0_2_12e503d9_1577820468972_91255_65980">
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_12e503d9_1577820469767_357803_66102" value="*"/>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_2_12e503d9_1577820468974_505749_65986">
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469737_968619_66084"/>
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469730_358203_66069"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469737_968619_66084" visibility="private" type="_19_0_2_12e503d9_1577820468972_486874_65981" association="_19_0_2_12e503d9_1577820468974_505749_65986">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_8bf0285_1596774704943_663489_327"/>
+                </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_12e503d9_1577820468975_133215_65988" name="Record" isAbstract="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820469739_653032_66086" body="The most common form of data in the Semantic Web">
+                    <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820468975_133215_65988"/>
+                </ownedComment>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469739_885136_66087" name="id" visibility="public" isReadOnly="true" type="_18_5_3_16560409_1536675188069_680014_19152">
+                    <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820470106_229091_66170" body="The UUID assigned to th Record. This identifier shall conform to RFC 4122.">
+                        <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820469739_885136_66087"/>
+                    </ownedComment>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469740_90190_66088" name="resourceIdentifier" visibility="public" type="_19_0_2_12e503d9_1577820468978_637517_65994">
+                    <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820470106_834228_66172" body="An IRI assigned to the record (for linked data access).">
+                        <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820469740_90190_66088"/>
+                    </ownedComment>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_12e503d9_1577820470107_106195_66173"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469740_197983_66089" name="alias" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820470107_417829_66175" body="A collection of other identifiers for this record, especially if the record was created or represented in other software applications and systems.">
+                        <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820469740_197983_66089"/>
+                    </ownedComment>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_12e503d9_1577820470107_512050_66176"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_12e503d9_1577820470107_614018_66174" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469741_716007_66090" name="name" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <subsettedProperty xmi:idref="_19_0_2_12e503d9_1577820469740_197983_66089"/>
+                    <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820470108_89327_66177" body="An optional human-friendly identifier for a record. The value assigned to the &lt;em&gt;name&lt;/em&gt; for a given record must be in the set of values assigned to &lt;em&gt;alias&lt;/em&gt; for that record.">
+                        <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820469741_716007_66090"/>
+                    </ownedComment>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1739034590718_568625_50"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1629741832147_14565_28133" name="description" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <ownedComment xmi:type="uml:Comment" xmi:id="_2022x_2_12e503d9_1739034381903_119322_49" body="A statement that provides details about the record.">
+                        <annotatedElement xmi:idref="_19_0_4_58901f1_1629741832147_14565_28133"/>
+                    </ownedComment>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_2_12e503d9_1577820468976_744920_65990">
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469731_381637_66070"/>
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469741_532109_66091"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_2_12e503d9_1577820469741_532109_66091" name="version" visibility="public" type="_19_0_2_12e503d9_1577820468972_486874_65981" association="_19_0_2_12e503d9_1577820468976_744920_65990"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:DataType" xmi:id="_19_0_2_12e503d9_1577820468976_300561_65991" name="ISO8601DateTime">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_12e503d9_1577820469742_912813_66092" body="ISO 8601 representation of Date and Time. See https://en.wikipedia.org/wiki/ISO_8601.&#xA;&#xA;Further, time should be allowed to be represented in milliseconds.">
+                    <annotatedElement xmi:idref="_19_0_2_12e503d9_1577820468976_300561_65991"/>
+                </ownedComment>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_2_12e503d9_1577820468977_252756_65993">
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469733_493524_66075"/>
+                <memberEnd xmi:idref="_19_0_2_12e503d9_1577820469728_610810_66065"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:DataType" xmi:id="_19_0_2_12e503d9_1577820468978_637517_65994" name="IRI"/>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_58901f1_1596535924317_146131_1855" name="ExternalRelationship">
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_58901f1_1596708855858_697400_1579" name="specification">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667838258412_138637_5875"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1629755852196_23786_29899" name="elementEnd" association="_19_0_4_58901f1_1629755852196_498579_29898">
+                    <type href="KerML Abstract Syntax.xml#_18_5_3_12e503d9_1533160651703_306405_42199"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1629755861218_259967_29912" name=" externalDataEnd" type="_19_0_2_58901f1_1596536258540_797744_1918" association="_19_0_4_58901f1_1629755861218_589415_29911"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1629815682552_46136_30600" name="language">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667838265856_286608_5877"/>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_58901f1_1596536258540_797744_1918" name="ExternalData">
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_2_8bf0285_1596606723805_618012_132" name="resourceIdentifier" type="_19_0_2_12e503d9_1577820468978_637517_65994"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_58901f1_1596546546708_201132_2821" name="Query">
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_4_58901f1_1597383676716_288340_54" general="_19_0_2_12e503d9_1577820468975_133215_65988"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1671293480578_778123_7740" name="name" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <redefinedProperty xmi:idref="_19_0_2_12e503d9_1577820469741_716007_66090"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377655027_119603_507" name="select">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1597377684279_272722_509"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597377684279_658484_510" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377703876_758020_511" name="scope" type="_19_0_4_58901f1_1628545298302_366009_233">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1597377758528_279169_513"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597377758528_552523_514" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377630809_759194_505" name="where" type="_19_0_4_58901f1_1597377190443_458144_421" association="_19_0_4_58901f1_1597377770269_24091_515"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597387733264_611302_866" name="orderBy">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1597387778472_872357_868"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597387778472_506798_869" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597396233221_999408_902" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982" association="_19_0_4_58901f1_1597396233219_77673_900"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1597377157087_303630_371" name="PrimitiveConstraint">
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_4_58901f1_1597401656549_980081_1217" general="_19_0_4_58901f1_1597377190443_458144_421"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377338703_200864_497" name="inverse">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#Boolean"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377425985_159367_499" name="property">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377427373_325175_501" name="operator" type="_19_0_4_58901f1_1597378913341_890131_571" association="_19_0_4_58901f1_1597383943522_408922_89"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377431228_229452_503" name="value">
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597379005474_652458_581" value="*"/>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1597377170613_382290_372" name="CompositeConstraint">
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_4_58901f1_1597401663186_539753_1220" general="_19_0_4_58901f1_1597377190443_458144_421"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377207847_92212_477" name="constraint" visibility="public" aggregation="composite" type="_19_0_4_58901f1_1597377190443_458144_421" association="_19_0_4_58901f1_1597377207846_149382_476">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1597377236011_996794_487" value="2"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597377236012_620269_488" value="*"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377244778_333596_491" name="operator" type="_19_0_4_58901f1_1597377278710_325607_493" association="_19_0_4_58901f1_1597383876315_276563_55"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1597377190443_458144_421" name="Constraint" isAbstract="true"/>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1597377207846_149382_476">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597377207847_92212_477"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597377207847_638975_478"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377207847_638975_478" visibility="public" type="_19_0_4_58901f1_1597377170613_382290_372" association="_19_0_4_58901f1_1597377207846_149382_476">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1739036350886_376210_465"/>
+                </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Enumeration" xmi:id="_19_0_4_58901f1_1597377278710_325607_493" name="JoinOperator">
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597377295668_585112_495" name="and"/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597377306313_598354_496" name="or"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1597377770269_24091_515">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597377770269_349162_516"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597377630809_759194_505"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597377770269_349162_516" visibility="private" type="_19_0_2_58901f1_1596546546708_201132_2821" association="_19_0_4_58901f1_1597377770269_24091_515"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Enumeration" xmi:id="_19_0_4_58901f1_1597378913341_890131_571" name="Operator">
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597378941269_83816_573" name="instanceOf"/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597378952576_724720_574" name="="/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597378952781_577786_575" name="&lt;"/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597378952911_62547_576" name="&lt;="/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597378953060_507713_577" name="&gt;"/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597378953225_506132_578" name="&gt;="/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_58901f1_1597378989017_499867_579" name="in"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1597383876315_276563_55">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597383876316_497733_56"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597377244778_333596_491"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597383876316_497733_56" visibility="private" type="_19_0_4_58901f1_1597377170613_382290_372" association="_19_0_4_58901f1_1597383876315_276563_55"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1597383943522_408922_89">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597383943522_312667_90"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597377427373_325175_501"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1597383943522_312667_90" visibility="private" type="_19_0_4_58901f1_1597377157087_303630_371" association="_19_0_4_58901f1_1597383943522_408922_89"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1597396233219_77673_900">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597396233220_492135_901"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1597396233221_999408_902"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1614694296040_352242_270">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1614694296040_474053_271"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1614694296041_977247_272"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1614694296041_977247_272" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982" association="_19_0_4_58901f1_1614694296040_352242_270">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1739035606920_930615_406"/>
+                </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1614694201381_683835_244">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1614694201382_729306_245"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1614694201382_575246_246"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1614695877725_497840_514">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1614695877725_676676_515"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1614695877725_249487_516"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1614695877725_249487_516" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103" association="_19_0_4_58901f1_1614695877725_497840_514">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1739035594201_437929_398"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2022x_2_12e503d9_1739035594201_456363_399" value="*"/>
+                </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1614653083353_265065_103" name="Branch">
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_4_58901f1_1628778586856_610338_603" general="_19_0_4_58901f1_1628778313792_224131_535"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1614694201382_575246_246" name="owningProject" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982" association="_19_0_4_58901f1_1614694201381_683835_244">
+                    <redefinedProperty xmi:idref="_19_0_4_58901f1_1628779129336_65342_713"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1614695877725_676676_515" name="head" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_4_58901f1_1614695877725_497840_514">
+                    <redefinedProperty xmi:idref="_19_0_4_58901f1_1628778313797_801027_537"/>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1628778623137_473540_604" name="Tag">
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_4_58901f1_1628778623157_447248_610" general="_19_0_4_58901f1_1628778313792_224131_535"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628778728157_220677_662" name="taggedCommit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_4_58901f1_1628778728156_880599_661">
+                    <redefinedProperty xmi:idref="_19_0_4_58901f1_1628778313797_801027_537"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628779424605_795551_741" name="owningProject" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982" association="_19_0_4_58901f1_1628779424605_629960_739">
+                    <redefinedProperty xmi:idref="_19_0_4_58901f1_1628779129336_65342_713"/>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Realization" xmi:id="_19_0_4_58901f1_1628778117665_910001_59">
+                <client href="KerML Abstract Syntax.xml#_18_5_3_12e503d9_1533160651703_306405_42199"/>
+                <supplier xmi:idref="_19_0_4_58901f1_1628545298302_366009_233"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1628779129336_41152_711">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628779129336_898482_712"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628779129336_65342_713"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Realization" xmi:id="_19_0_4_58901f1_1628777916965_775413_46">
+                <client xmi:idref="_19_0_4_58901f1_1627508656778_593254_548"/>
+                <supplier xmi:idref="_19_0_4_58901f1_1628545298302_366009_233"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Realization" xmi:id="_19_0_4_58901f1_1628777923593_590429_49">
+                <client xmi:idref="_19_0_2_58901f1_1596535924317_146131_1855"/>
+                <supplier xmi:idref="_19_0_4_58901f1_1628545298302_366009_233"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1628778728156_880599_661">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628778728157_220677_662"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628778728157_15401_663"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628778728157_15401_663" visibility="public" type="_19_0_4_58901f1_1628778623137_473540_604" association="_19_0_4_58901f1_1628778728156_880599_661">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1739035597133_156878_402"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2022x_2_12e503d9_1739035597134_586423_403" value="*"/>
+                </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1629496059367_330442_40">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1629496059367_814933_41"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1629496059368_6958_42"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1629496059368_6958_42" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_4_58901f1_1629496059367_330442_40"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1628778355900_807541_587">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628778355901_49632_588"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628778313797_801027_537"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628778355901_49632_588" visibility="private" type="_19_0_4_58901f1_1628778313792_224131_535" association="_19_0_4_58901f1_1628778355900_807541_587">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1739035586947_355172_394"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2022x_2_12e503d9_1739035586947_689417_395" value="*"/>
+                </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1628778313792_224131_535" name="CommitReference" isAbstract="true">
+                <ownedRule xmi:type="uml:Constraint" xmi:id="_19_0_4_58901f1_1629835608436_542731_32642" name="referencedCommit Constraint">
+                    <constrainedElement xmi:idref="_19_0_4_58901f1_1628778313792_224131_535"/>
+                    <specification xmi:type="uml:OpaqueExpression" xmi:id="_19_0_4_58901f1_1629835608436_61919_32643">
+                        <body>referencedCommit.owningProject = owningProject</body>
+                        <language>English</language>
+                    </specification>
+                </ownedRule>
+                <generalization xmi:type="uml:Generalization" xmi:id="_19_0_4_58901f1_1628778313798_253906_540" general="_19_0_2_12e503d9_1577820468975_133215_65988"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628778313797_801027_537" name="referencedCommit" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_4_58901f1_1628778355900_807541_587"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628778313797_665973_538" name="created" visibility="public" type="_19_0_2_12e503d9_1577820468976_300561_65991"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628779129336_65342_713" name="owningProject" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982" association="_19_0_4_58901f1_1628779129336_41152_711"/>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1671293488580_668503_7742" name="name" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <redefinedProperty xmi:idref="_19_0_2_12e503d9_1577820469741_716007_66090"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_2022x_2_f940371_1740179401841_624617_283" name="deleted" visibility="public" type="_19_0_2_12e503d9_1577820468976_300561_65991"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1627508656778_593254_548" name="ProjectUsage">
+                <ownedRule xmi:type="uml:Constraint" xmi:id="_19_0_4_58901f1_1629836413882_321381_32644" name="usedProject Constraint">
+                    <constrainedElement xmi:idref="_19_0_4_58901f1_1627508656778_593254_548"/>
+                    <specification xmi:type="uml:OpaqueExpression" xmi:id="_19_0_4_58901f1_1629836413882_994985_32645">
+                        <body>usedProject = usedProjectCommit.owningProject</body>
+                        <language>English</language>
+                    </specification>
+                </ownedRule>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628380685338_895164_312" name="usedProjectCommit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979" association="_19_0_4_58901f1_1628380685338_576656_311"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1628779424605_629960_739">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628779424605_974596_740"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628779424605_795551_741"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1628380685338_576656_311">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628380685338_895164_312"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1628380685339_331850_313"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1628380685339_331850_313" visibility="public" type="_19_0_4_58901f1_1627508656778_593254_548" association="_19_0_4_58901f1_1628380685338_576656_311">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1739035558601_306510_386"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2022x_2_12e503d9_1739035558601_632583_387" value="*"/>
+                </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Interface" xmi:id="_19_0_4_58901f1_1628545298302_366009_233" name="Data">
+                <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1628546174462_601853_259" name="getId" visibility="public">
+                    <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1628546201599_624519_262" visibility="public" direction="return" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                </ownedOperation>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Realization" xmi:id="_19_0_4_58901f1_1628777932441_135726_53">
+                <client xmi:idref="_19_0_2_58901f1_1596536258540_797744_1918"/>
+                <supplier xmi:idref="_19_0_4_58901f1_1628545298302_366009_233"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Enumeration" xmi:id="_18_5_3_16560409_1535391609027_991111_98286" name="Direction">
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_18_5_3_16560409_1535391609418_434467_98316" name="in"/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_18_5_3_16560409_1535391609418_551254_98317" name="out"/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_18_5_3_16560409_1535391609418_334221_98318" name="both"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1629755852196_498579_29898">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1629755852196_23786_29899"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1629755852197_856733_29900"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1629755852197_856733_29900" visibility="public" type="_19_0_2_58901f1_1596535924317_146131_1855" association="_19_0_4_58901f1_1629755852196_498579_29898"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_19_0_4_58901f1_1629755861218_589415_29911">
+                <memberEnd xmi:idref="_19_0_4_58901f1_1629755861218_259967_29912"/>
+                <memberEnd xmi:idref="_19_0_4_58901f1_1629755861218_583283_29913"/>
+                <ownedEnd xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1629755861218_583283_29913" visibility="public" type="_19_0_2_58901f1_1596535924317_146131_1855" association="_19_0_4_58901f1_1629755861218_589415_29911"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:DataType" xmi:id="_18_5_3_16560409_1536675188069_680014_19152" name="UUID"/>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1667597371888_316451_135" name="DataDifference">
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1667597388218_19169_136" name="baseData" type="_19_0_2_12e503d9_1577820468972_486874_65981">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667599120552_191987_153"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1667597418425_384059_139" name="compareData" type="_19_0_2_12e503d9_1577820468972_486874_65981">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667597418426_585808_141"/>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1667600196881_725157_160" name="MergeResult">
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1667600196883_581172_161" name="mergeCommit" type="_19_0_2_12e503d9_1577820468971_790808_65979">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667600196884_67247_164"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:type="uml:Property" xmi:id="_19_0_4_58901f1_1667600196883_169912_162" name="conflict" type="_19_0_2_12e503d9_1577820468974_665346_65985">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667600196884_431730_166"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1667600196884_408577_165" value="*"/>
+                </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Enumeration" xmi:id="_19_0_4_f940371_1696357131087_151242_74" name="ChangeType">
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_f940371_1696357194543_106295_96" name="CREATED"/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_f940371_1696357218318_802359_98" name="UPDATED"/>
+                <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_19_0_4_f940371_1696357221088_922864_100" name="DELETED"/>
+            </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_16560409_1567520780258_199959_197" name="ProjectService">
+            <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568648140631_437614_84" body="Service for working with projects.">
+                <annotatedElement xmi:idref="_19_0_2_16560409_1567520780258_199959_197"/>
+            </ownedComment>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_18_5_3_16560409_1536675096925_104323_19136" name="getProjects" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568648160535_185584_95" body="Get all projects.">
+                    <annotatedElement xmi:idref="_18_5_3_16560409_1536675096925_104323_19136"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675485787_623439_19172" name="projects" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468973_232920_65982">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_18_5_3_16560409_1536675485788_158325_19174"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_18_5_3_16560409_1536675485787_317693_19173" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_18_5_3_16560409_1536675134357_571360_19144" name="getProjectById" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568648189268_615440_96" body="Get project with the given id (projectId).">
+                    <annotatedElement xmi:idref="_18_5_3_16560409_1536675134357_571360_19144"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675134359_130117_19147" name="projectId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675514807_888074_19177" name="result" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468973_232920_65982">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_18_5_3_16560409_1536675514808_938218_19179"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_18_5_3_16560409_1536675837913_351069_19210" name="createProject">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568648382433_315550_100" body="Create a new project with the given name and description (optional).">
+                    <annotatedElement xmi:idref="_18_5_3_16560409_1536675837913_351069_19210"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675837914_476869_19213" name="name" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675883594_827542_19220" name="description" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629495422500_142716_24"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675859992_318659_19217" name="result" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667596309256_64941_24" name="updateProject">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667596309285_404375_27" body="Update the project with the given id (projectId).">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667596309256_64941_24"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596309281_702994_25" name="projectId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596309284_545734_26" name="result" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596459169_313129_37" name="name" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667596489340_963350_44"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596501565_583177_46" name="description" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667596501566_404168_48"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596512802_411486_51" name="defaultBranch" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667596570586_714872_58"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667596592164_629764_66" name="deleteProject">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667596592166_875354_72" body="&lt;p&gt;Delete the project with the given id (projectId).&lt;/p&gt;&#xA;&#xA;&lt;p&gt;The following pre-condition must be satisfied for a project to be deleted.&lt;/p&gt;&#xA;&#xA;&lt;ol&gt;&#xA;&#9;&lt;li&gt;Project with given projectId exists.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&#xA;&lt;p&gt;The following post-condition must be satisfied for a project to be deleted.&lt;/p&gt;&#xA;&#xA;&lt;ol&gt;&#xA;&#9;&lt;li&gt;All operations of all services where projectId (Id of the deleted project) is an input argument will return null.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&#xA;&lt;p&gt;Note that when a project is being deleted, elements owned by the project may be used in other projects via project usages. The detection of this condition and subsequent behavior is left to the API and Service providers. As a general recommendation, API and Service providers may implement different behaviors, such as, but not limited to, the following.&lt;/p&gt;&#xA;&#xA;&lt;ol&gt;&#xA;&#9;&lt;li&gt;Allow projects to be deleted irrespective of any of the elements from its latest tag (commit), default or pre-specified branches, being used in other projects, via project usages. The Service provider guarantees that future operations involving the using projects will continue to work in the absence of referenced elements owned by the deleted project. It is up to the Service Provider to find a way to implement this guarantee, such as by suppressing such nonexistent element references or reporting only unique identifiers of nonexistent element references in operation results.&lt;/li&gt;&#xA;&#9;&lt;li&gt;Allow projects to be deleted only if none of the elements in a list of pre-specified commits (e.g. latest tag and main branch) are being used in the list of pre-specified commits (e.g. latest tag or main branch) of another project, via project usage.&lt;/li&gt;&#xA;&#9;&lt;li&gt;Allow projects to be deleted only if none of their commits are referenced by project usages in any of the commits of any other project.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667596592164_629764_66"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596592164_146099_67" name="projectId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596592165_22599_68" name="result" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+            </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_19_0_2_58901f1_1596546490202_952360_2802" name="QueryService">
+            <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_58901f1_1596546490205_944358_2805" body="Service for working with queries.">
+                <annotatedElement xmi:idref="_19_0_2_58901f1_1596546490202_952360_2802"/>
+            </ownedComment>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629837783011_998405_32652" name="getQueries">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629837783013_136722_32659" body="Get all the queries in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629837783011_998405_32652"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629837783013_555241_32657" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629837783013_89474_32658" name="queries" visibility="public" direction="return" type="_19_0_2_58901f1_1596546546708_201132_2821">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629837783014_911174_32663"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1629837783014_282255_32662" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629837783011_438971_32651" name="getQueryById">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629837783013_38733_32656" body="Get the query with the given id (queryId) in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629837783011_438971_32651"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629837783012_848877_32653" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667670308193_812703_731" name="queryId" visibility="public" direction="return" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629837783012_260524_32655" name="query" visibility="public" direction="return" type="_19_0_2_58901f1_1596546546708_201132_2821">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629837783014_321179_32661"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1597379273925_383088_582" name="createQuery">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1597401150979_574242_1208" body="Create a query in the given project with the given inputs.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1597379273925_383088_582"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1671294914111_739058_7747" name="name" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1597401754688_365236_1226" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1597379361285_583702_586" name="select" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1597379377719_861750_587"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597379377719_389592_588" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1597379383586_317320_589" name="scope" visibility="public" type="_19_0_4_58901f1_1628545298302_366009_233">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1597379383587_541407_591"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597379383587_409422_590" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1597401597818_807319_1212" name="where" visibility="public" type="_19_0_4_58901f1_1597377190443_458144_421"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1597401706391_196521_1223" name="orderBy" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1597401739751_809159_1224"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1597401739751_103506_1225" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1597379311477_543255_585" name="query" visibility="public" direction="return" type="_19_0_2_58901f1_1596546546708_201132_2821"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667670167910_587349_723" name="updateQuery">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667670167911_927691_726" body="Update the given query (updateQuery) in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667670167910_587349_723"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667670167911_125451_724" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667670770989_670120_743" name="updateQuery" visibility="public" type="_19_0_2_58901f1_1596546546708_201132_2821"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667670167911_927385_725" name="query" visibility="public" direction="return" type="_19_0_2_58901f1_1596546546708_201132_2821"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1655561630459_451343_60" name="deleteQuery">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1655561630465_474308_64" body="Delete the query with the given id (queryId) in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1655561630459_451343_60"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1655561630463_561716_61" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1655561630464_632157_62" name="queryId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1655561630465_462929_63" name="query" visibility="public" direction="return" type="_19_0_2_58901f1_1596546546708_201132_2821"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_2_58901f1_1596546490204_45584_2804" name="executeQueryById">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_58901f1_1596546490209_538758_2819" body="Execute the query with the given id in the owning project (Query.project) at the given commit. If the commit is not specified, then the head commit of the default branch of the project will be used.">
+                    <annotatedElement xmi:idref="_19_0_2_58901f1_1596546490204_45584_2804"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_58901f1_1596546490207_696639_2814" name="queryId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629811531992_499384_30595" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667670598346_494045_738"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_58901f1_1596546490208_64107_2816" name="result" visibility="public" direction="return" type="_19_0_4_58901f1_1628545298302_366009_233">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_58901f1_1596546701554_211637_2823"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_58901f1_1596546701555_124673_2824" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1655562564586_880403_69" name="executeQuery" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1655562564590_368654_73" body="Execute the given query in the owning project (Query.project) at the given commit. If the commit is not specified, then the head commit of the default branch of the project will be used.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1655562564586_880403_69"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1655562564588_439554_70" name="query" visibility="public" type="_19_0_2_58901f1_1596546546708_201132_2821"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1655562564589_759300_71" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667670634648_409794_741"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1655562564590_173059_72" name="result" visibility="public" direction="return" type="_19_0_4_58901f1_1628545298302_366009_233">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1655562564590_718789_75"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1655562564590_506988_74" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1614696873640_24592_621" name="ProjectDataVersioningService">
+            <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1614696873645_80038_628" body="Service for working with data versioning, such as commits, branches, and tags, in projects.">
+                <annotatedElement xmi:idref="_19_0_4_58901f1_1614696873640_24592_621"/>
+            </ownedComment>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667674305070_134486_2274" name="getCommits" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667674305071_105850_2277" body="Get all the commits in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667674305070_134486_2274"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667674305070_720907_2275" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667674305070_16017_2276" name="commits" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468971_790808_65979">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667674305071_114188_2279"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1667674305071_628730_2278" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614696873643_421559_624" name="getHeadCommit" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1614696873649_591187_638" body="Get the head commit of the given branch in the given project. If the branch is not specified, the default branch of the project is used.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614696873643_421559_624"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873648_940252_636" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697118065_573971_760" name="branch" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667674434382_361953_2283"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873648_556070_637" name="commit" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614696873642_438907_623" name="getCommitById" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1614696873648_114252_635" body="Get the commit with the given id (commitId) in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614696873642_438907_623"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873647_642928_632" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873647_509065_633" name="commitId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873648_339445_634" name="commit" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468971_790808_65979">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629743978829_231181_28228"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614696873643_717621_625" name="createCommit">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1614696873650_397456_641" body="&lt;p&gt;Create a new commit with the given change (collection of DataVersion records) in the given branch of the project. If the branch is not specified, the default branch of the project is used. Commit.change should include the following for each Data object that needs to be created, updated, or deleted in the new commit. (1) Creating Data - Commit.change should include a DataVersion record with DataVersion.payload populated with the Data being created. DataVersion.identity is either left empty, in which case a new DataIdentity needs to be created by the Service and assigned to DataVersion.identity in the new commit; or provided a brand new value (one that does not already exist in any of the &lt;em&gt;previousCommits&lt;/em&gt;) by the client and accepted by the Service as is. (2) Updating Data - Commit.change should include a DataVersion record with DataVersion.payload populated with the updated Data. DataVersion.identity should be populated with the DataIdentity for which a new DataVersion record will be created in the new commit. (3) Deleting Data - Commit.change should include a DataVersion record with DataVersion.payload not provided, thereby indicating deletion of DataIdentity in the new commit. DataVersion.identity should be populated with the DataIdentity that will be deleted in the new commit. When a DataIdentity is deleted in a commit, all its versions (DataVersion) are also deleted, and any references from other DataIdentity are also removed to maintain data integrity. In addition, for Element Data (KerML), deletion of an Element must also result in deletion of incoming Relationships. When Element Data (KerML) is created or updated, derived properties must be computed or verified if the API provider claims Derived Property Conformance. The deleted element - DataIdentity and its DataVersion records - will be accessible in previous commits.&lt;/p&gt;&#xA;">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614696873643_717621_625"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873649_697022_639" name="change" visibility="public" type="_19_0_2_12e503d9_1577820468972_486874_65981">
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1614696873653_595215_650" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697173316_378552_761" name="branch" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1614697173331_938765_763"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1622046584375_167645_79" name="previousCommits" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1622046605236_432892_80"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1622046605238_566780_81" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873649_906100_640" isOrdered="true" name="commit" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1622049048282_684305_914" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667689656917_393999_3372" name="getCommitChange" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667689656919_759240_3376" body="&lt;p&gt;Get the change in the given commit of the given project.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;The operation getCommitChange in ProjectDataVersioningService has an optional argument changeTypes that is a collection typed by the enumeration ChangeType with three literals (CREATED, UPDATED, DELETED).&lt;/p&gt;&#xA;&#xA;&lt;p&gt;If the argument changeTypes is passed, then only the changes of the given type will be returned by the operation as DataVersion records. Some examples to elaborate this behavior are included below.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;If changeTypes = [], i.e. the argument is not specified, then the DataVersion records for all the data that was created, updated, or deleted in the given commit will be returned.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;If changeTypes = [&amp;#39;DELETED&amp;#39;], then the DataVersion records for all the data that was deleted in the given commit will be returned.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;If changeTypes = [&amp;#39;CREATED&amp;#39;, &amp;#39;UPDATED&amp;#39;], then the DataVersion records for all the data that was created or updated in the given commit will be returned.&lt;/p&gt;&#xA;">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667689656917_393999_3372"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689656918_589746_3373" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689656918_354284_3374" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689656918_640345_3375" name="change" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468972_486874_65981">
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1667689709109_377568_3381" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_f940371_1696358409431_655212_103" name="changeTypes" visibility="public" type="_19_0_4_f940371_1696357131087_151242_74">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_f940371_1696358490559_426065_104"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_f940371_1696358490560_228740_105" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667689720176_14497_3382" name="getCommitChangeById" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667689720177_761581_3386" body="Get the change with the given id (changeId) in the given commit of the given project. The changeId is the id of the DataVersion that changed in the commit.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667689720176_14497_3382"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689720176_449633_3383" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689720176_883778_3384" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689737019_124630_3392" name="changeId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689720177_222215_3385" name="change" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468972_486874_65981"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614696873641_264446_622" name="getBranches" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1614696873647_843518_631" body="Get all the branches in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614696873641_264446_622"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873646_141082_629" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696873646_309180_630" name="branches" visibility="public" direction="return" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1614696873652_260080_648" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614697478258_445676_771" name="getBranchById" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1614697478260_940516_775" body="Get the branch with the given id (branchId) in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614697478258_445676_771"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697478259_294699_772" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697478259_516296_773" name="branchId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697478259_880278_774" name="branch" visibility="public" direction="return" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629743965087_11474_28226"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614696986549_344586_753" name="getDefaultBranch" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1614696986550_551720_756" body="Get the default branch of the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614696986549_344586_753"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696986549_516191_754" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614696986550_12776_755" name="defaultBranch" visibility="public" direction="return" type="_19_0_4_58901f1_1614653083353_265065_103"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614697941566_393230_791" name="setDefaultBranch">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1614697941569_319238_794" body="Set the branch with the given branchId as the default branch of the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614697941566_393230_791"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697941568_903411_792" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697957331_794952_798" name="branchId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697941568_90803_793" name="defaultBranch" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614697730160_718282_777" name="createBranch">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1622047424446_72587_906" body="Create a new branch with the given name (branchName) in the given project, and set the head of the new branch as the given commit (head).">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614697730160_718282_777"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697778412_756222_780" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697741531_999154_779" name="branchName" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629742898156_996654_28209" name="head" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697848393_529751_785" name="branch" visibility="public" direction="return" type="_19_0_4_58901f1_1614653083353_265065_103"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1614697808633_448707_781" name="deleteBranch">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1622047478086_898671_907" body="Delete the branch with the given id (branchId) in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1614697808633_448707_781"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697808633_144899_782" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697808633_136928_783" name="branchId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1614697867017_573059_788" name="deletedBranch" visibility="public" direction="return" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1614697867017_657430_790"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629821998505_987287_32211" name="getTags" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629821998506_621340_32214" body="Get all the tags in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629821998505_987287_32211"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629821998506_418115_32212" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629821998506_993304_32213" name="tags" visibility="public" direction="return" type="_19_0_4_58901f1_1628778623137_473540_604">
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1629821998506_142637_32215" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629822055976_80172_32220" name="getTagById" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629822055977_633863_32224" body="Get the tag with the given id (tagId) in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629822055976_80172_32220"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822055976_42379_32221" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822055976_673881_32222" name="tagId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822055977_717523_32223" name="tag" visibility="public" direction="return" type="_19_0_4_58901f1_1628778623137_473540_604"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667689580227_717280_3364" name="getTaggedCommit" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667689580228_250957_3368" body="Get the tagged commit of the given tag in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667689580227_717280_3364"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689580227_571832_3365" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689580227_507648_3366" name="tag" visibility="public" type="_19_0_4_58901f1_1628778623137_473540_604"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667689580227_2023_3367" name="commit" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629822132716_275302_32230" name="createTag">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629822132718_548547_32235" body="Create a new tag with the given name (tagName) in the given project, and set the taggedCommit of the new tag as the given commit (taggedCommit).">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629822132716_275302_32230"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822132717_971524_32231" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822132717_70613_32232" name="tagName" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822132718_556219_32233" name="taggedCommit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822132718_131020_32234" name="tag" visibility="public" direction="return" type="_19_0_4_58901f1_1628778623137_473540_604"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629822379315_797399_32241" name="deleteTag">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629822379316_695158_32245" body="Delete the tag with the given id (tadId) in the given project.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629822379315_797399_32241"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822379315_458200_32242" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822379316_594027_32243" name="tagId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629822379316_957260_32244" name="deletedTag" visibility="public" direction="return" type="_19_0_4_58901f1_1628778623137_473540_604">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629822379316_641163_32247"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667596777087_33864_102" name="mergeIntoBranch">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667596777089_473323_106" body="Merge the given commits (commitsToMerge) in the given branch (baseBranch). &#xA;The commits included in commitsToMerge may be commits referenced by a CommitReference, such as Branch.head or Tag.taggedCommit, or any other commit in the owning project (Project.commits).&#xA;This operation returns a MergeResult which will include either of the following: (1) commit after the merge operation if successful, or (2) a set of DataIdentity records representing the merge conflicts if the merge operation is unsuccessful.&#xA;Two optional inputs may be provided: (1) resolution as a set of Data that will resolve the merge conflicts, and (2) description of the merged commit if this operation is successful.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667596777087_33864_102"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596777088_909186_103" name="baseBranch" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596777088_708098_104" name="commitsToMerge" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979">
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1667598194186_164638_150" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667599924894_625336_157" name="resolution" visibility="public" type="_19_0_4_58901f1_1628545298302_366009_233">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667599924895_792907_159"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1667599924895_649721_158" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667755735665_101252_3756" name="description" visibility="public">
+                    <type href="http://www.omg.org/spec/UML/20161101/PrimitiveTypes.xmi#String"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667755806181_620842_3757"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667596777088_179146_105" name="result" visibility="public" direction="return" type="_19_0_4_58901f1_1667600196881_725157_160"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1667597100139_951935_129" name="diffCommits" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1667597100141_760137_133" body="&lt;p&gt;Get the difference between two commits - compareCommit and baseCommit. The set of all DataVersion records in a project at a given commit is accessible as Commit.versionedData. From a set theoretic perspective, this operation gets&amp;nbsp;compareCommit.versionedData - baseCommit.versionedData and returns a DataDifference object with baseData and compareData for each difference. If any data is present in the compareCommit but absent in the baseCommit, DataDifference.compareData will include the corresponding DataVersion and DataDifference.baseData will be empty. If any data is absent in the compareCommit but present in the baseCommit, DataDifference.compareData will be empty and DataDifference.baseData will include the corresponding DataVersion. If any data is present in both but different in the compareCommit and baseCommit, DataDifference.compareData and DataDifference.baseData will include the corresponding DataVersion records.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;The operation diffCommits in ProjectDataVersioningService has an optional argument changeTypes that is a collection typed by the enumeration ChangeType with three literals (CREATED, UPDATED, DELETED).&lt;/p&gt;&#xA;&#xA;&lt;p&gt;If the argument changeTypes is passed, then only the changes of the given type will be returned by the operation as DataDifference objects. Some examples to elaborate this behavior are included below.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;If changeTypes = [], i.e. the argument is not specified, then the DataDifference objects for all the data that was created, updated, or deleted in the compareCommit versus the baseCommit will be returned.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;If changeTypes = [&amp;#39;DELETED&amp;#39;], then the DataDifference objects for all the data that was deleted in the compareCommit versus the baseCommit will be returned. If changeTypes = [&amp;#39;CREATED&amp;#39;, &amp;#39;UPDATED&amp;#39;], then the DataDifference objects for all the data that was created or updated in the compareCommit versus the baseCommit will be returned.&lt;/p&gt;">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1667597100139_951935_129"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667597100140_671459_130" name="baseCommit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667597100140_951657_131" name="compareCommit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1667597100140_228662_132" name="difference" visibility="public" direction="return" type="_19_0_4_58901f1_1667597371888_316451_135">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1667599099964_58838_151"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1667599099965_651522_152" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_f940371_1696358574289_951402_107" name="changeTypes" visibility="public" type="_19_0_4_f940371_1696357131087_151242_74">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_f940371_1696358604413_286176_108"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_f940371_1696358604413_615731_109" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1629807305744_239319_30337" name="ProjectUsageService">
+            <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629807305744_164879_30342" body="Service for working with project usages.">
+                <annotatedElement xmi:idref="_19_0_4_58901f1_1629807305744_239319_30337"/>
+            </ownedComment>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1627999838031_140797_72" name="getProjectUsages" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1627999838033_323166_75" body="Get all the project usages in the given project at the given commit.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1627999838031_140797_72"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1627999838032_272298_73" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629756741147_938996_29926" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1627999838032_24803_74" name="projectUsages" visibility="public" direction="return" type="_19_0_4_58901f1_1627508656778_593254_548">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1627999838034_214248_77"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1627999838033_681315_76" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1627999873984_593230_78" name="createProjectUsage">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1627999873988_251239_84" body="Create a new project usage in the given project at the head commit of the given branch. This operation returns a new commit that includes the new project usage, and sets the head of the given branch to the new commit. If a project branch is not given, then the default branch of the project will be used.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1627999873984_593230_78"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1627999873988_322748_83" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1627999873986_442362_80" name="branch" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1627999873990_812851_88"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1627999873985_61011_79" name="projectUsage" visibility="public" type="_19_0_4_58901f1_1627508656778_593254_548"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1627999873987_448474_82" isOrdered="true" name="newCommit" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1628000048106_82573_104" name="deleteProjectUsage">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1628000048109_417954_109" body="Deletes the project usage with the given id (projectUsageId) from the given project at the head commit of the given branch. This operation returns a new commit where the given project usage does not exist, and sets the head of the given branch to the new commit. If a project branch is not given, then the default branch of the project will be used.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1628000048106_82573_104"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1628000048108_924279_108" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1628000048108_398162_106" name="branch" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1628000048109_287522_113"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1628000048107_219058_105" name="projectUsageId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1628000048108_754544_107" isOrdered="true" name="newCommit" visibility="public" direction="return" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+            </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_18_5_3_16560409_1535391609027_360159_98285" name="ElementNavigationService">
+            <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568647495424_750152_47" body="Service for working with element navigating in projects.">
+                <annotatedElement xmi:idref="_18_5_3_16560409_1535391609027_360159_98285"/>
+            </ownedComment>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_2_16560409_1567520780260_151953_199" name="getElements" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568648304058_115020_98" body="Get all the elements in a given project at the given commit.">
+                    <annotatedElement xmi:idref="_19_0_2_16560409_1567520780260_151953_199"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_16560409_1567520780262_200351_204" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_16560409_1586925470296_907362_76" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_16560409_1567520780262_450019_205" name="elements" visibility="public" direction="return">
+                    <type href="KerML Abstract Syntax.xml#_18_5_3_12e503d9_1533160651703_306405_42199"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_16560409_1567520780265_652003_215"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_16560409_1567520780265_303969_214" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_18_5_3_16560409_1535391609417_948286_98312" name="getElementById" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568042484645_784835_45" body="Get element with the given id (elementId) in the given project at the given commit.">
+                    <annotatedElement xmi:idref="_18_5_3_16560409_1535391609417_948286_98312"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_58901f1_1596532491297_468770_1235" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_58901f1_1596532768837_222025_1236" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1535391609425_963739_98327" name="elementId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1535391609424_793880_98325" name="result" visibility="public" direction="return">
+                    <type href="KerML Abstract Syntax.xml#_18_5_3_12e503d9_1533160651703_306405_42199"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_18_5_3_16560409_1535391609432_325067_98352"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_18_5_3_16560409_1536675607665_601398_19191" name="getRelationshipsByRelatedElement" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568647775095_272712_58" body="Get relationships that are incoming, outgoing, or both relative to the given related element.">
+                    <annotatedElement xmi:idref="_18_5_3_16560409_1536675607665_601398_19191"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675607666_850489_19192" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_58901f1_1596533147628_821848_1238" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675607666_67207_19193" name="elementId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_58901f1_1596533527120_784355_1239" name="direction" visibility="public" type="_18_5_3_16560409_1535391609027_991111_98286"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_18_5_3_16560409_1536675607667_857465_19194" name="result" visibility="public" direction="return">
+                    <type href="KerML Abstract Syntax.xml#_18_5_3_12e503d9_1533160651700_869737_42192"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_18_5_3_16560409_1536675607667_315623_19196"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_18_5_3_16560409_1536675607667_221610_19195" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_2_16560409_1567520780259_560517_198" name="getRootElements" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_2_16560409_1568648248025_292443_97" body="Get all the root elements in the given project at the given commit.">
+                    <annotatedElement xmi:idref="_19_0_2_16560409_1567520780259_560517_198"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_16560409_1567520780261_202188_202" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_2_16560409_1567520780262_220168_203" name="root_elements" visibility="public" direction="return">
+                    <type href="KerML Abstract Syntax.xml#_18_5_3_12e503d9_1533160651703_306405_42199"/>
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_2_16560409_1567520780264_408623_211"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_2_16560409_1567520780264_734554_210" value="*"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1622046253618_238845_68" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+            </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_19_0_4_58901f1_1629806095412_620653_29939" name="ExternalRelationshipService">
+            <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629806095412_96915_29944" body="Service for working with external data and external relationships in projects.">
+                <annotatedElement xmi:idref="_19_0_4_58901f1_1629806095412_620653_29939"/>
+            </ownedComment>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629806513342_639047_30100" name="getExternalRelationships" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629806513342_73215_30104" body="Get all the external relationships in a given project at a given commit.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629806513342_639047_30100"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806513342_66351_30101" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806513342_170591_30102" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806513342_788116_30103" name="externalRelationships" visibility="public" direction="return" type="_19_0_2_58901f1_1596535924317_146131_1855">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629806513342_443699_30106"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1629806513342_918943_30105" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629806095412_121445_29940" name="getExternalRelationshipsByElement" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629806095412_509467_29948" body="Get all the external relationships in the given project at the given commit, where the id of elementEnd of the external relationship is the given elementId.">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629806095412_121445_29940"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806095412_793694_29945" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806095412_208093_29946" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806095412_189673_29947" name="elementId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806342332_658453_30097" name="externalRelationships" visibility="public" direction="return" type="_19_0_2_58901f1_1596535924317_146131_1855">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629806476501_824971_30098"/>
+                    <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_19_0_4_58901f1_1629806476501_120100_30099" value="*"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_19_0_4_58901f1_1629806095412_267085_29941" name="getExternalRelationshipById" isQuery="true">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_19_0_4_58901f1_1629806095412_617788_29953" body="Get the external relationship with the given id (externalRelationshipId). ">
+                    <annotatedElement xmi:idref="_19_0_4_58901f1_1629806095412_267085_29941"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806095412_917058_29949" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806095412_634095_29950" name="commit" visibility="public" type="_19_0_2_12e503d9_1577820468971_790808_65979"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806095412_977976_29951" name="externalRelationshipId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_19_0_4_58901f1_1629806095412_705206_29952" name="result" visibility="public" direction="return" type="_19_0_2_58901f1_1596535924317_146131_1855">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_19_0_4_58901f1_1629806095422_333691_29967"/>
+                </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_2022x_2_12e503d9_1741036560339_807836_584" name="createExternalRelationship">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_2022x_2_12e503d9_1741036684874_18829_598" body="Create an external relationship in a given project on a given branch.">
+                    <annotatedElement xmi:idref="_2022x_2_12e503d9_1741036560339_807836_584"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_2022x_2_12e503d9_1741036565991_793754_586" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_2022x_2_12e503d9_1741036566061_445155_587" name="branch" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1741036566132_279292_588"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_2022x_2_12e503d9_1741036566133_983807_590" name="externalRelationship" visibility="public" type="_19_0_2_58901f1_1596535924317_146131_1855"/>
+            </ownedOperation>
+            <ownedOperation xmi:type="uml:Operation" xmi:id="_2022x_2_12e503d9_1741036588668_276062_591" name="deleteExternalRelationship">
+                <ownedComment xmi:type="uml:Comment" xmi:id="_2022x_2_12e503d9_1741036741868_220113_599" body="Delete the external relationship with the given id (externalRelationshipId).">
+                    <annotatedElement xmi:idref="_2022x_2_12e503d9_1741036588668_276062_591"/>
+                </ownedComment>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_2022x_2_12e503d9_1741036597413_267508_593" name="project" visibility="public" type="_19_0_2_12e503d9_1577820468973_232920_65982"/>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_2022x_2_12e503d9_1741036597464_614167_594" name="branch" visibility="public" type="_19_0_4_58901f1_1614653083353_265065_103">
+                    <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2022x_2_12e503d9_1741036597512_103420_595"/>
+                </ownedParameter>
+                <ownedParameter xmi:type="uml:Parameter" xmi:id="_2022x_2_12e503d9_1741036597513_329223_597" name="externalRelationshipId" visibility="public" type="_18_5_3_16560409_1536675188069_680014_19152"/>
+            </ownedOperation>
+        </packagedElement>
+    </uml:Model>
+</xmi:XMI>

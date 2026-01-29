@@ -26,7 +26,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
 
-    using SysML2.NET.PIM.DTO;
+    using SysML2.NET.PIM.DTO.API_Model;
     using SysML2.NET.Serializer.Json;
     using SysML2.NET.Serializer.Json.Core.DTO;
 

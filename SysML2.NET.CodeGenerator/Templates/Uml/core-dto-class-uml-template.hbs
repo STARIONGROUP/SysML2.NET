@@ -1,7 +1,8 @@
-﻿// -------------------------------------------------------------------------------------------------
+﻿{{#with this.ClassContext}}
+// -------------------------------------------------------------------------------------------------
 // <copyright file="{{this.Name}}.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -22,14 +23,14 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
+namespace SysML2.NET.{{../Model}}.DTO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    {{ #Class.WriteEnumerationNameSpaces this}}
-    {{ #Class.WriteNameSpaces this DTO}}
+    {{ #Class.WriteEnumerationNameSpaces this ../Model}}
+    {{ #Class.WriteNameSpaces this DTO ../Model}}
     using SysML2.NET.Decorators;
 
     {{ #Documentation this }}
@@ -37,6 +38,7 @@ namespace SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this
     [GeneratedCode("SysML2.NET", "latest")]
     {{ Enum.ToString this.Visibility }} partial class {{this.Name}} : I{{this.Name}}
     {
+        {{#if (Class.DoesImplementsDataInterface this ../Model)}}
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
@@ -44,6 +46,7 @@ namespace SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this
         [Implements(implementation: "IData.Id")]
         public Guid Id { get; set; }
 
+        {{/if}}
         {{ #each (Class.QueryAllProperties this) as | property | }}
         {{ #Documentation property }}
         {{ #Decorator.WritePropertyAttribute property }}
@@ -51,8 +54,8 @@ namespace SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this
         {{ #Decorator.WriteRedefinedPropertyAttribute property }}
         {{ #Decorator.WriteRedefinedByPropertyAttribute property ../ }}
         {{ #Decorator.WriteImplementsAttribute property }}
-        {{ #Property.WriteForDTOClass property ../ }}
-            
+        {{ #Property.WriteForDTOClass property ../  ../../Model}}
+
         {{/each}}
     }
 }
@@ -60,3 +63,4 @@ namespace SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
+{{/with}}

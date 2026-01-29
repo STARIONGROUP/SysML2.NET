@@ -178,6 +178,12 @@
       <None Update="Templates\Uml\Partials\core-json-dto-serializer-uml-partial-template.hbs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="datamodel\SysML_PIM.xmi">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="datamodel\KerML Abstract Syntax.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

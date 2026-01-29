@@ -23,7 +23,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
     using System;
     using System.Text.Json;
 
-    using SysML2.NET.PIM.DTO;
+    using SysML2.NET.PIM.DTO.API_Model;
     using SysML2.NET.Serializer.Json;
 
     /// <summary>
@@ -61,6 +61,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                     writer.WriteString("@type"u8, "Commit"u8);
                     writer.WriteString("@id"u8, commit.Id);
                     writer.WriteStartArray("alias"u8);
+                    
                     if (commit.Alias != null)
                     {
                         foreach (var item in commit.Alias)
@@ -68,16 +69,24 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
                             writer.WriteStringValue(item);
                         }
                     }
+                    
                     writer.WriteEndArray();
                     writer.WriteString("created"u8, commit.Created);
                     writer.WriteString("description"u8, commit.Description);
                     writer.WriteStartObject("owningProject"u8);
                     writer.WriteString("@id"u8, commit.OwningProject);
                     writer.WriteEndObject();
-                    writer.WriteString("resourceIdentifier"u8, commit.ResourceIdentifier);
-                    writer.WriteStartObject("previousCommit"u8);
-                    writer.WriteString("@id"u8, commit.PreviousCommit);
-                    writer.WriteEndObject();
+                    writer.WriteString("resourceIdentifier"u8, commit.ResourceIdentifier?.AbsoluteUri);
+                    writer.WriteStartArray("previousCommits"u8);
+
+                    foreach (var previousCommit in commit.PreviousCommits)
+                    {
+                        writer.WriteStartObject();
+                        writer.WriteString("@id"u8, previousCommit);
+                        writer.WriteEndObject();    
+                    }
+                    
+                    writer.WriteEndArray();
                     writer.WriteEndObject();
                         
                     break;

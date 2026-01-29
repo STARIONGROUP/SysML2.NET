@@ -1,7 +1,8 @@
+{{#with this.ClassContext}}
 // -------------------------------------------------------------------------------------------------
 // <copyright file="I{{this.Name}}.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -22,20 +23,20 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
+namespace SysML2.NET.{{../Model}}.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
 {
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
 
-    {{ #Class.WriteEnumerationNameSpaces this}}
-    {{ #Class.WriteNameSpaces this POCO}}
+    {{ #Class.WriteEnumerationNameSpaces this ../Model}}
+    {{ #Class.WriteNameSpaces this POCO ../Model}}
     using SysML2.NET.Decorators;
 
     {{ #Documentation this }}
     {{ #Decorator.WriteClassAttribute this }}
     [GeneratedCode("SysML2.NET", "latest")]
-    {{ Enum.ToString this.Visibility }} partial interface I{{this.Name}} {{ #Generalization.Interfaces this }}
+    {{ Enum.ToString this.Visibility }} partial interface I{{this.Name}} {{ #Generalization.InterfaceImplementationAndInterfaces this }}
     {
         {{ #each (Class.QueryOwnedAttributeOrdered this) as | property | }}
         {{ #Documentation property }}
@@ -52,3 +53,4 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
+{{/with}}

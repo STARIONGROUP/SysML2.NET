@@ -26,10 +26,11 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
-    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+    using SysML2.NET.CodeGenerator.Tests.TestFixtureSourceConfiguration;
 
-    [TestFixture]
-    public class UmlCoreDtoGeneratorTestFixture
+    [TestFixture(typeof(CoreModelKindConfiguration))]
+    [TestFixture(typeof(PimModelKindConfiguration))]
+    public class UmlCoreDtoGeneratorTestFixture<TModelKindConfiguration>: ModelKindDependentTestFixture<TModelKindConfiguration> where TModelKindConfiguration: IModelKindConfiguration, new()
     {
         private DirectoryInfo umlDtoDirectoryInfo;
         private UmlCoreDtoGenerator umlCoreDtoGenerator;
@@ -39,7 +40,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         {
             var directoryInfo = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
 
-            var path = Path.Combine("UML", "_SysML2.NET.Core.AutoGenDto");
+            var path = Path.Combine("UML", $"_SysML2.NET.{this.ModelKind}.AutoGenDto");
 
             this.umlDtoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
             this.umlCoreDtoGenerator = new UmlCoreDtoGenerator();
@@ -48,37 +49,37 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         public async Task Verify_that_DataTransferObjects_are_generated()
         {
-            await Assert.ThatAsync(() => this.umlCoreDtoGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult,
-                    this.umlDtoDirectoryInfo),
+            await Assert.ThatAsync(() => this.umlCoreDtoGenerator.GenerateAsync(this.XmiReaderResult,
+                    this.umlDtoDirectoryInfo, this.ModelKind),
                 Throws.Nothing);
         }
 
         [Test]
-        [TestCaseSource(typeof(ExpectedConcreteClasses))]
+        [TestCaseSource(nameof(GetConcreteClasses))]
         [Category("Expected")]
         public async Task Verify_that_expected_Classes_are_generated(string className)
         {
-            var generatedCode = await this.umlCoreDtoGenerator.GenerateDataTransferObjectClassAsync(GeneratorSetupFixture.XmiReaderResult,
+            var generatedCode = await this.umlCoreDtoGenerator.GenerateDataTransferObjectClassAsync(this.XmiReaderResult,
                 this.umlDtoDirectoryInfo,
-                className);
+                className, this.ModelKind);
 
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
-                $"Expected/UML/Core/AutoGenDto/{className}.cs"));
+                $"Expected/UML/{this.ModelKind}/AutoGenDto/{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }
 
         [Test]
-        [TestCaseSource(typeof(ExpectedAllClasses))]
+        [TestCaseSource(nameof(GetAllClasses))]
         [Category("Expected")]
         public async Task Verify_that_expected_Interfaces_are_generated(string className)
         {
-            var generatedCode = await this.umlCoreDtoGenerator.GenerateDataTransferObjectInterfaceAsync(GeneratorSetupFixture.XmiReaderResult,
+            var generatedCode = await this.umlCoreDtoGenerator.GenerateDataTransferObjectInterfaceAsync(this.XmiReaderResult,
                 this.umlDtoDirectoryInfo,
-                className);
+                className, this.ModelKind);
 
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
-                $"Expected/UML/Core/AutoGenDto/I{className}.cs"));
+                $"Expected/UML/{this.ModelKind}/AutoGenDto/I{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

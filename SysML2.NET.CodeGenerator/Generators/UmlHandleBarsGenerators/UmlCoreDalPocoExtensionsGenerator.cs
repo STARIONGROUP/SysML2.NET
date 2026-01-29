@@ -21,9 +21,12 @@
 namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using SysML2.NET.CodeGenerator.Enumeration;
 
     using uml4net.Extensions;
     using uml4net.HandleBars;
@@ -51,16 +54,13 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// <summary>
         /// Generates code specific to the concrete implementation
         /// </summary>
-        /// <param name="xmiReaderResult">
-        /// the <see cref="XmiReaderResult" /> that contains the UML model to generate from
-        /// </param>
-        /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo" />
-        /// </param>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="modelKind">The specific <see cref="ModelKind"/> that the <paramref name="xmiReaderResult"/> represents</param>
         /// <returns>
         /// an awaitable <see cref="Task" />
         /// </returns>
-        public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, ModelKind modelKind)
         {
             await this.GenerateElementExtensions(xmiReaderResult, outputDirectory);
             await this.GeneratePocoExtensions(xmiReaderResult, outputDirectory);

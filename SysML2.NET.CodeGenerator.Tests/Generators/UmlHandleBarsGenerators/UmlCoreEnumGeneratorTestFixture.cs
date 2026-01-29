@@ -26,9 +26,11 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
+    using SysML2.NET.CodeGenerator.Tests.TestFixtureSourceConfiguration;
 
-    [TestFixture]
-    public class UmlCoreEnumGeneratorTestFixture
+    [TestFixture(typeof(CoreModelKindConfiguration))]
+    [TestFixture(typeof(PimModelKindConfiguration))]
+    public class UmlCoreEnumGeneratorTestFixture<TModelKindConfiguration>: ModelKindDependentTestFixture<TModelKindConfiguration> where TModelKindConfiguration: IModelKindConfiguration, new()
     {
         private DirectoryInfo enumerationDirectoryInfo;
         private UmlCoreEnumGenerator coreEnumGenerator;
@@ -38,7 +40,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         {
             var directoryInfo = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
 
-            var path = Path.Combine("UML", "_SysML2.NET.Core.AutoGenEnum");
+            var path = Path.Combine("UML", $"_SysML2.NET.{this.ModelKind}.AutoGenEnum");
 
             this.enumerationDirectoryInfo = directoryInfo.CreateSubdirectory(path);
 
@@ -48,18 +50,19 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         public async Task Verify_that_enumerations_are_generated()
         {
-            await Assert.ThatAsync(() => this.coreEnumGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.enumerationDirectoryInfo),
+            await Assert.ThatAsync(() => this.coreEnumGenerator.GenerateAsync(this.XmiReaderResult, this.enumerationDirectoryInfo, this.ModelKind),
                 Throws.Nothing);
         }
 
         [Test]
-        public async Task Verify_that_expected_enums_are_generated([Values("VisibilityKind", "TransitionFeatureKind")] string enumName)
+        [TestCaseSource(nameof(GetAllEnums))]
+        public async Task Verify_that_expected_enums_are_generated(string enumName)
         {
-            var generatedCode = await this.coreEnumGenerator.GenerateEnumerationAsync(GeneratorSetupFixture.XmiReaderResult, this.enumerationDirectoryInfo,
-                enumName);
+            var generatedCode = await this.coreEnumGenerator.GenerateEnumerationAsync(this.XmiReaderResult, this.enumerationDirectoryInfo,
+                enumName, this.ModelKind);
 
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
-                $"Expected/UML/Core/AutoGenEnum/{enumName}.cs"));
+                $"Expected/UML/{this.ModelKind}/AutoGenEnum/{enumName}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

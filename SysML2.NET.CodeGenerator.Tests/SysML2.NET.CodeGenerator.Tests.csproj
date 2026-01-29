@@ -738,6 +738,203 @@
       <None Include="Expected\UML\Core\AutoGenDto\Usage.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <Compile Remove="Expected\UML\PIM\Branch.cs" />
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\Branch.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\Branch.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\Commit.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\Commit.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\CompositeConstraint.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\CompositeConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\DataDifference.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\DataDifference.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\DataVersion.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\DataVersion.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\ExternalData.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\ExternalData.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\ExternalRelationship.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\ExternalRelationship.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\IBranch.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\IBranch.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\ICommit.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\ICommit.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\ICompositeConstraint.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\ICompositeConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\IDataDifference.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\IDataDifference.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\IDataVersion.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\IDataVersion.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\IExternalData.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\IExternalData.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\IExternalRelationship.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\IExternalRelationship.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\IPrimitiveConstraint.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\IPrimitiveConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\IProject.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\IProject.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\IRecord.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\IRecord.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\PrimitiveConstraint.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\PrimitiveConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenDto\Project.cs" />
+      <None Include="Expected\UML\PIM\AutoGenDto\Project.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenEnum\Direction.cs" />
+      <None Include="Expected\UML\PIM\AutoGenEnum\Direction.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenEnum\Operator.cs" />
+      <None Include="Expected\UML\PIM\AutoGenEnum\Operator.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\Branch.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\Branch.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\Commit.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\Commit.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\CompositeConstraint.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\CompositeConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\DataDifference.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\DataDifference.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\DataVersion.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\DataVersion.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\ExternalData.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\ExternalData.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\ExternalRelationship.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\ExternalRelationship.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\IBranch.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\IBranch.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\ICommit.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\ICommit.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\ICompositeConstraint.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\ICompositeConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\IDataDifference.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\IDataDifference.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\IDataVersion.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\IDataVersion.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\IExternalData.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\IExternalData.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\IExternalRelationship.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\IExternalRelationship.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\IPrimitiveConstraint.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\IPrimitiveConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\IProject.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\IProject.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\IRecord.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\IRecord.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\PrimitiveConstraint.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\PrimitiveConstraint.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPoco\Project.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPoco\Project.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\BranchExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\BranchExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\CommitExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\CommitExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\CompositeConstraintExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\CompositeConstraintExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\DataDifferenceExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\DataDifferenceExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\DataVersionExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\DataVersionExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\ExternalDataExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\ExternalDataExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\ExternalRelationshipExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\ExternalRelationshipExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\PrimitiveConstraintExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\PrimitiveConstraintExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\PIM\AutoGenPocoExtend\ProjectExtensions.cs" />
+      <None Include="Expected\UML\PIM\AutoGenPocoExtend\ProjectExtensions.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -781,10 +978,6 @@
       <None Include="Expected\UML\Core\AutoGenEnum\VisibilityKind.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Extensions\" />
     </ItemGroup>
 
 </Project>

@@ -21,10 +21,14 @@
 namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.Contexts;
+    using SysML2.NET.CodeGenerator.Enumeration;
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.UmlHandleBarHelpers;
 
     using uml4net.Extensions;
@@ -46,25 +50,23 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// <summary>
         /// Generates code specific to the concrete implementation
         /// </summary>
-        /// <param name="xmiReaderResult">
-        /// the <see cref="XmiReaderResult" /> that contains the UML model to generate from
-        /// </param>
-        /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo" />
-        /// </param>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="modelKind">The specific <see cref="ModelKind"/> that the <paramref name="xmiReaderResult"/> represents</param>
         /// <returns>
         /// an awaitable <see cref="Task" />
         /// </returns>
-        public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, ModelKind modelKind)
         {
-            await this.GenerateExtendClassesAsync(xmiReaderResult, outputDirectory);
+            await this.GenerateExtendClassesAsync(xmiReaderResult, outputDirectory, modelKind);
         }
 
         /// <summary>
-        /// Generates POCO classe files
+        /// Generates POCO class files
         /// </summary>
         /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
         /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="modelKind">The specific <see cref="ModelKind"/> that the <paramref name="xmiReaderResult"/> represents</param>
         /// <returns>
         /// an awaitable <see cref="Task" />
         /// </returns>
@@ -72,34 +74,41 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// In case of null value for <paramref name="xmiReaderResult" /> or
         /// <paramref name="outputDirectory" />
         /// </exception>
-        public Task GenerateExtendClassesAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        public Task GenerateExtendClassesAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, ModelKind modelKind)
         {
             ArgumentNullException.ThrowIfNull(xmiReaderResult);
             ArgumentNullException.ThrowIfNull(outputDirectory);
 
-            return this.GenerateExtendClassesInternalAsync(xmiReaderResult, outputDirectory);
+            return this.GenerateExtendClassesInternalAsync(xmiReaderResult, outputDirectory, modelKind);
         }
 
         /// <summary>
-        /// Generates POCO classe files
+        /// Generates POCO class files
         /// </summary>
         /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
         /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="modelKind">The specific <see cref="ModelKind"/> that the <paramref name="xmiReaderResult"/> represents</param>
         /// <returns>
         /// an awaitable <see cref="Task" />
         /// </returns>
-        private async Task GenerateExtendClassesInternalAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        private async Task GenerateExtendClassesInternalAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, ModelKind modelKind)
         {
             var template = this.Templates[ExtendTemplateName];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryRoot(null, name: modelKind.QueryRootNamePerModelKind()).QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => x.OwnedAttribute.Select(y => y.IsDerived || y.IsDerivedUnion).Any())
                 .ToList();
 
             foreach (var @class in classes)
             {
-                var generatedExtend = template(@class);
+                var classContext = new ClassModelKindContext()
+                {
+                    ClassContext = @class,
+                    Model = modelKind
+                };
+                
+                var generatedExtend = template(classContext);
 
                 generatedExtend = this.CodeCleanup(generatedExtend);
 
@@ -115,19 +124,20 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
         /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
         /// <param name="className">The name of the class to generate</param>
+        /// <param name="modelKind">The specific <see cref="ModelKind"/> that the <paramref name="xmiReaderResult"/> represents</param>
         /// <returns>An awaitable <see cref="Task{TResult}" /> with the generated code</returns>
         /// <exception cref="ArgumentNullException">
         /// If the <paramref name="xmiReaderResult" /> or the
         /// <paramref name="outputDirectory" /> is null
         /// </exception>
         /// <exception cref="ArgumentException">If the <paramref name="className" /> is null or whitespace</exception>
-        public Task<string> GenerateExtendClassAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        public Task<string> GenerateExtendClassAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className, ModelKind modelKind)
         {
             ArgumentNullException.ThrowIfNull(xmiReaderResult);
             ArgumentNullException.ThrowIfNull(outputDirectory);
             ArgumentException.ThrowIfNullOrWhiteSpace(className);
 
-            return this.GenerateExtendClassInternalAsync(xmiReaderResult, outputDirectory, className);
+            return this.GenerateExtendClassInternalAsync(xmiReaderResult, outputDirectory, className, modelKind);
         }
 
         /// <summary>
@@ -136,16 +146,23 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
         /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
         /// <param name="className">The name of the class to generate</param>
+        /// <param name="modelKind"></param>
         /// <returns>An awaitable <see cref="Task{TResult}" /> with the generated code</returns>
-        private async Task<string> GenerateExtendClassInternalAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        private async Task<string> GenerateExtendClassInternalAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className, ModelKind modelKind)
         {
             var template = this.Templates[ExtendTemplateName];
 
-            var umlClass = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var umlClass = xmiReaderResult.QueryRoot(null, name: modelKind.QueryRootNamePerModelKind()).QueryPackages()
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Single(x => x.Name == className);
 
-            var generatedExtend = template(umlClass);
+            var classContext = new ClassModelKindContext()
+            {
+                ClassContext = umlClass,
+                Model = modelKind
+            };
+            
+            var generatedExtend = template(classContext);
 
             generatedExtend = this.CodeCleanup(generatedExtend);
 

@@ -54,7 +54,7 @@ namespace SysML2.NET.Dal
             switch (dto)
             {
                 {{#each this as | class |}}
-                case Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Dto:
+                case Core.DTO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Dto:
                     return {{ class.Name }}Factory.Create({{ String.LowerCaseFirstLetter class.Name }}Dto);
                 {{/each}}
                 default:

@@ -33,12 +33,12 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
     {
         private static readonly Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind, bool>> SerializerActionMap = new Dictionary<System.Type, Action<object, Utf8JsonWriter, SerializationModeKind, bool>>
         {
-            { typeof(SysML2.NET.PIM.DTO.Branch), BranchSerializer.Serialize },
-            { typeof(SysML2.NET.PIM.DTO.Commit), CommitSerializer.Serialize },
-            { typeof(SysML2.NET.PIM.DTO.DataIdentity), DataIdentitySerializer.Serialize },
-            { typeof(SysML2.NET.PIM.DTO.DataVersion), DataVersionSerializer.Serialize },
-            { typeof(SysML2.NET.PIM.DTO.Project), ProjectSerializer.Serialize },
-            { typeof(SysML2.NET.PIM.DTO.Tag), TagSerializer.Serialize },
+            { typeof(SysML2.NET.PIM.DTO.API_Model.Branch), BranchSerializer.Serialize },
+            { typeof(SysML2.NET.PIM.DTO.API_Model.Commit), CommitSerializer.Serialize },
+            { typeof(SysML2.NET.PIM.DTO.API_Model.DataIdentity), DataIdentitySerializer.Serialize },
+            { typeof(SysML2.NET.PIM.DTO.API_Model.DataVersion), DataVersionSerializer.Serialize },
+            { typeof(SysML2.NET.PIM.DTO.API_Model.Project), ProjectSerializer.Serialize },
+            { typeof(SysML2.NET.PIM.DTO.API_Model.Tag), TagSerializer.Serialize },
         };
 
         /// <summary>

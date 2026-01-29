@@ -21,10 +21,12 @@
 namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.Enumeration;
     using SysML2.NET.CodeGenerator.UmlHandleBarHelpers;
 
     using uml4net.Extensions;
@@ -42,16 +44,13 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// <summary>
         /// Generates the Core SysML2 model Enumeration Providers
         /// </summary>
-        /// <param name="xmiReaderResult">
-        /// the <see cref="XmiReaderResult" /> that contains the UML model to generate from
-        /// </param>
-        /// <param name="outputDirectory">
-        /// The target <see cref="DirectoryInfo" />
-        /// </param>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="modelKind">The specific <see cref="ModelKind"/> that the <paramref name="xmiReaderResult"/> represents</param>
         /// <returns>
         /// an awaitable <see cref="Task" />
         /// </returns>
-        public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, ModelKind modelKind)
         {
             await this.GenerateEnumerationProvidersAsync(xmiReaderResult, outputDirectory);
         }

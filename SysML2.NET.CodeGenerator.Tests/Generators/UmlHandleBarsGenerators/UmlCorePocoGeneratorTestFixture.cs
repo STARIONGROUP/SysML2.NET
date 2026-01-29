@@ -25,11 +25,14 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 
     using NUnit.Framework;
 
+    using SysML2.NET.CodeGenerator.Enumeration;
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
-    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+    using SysML2.NET.CodeGenerator.Tests.Expected;
+    using SysML2.NET.CodeGenerator.Tests.TestFixtureSourceConfiguration;
 
-    [TestFixture]
-    public class UmlCorePocoGeneratorTestFixture
+    [TestFixture(typeof(CoreModelKindConfiguration))]
+    [TestFixture(typeof(PimModelKindConfiguration))]
+    public class UmlCorePocoGeneratorTestFixture<TModelKindConfiguration>: ModelKindDependentTestFixture<TModelKindConfiguration> where TModelKindConfiguration: IModelKindConfiguration, new()
     {
         private DirectoryInfo umlPocoDirectoryInfo;
         private UmlCorePocoGenerator umlCorePocoGenerator;
@@ -39,7 +42,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         {
             var directoryInfo = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
 
-            var path = Path.Combine("UML", "_SysML2.NET.Core.AutoGenPoco");
+            var path = Path.Combine("UML", $"_SysML2.NET.{this.ModelKind}.AutoGenPoco");
 
             this.umlPocoDirectoryInfo = directoryInfo.CreateSubdirectory(path);
             this.umlCorePocoGenerator = new UmlCorePocoGenerator();
@@ -48,35 +51,35 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         public async Task Verify_that_PlainOldClrObjects_are_generated()
         {
-            await Assert.ThatAsync(() => this.umlCorePocoGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlPocoDirectoryInfo), Throws.Nothing);
+            await Assert.ThatAsync(() => this.umlCorePocoGenerator.GenerateAsync(this.XmiReaderResult, this.umlPocoDirectoryInfo, this.ModelKind), Throws.Nothing);
         }
         
         [Test]
-        [TestCaseSource(typeof(ExpectedAllClasses))]
+        [TestCaseSource(nameof(GetAllClasses))]
         [Category("Expected")]
         public async Task Verify_that_expected_Interfaces_are_generated(string className)
         {
-            var generatedCode = await this.umlCorePocoGenerator.GeneratePocoInterfaceAsync(GeneratorSetupFixture.XmiReaderResult,
+            var generatedCode = await this.umlCorePocoGenerator.GeneratePocoInterfaceAsync(this.XmiReaderResult,
                 this.umlPocoDirectoryInfo,
-                className);
+                className, this.ModelKind);
 
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
-                $"Expected/UML/Core/AutoGenPoco/I{className}.cs"));
+                $"Expected/UML/{this.ModelKind}/AutoGenPoco/I{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }
         
         [Test]
-        [TestCaseSource(typeof(ExpectedConcreteClasses))]
+        [TestCaseSource(nameof(GetConcreteClasses))]
         [Category("Expected")]
         public async Task Verify_that_expected_classes_are_generated(string className)
         {
-            var generatedCode = await this.umlCorePocoGenerator.GenerateDataTransferObjectClassAsync(GeneratorSetupFixture.XmiReaderResult,
+            var generatedCode = await this.umlCorePocoGenerator.GeneratePocoClassAsync(this.XmiReaderResult,
                 this.umlPocoDirectoryInfo,
-                className);
+                className, this.ModelKind);
 
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
-                $"Expected/UML/Core/AutoGenPoco/{className}.cs"));
+                $"Expected/UML/{this.ModelKind}/AutoGenPoco/{className}.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

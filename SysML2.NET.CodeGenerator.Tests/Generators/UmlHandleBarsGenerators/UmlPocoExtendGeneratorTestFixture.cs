@@ -26,22 +26,23 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
-    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+    using SysML2.NET.CodeGenerator.Tests.TestFixtureSourceConfiguration;
 
-    [TestFixture]
-    [Explicit("The POCO Extend classes are Extension methods to compute derived properties. After generation " +
-              "these classes are updated manually and shall not just be overriden")]
-    public class UmlPocoExtendGeneratorTestFixture
+    [TestFixture(typeof(CoreModelKindConfiguration))]
+    [TestFixture(typeof(PimModelKindConfiguration))]
+    /*[Explicit("The POCO Extend classes are Extension methods to compute derived properties. After generation " +
+              "these classes are updated manually and shall not just be overriden")]*/
+    public class UmlPocoExtendGeneratorTestFixture<TModelKindConfiguration>: ModelKindDependentTestFixture<TModelKindConfiguration> where TModelKindConfiguration: IModelKindConfiguration, new()
     {
         private DirectoryInfo umlPocoExtendDirectoryInfo;
         private UmlPocoClassExtensionsGenerator umlPocoClassExtensionsGenerator;
-
+        
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             var directoryInfo = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
 
-            var path = Path.Combine("UML", "_SysML2.NET.Core.AutoGenPocoExtend");
+            var path = Path.Combine("UML", $"_SysML2.NET.{this.ModelKind}.AutoGenPocoExtend");
 
             this.umlPocoExtendDirectoryInfo = directoryInfo.CreateSubdirectory(path);
             this.umlPocoClassExtensionsGenerator = new UmlPocoClassExtensionsGenerator();
@@ -50,20 +51,20 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         public async Task Verify_that_expected_Extensions_are_generated_for_classes_with_derived_properties()
         {
-            await Assert.ThatAsync(() => this.umlPocoClassExtensionsGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlPocoExtendDirectoryInfo), Throws.Nothing);
+            await Assert.ThatAsync(() => this.umlPocoClassExtensionsGenerator.GenerateAsync(this.XmiReaderResult, this.umlPocoExtendDirectoryInfo, this.ModelKind), Throws.Nothing);
         }
 
         [Test]
-        [TestCaseSource(typeof(ExpectedAllClasses))]
+        [TestCaseSource(nameof(GetConcreteClasses))]
         [Category("Expected")]
         public async Task Verify_that_expected_Extensions_are_generated(string className)
         {
-            var generatedCode = await this.umlPocoClassExtensionsGenerator.GenerateExtendClassAsync(GeneratorSetupFixture.XmiReaderResult,
+            var generatedCode = await this.umlPocoClassExtensionsGenerator.GenerateExtendClassAsync(this.XmiReaderResult,
                 this.umlPocoExtendDirectoryInfo,
-                className);
+                className, this.ModelKind);
 
             var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory,
-                $"Expected/UML/Core/AutoGenPocoExtend/{className}Extensions.cs"));
+                $"Expected/UML/{this.ModelKind}/AutoGenPocoExtend/{className}Extensions.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

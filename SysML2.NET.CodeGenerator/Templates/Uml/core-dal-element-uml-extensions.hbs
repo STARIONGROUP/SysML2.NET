@@ -65,7 +65,7 @@ namespace SysML2.NET.Dal
             return poco switch
             {
                 {{#each this as | class |}}
-                Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco => {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }})dto),
+                Core.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco => {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateValueAndRemoveDeletedReferenceProperties((Core.DTO{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }})dto),
                 {{/each}}
                 _ => throw new NotSupportedException($"{poco.GetType().Name} not yet supported")
             };
@@ -106,8 +106,8 @@ namespace SysML2.NET.Dal
             switch (poco)
             {
                 {{#each this as | class |}}
-                case Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco:
-                    {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateReferenceProperties((Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }}) dto, cache);
+                case Core.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }} {{ String.LowerCaseFirstLetter class.Name }}Poco:
+                    {{ String.LowerCaseFirstLetter class.Name }}Poco.UpdateReferenceProperties((Core.DTO{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }}) dto, cache);
                     break;
                 {{/each}}
                 default:

@@ -26,10 +26,10 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
-    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+    using SysML2.NET.CodeGenerator.Tests.TestFixtureSourceConfiguration;
 
-    [TestFixture]
-    public class UmlCoreDalPocoExtensionsGeneratorTestFixture
+    [TestFixture(typeof(CoreModelKindConfiguration))]
+    public class UmlCoreDalPocoExtensionsGeneratorTestFixture<TModelKindConfiguration>: ModelKindDependentTestFixture<TModelKindConfiguration> where TModelKindConfiguration: IModelKindConfiguration, new()
     {
         private DirectoryInfo umlPocoExtensionDirectoryInfo;
         private UmlCoreDalPocoExtensionsGenerator umlCoreDalPocoExtensionsGenerator;
@@ -48,15 +48,15 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         public async Task VerifyCanGeneratePocoExtensions()
         {
-             await Assert.ThatAsync(() => this.umlCoreDalPocoExtensionsGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlPocoExtensionDirectoryInfo), Throws.Nothing);
+             await Assert.ThatAsync(() => this.umlCoreDalPocoExtensionsGenerator.GenerateAsync(this.XmiReaderResult, this.umlPocoExtensionDirectoryInfo, this.ModelKind), Throws.Nothing);
         }
 
         [Test]
-        [TestCaseSource(typeof(ExpectedConcreteClasses))]
+        [TestCaseSource(nameof(GetConcreteClasses))]
         [Category("Expected")]
         public async Task VerifyExpectedPocoExtensionsMatches(string className)
         {
-            var generatedCode = await this.umlCoreDalPocoExtensionsGenerator.GenerateDalPocoExtension(GeneratorSetupFixture.XmiReaderResult,
+            var generatedCode = await this.umlCoreDalPocoExtensionsGenerator.GenerateDalPocoExtension(this.XmiReaderResult,
                 this.umlPocoExtensionDirectoryInfo,
                 className);
 

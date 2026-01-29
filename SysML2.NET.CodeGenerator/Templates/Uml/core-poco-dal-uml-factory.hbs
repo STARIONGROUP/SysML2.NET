@@ -28,31 +28,31 @@ namespace SysML2.NET.Dal
 
     /// <summary>
     /// The purpose of the <see cref="{{this.Name}}Factory"/> is to create a new instance of a
-    /// <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/> based on a <see cref="Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/>
+    /// <see cref="Core.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/> based on a <see cref="Core.DTO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/>
     /// </summary>
     public static class {{this.Name}}Factory
     {
         /// <summary>
-        /// Creates an instance of the <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/> and sets the value properties
+        /// Creates an instance of the <see cref="Core.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/> and sets the value properties
         /// based on the DTO
         /// </summary>
         /// <param name="dto">
-        /// The instance of the <see cref="Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/>
+        /// The instance of the <see cref="Core.DTO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/>
         /// </param>
         /// <returns>
-        /// an instance of <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/>
+        /// an instance of <see cref="Core.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// thrown when <paramref name="dto"/> is null
         /// </exception>
-        public static Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}} Create(Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}} dto)
+        public static Core.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}} Create(Core.DTO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}} dto)
         {
             if (dto == null)
             {
                 throw new ArgumentNullException(nameof(dto), $"the {nameof(dto)} may not be null");
             }
 
-            var poco = new Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}();
+            var poco = new Core.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}();
             
             poco.Id = dto.Id;
                 {{#with this as | class |}}

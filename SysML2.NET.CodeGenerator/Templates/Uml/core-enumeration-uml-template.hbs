@@ -1,7 +1,8 @@
-﻿// -------------------------------------------------------------------------------------------------
+﻿{{#with Enumeration}}
+// -------------------------------------------------------------------------------------------------
 // <copyright file="{{this.Name}}.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
+namespace SysML2.NET.{{../Model}}{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
 {
     using System.CodeDom.Compiler;
 
@@ -41,3 +42,4 @@ namespace SysML2.NET.Core.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
 // ------------------------------------------------------------------------------------------------
 // --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
 // ------------------------------------------------------------------------------------------------
+{{/with}}

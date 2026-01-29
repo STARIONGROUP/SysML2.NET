@@ -26,10 +26,10 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
-    using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+    using SysML2.NET.CodeGenerator.Tests.TestFixtureSourceConfiguration;
 
-    [TestFixture]
-    public class UmlCoreJsonDtoSerializerGeneratorTestFixture
+    [TestFixture(typeof(CoreModelKindConfiguration))]
+    public class UmlCoreJsonDtoSerializerGeneratorTestFixture<TModelKindConfiguration>: ModelKindDependentTestFixture<TModelKindConfiguration> where TModelKindConfiguration: IModelKindConfiguration, new()
     {
         private DirectoryInfo umlDtoSerializerDirectoryInfo;
         private UmlCoreJsonDtoSerializerGenerator umlCoreDtoSerializerGenerator;
@@ -39,7 +39,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         {
             var directoryInfo = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
 
-            var path = Path.Combine("UML", "_SysML2.NET.Serializer.Json.Core.AutoGenSerializer");
+            var path = Path.Combine("UML", $"_SysML2.NET.Serializer.Json.{this.ModelKind}.AutoGenSerializer");
 
             this.umlDtoSerializerDirectoryInfo = directoryInfo.CreateSubdirectory(path);
             this.umlCoreDtoSerializerGenerator = new UmlCoreJsonDtoSerializerGenerator();
@@ -48,15 +48,15 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         [Test]
         public async Task VerifyCanGenerateDtoJsonSerializer()
         {
-            await Assert.ThatAsync(() => this.umlCoreDtoSerializerGenerator.GenerateAsync(GeneratorSetupFixture.XmiReaderResult, this.umlDtoSerializerDirectoryInfo), Throws.Nothing);
+            await Assert.ThatAsync(() => this.umlCoreDtoSerializerGenerator.GenerateAsync(this.XmiReaderResult, this.umlDtoSerializerDirectoryInfo, this.ModelKind), Throws.Nothing);
         }
         
-        [Test, TestCaseSource(typeof(ExpectedConcreteClasses)), Category("Expected")]
+        [Test, TestCaseSource(nameof(GetConcreteClasses)), Category("Expected")]
         public async Task VerifyMatchesExpectedSerializerClass(string className)
         {
-            var generatedCode = await this.umlCoreDtoSerializerGenerator.GenerateDtoSerializerClass(GeneratorSetupFixture.XmiReaderResult, this.umlDtoSerializerDirectoryInfo, className);
+            var generatedCode = await this.umlCoreDtoSerializerGenerator.GenerateDtoSerializerClass(this.XmiReaderResult, this.umlDtoSerializerDirectoryInfo, className);
 
-            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/UML/Core/AutoGenSerializer/{className}Serializer.cs"));
+            var expected = await File.ReadAllTextAsync(Path.Combine(TestContext.CurrentContext.TestDirectory, $"Expected/UML/{this.ModelKind}/AutoGenSerializer/{className}Serializer.cs"));
 
             Assert.That(generatedCode, Is.EqualTo(expected));
         }

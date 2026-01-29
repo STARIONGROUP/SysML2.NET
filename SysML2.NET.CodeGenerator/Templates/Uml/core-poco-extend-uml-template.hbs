@@ -1,4 +1,5 @@
-﻿// -------------------------------------------------------------------------------------------------
+﻿{{#with this.ClassContext}}
+// -------------------------------------------------------------------------------------------------
 // <copyright file="{{this.Name}}Extensions.cs" company="Starion Group S.A.">
 //
 //    Copyright (C) 2022-2025 Starion Group S.A.
@@ -18,13 +19,13 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
+namespace SysML2.NET.{{../Model}}.POCO{{ #NamedElement.WriteFullyQualifiedNameSpace this }}
 {
     using System;
     using System.Collections.Generic;
 
-    {{ #Class.WriteEnumerationNameSpaces this}}
-    {{ #Class.WriteNameSpaces this POCO}}
+    {{ #Class.WriteEnumerationNameSpaces this ../Model}}
+    {{ #Class.WriteNameSpaces this POCO ../Model}}
 
     /// <summary>
     /// The <see cref="{{this.Name}}Extensions"/> class provides extensions methods for
@@ -53,3 +54,4 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
         {{/each}}
     }
 }
+{{/with}}

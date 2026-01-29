@@ -49,6 +49,8 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
         private Dictionary<string, string> pathMaps;
 
         private string rootDirectory;
+        private FileInfo pimModelFileInfo;
+        private FileInfo pimOutputFileInfo;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -76,11 +78,18 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
 
             this.modelFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
                 "SysML_xmi.uml"));
+            
+            this.pimModelFileInfo =  new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
+                "SysML_PIM.xmi"));
 
             Directory.CreateDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, "UML",
                 "_SysML2.NET.Core.AutoGenHtmlDocs"));
 
+            Directory.CreateDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, "UML",
+                "_SysML2.NET.PIM.AutoGenHtmlDocs"));
+            
             this.outputFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "UML", "_SysML2.NET.Core.AutoGenHtmlDocs", "index.html"));
+            this.pimOutputFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "UML", "_SysML2.NET.PIM.AutoGenHtmlDocs", "index.html"));
 
             var inheritanceDiagramRenderer = new InheritanceDiagramRenderer(loggerFactory.CreateLogger<InheritanceDiagramRenderer>());
             this.htmlReportGenerator = new HtmlReportGenerator(inheritanceDiagramRenderer, this.loggerFactory);
@@ -100,6 +109,14 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
             Assert.That(() => this.htmlReportGenerator.GenerateReport(this.modelFileInfo, this.rootDirectoryInfo, "_h6bQED_xEfCL-qw9_9p9XQ", "SysML", 
                     true, this.pathMaps, this.outputFileInfo, customHtml),
             Throws.Nothing);
+            
+            this.loggerFactory = LoggerFactory.Create(builder => { builder.AddSerilog(); });
+            var inheritanceDiagramRenderer = new InheritanceDiagramRenderer(loggerFactory.CreateLogger<InheritanceDiagramRenderer>());
+            this.htmlReportGenerator = new HtmlReportGenerator(inheritanceDiagramRenderer, this.loggerFactory);
+            
+            Assert.That(() => this.htmlReportGenerator.GenerateReport(this.pimModelFileInfo, this.rootDirectoryInfo, "_19_0_4_3fa0198_1689000259946_865221_0", "Systems Modeling API and Services PIM", 
+                    true, this.pathMaps, this.pimOutputFileInfo, customHtml),
+                Throws.Nothing);
         }
     }
 }
