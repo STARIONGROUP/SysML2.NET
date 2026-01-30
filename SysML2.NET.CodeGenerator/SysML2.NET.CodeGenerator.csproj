@@ -1,218 +1,208 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-      <TargetFramework>net9.0</TargetFramework>
-      <LangVersion>12.0</LangVersion>
-      <Version>0.16.0</Version>
-      <Description>A Library to generate SysML v2 code.</Description>
-      <PackageId>SysML2.NET</PackageId>
-      <Company>Starion Group S.A.</Company>
-      <Copyright>Copyright © Starion Group S.A.</Copyright>
-      <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-      <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
-      <RepositoryType>Git</RepositoryType>
-      <Authors>Sam Gerene</Authors>
-      <ImplicitUsings>false</ImplicitUsings>
-      <Nullable>disable</Nullable>
-      <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-      <IsPackable>false</IsPackable>
-      <PreserveCompilationContext>true</PreserveCompilationContext>
-      <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Version>0.16.0</Version>
+    <Description>A Library to generate SysML v2 code.</Description>
+    <PackageId>SysML2.NET</PackageId>
+    <Company>Starion Group S.A.</Company>
+    <Copyright>Copyright © Starion Group S.A.</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/STARIONGROUP/SysML2.NET.git</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <Authors>Sam Gerene</Authors>
+    <ImplicitUsings>false</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <IsPackable>false</IsPackable>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
   </PropertyGroup>
-
-    <ItemGroup>
-
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="5.0.0" />
-
-        <!--
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="5.0.0" />
+    <!--
          -->
-        <PackageReference Include="uml4net.HandleBars" Version="6.3.1" />
-        <PackageReference Include="uml4net.Reporting" Version="6.3.1" />
-        <PackageReference Include="uml4net.xmi" Version="5.3.1" />
-
-        <!--
+    <!--
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.HandleBars\uml4net.HandleBars.csproj" />
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.xmi\uml4net.xmi.csproj" />
         -->
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\bootstrap.min.css">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\font-awesome.min.css">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.eot">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.svg">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.ttf">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff2">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\fonts\FontAwesome.otf">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\images\rhea_logo_large_square.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\images\rhea_logo_small.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\HtmlDocs\css\starionclassdocs.css">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dal-element-extensions.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dal-poco-extensions.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\element-dal-factory.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\graphql-schema.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\poco-dal-factory.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\poco-interface-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\poco-class-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dto-class-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dto-deserialization-provider-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dto-deserializer-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dto-interface-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dto-serialization-provider-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dto-serialization-provider-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\dto-serializer-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\enum-deserializer-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\enum-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-dto-class-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-dto-interface-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-dto-messagepackformatter-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-enumeration-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-enumprovider-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-json-dto-deserialization-provider-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-json-dto-deserializer-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-json-dto-serialization-provider-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-json-dto-serializer-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-json-enum-deserializer-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-messagepack-DataResolverGetFormatterHelper.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-messagepack-payload-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-messagepack-payloadfactory-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-messagepack-payloadmessagepackformatter-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-poco-class-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-poco-extend-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-poco-interface-uml-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-dal-element-uml-extensions.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-dal-poco-uml-extensions.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-element-dal-uml-factory.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\core-poco-dal-uml-factory.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\Partials\core-dal-poco-uml-partial-extensions.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\Partials\core-json-dto-deserializer-uml-partial-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Templates\Uml\Partials\core-json-dto-serializer-uml-partial-template.hbs">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Resources\HtmlDocs\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="..\Resources\PrimitiveTypes.xmi" Link="datamodel\PrimitiveTypes.xmi">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="..\Resources\SysML_xmi.uml" Link="datamodel\SysML_xmi.uml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="..\Resources\KerML.xmi">
-        <Link>datamodel\KerML.xmi</Link>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
+    <PackageReference Include="uml4net.HandleBars" Version="6.3.2" />
+    <PackageReference Include="uml4net.Reporting" Version="6.3.2" />
+    <PackageReference Include="uml4net.xmi" Version="5.3.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Resources\HtmlDocs\css\bootstrap-theme.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\bootstrap.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\font-awesome.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.eot">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\fonts\fontawesome-webfont.woff2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\fonts\FontAwesome.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\images\rhea_logo_large_square.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\images\rhea_logo_small.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\HtmlDocs\css\starionclassdocs.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dal-element-extensions.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dal-poco-extensions.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\element-dal-factory.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\graphql-schema.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\poco-dal-factory.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\poco-interface-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\poco-class-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dto-class-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dto-deserialization-provider-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dto-deserializer-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dto-interface-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dto-serialization-provider-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dto-serialization-provider-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\dto-serializer-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\enum-deserializer-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\enum-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-dto-class-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-dto-interface-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-dto-messagepackformatter-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-enumeration-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-enumprovider-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-json-dto-deserialization-provider-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-json-dto-deserializer-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-json-dto-serialization-provider-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-json-dto-serializer-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-json-enum-deserializer-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-messagepack-DataResolverGetFormatterHelper.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-messagepack-payload-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-messagepack-payloadfactory-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-messagepack-payloadmessagepackformatter-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-poco-class-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-poco-extend-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-poco-interface-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-dal-element-uml-extensions.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-dal-poco-uml-extensions.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-element-dal-uml-factory.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-poco-dal-uml-factory.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\Partials\core-dal-poco-uml-partial-extensions.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\Partials\core-json-dto-deserializer-uml-partial-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\Partials\core-json-dto-serializer-uml-partial-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\HtmlDocs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\PrimitiveTypes.xmi" Link="datamodel\PrimitiveTypes.xmi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Resources\SysML_xmi.uml" Link="datamodel\SysML_xmi.uml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\KerML.xmi">
+      <Link>datamodel\KerML.xmi</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
