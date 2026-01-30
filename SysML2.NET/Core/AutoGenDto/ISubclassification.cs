@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISubclassification.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,29 +35,29 @@ namespace SysML2.NET.Core.DTO.Core.Classifiers
     /// Subclassification is Specialization in which both the specific and general Types are Classifier.
     /// This means all instances of the specific Classifier are also instances of the general Classifier.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1543188778639_872842_24973", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Classifiers-Subclassification", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISubclassification : ISpecialization
     {
         /// <summary>
         /// The Classifier that owns this Subclassification relationship, which must also be its subclassifier.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543189170642_857401_25506", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
+        [Property(xmiId: "Core-Classifiers-Subclassification-owningClassifier", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-owningType")]
         Guid? owningClassifier { get; }
 
         /// <summary>
         /// The more specific Classifier in this Subclassification.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543189084042_772698_25407", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
+        [Property(xmiId: "Core-Classifiers-Subclassification-subclassifier", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-specific")]
         Guid Subclassifier { get; set; }
 
         /// <summary>
         /// The more general Classifier in this Subclassification.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543188934635_627507_25283", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_563969_43273")]
+        [Property(xmiId: "Core-Classifiers-Subclassification-superclassifier", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-general")]
         Guid Superclassifier { get; set; }
 
     }

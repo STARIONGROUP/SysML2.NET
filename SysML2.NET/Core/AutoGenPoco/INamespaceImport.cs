@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="INamespaceImport.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -39,15 +39,15 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     /// importedNamespace are imported. If  isRecursive = true, then, in addition, Memberships are
     /// recursively imported from any ownedMembers of the importedNamespace that are Namespaces.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1668208114894_902739_132", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Root-Namespaces-NamespaceImport", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface INamespaceImport : IImport
     {
         /// <summary>
         /// The Namespace whose visible Memberships are imported by this NamespaceImport.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674966_977620_43202", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        [Property(xmiId: "Root-Namespaces-NamespaceImport-importedNamespace", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
         INamespace ImportedNamespace { get; set; }
 
     }

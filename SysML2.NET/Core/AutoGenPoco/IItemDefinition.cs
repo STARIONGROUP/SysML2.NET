@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IItemDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.Items
     /// system, but which do not necessarily perform actions themselves. This includes items that can be
     /// exchanged between parts of a system, such as water or electrical signals.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1591216581238_805702_84", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Items-ItemDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IItemDefinition : IStructure, IOccurrenceDefinition
     {

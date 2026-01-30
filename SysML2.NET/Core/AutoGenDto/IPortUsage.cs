@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPortUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,15 +37,15 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
     /// A PortUsage is a usage of a PortDefinition. A PortUsage itself as well as all its nestedUsages must
     /// be referential (non-composite).
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565492704639_896080_24992", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Ports-PortUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPortUsage : IOccurrenceUsage
     {
         /// <summary>
         /// The occurrenceDefinitions of this PortUsage, which must all be PortDefinitions.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565492740124_880100_25026", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
+        [Property(xmiId: "Systems-Ports-PortUsage-portDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Occurrences-OccurrenceUsage-occurrenceDefinition")]
         List<Guid> portDefinition { get; }
 
     }

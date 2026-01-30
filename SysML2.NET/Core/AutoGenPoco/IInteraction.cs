@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IInteraction.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     /// An Interaction is a Behavior that is also an Association, providing a context for multiple objects
     /// that have behaviors that impact one another.
     /// </summary>
-    [Class(xmiId: "_18_5_3_b9102da_1536782424772_574530_21292", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Interactions-Interaction", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInteraction : IAssociation, IBehavior
     {

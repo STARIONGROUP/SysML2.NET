@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISuccessionAsUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO.Systems.Connections
     /// <summary>
     /// A SuccessionAsUsage is both a ConnectorAsUsage and a Succession.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1624053404424_842165_528", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Connections-SuccessionAsUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISuccessionAsUsage : IConnectorAsUsage, ISuccession
     {

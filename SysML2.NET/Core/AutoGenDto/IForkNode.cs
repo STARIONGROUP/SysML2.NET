@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IForkNode.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
     /// A ForkNode is a ControlNode that must be followed by successor Actions as given by all its outgoing
     /// Successions.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565503181274_818459_33629", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-ForkNode", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IForkNode : IControlNode
     {

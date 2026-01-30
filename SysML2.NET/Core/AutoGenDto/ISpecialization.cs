@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISpecialization.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,30 +36,30 @@ namespace SysML2.NET.Core.DTO.Core.Types
     /// to also be instances of the general Type (i.e., the set of instances of the specific Type is a
     /// subset of those of the general Type, which might be the same set).
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651696_992729_42182", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Types-Specialization", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISpecialization : IRelationship
     {
         /// <summary>
         /// A Type with a superset of all instances of the specific Type, which might be the same set.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674980_563969_43273", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        [Property(xmiId: "Core-Types-Specialization-general", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
         Guid General { get; set; }
 
         /// <summary>
         /// The Type that is the specific Type of this Specialization and owns it as its owningRelatedElement.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674971_573157_43226", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
+        [Property(xmiId: "Core-Types-Specialization-owningType", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
+        [SubsettedProperty(propertyName: "Core-Types-Specialization-specific")]
         Guid? owningType { get; }
 
         /// <summary>
         /// A Type with a subset of all instances of the general Type, which might be the same set.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674982_253967_43281", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        [Property(xmiId: "Core-Types-Specialization-specific", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
         Guid Specific { get; set; }
 
     }

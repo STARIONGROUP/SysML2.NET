@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IItemUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ namespace SysML2.NET.Core.POCO.Systems.Items
     /// kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
     /// Libraries.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565480460114_846184_24270", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Items-ItemUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IItemUsage : IOccurrenceUsage
     {
@@ -76,8 +76,8 @@ namespace SysML2.NET.Core.POCO.Systems.Items
         /// other kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel
         /// Library.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565471361757_649736_20796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
+        [Property(xmiId: "Systems-Items-ItemUsage-itemDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Systems-Occurrences-OccurrenceUsage-occurrenceDefinition")]
         List<IStructure> itemDefinition { get; }
 
     }

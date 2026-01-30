@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPredicate.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     /// <summary>
     /// A Predicate is a Function whose result parameter has type Boolean and multiplicity 1..1.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651691_194569_42171", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Functions-Predicate", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPredicate : IFunction
     {

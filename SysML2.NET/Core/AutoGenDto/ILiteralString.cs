@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralString.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,14 +35,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// A LiteralString is a LiteralExpression that provides a String value as a result. Its result
     /// parameter must have the type String.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651701_975433_42193", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Expressions-LiteralString", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralString : ILiteralExpression
     {
         /// <summary>
         /// The String value that is the result of evaluating this Expression.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674985_368212_43297", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Kernel-Expressions-LiteralString-value", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         string Value { get; set; }
 
     }

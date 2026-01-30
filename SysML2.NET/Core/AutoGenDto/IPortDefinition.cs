@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPortDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,15 +37,15 @@ namespace SysML2.NET.Core.DTO.Systems.Ports
     /// system or part of a system. Any ownedUsages of a PortDefinition, other than PortUsages, must not be
     /// composite.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565478005829_611481_22375", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Ports-PortDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IPortDefinition : IOccurrenceDefinition, IStructure
+    public partial interface IPortDefinition : IStructure, IOccurrenceDefinition
     {
         /// <summary>
         /// The <> that is conjugate to this PortDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1575484364015_206236_989", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
+        [Property(xmiId: "Systems-Ports-PortDefinition-conjugatedPortDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-ownedMember")]
         Guid? conjugatedPortDefinition { get; }
 
     }

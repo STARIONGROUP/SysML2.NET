@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IIncludeUseCaseUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
     /// be included is related to the includedUseCase by a ReferenceSubsetting Relationship. An
     /// IncludeUseCaseUsage is also a PerformActionUsage, with its useCaseIncluded as the performedAction.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1621532125543_31659_1117", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-UseCases-IncludeUseCaseUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IIncludeUseCaseUsage : IUseCaseUsage, IPerformActionUsage
     {
@@ -76,8 +76,8 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// The UseCaseUsage to be included by this IncludeUseCaseUsage. It is the performedAction of the
         /// IncludeUseCaseUsage considered as a PerformActionUsage, which must be a UseCaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621532149711_865323_1172", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1567740791820_867719_18017")]
+        [Property(xmiId: "Systems-UseCases-IncludeUseCaseUsage-useCaseIncluded", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Actions-PerformActionUsage-performedAction")]
         IUseCaseUsage useCaseIncluded { get; }
 
     }

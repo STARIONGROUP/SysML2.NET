@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralInteger.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,14 +35,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// A LiteralInteger is a LiteralExpression that provides an Integer value as a result. Its result
     /// parameter must have the type Integer.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651681_567347_42153", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Expressions-LiteralInteger", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralInteger : ILiteralExpression
     {
         /// <summary>
         /// The Integer value that is the result of evaluating this LiteralInteger.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_358889_43199", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Kernel-Expressions-LiteralInteger-value", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         int Value { get; set; }
 
     }

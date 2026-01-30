@@ -25,6 +25,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.Extensions;
+
     using uml4net.Extensions;
     using uml4net.HandleBars;
     using uml4net.StructuredClassifiers;
@@ -96,7 +98,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[MessagePackPayloadFactoryTemplateName];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .OrderBy(x => x.Name)
@@ -129,7 +131,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[MessagePackPayloadTemplateName];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .OrderBy(x => x.Name)
@@ -162,7 +164,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[MessagePackDataResolverGetFormatterHelper];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .OrderBy(x => x.Name)
@@ -195,7 +197,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[PayloadMessagePackFormatterTemplateName];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .OrderBy(x => x.Name)
@@ -228,7 +230,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[DtoMessagePackFormatterTemplateName];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .OrderBy(x => x.Name)
@@ -265,7 +267,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[DtoMessagePackFormatterTemplateName];
 
-            var @class = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var @class = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .Single(x => x.Name == className);

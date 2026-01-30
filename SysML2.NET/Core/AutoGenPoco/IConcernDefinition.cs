@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConcernDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     /// having addressed. These stakeholders are identified by the ownedStakeholdersof the
     /// ConcernDefinition.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1617051538049_980762_1225", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Requirements-ConcernDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConcernDefinition : IRequirementDefinition
     {

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IUseCaseDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.UseCases
     /// interaction with one or more actors external to the subject. The objective is to yield an observable
     /// result that is of value to one or more of the actors.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1621460866763_205297_823", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-UseCases-UseCaseDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IUseCaseDefinition : ICaseDefinition
     {
@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.DTO.Systems.UseCases
         /// The UseCaseUsages that are included by this UseCaseDefinition, which are the useCaseIncludeds of the
         /// IncludeUseCaseUsages owned by this UseCaseDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621461043764_27_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Systems-UseCases-UseCaseDefinition-includedUseCase", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<Guid> includedUseCase { get; }
 
     }

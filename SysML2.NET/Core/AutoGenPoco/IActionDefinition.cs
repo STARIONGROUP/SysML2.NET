@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IActionDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -62,17 +62,17 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// An ActionDefinition is a Definition that is also a Behavior that defines an Action performed by a
     /// system or part of a system.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565500542970_17430_30342", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-ActionDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IActionDefinition : IBehavior, IOccurrenceDefinition
+    public partial interface IActionDefinition : IOccurrenceDefinition, IBehavior
     {
         /// <summary>
         /// The ActionUsages that are steps in this ActionDefinition, which define the actions that specify the
         /// behavior of the ActionDefinition.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565500809065_170841_30688", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_b9102da_1536346067212_587255_17343")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
+        [Property(xmiId: "Systems-Actions-ActionDefinition-action", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Kernel-Behaviors-Behavior-step")]
+        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Definition-usage")]
         List<IActionUsage> action { get; }
 
     }

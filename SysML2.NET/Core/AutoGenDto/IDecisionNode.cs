@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IDecisionNode.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
     /// <summary>
     /// A DecisionNode is a ControlNode that makes a selection from its outgoing Successions.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565503118756_203952_33551", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-DecisionNode", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IDecisionNode : IControlNode
     {

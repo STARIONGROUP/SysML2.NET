@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IActorMembership.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,15 +37,15 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
     /// specifies a role played by an external entity in interaction with the owningType of the
     /// ActorMembership.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1621464240681_650455_1312", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Requirements-ActorMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IActorMembership : IParameterMembership
     {
         /// <summary>
         /// The PartUsage specifying the actor.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621464305451_983612_1421", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528016548_548098_110830")]
+        [Property(xmiId: "Systems-Requirements-ActorMembership-ownedActorParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Kernel-Behaviors-ParameterMembership-ownedMemberParameter")]
         Guid ownedActorParameter { get; }
 
     }

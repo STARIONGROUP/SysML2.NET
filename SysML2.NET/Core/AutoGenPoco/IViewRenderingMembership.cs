@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IViewRenderingMembership.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// A ViewRenderingMembership is a <coed>FeatureMembership that identifies the viewRendering of a
     /// ViewDefinition or ViewUsage.</coed>
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1617134177967_461389_5877", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Views-ViewRenderingMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IViewRenderingMembership : IFeatureMembership
     {
@@ -48,8 +48,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// The owned RenderingUsage that is either itself the referencedRendering or subsets the
         /// referencedRendering.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617134244546_130200_6000", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
+        [Property(xmiId: "Systems-Views-ViewRenderingMembership-ownedRendering", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
         IRenderingUsage ownedRendering { get; }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// referencedFeature of the ownedReferenceSubsetting for the ownedRendering, if there is one, and,
         /// otherwise, the ownedRendering itself.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617134300857_286392_6081", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Systems-Views-ViewRenderingMembership-referencedRendering", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IRenderingUsage referencedRendering { get; }
 
     }

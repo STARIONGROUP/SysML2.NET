@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAssociationStructure.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ namespace SysML2.NET.Core.DTO.Kernel.Associations
     /// Features can change over time. However, the values of the end Features of a link object are fixed
     /// and cannot change over its lifetime.
     /// </summary>
-    [Class(xmiId: "_19_0_4_b9102da_1609608726569_644338_601", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Associations-AssociationStructure", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IAssociationStructure : IAssociation, IStructure
+    public partial interface IAssociationStructure : IStructure, IAssociation
     {
     }
 }

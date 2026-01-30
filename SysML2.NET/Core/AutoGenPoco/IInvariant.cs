@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IInvariant.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -42,14 +42,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     /// isNegated = false, then the result is asserted to be true. If isNegated = true, then the result is
     /// asserted to be false.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1578025014367_499614_936", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Functions-Invariant", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInvariant : IBooleanExpression
     {
         /// <summary>
         /// Whether this Invariant is asserted to be false rather than true.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1623945815201_648891_36531", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "Kernel-Functions-Invariant-isNegated", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsNegated { get; set; }
 
     }

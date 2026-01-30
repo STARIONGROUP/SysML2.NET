@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeatureMembership.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// then the FeatureMembership implies that the ownedMemberFeature is featured by the snapshots of the
     /// owningType, which must specialize the Kernel Semantic Library base class Occurrence.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651715_740575_42237", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Types-FeatureMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFeatureMembership : IOwningMembership
     {
@@ -50,16 +50,16 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// The Feature that this FeatureMembership relates to its owningType, making it an ownedFeature of the
         /// owningType.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674993_898044_43344", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
+        [Property(xmiId: "Core-Types-FeatureMembership-ownedMemberFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Namespaces-OwningMembership-ownedMemberElement")]
         IFeature ownedMemberFeature { get; }
 
         /// <summary>
         /// The Type that owns this FeatureMembership.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674992_418504_43339", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866524_738482_486")]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_193857_43197")]
+        [Property(xmiId: "Core-Types-FeatureMembership-owningType", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Core-Types-A_featureMembership_type-type")]
+        [RedefinedProperty(propertyName: "Root-Namespaces-Membership-membershipOwningNamespace")]
         IType owningType { get; }
 
     }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IClassifier.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,14 +36,14 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Classifier is a Type that classifies:<ul>	<li>Things (in the universe) regardless of how Features
-    /// relate them. (These are interpreted semantically as sequences of exactly one thing.)</li>	<li>How
-    /// the above things are related by Features. (These are interpreted semantically as sequences of
-    /// multiple things, such that the last thing in the sequence is also classified by the Classifier. Note
-    /// that this means that a Classifier modeled as specializing a Feature cannot classify
-    /// anything.)</li></ul>
+    /// A Classifier is a Type that classifies:  <ul>  <li>Things (in the universe) regardless of how
+    /// Features relate them. (These are interpreted semantically as sequences of exactly one thing.)</li> 
+    /// <li>How the above things are related by Features. (These are interpreted semantically as sequences
+    /// of multiple things, such that the last thing in the sequence is also classified by the Classifier.
+    /// Note that this means that a Classifier modeled as specializing a Feature cannot classify
+    /// anything.)</li> </ul>
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651676_375105_42143", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Classifiers-Classifier", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IClassifier : IType
     {
@@ -51,8 +51,8 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
         /// The ownedSpecializations of this Classifier that are Subclassifications, for which this Classifier
         /// is the subclassifier.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543189170643_419862_25507", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_579676_43168")]
+        [Property(xmiId: "Core-Classifiers-Classifier-ownedSubclassification", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Core-Types-Type-ownedSpecialization")]
         List<ISubclassification> ownedSubclassification { get; }
 
     }

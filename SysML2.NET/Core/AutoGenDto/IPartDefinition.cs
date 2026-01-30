@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPartDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Parts
     /// may be considered items for certain purposes, but not all items are parts that can perform actions
     /// within a system.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565469626440_455154_19856", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Parts-PartDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPartDefinition : IItemDefinition
     {

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IUnioning.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,23 +36,23 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// <summary>
     /// Unioning is a Relationship that makes its unioningType one of the unioningTypes of its typeUnioned.
     /// </summary>
-    [Class(xmiId: "_19_0_4_b9102da_1661869922775_190651_380", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Types-Unioning", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IUnioning : IRelationship
     {
         /// <summary>
         /// Type with interpretations partly determined by unioningType, as described in Type::unioningType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661869978504_423347_459", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        [Property(xmiId: "Core-Types-Unioning-typeUnioned", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
         IType typeUnioned { get; }
 
         /// <summary>
         /// Type that partly determines interpretations of typeUnioned, as described in Type::unioningType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661869982082_280210_472", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        [Property(xmiId: "Core-Types-Unioning-unioningType", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
         IType UnioningType { get; set; }
 
     }

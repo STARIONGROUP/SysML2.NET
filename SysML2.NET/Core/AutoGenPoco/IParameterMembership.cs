@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IParameterMembership.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -41,15 +41,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     /// is always owned, and must have a direction. A ParameterMembership must be owned by a Behavior, a
     /// Step, or the result parameter of a ConstructorExpression.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1557527738711_165124_110466", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Behaviors-ParameterMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IParameterMembership : IFeatureMembership
     {
         /// <summary>
         /// The Feature that is identified as a parameter by this ParameterMembership.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1557528016548_548098_110830", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
+        [Property(xmiId: "Kernel-Behaviors-ParameterMembership-ownedMemberParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
         IFeature ownedMemberParameter { get; }
 
     }

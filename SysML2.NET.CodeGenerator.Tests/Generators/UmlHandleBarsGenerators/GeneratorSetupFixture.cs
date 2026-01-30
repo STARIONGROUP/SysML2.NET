@@ -54,8 +54,11 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             };
 
             var reader = XmiReaderBuilder.Create()
-                .UsingSettings(x => x.LocalReferenceBasePath = rootPath)
-                .UsingSettings(x => x.PathMaps = pathMaps)
+                .UsingSettings(x =>
+                {
+                    x.PathMaps = pathMaps;
+                    x.LocalReferenceBasePath = rootPath;
+                })
                 .WithLogger(loggerFactory)
                 .Build();
 

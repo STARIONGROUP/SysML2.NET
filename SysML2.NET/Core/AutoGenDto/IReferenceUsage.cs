@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IReferenceUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -38,15 +38,15 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
     /// specification of a generic reference without distinguishing if the thing referenced is an attribute
     /// value, item, action, etc.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1591477377905_618531_857", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-DefinitionAndUsage-ReferenceUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IReferenceUsage : IUsage
     {
         /// <summary>
         /// Always true for a ReferenceUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624035133434_200283_41434", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
-        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
+        [Property(xmiId: "Systems-DefinitionAndUsage-ReferenceUsage-isReference", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [RedefinedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-isReference")]
         new bool isReference { get; }
 
     }

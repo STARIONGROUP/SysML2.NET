@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ITriggerInvocationExpression.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// A TriggerInvocationExpression is an InvocationExpression that invokes one of the trigger Functions
     /// from the Kernel Semantic Library Triggers package, as indicated by its kind.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1643588492412_624345_274", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-TriggerInvocationExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ITriggerInvocationExpression : IInvocationExpression
     {
@@ -52,7 +52,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// Indicates which of the Functions from the Triggers model in the Kernel Semantic Library is to be
         /// invoked by this TriggerInvocationExpression.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1643588513495_774789_300", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Systems-Actions-TriggerInvocationExpression-kind", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         TriggerKind Kind { get; set; }
 
     }

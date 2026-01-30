@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPerformActionUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -67,16 +67,16 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// PerformActionUsage by a ReferenceSubsetting relationship. A PerformActionUsage is also an
     /// EventOccurrenceUsage, with its performedAction as the eventOccurrence.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565503273042_472885_33822", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-PerformActionUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IPerformActionUsage : IActionUsage, IEventOccurrenceUsage
+    public partial interface IPerformActionUsage : IEventOccurrenceUsage, IActionUsage
     {
         /// <summary>
         /// The ActionUsage to be performed by this PerformedActionUsage. It is the eventOccurrence of the
         /// PerformActionUsage considered as an EventOccurrenceUsage, which must be an ActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1567740791820_867719_18017", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622831790393_676695_195")]
+        [Property(xmiId: "Systems-Actions-PerformActionUsage-performedAction", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Occurrences-EventOccurrenceUsage-eventOccurrence")]
         IActionUsage performedAction { get; }
 
     }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMembershipImport.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,15 +36,15 @@ namespace SysML2.NET.Core.DTO.Root.Namespaces
     /// If isRecursive = true and the memberElement of the importedMembership is a Namespace, then the
     /// equivalent of a recursive NamespaceImport is also performed on that Namespace.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1668208086726_425885_108", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Root-Namespaces-MembershipImport", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMembershipImport : IImport
     {
         /// <summary>
         /// The Membership to be imported.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1668466089734_604404_605", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        [Property(xmiId: "Root-Namespaces-MembershipImport-importedMembership", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
         Guid ImportedMembership { get; set; }
 
     }

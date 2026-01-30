@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISuccessionFlow.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     /// start until the source Occurrence has completed and that must complete before the target Occurrence
     /// can start.
     /// </summary>
-    [Class(xmiId: "_18_5_3_b9102da_1536869794875_359922_17902", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Interactions-SuccessionFlow", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISuccessionFlow : ISuccession, IFlow
     {

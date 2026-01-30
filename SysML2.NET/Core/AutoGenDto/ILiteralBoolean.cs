@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralBoolean.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,14 +35,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// LiteralBoolean is a LiteralExpression that provides a Boolean value as a result. Its result
     /// parameter must have type Boolean.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651699_96836_42187", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Expressions-LiteralBoolean", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralBoolean : ILiteralExpression
     {
         /// <summary>
         /// The Boolean value that is the result of evaluating this LiteralBoolean.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674984_421338_43289", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Kernel-Expressions-LiteralBoolean-value", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         bool Value { get; set; }
 
     }

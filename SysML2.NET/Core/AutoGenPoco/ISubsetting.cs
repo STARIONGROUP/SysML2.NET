@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISubsetting.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -42,30 +42,30 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// the subsettedFeature (via Specialization), and the co-domain (intersection of the types) of the
     /// subsettingFeature must specialize the co-domain of the subsettedFeature.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651710_980688_42209", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Features-Subsetting", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISubsetting : ISpecialization
     {
         /// <summary>
         /// A subsettingFeature that is also the owningRelatedElement of this Subsetting.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_236250_43311", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
+        [Property(xmiId: "Core-Features-Subsetting-owningFeature", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Core-Features-Subsetting-subsettingFeature")]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-owningType")]
         IFeature owningFeature { get; }
 
         /// <summary>
         /// The Feature that is subsetted by the subsettingFeature of this Subsetting.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674961_393191_43181", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_563969_43273")]
+        [Property(xmiId: "Core-Features-Subsetting-subsettedFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-general")]
         IFeature SubsettedFeature { get; set; }
 
         /// <summary>
         /// The Feature that is a subset of the subsettedFeature of this Subsetting.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674967_140305_43206", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
+        [Property(xmiId: "Core-Features-Subsetting-subsettingFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-specific")]
         IFeature SubsettingFeature { get; set; }
 
     }

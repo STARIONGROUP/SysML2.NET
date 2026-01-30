@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IBooleanExpression.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,15 +35,15 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
     /// A BooleanExpression is a Boolean-valued Expression whose type is a Predicate. It represents a
     /// logical condition resulting from the evaluation of the Predicate.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1578511256733_336334_354", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Functions-BooleanExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IBooleanExpression : IExpression
     {
         /// <summary>
         /// The Predicate that types the Expression.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1578025035149_386_969", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
+        [Property(xmiId: "Kernel-Functions-BooleanExpression-predicate", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Kernel-Functions-Expression-function")]
         Guid? predicate { get; }
 
     }

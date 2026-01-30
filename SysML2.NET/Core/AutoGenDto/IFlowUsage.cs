@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFlowUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
     /// <summary>
     /// A FlowUsage is an ActionUsage that is also a ConnectorAsUsage and a KerML Flow.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1624054663096_771284_1274", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Flows-FlowUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFlowUsage : IConnectorAsUsage, IFlow, IActionUsage
     {
@@ -47,9 +47,9 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
         /// other kinds of Kernel Interactions are also allowed, to permit use of Interactions from the Kernel
         /// Model Libraries.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1661892878973_977062_185", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
-        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1661900477937_518125_727")]
+        [Property(xmiId: "Systems-Flows-FlowUsage-flowDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Actions-ActionUsage-actionDefinition")]
+        [RedefinedProperty(propertyName: "Kernel-Interactions-Flow-interaction")]
         List<Guid> flowDefinition { get; }
 
     }

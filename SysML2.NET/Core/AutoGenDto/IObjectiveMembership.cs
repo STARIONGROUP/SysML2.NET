@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IObjectiveMembership.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,15 +36,15 @@ namespace SysML2.NET.Core.DTO.Systems.Cases
     /// An ObjectiveMembership is a FeatureMembership that indicates that its ownedObjectiveRequirement is
     /// the objective RequirementUsage for its owningType, which must be a CaseDefinition or CaseUsage.
     /// </summary>
-    [Class(xmiId: "_19_0_2_59601fc_1590256849943_920466_400", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Cases-ObjectiveMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IObjectiveMembership : IFeatureMembership
     {
         /// <summary>
         /// The RequirementUsage that is the ownedMemberFeature of this RequirementUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_59601fc_1590258776804_538578_832", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
+        [Property(xmiId: "Systems-Cases-ObjectiveMembership-ownedObjectiveRequirement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
         Guid ownedObjectiveRequirement { get; }
 
     }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ICalculationDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,16 +36,16 @@ namespace SysML2.NET.Core.DTO.Systems.Calculations
     /// A CalculationDefinition is an <coed>ActionDefinition that also defines a Function producing a
     /// result.</coed>
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1588213234752_326869_117", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Calculations-CalculationDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface ICalculationDefinition : IFunction, IActionDefinition
+    public partial interface ICalculationDefinition : IActionDefinition, IFunction
     {
         /// <summary>
         /// The actions of this CalculationDefinition that are CalculationUsages.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1588214479224_101961_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565500809065_170841_30688")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948400639_301251_20841")]
+        [Property(xmiId: "Systems-Calculations-CalculationDefinition-calculation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Systems-Actions-ActionDefinition-action")]
+        [SubsettedProperty(propertyName: "Kernel-Functions-Function-expression")]
         List<Guid> calculation { get; }
 
     }

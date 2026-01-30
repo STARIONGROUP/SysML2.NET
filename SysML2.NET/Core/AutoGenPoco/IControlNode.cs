@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IControlNode.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// incoming and outgoing Successions that are used to control other Actions. A ControlNode must be a
     /// composite owned usage of an ActionDefinition or ActionUsage.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1567281323333_776611_544", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-ControlNode", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IControlNode : IActionUsage
     {

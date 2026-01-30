@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IRedefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -44,22 +44,22 @@ namespace SysML2.NET.Core.DTO.Core.Features
     /// redefiningFeature.This enables the redefiningFeature to have the same name as the redefinedFeature,
     /// if desired.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651690_251835_42168", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Features-Redefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IRedefinition : ISubsetting
     {
         /// <summary>
         /// The Feature that is redefined by the redefiningFeature of this Redefinition.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674973_199798_43245", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_393191_43181")]
+        [Property(xmiId: "Core-Features-Redefinition-redefinedFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Features-Subsetting-subsettedFeature")]
         Guid RedefinedFeature { get; set; }
 
         /// <summary>
         /// The Feature that is redefining the redefinedFeature of this Redefinition.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674958_414216_43160", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674967_140305_43206")]
+        [Property(xmiId: "Core-Features-Redefinition-redefiningFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Features-Subsetting-subsettingFeature")]
         Guid RedefiningFeature { get; set; }
 
     }

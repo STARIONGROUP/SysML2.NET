@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAssertConstraintUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -67,16 +67,16 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     /// true (by default). Unless it is the AssertConstraintUsage itself, the asserted ConstraintUsage is
     /// related to the AssertConstraintUsage by a ReferenceSubsetting Relationship.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1581045078368_47459_9326", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Constraints-AssertConstraintUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IAssertConstraintUsage : IConstraintUsage, IInvariant
+    public partial interface IAssertConstraintUsage : IInvariant, IConstraintUsage
     {
         /// <summary>
         /// The ConstraintUsage to be performed by the AssertConstraintUsage. It is the referenceFeature of the
         /// ownedReferenceSubsetting for the AssertConstraintUsage, if there is one, and, otherwise, the
         /// AssertConstraintUsage itself.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1581045158665_239617_9458", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Systems-Constraints-AssertConstraintUsage-assertedConstraint", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IConstraintUsage assertedConstraint { get; }
 
     }

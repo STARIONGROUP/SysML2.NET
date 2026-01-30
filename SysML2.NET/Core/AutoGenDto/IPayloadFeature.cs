@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IPayloadFeature.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
     /// A PayloadFeature is the ownedFeature of a Flow that identifies the things carried by the kinds of
     /// transfers that are instances of the Flow.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1563219020686_897240_20518", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Interactions-PayloadFeature", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPayloadFeature : IFeature
     {

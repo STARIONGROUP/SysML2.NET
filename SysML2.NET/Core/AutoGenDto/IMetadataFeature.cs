@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMetadataFeature.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -38,15 +38,15 @@ namespace SysML2.NET.Core.DTO.Kernel.Metadata
     /// metadata. It is typed by a Metaclass. All its ownedFeatures must redefine features of its metaclass
     /// and any feature bindings must be model-level evaluable.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1606345563822_968574_178", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Metadata-MetadataFeature", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMetadataFeature : IAnnotatingElement, IFeature
     {
         /// <summary>
         /// The type of this MetadataFeature, which must be a Metaclass.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1606345564958_925589_327", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
+        [Property(xmiId: "Kernel-Metadata-MetadataFeature-metaclass", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Core-Features-Feature-type")]
         Guid? metaclass { get; }
 
     }

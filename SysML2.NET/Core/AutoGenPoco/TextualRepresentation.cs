@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="TextualRepresentation.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -38,28 +38,27 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     /// given language. The representedElement must be the owner of the TextualRepresentation. The named
     /// language can be a natural language, in which case the body is an informal representation, or an
     /// artificial language, in which case the body is expected to be a formal, machine-parsable
-    /// representation.If the named language of a TextualRepresentation is machine-parsable, then the body
+    /// representation.  If the named language of a TextualRepresentation is machine-parsable, then the body
     /// text should be legal input text as defined for that language. The interpretation of the named
     /// language string shall be case insensitive. The following language names are defined to correspond to
-    /// the given standard languages:<table border="1" cellpadding="1" cellspacing="1"
-    /// width="498">	<thead>	</thead>	<tbody>		<tr>			<td style="text-align: center; width:
-    /// 154px;">kerml</td>			<td style="width: 332px;">Kernel Modeling Language</td>		</tr>		<tr>			<td
-    /// style="text-align: center; width: 154px;">ocl</td>			<td style="width: 332px;">Object Constraint
-    /// Language</td>		</tr>		<tr>			<td style="text-align: center; width: 154px;">alf</td>			<td
-    /// style="width: 332px;">Action Language for fUML</td>		</tr>	</tbody></table>Other specifications may
-    /// define specific language strings, other than those shown above, to be used to indicate the use of
-    /// languages from those specifications in KerML TextualRepresentation.If the language of a
-    /// TextualRepresentation is &quot;kerml&quot;, then the body text shall be a legal representation of
-    /// the representedElement in the KerML textual concrete syntax. A conforming tool can use such a
-    /// TextualRepresentation Annotation to record the original KerML concrete syntax text from which an
-    /// Element was parsed. In this case, it is a tool responsibility to ensure that the body of the
-    /// TextualRepresentation remains correct (or the Annotation is removed) if the annotated Element
-    /// changes other than by re-parsing the body text.An Element with a TextualRepresentation in a language
-    /// other than KerML is essentially a semantically &quot;opaque&quot; Element specified in the other
-    /// language. However, a conforming KerML tool may interpret such an element consistently with the
-    /// specification of the named language.
+    /// the given standard languages:  <table border="1" cellpadding="1" cellspacing="1" width="498"> 
+    /// <thead>  </thead>  <tbody>   <tr>    <td style="text-align: center; width: 154px;">kerml</td>    <td
+    /// style="width: 332px;">Kernel Modeling Language</td>   </tr>   <tr>    <td style="text-align: center;
+    /// width: 154px;">ocl</td>    <td style="width: 332px;">Object Constraint Language</td>   </tr>   <tr> 
+    ///   <td style="text-align: center; width: 154px;">alf</td>    <td style="width: 332px;">Action
+    /// Language for fUML</td>   </tr>  </tbody> </table>  Other specifications may define specific language
+    /// strings, other than those shown above, to be used to indicate the use of languages from those
+    /// specifications in KerML TextualRepresentation.  If the language of a TextualRepresentation is
+    /// &quot;kerml&quot;, then the body text shall be a legal representation of the representedElement in
+    /// the KerML textual concrete syntax. A conforming tool can use such a TextualRepresentation Annotation
+    /// to record the original KerML concrete syntax text from which an Element was parsed. In this case, it
+    /// is a tool responsibility to ensure that the body of the TextualRepresentation remains correct (or
+    /// the Annotation is removed) if the annotated Element changes other than by re-parsing the body text. 
+    /// An Element with a TextualRepresentation in a language other than KerML is essentially a semantically
+    /// &quot;opaque&quot; Element specified in the other language. However, a conforming KerML tool may
+    /// interpret such an element consistently with the specification of the named language.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1594152214531_455349_2448", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Root-Annotations-TextualRepresentation", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial class TextualRepresentation : ITextualRepresentation
     {
@@ -73,7 +72,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-aliasIds", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.AliasIds")]
         public List<string> AliasIds { get; set; } = [];
 
@@ -82,7 +81,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// annotatedElements of the annotations. If annotation is empty, then it is the owningNamespace of the
         /// AnnotatingElement.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594145755058_99428_86", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Annotations-AnnotatingElement-annotatedElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("ITextualRepresentation.RepresentedElement")]
         [Implements(implementation: "IAnnotatingElement.AnnotatedElement")]
         List<IElement> IAnnotatingElement.annotatedElement => this.representedElement != null ? [this.representedElement] : [];
@@ -91,22 +90,22 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// The Annotations that relate this AnnotatingElement to its annotatedElements. This includes the
         /// owningAnnotatingRelationship (if any) followed by all the ownedAnnotatingRelationshps.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543094212714_953084_18407", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [Property(xmiId: "Root-Annotations-AnnotatingElement-annotation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-A_source_sourceRelationship-sourceRelationship")]
         [Implements(implementation: "IAnnotatingElement.Annotation")]
         public List<IAnnotation> annotation => this.ComputeAnnotation();
 
         /// <summary>
         /// The textual representation of the representedElement in the given language.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1647817353412_339800_421", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Annotations-TextualRepresentation-body", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "ITextualRepresentation.Body")]
         public string Body { get; set; }
 
         /// <summary>
         /// The declared name of this Element.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-declaredName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.DeclaredName")]
         public string DeclaredName { get; set; }
 
@@ -116,16 +115,16 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
         /// model or relative to some other context.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-declaredShortName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.DeclaredShortName")]
         public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The Documentation owned by this Element.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
+        [Property(xmiId: "Root-Elements-Element-documentation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Annotations-A_annotatedElement_annotatingElement-annotatingElement")]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedElement")]
         [Implements(implementation: "IElement.Documentation")]
         public List<IDocumentation> documentation => this.ComputeDocumentation();
 
@@ -133,7 +132,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_844338_43305", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-elementId", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ElementId")]
         public string ElementId { get; set; }
 
@@ -144,21 +143,21 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1662070949317_79713_3658", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "Root-Elements-Element-isImpliedIncluded", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IElement.IsImpliedIncluded")]
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether this Element is contained in the ownership tree of a library model.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-isLibraryElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
         public bool isLibraryElement => this.ComputeIsLibraryElement();
 
         /// <summary>
         /// The natural or artifical language in which the body text is written.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594152270061_927814_2479", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Annotations-TextualRepresentation-language", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "ITextualRepresentation.Language")]
         public string Language { get; set; }
 
@@ -168,7 +167,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// this is overridden for certain kinds of Elements to compute a name even when the declaredName is
         /// null.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-name", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
         public string name => this.ComputeName();
 
@@ -176,9 +175,9 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// The ownedRelationships of this AnnotatingElement that are Annotations, for which this
         /// AnnotatingElement is the annotatingElement.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1703019570915_375100_18", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094212714_953084_18407")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [Property(xmiId: "Root-Annotations-AnnotatingElement-ownedAnnotatingRelationship", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Annotations-AnnotatingElement-annotation")]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedRelationship")]
         [Implements(implementation: "IAnnotatingElement.OwnedAnnotatingRelationship")]
         public List<IAnnotation> ownedAnnotatingRelationship => this.ComputeOwnedAnnotatingRelationship();
 
@@ -186,9 +185,9 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
         /// annotatedElement.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594152527165_702130_2500", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
+        [Property(xmiId: "Root-Elements-Element-ownedAnnotation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedRelationship")]
+        [SubsettedProperty(propertyName: "Root-Annotations-A_annotatedElement_annotation-annotation")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
         public List<IAnnotation> ownedAnnotation => this.ComputeOwnedAnnotation();
 
@@ -196,15 +195,15 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
         /// this Element.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-ownedElement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
         public List<IElement> ownedElement => this.ComputeOwnedElement();
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
+        [Property(xmiId: "Root-Elements-Element-ownedRelationship", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-A_relatedElement_relationship-relationship")]
         [Implements(implementation: "IElement.OwnedRelationship")]
         public List<IRelationship> OwnedRelationship { get; set; } = [];
 
@@ -212,25 +211,25 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
         /// Element, if any.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-owner", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
         public IElement owner => this.ComputeOwner();
 
         /// <summary>
         /// The owningRelationship of this AnnotatingRelationship, if it is an Annotation
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1735188506571_308678_376", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094212714_953084_18407")]
+        [Property(xmiId: "Root-Annotations-AnnotatingElement-owningAnnotatingRelationship", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-owningRelationship")]
+        [SubsettedProperty(propertyName: "Root-Annotations-AnnotatingElement-annotation")]
         [Implements(implementation: "IAnnotatingElement.OwningAnnotatingRelationship")]
         public IAnnotation owningAnnotatingRelationship => this.ComputeOwningAnnotatingRelationship();
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
+        [Property(xmiId: "Root-Elements-Element-owningMembership", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Namespaces-A_memberElement_membership-membership")]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-owningRelationship")]
         [Implements(implementation: "IElement.OwningMembership")]
         public IOwningMembership owningMembership => this.ComputeOwningMembership();
 
@@ -238,16 +237,16 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
         /// of this Element, if any.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
+        [Property(xmiId: "Root-Elements-Element-owningNamespace", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Namespaces-A_member_namespace-namespace")]
         [Implements(implementation: "IElement.OwningNamespace")]
         public INamespace owningNamespace => this.ComputeOwningNamespace();
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
+        [Property(xmiId: "Root-Elements-Element-owningRelationship", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-A_relatedElement_relationship-relationship")]
         [Implements(implementation: "IElement.OwningRelationship")]
         public IRelationship OwningRelationship { get; set; }
 
@@ -259,16 +258,16 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// Namespace to this Element. If the owningNamespace has other Elements with the same name as this one,
         /// then the qualifiedName is null for all such Elements other than the first.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-qualifiedName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
         public string qualifiedName => this.ComputeQualifiedName();
 
         /// <summary>
         /// The Element that is represented by this TextualRepresentation.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594154758494_414887_3389", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_744477_17277")]
-        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594145755058_99428_86")]
+        [Property(xmiId: "Root-Annotations-TextualRepresentation-representedElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-owner")]
+        [RedefinedProperty(propertyName: "Root-Annotations-AnnotatingElement-annotatedElement")]
         [Implements(implementation: "ITextualRepresentation.RepresentedElement")]
         public IElement representedElement => this.ComputeRepresentedElement();
 
@@ -278,16 +277,16 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// declaredShortName, but this is overridden for certain kinds of Elements to compute a shortName even
         /// when the declaredName is null.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Elements-Element-shortName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
         public string shortName => this.ComputeShortName();
 
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
+        [Property(xmiId: "Root-Elements-Element-textualRepresentation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Annotations-A_annotatedElement_annotatingElement-annotatingElement")]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedElement")]
         [Implements(implementation: "IElement.TextualRepresentation")]
         public List<ITextualRepresentation> textualRepresentation => this.ComputeTextualRepresentation();
 

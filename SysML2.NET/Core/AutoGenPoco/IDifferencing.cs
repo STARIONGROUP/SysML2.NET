@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IDifferencing.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// Differencing is a Relationship that makes its differencingType one of the differencingTypes of its
     /// typeDifferenced.
     /// </summary>
-    [Class(xmiId: "_19_0_4_b9102da_1661870994364_119372_712", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Types-Differencing", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IDifferencing : IRelationship
     {
@@ -45,17 +45,17 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// Type that partly determines interpretations of typeDifferenced, as described in
         /// Type::differencingType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661871173117_978241_809", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        [Property(xmiId: "Core-Types-Differencing-differencingType", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
         IType DifferencingType { get; set; }
 
         /// <summary>
         /// Type with interpretations partly determined by differencingType, as described in
         /// Type::differencingType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1661871168453_175911_796", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        [Property(xmiId: "Core-Types-Differencing-typeDifferenced", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
         IType typeDifferenced { get; }
 
     }

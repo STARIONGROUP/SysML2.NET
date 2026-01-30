@@ -208,4 +208,11 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="..\Resources\KerML.xmi">
+        <Link>datamodel\KerML.xmi</Link>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

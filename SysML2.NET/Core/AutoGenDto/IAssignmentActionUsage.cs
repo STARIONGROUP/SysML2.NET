@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAssignmentActionUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -38,15 +38,15 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
     /// referent Feature, relative to the target given by the result of the targetArgument Expression,
     /// should be set to the result of the valueExpression.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1624201606942_142574_2658", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-AssignmentActionUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAssignmentActionUsage : IActionUsage
     {
         /// <summary>
         /// The Feature whose value is to be set.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624202269076_561550_3109", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
+        [Property(xmiId: "Systems-Actions-AssignmentActionUsage-referent", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-member")]
         Guid referent { get; }
 
         /// <summary>
@@ -54,13 +54,13 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// value of the referent will be set to the result of the valueExpression by this
         /// AssignmentActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624201786354_844501_2835", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Systems-Actions-AssignmentActionUsage-targetArgument", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? targetArgument { get; }
 
         /// <summary>
         /// The Expression whose result is to be assigned to the referent Feature.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624201792996_104394_2856", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Systems-Actions-AssignmentActionUsage-valueExpression", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? valueExpression { get; }
 
     }

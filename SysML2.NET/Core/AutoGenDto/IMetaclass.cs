@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMetaclass.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Metadata
     /// <summary>
     /// A Metaclass is a Structure used to type MetadataFeatures.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1645120910786_720932_39", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Metadata-Metaclass", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMetaclass : IStructure
     {

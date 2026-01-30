@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="AnalysisCaseDefinitionExtensions.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -92,7 +92,6 @@ namespace SysML2.NET.Dal
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
 
-            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
 
             return identifiersOfObjectsToDelete;

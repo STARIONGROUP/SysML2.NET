@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILiteralInfinity.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// A LiteralInfinity is a LiteralExpression that provides the positive infinity value (*). It's result
     /// must have the type Positive.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651697_757989_42184", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Expressions-LiteralInfinity", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralInfinity : ILiteralExpression
     {

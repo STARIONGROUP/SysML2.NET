@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConnectorAsUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
     /// in a SysML model, but it is a base class for the concrete classes BindingConnectorAsUsage,
     /// SuccessionAsUsage, ConnectionUsage and FlowConnectionUsage.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1624053320057_820842_471", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Connections-ConnectorAsUsage", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConnectorAsUsage : IUsage, IConnector
     {

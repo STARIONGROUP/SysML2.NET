@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IActionUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// However, other kinds of kernel Behaviors are also allowed, to permit use of Behaviors from the
     /// Kernel Model Libraries.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565500580749_954926_30405", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-ActionUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IActionUsage : IStep, IOccurrenceUsage
     {
@@ -76,9 +76,9 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// but other kinds of Kernel Behaviors are also allowed, to permit use of Behaviors from the Kernel
         /// Model Libraries.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565500905804_589845_30779", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
-        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
+        [Property(xmiId: "Systems-Actions-ActionUsage-actionDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Kernel-Behaviors-Step-behavior")]
+        [RedefinedProperty(propertyName: "Systems-Occurrences-OccurrenceUsage-occurrenceDefinition")]
         List<IBehavior> actionDefinition { get; }
 
     }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConstraintUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -40,17 +40,17 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
     /// ConstraintDefinition. However, other kinds of kernel Predicates are also allowed, to permit use of
     /// Predicates from the Kernel Model Libraries.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1578067096274_745288_1478", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Constraints-ConstraintUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IConstraintUsage : IBooleanExpression, IOccurrenceUsage
+    public partial interface IConstraintUsage : IOccurrenceUsage, IBooleanExpression
     {
         /// <summary>
         /// The (single) Predicate that is the type of this ConstraintUsage. Nominally, this will be a
         /// ConstraintDefinition, but other kinds of Predicates are also allowed, to permit use of Predicates
         /// from the Kernel Model Libraries.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1578067546711_751168_1745", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578025035149_386_969")]
+        [Property(xmiId: "Systems-Constraints-ConstraintUsage-constraintDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Kernel-Functions-BooleanExpression-predicate")]
         Guid? constraintDefinition { get; }
 
     }

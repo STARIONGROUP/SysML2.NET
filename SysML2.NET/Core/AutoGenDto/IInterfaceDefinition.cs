@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IInterfaceDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,15 +35,15 @@ namespace SysML2.NET.Core.DTO.Systems.Interfaces
     /// An InterfaceDefinition is a ConnectionDefinition all of whose ends are PortUsages, defining an
     /// interface between elements that interact through such ports.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1565496029896_966800_26573", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Interfaces-InterfaceDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInterfaceDefinition : IConnectionDefinition
     {
         /// <summary>
         /// The PortUsages that are the connectionEnds of this InterfaceDefinition.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1565496234915_779221_26664", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591476421094_685440_682")]
+        [Property(xmiId: "Systems-Interfaces-InterfaceDefinition-interfaceEnd", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Connections-ConnectionDefinition-connectionEnd")]
         List<Guid> interfaceEnd { get; }
 
     }

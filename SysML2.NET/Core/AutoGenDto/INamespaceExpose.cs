@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="INamespaceExpose.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Views
     /// A NamespaceExpose is an Expose Relationship that exposes the Memberships of a specific
     /// importedNamespace and, if isRecursive = true, additional Memberships recursively.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1668805386737_851862_212", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Views-NamespaceExpose", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface INamespaceExpose : IExpose, INamespaceImport
     {

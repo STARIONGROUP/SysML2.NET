@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IBehavior.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     /// A Behavior coordinates occurrences of other Behaviors, as well as changes in objects. Behaviors can
     /// be decomposed into Steps and be characterized by parameters.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651709_376789_42207", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Behaviors-Behavior", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IBehavior : IClass
     {
@@ -49,15 +49,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
         /// The parameters of this Behavior, which are defined as its directedFeatures, whose values are passed
         /// into and/or out of a performance of the Behavior.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543948010065_362066_20413", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
+        [Property(xmiId: "Kernel-Behaviors-Behavior-parameter", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-Type-directedFeature")]
         List<IFeature> parameter { get; }
 
         /// <summary>
         /// The Steps that make up this Behavior.
         /// </summary>
-        [Property(xmiId: "_18_5_3_b9102da_1536346067212_587255_17343", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
+        [Property(xmiId: "Kernel-Behaviors-Behavior-step", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Core-Types-Type-feature")]
         List<IStep> step { get; }
 
     }

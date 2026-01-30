@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IDependency.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -34,25 +34,25 @@ namespace SysML2.NET.Core.DTO.Root.Dependencies
     /// <summary>
     /// A Dependency is a Relationship that indicates that one or more client Elements require one more
     /// supplier Elements for their complete specification. In general, this means that a change to one of
-    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements.Note
-    /// that a Dependency is entirely a model-level Relationship, without instance-level semantics.
+    /// the supplier Elements may necessitate a change to, or re-specification of, the client Elements. 
+    /// Note that a Dependency is entirely a model-level Relationship, without instance-level semantics.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1594006219028_628649_74", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Root-Dependencies-Dependency", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IDependency : IRelationship
     {
         /// <summary>
         /// The Element or Elements dependent on the supplier Elements.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594006406653_175551_182", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        [Property(xmiId: "Root-Dependencies-Dependency-client", aggregation: AggregationKind.None, lowerValue: 1, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
         List<Guid> Client { get; set; }
 
         /// <summary>
         /// The Element or Elements on which the client Elements depend in some respect.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594006525044_548771_207", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        [Property(xmiId: "Root-Dependencies-Dependency-supplier", aggregation: AggregationKind.None, lowerValue: 1, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
         List<Guid> Supplier { get; set; }
 
     }

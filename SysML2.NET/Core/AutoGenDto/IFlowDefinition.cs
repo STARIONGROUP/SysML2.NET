@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFlowDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,15 +36,15 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
     /// A FlowDefinition is an ActionDefinition that is also an Interaction (which is both a KerML Behavior
     /// and Association), representing flows between Usages.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1661892471095_470217_5", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Flows-FlowDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IFlowDefinition : IInteraction, IActionDefinition
+    public partial interface IFlowDefinition : IActionDefinition, IInteraction
     {
         /// <summary>
         /// The Usages that define the things related by the FlowDefinition.
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1733008492358_136366_19515", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
+        [Property(xmiId: "Systems-Flows-FlowDefinition-flowEnd", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Kernel-Associations-Association-associationEnd")]
         List<Guid> flowEnd { get; }
 
     }

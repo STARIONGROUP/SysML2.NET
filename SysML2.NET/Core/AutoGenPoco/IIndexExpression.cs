@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IIndexExpression.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -42,14 +42,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// An IndexExpression is an OperatorExpression whose operator is "#", which resolves to the Function
     /// BasicFunctions::'#' from the Kernel Functions Library.
     /// </summary>
-    [Class(xmiId: "_2022x_2_12e503d9_1735075421524_242675_323", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Expressions-IndexExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IIndexExpression : IOperatorExpression
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1735075421526_442091_324", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "#")]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528808100_646606_111674")]
+        [Property(xmiId: "Kernel-Expressions-IndexExpression-operator", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "#")]
+        [RedefinedProperty(propertyName: "Kernel-Expressions-OperatorExpression-operator")]
         new string Operator { get; set; }
 
     }

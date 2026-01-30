@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeatureReferenceExpression.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// <summary>
     /// A FeatureReferenceExpression is an Expression whose result is bound to a referent Feature.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1533160651680_105632_42151", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Expressions-FeatureReferenceExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFeatureReferenceExpression : IExpression
     {
@@ -49,8 +49,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// The Feature that is referenced by this FeatureReferenceExpression, which is its first non-parameter
         /// member.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1533160674962_848357_43185", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
+        [Property(xmiId: "Kernel-Expressions-FeatureReferenceExpression-referent", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-member")]
         IFeature referent { get; }
 
     }

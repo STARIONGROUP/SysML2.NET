@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAllocationUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,15 +37,15 @@ namespace SysML2.NET.Core.DTO.Systems.Allocations
     /// An AllocationUsage is a usage of an AllocationDefinition asserting the allocation of the source
     /// feature to the target feature.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1611430595314_523036_933", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Allocations-AllocationUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAllocationUsage : IConnectionUsage
     {
         /// <summary>
         /// The AllocationDefinitions that are the types of this AllocationUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1611430742949_241425_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594853499656_139435_802")]
+        [Property(xmiId: "Systems-Allocations-AllocationUsage-allocationDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Connections-ConnectionUsage-connectionDefinition")]
         List<Guid> allocationDefinition { get; }
 
     }

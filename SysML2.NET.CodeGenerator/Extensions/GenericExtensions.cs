@@ -29,44 +29,6 @@ namespace SysML2.NET.CodeGenerator.Extensions
     public static class GenericExtensions
     {
         /// <summary>
-        /// Capitalize the first letter of a string
-        /// </summary>
-        /// <param name="input">
-        /// The subject input string
-        /// </param>
-        /// <returns>
-        /// Returns a string
-        /// </returns>
-        public static string CapitalizeFirstLetter(this string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                throw new ArgumentException("string can't be empty!");
-            }
-
-            return string.Concat(input.First().ToString().ToUpper(), input.AsSpan(1));
-        }
-
-        /// <summary>
-        /// Lower ccase the first letter of a string
-        /// </summary>
-        /// <param name="input">
-        /// The subject input string
-        /// </param>
-        /// <returns>
-        /// Returns a string
-        /// </returns>
-        public static string LowerCaseFirstLetter(this string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                throw new ArgumentException("string can't be empty!");
-            }
-
-            return string.Concat(input.First().ToString().ToLower(), input.AsSpan(1));
-        }
-
-        /// <summary>
         /// Prefixes the input string with another
         /// </summary>
         /// <param name="input">

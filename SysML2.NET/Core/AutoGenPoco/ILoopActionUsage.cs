@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ILoopActionUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// repeatedly. Its subclasses WhileLoopActionUsage and ForLoopActionUsage provide different ways to
     /// determine how many times the bodyAction should be performed.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1624203585458_610400_3524", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Actions-LoopActionUsage", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILoopActionUsage : IActionUsage
     {
@@ -74,7 +74,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The ActionUsage to be performed repeatedly by the LoopActionUsage. It is the second parameter of the
         /// LoopActionUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1624203902575_509097_3869", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Systems-Actions-LoopActionUsage-bodyAction", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IActionUsage bodyAction { get; }
 
     }

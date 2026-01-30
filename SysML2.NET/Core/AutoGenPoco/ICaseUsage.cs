@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ICaseUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -65,38 +65,38 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
     /// <summary>
     /// A CaseUsage is a Usage of a CaseDefinition.
     /// </summary>
-    [Class(xmiId: "_19_0_2_59601fc_1590256077623_424527_107", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Cases-CaseUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ICaseUsage : ICalculationUsage
     {
         /// <summary>
         /// The parameters of this CaseUsage that represent actors involved in the case.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1621464633171_380461_1655", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
+        [Property(xmiId: "Systems-Cases-CaseUsage-actorParameter", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Kernel-Behaviors-Step-parameter")]
+        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
         List<IPartUsage> actorParameter { get; }
 
         /// <summary>
         /// The CaseDefinition that is the type of this CaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_59601fc_1590257465225_855208_512", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1588213526305_899324_302")]
+        [Property(xmiId: "Systems-Cases-CaseUsage-caseDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Calculations-CalculationUsage-calculationDefinition")]
         ICaseDefinition caseDefinition { get; }
 
         /// <summary>
         /// The RequirementUsage representing the objective of this CaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591138794257_404044_2145", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
+        [Property(xmiId: "Systems-Cases-CaseUsage-objectiveRequirement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
         IRequirementUsage objectiveRequirement { get; }
 
         /// <summary>
         /// The parameter of this CaseUsage that represents its subject.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1595190279083_51021_1128", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
+        [Property(xmiId: "Systems-Cases-CaseUsage-subjectParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Kernel-Behaviors-Step-parameter")]
+        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
         IUsage subjectParameter { get; }
 
     }

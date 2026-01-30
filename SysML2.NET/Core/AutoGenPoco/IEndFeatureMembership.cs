@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IEndFeatureMembership.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -39,14 +39,14 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// EndFeatureMembership is a FeatureMembership that requires its memberFeature be owned and have isEnd
     /// = true.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1625459008756_956040_5416", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Features-EndFeatureMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IEndFeatureMembership : IFeatureMembership
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1625459277304_568293_5526", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
+        [Property(xmiId: "Core-Features-EndFeatureMembership-ownedMemberFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
         new IFeature ownedMemberFeature { get; }
 
     }

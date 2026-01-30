@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IEnumerationUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -35,15 +35,15 @@ namespace SysML2.NET.Core.DTO.Systems.Enumerations
     /// <summary>
     /// An EnumerationUsage is an AttributeUsage whose attributeDefinition is an EnumerationDefinition.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1606946489455_954016_180", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Enumerations-EnumerationUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IEnumerationUsage : IAttributeUsage
     {
         /// <summary>
         /// The single EnumerationDefinition that is the type of this EnumerationUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1606946962858_570633_331", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565471811429_523492_20975")]
+        [Property(xmiId: "Systems-Enumerations-EnumerationUsage-enumerationDefinition", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Attributes-AttributeUsage-attributeDefinition")]
         Guid enumerationDefinition { get; }
 
     }

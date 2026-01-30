@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMetadataDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ namespace SysML2.NET.Core.POCO.Systems.Metadata
     /// <summary>
     /// A MetadataDefinition is an ItemDefinition that is also a Metaclass.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1645121454429_912244_371", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Metadata-MetadataDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMetadataDefinition : IItemDefinition, IMetaclass
     {

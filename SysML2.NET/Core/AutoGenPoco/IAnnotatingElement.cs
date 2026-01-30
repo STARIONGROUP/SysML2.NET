@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAnnotatingElement.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
     /// Element. An AnnotatingElement is either attached to its annotatedElements by Annotation
     /// Relationships, or it implicitly annotates its owningNamespace.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1594145576693_532940_27", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Root-Annotations-AnnotatingElement", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAnnotatingElement : IElement
     {
@@ -46,32 +46,32 @@ namespace SysML2.NET.Core.POCO.Root.Annotations
         /// annotatedElements of the annotations. If annotation is empty, then it is the owningNamespace of the
         /// AnnotatingElement.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1594145755058_99428_86", aggregation: AggregationKind.None, lowerValue: 1, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Root-Annotations-AnnotatingElement-annotatedElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<IElement> annotatedElement { get; }
 
         /// <summary>
         /// The Annotations that relate this AnnotatingElement to its annotatedElements. This includes the
         /// owningAnnotatingRelationship (if any) followed by all the ownedAnnotatingRelationshps.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543094212714_953084_18407", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [Property(xmiId: "Root-Annotations-AnnotatingElement-annotation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-A_source_sourceRelationship-sourceRelationship")]
         List<IAnnotation> annotation { get; }
 
         /// <summary>
         /// The ownedRelationships of this AnnotatingElement that are Annotations, for which this
         /// AnnotatingElement is the annotatingElement.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1703019570915_375100_18", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094212714_953084_18407")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [Property(xmiId: "Root-Annotations-AnnotatingElement-ownedAnnotatingRelationship", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Annotations-AnnotatingElement-annotation")]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedRelationship")]
         List<IAnnotation> ownedAnnotatingRelationship { get; }
 
         /// <summary>
         /// The owningRelationship of this AnnotatingRelationship, if it is an Annotation
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1735188506571_308678_376", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094212714_953084_18407")]
+        [Property(xmiId: "Root-Annotations-AnnotatingElement-owningAnnotatingRelationship", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-Element-owningRelationship")]
+        [SubsettedProperty(propertyName: "Root-Annotations-AnnotatingElement-annotation")]
         IAnnotation owningAnnotatingRelationship { get; }
 
     }

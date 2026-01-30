@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConnectionDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -62,22 +62,22 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
     /// A ConnectionDefinition is a PartDefinition that is also an AssociationStructure. The end Features of
     /// a ConnectionDefinition must be Usages.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1565813525877_81950_622", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Connections-ConnectionDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConnectionDefinition : IAssociationStructure, IPartDefinition
     {
         /// <summary>
         /// The Usages that define the things related by the ConnectionDefinition.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591476421094_685440_682", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562477648742_24204_22901")]
+        [Property(xmiId: "Systems-Connections-ConnectionDefinition-connectionEnd", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Kernel-Associations-Association-associationEnd")]
         List<IUsage> connectionEnd { get; }
 
         /// <summary>
         /// A ConnectionDefinition always has isSufficient = true.
         /// </summary>
-        [Property(xmiId: "_2022x_2_12e503d9_1734734871008_462076_156", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
-        [RedefinedProperty(propertyName: "_18_5_3_b9102da_1564072709069_937523_30797")]
+        [Property(xmiId: "Systems-Connections-ConnectionDefinition-isSufficient", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [RedefinedProperty(propertyName: "Core-Types-Type-isSufficient")]
         new bool IsSufficient { get; set; }
 
     }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAnalysisCaseDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.DTO.Systems.AnalysisCases
     /// <summary>
     /// An AnalysisCaseDefinition is a CaseDefinition for the case of carrying out an analysis.
     /// </summary>
-    [Class(xmiId: "_19_0_2_59601fc_1590260221442_937295_1064", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-AnalysisCases-AnalysisCaseDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAnalysisCaseDefinition : ICaseDefinition
     {
@@ -42,9 +42,9 @@ namespace SysML2.NET.Core.DTO.Systems.AnalysisCases
         /// An Expression used to compute the result of the AnalysisCaseDefinition, owned via a
         /// ResultExpressionMembership.
         /// </summary>
-        [Property(xmiId: "_19_0_2_59601fc_1590945152798_315308_221", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948400639_301251_20841")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [Property(xmiId: "Systems-AnalysisCases-AnalysisCaseDefinition-resultExpression", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Kernel-Functions-Function-expression")]
+        [SubsettedProperty(propertyName: "Core-Types-Type-ownedFeature")]
         Guid? resultExpression { get; }
 
     }

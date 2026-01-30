@@ -25,6 +25,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
     using uml4net.Extensions;
@@ -125,7 +126,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[DtoSerializerProviderTemplateName];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .OrderBy(x => x.Name)
@@ -172,7 +173,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[DtoSerializerTemplateName];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .ToList();
@@ -225,7 +226,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[DtoSerializerTemplateName];
 
-            var classToGenerate = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classToGenerate = xmiReaderResult.QueryAllExistingPackages("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Single(x => x.Name == className);
             

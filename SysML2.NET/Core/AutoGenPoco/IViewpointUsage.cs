@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IViewpointUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -65,22 +65,22 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// <summary>
     /// A ViewpointUsage is a Usage of a ViewpointDefinition.
     /// </summary>
-    [Class(xmiId: "_19_0_2_59601fc_1583087291401_74297_590", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Views-ViewpointUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IViewpointUsage : IRequirementUsage
     {
         /// <summary>
         /// The ViewpointDefinition that is the definition of this ViewpointUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596649684798_569222_3524", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1583000408905_769743_1223")]
+        [Property(xmiId: "Systems-Views-ViewpointUsage-viewpointDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementUsage-requirementDefinition")]
         IViewpointDefinition viewpointDefinition { get; }
 
         /// <summary>
         /// The PartUsages that identify the stakeholders with concerns framed by this ViewpointUsage, which are
         /// the owned and inherited stakeholderParameters of the framedConcerns of this ViewpointUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_4_12e503d9_1617117200628_940407_3323", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "Systems-Views-ViewpointUsage-viewpointStakeholder", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<IPartUsage> viewpointStakeholder { get; }
 
     }

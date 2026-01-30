@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IIntersecting.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// Intersecting is a Relationship that makes its intersectingType one of the intersectingTypes of its
     /// typeIntersected.
     /// </summary>
-    [Class(xmiId: "_19_0_4_b9102da_1623187351831_706169_90", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Types-Intersecting", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IIntersecting : IRelationship
     {
@@ -45,17 +45,17 @@ namespace SysML2.NET.Core.POCO.Core.Types
         /// Type that partly determines interpretations of typeIntersected, as described in
         /// Type::intersectingType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1623242559520_591868_537", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
+        [Property(xmiId: "Core-Types-Intersecting-intersectingType", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
         IType IntersectingType { get; set; }
 
         /// <summary>
         /// Type with interpretations partly determined by intersectingType, as described in
         /// Type::intersectingType.
         /// </summary>
-        [Property(xmiId: "_19_0_4_b9102da_1623242552145_149730_525", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
+        [Property(xmiId: "Core-Types-Intersecting-typeIntersected", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
+        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
         IType typeIntersected { get; }
 
     }

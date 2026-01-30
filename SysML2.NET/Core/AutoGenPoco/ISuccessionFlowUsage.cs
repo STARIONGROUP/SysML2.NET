@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISuccessionFlowUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ namespace SysML2.NET.Core.POCO.Systems.Flows
     /// <summary>
     /// A SuccessionFlowUsage is a FlowUsage that is also a KerML SuccessionFlow.
     /// </summary>
-    [Class(xmiId: "_19_0_4_12e503d9_1624054686981_604189_1301", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Flows-SuccessionFlowUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISuccessionFlowUsage : ISuccessionFlow, IFlowUsage
     {

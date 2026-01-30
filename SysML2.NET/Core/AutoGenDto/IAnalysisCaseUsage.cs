@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAnalysisCaseUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,23 +36,23 @@ namespace SysML2.NET.Core.DTO.Systems.AnalysisCases
     /// <summary>
     /// An AnalysisCaseUsage is a Usage of an AnalysisCaseDefinition.
     /// </summary>
-    [Class(xmiId: "_19_0_2_59601fc_1590260225615_617039_1090", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-AnalysisCases-AnalysisCaseUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAnalysisCaseUsage : ICaseUsage
     {
         /// <summary>
         /// The AnalysisCaseDefinition that is the definition of this AnalysisCaseUsage.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591152217935_225164_2921", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_19_0_2_59601fc_1590257465225_855208_512")]
+        [Property(xmiId: "Systems-AnalysisCases-AnalysisCaseUsage-analysisCaseDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Systems-Cases-CaseUsage-caseDefinition")]
         Guid? analysisCaseDefinition { get; }
 
         /// <summary>
         /// An Expression used to compute the result of the AnalysisCaseUsage, owned via a
         /// ResultExpressionMembership.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1591151453868_910052_2600", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
+        [Property(xmiId: "Systems-AnalysisCases-AnalysisCaseUsage-resultExpression", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Core-Types-Type-ownedFeature")]
         Guid? resultExpression { get; }
 
     }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IInvocationExpression.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// of the invoked Function. Otherwise, the result is an instance of the instantiatedType (essentially
     /// like a behavioral ConstructorExpression).
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1557528671608_638869_111563", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Expressions-InvocationExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInvocationExpression : IInstantiationExpression
     {

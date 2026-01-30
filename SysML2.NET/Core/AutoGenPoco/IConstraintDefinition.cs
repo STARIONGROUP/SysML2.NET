@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConstraintDefinition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     /// A ConstraintDefinition is an OccurrenceDefinition that is also a Predicate that defines a constraint
     /// that may be asserted to hold on a system or part of a system.
     /// </summary>
-    [Class(xmiId: "_19_0_2_12e503d9_1578067054125_439104_1452", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Systems-Constraints-ConstraintDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConstraintDefinition : IOccurrenceDefinition, IPredicate
     {

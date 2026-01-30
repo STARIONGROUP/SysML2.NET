@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ISuccession.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
     /// <summary>
     /// A Succession is a binary Connector that requires its relatedFeatures to happen separately in time.
     /// </summary>
-    [Class(xmiId: "_18_5_3_71301a1_1536100248189_622183_16479", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Kernel-Connectors-Succession", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISuccession : IConnector
     {
