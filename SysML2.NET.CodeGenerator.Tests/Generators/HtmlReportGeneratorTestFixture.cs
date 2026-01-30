@@ -97,7 +97,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
                              </div>
                              """;
 
-            Assert.That(() => this.htmlReportGenerator.GenerateReport(this.modelFileInfo, this.rootDirectoryInfo, "_h6bQED_xEfCL-qw9_9p9XQ", "SysML", 
+            Assert.That(() => this.htmlReportGenerator.GenerateReport(this.modelFileInfo, this.rootDirectoryInfo, "SysML", "SysML", 
                     true, this.pathMaps, this.outputFileInfo, customHtml),
             Throws.Nothing);
         }

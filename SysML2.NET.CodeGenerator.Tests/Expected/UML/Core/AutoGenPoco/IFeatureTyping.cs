@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeatureTyping.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -40,30 +40,30 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// In the simplest case, the type is a Classifier, whereupon the typedFeature has values that are
     /// instances of the Classifier.
     /// </summary>
-    [Class(xmiId: "_18_5_3_12e503d9_1543180339807_437641_20928", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "Core-Features-FeatureTyping", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFeatureTyping : ISpecialization
     {
         /// <summary>
         /// A typedFeature that is also the owningRelatedElement of this FeatureTyping.
         /// </summary>
-        [Property(xmiId: "_19_0_2_12e503d9_1596597427753_801746_43", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543180501615_13273_21101")]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_573157_43226")]
+        [Property(xmiId: "Core-Features-FeatureTyping-owningFeature", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "Core-Features-FeatureTyping-typedFeature")]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-owningType")]
         IFeature owningFeature { get; }
 
         /// <summary>
         /// The Type that is being applied by this FeatureTyping.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543180520185_480887_21131", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_563969_43273")]
+        [Property(xmiId: "Core-Features-FeatureTyping-type", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-general")]
         IType Type { get; set; }
 
         /// <summary>
         /// The Feature that has a type determined by this FeatureTyping.
         /// </summary>
-        [Property(xmiId: "_18_5_3_12e503d9_1543180501615_13273_21101", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674982_253967_43281")]
+        [Property(xmiId: "Core-Features-FeatureTyping-typedFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "Core-Types-Specialization-specific")]
         IFeature TypedFeature { get; set; }
 
     }
