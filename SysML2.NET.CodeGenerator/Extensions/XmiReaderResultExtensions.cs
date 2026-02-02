@@ -40,7 +40,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// <param name="xmiReaderResult">The <see cref="XmiReaderResult"/> that contains all read elements</param>
         /// <param name="rootName">The name of the root package to query</param>
         /// <returns>A <see cref="IReadOnlyCollection{T}"/> of all contained <see cref="IPackage"/> under the root <see cref="IPackage"/></returns>
-        public static IReadOnlyList<IPackage> QueryAllExistingPackages(this XmiReaderResult xmiReaderResult, string rootName)
+        public static IReadOnlyList<IPackage> QueryContainedAndImported(this XmiReaderResult xmiReaderResult, string rootName)
         {
             ArgumentNullException.ThrowIfNull(xmiReaderResult);
             

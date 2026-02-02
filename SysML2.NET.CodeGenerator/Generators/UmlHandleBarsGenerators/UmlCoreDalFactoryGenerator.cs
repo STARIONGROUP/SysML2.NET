@@ -122,7 +122,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[PocoFactoryTemplateName];
 
-            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .ToList();
@@ -175,7 +175,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[PocoFactoryTemplateName];
 
-            var classToGenerate = xmiReaderResult.QueryAllExistingPackages("SysML")
+            var classToGenerate = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Single(x => x.Name == className);
             
@@ -221,7 +221,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[ElementFactoryTemplateName];
 
-            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .OrderBy(x => x.Name)

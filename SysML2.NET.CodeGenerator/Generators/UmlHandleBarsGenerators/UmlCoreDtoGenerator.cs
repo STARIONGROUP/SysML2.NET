@@ -190,7 +190,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-interface-uml-template"];
 
-            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>());
            
             foreach (var @class in classes)
@@ -224,7 +224,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-interface-uml-template"];
 
-            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                     .SelectMany(x => x.PackagedElement.OfType<IClass>());
 
             var @class = classes.Single(x => x.Name == name);
@@ -256,7 +256,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-class-uml-template"];
 
-            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .ToList();
@@ -292,7 +292,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-class-uml-template"];
 
-            var classes = xmiReaderResult.QueryAllExistingPackages("SysML")
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>());
 
             var @class = classes.Single(x => x.Name == name);
