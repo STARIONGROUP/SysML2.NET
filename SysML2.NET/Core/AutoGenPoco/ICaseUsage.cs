@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ICaseUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -74,7 +74,6 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621464633171_380461_1655", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         List<IPartUsage> actorParameter { get; }
 
         /// <summary>
@@ -96,7 +95,6 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1595190279083_51021_1128", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         IUsage subjectParameter { get; }
 
     }

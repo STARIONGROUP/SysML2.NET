@@ -25,6 +25,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.UmlHandleBarHelpers;
 
     using uml4net.Extensions;
@@ -92,7 +93,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[ExtendTemplateName];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => x.OwnedAttribute.Select(y => y.IsDerived || y.IsDerivedUnion).Any())
                 .ToList();
@@ -141,7 +142,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[ExtendTemplateName];
 
-            var umlClass = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var umlClass = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Single(x => x.Name == className);
 

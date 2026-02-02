@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IAttributeUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -64,8 +64,9 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
     /// AttributeDefinition, an AttributeUsage is a usage of a AttributeDefinition to represent the value of
     /// some system quality or characteristic. However, other kinds of kernel DataTypes are also allowed, to
     /// permit use of DataTypes from the Kernel Model Libraries. An AttributeUsage itself as well as all its
-    /// nested features must be referential (non-composite).An AttributeUsage must specialize, directly or
-    /// indirectly, the base Feature Base::dataValues from the Kernel Semantic Library.
+    /// nested features must be referential (non-composite).                        An AttributeUsage must
+    /// specialize, directly or indirectly, the base Feature Base::dataValues from the Kernel Semantic
+    /// Library.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1565471291545_950196_20762", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFeature.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -39,18 +39,19 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// A Feature is a Type that classifies relations between multiple things (in the universe). The domain
     /// of the relation is the intersection of the featuringTypes of the Feature. (The domain of a Feature
     /// with no featuringTyps is implicitly the most general Type Base::Anything from the Kernel Semantic
-    /// Library.) The co-domain of the relation is the intersection of the types of the Feature.In the
-    /// simplest cases, the featuringTypes and types are Classifiers and the Feature relates two things, one
-    /// from the domain and one from the range. Examples include cars paired with wheels, people paired with
-    /// other people, and cars paired with numbers representing the car length.Since Features are Types,
-    /// their featuringTypes and types can be Features. In this case, the Feature effectively classifies
-    /// relations between relations, which can be interpreted as the sequence of things related by the
-    /// domain Feature concatenated with the sequence of things related by the co-domain Feature.The values
-    /// of a Feature for a given instance of its domain are all the instances of its co-domain that are
-    /// related to that domain instance by the Feature. The values of a Feature with chainingFeatures are
-    /// the same as values of the last Feature in the chain, which can be found by starting with values of
-    /// the first Feature, then using those values as domain instances to obtain valus of the second
-    /// Feature, and so on, to values of the last Feature.
+    /// Library.) The co-domain of the relation is the intersection of the types of the Feature.            
+    ///            In the simplest cases, the featuringTypes and types are Classifiers and the Feature
+    /// relates two things, one from the domain and one from the range. Examples include cars paired with
+    /// wheels, people paired with other people, and cars paired with numbers representing the car length.  
+    ///                      Since Features are Types, their featuringTypes and types can be Features. In
+    /// this case, the Feature effectively classifies relations between relations, which can be interpreted
+    /// as the sequence of things related by the domain Feature concatenated with the sequence of things
+    /// related by the co-domain Feature.                        The values of a Feature for a given
+    /// instance of its domain are all the instances of its co-domain that are related to that domain
+    /// instance by the Feature. The values of a Feature with chainingFeatures are the same as values of the
+    /// last Feature in the chain, which can be found by starting with values of the first Feature, then
+    /// using those values as domain instances to obtain valus of the second Feature, and so on, to values
+    /// of the last Feature.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1533160651684_893483_42160", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

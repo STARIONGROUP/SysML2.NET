@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="VerificationCaseUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -54,17 +54,14 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565500905804_589845_30779", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
-        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
-        [RedefinedByProperty("ICalculationUsage.CalculationDefinition")]
         [Implements(implementation: "IActionUsage.ActionDefinition")]
-        List<Guid> Systems.Actions.IActionUsage.actionDefinition => ((SysML2.NET.Core.DTO.Systems.Calculations.ICalculationUsage)this).calculationDefinition.HasValue ? [((SysML2.NET.Core.DTO.Systems.Calculations.ICalculationUsage)this).calculationDefinition.Value] : [];
+        public List<Guid> actionDefinition { get; internal set; } = [];
 
         /// <summary>
         /// The parameters of this CaseUsage that represent actors involved in the case.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621464633171_380461_1655", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "ICaseUsage.ActorParameter")]
         public List<Guid> actorParameter { get; internal set; } = [];
 
@@ -91,7 +88,6 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1588213526305_899324_302", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
         [RedefinedByProperty("ICaseUsage.CaseDefinition")]
         [Implements(implementation: "ICalculationUsage.CalculationDefinition")]
         Guid? Systems.Calculations.ICalculationUsage.calculationDefinition => this.caseDefinition.HasValue ? this.caseDefinition.Value : Guid.Empty;
@@ -152,7 +148,7 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         [RedefinedByProperty("IOccurrenceUsage.OccurrenceDefinition")]
         [Implements(implementation: "IUsage.Definition")]
-        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. ((SysML2.NET.Core.DTO.Systems.Occurrences.IOccurrenceUsage)this).occurrenceDefinition];
+        List<Guid> Systems.DefinitionAndUsage.IUsage.definition => [.. this.occurrenceDefinition];
 
         /// <summary>
         /// The interpretations of a Type with differencingTypes are asserted to be those of the first of those
@@ -181,7 +177,6 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.DirectedUsage")]
         public List<Guid> directedUsage { get; internal set; } = [];
 
@@ -436,11 +431,11 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
-        /// classify all four-wheeled things.)
+        /// Type.                            (A Type gives conditions that must be met by whatever it
+        /// classifies, but when isSufficient is false, things may meet those conditions but still not be
+        /// classified by the Type. For example, a Type Car that is not sufficient could require everything it
+        /// classifies to have four wheels, but not all four wheeled things would classify as cars. However, if
+        /// the Type Car were sufficient, it would classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IType.IsSufficient")]
@@ -478,9 +473,9 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// Whether this Usage may be time varying (that is, whether it is featured by the snapshots of its
         /// owningType, rather than being featured by the owningType itself). However, if isConstant is also
         /// true, then the value of the Usage is nevertheless constant over the entire duration of an instance
-        /// of its owningType (that is, it has the same value on all snapshots).The property mayTimeVary
-        /// redefines the KerML property Feature::isVariable, making it derived. The property isConstant is
-        /// inherited from Feature.
+        /// of its owningType (that is, it has the same value on all snapshots).                            The
+        /// property mayTimeVary redefines the KerML property Feature::isVariable, making it derived. The
+        /// property isConstant is inherited from Feature.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
@@ -706,7 +701,6 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.NestedUsage")]
         public List<Guid> nestedUsage { get; internal set; } = [];
 
@@ -757,9 +751,8 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
-        [RedefinedByProperty("IActionUsage.ActionDefinition")]
         [Implements(implementation: "IOccurrenceUsage.OccurrenceDefinition")]
-        List<Guid> Systems.Occurrences.IOccurrenceUsage.occurrenceDefinition => [.. ((SysML2.NET.Core.DTO.Systems.Actions.IActionUsage)this).actionDefinition];
+        public List<Guid> occurrenceDefinition { get; internal set; } = [];
 
         /// <summary>
         /// All features related to this Type by FeatureMemberships that have direction out or inout.
@@ -999,7 +992,6 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
         [Implements(implementation: "IUsage.OwningDefinition")]
         public Guid? owningDefinition { get; internal set; }
 
@@ -1111,7 +1103,6 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1595190279083_51021_1128", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "ICaseUsage.SubjectParameter")]
         public Guid subjectParameter { get; internal set; }
 

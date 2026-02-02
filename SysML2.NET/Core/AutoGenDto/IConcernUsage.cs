@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IConcernUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -33,10 +33,10 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConcernUsage is a Usage of a ConcernDefinition. The ownedStakeholder features of the ConcernUsage
-    /// shall all subset the ConcernCheck::concernedStakeholders feature. If the ConcernUsage is an
-    /// ownedFeature of a StakeholderDefinition or StakeholderUsage, then the ConcernUsage shall have an
-    /// ownedStakeholder feature that is bound to the self feature of its owner.
+    /// A ConcernUsage is a Usage of a ConcernDefinition.                        The ownedStakeholder
+    /// features of the ConcernUsage shall all subset the ConcernCheck::concernedStakeholders feature. If
+    /// the ConcernUsage is an ownedFeature of a StakeholderDefinition or StakeholderUsage, then the
+    /// ConcernUsage shall have an ownedStakeholder feature that is bound to the self feature of its owner.
     /// </summary>
     [Class(xmiId: "_19_0_4_12e503d9_1617051561652_163085_1288", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

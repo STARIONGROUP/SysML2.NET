@@ -54,13 +54,16 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
             };
 
             var reader = XmiReaderBuilder.Create()
-                .UsingSettings(x => x.LocalReferenceBasePath = rootPath)
-                .UsingSettings(x => x.PathMaps = pathMaps)
+                .UsingSettings(x =>
+                {
+                    x.PathMaps = pathMaps;
+                    x.LocalReferenceBasePath = rootPath;
+                })
                 .WithLogger(loggerFactory)
                 .Build();
 
             XmiReaderResult = reader.Read(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
-                "SysML_xmi.uml"));
+                "SysML_only_xmi.uml"));
         }
 
         public static XmiReaderResult XmiReaderResult;

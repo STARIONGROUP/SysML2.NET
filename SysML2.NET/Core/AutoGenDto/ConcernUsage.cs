@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ConcernUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -33,10 +33,10 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConcernUsage is a Usage of a ConcernDefinition. The ownedStakeholder features of the ConcernUsage
-    /// shall all subset the ConcernCheck::concernedStakeholders feature. If the ConcernUsage is an
-    /// ownedFeature of a StakeholderDefinition or StakeholderUsage, then the ConcernUsage shall have an
-    /// ownedStakeholder feature that is bound to the self feature of its owner.
+    /// A ConcernUsage is a Usage of a ConcernDefinition.                        The ownedStakeholder
+    /// features of the ConcernUsage shall all subset the ConcernCheck::concernedStakeholders feature. If
+    /// the ConcernUsage is an ownedFeature of a StakeholderDefinition or StakeholderUsage, then the
+    /// ConcernUsage shall have an ownedStakeholder feature that is bound to the self feature of its owner.
     /// </summary>
     [Class(xmiId: "_19_0_4_12e503d9_1617051561652_163085_1288", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -54,7 +54,6 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1621564075474_350859_2735", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IRequirementUsage.ActorParameter")]
         public List<Guid> actorParameter { get; internal set; } = [];
 
@@ -188,7 +187,6 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.DirectedUsage")]
         public List<Guid> directedUsage { get; internal set; } = [];
 
@@ -452,11 +450,11 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
-        /// classify all four-wheeled things.)
+        /// Type.                            (A Type gives conditions that must be met by whatever it
+        /// classifies, but when isSufficient is false, things may meet those conditions but still not be
+        /// classified by the Type. For example, a Type Car that is not sufficient could require everything it
+        /// classifies to have four wheels, but not all four wheeled things would classify as cars. However, if
+        /// the Type Car were sufficient, it would classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IType.IsSufficient")]
@@ -494,9 +492,9 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// Whether this Usage may be time varying (that is, whether it is featured by the snapshots of its
         /// owningType, rather than being featured by the owningType itself). However, if isConstant is also
         /// true, then the value of the Usage is nevertheless constant over the entire duration of an instance
-        /// of its owningType (that is, it has the same value on all snapshots).The property mayTimeVary
-        /// redefines the KerML property Feature::isVariable, making it derived. The property isConstant is
-        /// inherited from Feature.
+        /// of its owningType (that is, it has the same value on all snapshots).                            The
+        /// property mayTimeVary redefines the KerML property Feature::isVariable, making it derived. The
+        /// property isConstant is inherited from Feature.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
@@ -722,7 +720,6 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IUsage.NestedUsage")]
         public List<Guid> nestedUsage { get; internal set; } = [];
 
@@ -1006,7 +1003,6 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_18876_27787")]
         [Implements(implementation: "IUsage.OwningDefinition")]
         public Guid? owningDefinition { get; internal set; }
 
@@ -1156,7 +1152,6 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1624032823963_328647_40107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IRequirementUsage.StakeholderParameter")]
         public List<Guid> stakeholderParameter { get; internal set; } = [];
 
@@ -1165,7 +1160,6 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// </summary>
         [Property(xmiId: "_19_0_2_12e503d9_1595189397261_941898_844", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
-        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         [Implements(implementation: "IRequirementUsage.SubjectParameter")]
         public Guid subjectParameter { get; internal set; }
 

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IRelationship.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,14 +37,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
     /// in which case those ownedRelatedElements will be deleted from a model if their owningRelationship
     /// is. A Relationship may also be owned by another Element, in which case the ownedRelatedElements of
     /// the Relationship are also considered to be transitively owned by the owningRelatedElement of the
-    /// Relationship.The relatedElements of a Relationship are divided into source and target Elements. The
-    /// Relationship is considered to be directed from the source to the target Elements. An undirected
-    /// Relationship may have either all source or all target Elements.A &quot;relationship Element&quot; in
-    /// the abstract syntax is generically any Element that is an instance of either Relationship or a
-    /// direct or indirect specialization of Relationship. Any other kind of Element is a
-    /// &quot;non-relationship Element&quot;. It is a convention of that non-relationship Elements are only
-    /// related via reified relationship Elements. Any meta-associations directly between non-relationship
-    /// Elements must be derived from underlying reified Relationship.
+    /// Relationship.                        The relatedElements of a Relationship are divided into source
+    /// and target Elements. The Relationship is considered to be directed from the source to the target
+    /// Elements. An undirected Relationship may have either all source or all target Elements.             
+    ///           A &quot;relationship Element&quot; in the abstract syntax is generically any Element that
+    /// is an instance of either Relationship or a direct or indirect specialization of Relationship. Any
+    /// other kind of Element is a &quot;non-relationship Element&quot;. It is a convention of that
+    /// non-relationship Elements are only related via reified relationship Elements. Any meta-associations
+    /// directly between non-relationship Elements must be derived from underlying reified Relationship.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1533160651700_869737_42192", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

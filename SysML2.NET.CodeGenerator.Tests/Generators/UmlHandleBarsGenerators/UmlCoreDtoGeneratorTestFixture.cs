@@ -21,12 +21,16 @@
 namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
 {
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using NUnit.Framework;
 
     using SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators;
     using SysML2.NET.CodeGenerator.Tests.Expected.Ecore.Core;
+
+    using uml4net.Extensions;
+    using uml4net.StructuredClassifiers;
 
     [TestFixture]
     public class UmlCoreDtoGeneratorTestFixture

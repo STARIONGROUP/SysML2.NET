@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IEventOccurrenceUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -36,9 +36,9 @@ namespace SysML2.NET.Core.DTO.Systems.Occurrences
     /// An EventOccurrenceUsage is an OccurrenceUsage that represents another OccurrenceUsage occurring as a
     /// suboccurrence of the containing occurrence of the EventOccurrenceUsage. Unless it is the
     /// EventOccurrenceUsage itself, the referenced OccurrenceUsage is related to the EventOccurrenceUsage
-    /// by a ReferenceSubsetting Relationship.If the EventOccurrenceUsage is owned by an
-    /// OccurrenceDefinition or OccurrenceUsage, then it also subsets the timeEnclosedOccurrences property
-    /// of the Class Occurrence from the Kernel Semantic Library model Occurrences.
+    /// by a ReferenceSubsetting Relationship.                        If the EventOccurrenceUsage is owned
+    /// by an OccurrenceDefinition or OccurrenceUsage, then it also subsets the timeEnclosedOccurrences
+    /// property of the Class Occurrence from the Kernel Semantic Library model Occurrences.
     /// </summary>
     [Class(xmiId: "_19_0_4_12e503d9_1622831611763_442921_132", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ITransitionUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -67,9 +67,9 @@ namespace SysML2.NET.Core.POCO.Systems.States
     /// A TransitionUsage is an ActionUsage representing a triggered transition between ActionUsages or
     /// StateUsages. When triggered by a triggerAction, when its guardExpression is true, the
     /// TransitionUsage asserts that its source is exited, then its effectAction (if any) is performed, and
-    /// then its target is entered.A TransitionUsage can be related to some of its ownedFeatures using
-    /// TransitionFeatureMembership Relationships, corresponding to the triggerAction, guardExpression and
-    /// effectAction of the TransitionUsage.
+    /// then its target is entered.                        A TransitionUsage can be related to some of its
+    /// ownedFeatures using TransitionFeatureMembership Relationships, corresponding to the triggerAction,
+    /// guardExpression and effectAction of the TransitionUsage.
     /// </summary>
     [Class(xmiId: "_19_0_2_12e503d9_1575672078353_626298_450", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

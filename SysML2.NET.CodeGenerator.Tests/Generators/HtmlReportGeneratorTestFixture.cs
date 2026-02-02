@@ -31,8 +31,6 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
 
     using uml4net.Reporting.Drawing;
     using uml4net.Reporting.Generators;
-    using uml4net.xmi;
-    using uml4net.xmi.Readers;
 
     public class HtmlReportGeneratorTestFixture
     {
@@ -75,7 +73,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
             };
 
             this.modelFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
-                "SysML_xmi.uml"));
+                "SysML_only_xmi.uml"));
 
             Directory.CreateDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, "UML",
                 "_SysML2.NET.Core.AutoGenHtmlDocs"));
@@ -97,7 +95,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
                              </div>
                              """;
 
-            Assert.That(() => this.htmlReportGenerator.GenerateReport(this.modelFileInfo, this.rootDirectoryInfo, "_h6bQED_xEfCL-qw9_9p9XQ", "SysML", 
+            Assert.That(() => this.htmlReportGenerator.GenerateReport(this.modelFileInfo, this.rootDirectoryInfo, null, "SysML", 
                     true, this.pathMaps, this.outputFileInfo, customHtml),
             Throws.Nothing);
         }

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="CrossSubsetting.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -34,17 +34,18 @@ namespace SysML2.NET.Core.DTO.Core.Features
     /// CrossSubsetting is a kind of Subsetting for end Features, as identified by crossingFeature, to
     /// subset a chained Feature, identified by crossedFeature. It navigates to instances of the end
     /// Feature’s type from instances of other end Feature types on the same owningType (at least two end
-    /// Features are required for any of them to have a CrossSubsetting).The crossedFeature of a
-    /// CrossSubsetting must have a feature chain of exactly two Features. The second Feature in the chain
-    /// is the crossFeature of the crossingFeature (end Feature), which has the same type as the
-    /// crossingFeature. When the owningType of the crossingFeature has exactly two end Features, the first
-    /// Feature in the chain of the crossedFeature is the other end Feature. The crossFeature’s
-    /// featuringType in this case is the other end Feature. When the owningType has more than two end
-    /// Features, the first Feature in the chain is a Feature that CrossMultiplies all the other end
-    /// Features, which is also the featuringType of the crossFeature.A crossFeature must be owned by its
-    /// featureCrossing (end Feature) when the featureCrossing owningType has more than two end Features.
-    /// Otherwise, for exactly two end Features, the crossFeatures of each the ends can instead optionally
-    /// be inherited by the other end from one of its types or a subsetted Feature.
+    /// Features are required for any of them to have a CrossSubsetting).                        The
+    /// crossedFeature of a CrossSubsetting must have a feature chain of exactly two Features. The second
+    /// Feature in the chain is the crossFeature of the crossingFeature (end Feature), which has the same
+    /// type as the crossingFeature. When the owningType of the crossingFeature has exactly two end
+    /// Features, the first Feature in the chain of the crossedFeature is the other end Feature. The
+    /// crossFeature’s featuringType in this case is the other end Feature. When the owningType has more
+    /// than two end Features, the first Feature in the chain is a Feature that CrossMultiplies all the
+    /// other end Features, which is also the featuringType of the crossFeature.                        A
+    /// crossFeature must be owned by its featureCrossing (end Feature) when the featureCrossing owningType
+    /// has more than two end Features. Otherwise, for exactly two end Features, the crossFeatures of each
+    /// the ends can instead optionally be inherited by the other end from one of its types or a subsetted
+    /// Feature.
     /// </summary>
     [Class(xmiId: "_19_0_4_b9102da_1689616180239_998062_127", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

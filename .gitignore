@@ -354,3 +354,4 @@ MigrationBackup/
 
 # WinMerge bak files
 *.bak
+/switcher.json

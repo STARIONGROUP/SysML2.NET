@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="CaseUsageExtensions.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -211,6 +211,7 @@ namespace SysML2.NET.Dal
 
             if (includeDerivedProperties)
             {
+                dto.actionDefinition = poco.actionDefinition.Select(x => x.Id).ToList();
                 dto.actorParameter = poco.actorParameter.Select(x => x.Id).ToList();
                 dto.caseDefinition = poco.caseDefinition?.Id;
                 dto.chainingFeature = poco.chainingFeature.Select(x => x.Id).ToList();
@@ -267,6 +268,7 @@ namespace SysML2.NET.Dal
                 dto.nestedView = poco.nestedView.Select(x => x.Id).ToList();
                 dto.nestedViewpoint = poco.nestedViewpoint.Select(x => x.Id).ToList();
                 dto.objectiveRequirement = poco.objectiveRequirement?.Id;
+                dto.occurrenceDefinition = poco.occurrenceDefinition.Select(x => x.Id).ToList();
                 dto.output = poco.output.Select(x => x.Id).ToList();
                 dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
                 dto.ownedConjugator = poco.ownedConjugator?.Id;

@@ -25,6 +25,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.UmlHandleBarHelpers;
 
     using uml4net.Extensions;
@@ -145,7 +146,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-enumprovider-uml-template"];
 
-            var enumerations = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var enumerations = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IEnumeration>())
                 .ToList();
 
@@ -180,7 +181,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-enumprovider-uml-template"];
 
-            var enumerations = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var enumerations = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IEnumeration>())
                 .ToList();
 

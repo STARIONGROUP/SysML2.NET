@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IMetadataUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
         /// The MetadataDefinition that is the definition of this MetadataUsage.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1647727047674_847094_2563", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565471361757_649736_20796")]
         [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1606345564958_925589_327")]
         Guid? metadataDefinition { get; }
 

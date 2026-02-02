@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Classifier.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,12 +37,13 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Classifier is a Type that classifies:<ul>	<li>Things (in the universe) regardless of how Features
-    /// relate them. (These are interpreted semantically as sequences of exactly one thing.)</li>	<li>How
-    /// the above things are related by Features. (These are interpreted semantically as sequences of
-    /// multiple things, such that the last thing in the sequence is also classified by the Classifier. Note
-    /// that this means that a Classifier modeled as specializing a Feature cannot classify
-    /// anything.)</li></ul>
+    /// A Classifier is a Type that classifies:                        <ul>                       
+    /// <li>Things (in the universe) regardless of how Features relate them. (These are interpreted
+    /// semantically as sequences of exactly one thing.)</li>                        <li>How the above
+    /// things are related by Features. (These are interpreted semantically as sequences of multiple things,
+    /// such that the last thing in the sequence is also classified by the Classifier. Note that this means
+    /// that a Classifier modeled as specializing a Feature cannot classify anything.)</li>                 
+    /// </ul>
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1533160651676_375105_42143", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -223,11 +224,11 @@ namespace SysML2.NET.Core.POCO.Core.Classifiers
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
-        /// classify all four-wheeled things.)
+        /// Type.                            (A Type gives conditions that must be met by whatever it
+        /// classifies, but when isSufficient is false, things may meet those conditions but still not be
+        /// classified by the Type. For example, a Type Car that is not sufficient could require everything it
+        /// classifies to have four wheels, but not all four wheeled things would classify as cars. However, if
+        /// the Type Car were sufficient, it would classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IType.IsSufficient")]

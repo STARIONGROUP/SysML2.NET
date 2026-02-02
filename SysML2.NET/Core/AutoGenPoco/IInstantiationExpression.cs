@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IInstantiationExpression.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -40,8 +40,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
 
     /// <summary>
     /// An InstantiationExpression is an Expression that instantiates its instantiatedType, binding some or
-    /// all of the features of that Type to the results of its arguments.InstantiationExpression is
-    /// abstract, with concrete subclasses InvocationExpression and ConstructorExpression.
+    /// all of the features of that Type to the results of its arguments.                       
+    /// InstantiationExpression is abstract, with concrete subclasses InvocationExpression and
+    /// ConstructorExpression.
     /// </summary>
     [Class(xmiId: "_2022x_2_12e503d9_1739136879941_579104_183", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -50,8 +51,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
         /// <summary>
         /// The Expressions whose results are bound to features of the instantiatedType. The arguments are
         /// ordered consistent with the order of the features, though they may not be one-to-one with all the
-        /// features.<strong>Note.</strong> The derivation of argument is given in the concrete subclasses of
-        /// InstantiationExpression.
+        /// features.                            <strong>Note.</strong> The derivation of argument is given in
+        /// the concrete subclasses of InstantiationExpression.
         /// </summary>
         [Property(xmiId: "_2022x_2_12e503d9_1739134437590_328753_108", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<IExpression> argument { get; }

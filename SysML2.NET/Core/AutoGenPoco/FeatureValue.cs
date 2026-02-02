@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="FeatureValue.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -41,13 +41,14 @@ namespace SysML2.NET.Core.POCO.Kernel.FeatureValues
     /// A FeatureValue is a Membership that identifies a particular member Expression that provides the
     /// value of the Feature that owns the FeatureValue. The value is specified as either a bound value or
     /// an initial value, and as either a concrete or default value. A Feature can have at most one
-    /// FeatureValue.The result of the value Expression is bound to the featureWithValue using a
-    /// BindingConnector. If isInitial = false, then the featuringType of the BindingConnector is the same
-    /// as the featuringType of the featureWithValue. If isInitial = true, then the featuringType of the
-    /// BindingConnector is restricted to its startShot.If isDefault = false, then the above semantics of
-    /// the FeatureValue are realized for the given featureWithValue. Otherwise, the semantics are realized
-    /// for any individual of the featuringType of the featureWithValue, unless another value is explicitly
-    /// given for the featureWithValue for that individual.
+    /// FeatureValue.                        The result of the value Expression is bound to the
+    /// featureWithValue using a BindingConnector. If isInitial = false, then the featuringType of the
+    /// BindingConnector is the same as the featuringType of the featureWithValue. If isInitial = true, then
+    /// the featuringType of the BindingConnector is restricted to its startShot.                        If
+    /// isDefault = false, then the above semantics of the FeatureValue are realized for the given
+    /// featureWithValue. Otherwise, the semantics are realized for any individual of the featuringType of
+    /// the featureWithValue, unless another value is explicitly given for the featureWithValue for that
+    /// individual.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1543180279304_499907_20659", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

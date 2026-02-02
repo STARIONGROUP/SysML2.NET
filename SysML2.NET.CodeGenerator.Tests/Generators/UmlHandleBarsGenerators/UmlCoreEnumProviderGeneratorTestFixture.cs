@@ -55,6 +55,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
         }
 
         [Test]
+        [Category("Expected")]
         public async Task Verify_that_expected_enums_are_generated([Values("VisibilityKind", "TransitionFeatureKind")] string enumName)
         {
             var generatedCode = await this.umlCoreEnumProviderGenerator.GenerateEnumerationProviderAsync(GeneratorSetupFixture.XmiReaderResult,

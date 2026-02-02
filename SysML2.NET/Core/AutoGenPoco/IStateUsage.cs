@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IStateUsage.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -63,9 +63,10 @@ namespace SysML2.NET.Core.POCO.Systems.States
 
     /// <summary>
     /// A StateUsage is an ActionUsage that is nominally the Usage of a StateDefinition. However, other
-    /// kinds of kernel Behaviors are also allowed as types, to permit use of BehaviorsA StateUsage may be
-    /// related to up to three of its ownedFeatures by StateSubactionMembership Relationships, all of
-    /// different kinds, corresponding to the entry, do and exit actions of the StateUsage.
+    /// kinds of kernel Behaviors are also allowed as types, to permit use of Behaviors                     
+    ///   A StateUsage may be related to up to three of its ownedFeatures by StateSubactionMembership
+    /// Relationships, all of different kinds, corresponding to the entry, do and exit actions of the
+    /// StateUsage.
     /// </summary>
     [Class(xmiId: "_19_0_2_12e503d9_1575587557729_586912_651", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]

@@ -25,6 +25,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.UmlHandleBarHelpers;
 
     using uml4net.Extensions;
@@ -70,7 +71,6 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         public Task GenerateDataTransferObjectInterfacesAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
         {
             ArgumentNullException.ThrowIfNull(xmiReaderResult);
-
             ArgumentNullException.ThrowIfNull(outputDirectory);
 
             return this.GenerateDataTransferObjectInterfacesInternalAsync(xmiReaderResult, outputDirectory);
@@ -94,13 +94,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         public Task<string> GenerateDataTransferObjectInterfaceAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string name)
         {
             ArgumentNullException.ThrowIfNull(xmiReaderResult);
-
             ArgumentNullException.ThrowIfNull(outputDirectory);
-
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException(nameof(name));
-            }
+            ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
             return this.GenerateDataTransferObjectInterfaceInternalAsync(xmiReaderResult, outputDirectory, name);
         }
@@ -120,7 +115,6 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         public Task GenerateDataTransferObjectClassesAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
         {
             ArgumentNullException.ThrowIfNull(xmiReaderResult);
-
             ArgumentNullException.ThrowIfNull(outputDirectory);
 
             return this.GenerateDataTransferObjectClassesInternalAsync(xmiReaderResult, outputDirectory);
@@ -145,11 +139,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             ArgumentNullException.ThrowIfNull(xmiReaderResult);
             ArgumentNullException.ThrowIfNull(outputDirectory);
-
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException(nameof(name));
-            }
+            ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
             return this.GenerateDataTransferObjectClassInternalAsync(xmiReaderResult, outputDirectory, name);
         }
@@ -200,10 +190,9 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-interface-uml-template"];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
-                .SelectMany(x => x.PackagedElement.OfType<IClass>())
-                .ToList();
-
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
+                .SelectMany(x => x.PackagedElement.OfType<IClass>());
+           
             foreach (var @class in classes)
             {
                 var generatedDto = template(@class);
@@ -235,9 +224,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-interface-uml-template"];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
-                .SelectMany(x => x.PackagedElement.OfType<IClass>())
-                .ToList();
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
+                    .SelectMany(x => x.PackagedElement.OfType<IClass>());
 
             var @class = classes.Single(x => x.Name == name);
 
@@ -268,7 +256,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-class-uml-template"];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
                 .SelectMany(x => x.PackagedElement.OfType<IClass>())
                 .Where(x => !x.IsAbstract)
                 .ToList();
@@ -304,9 +292,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates["core-dto-class-uml-template"];
 
-            var classes = xmiReaderResult.QueryRoot(null, name: "SysML").QueryPackages()
-                .SelectMany(x => x.PackagedElement.OfType<IClass>())
-                .ToList();
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
+                .SelectMany(x => x.PackagedElement.OfType<IClass>());
 
             var @class = classes.Single(x => x.Name == name);
 

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IFunction.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -56,9 +56,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
         /// <summary>
         /// Whether this Function can be used as the function of a model-level evaluable InvocationExpression.
         /// Certain Functions from the Kernel Functions Library are considered to have isModelLevelEvaluable =
-        /// true. For all other Functions it is false.<strong>Note:</strong> See the specification of the KerML
-        /// concrete syntax notation for Expressions for an identification of which library Functions are
-        /// model-level evaluable.
+        /// true. For all other Functions it is false.                            <strong>Note:</strong> See the
+        /// specification of the KerML concrete syntax notation for Expressions for an identification of which
+        /// library Functions are model-level evaluable.
         /// </summary>
         [Property(xmiId: "_19_0_4_12e503d9_1617395221463_139517_26381", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         bool isModelLevelEvaluable { get; }

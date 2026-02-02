@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Definition.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -33,15 +33,15 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
 
     /// <summary>
     /// A Definition is a Classifier of Usages. The actual kinds of Definition that may appear in a model
-    /// are given by the subclasses of Definition (possibly as extended with user-defined
-    /// SemanticMetadata).Normally, a Definition has owned Usages that model features of the thing being
-    /// defined. A Definition may also have other Definitions nested in it, but this has no semantic
+    /// are given by the subclasses of Definition (possibly as extended with user-defined SemanticMetadata).
+    ///                        Normally, a Definition has owned Usages that model features of the thing
+    /// being defined. A Definition may also have other Definitions nested in it, but this has no semantic
     /// significance, other than the nested scoping resulting from the Definition being considered as a
-    /// Namespace for any nested Definitions.However, if a Definition has isVariation = true, then it
-    /// represents a variation point Definition. In this case, all of its members must be variant Usages,
-    /// related to the Definition by VariantMembership Relationships. Rather than being features of the
-    /// Definition, variant Usages model different concrete alternatives that can be chosen to fill in for
-    /// an abstract Usage of the variation point Definition.
+    /// Namespace for any nested Definitions.                        However, if a Definition has
+    /// isVariation = true, then it represents a variation point Definition. In this case, all of its
+    /// members must be variant Usages, related to the Definition by VariantMembership Relationships. Rather
+    /// than being features of the Definition, variant Usages model different concrete alternatives that can
+    /// be chosen to fill in for an abstract Usage of the variation point Definition.
     /// </summary>
     [Class(xmiId: "_18_5_3_12e503d9_1565479032244_336549_22524", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
@@ -104,7 +104,6 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565495064714_974634_26150", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         [Implements(implementation: "IDefinition.DirectedUsage")]
         public List<Guid> directedUsage { get; internal set; } = [];
 
@@ -231,11 +230,11 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
 
         /// <summary>
         /// Whether all things that meet the classification conditions of this Type must be classified by the
-        /// Type.(A Type gives conditions that must be met by whatever it classifies, but when isSufficient
-        /// is false, things may meet those conditions but still not be classified by the Type. For example, a
-        /// Type Car that is not sufficient could require everything it classifies to have four wheels, but not
-        /// all four wheeled things would classify as cars. However, if the Type Car were sufficient, it would
-        /// classify all four-wheeled things.)
+        /// Type.                            (A Type gives conditions that must be met by whatever it
+        /// classifies, but when isSufficient is false, things may meet those conditions but still not be
+        /// classified by the Type. For example, a Type Car that is not sufficient could require everything it
+        /// classifies to have four wheels, but not all four wheeled things would classify as cars. However, if
+        /// the Type Car were sufficient, it would classify all four-wheeled things.)
         /// </summary>
         [Property(xmiId: "_18_5_3_b9102da_1564072709069_937523_30797", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IType.IsSufficient")]
@@ -625,7 +624,6 @@ namespace SysML2.NET.Core.DTO.Systems.DefinitionAndUsage
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1565479686637_967933_23236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
-        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         [Implements(implementation: "IDefinition.OwnedUsage")]
         public List<Guid> ownedUsage { get; internal set; } = [];
 

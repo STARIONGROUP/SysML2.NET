@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="IReferenceSubsetting.cs" company="Starion Group S.A.">
 //
-//    Copyright (C) 2022-2025 Starion Group S.A.
+//    Copyright (C) 2022-2026 Starion Group S.A.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -39,8 +39,8 @@ namespace SysML2.NET.Core.POCO.Core.Features
     /// distinguished from other Features subsetted by the referencingFeature. ReferenceSubsetting has the
     /// same semantics as Subsetting, but the referencedFeature may have a special purpose relative to the
     /// referencingFeature. For instance, ReferenceSubsetting is used to identify the relatedFeatures of a
-    /// Connector.ReferenceSubsetting is always an ownedRelationship of its referencingFeature. A Feature
-    /// can have at most one ownedReferenceSubsetting.
+    /// Connector.                        ReferenceSubsetting is always an ownedRelationship of its
+    /// referencingFeature. A Feature can have at most one ownedReferenceSubsetting.
     /// </summary>
     [Class(xmiId: "_19_0_4_12e503d9_1661554793960_500657_60", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
