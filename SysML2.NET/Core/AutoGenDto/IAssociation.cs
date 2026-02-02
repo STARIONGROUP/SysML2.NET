@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Associations
     /// (in the universe). The co-domains (types) of the associationEnd Features are the relatedTypes, as
     /// co-domain and participants (linked things) of an Association identify each other.
     /// </summary>
-    [Class(xmiId: "Kernel-Associations-Association", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651716_116234_42240", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAssociation : IClassifier, IRelationship
     {
@@ -46,33 +46,33 @@ namespace SysML2.NET.Core.DTO.Kernel.Associations
         /// Association must have at least two associationEnds. When it has exactly two, the Association is
         /// called a binary Association.
         /// </summary>
-        [Property(xmiId: "Kernel-Associations-Association-associationEnd", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-Type-endFeature")]
+        [Property(xmiId: "_18_5_3_12e503d9_1562477648742_24204_22901", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         List<Guid> associationEnd { get; }
 
         /// <summary>
         /// The types of the associationEnds of the Association, which are the relatedElements of the
         /// Association considered as a Relationship.
         /// </summary>
-        [Property(xmiId: "Kernel-Associations-Association-relatedType", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-relatedElement")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674994_4339_43349", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         List<Guid> relatedType { get; }
 
         /// <summary>
         /// The source relatedType for this Association. It is the first relatedType of the Association.
         /// </summary>
-        [Property(xmiId: "Kernel-Associations-Association-sourceType", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Associations-Association-relatedType")]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
+        [Property(xmiId: "_19_0_2_12e503d9_1594939013292_377668_3566", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         Guid? sourceType { get; }
 
         /// <summary>
         /// The target relatedTypes for this Association. This includes all the relatedTypes other than the
         /// sourceType.
         /// </summary>
-        [Property(xmiId: "Kernel-Associations-Association-targetType", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Associations-Association-relatedType")]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
+        [Property(xmiId: "_19_0_2_12e503d9_1594939237325_861933_3707", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674994_4339_43349")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         List<Guid> targetType { get; }
 
     }

@@ -42,21 +42,21 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     /// A RequirementConstraintMembership is a FeatureMembership for an assumed or required ConstraintUsage
     /// of a RequirementDefinition or RequirementUsage.
     /// </summary>
-    [Class(xmiId: "Systems-Requirements-RequirementConstraintMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1584048032876_657748_336", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IRequirementConstraintMembership : IFeatureMembership
     {
         /// <summary>
         /// Whether the RequirementConstraintMembership is for an assumed or required ConstraintUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementConstraintMembership-kind", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1584048161309_821854_390", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         RequirementConstraintKind Kind { get; set; }
 
         /// <summary>
         /// The ConstraintUsage that is the ownedMemberFeature of this RequirementConstraintMembership.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementConstraintMembership-ownedConstraint", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1584048366950_985767_426", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         IConstraintUsage ownedConstraint { get; }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// referencedFeature of the ownedReferenceSubsetting of the ownedConstraint, if there is one, and,
         /// otherwise, the ownedConstraint itself.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementConstraintMembership-referencedConstraint", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617118807597_77864_3544", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IConstraintUsage referencedConstraint { get; }
 
     }

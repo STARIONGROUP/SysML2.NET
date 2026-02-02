@@ -38,15 +38,15 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
     /// Expression must contain a BindingConnector between the result parameter of the ownedResultExpression
     /// and the result parameter of the owning Function or Expression.
     /// </summary>
-    [Class(xmiId: "Kernel-Functions-ResultExpressionMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1594868887258_973573_2461", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IResultExpressionMembership : IFeatureMembership
     {
         /// <summary>
         /// The Expression that provides the result for the owner of the ResultExpressionMembership.
         /// </summary>
-        [Property(xmiId: "Kernel-Functions-ResultExpressionMembership-ownedResultExpression", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1594868945944_989058_2545", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         Guid ownedResultExpression { get; }
 
     }

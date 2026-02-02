@@ -106,6 +106,7 @@ namespace SysML2.NET.Dal
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
 
+            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
             poco.PortionKind = dto.PortionKind;
 

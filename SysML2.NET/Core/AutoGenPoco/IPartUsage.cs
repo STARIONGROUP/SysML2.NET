@@ -63,18 +63,18 @@ namespace SysML2.NET.Core.POCO.Systems.Parts
 
     /// <summary>
     /// A PartUsage is a usage of a PartDefinition to represent a system or a part of a system. At least one
-    /// of the itemDefinitions of the PartUsage must be a PartDefinition.  A PartUsage must subset, directly
-    /// or indirectly, the base PartUsage parts from the Systems Model Library.
+    /// of the itemDefinitions of the PartUsage must be a PartDefinition.                        A PartUsage
+    /// must subset, directly or indirectly, the base PartUsage parts from the Systems Model Library.
     /// </summary>
-    [Class(xmiId: "Systems-Parts-PartUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565471239590_312157_20701", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPartUsage : IItemUsage
     {
         /// <summary>
         /// The itemDefinitions of this PartUsage that are PartDefinitions.
         /// </summary>
-        [Property(xmiId: "Systems-Parts-PartUsage-partDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-Items-ItemUsage-itemDefinition")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591475180488_929065_121", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565471361757_649736_20796")]
         List<IPartDefinition> partDefinition { get; }
 
     }

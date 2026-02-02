@@ -41,15 +41,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Functions
     /// A BooleanExpression is a Boolean-valued Expression whose type is a Predicate. It represents a
     /// logical condition resulting from the evaluation of the Predicate.
     /// </summary>
-    [Class(xmiId: "Kernel-Functions-BooleanExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1578511256733_336334_354", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IBooleanExpression : IExpression
     {
         /// <summary>
         /// The Predicate that types the Expression.
         /// </summary>
-        [Property(xmiId: "Kernel-Functions-BooleanExpression-predicate", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Kernel-Functions-Expression-function")]
+        [Property(xmiId: "_19_0_2_12e503d9_1578025035149_386_969", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
         IPredicate predicate { get; }
 
     }

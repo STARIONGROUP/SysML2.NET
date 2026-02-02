@@ -67,7 +67,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// However, other kinds of kernel Behaviors are also allowed, to permit use of Behaviors from the
     /// Kernel Model Libraries.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-ActionUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565500580749_954926_30405", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IActionUsage : IStep, IOccurrenceUsage
     {
@@ -76,9 +76,8 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// but other kinds of Kernel Behaviors are also allowed, to permit use of Behaviors from the Kernel
         /// Model Libraries.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-ActionUsage-actionDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Kernel-Behaviors-Step-behavior")]
-        [RedefinedProperty(propertyName: "Systems-Occurrences-OccurrenceUsage-occurrenceDefinition")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565500905804_589845_30779", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_b9102da_1536346315176_954314_17388")]
         List<IBehavior> actionDefinition { get; }
 
     }

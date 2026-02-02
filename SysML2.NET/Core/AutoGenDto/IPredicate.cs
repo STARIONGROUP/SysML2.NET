@@ -33,7 +33,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
     /// <summary>
     /// A Predicate is a Function whose result parameter has type Boolean and multiplicity 1..1.
     /// </summary>
-    [Class(xmiId: "Kernel-Functions-Predicate", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651691_194569_42171", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPredicate : IFunction
     {

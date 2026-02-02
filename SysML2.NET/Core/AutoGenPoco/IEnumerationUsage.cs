@@ -62,15 +62,15 @@ namespace SysML2.NET.Core.POCO.Systems.Enumerations
     /// <summary>
     /// An EnumerationUsage is an AttributeUsage whose attributeDefinition is an EnumerationDefinition.
     /// </summary>
-    [Class(xmiId: "Systems-Enumerations-EnumerationUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1606946489455_954016_180", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IEnumerationUsage : IAttributeUsage
     {
         /// <summary>
         /// The single EnumerationDefinition that is the type of this EnumerationUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Enumerations-EnumerationUsage-enumerationDefinition", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Attributes-AttributeUsage-attributeDefinition")]
+        [Property(xmiId: "_19_0_4_12e503d9_1606946962858_570633_331", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565471811429_523492_20975")]
         IEnumerationDefinition enumerationDefinition { get; }
 
     }

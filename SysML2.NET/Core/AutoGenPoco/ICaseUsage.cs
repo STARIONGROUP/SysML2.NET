@@ -65,38 +65,36 @@ namespace SysML2.NET.Core.POCO.Systems.Cases
     /// <summary>
     /// A CaseUsage is a Usage of a CaseDefinition.
     /// </summary>
-    [Class(xmiId: "Systems-Cases-CaseUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_59601fc_1590256077623_424527_107", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ICaseUsage : ICalculationUsage
     {
         /// <summary>
         /// The parameters of this CaseUsage that represent actors involved in the case.
         /// </summary>
-        [Property(xmiId: "Systems-Cases-CaseUsage-actorParameter", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Behaviors-Step-parameter")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
+        [Property(xmiId: "_19_0_4_12e503d9_1621464633171_380461_1655", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         List<IPartUsage> actorParameter { get; }
 
         /// <summary>
         /// The CaseDefinition that is the type of this CaseUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Cases-CaseUsage-caseDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Calculations-CalculationUsage-calculationDefinition")]
+        [Property(xmiId: "_19_0_2_59601fc_1590257465225_855208_512", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1588213526305_899324_302")]
         ICaseDefinition caseDefinition { get; }
 
         /// <summary>
         /// The RequirementUsage representing the objective of this CaseUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Cases-CaseUsage-objectiveRequirement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591138794257_404044_2145", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591217543254_26688_475")]
         IRequirementUsage objectiveRequirement { get; }
 
         /// <summary>
         /// The parameter of this CaseUsage that represents its subject.
         /// </summary>
-        [Property(xmiId: "Systems-Cases-CaseUsage-subjectParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Behaviors-Step-parameter")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1595190279083_51021_1128", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         IUsage subjectParameter { get; }
 
     }

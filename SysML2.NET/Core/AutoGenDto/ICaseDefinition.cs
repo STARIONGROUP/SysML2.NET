@@ -36,31 +36,29 @@ namespace SysML2.NET.Core.DTO.Systems.Cases
     /// data, relative to a subject, possibly involving the collaboration of one or more other actors,
     /// producing a result that meets an objective.
     /// </summary>
-    [Class(xmiId: "Systems-Cases-CaseDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_59601fc_1590256070522_658678_81", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ICaseDefinition : ICalculationDefinition
     {
         /// <summary>
         /// The parameters of this CaseDefinition that represent actors involved in the case.
         /// </summary>
-        [Property(xmiId: "Systems-Cases-CaseDefinition-actorParameter", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Behaviors-Behavior-parameter")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Definition-usage")]
+        [Property(xmiId: "_19_0_4_12e503d9_1621464609772_382176_1612", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         List<Guid> actorParameter { get; }
 
         /// <summary>
         /// The RequirementUsage representing the objective of this CaseDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-Cases-CaseDefinition-objectiveRequirement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Definition-usage")]
+        [Property(xmiId: "_19_0_2_59601fc_1590259317710_27529_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         Guid? objectiveRequirement { get; }
 
         /// <summary>
         /// The parameter of this CaseDefinition that represents its subject.
         /// </summary>
-        [Property(xmiId: "Systems-Cases-CaseDefinition-subjectParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Behaviors-Behavior-parameter")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Definition-usage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1595189932946_106647_973", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948010065_362066_20413")]
         Guid subjectParameter { get; }
 
     }

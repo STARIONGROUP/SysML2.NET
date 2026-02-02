@@ -59,16 +59,16 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A Usage is a usage of a Definition.  A Usage may have nestedUsages that model features that apply in
-    /// the context of the owningUsage. A Usage may also have Definitions nested in it, but this has no
-    /// semantic significance, other than the nested scoping resulting from the Usage being considered as a
-    /// Namespace for any nested Definitions.  However, if a Usage has isVariation = true, then it
-    /// represents a variation point Usage. In this case, all of its members must be variant Usages, related
-    /// to the Usage by VariantMembership Relationships. Rather than being features of the Usage, variant
-    /// Usages model different concrete alternatives that can be chosen to fill in for the variation point
-    /// Usage.
+    /// A Usage is a usage of a Definition.                        A Usage may have nestedUsages that model
+    /// features that apply in the context of the owningUsage. A Usage may also have Definitions nested in
+    /// it, but this has no semantic significance, other than the nested scoping resulting from the Usage
+    /// being considered as a Namespace for any nested Definitions.                        However, if a
+    /// Usage has isVariation = true, then it represents a variation point Usage. In this case, all of its
+    /// members must be variant Usages, related to the Usage by VariantMembership Relationships. Rather than
+    /// being features of the Usage, variant Usages model different concrete alternatives that can be chosen
+    /// to fill in for the variation point Usage.
     /// </summary>
-    [Class(xmiId: "Systems-DefinitionAndUsage-Usage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565469997820_598571_19982", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IUsage : IFeature
     {
@@ -77,90 +77,89 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// of Kernel Classifiers are also allowed, to permit use of Classifiers from the Kernel Model
         /// Libraries.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-definition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Features-Feature-type")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591477641252_179221_958", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         List<IClassifier> definition { get; }
 
         /// <summary>
         /// The usages of this Usage that are directedFeatures.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-directedUsage", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Types-Type-directedFeature")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591217699198_66279_508", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         List<IUsage> directedUsage { get; }
 
         /// <summary>
         /// Whether this Usage is a referential Usage, that is, it has isComposite = false.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-isReference", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624035114787_488767_41423", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         bool isReference { get; }
 
         /// <summary>
         /// Whether this Usage is for a variation point or not. If true, then all the memberships of the Usage
         /// must be VariantMemberships.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-isVariation", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1590978312364_290951_421", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         bool IsVariation { get; set; }
 
         /// <summary>
         /// Whether this Usage may be time varying (that is, whether it is featured by the snapshots of its
         /// owningType, rather than being featured by the owningType itself). However, if isConstant is also
         /// true, then the value of the Usage is nevertheless constant over the entire duration of an instance
-        /// of its owningType (that is, it has the same value on all snapshots).  The property mayTimeVary
-        /// redefines the KerML property Feature::isVariable, making it derived. The property isConstant is
-        /// inherited from Feature.
+        /// of its owningType (that is, it has the same value on all snapshots).                            The
+        /// property mayTimeVary redefines the KerML property Feature::isVariable, making it derived. The
+        /// property isConstant is inherited from Feature.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-mayTimeVary", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Features-Feature-isVariable")]
+        [Property(xmiId: "_2022x_2_12e503d9_1737227200362_771035_69", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_2022x_2_12e503d9_1725998273002_23711_212")]
         bool mayTimeVary { get; }
 
         /// <summary>
         /// The ActionUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedAction", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedOccurrence")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565501745142_70952_31609", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         List<IActionUsage> nestedAction { get; }
 
         /// <summary>
         /// The AllocationUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedAllocation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedConnection")]
+        [Property(xmiId: "_19_0_4_12e503d9_1611430983774_648557_1053", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         List<IAllocationUsage> nestedAllocation { get; }
 
         /// <summary>
         /// The AnalysisCaseUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedAnalysisCase", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedCase")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591152666850_226358_3749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         List<IAnalysisCaseUsage> nestedAnalysisCase { get; }
 
         /// <summary>
         /// The code>AttributeUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedAttribute", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedUsage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591500785349_111324_4486", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         List<IAttributeUsage> nestedAttribute { get; }
 
         /// <summary>
         /// The CalculationUsage that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedCalculation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedAction")]
+        [Property(xmiId: "_19_0_2_12e503d9_1588215112283_215964_632", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
         List<ICalculationUsage> nestedCalculation { get; }
 
         /// <summary>
         /// The CaseUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedCase", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedCalculation")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591135021853_494751_737", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1588215112283_215964_632")]
         List<ICaseUsage> nestedCase { get; }
 
         /// <summary>
         /// The ConcernUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedConcern", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedRequirement")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617051711833_106553_1460", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
         List<IConcernUsage> nestedConcern { get; }
 
         /// <summary>
@@ -168,180 +167,178 @@ namespace SysML2.NET.Core.POCO.Systems.DefinitionAndUsage
         /// BindingConnectorAsUsages, SuccessionAsUsages, and FlowConnectionUsages because these are
         /// ConnectorAsUsages even though they are not ConnectionUsages.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedConnection", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedUsage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591479754895_422988_1242", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         List<IConnectorAsUsage> nestedConnection { get; }
 
         /// <summary>
         /// The ConstraintUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedConstraint", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedOccurrence")]
+        [Property(xmiId: "_19_0_2_12e503d9_1578067664051_434365_1774", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         List<IConstraintUsage> nestedConstraint { get; }
 
         /// <summary>
         /// The code>EnumerationUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedEnumeration", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedAttribute")]
+        [Property(xmiId: "_19_0_4_12e503d9_1606946589000_158124_239", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591500785349_111324_4486")]
         List<IEnumerationUsage> nestedEnumeration { get; }
 
         /// <summary>
         /// The code>FlowUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedFlow", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedConnection")]
+        [Property(xmiId: "_19_0_4_12e503d9_1624054938718_124518_1464", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         List<IFlowUsage> nestedFlow { get; }
 
         /// <summary>
         /// The InterfaceUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedInterface", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedConnection")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591498454569_383419_3839", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591479754895_422988_1242")]
         List<IInterfaceUsage> nestedInterface { get; }
 
         /// <summary>
         /// The ItemUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedItem", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedOccurrence")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591482421103_284620_2978", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943853976_48759_278")]
         List<IItemUsage> nestedItem { get; }
 
         /// <summary>
         /// The MetadataUsages that are nestedUsages of this of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedMetadata", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedItem")]
+        [Property(xmiId: "_19_0_4_12e503d9_1661488589862_120785_2970", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
         List<IMetadataUsage> nestedMetadata { get; }
 
         /// <summary>
         /// The OccurrenceUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedOccurrence", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedUsage")]
+        [Property(xmiId: "_19_0_4_12e503d9_1618943853976_48759_278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         List<IOccurrenceUsage> nestedOccurrence { get; }
 
         /// <summary>
         /// The PartUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedPart", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedItem")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591496406876_479979_3188", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591482421103_284620_2978")]
         List<IPartUsage> nestedPart { get; }
 
         /// <summary>
         /// The PortUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedPort", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedUsage")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565494459494_859367_26042", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         List<IPortUsage> nestedPort { get; }
 
         /// <summary>
         /// The ReferenceUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedReference", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedUsage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591477541360_47573_933", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         List<IReferenceUsage> nestedReference { get; }
 
         /// <summary>
         /// The RenderingUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedRendering", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedPart")]
+        [Property(xmiId: "_19_0_2_12e503d9_1596741501454_147708_6545", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
         List<IRenderingUsage> nestedRendering { get; }
 
         /// <summary>
         /// The RequirementUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedRequirement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedConstraint")]
+        [Property(xmiId: "_19_0_2_12e503d9_1583000447195_878123_1244", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1578067664051_434365_1774")]
         List<IRequirementUsage> nestedRequirement { get; }
 
         /// <summary>
         /// The StateUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedState", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedAction")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575587743891_973819_756", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565501745142_70952_31609")]
         List<IStateUsage> nestedState { get; }
 
         /// <summary>
         /// The TransitionUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedTransition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedUsage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1578597913303_768272_3894", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565472757327_162097_21259")]
         List<ITransitionUsage> nestedTransition { get; }
 
         /// <summary>
         /// The Usages that are ownedFeatures of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedUsage", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Types-Type-ownedFeature")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565472757327_162097_21259", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         List<IUsage> nestedUsage { get; }
 
         /// <summary>
         /// The UseCaseUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedUseCase", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedCase")]
+        [Property(xmiId: "_19_0_4_12e503d9_1621463992900_247262_1080", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         List<IUseCaseUsage> nestedUseCase { get; }
 
         /// <summary>
         /// The VerificationCaseUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedVerificationCase", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedCase")]
+        [Property(xmiId: "_19_0_2_12e503d9_1596821592100_42801_10499", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591135021853_494751_737")]
         List<IVerificationCaseUsage> nestedVerificationCase { get; }
 
         /// <summary>
         /// The ViewUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedView", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedPart")]
+        [Property(xmiId: "_19_0_2_12e503d9_1596644669126_858176_809", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1591496406876_479979_3188")]
         List<IViewUsage> nestedView { get; }
 
         /// <summary>
         /// The ViewpointUsages that are nestedUsages of this Usage.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-nestedViewpoint", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedRequirement")]
+        [Property(xmiId: "_19_0_2_12e503d9_1596649930212_443356_3818", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583000447195_878123_1244")]
         List<IViewpointUsage> nestedViewpoint { get; }
 
         /// <summary>
         /// The Definition that owns this Usage (if any).
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-owningDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Features-Feature-owningType")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-A_usage_featuringDefinition-featuringDefinition")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565479686638_420576_23237", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         IDefinition owningDefinition { get; }
 
         /// <summary>
         /// The Usage in which this Usage is nested (if any).
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-owningUsage", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Features-Feature-owningType")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565472757327_504924_21260", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_592215_43200")]
         IUsage owningUsage { get; }
 
         /// <summary>
         /// The Usages that are features of this Usage (not necessarily owned).
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-usage", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Types-Type-feature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591217543254_26688_475", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_326391_43166")]
         List<IUsage> usage { get; }
 
         /// <summary>
         /// The Usages which represent the variants of this Usage as a variation point Usage, if isVariation =
         /// true. If isVariation = false, then there must be no variants.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-variant", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-ownedMember")]
+        [Property(xmiId: "_19_0_2_12e503d9_1590979649160_380466_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         List<IUsage> variant { get; }
 
         /// <summary>
         /// The ownedMemberships of this Usage that are VariantMemberships. If isVariation = true, then this
         /// must be all memberships of the Usage. If isVariation = false, then variantMembershipmust be empty.
         /// </summary>
-        [Property(xmiId: "Systems-DefinitionAndUsage-Usage-variantMembership", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-ownedMembership")]
+        [Property(xmiId: "_19_0_2_12e503d9_1590979136735_982171_914", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_190614_43269")]
         List<IVariantMembership> variantMembership { get; }
 
     }

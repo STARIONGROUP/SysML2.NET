@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
     /// A FramedConcernMembership is a RequirementConstraintMembership for a framed ConcernUsage of a
     /// RequirementDefinition or RequirementUsage.
     /// </summary>
-    [Class(xmiId: "Systems-Requirements-FramedConcernMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1617120429499_126250_3667", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial class FramedConcernMembership : IFramedConcernMembership
     {
@@ -50,14 +50,14 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// Various alternative identifiers for this Element. Generally, these will be set by tools.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-aliasIds", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594312532679_496267_4310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.AliasIds")]
         public List<string> AliasIds { get; set; } = [];
 
         /// <summary>
         /// The declared name of this Element.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-declaredName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674987_737648_43307", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.DeclaredName")]
         public string DeclaredName { get; set; }
 
@@ -67,16 +67,16 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// it is then the responsibility of the modeler to maintain the uniqueness of this identifier within a
         /// model or relative to some other context.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-declaredShortName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1594160442439_915308_4153", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.DeclaredShortName")]
         public string DeclaredShortName { get; set; }
 
         /// <summary>
         /// The Documentation owned by this Element.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-documentation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Annotations-A_annotatedElement_annotatingElement-annotatingElement")]
-        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedElement")]
+        [Property(xmiId: "_19_0_2_12e503d9_1594150061166_345630_1621", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.Documentation")]
         public List<Guid> documentation { get; internal set; } = [];
 
@@ -84,7 +84,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The globally unique identifier for this Element. This is intended to be set by tooling, and it must
         /// not change during the lifetime of the Element.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-elementId", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_844338_43305", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ElementId")]
         public string ElementId { get; set; }
 
@@ -92,7 +92,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// Whether this Relationship was generated by tooling to meet semantic rules, rather than being
         /// directly created by a modeler.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Relationship-isImplied", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1662070829631_521257_3623", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IRelationship.IsImplied")]
         public bool IsImplied { get; set; }
 
@@ -103,29 +103,29 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// if it is false, then ownedRelationships may not contain any implied Relationships. That is, either
         /// all required implied Relationships must be included, or none of them.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-isImpliedIncluded", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1662070949317_79713_3658", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         [Implements(implementation: "IElement.IsImpliedIncluded")]
         public bool IsImpliedIncluded { get; set; }
 
         /// <summary>
         /// Whether this Element is contained in the ownership tree of a library model.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-isLibraryElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1665443500960_5561_723", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.IsLibraryElement")]
         public bool isLibraryElement { get; internal set; }
 
         /// <summary>
         /// The kind of an FramedConcernMembership must be requirement.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-FramedConcernMembership-kind", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-kind")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120451812_644221_3690", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048161309_821854_390")]
         [Implements(implementation: "IFramedConcernMembership.Kind")]
         public RequirementConstraintKind Kind { get; set; } = RequirementConstraintKind.Requirement;
 
         /// <summary>
         /// Whether the RequirementConstraintMembership is for an assumed or required ConstraintUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementConstraintMembership-kind", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1584048161309_821854_390", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IFramedConcernMembership.Kind")]
         [Implements(implementation: "IRequirementConstraintMembership.Kind")]
         RequirementConstraintKind IRequirementConstraintMembership.Kind
@@ -140,8 +140,8 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-memberElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674964_819490_43195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElement")]
         [Implements(implementation: "IMembership.MemberElement")]
         Guid Root.Namespaces.IMembership.MemberElement
@@ -153,7 +153,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The elementId of the memberElement.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-memberElementId", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberElementId")]
         [Implements(implementation: "IMembership.MemberElementId")]
         string Root.Namespaces.IMembership.memberElementId => this.ownedMemberElementId;
@@ -161,7 +161,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-memberName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674964_35293_43192", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberName")]
         [Implements(implementation: "IMembership.MemberName")]
         string Root.Namespaces.IMembership.MemberName
@@ -173,10 +173,10 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The Namespace of which the memberElement becomes a member due to this Membership.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-membershipOwningNamespace", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-A_membership_membershipNamespace-membershipNamespace")]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_193857_43197", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_531296_43182")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         [RedefinedByProperty("IFeatureMembership.OwningType")]
         [Implements(implementation: "IMembership.MembershipOwningNamespace")]
         Guid Root.Namespaces.IMembership.membershipOwningNamespace => this.owningType;
@@ -184,7 +184,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-memberShortName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1651721174176_601088_238", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IOwningMembership.OwnedMemberShortName")]
         [Implements(implementation: "IMembership.MemberShortName")]
         string Root.Namespaces.IMembership.MemberShortName
@@ -199,7 +199,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// this is overridden for certain kinds of Elements to compute a name even when the declaredName is
         /// null.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-name", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617485009541_709355_27528", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Name")]
         public string name { get; internal set; }
 
@@ -207,25 +207,25 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The ownedRelationships of this Element that are Annotations, for which this Element is the
         /// annotatedElement.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-ownedAnnotation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedRelationship")]
-        [SubsettedProperty(propertyName: "Root-Annotations-A_annotatedElement_annotation-annotation")]
+        [Property(xmiId: "_19_0_2_12e503d9_1594152527165_702130_2500", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543094430277_599480_18543")]
         [Implements(implementation: "IElement.OwnedAnnotation")]
         public List<Guid> ownedAnnotation { get; internal set; } = [];
 
         /// <summary>
         /// The ConcernUsage that is the ownedConstraint of this FramedConcernMembership.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-FramedConcernMembership-ownedConcern", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-ownedConstraint")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120590170_490370_3748", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048366950_985767_426")]
         [Implements(implementation: "IFramedConcernMembership.OwnedConcern")]
         public Guid ownedConcern { get; internal set; }
 
         /// <summary>
         /// The ConstraintUsage that is the ownedMemberFeature of this RequirementConstraintMembership.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementConstraintMembership-ownedConstraint", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1584048366950_985767_426", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         [RedefinedByProperty("IFramedConcernMembership.OwnedConcern")]
         [Implements(implementation: "IRequirementConstraintMembership.OwnedConstraint")]
         Guid IRequirementConstraintMembership.ownedConstraint => this.ownedConcern;
@@ -234,7 +234,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The Elements owned by this Element, derived as the ownedRelatedElements of the ownedRelationships of
         /// this Element.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-ownedElement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_112608_17278", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.OwnedElement")]
         public List<Guid> ownedElement { get; internal set; } = [];
 
@@ -242,9 +242,9 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The Element that becomes an ownedMember of the membershipOwningNamespace due to this
         /// OwningMembership.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-OwningMembership-ownedMemberElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-ownedRelatedElement")]
-        [RedefinedProperty(propertyName: "Root-Namespaces-Membership-memberElement")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_501750_43196", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_59873_43302")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_819490_43195")]
         [RedefinedByProperty("IFeatureMembership.OwnedMemberFeature")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElement")]
         Guid Root.Namespaces.IOwningMembership.ownedMemberElement => ((SysML2.NET.Core.DTO.Core.Types.IFeatureMembership)this).ownedMemberFeature;
@@ -252,8 +252,8 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The elementId of the ownedMemberElement.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-OwningMembership-ownedMemberElementId", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Namespaces-Membership-memberElementId")]
+        [Property(xmiId: "_19_0_4_12e503d9_1651721234828_904219_244", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721199802_246768_242")]
         [Implements(implementation: "IOwningMembership.OwnedMemberElementId")]
         public string ownedMemberElementId { get; internal set; }
 
@@ -261,8 +261,8 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The Feature that this FeatureMembership relates to its owningType, making it an ownedFeature of the
         /// owningType.
         /// </summary>
-        [Property(xmiId: "Core-Types-FeatureMembership-ownedMemberFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Namespaces-OwningMembership-ownedMemberElement")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674993_898044_43344", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         [RedefinedByProperty("IRequirementConstraintMembership.OwnedConstraint")]
         [Implements(implementation: "IFeatureMembership.OwnedMemberFeature")]
         Guid Core.Types.IFeatureMembership.ownedMemberFeature => ((SysML2.NET.Core.DTO.Systems.Requirements.IRequirementConstraintMembership)this).ownedConstraint;
@@ -270,32 +270,32 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The name of the ownedMemberElement.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-OwningMembership-ownedMemberName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Namespaces-Membership-memberName")]
+        [Property(xmiId: "_19_0_4_12e503d9_1648181616390_323441_387", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674964_35293_43192")]
         [Implements(implementation: "IOwningMembership.OwnedMemberName")]
         public string ownedMemberName { get; internal set; }
 
         /// <summary>
         /// The shortName of the ownedMemberElement.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-OwningMembership-ownedMemberShortName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Namespaces-Membership-memberShortName")]
+        [Property(xmiId: "_19_0_4_12e503d9_1651721262092_909505_246", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1651721174176_601088_238")]
         [Implements(implementation: "IOwningMembership.OwnedMemberShortName")]
         public string ownedMemberShortName { get; internal set; }
 
         /// <summary>
         /// The relatedElements of this Relationship that are owned by the Relationship.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Relationship-ownedRelatedElement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-relatedElement")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IRelationship.OwnedRelatedElement")]
         public List<Guid> OwnedRelatedElement { get; set; } = [];
 
         /// <summary>
         /// The Relationships for which this Element is the owningRelatedElement.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-ownedRelationship", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-A_relatedElement_relationship-relationship")]
+        [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwnedRelationship")]
         public List<Guid> OwnedRelationship { get; set; } = [];
 
@@ -303,16 +303,16 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The owner of this Element, derived as the owningRelatedElement of the owningRelationship of this
         /// Element, if any.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-owner", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1543092869879_744477_17277", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.Owner")]
         public Guid? owner { get; internal set; }
 
         /// <summary>
         /// The owningRelationship of this Element, if that Relationship is a Membership.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-owningMembership", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-A_memberElement_membership-membership")]
-        [SubsettedProperty(propertyName: "Root-Elements-Element-owningRelationship")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674972_622493_43236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674973_469277_43243")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_482273_43303")]
         [Implements(implementation: "IElement.OwningMembership")]
         public Guid? owningMembership { get; internal set; }
 
@@ -320,33 +320,33 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The Namespace that owns this Element, which is the membershipOwningNamespace of the owningMembership
         /// of this Element, if any.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-owningNamespace", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-A_member_namespace-namespace")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_474739_43306", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674980_717955_43271")]
         [Implements(implementation: "IElement.OwningNamespace")]
         public Guid? owningNamespace { get; internal set; }
 
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Relationship-owningRelatedElement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-relatedElement")]
+        [Property(xmiId: "_18_5_3_12e503d9_1543092026091_693018_16749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [Implements(implementation: "IRelationship.OwningRelatedElement")]
         public Guid? OwningRelatedElement { get; set; }
 
         /// <summary>
         /// The Relationship for which this Element is an ownedRelatedElement, if any.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-owningRelationship", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-A_relatedElement_relationship-relationship")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwningRelationship")]
         public Guid? OwningRelationship { get; set; }
 
         /// <summary>
         /// The Type that owns this FeatureMembership.
         /// </summary>
-        [Property(xmiId: "Core-Types-FeatureMembership-owningType", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Types-A_featureMembership_type-type")]
-        [RedefinedProperty(propertyName: "Root-Namespaces-Membership-membershipOwningNamespace")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674992_418504_43339", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1651076866524_738482_486")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_193857_43197")]
         [Implements(implementation: "IFeatureMembership.OwningType")]
         public Guid owningType { get; internal set; }
 
@@ -358,7 +358,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// Namespace to this Element. If the owningNamespace has other Elements with the same name as this one,
         /// then the qualifiedName is null for all such Elements other than the first.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-qualifiedName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1611356604987_900871_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.QualifiedName")]
         public string qualifiedName { get; internal set; }
 
@@ -367,8 +367,8 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// referencedConstraint of the FramedConcernMembership considered as a RequirementConstraintMembership,
         /// which must be a ConcernUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-FramedConcernMembership-referencedConcern", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-referencedConstraint")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120658044_92083_3773", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1617118807597_77864_3544")]
         [Implements(implementation: "IFramedConcernMembership.ReferencedConcern")]
         public Guid referencedConcern { get; internal set; }
 
@@ -377,7 +377,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// referencedFeature of the ownedReferenceSubsetting of the ownedConstraint, if there is one, and,
         /// otherwise, the ownedConstraint itself.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementConstraintMembership-referencedConstraint", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617118807597_77864_3544", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [RedefinedByProperty("IFramedConcernMembership.ReferencedConcern")]
         [Implements(implementation: "IRequirementConstraintMembership.ReferencedConstraint")]
         Guid IRequirementConstraintMembership.referencedConstraint => this.referencedConcern;
@@ -386,7 +386,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// The Elements that are related by this Relationship, derived as the union of the source and target
         /// Elements of the Relationship.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Relationship-relatedElement", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674961_132339_43177", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
         [Implements(implementation: "IRelationship.RelatedElement")]
         public List<Guid> relatedElement { get; internal set; } = [];
 
@@ -396,15 +396,15 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// declaredShortName, but this is overridden for certain kinds of Elements to compute a shortName even
         /// when the declaredName is null.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-shortName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1673496405504_544235_24", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [Implements(implementation: "IElement.ShortName")]
         public string shortName { get; internal set; }
 
         /// <summary>
         /// The relatedElements from which this Relationship is considered to be directed.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Relationship-source", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-relatedElement")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674971_696758_43228", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IMembership.MembershipOwningNamespace")]
         [Implements(implementation: "IRelationship.Source")]
         List<Guid> Root.Elements.IRelationship.Source
@@ -416,8 +416,8 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The relatedElements to which this Relationship is considered to be directed.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Relationship-target", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-relatedElement")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674961_138197_43179", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         [RedefinedByProperty("IMembership.MemberElement")]
         [Implements(implementation: "IRelationship.Target")]
         List<Guid> Root.Elements.IRelationship.Target
@@ -436,9 +436,9 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// <summary>
         /// The TextualRepresentations that annotate this Element.
         /// </summary>
-        [Property(xmiId: "Root-Elements-Element-textualRepresentation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Annotations-A_annotatedElement_annotatingElement-annotatingElement")]
-        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedElement")]
+        [Property(xmiId: "_19_0_2_12e503d9_1594154758493_640290_3388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1594145755059_76214_87")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092869879_112608_17278")]
         [Implements(implementation: "IElement.TextualRepresentation")]
         public List<Guid> textualRepresentation { get; internal set; } = [];
 
@@ -446,7 +446,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly
         /// visible outside that Namespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-visibility", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "public")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674964_42975_43193", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "public")]
         [Implements(implementation: "IMembership.Visibility")]
         public VisibilityKind Visibility { get; set; } = VisibilityKind.Public;
 

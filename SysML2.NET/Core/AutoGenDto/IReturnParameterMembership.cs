@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Functions
     /// the result parameter of a Function or Expression. The direction of the ownedMemberParameter must be
     /// out.
     /// </summary>
-    [Class(xmiId: "Kernel-Functions-ReturnParameterMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1557528148740_240982_111109", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IReturnParameterMembership : IParameterMembership
     {

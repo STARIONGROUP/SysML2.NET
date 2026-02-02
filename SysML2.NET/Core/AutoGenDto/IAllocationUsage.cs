@@ -37,15 +37,15 @@ namespace SysML2.NET.Core.DTO.Systems.Allocations
     /// An AllocationUsage is a usage of an AllocationDefinition asserting the allocation of the source
     /// feature to the target feature.
     /// </summary>
-    [Class(xmiId: "Systems-Allocations-AllocationUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1611430595314_523036_933", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAllocationUsage : IConnectionUsage
     {
         /// <summary>
         /// The AllocationDefinitions that are the types of this AllocationUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Allocations-AllocationUsage-allocationDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Connections-ConnectionUsage-connectionDefinition")]
+        [Property(xmiId: "_19_0_4_12e503d9_1611430742949_241425_999", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594853499656_139435_802")]
         List<Guid> allocationDefinition { get; }
 
     }

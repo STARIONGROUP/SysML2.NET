@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// A NamespaceExpose is an Expose Relationship that exposes the Memberships of a specific
     /// importedNamespace and, if isRecursive = true, additional Memberships recursively.
     /// </summary>
-    [Class(xmiId: "Systems-Views-NamespaceExpose", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1668805386737_851862_212", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface INamespaceExpose : IExpose, INamespaceImport
     {

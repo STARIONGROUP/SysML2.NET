@@ -35,18 +35,19 @@ namespace SysML2.NET.Core.DTO.Core.Types
     /// <summary>
     /// A Multiplicity is a Feature whose co-domain is a set of natural numbers giving the allowed
     /// cardinalities of each typeWithMultiplicity. The cardinality of a Type is defined as follows,
-    /// depending on whether the Type is a Classifier or Feature. <ul> <li>Classifier – The number of basic
-    /// instances of the Classifier, that is, those instances representing things, which are not instances
-    /// of any subtypes of the Classifier that are Features. <li>Features – The number of instances with the
-    /// same featuring instances. In the case of a Feature with a Classifier as its featuringType, this is
-    /// the number of values of Feature for each basic instance of the Classifier. Note that, for non-unique
-    /// Features, all duplicate values are included in this count.</li> </ul>  Multiplicity co-domains (in
-    /// models) can be specified by Expression that might vary in their results. If the typeWithMultiplicity
-    /// is a Classifier, the domain of the Multiplicity shall be Base::Anything.  If the
-    /// typeWithMultiplicity is a Feature,  the Multiplicity shall have the same domain as the
+    /// depending on whether the Type is a Classifier or Feature.                        <ul>               
+    ///         <li>Classifier – The number of basic instances of the Classifier, that is, those instances
+    /// representing things, which are not instances of any subtypes of the Classifier that are Features.   
+    ///                     <li>Features – The number of instances with the same featuring instances. In the
+    /// case of a Feature with a Classifier as its featuringType, this is the number of values of Feature
+    /// for each basic instance of the Classifier. Note that, for non-unique Features, all duplicate values
+    /// are included in this count.</li>                        </ul>                        Multiplicity
+    /// co-domains (in models) can be specified by Expression that might vary in their results. If the
+    /// typeWithMultiplicity is a Classifier, the domain of the Multiplicity shall be Base::Anything.  If
+    /// the typeWithMultiplicity is a Feature,  the Multiplicity shall have the same domain as the
     /// typeWithMultiplicity.
     /// </summary>
-    [Class(xmiId: "Core-Types-Multiplicity", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1573083797505_495205_3879", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMultiplicity : IFeature
     {

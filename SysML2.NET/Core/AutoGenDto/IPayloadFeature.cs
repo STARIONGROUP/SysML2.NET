@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Interactions
     /// A PayloadFeature is the ownedFeature of a Flow that identifies the things carried by the kinds of
     /// transfers that are instances of the Flow.
     /// </summary>
-    [Class(xmiId: "Kernel-Interactions-PayloadFeature", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1563219020686_897240_20518", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPayloadFeature : IFeature
     {

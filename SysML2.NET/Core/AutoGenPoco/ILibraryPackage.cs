@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     /// A LibraryPackage is a Package that is the container for a model library. A LibraryPackage is itself
     /// a library Element as are all Elements that are directly or indirectly contained in it.
     /// </summary>
-    [Class(xmiId: "Kernel-Packages-LibraryPackage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1665457931502_349175_779", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILibraryPackage : IPackage
     {
@@ -47,7 +47,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// LibraryPackages in the standard Kernel Model Libraries or in normative model libraries for a
         /// language built on KerML.
         /// </summary>
-        [Property(xmiId: "Kernel-Packages-LibraryPackage-isStandard", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1665459011301_65344_899", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsStandard { get; set; }
 
     }

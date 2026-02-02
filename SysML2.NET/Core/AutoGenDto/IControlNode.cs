@@ -37,7 +37,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
     /// incoming and outgoing Successions that are used to control other Actions. A ControlNode must be a
     /// composite owned usage of an ActionDefinition or ActionUsage.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-ControlNode", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1567281323333_776611_544", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IControlNode : IActionUsage
     {

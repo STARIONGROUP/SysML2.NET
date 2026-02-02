@@ -41,7 +41,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
     /// the condition Expression. A general Namespace does not define any specific filtering behavior, but
     /// such behavior may be defined for various specialized kinds of Namespaces.
     /// </summary>
-    [Class(xmiId: "Kernel-Packages-ElementFilterMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1605760960644_813844_5877", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IElementFilterMembership : IOwningMembership
     {
@@ -49,8 +49,8 @@ namespace SysML2.NET.Core.POCO.Kernel.Packages
         /// The model-level evaluable Boolean-valued Expression used to filter the imported members of the
         /// membershipOwningNamespace of this ElementFilterMembership.
         /// </summary>
-        [Property(xmiId: "Kernel-Packages-ElementFilterMembership-condition", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Namespaces-OwningMembership-ownedMemberElement")]
+        [Property(xmiId: "_19_0_4_12e503d9_1605762464250_876969_157", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674965_501750_43196")]
         IExpression condition { get; }
 
     }

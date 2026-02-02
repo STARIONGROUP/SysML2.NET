@@ -43,9 +43,9 @@ namespace SysML2.NET.Core.POCO.Kernel.Associations
     /// Features can change over time. However, the values of the end Features of a link object are fixed
     /// and cannot change over its lifetime.
     /// </summary>
-    [Class(xmiId: "Kernel-Associations-AssociationStructure", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_b9102da_1609608726569_644338_601", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IAssociationStructure : IStructure, IAssociation
+    public partial interface IAssociationStructure : IAssociation, IStructure
     {
     }
 }

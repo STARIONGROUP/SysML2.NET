@@ -110,6 +110,7 @@ namespace SysML2.NET.Dal
                 poco.OwnedRelatedElement.Remove(poco.OwnedRelatedElement.Single(x => x.Id == identifier));
             }
 
+            identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
 
@@ -118,6 +119,7 @@ namespace SysML2.NET.Dal
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
 
+            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
             poco.PortionKind = dto.PortionKind;
 
@@ -242,6 +244,7 @@ namespace SysML2.NET.Dal
 
             if (includeDerivedProperties)
             {
+                dto.actionDefinition = poco.actionDefinition.Select(x => x.Id).ToList();
                 dto.chainingFeature = poco.chainingFeature.Select(x => x.Id).ToList();
                 dto.connectorEnd = poco.connectorEnd.Select(x => x.Id).ToList();
                 dto.crossFeature = poco.crossFeature?.Id;
@@ -297,6 +300,7 @@ namespace SysML2.NET.Dal
                 dto.nestedVerificationCase = poco.nestedVerificationCase.Select(x => x.Id).ToList();
                 dto.nestedView = poco.nestedView.Select(x => x.Id).ToList();
                 dto.nestedViewpoint = poco.nestedViewpoint.Select(x => x.Id).ToList();
+                dto.occurrenceDefinition = poco.occurrenceDefinition.Select(x => x.Id).ToList();
                 dto.output = poco.output.Select(x => x.Id).ToList();
                 dto.ownedAnnotation = poco.ownedAnnotation.Select(x => x.Id).ToList();
                 dto.ownedConjugator = poco.ownedConjugator?.Id;

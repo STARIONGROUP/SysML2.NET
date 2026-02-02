@@ -41,15 +41,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
     /// metadata. It is typed by a Metaclass. All its ownedFeatures must redefine features of its metaclass
     /// and any feature bindings must be model-level evaluable.
     /// </summary>
-    [Class(xmiId: "Kernel-Metadata-MetadataFeature", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1606345563822_968574_178", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMetadataFeature : IAnnotatingElement, IFeature
     {
         /// <summary>
         /// The type of this MetadataFeature, which must be a Metaclass.
         /// </summary>
-        [Property(xmiId: "Kernel-Metadata-MetadataFeature-metaclass", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Features-Feature-type")]
+        [Property(xmiId: "_19_0_4_12e503d9_1606345564958_925589_327", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         IMetaclass metaclass { get; }
 
     }

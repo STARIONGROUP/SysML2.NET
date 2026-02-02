@@ -41,7 +41,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// <summary>
     /// A LiteralExpression is an Expression that provides a basic DataValue as a result.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-LiteralExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651688_624289_42165", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralExpression : IExpression
     {

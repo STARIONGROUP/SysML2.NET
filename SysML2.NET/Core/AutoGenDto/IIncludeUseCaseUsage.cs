@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.DTO.Systems.UseCases
     /// be included is related to the includedUseCase by a ReferenceSubsetting Relationship. An
     /// IncludeUseCaseUsage is also a PerformActionUsage, with its useCaseIncluded as the performedAction.
     /// </summary>
-    [Class(xmiId: "Systems-UseCases-IncludeUseCaseUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1621532125543_31659_1117", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IIncludeUseCaseUsage : IUseCaseUsage, IPerformActionUsage
     {
@@ -47,8 +47,8 @@ namespace SysML2.NET.Core.DTO.Systems.UseCases
         /// The UseCaseUsage to be included by this IncludeUseCaseUsage. It is the performedAction of the
         /// IncludeUseCaseUsage considered as a PerformActionUsage, which must be a UseCaseUsage.
         /// </summary>
-        [Property(xmiId: "Systems-UseCases-IncludeUseCaseUsage-useCaseIncluded", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Actions-PerformActionUsage-performedAction")]
+        [Property(xmiId: "_19_0_4_12e503d9_1621532149711_865323_1172", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1567740791820_867719_18017")]
         Guid useCaseIncluded { get; }
 
     }

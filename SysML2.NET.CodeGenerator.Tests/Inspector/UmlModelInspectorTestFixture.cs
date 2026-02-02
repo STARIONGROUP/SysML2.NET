@@ -60,7 +60,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Inspector
         {
             var rootPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel");
 
-            this.modelPath = Path.Combine(rootPath, "SysML_xmi.uml");
+            this.modelPath = Path.Combine(rootPath, "SysML_only_xmi.uml");
             this.modelFileInfo = new FileInfo(modelPath);
 
             var reportPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "uml-inspection-report.txt");

@@ -38,23 +38,23 @@ namespace SysML2.NET.Core.DTO.Kernel.Behaviors
     /// descriptions. Steps can be ordered in time and can be connected using Flows to specify things
     /// flowing between their parameters.
     /// </summary>
-    [Class(xmiId: "Kernel-Behaviors-Step", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_b9102da_1536345916995_711141_17306", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IStep : IFeature
     {
         /// <summary>
         /// The Behaviors that type this Step.
         /// </summary>
-        [Property(xmiId: "Kernel-Behaviors-Step-behavior", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Features-Feature-type")]
+        [Property(xmiId: "_18_5_3_b9102da_1536346315176_954314_17388", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         List<Guid> behavior { get; }
 
         /// <summary>
         /// The parameters of this Step, which are defined as its directedFeatures, whose values are passed into
         /// and/or out of a performance of the Step.
         /// </summary>
-        [Property(xmiId: "Kernel-Behaviors-Step-parameter", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-Type-directedFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1595189174990_213826_657", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1623952188842_882068_37169")]
         List<Guid> parameter { get; }
 
     }

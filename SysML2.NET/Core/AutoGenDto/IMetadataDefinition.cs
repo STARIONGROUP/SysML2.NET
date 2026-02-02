@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
     /// <summary>
     /// A MetadataDefinition is an ItemDefinition that is also a Metaclass.
     /// </summary>
-    [Class(xmiId: "Systems-Metadata-MetadataDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1645121454429_912244_371", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMetadataDefinition : IItemDefinition, IMetaclass
     {

@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO.Systems.Views
     /// A ViewpointDefinition is a RequirementDefinition that specifies one or more stakeholder concerns
     /// that are to be satisfied by creating a view of a model.
     /// </summary>
-    [Class(xmiId: "Systems-Views-ViewpointDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1596649640349_746765_3429", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IViewpointDefinition : IRequirementDefinition
     {
@@ -44,7 +44,7 @@ namespace SysML2.NET.Core.DTO.Systems.Views
         /// which are the owned and inherited stakeholderParameters of the framedConcerns of this
         /// ViewpointDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-Views-ViewpointDefinition-viewpointStakeholder", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617117194003_518610_3310", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<Guid> viewpointStakeholder { get; }
 
     }

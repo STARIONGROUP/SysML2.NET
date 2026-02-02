@@ -37,10 +37,11 @@ namespace SysML2.NET.Core.DTO.Systems.Attributes
     /// AttributeDefinition, an AttributeUsage is a usage of a AttributeDefinition to represent the value of
     /// some system quality or characteristic. However, other kinds of kernel DataTypes are also allowed, to
     /// permit use of DataTypes from the Kernel Model Libraries. An AttributeUsage itself as well as all its
-    /// nested features must be referential (non-composite).  An AttributeUsage must specialize, directly or
-    /// indirectly, the base Feature Base::dataValues from the Kernel Semantic Library.
+    /// nested features must be referential (non-composite).                        An AttributeUsage must
+    /// specialize, directly or indirectly, the base Feature Base::dataValues from the Kernel Semantic
+    /// Library.
     /// </summary>
-    [Class(xmiId: "Systems-Attributes-AttributeUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565471291545_950196_20762", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAttributeUsage : IUsage
     {
@@ -49,15 +50,15 @@ namespace SysML2.NET.Core.DTO.Systems.Attributes
         /// but other kinds of kernel DataTypes are also allowed, to permit use of DataTypes from the Kernel
         /// Model Libraries.
         /// </summary>
-        [Property(xmiId: "Systems-Attributes-AttributeUsage-attributeDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-definition")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565471811429_523492_20975", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         List<Guid> attributeDefinition { get; }
 
         /// <summary>
         /// Always true for an AttributeUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Attributes-AttributeUsage-isReference", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
-        [RedefinedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-isReference")]
+        [Property(xmiId: "_19_0_4_12e503d9_1624050661138_649455_27", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1624035114787_488767_41423")]
         new bool isReference { get; }
 
     }

@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
     /// A BindingConnector is a binary Connector that requires its relatedFeatures to identify the same
     /// things (have the same values).
     /// </summary>
-    [Class(xmiId: "Kernel-Connectors-BindingConnector", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_b9102da_1543591219823_238592_17680", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IBindingConnector : IConnector
     {

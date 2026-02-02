@@ -67,16 +67,16 @@ namespace SysML2.NET.Core.POCO.Systems.Constraints
     /// true (by default). Unless it is the AssertConstraintUsage itself, the asserted ConstraintUsage is
     /// related to the AssertConstraintUsage by a ReferenceSubsetting Relationship.
     /// </summary>
-    [Class(xmiId: "Systems-Constraints-AssertConstraintUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1581045078368_47459_9326", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IAssertConstraintUsage : IInvariant, IConstraintUsage
+    public partial interface IAssertConstraintUsage : IConstraintUsage, IInvariant
     {
         /// <summary>
         /// The ConstraintUsage to be performed by the AssertConstraintUsage. It is the referenceFeature of the
         /// ownedReferenceSubsetting for the AssertConstraintUsage, if there is one, and, otherwise, the
         /// AssertConstraintUsage itself.
         /// </summary>
-        [Property(xmiId: "Systems-Constraints-AssertConstraintUsage-assertedConstraint", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1581045158665_239617_9458", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IConstraintUsage assertedConstraint { get; }
 
     }

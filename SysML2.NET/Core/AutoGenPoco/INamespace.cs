@@ -35,64 +35,65 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     /// <summary>
     /// A Namespace is an Element that contains other Elements, known as its members, via Membership
     /// Relationships with those Elements. The members of a Namespace may be owned by the Namespace, aliased
-    /// in the Namespace, or imported into the Namespace via Import Relationships.  A Namespace can provide
-    /// names for its members via the memberNames and memberShortNames specified by the Memberships in the
-    /// Namespace. If a Membership specifies a memberName and/or memberShortName, then those are names of
-    /// the corresponding memberElement relative to the Namespace. For an OwningMembership, the
-    /// ownedMemberName and ownedMemberShortName are given by the Element name and shortName. Note that the
-    /// same Element may be the memberElement of multiple Memberships in a Namespace (though it may be owned
-    /// at most once), each of which may define a separate alias for the Element relative to the Namespace.
+    /// in the Namespace, or imported into the Namespace via Import Relationships.                        A
+    /// Namespace can provide names for its members via the memberNames and memberShortNames specified by
+    /// the Memberships in the Namespace. If a Membership specifies a memberName and/or memberShortName,
+    /// then those are names of the corresponding memberElement relative to the Namespace. For an
+    /// OwningMembership, the ownedMemberName and ownedMemberShortName are given by the Element name and
+    /// shortName. Note that the same Element may be the memberElement of multiple Memberships in a
+    /// Namespace (though it may be owned at most once), each of which may define a separate alias for the
+    /// Element relative to the Namespace.
     /// </summary>
-    [Class(xmiId: "Root-Namespaces-Namespace", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651694_110063_42176", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface INamespace : IElement
     {
         /// <summary>
         /// The Memberships in this Namespace that result from the ownedImports of this Namespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Namespace-importedMembership", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-membership")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_207869_43270", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
         List<IMembership> importedMembership { get; }
 
         /// <summary>
         /// The set of all member Elements of this Namespace, which are the memberElements of all memberships of
         /// the Namespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Namespace-member", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_644335_43267", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<IElement> member { get; }
 
         /// <summary>
         /// All Memberships in this Namespace, including (at least) the union of ownedMemberships and
         /// importedMemberships.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Namespace-membership", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674962_198288_43183", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: true, isUnique: true, defaultValue: null)]
         List<IMembership> membership { get; }
 
         /// <summary>
         /// The ownedRelationships of this Namespace that are Imports, for which the Namespace is the
         /// importOwningNamespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Namespace-ownedImport", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedRelationship")]
-        [SubsettedProperty(propertyName: "Root-Elements-A_source_sourceRelationship-sourceRelationship")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674974_746786_43247", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
         List<IImport> ownedImport { get; }
 
         /// <summary>
         /// The owned members of this Namespace, which are the <cpde>ownedMemberElements of the ownedMemberships
         /// of the Namespace.</cpde>
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Namespace-ownedMember", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-member")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_259543_43268", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         List<IElement> ownedMember { get; }
 
         /// <summary>
         /// The ownedRelationships of this Namespace that are Memberships, for which the Namespace is the
         /// membershipOwningNamespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Namespace-ownedMembership", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-membership")]
-        [SubsettedProperty(propertyName: "Root-Elements-A_source_sourceRelationship-sourceRelationship")]
-        [SubsettedProperty(propertyName: "Root-Elements-Element-ownedRelationship")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674979_190614_43269", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_198288_43183")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_80547_43227")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_217766_16748")]
         List<IMembership> ownedMembership { get; }
 
     }

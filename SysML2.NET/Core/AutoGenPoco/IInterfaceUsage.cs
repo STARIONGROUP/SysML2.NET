@@ -67,15 +67,15 @@ namespace SysML2.NET.Core.POCO.Systems.Interfaces
     /// An InterfaceUsage is a Usage of an InterfaceDefinition to represent an interface connecting parts of
     /// a system through specific ports.
     /// </summary>
-    [Class(xmiId: "Systems-Interfaces-InterfaceUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565498940266_617738_28508", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInterfaceUsage : IConnectionUsage
     {
         /// <summary>
         /// The InterfaceDefinitions that type this InterfaceUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Interfaces-InterfaceUsage-interfaceDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Connections-ConnectionUsage-connectionDefinition")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565499418349_431355_28798", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594853499656_139435_802")]
         List<IInterfaceDefinition> interfaceDefinition { get; }
 
     }

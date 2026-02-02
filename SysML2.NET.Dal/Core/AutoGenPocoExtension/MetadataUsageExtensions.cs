@@ -108,6 +108,7 @@ namespace SysML2.NET.Dal
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
 
+            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
             poco.PortionKind = dto.PortionKind;
 
@@ -233,6 +234,7 @@ namespace SysML2.NET.Dal
                 dto.isConjugated = poco.isConjugated;
                 dto.isLibraryElement = poco.isLibraryElement;
                 dto.isReference = poco.isReference;
+                dto.itemDefinition = poco.itemDefinition.Select(x => x.Id).ToList();
                 dto.mayTimeVary = poco.mayTimeVary;
                 dto.member = poco.member.Select(x => x.Id).ToList();
                 dto.membership = poco.membership.Select(x => x.Id).ToList();

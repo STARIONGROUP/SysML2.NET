@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     /// visibility. If isRecursive = true, then visible Memberships are also recursively imported from owned
     /// sub-Namespaces.
     /// </summary>
-    [Class(xmiId: "Root-Namespaces-Import", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651693_673132_42174", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IImport : IRelationship
     {
@@ -50,35 +50,35 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
         /// The effectively imported Element for this Import. For a MembershipImport, this is the memberElement
         /// of the importedMembership. For a NamespaceImport, it is the importedNamespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Import-importedElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1668801846848_909736_64", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IElement importedElement { get; }
 
         /// <summary>
         /// The Namespace into which Memberships are imported by this Import, which must be the
         /// owningRelatedElement of the Import.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Import-importOwningNamespace", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674974_548878_43248", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         INamespace importOwningNamespace { get; }
 
         /// <summary>
         /// Whether to import memberships without regard to declared visibility.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Import-isImportAll", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1622577942205_869984_64", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsImportAll { get; set; }
 
         /// <summary>
         /// Whether to recursively import Memberships from visible, owned sub-Namespaces.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Import-isRecursive", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1605759116711_596237_5033", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsRecursive { get; set; }
 
         /// <summary>
         /// The visibility level of the imported members from this Import relative to the importOwningNamespace.
         /// The default is private.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Import-visibility", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "private")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674976_798509_43257", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "private")]
         VisibilityKind Visibility { get; set; }
 
     }

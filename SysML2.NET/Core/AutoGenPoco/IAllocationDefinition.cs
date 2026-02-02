@@ -66,15 +66,15 @@ namespace SysML2.NET.Core.POCO.Systems.Allocations
     /// itself be refined using nested allocations that give a finer-grained decomposition of the containing
     /// allocation mapping.
     /// </summary>
-    [Class(xmiId: "Systems-Allocations-AllocationDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1611430566467_608282_906", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAllocationDefinition : IConnectionDefinition
     {
         /// <summary>
         /// The AllocationUsages that refine the allocation mapping defined by this AllocationDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-Allocations-AllocationDefinition-allocation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Definition-usage")]
+        [Property(xmiId: "_19_0_4_12e503d9_1611430644481_402036_964", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<IAllocationUsage> allocation { get; }
 
     }

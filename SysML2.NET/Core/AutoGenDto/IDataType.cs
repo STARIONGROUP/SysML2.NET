@@ -34,12 +34,13 @@ namespace SysML2.NET.Core.DTO.Kernel.DataTypes
     /// <summary>
     /// A DataType is a Classifier of things (in the universe) that can only be distinguished by how they
     /// are related to other things (via Features). This means multiple things classified by the same
-    /// DataType  <ul>  <li>Cannot be distinguished when they are related to other things in exactly the
-    /// same way, even when they are intended to be about different things.</li>  <li>Can be distinguished
-    /// when they are related to other things in different ways, even when they are intended to be about the
-    /// same thing.</li> </ul>
+    /// DataType                        <ul>                        <li>Cannot be distinguished when they
+    /// are related to other things in exactly the same way, even when they are intended to be about
+    /// different things.</li>                        <li>Can be distinguished when they are related to
+    /// other things in different ways, even when they are intended to be about the same thing.</li>        
+    /// </ul>
     /// </summary>
-    [Class(xmiId: "Kernel-DataTypes-DataType", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1557527599533_240072_110321", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IDataType : IClassifier
     {

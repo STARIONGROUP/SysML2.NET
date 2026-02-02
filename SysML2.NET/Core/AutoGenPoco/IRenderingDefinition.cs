@@ -61,15 +61,15 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// A RenderingDefinition is a PartDefinition that defines a specific rendering of the content of a
     /// model view (e.g., symbols, style, layout, etc.).
     /// </summary>
-    [Class(xmiId: "Systems-Views-RenderingDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1596657122569_397556_4766", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IRenderingDefinition : IPartDefinition
     {
         /// <summary>
         /// The usages of a RenderingDefinition that are RenderingUsages.
         /// </summary>
-        [Property(xmiId: "Systems-Views-RenderingDefinition-rendering", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Definition-usage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1596741367270_249607_6373", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565498571495_48981_27786")]
         List<IRenderingUsage> rendering { get; }
 
     }

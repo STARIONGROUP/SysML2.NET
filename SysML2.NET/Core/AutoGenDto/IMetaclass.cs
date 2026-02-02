@@ -34,7 +34,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Metadata
     /// <summary>
     /// A Metaclass is a Structure used to type MetadataFeatures.
     /// </summary>
-    [Class(xmiId: "Kernel-Metadata-Metaclass", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1645120910786_720932_39", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMetaclass : IStructure
     {

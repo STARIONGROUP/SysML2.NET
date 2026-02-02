@@ -69,7 +69,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// featuring instance (that) of the performance of the TerminateActionUsage, generally the performance
     /// of its immediately containing ActionDefinition or ActionUsage.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-TerminateActionUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_2022x_2_12e503d9_1724451571263_191875_31", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ITerminateActionUsage : IActionUsage
     {
@@ -77,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// The Expression that is the featureValue of the terminateOccurrence parameter of this
         /// TerminateActionUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-TerminateActionUsage-terminatedOccurrenceArgument", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_2022x_2_12e503d9_1724451750939_948290_107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IExpression terminatedOccurrenceArgument { get; }
 
     }

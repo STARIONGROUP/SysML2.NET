@@ -43,15 +43,15 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     /// stakeholderParameter of a RequirementDefinition or RequirementUsage, which specifies a role played
     /// by an entity with concerns framed by the owningType.
     /// </summary>
-    [Class(xmiId: "Systems-Requirements-StakeholderMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1624034341711_188515_40791", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IStakeholderMembership : IParameterMembership
     {
         /// <summary>
         /// The PartUsage specifying the stakeholder.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-StakeholderMembership-ownedStakeholderParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Kernel-Behaviors-ParameterMembership-ownedMemberParameter")]
+        [Property(xmiId: "_19_0_4_12e503d9_1624034451301_6622_40822", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528016548_548098_110830")]
         IPartUsage ownedStakeholderParameter { get; }
 
     }

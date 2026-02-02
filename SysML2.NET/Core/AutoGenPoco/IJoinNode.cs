@@ -65,7 +65,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// A JoinNode is a ControlNode that waits for the completion of all the predecessor Actions given by
     /// incoming Successions.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-JoinNode", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565503134270_392089_33594", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IJoinNode : IControlNode
     {

@@ -41,22 +41,22 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     /// become outputs on the ConjugatedPortDefinition and output flows of the original PortDefinition
     /// become inputs on the ConjugatedPortDefinition.
     /// </summary>
-    [Class(xmiId: "Systems-Ports-PortConjugation", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1575484318404_705000_871", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPortConjugation : IConjugation
     {
         /// <summary>
         /// The ConjugatedPortDefinition that is conjugate to the originalPortDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-Ports-PortConjugation-conjugatedPortDefinition", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-Conjugation-owningType")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575484344899_880331_946", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_778895_441")]
         IConjugatedPortDefinition conjugatedPortDefinition { get; }
 
         /// <summary>
         /// The PortDefinition being conjugated.
         /// </summary>
-        [Property(xmiId: "Systems-Ports-PortConjugation-originalPortDefinition", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-Conjugation-originalType")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575484331999_998721_917", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482354187_108424_237")]
         IPortDefinition OriginalPortDefinition { get; set; }
 
     }

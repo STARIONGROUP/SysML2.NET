@@ -37,15 +37,15 @@ namespace SysML2.NET.Core.DTO.Root.Namespaces
     /// importedNamespace are imported. If  isRecursive = true, then, in addition, Memberships are
     /// recursively imported from any ownedMembers of the importedNamespace that are Namespaces.
     /// </summary>
-    [Class(xmiId: "Root-Namespaces-NamespaceImport", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1668208114894_902739_132", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface INamespaceImport : IImport
     {
         /// <summary>
         /// The Namespace whose visible Memberships are imported by this NamespaceImport.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-NamespaceImport-importedNamespace", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674966_977620_43202", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         Guid ImportedNamespace { get; set; }
 
     }

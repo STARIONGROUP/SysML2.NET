@@ -41,15 +41,15 @@ namespace SysML2.NET.Core.POCO.Kernel.Behaviors
     /// is always owned, and must have a direction. A ParameterMembership must be owned by a Behavior, a
     /// Step, or the result parameter of a ConstructorExpression.
     /// </summary>
-    [Class(xmiId: "Kernel-Behaviors-ParameterMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1557527738711_165124_110466", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IParameterMembership : IFeatureMembership
     {
         /// <summary>
         /// The Feature that is identified as a parameter by this ParameterMembership.
         /// </summary>
-        [Property(xmiId: "Kernel-Behaviors-ParameterMembership-ownedMemberParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
+        [Property(xmiId: "_18_5_3_12e503d9_1557528016548_548098_110830", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         IFeature ownedMemberParameter { get; }
 
     }

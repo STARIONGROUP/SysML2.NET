@@ -64,14 +64,14 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
     /// act on such structures. If isIndividual is true, then the OccurrenceDefinition is constrained to
     /// have (at most) a single instance that is the entire life of a single individual.
     /// </summary>
-    [Class(xmiId: "Systems-Occurrences-OccurrenceDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1618943693347_790503_111", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IOccurrenceDefinition : IDefinition, IClass
     {
         /// <summary>
         /// Whether this OccurrenceDefinition is constrained to represent at most one thing.
         /// </summary>
-        [Property(xmiId: "Systems-Occurrences-OccurrenceDefinition-isIndividual", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1618955405499_394357_6740", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsIndividual { get; set; }
 
     }

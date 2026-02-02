@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// <summary>
     /// A NullExpression is an Expression that results in a null value.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-NullExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651705_773974_42202", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface INullExpression : IExpression
     {

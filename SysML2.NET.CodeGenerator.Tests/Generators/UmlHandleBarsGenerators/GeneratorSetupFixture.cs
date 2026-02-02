@@ -63,7 +63,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
                 .Build();
 
             XmiReaderResult = reader.Read(Path.Combine(TestContext.CurrentContext.TestDirectory, "datamodel",
-                "SysML_xmi.uml"));
+                "SysML_only_xmi.uml"));
         }
 
         public static XmiReaderResult XmiReaderResult;

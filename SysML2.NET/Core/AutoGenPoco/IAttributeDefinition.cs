@@ -61,11 +61,11 @@ namespace SysML2.NET.Core.POCO.Systems.Attributes
     /// <summary>
     /// An AttributeDefinition is a Definition and a DataType of information about a quality or
     /// characteristic of a system or part of a system that has no independent identity other than its
-    /// value. All features of an AttributeDefinition must be referential (non-composite).  As a DataType,
-    /// an AttributeDefinition must specialize, directly or indirectly, the base DataType Base::DataValue
-    /// from the Kernel Semantic Library.
+    /// value. All features of an AttributeDefinition must be referential (non-composite).                  
+    ///      As a DataType, an AttributeDefinition must specialize, directly or indirectly, the base
+    /// DataType Base::DataValue from the Kernel Semantic Library.
     /// </summary>
-    [Class(xmiId: "Systems-Attributes-AttributeDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565471213468_167708_20650", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAttributeDefinition : IDataType, IDefinition
     {

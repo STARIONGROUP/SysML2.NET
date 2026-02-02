@@ -38,15 +38,15 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// includes an instance of the reflective Metaclass corresponding to the MOF class of the
     /// referencedElement, with values for all the abstract syntax properties of the referencedElement.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-MetadataAccessExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1665514023745_516216_1215", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMetadataAccessExpression : IExpression
     {
         /// <summary>
         /// The Element whose metadata is being accessed.
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-MetadataAccessExpression-referencedElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-member")]
+        [Property(xmiId: "_19_0_4_12e503d9_1665514131655_247232_1341", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         Guid referencedElement { get; }
 
     }

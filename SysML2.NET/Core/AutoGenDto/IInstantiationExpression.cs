@@ -34,27 +34,28 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
 
     /// <summary>
     /// An InstantiationExpression is an Expression that instantiates its instantiatedType, binding some or
-    /// all of the features of that Type to the results of its arguments.  InstantiationExpression is
-    /// abstract, with concrete subclasses InvocationExpression and ConstructorExpression.
+    /// all of the features of that Type to the results of its arguments.                       
+    /// InstantiationExpression is abstract, with concrete subclasses InvocationExpression and
+    /// ConstructorExpression.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-InstantiationExpression", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_2022x_2_12e503d9_1739136879941_579104_183", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInstantiationExpression : IExpression
     {
         /// <summary>
         /// The Expressions whose results are bound to features of the instantiatedType. The arguments are
         /// ordered consistent with the order of the features, though they may not be one-to-one with all the
-        /// features.  <strong>Note.</strong> The derivation of argument is given in the concrete subclasses of
-        /// InstantiationExpression.
+        /// features.                            <strong>Note.</strong> The derivation of argument is given in
+        /// the concrete subclasses of InstantiationExpression.
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-InstantiationExpression-argument", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_2022x_2_12e503d9_1739134437590_328753_108", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<Guid> argument { get; }
 
         /// <summary>
         /// The Type that is being instantiated.
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-InstantiationExpression-instantiatedType", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-member")]
+        [Property(xmiId: "_2022x_2_12e503d9_1739134352572_416088_80", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         Guid instantiatedType { get; }
 
     }

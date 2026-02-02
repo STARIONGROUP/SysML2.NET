@@ -65,23 +65,23 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     /// <summary>
     /// An AnalysisCaseUsage is a Usage of an AnalysisCaseDefinition.
     /// </summary>
-    [Class(xmiId: "Systems-AnalysisCases-AnalysisCaseUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_59601fc_1590260225615_617039_1090", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAnalysisCaseUsage : ICaseUsage
     {
         /// <summary>
         /// The AnalysisCaseDefinition that is the definition of this AnalysisCaseUsage.
         /// </summary>
-        [Property(xmiId: "Systems-AnalysisCases-AnalysisCaseUsage-analysisCaseDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Cases-CaseUsage-caseDefinition")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591152217935_225164_2921", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_59601fc_1590257465225_855208_512")]
         IAnalysisCaseDefinition analysisCaseDefinition { get; }
 
         /// <summary>
         /// An Expression used to compute the result of the AnalysisCaseUsage, owned via a
         /// ResultExpressionMembership.
         /// </summary>
-        [Property(xmiId: "Systems-AnalysisCases-AnalysisCaseUsage-resultExpression", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Types-Type-ownedFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1591151453868_910052_2600", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         IExpression resultExpression { get; }
 
     }

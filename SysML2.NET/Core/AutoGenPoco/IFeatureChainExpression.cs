@@ -43,22 +43,22 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// Function ControlFunctions::'.' from the Kernel Functions Library. It evaluates to the result of
     /// chaining the result Feature of its single argument Expression with its targetFeature.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-FeatureChainExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1645049764787_93967_15", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFeatureChainExpression : IOperatorExpression
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-FeatureChainExpression-operator", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: ".")]
-        [RedefinedProperty(propertyName: "Kernel-Expressions-OperatorExpression-operator")]
+        [Property(xmiId: "_19_0_4_12e503d9_1645049784007_509459_41", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: ".")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528808100_646606_111674")]
         new string Operator { get; set; }
 
         /// <summary>
         /// The Feature that is accessed by this FeatureChainExpression, which is its first non-parameter
         /// member.
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-FeatureChainExpression-targetFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-member")]
+        [Property(xmiId: "_19_0_4_12e503d9_1645049897369_762611_49", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_644335_43267")]
         IFeature targetFeature { get; }
 
     }

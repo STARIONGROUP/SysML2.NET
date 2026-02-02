@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Connectors
     /// <summary>
     /// A Succession is a binary Connector that requires its relatedFeatures to happen separately in time.
     /// </summary>
-    [Class(xmiId: "Kernel-Connectors-Succession", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_71301a1_1536100248189_622183_16479", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISuccession : IConnector
     {

@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.DTO.Systems.Items
     /// system, but which do not necessarily perform actions themselves. This includes items that can be
     /// exchanged between parts of a system, such as water or electrical signals.
     /// </summary>
-    [Class(xmiId: "Systems-Items-ItemDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1591216581238_805702_84", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IItemDefinition : IStructure, IOccurrenceDefinition
     {

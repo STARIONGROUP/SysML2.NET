@@ -40,17 +40,17 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
     /// ConstraintDefinition. However, other kinds of kernel Predicates are also allowed, to permit use of
     /// Predicates from the Kernel Model Libraries.
     /// </summary>
-    [Class(xmiId: "Systems-Constraints-ConstraintUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1578067096274_745288_1478", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IConstraintUsage : IOccurrenceUsage, IBooleanExpression
+    public partial interface IConstraintUsage : IBooleanExpression, IOccurrenceUsage
     {
         /// <summary>
         /// The (single) Predicate that is the type of this ConstraintUsage. Nominally, this will be a
         /// ConstraintDefinition, but other kinds of Predicates are also allowed, to permit use of Predicates
         /// from the Kernel Model Libraries.
         /// </summary>
-        [Property(xmiId: "Systems-Constraints-ConstraintUsage-constraintDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Kernel-Functions-BooleanExpression-predicate")]
+        [Property(xmiId: "_19_0_2_12e503d9_1578067546711_751168_1745", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578025035149_386_969")]
         Guid? constraintDefinition { get; }
 
     }

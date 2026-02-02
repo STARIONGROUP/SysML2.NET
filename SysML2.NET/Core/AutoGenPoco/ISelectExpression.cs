@@ -42,14 +42,14 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// A SelectExpression is an OperatorExpression whose operator is "select", which resolves to the
     /// Function ControlFunctions::select from the Kernel Functions Library.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-SelectExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1559596717567_82711_29088", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISelectExpression : IOperatorExpression
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-SelectExpression-operator", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "select")]
-        [RedefinedProperty(propertyName: "Kernel-Expressions-OperatorExpression-operator")]
+        [Property(xmiId: "_18_5_3_12e503d9_1559596728932_861031_29126", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "select")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528808100_646606_111674")]
         new string Operator { get; set; }
 
     }

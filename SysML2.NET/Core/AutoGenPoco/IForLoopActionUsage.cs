@@ -67,7 +67,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// performed once for each value, in order, from the sequence of values obtained as the result of the
     /// seqArgument Expression, with the loopVariable set to the value for each iteration.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-ForLoopActionUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1624306893649_489444_5711", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IForLoopActionUsage : ILoopActionUsage
     {
@@ -76,7 +76,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// the successive values of the input sequence on each iteration. It is the ownedFeature that redefines
         /// ForLoopAction::var.</co>
         /// </summary>
-        [Property(xmiId: "Systems-Actions-ForLoopActionUsage-loopVariable", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1640325378400_227367_3662", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IReferenceUsage loopVariable { get; }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
         /// each iterative performance of the bodyAction. It is the Expression whose result is bound to the seq
         /// input parameter of this ForLoopActionUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-ForLoopActionUsage-seqArgument", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1624306920911_355291_5769", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IExpression seqArgument { get; }
 
     }

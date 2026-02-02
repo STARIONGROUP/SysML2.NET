@@ -40,16 +40,15 @@ namespace SysML2.NET.Core.DTO.Systems.Metadata
     /// MetadataDefinition. However, any kernel Metaclass is also allowed, to permit use of Metaclasses from
     /// the Kernel Model Libraries.
     /// </summary>
-    [Class(xmiId: "Systems-Metadata-MetadataUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1645121476406_921183_398", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IMetadataUsage : IMetadataFeature, IItemUsage
+    public partial interface IMetadataUsage : IItemUsage, IMetadataFeature
     {
         /// <summary>
         /// The MetadataDefinition that is the definition of this MetadataUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Metadata-MetadataUsage-metadataDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Items-ItemUsage-itemDefinition")]
-        [RedefinedProperty(propertyName: "Kernel-Metadata-MetadataFeature-metaclass")]
+        [Property(xmiId: "_19_0_4_12e503d9_1647727047674_847094_2563", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1606345564958_925589_327")]
         Guid? metadataDefinition { get; }
 
     }

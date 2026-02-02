@@ -36,14 +36,14 @@ namespace SysML2.NET.Core.DTO.Core.Features
     /// EndFeatureMembership is a FeatureMembership that requires its memberFeature be owned and have isEnd
     /// = true.
     /// </summary>
-    [Class(xmiId: "Core-Features-EndFeatureMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1625459008756_956040_5416", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IEndFeatureMembership : IFeatureMembership
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "Core-Features-EndFeatureMembership-ownedMemberFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
+        [Property(xmiId: "_19_0_4_12e503d9_1625459277304_568293_5526", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         new Guid ownedMemberFeature { get; }
 
     }

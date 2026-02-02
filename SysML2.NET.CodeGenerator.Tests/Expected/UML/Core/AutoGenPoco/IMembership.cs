@@ -37,54 +37,55 @@ namespace SysML2.NET.Core.POCO.Root.Namespaces
     /// A Membership is a Relationship between a Namespace and an Element that indicates the Element is a
     /// member of (i.e., is contained in) the Namespace. Any memberNames specify how the memberElement is
     /// identified in the Namespace and the visibility specifies whether or not the memberElement is
-    /// publicly visible from outside the Namespace.  If a Membership is an OwningMembership, then it owns
-    /// its memberElement, which becomes an ownedMember of the membershipOwningNamespace. Otherwise, the
-    /// memberNames of a Membership are effectively aliases within the membershipOwningNamespace for an
-    /// Element with a separate OwningMembership in the same or a different Namespace.   
+    /// publicly visible from outside the Namespace.                        If a Membership is an
+    /// OwningMembership, then it owns its memberElement, which becomes an ownedMember of the
+    /// membershipOwningNamespace. Otherwise, the memberNames of a Membership are effectively aliases within
+    /// the membershipOwningNamespace for an Element with a separate OwningMembership in the same or a
+    /// different Namespace.                         
     /// </summary>
-    [Class(xmiId: "Root-Namespaces-Membership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651680_888716_42152", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMembership : IRelationship
     {
         /// <summary>
         /// The Element that becomes a member of the membershipOwningNamespace due to this Membership.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-memberElement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674964_819490_43195", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IElement MemberElement { get; set; }
 
         /// <summary>
         /// The elementId of the memberElement.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-memberElementId", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1651721199802_246768_242", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         string memberElementId { get; }
 
         /// <summary>
         /// The name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-memberName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674964_35293_43192", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         string MemberName { get; set; }
 
         /// <summary>
         /// The Namespace of which the memberElement becomes a member due to this Membership.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-membershipOwningNamespace", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-A_membership_membershipNamespace-membershipNamespace")]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674965_193857_43197", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674962_531296_43182")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         INamespace membershipOwningNamespace { get; }
 
         /// <summary>
         /// The short name of the memberElement relative to the membershipOwningNamespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-memberShortName", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1651721174176_601088_238", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         string MemberShortName { get; set; }
 
         /// <summary>
         /// Whether or not the Membership of the memberElement in the membershipOwningNamespace is publicly
         /// visible outside that Namespace.
         /// </summary>
-        [Property(xmiId: "Root-Namespaces-Membership-visibility", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "public")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674964_42975_43193", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "public")]
         VisibilityKind Visibility { get; set; }
 
     }

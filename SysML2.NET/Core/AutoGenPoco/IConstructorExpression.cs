@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// binding some or all of the features of the instantiatedType to the results of its argument
     /// Expressions.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-ConstructorExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_2022x_2_12e503d9_1739134182574_300577_15", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConstructorExpression : IInstantiationExpression
     {

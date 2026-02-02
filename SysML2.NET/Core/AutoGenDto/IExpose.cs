@@ -36,22 +36,22 @@ namespace SysML2.NET.Core.DTO.Systems.Views
     /// An Expose is an Import of Memberships into a ViewUsage that provide the Elements to be included in a
     /// view. Visibility is always ignored for an Expose (i.e., isImportAll = true).
     /// </summary>
-    [Class(xmiId: "Systems-Views-Expose", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1573075516960_794934_94", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IExpose : IImport
     {
         /// <summary>
         /// An Expose always imports all Elements, regardless of visibility (isImportAll = true).
         /// </summary>
-        [Property(xmiId: "Systems-Views-Expose-isImportAll", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
-        [RedefinedProperty(propertyName: "Root-Namespaces-Import-isImportAll")]
+        [Property(xmiId: "_19_0_4_12e503d9_1622578615027_762161_80", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "true")]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1622577942205_869984_64")]
         new bool IsImportAll { get; set; }
 
         /// <summary>
         /// An Expose always has protected visibility.
         /// </summary>
-        [Property(xmiId: "Systems-Views-Expose-visibility", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "protected")]
-        [RedefinedProperty(propertyName: "Root-Namespaces-Import-visibility")]
+        [Property(xmiId: "_2022x_2_12e503d9_1720469034555_222060_1140", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "protected")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674976_798509_43257")]
         new VisibilityKind Visibility { get; set; }
 
     }

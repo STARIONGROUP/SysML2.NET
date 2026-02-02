@@ -63,16 +63,15 @@ namespace SysML2.NET.Core.POCO.Systems.Calculations
     /// A CalculationDefinition is an <coed>ActionDefinition that also defines a Function producing a
     /// result.</coed>
     /// </summary>
-    [Class(xmiId: "Systems-Calculations-CalculationDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1588213234752_326869_117", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface ICalculationDefinition : IActionDefinition, IFunction
+    public partial interface ICalculationDefinition : IFunction, IActionDefinition
     {
         /// <summary>
         /// The actions of this CalculationDefinition that are CalculationUsages.
         /// </summary>
-        [Property(xmiId: "Systems-Calculations-CalculationDefinition-calculation", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-Actions-ActionDefinition-action")]
-        [SubsettedProperty(propertyName: "Kernel-Functions-Function-expression")]
+        [Property(xmiId: "_19_0_2_12e503d9_1588214479224_101961_594", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543948400639_301251_20841")]
         List<ICalculationUsage> calculation { get; }
 
     }

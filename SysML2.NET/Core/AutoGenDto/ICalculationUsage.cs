@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.DTO.Systems.Calculations
     /// CalculationDefinition within a system. However, other kinds of kernel Functions are also allowed, to
     /// permit use of Functions from the Kernel Model Libraries.
     /// </summary>
-    [Class(xmiId: "Systems-Calculations-CalculationUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1588213258220_731107_146", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ICalculationUsage : IExpression, IActionUsage
     {
@@ -49,9 +49,8 @@ namespace SysML2.NET.Core.DTO.Systems.Calculations
         /// CalculationDefinition, but a kernel Function is also allowed, to permit use of Functions from the
         /// Kernel Model Libraries.</ode>
         /// </summary>
-        [Property(xmiId: "Systems-Calculations-CalculationUsage-calculationDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Kernel-Functions-Expression-function")]
-        [RedefinedProperty(propertyName: "Systems-Actions-ActionUsage-actionDefinition")]
+        [Property(xmiId: "_19_0_2_12e503d9_1588213526305_899324_302", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1543948477241_299049_20934")]
         Guid? calculationDefinition { get; }
 
     }

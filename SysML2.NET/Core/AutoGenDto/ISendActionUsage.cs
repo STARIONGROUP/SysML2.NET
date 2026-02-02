@@ -40,26 +40,26 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
     /// receiverArgument is given, then the receiver is to be determined by, e.g., outgoing Connections from
     /// the sender.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-SendActionUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565505727349_597544_34143", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISendActionUsage : IActionUsage
     {
         /// <summary>
         /// An Expression whose result is bound to the payload input parameter of this SendActionUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-SendActionUsage-payloadArgument", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1612814399422_336683_143", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid payloadArgument { get; }
 
         /// <summary>
         /// An Expression whose result is bound to the receiver input parameter of this SendActionUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-SendActionUsage-receiverArgument", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1567742374932_10504_18141", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? receiverArgument { get; }
 
         /// <summary>
         /// An Expression whose result is bound to the sender input parameter of this SendActionUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-SendActionUsage-senderArgument", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1665504224536_894018_944", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? senderArgument { get; }
 
     }

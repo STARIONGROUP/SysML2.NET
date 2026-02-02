@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
     /// having addressed. These stakeholders are identified by the ownedStakeholdersof the
     /// ConcernDefinition.
     /// </summary>
-    [Class(xmiId: "Systems-Requirements-ConcernDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1617051538049_980762_1225", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConcernDefinition : IRequirementDefinition
     {

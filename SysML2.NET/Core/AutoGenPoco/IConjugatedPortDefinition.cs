@@ -66,7 +66,7 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     /// exactly one corresponding ConjugatedPortDefinition, whose effective name is the name of the
     /// originalPortDefinition, with the character ~ prepended.
     /// </summary>
-    [Class(xmiId: "Systems-Ports-ConjugatedPortDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1575484160733_882684_674", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConjugatedPortDefinition : IPortDefinition
     {
@@ -74,16 +74,16 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
         /// The original PortDefinition for this ConjugatedPortDefinition, which is the owningNamespace of the
         /// ConjugatedPortDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-Ports-ConjugatedPortDefinition-originalPortDefinition", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Element-owningNamespace")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575484364017_387810_990", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674986_474739_43306")]
         IPortDefinition originalPortDefinition { get; }
 
         /// <summary>
         /// The PortConjugation that is the ownedConjugator of this ConjugatedPortDefinition, linking it to its
         /// originalPortDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-Ports-ConjugatedPortDefinition-ownedPortConjugator", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-Type-ownedConjugator")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575484344901_850046_947", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1575482646809_280165_440")]
         IPortConjugation ownedPortConjugator { get; }
 
     }

@@ -35,14 +35,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// A CollectExpression is an OperatorExpression whose operator is "collect", which resolves to the
     /// Function ControlFunctions::collect from the Kernel Functions Library.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-CollectExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1559596612705_364896_29003", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ICollectExpression : IOperatorExpression
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-CollectExpression-operator", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "collect")]
-        [RedefinedProperty(propertyName: "Kernel-Expressions-OperatorExpression-operator")]
+        [Property(xmiId: "_18_5_3_12e503d9_1559596670531_992404_29068", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "collect")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528808100_646606_111674")]
         new string Operator { get; set; }
 
     }

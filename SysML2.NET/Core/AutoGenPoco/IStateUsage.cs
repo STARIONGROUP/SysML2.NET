@@ -63,11 +63,12 @@ namespace SysML2.NET.Core.POCO.Systems.States
 
     /// <summary>
     /// A StateUsage is an ActionUsage that is nominally the Usage of a StateDefinition. However, other
-    /// kinds of kernel Behaviors are also allowed as types, to permit use of Behaviors  A StateUsage may be
-    /// related to up to three of its ownedFeatures by StateSubactionMembership Relationships, all of
-    /// different kinds, corresponding to the entry, do and exit actions of the StateUsage.
+    /// kinds of kernel Behaviors are also allowed as types, to permit use of Behaviors                     
+    ///   A StateUsage may be related to up to three of its ownedFeatures by StateSubactionMembership
+    /// Relationships, all of different kinds, corresponding to the entry, do and exit actions of the
+    /// StateUsage.
     /// </summary>
-    [Class(xmiId: "Systems-States-StateUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1575587557729_586912_651", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IStateUsage : IActionUsage
     {
@@ -76,7 +77,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// StateDefinition. It is the owned ActionUsage related to the StateUsage by a StateSubactionMembership
         /// with kind = do.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateUsage-doAction", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1582976255473_203238_644", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IActionUsage doAction { get; }
 
         /// <summary>
@@ -84,7 +85,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// StateDefinition. It is the owned ActionUsage related to the StateUsage by a StateSubactionMembership
         /// with kind = entry.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateUsage-entryAction", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1582976239200_979652_605", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IActionUsage entryAction { get; }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// StateDefinition. It is the owned ActionUsage related to the StateUsage by a StateSubactionMembership
         /// with kind = exit.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateUsage-exitAction", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1582976283940_998741_691", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IActionUsage exitAction { get; }
 
         /// <summary>
@@ -100,15 +101,15 @@ namespace SysML2.NET.Core.POCO.Systems.States
         /// the nestedActions (which include nestedStates) may have any incoming or outgoing Transitions. If
         /// false, only one nestedState may be performed at a time.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateUsage-isParallel", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1624025713025_548712_37708", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsParallel { get; set; }
 
         /// <summary>
         /// The Behaviors that are the types of this StateUsage. Nominally, these would be StateDefinitions, but
         /// kernel Behaviors are also allowed, to permit use of Behaviors from the Kernel Model Libraries.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateUsage-stateDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Actions-ActionUsage-actionDefinition")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575588456737_49200_1438", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1565500905804_589845_30779")]
         List<IBehavior> stateDefinition { get; }
 
     }

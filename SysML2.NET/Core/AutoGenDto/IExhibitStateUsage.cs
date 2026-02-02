@@ -39,16 +39,16 @@ namespace SysML2.NET.Core.DTO.Systems.States
     /// ReferenceSubsetting Relationship. An ExhibitStateUsage is also a PerformActionUsage, with its
     /// exhibitedState as the performedAction.
     /// </summary>
-    [Class(xmiId: "Systems-States-ExhibitStateUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1577070975739_684062_203", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial interface IExhibitStateUsage : IPerformActionUsage, IStateUsage
+    public partial interface IExhibitStateUsage : IStateUsage, IPerformActionUsage
     {
         /// <summary>
         /// The StateUsage to be exhibited by the ExhibitStateUsage. It is the performedAction of the
         /// ExhibitStateUsage considered as a PerformActionUsage, which must be a StateUsage.
         /// </summary>
-        [Property(xmiId: "Systems-States-ExhibitStateUsage-exhibitedState", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Actions-PerformActionUsage-performedAction")]
+        [Property(xmiId: "_19_0_2_12e503d9_1577070999039_688794_260", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1567740791820_867719_18017")]
         Guid exhibitedState { get; }
 
     }

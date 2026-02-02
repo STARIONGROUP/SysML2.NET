@@ -42,21 +42,21 @@ namespace SysML2.NET.Core.POCO.Systems.States
     /// A StateSubactionMembership is a FeatureMembership for an entry, do or exit ActionUsage of a
     /// StateDefinition or StateUsage.
     /// </summary>
-    [Class(xmiId: "Systems-States-StateSubactionMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1575671792204_632048_203", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IStateSubactionMembership : IFeatureMembership
     {
         /// <summary>
         /// The ActionUsage that is the ownedMemberFeature of this StateSubactionMembership.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateSubactionMembership-action", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1582974847979_606181_96", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         IActionUsage action { get; }
 
         /// <summary>
         /// Whether this StateSubactionMembership is for an entry, do or exit ActionUsage.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateSubactionMembership-kind", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575671861308_70894_325", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         StateSubactionKind Kind { get; set; }
 
     }

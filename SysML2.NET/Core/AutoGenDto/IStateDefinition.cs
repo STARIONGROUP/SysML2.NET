@@ -33,11 +33,11 @@ namespace SysML2.NET.Core.DTO.Systems.States
 
     /// <summary>
     /// A StateDefinition is the Definition of the Behavior of a system or part of a system in a certain
-    /// state condition.  A StateDefinition may be related to up to three of its ownedFeatures by
-    /// StateBehaviorMembership Relationships, all of different kinds, corresponding to the entry, do and
-    /// exit actions of the StateDefinition.
+    /// state condition.                        A StateDefinition may be related to up to three of its
+    /// ownedFeatures by StateBehaviorMembership Relationships, all of different kinds, corresponding to the
+    /// entry, do and exit actions of the StateDefinition.
     /// </summary>
-    [Class(xmiId: "Systems-States-StateDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1575587534200_898246_600", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IStateDefinition : IActionDefinition
     {
@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// StateDefinition. It is the owned ActionUsage related to the StateDefinition by a
         /// StateSubactionMembership  with kind = do.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateDefinition-doAction", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1582975916386_388324_339", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? doAction { get; }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// StateDefinition. It is the owned ActionUsage related to the StateDefinition by a
         /// StateSubactionMembership  with kind = entry.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateDefinition-entryAction", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1582975902339_513804_312", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? entryAction { get; }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// StateDefinition. It is the owned ActionUsage related to the StateDefinition by a
         /// StateSubactionMembership  with kind = exit.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateDefinition-exitAction", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1582975927011_696894_352", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? exitAction { get; }
 
         /// <summary>
@@ -70,15 +70,15 @@ namespace SysML2.NET.Core.DTO.Systems.States
         /// of the ownedActions (which includes ownedStates) may have any incoming or outgoing Transitions. If
         /// false, only one ownedState may be performed at a time.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateDefinition-isParallel", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1624025670323_266174_37704", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsParallel { get; set; }
 
         /// <summary>
         /// The StateUsages, which are actions in the StateDefinition, that specify the discrete states in the
         /// behavior defined by the StateDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-States-StateDefinition-state", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-Actions-ActionDefinition-action")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575588190693_949879_1156", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1565500809065_170841_30688")]
         List<Guid> state { get; }
 
     }

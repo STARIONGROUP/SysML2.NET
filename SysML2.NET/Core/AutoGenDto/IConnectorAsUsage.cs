@@ -38,7 +38,7 @@ namespace SysML2.NET.Core.DTO.Systems.Connections
     /// in a SysML model, but it is a base class for the concrete classes BindingConnectorAsUsage,
     /// SuccessionAsUsage, ConnectionUsage and FlowConnectionUsage.
     /// </summary>
-    [Class(xmiId: "Systems-Connections-ConnectorAsUsage", isAbstract: true, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1624053320057_820842_471", isAbstract: true, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConnectorAsUsage : IUsage, IConnector
     {

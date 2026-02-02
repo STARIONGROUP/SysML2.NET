@@ -35,7 +35,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// An OperatorExpression is an InvocationExpression whose function is determined by resolving its
     /// operator in the context of one of the standard packages from the Kernel Function Library.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-OperatorExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1557528779746_71999_111623", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IOperatorExpression : IInvocationExpression
     {
@@ -43,7 +43,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
         /// An operator symbol that names a corresponding Function from one of the standard packages from the
         /// Kernel Function Library .
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-OperatorExpression-operator", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1557528808100_646606_111674", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         string Operator { get; set; }
 
     }

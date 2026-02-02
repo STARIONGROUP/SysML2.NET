@@ -43,21 +43,21 @@ namespace SysML2.NET.Core.POCO.Systems.States
     /// TransitionUsage, whose transitionFeature is a AcceptActionUsage, Boolean-valued Expression or
     /// ActionUsage, depending on its kind.
     /// </summary>
-    [Class(xmiId: "Systems-States-TransitionFeatureMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1575672033669_188530_395", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ITransitionFeatureMembership : IFeatureMembership
     {
         /// <summary>
         /// Whether this TransitionFeatureMembership  is for a trigger, guard or effect.
         /// </summary>
-        [Property(xmiId: "Systems-States-TransitionFeatureMembership-kind", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1575672142396_129864_506", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         TransitionFeatureKind Kind { get; set; }
 
         /// <summary>
         /// The Step that is the ownedMemberFeature of this TransitionFeatureMembership.
         /// </summary>
-        [Property(xmiId: "Systems-States-TransitionFeatureMembership-transitionFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1582975046568_736161_148", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         IStep transitionFeature { get; }
 
     }

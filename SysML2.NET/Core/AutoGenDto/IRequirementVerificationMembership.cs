@@ -37,15 +37,15 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
     /// A RequirementVerificationMembership is a RequirementConstraintMembership  used in the objective of a
     /// VerificationCase to identify a RequirementUsage that is verified by the VerificationCase.
     /// </summary>
-    [Class(xmiId: "Systems-VerificationCases-RequirementVerificationMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1603921138449_428307_72", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IRequirementVerificationMembership : IRequirementConstraintMembership
     {
         /// <summary>
         /// The kind of a RequirementVerificationMembership must be requirement.
         /// </summary>
-        [Property(xmiId: "Systems-VerificationCases-RequirementVerificationMembership-kind", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-kind")]
+        [Property(xmiId: "_19_0_4_12e503d9_1603921465292_637146_187", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048161309_821854_390")]
         new RequirementConstraintKind Kind { get; set; }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// RequirementVerificationMembership. This will either be the verifiedRequirement, or it will subset
         /// the verifiedRequirement.
         /// </summary>
-        [Property(xmiId: "Systems-VerificationCases-RequirementVerificationMembership-ownedRequirement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-ownedConstraint")]
+        [Property(xmiId: "_19_0_4_12e503d9_1603921329650_612380_147", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048366950_985767_426")]
         Guid ownedRequirement { get; }
 
         /// <summary>
@@ -62,8 +62,8 @@ namespace SysML2.NET.Core.DTO.Systems.VerificationCases
         /// RequirementVerificationMembership considered as a RequirementConstraintMembership, which must be a
         /// RequirementUsage.
         /// </summary>
-        [Property(xmiId: "Systems-VerificationCases-RequirementVerificationMembership-verifiedRequirement", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-referencedConstraint")]
+        [Property(xmiId: "_19_0_4_12e503d9_1603921870169_98378_309", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1617118807597_77864_3544")]
         Guid verifiedRequirement { get; }
 
     }

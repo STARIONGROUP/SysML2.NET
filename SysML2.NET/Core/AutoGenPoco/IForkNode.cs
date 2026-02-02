@@ -65,7 +65,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// A ForkNode is a ControlNode that must be followed by successor Actions as given by all its outgoing
     /// Successions.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-ForkNode", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565503181274_818459_33629", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IForkNode : IControlNode
     {

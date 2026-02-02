@@ -46,7 +46,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// of the invoked Function. Otherwise, the result is an instance of the instantiatedType (essentially
     /// like a behavioral ConstructorExpression).
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-InvocationExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1557528671608_638869_111563", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInvocationExpression : IInstantiationExpression
     {

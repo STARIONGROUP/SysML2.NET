@@ -39,15 +39,15 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
     /// of things might be linked. The Connector further restricts these links to be between values of
     /// Features on instances of its domain.
     /// </summary>
-    [Class(xmiId: "Kernel-Connectors-Connector", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651698_598377_42185", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConnector : IFeature, IRelationship
     {
         /// <summary>
         /// The Associations that type the Connector.
         /// </summary>
-        [Property(xmiId: "Kernel-Connectors-Connector-association", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Features-Feature-type")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674983_471497_43284", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674969_376003_43216")]
         List<Guid> association { get; }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// The connectorEnds determine via ReferenceSubsetting Relationships which Features are related by the
         /// Connector.
         /// </summary>
-        [Property(xmiId: "Kernel-Connectors-Connector-connectorEnd", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-Type-endFeature")]
+        [Property(xmiId: "_18_5_3_12e503d9_1556735067666_827798_21922", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1562476168385_824569_22106")]
         List<Guid> connectorEnd { get; }
 
         /// <summary>
@@ -64,32 +64,32 @@ namespace SysML2.NET.Core.DTO.Kernel.Connectors
         /// that, if it exists and was the featuringType of this Connector, the Connector would satisfy the
         /// checkConnectorTypeFeaturing constraint.
         /// </summary>
-        [Property(xmiId: "Kernel-Connectors-Connector-defaultFeaturingType", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_2022x_2_12e503d9_1737751598145_444042_71", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? defaultFeaturingType { get; }
 
         /// <summary>
         /// The Features that are related by this Connector considered as a Relationship and that restrict the
         /// links it identifies, given by the referenced Features of the connectorEnds of the Connector.
         /// </summary>
-        [Property(xmiId: "Kernel-Connectors-Connector-relatedFeature", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-relatedElement")]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674968_916334_43210", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: false, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
         List<Guid> relatedFeature { get; }
 
         /// <summary>
         /// The source relatedFeature for this Connector. It is the first relatedFeature.
         /// </summary>
-        [Property(xmiId: "Kernel-Connectors-Connector-sourceFeature", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Connectors-Connector-relatedFeature")]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
+        [Property(xmiId: "_19_0_2_12e503d9_1594953058873_558253_3897", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         Guid? sourceFeature { get; }
 
         /// <summary>
         /// The target relatedFeatures for this Connector. This includes all the relatedFeatures other than the
         /// sourceFeature.
         /// </summary>
-        [Property(xmiId: "Kernel-Connectors-Connector-targetFeature", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Connectors-Connector-relatedFeature")]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
+        [Property(xmiId: "_19_0_2_12e503d9_1594953128207_991867_3946", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674968_916334_43210")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         List<Guid> targetFeature { get; }
 
     }

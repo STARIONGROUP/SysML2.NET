@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
     /// A MergeNode is a ControlNode that asserts the merging of its incoming Successions. A MergeNode may
     /// have at most one outgoing Successions.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-MergeNode", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565503106899_225416_33510", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMergeNode : IControlNode
     {

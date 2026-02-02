@@ -66,22 +66,22 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
     /// However, other types of Kernel Classes are also allowed, to permit use of Classes from the Kernel
     /// Model Libraries.
     /// </summary>
-    [Class(xmiId: "Systems-Occurrences-OccurrenceUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1618943737195_33207_138", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IOccurrenceUsage : IUsage
     {
         /// <summary>
         /// The at most one occurrenceDefinition that has isIndividual = true.
         /// </summary>
-        [Property(xmiId: "Systems-Occurrences-OccurrenceUsage-individualDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-Occurrences-OccurrenceUsage-occurrenceDefinition")]
+        [Property(xmiId: "_19_0_4_12e503d9_1618958878775_52798_7090", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         IOccurrenceDefinition individualDefinition { get; }
 
         /// <summary>
         /// Whether this OccurrenceUsage represents the usage of the specific individual represented by its
         /// individualDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-Occurrences-OccurrenceUsage-isIndividual", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
+        [Property(xmiId: "_19_0_4_12e503d9_1618959865886_548379_7149", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "false")]
         bool IsIndividual { get; set; }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// but other kinds of kernel Classes are also allowed, to permit use of Classes from the Kernel Model
         /// Libraries.
         /// </summary>
-        [Property(xmiId: "Systems-Occurrences-OccurrenceUsage-occurrenceDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-definition")]
+        [Property(xmiId: "_19_0_4_12e503d9_1618943843466_158863_236", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1591477641252_179221_958")]
         List<IClass> occurrenceDefinition { get; }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace SysML2.NET.Core.POCO.Systems.Occurrences
         /// portionKind is not null, then the owningType of the OccurrenceUsage must be non-null, and the
         /// OccurrenceUsage represents portions of the featuring instance of the owningType.
         /// </summary>
-        [Property(xmiId: "Systems-Occurrences-OccurrenceUsage-portionKind", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1618959362712_182798_7138", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         PortionKind? PortionKind { get; set; }
 
     }

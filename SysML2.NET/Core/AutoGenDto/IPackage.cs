@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Kernel.Packages
     /// one or more model-level evaluable filterCondition Expressions used to filter its
     /// importedMemberships. Any imported member must meet all of the filterConditions.
     /// </summary>
-    [Class(xmiId: "Kernel-Packages-Package", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1606943754976_445656_5532", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPackage : INamespace
     {
@@ -44,8 +44,8 @@ namespace SysML2.NET.Core.DTO.Kernel.Packages
         /// The model-level evaluable Boolean-valued Expression used to filter the members of this Package,
         /// which are owned by the Package are via ElementFilterMemberships.
         /// </summary>
-        [Property(xmiId: "Kernel-Packages-Package-filterCondition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Root-Namespaces-Namespace-ownedMember")]
+        [Property(xmiId: "_19_0_4_12e503d9_1607033896050_867332_6206", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674979_259543_43268")]
         List<Guid> filterCondition { get; }
 
     }

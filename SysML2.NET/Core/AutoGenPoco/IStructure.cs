@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Structures
     /// While such an object is not itself behavioral, it may be involved in and acted on by Behaviors, and
     /// it may be the performer of some of them.
     /// </summary>
-    [Class(xmiId: "Kernel-Structures-Structure", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_b9102da_1609606051359_625961_451", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IStructure : IClass
     {

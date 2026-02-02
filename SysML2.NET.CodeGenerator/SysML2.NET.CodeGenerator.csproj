@@ -195,13 +195,13 @@
     <None Include="..\Resources\PrimitiveTypes.xmi" Link="datamodel\PrimitiveTypes.xmi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Resources\SysML_xmi.uml" Link="datamodel\SysML_xmi.uml">
+    <None Include="..\Resources\SysML_only_xmi.uml" Link="datamodel\SysML_only_xmi.uml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Resources\KerML.xmi">
-      <Link>datamodel\KerML.xmi</Link>
+    <None Include="..\Resources\KerML_only_xmi.uml">
+      <Link>datamodel\KerML_only_xmi.uml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

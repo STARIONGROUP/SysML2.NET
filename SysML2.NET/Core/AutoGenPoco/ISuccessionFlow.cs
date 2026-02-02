@@ -45,7 +45,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     /// start until the source Occurrence has completed and that must complete before the target Occurrence
     /// can start.
     /// </summary>
-    [Class(xmiId: "Kernel-Interactions-SuccessionFlow", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_b9102da_1536869794875_359922_17902", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISuccessionFlow : ISuccession, IFlow
     {

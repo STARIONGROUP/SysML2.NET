@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Views
     /// A MembershipExpose is an Expose <> that exposes a specific importedMembership and, if isRecursive =
     /// true, additional Memberships recursively.
     /// </summary>
-    [Class(xmiId: "Systems-Views-MembershipExpose", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1668805350620_499865_159", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IMembershipExpose : IMembershipImport, IExpose
     {

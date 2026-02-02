@@ -33,20 +33,20 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
     using SysML2.NET.Decorators;
 
     /// <summary>
-    /// A ConcernUsage is a Usage of a ConcernDefinition.   The ownedStakeholder features of the
-    /// ConcernUsage shall all subset the ConcernCheck::concernedStakeholders feature. If the ConcernUsage
-    /// is an ownedFeature of a StakeholderDefinition or StakeholderUsage, then the ConcernUsage shall have
-    /// an ownedStakeholder feature that is bound to the self feature of its owner.
+    /// A ConcernUsage is a Usage of a ConcernDefinition.                        The ownedStakeholder
+    /// features of the ConcernUsage shall all subset the ConcernCheck::concernedStakeholders feature. If
+    /// the ConcernUsage is an ownedFeature of a StakeholderDefinition or StakeholderUsage, then the
+    /// ConcernUsage shall have an ownedStakeholder feature that is bound to the self feature of its owner.
     /// </summary>
-    [Class(xmiId: "Systems-Requirements-ConcernUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1617051561652_163085_1288", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConcernUsage : IRequirementUsage
     {
         /// <summary>
         /// The ConcernDefinition that is the single type of this ConcernUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-ConcernUsage-concernDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementUsage-requirementDefinition")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617052514912_780627_2256", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1583000408905_769743_1223")]
         Guid? concernDefinition { get; }
 
     }

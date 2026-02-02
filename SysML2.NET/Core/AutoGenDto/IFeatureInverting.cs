@@ -38,30 +38,30 @@ namespace SysML2.NET.Core.DTO.Core.Features
     /// each person&#39;s children. A person identified as a parent of another will identify that other as
     /// one of their children.
     /// </summary>
-    [Class(xmiId: "Core-Features-FeatureInverting", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_b9102da_1623178487957_761743_77", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFeatureInverting : IRelationship
     {
         /// <summary>
         /// The Feature that is an inverse of the invertingFeature.
         /// </summary>
-        [Property(xmiId: "Core-Features-FeatureInverting-featureInverted", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
+        [Property(xmiId: "_19_0_4_b9102da_1623178838862_842173_146", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         Guid FeatureInverted { get; set; }
 
         /// <summary>
         /// The Feature that is an inverse of the invertedFeature.
         /// </summary>
-        [Property(xmiId: "Core-Features-FeatureInverting-invertingFeature", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
+        [Property(xmiId: "_19_0_4_b9102da_1623178854941_627588_162", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         Guid InvertingFeature { get; set; }
 
         /// <summary>
         /// A featureInverted that is also the owningRelatedElement of this FeatureInverting.
         /// </summary>
-        [Property(xmiId: "Core-Features-FeatureInverting-owningFeature", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Features-FeatureInverting-featureInverted")]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
+        [Property(xmiId: "_19_0_4_b9102da_1653567738671_122613_44", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_b9102da_1623178838862_842173_146")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         Guid? owningFeature { get; }
 
     }

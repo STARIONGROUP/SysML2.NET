@@ -39,34 +39,34 @@ namespace SysML2.NET.Core.POCO.Core.Types
     /// with a direction in relative to the originalType are considered to have an effective direction of
     /// out relative to the conjugatedType and, similarly, Features with direction out in the originalType
     /// are considered to have an effective direction of in in the conjugatedType. Features with direction
-    /// inout, or with no direction, in the originalType, are inherited without change.  A Type may
-    /// participate as a conjugatedType in at most one Conjugation relationship, and such a Type may not
-    /// also be the specific Type in any Specialization relationship.
+    /// inout, or with no direction, in the originalType, are inherited without change.                     
+    ///   A Type may participate as a conjugatedType in at most one Conjugation relationship, and such a
+    /// Type may not also be the specific Type in any Specialization relationship.
     /// </summary>
-    [Class(xmiId: "Core-Types-Conjugation", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1575482328287_696279_181", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConjugation : IRelationship
     {
         /// <summary>
         /// The Type that is the result of applying Conjugation to the originalType.
         /// </summary>
-        [Property(xmiId: "Core-Types-Conjugation-conjugatedType", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-source")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575482490143_721644_299", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674971_696758_43228")]
         IType ConjugatedType { get; set; }
 
         /// <summary>
         /// The Type to be conjugated.
         /// </summary>
-        [Property(xmiId: "Core-Types-Conjugation-originalType", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Relationship-target")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575482354187_108424_237", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_138197_43179")]
         IType OriginalType { get; set; }
 
         /// <summary>
         /// The conjugatedType of this Conjugation that is also its owningRelatedElement.
         /// </summary>
-        [Property(xmiId: "Core-Types-Conjugation-owningType", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Types-Conjugation-conjugatedType")]
-        [SubsettedProperty(propertyName: "Root-Elements-Relationship-owningRelatedElement")]
+        [Property(xmiId: "_19_0_2_12e503d9_1575482646809_778895_441", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1575482490143_721644_299")]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1543092026091_693018_16749")]
         IType owningType { get; }
 
     }

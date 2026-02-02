@@ -65,16 +65,15 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
     /// <summary>
     /// A RequirementUsage is a Usage of a RequirementDefinition.
     /// </summary>
-    [Class(xmiId: "Systems-Requirements-RequirementUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1582991078230_41497_1143", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IRequirementUsage : IConstraintUsage
     {
         /// <summary>
         /// The parameters of this RequirementUsage that represent actors involved in the requirement.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-actorParameter", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Behaviors-Step-parameter")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
+        [Property(xmiId: "_19_0_4_12e503d9_1621564075474_350859_2735", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         List<IPartUsage> actorParameter { get; }
 
         /// <summary>
@@ -82,16 +81,16 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// ownedConstraints of the RequirementConstraintMemberships of the RequirementUsage with kind =
         /// assumption.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-assumedConstraint", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Types-Type-ownedFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1583377612865_991722_535", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         List<IConstraintUsage> assumedConstraint { get; }
 
         /// <summary>
         /// The ConcernUsages framed by this RequirementUsage, which are the ownedConcerns of all
         /// FramedConcernMemberships of the RequirementUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-framedConcern", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-Requirements-RequirementUsage-requiredConstraint")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617116922864_514612_3264", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1583377448339_252740_390")]
         List<IConcernUsage> framedConcern { get; }
 
         /// <summary>
@@ -99,8 +98,8 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// original requirement text in some source document), which is the declaredShortName for the
         /// RequirementUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-reqId", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Root-Elements-Element-declaredShortName")]
+        [Property(xmiId: "_19_0_2_12e503d9_1583376474630_975784_96", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1594160442439_915308_4153")]
         string ReqId { get; set; }
 
         /// <summary>
@@ -108,38 +107,36 @@ namespace SysML2.NET.Core.POCO.Systems.Requirements
         /// ownedConstraints of the RequirementConstraintMemberships of the RequirementUsage with kind =
         /// requirement.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-requiredConstraint", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Core-Types-Type-ownedFeature")]
+        [Property(xmiId: "_19_0_2_12e503d9_1583377448339_252740_390", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674959_226999_43167")]
         List<IConstraintUsage> requiredConstraint { get; }
 
         /// <summary>
         /// The RequirementDefinition that is the single definition of this RequirementUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-requirementDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Constraints-ConstraintUsage-constraintDefinition")]
+        [Property(xmiId: "_19_0_2_12e503d9_1583000408905_769743_1223", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1578067546711_751168_1745")]
         IRequirementDefinition requirementDefinition { get; }
 
         /// <summary>
         /// The parameters of this RequirementUsage that represent stakeholders for the requirement.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-stakeholderParameter", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Behaviors-Step-parameter")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
+        [Property(xmiId: "_19_0_4_12e503d9_1624032823963_328647_40107", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         List<IPartUsage> stakeholderParameter { get; }
 
         /// <summary>
         /// The parameter of this RequirementUsage that represents its subject.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-subjectParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Kernel-Behaviors-Step-parameter")]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-usage")]
+        [Property(xmiId: "_19_0_2_12e503d9_1595189397261_941898_844", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         IUsage subjectParameter { get; }
 
         /// <summary>
         /// An optional textual statement of the requirement represented by this RequirementUsage, derived from
         /// the bodies of the documentation of the RequirementUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-RequirementUsage-text", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_2_12e503d9_1583376480942_745679_99", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<string> text { get; }
 
     }

@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Expressions
     /// A LiteralInfinity is a LiteralExpression that provides the positive infinity value (*). It's result
     /// must have the type Positive.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-LiteralInfinity", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651697_757989_42184", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralInfinity : ILiteralExpression
     {

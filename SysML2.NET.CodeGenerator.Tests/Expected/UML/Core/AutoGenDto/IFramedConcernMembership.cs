@@ -36,22 +36,22 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
     /// A FramedConcernMembership is a RequirementConstraintMembership for a framed ConcernUsage of a
     /// RequirementDefinition or RequirementUsage.
     /// </summary>
-    [Class(xmiId: "Systems-Requirements-FramedConcernMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1617120429499_126250_3667", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFramedConcernMembership : IRequirementConstraintMembership
     {
         /// <summary>
         /// The kind of an FramedConcernMembership must be requirement.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-FramedConcernMembership-kind", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-kind")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120451812_644221_3690", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "requirement")]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048161309_821854_390")]
         new RequirementConstraintKind Kind { get; set; }
 
         /// <summary>
         /// The ConcernUsage that is the ownedConstraint of this FramedConcernMembership.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-FramedConcernMembership-ownedConcern", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-ownedConstraint")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120590170_490370_3748", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_2_12e503d9_1584048366950_985767_426")]
         Guid ownedConcern { get; }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace SysML2.NET.Core.DTO.Systems.Requirements
         /// referencedConstraint of the FramedConcernMembership considered as a RequirementConstraintMembership,
         /// which must be a ConcernUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Requirements-FramedConcernMembership-referencedConcern", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Requirements-RequirementConstraintMembership-referencedConstraint")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617120658044_92083_3773", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1617118807597_77864_3544")]
         Guid referencedConcern { get; }
 
     }

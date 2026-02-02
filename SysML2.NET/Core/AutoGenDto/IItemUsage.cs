@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.DTO.Systems.Items
     /// kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel Model
     /// Libraries.
     /// </summary>
-    [Class(xmiId: "Systems-Items-ItemUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565480460114_846184_24270", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IItemUsage : IOccurrenceUsage
     {
@@ -48,8 +48,8 @@ namespace SysML2.NET.Core.DTO.Systems.Items
         /// other kinds of Kernel Structures are also allowed, to permit use of Structures from the Kernel
         /// Library.
         /// </summary>
-        [Property(xmiId: "Systems-Items-ItemUsage-itemDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-Occurrences-OccurrenceUsage-occurrenceDefinition")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565471361757_649736_20796", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         List<Guid> itemDefinition { get; }
 
     }

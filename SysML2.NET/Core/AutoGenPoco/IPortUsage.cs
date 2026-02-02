@@ -64,15 +64,15 @@ namespace SysML2.NET.Core.POCO.Systems.Ports
     /// A PortUsage is a usage of a PortDefinition. A PortUsage itself as well as all its nestedUsages must
     /// be referential (non-composite).
     /// </summary>
-    [Class(xmiId: "Systems-Ports-PortUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565492704639_896080_24992", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPortUsage : IOccurrenceUsage
     {
         /// <summary>
         /// The occurrenceDefinitions of this PortUsage, which must all be PortDefinitions.
         /// </summary>
-        [Property(xmiId: "Systems-Ports-PortUsage-portDefinition", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Systems-Occurrences-OccurrenceUsage-occurrenceDefinition")]
+        [Property(xmiId: "_18_5_3_12e503d9_1565492740124_880100_25026", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_19_0_4_12e503d9_1618943843466_158863_236")]
         List<IPortDefinition> portDefinition { get; }
 
     }

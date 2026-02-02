@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Constraints
     /// A ConstraintDefinition is an OccurrenceDefinition that is also a Predicate that defines a constraint
     /// that may be asserted to hold on a system or part of a system.
     /// </summary>
-    [Class(xmiId: "Systems-Constraints-ConstraintDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_2_12e503d9_1578067054125_439104_1452", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IConstraintDefinition : IOccurrenceDefinition, IPredicate
     {

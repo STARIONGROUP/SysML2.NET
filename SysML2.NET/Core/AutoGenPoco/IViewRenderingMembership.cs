@@ -40,7 +40,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
     /// A ViewRenderingMembership is a <coed>FeatureMembership that identifies the viewRendering of a
     /// ViewDefinition or ViewUsage.</coed>
     /// </summary>
-    [Class(xmiId: "Systems-Views-ViewRenderingMembership", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1617134177967_461389_5877", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IViewRenderingMembership : IFeatureMembership
     {
@@ -48,8 +48,8 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// The owned RenderingUsage that is either itself the referencedRendering or subsets the
         /// referencedRendering.
         /// </summary>
-        [Property(xmiId: "Systems-Views-ViewRenderingMembership-ownedRendering", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [RedefinedProperty(propertyName: "Core-Types-FeatureMembership-ownedMemberFeature")]
+        [Property(xmiId: "_19_0_4_12e503d9_1617134244546_130200_6000", aggregation: AggregationKind.Composite, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1533160674993_898044_43344")]
         IRenderingUsage ownedRendering { get; }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace SysML2.NET.Core.POCO.Systems.Views
         /// referencedFeature of the ownedReferenceSubsetting for the ownedRendering, if there is one, and,
         /// otherwise, the ownedRendering itself.
         /// </summary>
-        [Property(xmiId: "Systems-Views-ViewRenderingMembership-referencedRendering", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1617134300857_286392_6081", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         IRenderingUsage referencedRendering { get; }
 
     }

@@ -39,7 +39,7 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
     /// Transfer is output on its payloadParameter. Which Transfers may be accepted is determined by
     /// conformance to the typing and (potentially) binding of the payloadParameter.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-AcceptActionUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565503089035_106795_33475", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IAcceptActionUsage : IActionUsage
     {
@@ -47,22 +47,21 @@ namespace SysML2.NET.Core.DTO.Systems.Actions
         /// An Expression whose result is bound to the payload parameter of this AcceptActionUsage. If provided,
         /// the AcceptActionUsage will only accept a Transfer with exactly this payload.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-AcceptActionUsage-payloadArgument", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1642710978429_81558_4948", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? payloadArgument { get; }
 
         /// <summary>
         /// The nestedReference of this AcceptActionUsage that redefines the payload output parameter of the
         /// base AcceptActionUsage AcceptAction from the Systems Model Library.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-AcceptActionUsage-payloadParameter", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
-        [SubsettedProperty(propertyName: "Systems-DefinitionAndUsage-Usage-nestedReference")]
-        [SubsettedProperty(propertyName: "Kernel-Behaviors-Step-parameter")]
+        [Property(xmiId: "_19_0_4_12e503d9_1642701018287_478584_4462", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [SubsettedProperty(propertyName: "_19_0_2_12e503d9_1595189174990_213826_657")]
         Guid payloadParameter { get; }
 
         /// <summary>
         /// An Expression whose result is bound to the receiver input parameter of this AcceptActionUsage.
         /// </summary>
-        [Property(xmiId: "Systems-Actions-AcceptActionUsage-receiverArgument", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1612814670555_311543_168", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         Guid? receiverArgument { get; }
 
     }

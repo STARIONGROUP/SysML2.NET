@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     /// which redefines Transfer::source::sourceOutput or Transfer::target::targetInput and redefines the
     /// corresponding feature of the relatedElement for its end.
     /// </summary>
-    [Class(xmiId: "Kernel-Interactions-FlowEnd", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1563219035000_53223_20571", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IFlowEnd : IFeature
     {

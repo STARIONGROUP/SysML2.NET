@@ -63,7 +63,7 @@ namespace SysML2.NET.Core.POCO.Systems.Connections
     /// <summary>
     /// A BindingConnectorAsUsage is both a BindingConnector and a ConnectorAsUsage.
     /// </summary>
-    [Class(xmiId: "Systems-Connections-BindingConnectorAsUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1624053366342_865295_501", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IBindingConnectorAsUsage : IBindingConnector, IConnectorAsUsage
     {

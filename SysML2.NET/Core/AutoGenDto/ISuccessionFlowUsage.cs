@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Flows
     /// <summary>
     /// A SuccessionFlowUsage is a FlowUsage that is also a KerML SuccessionFlow.
     /// </summary>
-    [Class(xmiId: "Systems-Flows-SuccessionFlowUsage", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1624054686981_604189_1301", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ISuccessionFlowUsage : ISuccessionFlow, IFlowUsage
     {

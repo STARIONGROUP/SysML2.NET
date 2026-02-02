@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
     /// interaction with one or more actors external to the subject. The objective is to yield an observable
     /// result that is of value to one or more of the actors.
     /// </summary>
-    [Class(xmiId: "Systems-UseCases-UseCaseDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_19_0_4_12e503d9_1621460866763_205297_823", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IUseCaseDefinition : ICaseDefinition
     {
@@ -72,7 +72,7 @@ namespace SysML2.NET.Core.POCO.Systems.UseCases
         /// The UseCaseUsages that are included by this UseCaseDefinition, which are the useCaseIncludeds of the
         /// IncludeUseCaseUsages owned by this UseCaseDefinition.
         /// </summary>
-        [Property(xmiId: "Systems-UseCases-UseCaseDefinition-includedUseCase", aggregation: AggregationKind.None, lowerValue: 0, upperValue: -1, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_19_0_4_12e503d9_1621461043764_27_910", aggregation: AggregationKind.None, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: true, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         List<IUseCaseUsage> includedUseCase { get; }
 
     }

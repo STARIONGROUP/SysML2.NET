@@ -64,7 +64,7 @@ namespace SysML2.NET.Core.POCO.Systems.Actions
     /// <summary>
     /// A DecisionNode is a ControlNode that makes a selection from its outgoing Successions.
     /// </summary>
-    [Class(xmiId: "Systems-Actions-DecisionNode", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565503118756_203952_33551", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IDecisionNode : IControlNode
     {

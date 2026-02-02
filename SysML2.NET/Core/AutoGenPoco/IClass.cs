@@ -41,7 +41,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Classes
     /// they are related to other things (via Features). This means multiple things classified by the same
     /// Class can be distinguished, even when they are related other things in exactly the same way.
     /// </summary>
-    [Class(xmiId: "Kernel-Classes-Class", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1557527582956_258352_110280", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IClass : IClassifier
     {

@@ -35,14 +35,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// A LiteralString is a LiteralExpression that provides a String value as a result. Its result
     /// parameter must have the type String.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-LiteralString", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1533160651701_975433_42193", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface ILiteralString : ILiteralExpression
     {
         /// <summary>
         /// The String value that is the result of evaluating this Expression.
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-LiteralString-value", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
+        [Property(xmiId: "_18_5_3_12e503d9_1533160674985_368212_43297", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         string Value { get; set; }
 
     }

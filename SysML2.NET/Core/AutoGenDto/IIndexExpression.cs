@@ -35,14 +35,14 @@ namespace SysML2.NET.Core.DTO.Kernel.Expressions
     /// An IndexExpression is an OperatorExpression whose operator is "#", which resolves to the Function
     /// BasicFunctions::'#' from the Kernel Functions Library.
     /// </summary>
-    [Class(xmiId: "Kernel-Expressions-IndexExpression", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_2022x_2_12e503d9_1735075421524_242675_323", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IIndexExpression : IOperatorExpression
     {
         /// <summary>
         /// </summary>
-        [Property(xmiId: "Kernel-Expressions-IndexExpression-operator", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "#")]
-        [RedefinedProperty(propertyName: "Kernel-Expressions-OperatorExpression-operator")]
+        [Property(xmiId: "_2022x_2_12e503d9_1735075421526_442091_324", aggregation: AggregationKind.None, lowerValue: 1, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: "#")]
+        [RedefinedProperty(propertyName: "_18_5_3_12e503d9_1557528808100_646606_111674")]
         new string Operator { get; set; }
 
     }

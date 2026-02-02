@@ -42,7 +42,7 @@ namespace SysML2.NET.Core.POCO.Kernel.Interactions
     /// An Interaction is a Behavior that is also an Association, providing a context for multiple objects
     /// that have behaviors that impact one another.
     /// </summary>
-    [Class(xmiId: "Kernel-Interactions-Interaction", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_b9102da_1536782424772_574530_21292", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IInteraction : IAssociation, IBehavior
     {

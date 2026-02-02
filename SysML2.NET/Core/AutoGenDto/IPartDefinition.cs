@@ -36,7 +36,7 @@ namespace SysML2.NET.Core.DTO.Systems.Parts
     /// may be considered items for certain purposes, but not all items are parts that can perform actions
     /// within a system.
     /// </summary>
-    [Class(xmiId: "Systems-Parts-PartDefinition", isAbstract: false, isFinalSpecialization: false, isActive: false)]
+    [Class(xmiId: "_18_5_3_12e503d9_1565469626440_455154_19856", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
     public partial interface IPartDefinition : IItemDefinition
     {

@@ -94,6 +94,7 @@ namespace SysML2.NET.Dal
                 poco.OwnedRelatedElement.Remove(poco.OwnedRelatedElement.Single(x => x.Id == identifier));
             }
 
+            identifiersOfObjectsToDelete.AddRange(ownedRelatedElementToDelete);
 
             var ownedRelationshipToDelete = poco.OwnedRelationship.Select(x => x.Id).Except(dto.OwnedRelationship);
 
@@ -102,6 +103,7 @@ namespace SysML2.NET.Dal
                 poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
 
+            identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
 
 
             return identifiersOfObjectsToDelete;
