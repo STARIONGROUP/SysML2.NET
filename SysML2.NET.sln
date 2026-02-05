@@ -59,6 +59,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.Messa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.MessagePack.Tests", "SysML2.NET.Serializer.MessagePack.Tests\SysML2.NET.Serializer.MessagePack.Tests.csproj", "{A6909F7B-D348-4F91-8E78-85605F36A628}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.Xmi", "SysML2.NET.Serializer.Xmi\SysML2.NET.Serializer.Xmi.csproj", "{6DF64C6F-B3B1-48B7-9C0D-9601A5BB69D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.Xmi.Tests", "SysML2.NET.Serializer.Xmi.Tests\SysML2.NET.Serializer.Xmi.Tests.csproj", "{0E02F812-6B73-4CD9-A96F-54D7389873CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +129,14 @@ Global
 		{A6909F7B-D348-4F91-8E78-85605F36A628}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6909F7B-D348-4F91-8E78-85605F36A628}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6909F7B-D348-4F91-8E78-85605F36A628}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF64C6F-B3B1-48B7-9C0D-9601A5BB69D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF64C6F-B3B1-48B7-9C0D-9601A5BB69D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF64C6F-B3B1-48B7-9C0D-9601A5BB69D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF64C6F-B3B1-48B7-9C0D-9601A5BB69D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E02F812-6B73-4CD9-A96F-54D7389873CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E02F812-6B73-4CD9-A96F-54D7389873CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E02F812-6B73-4CD9-A96F-54D7389873CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E02F812-6B73-4CD9-A96F-54D7389873CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,90 @@
+var {{String.LowerCaseFirstLetter property.Name}}XmlAttribute = xmiReader.GetAttribute("{{String.LowerCaseFirstLetter property.Name}}");
+
+if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}XmlAttribute))
+{
+{{#if (Property.QueryIsReferenceProperty property)}}
+    {{#if (Property.QueryIsEnumerable property)}}
+    var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReferences = new List<Guid>();
+    
+    foreach(var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue in {{String.LowerCaseFirstLetter property.Name}}XmlAttribute.Split(SplitMultiReference, StringSplitOptions.RemoveEmptyEntries))
+    {
+        if(Guid.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReference))
+        {
+            {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReferences.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeReference);
+        }
+    }
+    
+    if({{String.LowerCaseFirstLetter property.Name}}XmlAttributeReferences.Count != 0)
+    {
+        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "{{String.LowerCaseFirstLetter property.Name}}", {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReferences);
+    }
+    {{else}}
+    if(Guid.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReference))
+    {
+        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "{{String.LowerCaseFirstLetter property.Name}}", {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReference);
+    }
+    {{/if}}
+{{else}}
+    {{#if (Property.QueryIsEnumerable property)}}
+            foreach(var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue in {{String.LowerCaseFirstLetter property.Name}}XmlAttribute.Split(SplitMultiReference, StringSplitOptions.RemoveEmptyEntries))
+            {
+        {{#if (Property.QueryIsBool property )}}
+                if(bool.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsBool))
+                {
+                    poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsBool);
+                }
+        {{else if (Property.QueryIsEnum property )}}
+                if(Enum.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, true, out {{property.Type.Name}} {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsEnum))
+                {
+                    poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsEnum);
+                }
+        {{else if (Property.QueryIsNumeric property )}}
+            {{#if (Property.QueryIsInteger property) }}
+                if(int.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsInt))
+                {
+                    poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsInt);
+                }
+            {{else if (Property.QueryIsDouble property) }}
+                if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsDouble))
+                {
+                    poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsDouble);
+                }
+            {{ else }}
+                new NotImplementedException("{{ classContext.Name }}.{{property.Name}} is not yet supported");
+            {{/if}}
+        {{else}}
+                poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue);
+        {{/if}}
+        }
+    {{else}}
+        {{#if (Property.QueryIsBool property )}}
+            if(bool.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsBool))
+            {
+                poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsBool;
+            }
+        {{else if (Property.QueryIsEnum property )}}
+                if(Enum.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, true, out {{property.Type.Name}} {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsEnum))
+                {
+                poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsEnum;
+                }
+        {{else if (Property.QueryIsNumeric property )}}
+            {{#if (Property.QueryIsInteger property) }}
+                    if(int.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsInt))
+                    {
+                    poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsInt;
+                    }
+            {{else if (Property.QueryIsDouble property) }}
+                    if(double.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsDouble))
+                    {
+                    poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsDouble;
+                    }
+            {{ else }}
+                    new NotImplementedException("{{ classContext.Name }}.{{property.Name}} is not yet supported");
+            {{/if}}
+        {{else}}
+                poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttribute;
+        {{/if}}
+    {{/if}}
+{{/if}}
+}
+

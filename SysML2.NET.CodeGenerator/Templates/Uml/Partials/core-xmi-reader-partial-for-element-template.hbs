@@ -1,0 +1,70 @@
+case"{{String.LowerCaseFirstLetter property.Name}}":
+{
+{{#if (Property.QueryIsReferenceProperty property)}}
+    var hrefAttribute = xmiReader.GetAttribute("href");
+    
+    if(!string.IsNullOrWhiteSpace(hrefAttribute))
+    {
+        var hrefSplit = hrefAttribute.Split('#');
+        this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
+        var {{String.LowerCaseFirstLetter property.Name}}Id = Guid.Parse(hrefSplit[1]);
+        {{#if (Property.QueryIsEnumerable property)}}
+            this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "{{String.LowerCaseFirstLetter property.Name}}", {{String.LowerCaseFirstLetter property.Name}}Id);
+        {{else}}
+            this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "{{String.LowerCaseFirstLetter property.Name}}", {{String.LowerCaseFirstLetter property.Name}}Id);
+        {{/if}}
+    }
+    else
+    {
+        var {{String.LowerCaseFirstLetter property.Name}}Value = (I{{property.Type.Name}})this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+
+        {{#if (Property.QueryIsEnumerable property)}}
+            poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}Value);
+        {{else}}
+            poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}Value;
+        {{/if}}
+    }
+{{else}}
+    var {{String.LowerCaseFirstLetter property.Name}}Value = xmiReader.ReadElementContentAsString();
+    
+    if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}Value))
+    {
+    {{#if (Property.QueryIsEnumerable property)}}
+        {{#if (Property.QueryIsBool property )}}
+            poco.{{Property.WritePropertyName property}}.Add(bool.Parse({{String.LowerCaseFirstLetter property.Name}}Value));
+        {{else if (Property.QueryIsEnum property )}}
+            poco.{{Property.WritePropertyName property}}.Add(({{property.Type.Name}})Enum.Parse(typeof({{property.Type.Name}}), {{String.LowerCaseFirstLetter property.Name}}Value, true));
+        {{else if (Property.QueryIsNumeric property )}}
+            {{#if (Property.QueryIsInteger property) }}
+                poco.{{Property.WritePropertyName property}}.Add(int.Parse({{String.LowerCaseFirstLetter property.Name}}Value));
+            {{else if (Property.QueryIsDouble property) }}
+                poco.{{Property.WritePropertyName property}}.Add(double.Parse({{String.LowerCaseFirstLetter property.Name}}Value));
+            {{ else }}
+                new NotImplementedException("{{ classContext.Name }}.{{property.Name}} is not yet supported");
+            {{/if}}
+        {{else}}
+            poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}Value);
+        {{/if}}
+    {{else}}
+        {{#if (Property.QueryIsBool property )}}
+            poco.{{Property.WritePropertyName property}} = bool.Parse({{String.LowerCaseFirstLetter property.Name}}Value);
+        {{else if (Property.QueryIsEnum property )}}
+            poco.{{Property.WritePropertyName property}} = ({{property.Type.Name}})Enum.Parse(typeof({{property.Type.Name}}), {{String.LowerCaseFirstLetter property.Name}}Value, true);
+        {{else if (Property.QueryIsNumeric property )}}
+            {{#if (Property.QueryIsInteger property) }}
+                poco.{{Property.WritePropertyName property}} = int.Parse({{String.LowerCaseFirstLetter property.Name}}Value);
+            {{else if (Property.QueryIsDouble property) }}
+                poco.{{Property.WritePropertyName property}} = double.Parse({{String.LowerCaseFirstLetter property.Name}}Value);
+            {{ else }}
+                new NotImplementedException("{{ classContext.Name }}.{{property.Name}} is not yet supported");
+            {{/if}}
+        {{else}}
+            poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}Value;
+        {{/if}}
+    {{/if}}
+    }
+{{/if}}
+
+    break;
+}
+

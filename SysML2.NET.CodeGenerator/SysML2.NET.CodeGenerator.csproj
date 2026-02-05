@@ -193,6 +193,18 @@
     <None Update="Templates\Uml\Partials\core-json-dto-serializer-uml-partial-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Uml\core-xmi-reader-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-xmi-reader-facade-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\Partials\core-xmi-reader-partial-for-attribute-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\Partials\core-xmi-reader-partial-for-element-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />
