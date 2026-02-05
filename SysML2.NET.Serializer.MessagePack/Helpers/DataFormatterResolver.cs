@@ -31,7 +31,21 @@ namespace SysML2.NET.Serializer.MessagePack.Helpers
     /// </summary>
     public class DataFormatterResolver : IFormatterResolver
     {
-        // Resolver should be singleton.
+        /// <summary>
+        /// Gets the singleton instance of the <see cref="DataFormatterResolver"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This resolver is implemented as a singleton to ensure that formatter
+        /// resolution is centralized, stateless, and allocation-free at runtime.
+        /// </para>
+        /// <para>
+        /// MessagePack resolvers are expected to be reusable and thread-safe.
+        /// Using a single shared instance avoids unnecessary allocations and
+        /// ensures consistent formatter behavior across all serialization and
+        /// deserialization operations.
+        /// </para>
+        /// </remarks>
         public static readonly IFormatterResolver Instance = new DataFormatterResolver();
 
         /// <summary>

@@ -35,6 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SysML2.NET.Extensions\SysML2.NET.Extensions.csproj" />
       <ProjectReference Include="..\SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj" />
     </ItemGroup>
 

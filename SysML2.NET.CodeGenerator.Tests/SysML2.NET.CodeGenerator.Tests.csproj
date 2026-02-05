@@ -24,6 +24,25 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\AnnotatingElementComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\AssociationComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\DependencyComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\EnumerationDefinitionComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\FeatureComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\FeatureTypingComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\FlowComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\FramedConcernMembershipComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\LiteralIntegerComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\LiteralRationalComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\MembershipComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\MultiplicityRangeComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\OwningMembershipComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\ReferenceSubsettingComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\RequirementUsageComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\SelectExpressionComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\SubclassificationComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\TextualRepresentationComparer.cs" />
+      <Compile Remove="Expected\UML\Core\AutoGenDtoComparers\UsageComparer.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\TransitionFeatureKindProvider.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnumProvider\VisibilityKindProvider.cs" />
       <Compile Remove="Expected\UML\Core\AutoGenEnum\TransitionFeatureKind.cs" />
@@ -75,6 +94,63 @@
 
     <ItemGroup>
       <Compile Remove="Expected\UML\Core\AutoGenPoco\AnnotatingElement.cs" />
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\AnnotatingElementComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\AssociationComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\DependencyComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\EnumerationDefinitionComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\FeatureComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\FeatureTypingComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\FlowComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\FramedConcernMembershipComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\LiteralIntegerComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\LiteralRationalComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\MembershipComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\MultiplicityRangeComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\OwningMembershipComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\ReferenceSubsettingComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\RequirementUsageComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\SelectExpressionComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\SubclassificationComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\TextualRepresentationComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Include="Expected\UML\Core\AutoGenDtoComparers\UsageComparer.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Include="Expected\UML\Core\AutoGenMessagePackFormatter\AnnotatingElementMessagePackFormatter.cs">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

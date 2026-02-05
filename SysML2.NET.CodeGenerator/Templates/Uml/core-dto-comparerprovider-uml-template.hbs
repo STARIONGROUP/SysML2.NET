@@ -1,0 +1,169 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="ComparerProvider.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Extensions.Core.DTO.Comparers
+{
+    using System;
+    using System.Collections.Generic;
+
+    using SysML2.NET.Common;
+
+    /// <summary>
+    /// Provides runtime access to equality comparers for DTO types.
+    /// </summary>
+    public static class ComparerProvider
+    {
+        private static readonly IReadOnlyDictionary<Type, IEqualityComparer<IData>> Comparers =
+            new Dictionary<Type, IEqualityComparer<IData>>
+            {
+                {{#each this as | class |}}
+                { typeof(SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }}), new Adapter<SysML2.NET.Core.DTO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.{{ class.Name }}>(new {{ class.Name }}Comparer()) },
+                {{/each}}
+            };
+
+        /// <summary>
+        /// Resolves the equality comparer for the specified DTO runtime type.
+        /// </summary>
+        public static IEqualityComparer<IData> Resolve(Type dtoType)
+        {
+            if (dtoType == null)
+            {
+                throw new ArgumentNullException(nameof(dtoType));
+            }
+
+            if (!Comparers.TryGetValue(dtoType, out var comparer))
+            {
+                throw new NotSupportedException($"No equality comparer generated for DTO type '{dtoType.FullName}'.");
+            }
+
+            return comparer;
+        }
+
+        /// <summary>
+        /// Resolves the equality comparer for the runtime type of the given DTO.
+        /// </summary>
+        public static IEqualityComparer<IData> Resolve(IData dto)
+        {
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto));
+            }
+
+            return Resolve(dto.GetType());
+        }
+
+        /// <summary>
+        /// Adapts a strongly-typed comparer to <see cref="IEqualityComparer{IData}"/>.
+        /// This adapter exists solely to bridge generic invariance in C#.
+        /// </summary>
+        private sealed class Adapter<T> : IEqualityComparer<IData>
+            where T : class, IData
+        {
+            private readonly IEqualityComparer<T> inner;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Adapter{T}"/> class
+            /// wrapping the specified strongly-typed comparer.
+            /// </summary>
+            /// <param name="inner">
+            /// The generated equality comparer responsible for comparing instances
+            /// of <typeparamref name="T"/>.
+            /// </param>
+            /// <exception cref="ArgumentNullException">
+            /// Thrown when <paramref name="inner"/> is <c>null</c>.
+            /// </exception>
+            public Adapter(IEqualityComparer<T> inner)
+            {
+                this.inner = inner;
+            }
+
+            /// <summary>
+            /// Determines whether the specified <see cref="IData"/> instances are
+            /// equal by delegating to the wrapped <see cref="IEqualityComparer{T}"/>.
+            /// </summary>
+            /// <param name="x">
+            /// The first object to compare.
+            /// </param>
+            /// <param name="y">
+            /// The second object to compare.
+            /// </param>
+            /// <returns>
+            /// <c>true</c> if <paramref name="x"/> and <paramref name="y"/> are
+            /// considered equal according to the wrapped comparer; otherwise,
+            /// <c>false</c>.
+            /// </returns>
+            /// <remarks>
+            /// <para>
+            /// If both references are identical, the method returns <c>true</c>
+            /// immediately. If either reference is <c>null</c>, the method returns
+            /// <c>false</c>.
+            /// </para>
+            /// <para>
+            /// Both arguments are expected to be instances of
+            /// <typeparamref name="T"/>. This invariant is guaranteed by
+            /// <see cref="ComparerProvider"/>, which resolves adapters strictly
+            /// by the runtime type of the DTO.
+            /// </para>
+            /// </remarks>
+            public bool Equals(IData x, IData y)
+            {
+                if (ReferenceEquals(x, y)) return true;
+                if (x is null || y is null) return false;
+
+                return this.inner.Equals((T)x, (T)y);
+            }
+
+            /// <summary>
+            /// Returns a hash code for the specified <see cref="IData"/> instance
+            /// by delegating to the wrapped <see cref="IEqualityComparer{T}"/>.
+            /// </summary>
+            /// <param name="obj">
+            /// The object for which a hash code is to be returned.
+            /// </param>
+            /// <returns>
+            /// A hash code for <paramref name="obj"/>, suitable for use in hash-based
+            /// collections when combined with the corresponding equality semantics.
+            /// </returns>
+            /// <remarks>
+            /// <para>
+            /// The hash code implementation is fully delegated to the wrapped
+            /// comparer and therefore remains consistent with its
+            /// <see cref="Equals(IData, IData)"/> semantics.
+            /// </para>
+            /// <para>
+            /// The adapter does not attempt to normalize or reinterpret the hash
+            /// code in any way.
+            /// </para>
+            /// </remarks>
+            public int GetHashCode(IData obj)
+            {
+                return this.inner.GetHashCode((T)obj);
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

@@ -40,10 +40,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Comparers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="Data\projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
