@@ -87,7 +87,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading Specialization at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:Specialization")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:Specialization")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the SpecializationReader");
                 }

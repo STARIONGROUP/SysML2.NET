@@ -90,7 +90,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading FlowEnd at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:FlowEnd")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:FlowEnd")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the FlowEndReader");
                 }

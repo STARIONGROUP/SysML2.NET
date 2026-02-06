@@ -18,14 +18,16 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.Json
+namespace SysML2.NET.Serializer.Xmi
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Core.POCO.Root.Namespaces;
 
     /// <summary>
     /// The purpose of the <see cref="IDeSerializer"/> is to deserialize a XMI <see cref="Stream"/> to
@@ -34,30 +36,14 @@ namespace SysML2.NET.Serializer.Json
     public interface IDeSerializer
     {
         /// <summary>
-        /// Deserializes the XMI stream to an <see cref="IEnumerable{IData}"/>
+        /// Deserializes the XMI file to a read <see cref="INamespace"/>
         /// </summary>
-        /// <param name="stream">
-        /// the XMI input stream
-        /// </param>
-        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
-        /// <returns>
-        /// an <see cref="IEnumerable{IData}"/>
-        /// </returns>
-        IEnumerable<IData> DeSerialize(Stream stream, bool deserializeDerivedProperties);
-
-        /// <summary>
-        /// Asynchronously deserializes the XMI stream to an <see cref="IEnumerable{IData}"/>
-        /// </summary>
-        /// <param name="stream">
-        /// the XMI input stream
-        /// </param>
-        /// <param name="deserializeDerivedProperties">Asserts that the deserializer should deserialize derived properties if present or if they are ignored</param>
-        /// <param name="cancellationToken">
-        /// The <see cref="CancellationToken"/> used to cancel the operation
+        /// <param name="fileLocation">
+        /// the <see cref="Uri"/> that locates the XMI file
         /// </param>
         /// <returns>
-        /// an <see cref="IEnumerable{IData}"/>
+        /// The read <see cref="INamespace"/>
         /// </returns>
-        Task<IEnumerable<IData>> DeSerializeAsync(Stream stream, bool deserializeDerivedProperties, CancellationToken cancellationToken);
+        INamespace DeSerialize(Uri fileLocation);
     }
 }

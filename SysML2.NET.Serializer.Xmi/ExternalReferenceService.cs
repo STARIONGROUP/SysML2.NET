@@ -29,9 +29,9 @@ namespace SysML2.NET.Serializer.Xmi
     public class ExternalReferenceService: IExternalReferenceService
     {
         /// <summary>
-        /// Stores external references that have to be processed and the process state. The key is the absolute path to 
+        /// Stores external references that have to be processed 
         /// </summary>
-        private readonly Dictionary<string, bool> externalReferences = []; 
+        private readonly HashSet<Uri> externalReferences = []; 
 
         /// <summary>
         /// Adds a reference to an external file that have to be processed
@@ -42,10 +42,18 @@ namespace SysML2.NET.Serializer.Xmi
         {
             var uri = new Uri(currentLocation, externalReference);
 
-            if (!this.externalReferences.ContainsKey(uri.AbsolutePath))
-            {
-                this.externalReferences.Add(uri.AbsolutePath, false);
-            }
+            this.externalReferences.Add(uri);
+        }
+
+        /// <summary>
+        /// Gets <see cref="Uri"/> of external references that have to be processed
+        /// </summary>
+        /// <returns>A collection of <see cref="Uri"/> to process</returns>
+        public IReadOnlyCollection<Uri> GetExternalReferencesToProcess()
+        {
+            var toBeProcessed = new List<Uri>(this.externalReferences);
+            this.externalReferences.Clear();
+            return toBeProcessed;
         }
     }
 }

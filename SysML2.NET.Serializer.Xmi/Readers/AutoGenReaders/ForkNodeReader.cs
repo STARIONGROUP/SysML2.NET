@@ -115,7 +115,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading ForkNode at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:ForkNode")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:ForkNode")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the ForkNodeReader");
                 }

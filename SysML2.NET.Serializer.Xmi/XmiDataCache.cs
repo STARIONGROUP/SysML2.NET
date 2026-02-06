@@ -131,5 +131,17 @@ namespace SysML2.NET.Serializer.Xmi
                 this.singleReferenceCache[dataId] = singleReference;
             }
         }
+
+        /// <summary>
+        /// Tries to get a cached <see cref="IData"/> from its identifier
+        /// </summary>
+        /// <param name="dataId">The <see cref="Guid"/> identifier</param>
+        /// <param name="data">The retrieved <see cref="IData"/> if applicable</param>
+        /// <returns>True if the <see cref="IData"/> could was present in the cache and could be retrieved</returns>
+        public bool TryGetData(Guid dataId, out IData data)
+        {
+            data = null;
+            return this.cache.TryGetValue(dataId, out data);
+        }
     }
 }

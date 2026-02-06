@@ -113,7 +113,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading CalculationDefinition at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:CalculationDefinition")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:CalculationDefinition")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the CalculationDefinitionReader");
                 }

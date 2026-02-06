@@ -91,7 +91,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading Metaclass at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:Metaclass")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:Metaclass")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the MetaclassReader");
                 }

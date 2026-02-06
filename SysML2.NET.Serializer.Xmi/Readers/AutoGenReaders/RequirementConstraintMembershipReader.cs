@@ -92,7 +92,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading RequirementConstraintMembership at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:RequirementConstraintMembership")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:RequirementConstraintMembership")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the RequirementConstraintMembershipReader");
                 }

@@ -42,4 +42,26 @@
       <ProjectReference Include="..\SysML2.NET.Serializer.Xmi\SysML2.NET.Serializer.Xmi.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Resources\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Resources\Kernel Libraries\Kernel Data Type Library\Collections.kermlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\Kernel Libraries\Kernel Data Type Library\ScalarValues.kermlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\Kernel Libraries\Kernel Data Type Library\VectorValues.kermlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\Domain Libraries\Quantities and Units\Quantities.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\Domain Libraries\Quantities and Units\MeasurementReferences.sysmlx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

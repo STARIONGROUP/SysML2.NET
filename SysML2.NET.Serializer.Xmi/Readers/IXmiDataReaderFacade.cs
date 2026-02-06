@@ -42,8 +42,9 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// <param name="currentLocation">The <see cref="Uri"/> that keep tracks of the current location</param>
         /// <param name="externalReferenceService">The <see cref="IExternalReferenceService"/> used to register and process external references</param>
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> used to set up logging</param>
+        /// <param name="explicitTypeName">The explicit type name to resolve, in case of un-specified xsi:type</param>
         /// <returns>An instance of the read <see cref="IData"/></returns>
         /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
-        IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory);
+        IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "");
     }
 }

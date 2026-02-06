@@ -87,7 +87,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading Conjugation at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:Conjugation")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:Conjugation")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the ConjugationReader");
                 }

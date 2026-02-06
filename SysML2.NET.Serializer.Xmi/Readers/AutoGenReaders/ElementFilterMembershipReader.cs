@@ -89,7 +89,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading ElementFilterMembership at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:ElementFilterMembership")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:ElementFilterMembership")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the ElementFilterMembershipReader");
                 }

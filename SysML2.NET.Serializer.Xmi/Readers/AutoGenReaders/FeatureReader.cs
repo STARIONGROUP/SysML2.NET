@@ -89,7 +89,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading Feature at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:Feature")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:Feature")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the FeatureReader");
                 }

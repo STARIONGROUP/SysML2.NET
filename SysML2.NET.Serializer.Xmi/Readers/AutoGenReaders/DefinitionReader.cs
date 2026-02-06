@@ -111,7 +111,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading Definition at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:Definition")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:Definition")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the DefinitionReader");
                 }

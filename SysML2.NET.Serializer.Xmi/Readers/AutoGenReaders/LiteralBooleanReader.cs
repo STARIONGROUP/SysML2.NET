@@ -92,7 +92,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading LiteralBoolean at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:LiteralBoolean")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:LiteralBoolean")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the LiteralBooleanReader");
                 }

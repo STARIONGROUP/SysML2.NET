@@ -91,7 +91,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading BindingConnector at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:BindingConnector")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:BindingConnector")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the BindingConnectorReader");
                 }

@@ -18,7 +18,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.Serializer.XMI
+namespace SysML2.NET.Serializer.Xmi
 {
     using System.Collections.Generic;
     using System.IO;

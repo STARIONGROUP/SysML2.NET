@@ -86,7 +86,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading Namespace at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:Namespace")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:Namespace")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the NamespaceReader");
                 }

@@ -113,7 +113,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading CaseDefinition at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:CaseDefinition")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:CaseDefinition")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the CaseDefinitionReader");
                 }

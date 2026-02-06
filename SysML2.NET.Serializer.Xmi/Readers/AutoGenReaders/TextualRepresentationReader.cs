@@ -86,7 +86,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading TextualRepresentation at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:TextualRepresentation")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:TextualRepresentation")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the TextualRepresentationReader");
                 }

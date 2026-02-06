@@ -88,7 +88,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading ReferenceSubsetting at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:ReferenceSubsetting")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:ReferenceSubsetting")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the ReferenceSubsettingReader");
                 }

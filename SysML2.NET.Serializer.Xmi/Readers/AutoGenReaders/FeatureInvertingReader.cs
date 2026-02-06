@@ -87,7 +87,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading FeatureInverting at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:FeatureInverting")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:FeatureInverting")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the FeatureInvertingReader");
                 }

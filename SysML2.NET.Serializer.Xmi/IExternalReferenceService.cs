@@ -21,6 +21,7 @@
 namespace SysML2.NET.Serializer.Xmi
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Resolves external references for XMI elements 
@@ -33,5 +34,11 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="currentLocation"></param>
         /// <param name="externalReference">The reference to the external file</param>
         void AddExternalReferenceToProcess(Uri currentLocation, string externalReference);
+
+        /// <summary>
+        /// Gets <see cref="Uri"/> of external references that have to be processed
+        /// </summary>
+        /// <returns>A collection of <see cref="Uri"/> to process</returns>
+        IReadOnlyCollection<Uri> GetExternalReferencesToProcess();
     }
 }

@@ -115,7 +115,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading PerformActionUsage at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:PerformActionUsage")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:PerformActionUsage")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the PerformActionUsageReader");
                 }

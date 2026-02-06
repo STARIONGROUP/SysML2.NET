@@ -112,7 +112,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading ConnectionDefinition at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:ConnectionDefinition")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:ConnectionDefinition")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the ConnectionDefinitionReader");
                 }

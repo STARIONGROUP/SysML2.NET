@@ -116,7 +116,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading AcceptActionUsage at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:AcceptActionUsage")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:AcceptActionUsage")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the AcceptActionUsageReader");
                 }

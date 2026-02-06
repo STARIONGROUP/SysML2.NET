@@ -118,7 +118,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading SuccessionFlowUsage at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:SuccessionFlowUsage")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:SuccessionFlowUsage")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the SuccessionFlowUsageReader");
                 }

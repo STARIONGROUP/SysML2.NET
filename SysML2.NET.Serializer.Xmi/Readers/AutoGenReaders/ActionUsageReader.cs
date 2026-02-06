@@ -115,7 +115,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 this.logger.LogTrace("reading ActionUsage at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
                 var xsiType = xmiReader.GetAttribute("xsi:type");
 
-                if (string.IsNullOrEmpty(xsiType) || xsiType != "sysml:ActionUsage")
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:ActionUsage")
                 {
                     throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the ActionUsageReader");
                 }
