@@ -28,12 +28,10 @@ namespace SysML2.NET.Serializer.Json.Tests
 
     using NUnit.Framework;
 
-    using SysML2.NET.PIM.DTO;
-    using SysML2.NET.Core.DTO;
-    using SysML2.NET.Serializer.Json;
-    using SysML2.NET.Core;
     using SysML2.NET.Core.Core.Types;
     using SysML2.NET.Core.DTO.Core.Features;
+    using SysML2.NET.PIM.DTO;
+    using SysML2.NET.Serializer.Json;
 
     /// <summary>
     /// Suite of tests for the <see cref="DeSerializer"/>
@@ -41,7 +39,7 @@ namespace SysML2.NET.Serializer.Json.Tests
     [TestFixture]
     public class DeSerializerTestFixture
     {
-        private IDeSerializer deSerializer;
+        private DeSerializer deSerializer;
 
         [SetUp]
         public void SetUp()
@@ -52,7 +50,7 @@ namespace SysML2.NET.Serializer.Json.Tests
         [Test]
         [TestCase(false)]
         [TestCase(true)]
-        public void Verify_that_idada_from_sysmlcore_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
+        public void Verify_that_iData_from_sysmlcore_json_can_be_deserialized(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json");
             using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -87,7 +85,7 @@ namespace SysML2.NET.Serializer.Json.Tests
         [Test]
         [TestCase(false)]
         [TestCase(true)]
-        public async Task Verify_that_idada_from_sysmlcore_json_can_be_deserialized_async(bool shouldDeserializeDerivedProperties)
+        public async Task Verify_that_iData_from_sysmlcore_json_can_be_deserialized_async(bool shouldDeserializeDerivedProperties)
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json");
 

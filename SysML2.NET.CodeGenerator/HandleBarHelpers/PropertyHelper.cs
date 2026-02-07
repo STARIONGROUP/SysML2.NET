@@ -753,6 +753,102 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString(sb);
             });
 
+            handlebars.RegisterHelper("Property.WriteForDTOComparer", (writer, _, parameters) =>
+            {
+                if (parameters.Length != 2)
+                {
+                    throw new HandlebarsException("{{#Property.WriteForDTOComparer}} helper must have exactly two arguments");
+                }
+
+                var property = (parameters[0] as IProperty)!;
+                var classContext = (parameters[1] as IClass)!;
+
+                var sb = new StringBuilder();
+                var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
+                var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var _);
+
+                if (isRedefinedPropertyInContext)
+                {
+                    throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for redefined properties");
+                }
+
+                if (property.IsDerived || property.IsDerivedUnion)
+                {
+                    throw new InvalidOperationException("Property.WriteForDTOComparer is invalid for derived or derivedunion properties");
+                }
+
+                if (property.Type is IDataType)
+                {
+                    if (property.QueryIsString())
+                    {
+                        if (property.QueryIsEnumerable())
+                        {
+                            if (property.IsOrdered)
+                            {
+                                sb.AppendLine($"if (!StringSequenceEquality.OrderedEqual(x.{propertyName}, y.{propertyName})) return false;");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"if (!StringSequenceEquality.UnorderedEqual(x.{propertyName}, y.{propertyName})) return false;");
+                            }
+                        }
+                        else
+                        {
+                            sb.AppendLine($"if (!OrdinalStringComparer.Equals(x.{propertyName}, y.{propertyName})) return false;");
+                        }
+                    }
+                    else if (property.QueryIsDouble())
+                    {
+                        if (property.QueryIsNullable())
+                        {
+                            sb.AppendLine($"if (x.{propertyName}.HasValue != y.{propertyName}.HasValue) return false;");
+
+                            sb.AppendLine($"if (x.{propertyName}.HasValue && FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.DefaultDoubleEpsilon)) return false;");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"if (FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.DefaultDoubleEpsilon)) return false;");
+                        }
+
+                    }
+                    else if (property.QueryIsFloat())
+                    {
+                        if (property.QueryIsNullable())
+                        {
+                            sb.AppendLine($"if (x.{propertyName}.HasValue != y.{propertyName}.HasValue) return false;");
+
+                            sb.AppendLine($"if (x.{propertyName}.HasValue && FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.DefaultFloatEpsilon)) return false;");
+                        }
+
+                        sb.AppendLine($"if (FloatingPointComparer.NearlyEqual(x.{propertyName}, y.{propertyName}, FloatingPointComparer.DefaultDoubleEpsilon)) return false;");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"if (x.{propertyName} != y.{propertyName}) return false;");
+                    }
+                }
+                else
+                {
+                    if (property.QueryIsEnumerable())
+                    {
+                        if (property.IsOrdered)
+                        {
+                            sb.AppendLine($"if (!GuidSequenceEquality.OrderedEqual(x.{propertyName}, y.{propertyName})) return false;");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"if (!GuidSequenceEquality.UnorderedEqual(x.{propertyName}, y.{propertyName})) return false;");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine($"if (x.{propertyName} != y.{propertyName}) return false;");
+                    }
+                }
+
+                writer.WriteSafeString(sb + Environment.NewLine);
+            });
+
             handlebars.RegisterHelper("Property.IsPropertyRedefinedInClass", (context, arguments) =>
             {
                 if (context.Value is not IProperty property)
@@ -861,7 +957,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"{variableName}.{propertyName}");
                 }
             });
-            
+
             handlebars.RegisterHelper("Property.IsOfTypeBaseElement", (_, arguments) =>
             {
                 if (arguments.Single() is not IProperty property)

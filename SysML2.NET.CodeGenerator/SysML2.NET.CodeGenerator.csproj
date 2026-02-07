@@ -118,6 +118,12 @@
     <None Update="Templates\Uml\core-dto-class-uml-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Uml\core-dto-comparer-class-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-dto-comparerprovider-uml-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Uml\core-dto-interface-uml-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

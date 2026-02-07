@@ -20,24 +20,15 @@
 
 namespace SysML2.NET.Serializer.MessagePack.Tests
 {
-    using System;
     using System.IO;
     using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     using NUnit.Framework;
 
-    using SysML2.NET.PIM.DTO;
-
-    using SysML2.NET.Core;
-    using SysML2.NET.Core.DTO;
     using SysML2.NET.Serializer.Json;
-    using SysML2.NET.Serializer.MessagePack;
-    using SysML2.NET.Core.Core.Types;
-    using SysML2.NET.Core.DTO.Core.Features;
-    using SerializationTargetKind = MessagePack.SerializationTargetKind;
+    using SysML2.NET.Extensions.Core.DTO.Comparers;
 
+    using SerializationTargetKind = MessagePack.SerializationTargetKind;
 
     [TestFixture]
     public class SerializerTestFixture
@@ -60,14 +51,11 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
         public void Verify_that_iData_from_sysml2_core_json_can_be_deserialized()
         {
             var fileName = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "projects.000e9890-6935-43e6-a5d7-5d7cac601f4c.commits.6d7ad9fd-6520-4ff2-885b-8c5c129e6c27.elements.json");
-            using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            using var jsonStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
-            var jsonData = this.jsonDeSerializer.DeSerialize(stream, SerializationModeKind.JSON, Json.SerializationTargetKind.CORE,false);
+            var jsonData = this.jsonDeSerializer.DeSerialize(jsonStream, SerializationModeKind.JSON, Json.SerializationTargetKind.CORE,false).ToList();
 
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(jsonData.Count(), Is.EqualTo(100));
-            }
+            Assert.That(jsonData.Count, Is.EqualTo(100));
 
             var messagePackStream = new MemoryStream();
 
@@ -75,12 +63,35 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
 
             messagePackStream.Position = 0;
 
-            var messagePackData= this.messagePackDeSerializer.DeSerialize(messagePackStream, SerializationTargetKind.CORE);
+            var messagePackData= this.messagePackDeSerializer.DeSerialize(messagePackStream, SerializationTargetKind.CORE).ToList();
 
-            var jsonBasedDictionary = jsonData.ToDictionary(x => x.Id);
-            var messagePackBasedDictionary = messagePackData.ToDictionary(x => x.Id);
+            Assert.That(messagePackData, Has.Count.EqualTo(jsonData.Count));
 
-            Assert.That(jsonBasedDictionary.Keys, Is.EquivalentTo(messagePackBasedDictionary.Keys));
+            var jsonById = jsonData.ToDictionary(x => x.Id);
+            var msgById = messagePackData.ToDictionary(x => x.Id);
+
+            Assert.That(jsonById.Keys, Is.EquivalentTo(msgById.Keys));
+
+            using (Assert.EnterMultipleScope())
+            {
+                foreach (var id in jsonById.Keys)
+                {
+                    var left = jsonById[id];
+                    var right = msgById[id];
+
+                    Assert.That(
+                        right.GetType(),
+                        Is.EqualTo(left.GetType()),
+                        $"Type mismatch for id {id}. Left={left.GetType().FullName}, Right={right.GetType().FullName}");
+
+                    var comparer = ComparerProvider.Resolve(left);
+
+                    Assert.That(
+                        comparer.Equals(left, right),
+                        Is.True,
+                        $"Round-trip semantic mismatch for id {id} ({left.GetType().Name}).");
+                }
+            }
         }
     }
 }
