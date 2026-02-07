@@ -765,7 +765,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 var sb = new StringBuilder();
                 var propertyName = StringExtensions.CapitalizeFirstLetter(property.Name);
-                var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var redefiningProperty);
+                var isRedefinedPropertyInContext = property.TryQueryRedefinedByProperty(classContext, out var _);
 
                 if (isRedefinedPropertyInContext)
                 {

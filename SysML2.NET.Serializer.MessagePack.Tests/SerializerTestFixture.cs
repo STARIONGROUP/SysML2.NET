@@ -55,7 +55,7 @@ namespace SysML2.NET.Serializer.MessagePack.Tests
 
             var jsonData = this.jsonDeSerializer.DeSerialize(jsonStream, SerializationModeKind.JSON, Json.SerializationTargetKind.CORE,false).ToList();
 
-            Assert.That(jsonData.Count(), Is.EqualTo(100));
+            Assert.That(jsonData.Count, Is.EqualTo(100));
 
             var messagePackStream = new MemoryStream();
 

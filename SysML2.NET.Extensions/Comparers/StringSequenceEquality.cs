@@ -33,7 +33,7 @@ namespace SysML2.NET.Extensions.Comparers
     /// culture-independent behavior suitable for identifiers, names, and other
     /// model-level string values.
     /// </remarks>
-    public class StringSequenceEquality
+    public static class StringSequenceEquality
     {
         /// <summary>
         /// Determines whether two string sequences are equal using an ordered
