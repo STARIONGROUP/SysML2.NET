@@ -1,6 +1,8 @@
 # SysML2.NET
 
-SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release). SysML2.NET provides a number of libraries in the form on an SDK as well as reference implementation such as a web-application.
+SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release). SysML2.NET provides a number of libraries in the form on a C# SDK.
+
+> NOTE: Due to an error in the OMG published machine readable specifications, the current code is based on (generated from) https://github.com/Systems-Modeling/SysML-v2-Pilot-Implementation commit f1fd2b83e460f5695e8edcd780f43909f359d299 with comment `ST6RI-854 Updated metamodel files to latest Beta 4 version`.
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
