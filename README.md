@@ -1,6 +1,6 @@
 # SysML2.NET
 
-SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release). SysML2.NET provides a number of libraries in the form on an SDK as well as reference implementation such as a web-application and REST API.
+SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://github.com/Systems-Modeling/SysML-v2-Release). SysML2.NET provides a number of libraries in the form on an SDK as well as reference implementation such as a web-application.
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=STARIONGROUP_SysML2.NET&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=STARIONGROUP_SysML2.NET)
@@ -17,14 +17,14 @@ SysML2.NET is a .NET implementation of the [OMG SysML2 specification](https://gi
 
 The packages are available on Nuget at:
 
-project                                                                                             | Nuget
---------------------------------------------------------------------------------------------------- | ------------
-[SysML2.NET](https://www.nuget.org/packages/SysML2.NET)                                             | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET)
-[SysML2.NET.Serializer.Json](https://www.nuget.org/packages/SysML2.NET.Serializer.Json)             | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.Json)
-[SysML2.NET.Serializer.Dictionary](https://www.nuget.org/packages/SysML2.NET.Serializer.Dictionary) | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.Dictionary)
-[SysML2.NET.REST](https://www.nuget.org/packages/SysML2.NET.REST)                                   | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.REST)
-[SysML2.NET.DAL](https://www.nuget.org/packages/SysML2.NET.DAL)                                     | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.DAL)
-[SysML2.NET.OGM](https://www.nuget.org/packages/SysML2.NET.OGM)                                     | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.OGM)
+project                                                                                               | Nuget
+----------------------------------------------------------------------------------------------------- | ------------
+[SysML2.NET](https://www.nuget.org/packages/SysML2.NET)                                               | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET)
+[SysML2.NET.Extensions](https://www.nuget.org/packages/SysML2.NET.Extensions)                         | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Extensions)
+[SysML2.NET.Serializer.Json](https://www.nuget.org/packages/SysML2.NET.Serializer.Json)               | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.Json)
+[SysML2.NET.Serializer.MessagePack](https://www.nuget.org/packages/SysML2.NET.Serializer.MessagePack) | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.MessagePack)
+[SysML2.NET.REST](https://www.nuget.org/packages/SysML2.NET.REST)                                     | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.REST)
+[SysML2.NET.DAL](https://www.nuget.org/packages/SysML2.NET.DAL)                                       | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.DAL)
 
 The reference web-application is available on [docker-hub](https://hub.docker.com/r/stariongroup/sysml2.net.viewer). A demo-version is hosted at http://viewer.sysml2.net.
 
