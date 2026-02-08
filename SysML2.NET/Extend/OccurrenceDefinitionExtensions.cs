@@ -20,42 +20,16 @@
 
 namespace SysML2.NET.Core.POCO.Systems.Occurrences
 {
-    using System;
-    using System.Collections.Generic;
-
-    using SysML2.NET.Core.POCO.Core.Classifiers;
-    using SysML2.NET.Core.POCO.Core.Features;
-    using SysML2.NET.Core.POCO.Core.Types;
-    using SysML2.NET.Core.POCO.Kernel.Classes;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
-    using SysML2.NET.Core.POCO.Systems.Actions;
-    using SysML2.NET.Core.POCO.Systems.Allocations;
-    using SysML2.NET.Core.POCO.Systems.AnalysisCases;
-    using SysML2.NET.Core.POCO.Systems.Attributes;
-    using SysML2.NET.Core.POCO.Systems.Calculations;
-    using SysML2.NET.Core.POCO.Systems.Cases;
-    using SysML2.NET.Core.POCO.Systems.Connections;
-    using SysML2.NET.Core.POCO.Systems.Constraints;
-    using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
-    using SysML2.NET.Core.POCO.Systems.Enumerations;
-    using SysML2.NET.Core.POCO.Systems.Flows;
-    using SysML2.NET.Core.POCO.Systems.Interfaces;
-    using SysML2.NET.Core.POCO.Systems.Items;
-    using SysML2.NET.Core.POCO.Systems.Metadata;
-    using SysML2.NET.Core.POCO.Systems.Parts;
-    using SysML2.NET.Core.POCO.Systems.Ports;
-    using SysML2.NET.Core.POCO.Systems.Requirements;
-    using SysML2.NET.Core.POCO.Systems.States;
-    using SysML2.NET.Core.POCO.Systems.UseCases;
-    using SysML2.NET.Core.POCO.Systems.VerificationCases;
-    using SysML2.NET.Core.POCO.Systems.Views;
-
+    using System.Diagnostics.CodeAnalysis;
+    
     /// <summary>
     /// The <see cref="OccurrenceDefinitionExtensions"/> class provides extensions methods for
     /// the <see cref="IOccurrenceDefinition"/> interface
     /// </summary>
+    [SuppressMessage(
+        "Major Code Smell",
+        "S2094:Classes should not be empty",
+        Justification = "Extension class intentionally empty; methods are generated conditionally.")]
     internal static class OccurrenceDefinitionExtensions
     {
     }

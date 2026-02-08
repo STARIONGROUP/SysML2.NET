@@ -20,18 +20,16 @@
 
 namespace SysML2.NET.Core.POCO.Kernel.Packages
 {
-    using System;
-    using System.Collections.Generic;
-
-    using SysML2.NET.Core.POCO.Kernel.Functions;
-    using SysML2.NET.Core.POCO.Root.Annotations;
-    using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Root.Namespaces;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// The <see cref="LibraryPackageExtensions"/> class provides extensions methods for
     /// the <see cref="ILibraryPackage"/> interface
     /// </summary>
+    [SuppressMessage(
+        "Major Code Smell",
+        "S2094:Classes should not be empty",
+        Justification = "Extension class intentionally empty; methods are generated conditionally.")]
     internal static class LibraryPackageExtensions
     {
     }
