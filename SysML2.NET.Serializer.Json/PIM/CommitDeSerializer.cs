@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="CommitDeSerializer.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the alias Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug("The alias Json property was not found in the Commit: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("created"u8, out JsonElement createdProperty))
@@ -98,7 +98,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the created Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug("The created Json property was not found in the Commit: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("description"u8, out JsonElement descriptionProperty))

@@ -153,7 +153,7 @@ namespace SysML2.NET.Serializer.Json
                 }
             }
 
-            this.logger.LogInformation($"stream deserialized asynchronously in {sw.ElapsedMilliseconds} [ms]");
+            this.logger.LogInformation("stream deserialized asynchronously in {ElapsedMilliseconds} [ms]", sw.ElapsedMilliseconds);
 
             return result;
         }
