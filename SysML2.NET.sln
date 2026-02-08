@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NOTICE = NOTICE
 		Nuget.Config = Nuget.Config
 		README.md = README.md
+		CITATION.cff = CITATION.cff
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.CodeGenerator.Tests", "SysML2.NET.CodeGenerator.Tests\SysML2.NET.CodeGenerator.Tests.csproj", "{F7DCD458-E07C-42D5-8247-3A55202C90B6}"
@@ -25,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		.github\workflows\CodeQuality.yml = .github\workflows\CodeQuality.yml
+		.github\workflows\nuget-reference-check.yml = .github\workflows\nuget-reference-check.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysML2.NET.Serializer.Json", "SysML2.NET.Serializer.Json\SysML2.NET.Serializer.Json.csproj", "{E7307EB9-F42E-46CC-96F4-D0FECAFFD429}"

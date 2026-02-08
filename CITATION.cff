@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+
+title: "SysML2.NET: A .NET implementation of the OMG SysML v2 specification"
+abstract: "SysML2.NET is a .NET implementation of the OMG SysML2 specification. SysML2.NET provides a number of libraries in the form of a C# SDK."
+version: "0.18.0"
+date-released: "2026-02-08"
+url: "https://github.com/STARIONGROUP/SysML2.NET"
+
+authors:
+  - given-names: "Sam"
+    family-names: "Gerené"
+    affiliation: "Starion Group S.A."
+    orcid: "https://orcid.org/0009-0000-1848-550X"
+  - given-names: Antoine
+    family-names: Théate
+    affiliation: "Starion Group S.A."
+  - name: "Starion Group S.A."
+
+repository-code: "https://github.com/STARIONGROUP/SysML2.NET"
+license: "Apache-2.0"
+
+preferred-citation:
+  type: software
+  title: "SysML2.NET is a .NET implementation of the OMG SysML2 specification."
+  authors:
+    - given-names: "Sam"
+      family-names: "Gerené"
+      orcid: "https://orcid.org/0009-0000-1848-550X"
+    - given-names: Antoine
+      family-names: Théate
+      affiliation: "Starion Group S.A."
+    - name: "Starion Group S.A."
+  version: "0.18.0"
+  url: "https://github.com/STARIONGROUP/SysML2.NET"
+  date-released: "2026-02-08"
