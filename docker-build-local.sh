@@ -4,7 +4,7 @@
 set -e
 
 # Ensure version is passed
-if [ -z "$1" ]; then
+if [[ -z "$1" ]]; then
   echo "Usage: $0 <version>"
   echo "Example: $0 x.y.z"
   exit 1
