@@ -18,7 +18,7 @@ jobs:
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
           ref: ${{ env.DEFAULT_BRANCH }}
@@ -41,7 +41,7 @@ jobs:
           fi
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5.1.0
         with:
           dotnet-version: '9.0.x'
 
@@ -118,6 +118,9 @@ jobs:
 
           echo "----- RELEASE_NOTES.md -----"
           cat RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "Find the generated HTML documentation at https://modeldocs.sysml2.net/" >> RELEASE_NOTES.md
+          echo "Find the web application at http://viewer.sysml2.net/" >> RELEASE_NOTES.md
 
       - name: Pack
         run: dotnet pack -c Release -o ReleaseBuilds SysML2.NET.sln
@@ -127,17 +130,13 @@ jobs:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ReleaseBuilds/*.nupkg -k "$NUGET_API_KEY" -s https://api.nuget.org/v3/index.json --skip-duplicate
 
-          echo "" >> RELEASE_NOTES.md
-          echo "Find the generated HTML documentation at https://modeldocs.sysml2.net/" >> RELEASE_NOTES.md
-          echo "Find the web application at http://viewer.sysml2.net/" >> RELEASE_NOTES.md
-
       - name: Create annotated tag at this commit
         run: |
           git tag -a "${VERSION}" -m "Release ${VERSION}"
           git push origin "refs/tags/${VERSION}"
 
       - name: Create draft GitHub release (attach EXE)
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.5.0
         with:
           draft: true
           prerelease: ${{ env.PRERELEASE }}
