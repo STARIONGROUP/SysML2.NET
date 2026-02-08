@@ -157,7 +157,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
             }
             else
             {
-                logger.LogDebug($"the owningProject Json property was not found in the Commit: {dtoInstance.Id}");
+                logger.LogDebug("the owningProject Json property was not found in the Commit: {Id}", dtoInstance.Id);
             }
 
             if (jsonElement.TryGetProperty("resourceIdentifier"u8, out JsonElement resourceIdentifierProperty))

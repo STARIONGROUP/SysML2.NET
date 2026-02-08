@@ -34,6 +34,10 @@ namespace SysML2.NET.Core.POCO.Kernel.Metadata
     /// The <see cref="MetadataFeatureExtensions"/> class provides extensions methods for
     /// the <see cref="IMetadataFeature"/> interface
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "Major Code Smell",
+        "S1192:Define a constant instead of using this literal",
+        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class MetadataFeatureExtensions
     {
         /// <summary>

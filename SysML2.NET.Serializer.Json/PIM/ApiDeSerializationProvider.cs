@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="ApiDeSerializationProvider.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
 
     /// <summary>
     /// Delegate provider for the appropriate deserialization method for <see cref="System.Type"/> from the 
-    /// <see cref="SysML2.NET.API"/> namespace
+    /// <see cref="SysML2.NET.PIM"/> namespace
     /// </summary>
     internal static class ApiDeSerializationProvider
     {
@@ -57,7 +57,7 @@ namespace SysML2.NET.Serializer.Json.PIM.DTO
         /// The name of the subject <see cref="System.Type"/> that is to be serialized
         /// </param>
         /// <returns>
-        /// A Delegate of <see cref="Func{JsonElement, SerializationModeKind, bool, ILoggerFactory, IData}"/>
+        /// A delegate for <see cref="Func{JsonElement, SerializationModeKind, bool, ILoggerFactory, IData}"/>
         /// </returns>
         /// <exception cref="NotSupportedException">
         /// Thrown when the <see cref="System.Type"/> is not supported.

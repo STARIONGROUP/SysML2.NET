@@ -66,21 +66,16 @@ namespace SysML2.NET.Serializer.MessagePack.Helpers
         }
 
         /// <summary>
-        /// A cache from which <see cref="IMessagePackFormatter"/> can be resolved
+        /// Per-type cache for resolved MessagePack formatters.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type for which a formatter is cached.</typeparam>
         private static class FormatterCache<T>
         {
-            public static readonly IMessagePackFormatter<T> Formatter;
-
-            // generic's static constructor should be minimized for reduce type generation size!
-            // use outer helper method.
-            static FormatterCache()
-            {
-                var type = typeof(T);
-
-                Formatter = (IMessagePackFormatter<T>)DataResolverGetFormatterHelper.GetFormatter(type);
-            }
+            /// <summary>
+            /// The cached formatter for <typeparamref name="T"/>, or <see langword="null"/> if none is available.
+            /// </summary>
+            public static readonly IMessagePackFormatter<T> Formatter =
+                (IMessagePackFormatter<T>)DataResolverGetFormatterHelper.GetFormatter(typeof(T));
         }
     }
 }

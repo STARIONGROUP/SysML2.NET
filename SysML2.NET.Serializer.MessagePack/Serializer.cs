@@ -78,7 +78,7 @@ namespace SysML2.NET.Serializer.MessagePack
                 throw new ArgumentNullException(nameof(stream));
             }
 
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var payload = dataItems.ToList().AsReadOnly().ToPayload();
 
@@ -115,7 +115,7 @@ namespace SysML2.NET.Serializer.MessagePack
                 throw new ArgumentNullException(nameof(writer));
             }
 
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var payload = dataItems.ToList().AsReadOnly().ToPayload();
 
@@ -169,7 +169,7 @@ namespace SysML2.NET.Serializer.MessagePack
         /// </param>
         private async Task SerializeInternalAsync(IEnumerable<IData> dataItems, Stream stream, CancellationToken cancellationToken)
         {
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var payload = dataItems.ToList().AsReadOnly().ToPayload();
 

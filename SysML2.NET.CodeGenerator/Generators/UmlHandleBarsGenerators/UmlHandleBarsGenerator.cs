@@ -62,10 +62,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         /// </returns>
         protected static HandlebarsPayload CreateHandlebarsPayload(XmiReaderResult xmiReaderResult)
         {
-            if (xmiReaderResult == null)
-            {
-                throw new ArgumentNullException(nameof(xmiReaderResult));
-            }
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
 
             var enumerations = new List<IEnumeration>();
             var primitiveTypes = new List<IPrimitiveType>();

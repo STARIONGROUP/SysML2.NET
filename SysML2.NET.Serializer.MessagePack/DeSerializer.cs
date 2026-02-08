@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializer.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ namespace SysML2.NET.Serializer.MessagePack
                 throw new ArgumentNullException(nameof(stream), "Stream may not be null");
             }
 
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var sw = Stopwatch.StartNew();
 
@@ -135,7 +135,7 @@ namespace SysML2.NET.Serializer.MessagePack
         /// </remarks>
         public async Task<IEnumerable<IData>> DeserializeInternalAsync(Stream stream, SerializationTargetKind serializationTargetKind, CancellationToken cancellationToken)
         {
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var sw = Stopwatch.StartNew();
 

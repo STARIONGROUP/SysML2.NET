@@ -37,6 +37,10 @@ namespace SysML2.NET.Core.POCO.Systems.VerificationCases
     /// The <see cref="RequirementVerificationMembershipExtensions"/> class provides extensions methods for
     /// the <see cref="IRequirementVerificationMembership"/> interface
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "Major Code Smell",
+        "S1192:Define a constant instead of using this literal",
+        Justification = "Placeholder message for unimplemented derived properties. Suppression to be removed after methods have been implemented")]
     internal static class RequirementVerificationMembershipExtensions
     {
         /// <summary>

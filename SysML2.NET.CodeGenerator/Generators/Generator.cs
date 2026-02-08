@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="Generator.cs" company="Starion Group S.A.">
 //
-//   Copyright 2022 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -135,14 +135,14 @@ namespace SysML2.NET.CodeGenerator.Generators
         {
             if (string.IsNullOrEmpty(generatedCode))
             {
-                throw new ArgumentException(nameof(generatedCode));
+                throw new ArgumentException($"the {nameof(generatedCode)} may not be null", nameof(generatedCode));
             }
 
             ArgumentNullException.ThrowIfNull(outputDirectory);
 
             if (string.IsNullOrEmpty(fileName))
             {
-                throw new ArgumentException(nameof(fileName));
+                throw new ArgumentException($"the {nameof(fileName)} may not be null",nameof(fileName));
             }
 
             var filePath = Path.Combine(outputDirectory.FullName, fileName);

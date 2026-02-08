@@ -35,7 +35,7 @@ namespace SysML2.NET.Serializer.MessagePack.Core
     /// This base class exists to centralize performance-critical serialization logic
     /// that is reused across multiple MessagePack formatters.
     /// </remarks>
-    public class MessagePackFormatterBase
+    public abstract class MessagePackFormatterBase
     {
         /// <summary>
         /// Thread-local reusable buffer for serializing <see cref="Guid"/> values
