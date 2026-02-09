@@ -1,0 +1,117 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="XmiDataReaderFacade.cs" company="Starion Group S.A.">
+//
+//   Copyright (C) 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.Xmi.Readers
+{
+    using System;
+    using System.CodeDom.Compiler;
+    using System.Collections.Generic;
+    using System.Xml;
+
+    using Microsoft.Extensions.Logging;
+
+    using SysML2.NET.Common;
+
+    /// <summary>
+    /// The purpose of the <see cref="XmiDataReaderFacade"/> is to read an <see cref="IData"/> from an
+    /// <see cref="XmlReader"/>
+    /// </summary>
+    public class XmiDataReaderFacade : IXmiDataReaderFacade
+    {
+        /// <summary>
+        /// A dictionary that contains functions that return <see cref="IData"/> based a key that represents the xsi Type
+        /// and a provided <see cref="IXmiDataCache"/>, <see cref="IExternalReferenceService" />, <see cref="ILoggerFactory"/> and <see cref="XmlReader"/>
+        /// </summary>
+        private readonly Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, IData>> readerCache;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmiDataReaderFacade"/>
+        /// </summary>
+        public XmiDataReaderFacade()
+        {
+            this.readerCache = new Dictionary<string, Func<IXmiDataCache, IExternalReferenceService,ILoggerFactory, XmlReader, Uri, IData>>
+            {
+            {{ #each this as | class | }}
+                ["sysml:{{ class.Name }}"] = (cache, externalReferenceService, loggerFactory, xmlReader, currentLocation) =>
+                {
+                    using var subXmlReader = xmlReader.ReadSubtree();
+                    var {{ String.LowerCaseFirstLetter class.Name }}Reader = new {{ class.Name }}Reader(cache, this, externalReferenceService, loggerFactory);
+                    return {{ String.LowerCaseFirstLetter class.Name }}Reader.Read(subXmlReader, currentLocation);
+                },
+            {{/each}}
+            };
+        }
+
+        /// <summary>
+        /// Queries an instance of an <see cref="IData" /> based on the position of the <see cref="XmlReader"/>.
+        /// When the reader is at an XML Element and has an attribute of xsi:type, the value of that attribute is used to select the appropriate
+        /// XmiElementReader from which the <see cref="IData"/> is returned.
+        /// </summary>
+        /// <param name="xmiReader">The current <see cref="XmlReader"/></param>
+        /// <param name="xmiDataCache">The <see cref="IXmiDataCache"/> to register and query read <see cref="IData"/></param>
+        /// <param name="currentLocation">The <see cref="Uri"/> that keep tracks of the current location</param>
+        /// <param name="externalReferenceService">The <see cref="IExternalReferenceService"/> used to register and process external references</param>
+        /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> used to set up logging</param>
+        /// <param name="explicitTypeName">The explicit type name to resolve, in case of un-specified xsi:type</param>
+        /// <returns>An instance of the read <see cref="IData"/></returns>
+        /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
+        public IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "")
+        {
+            if (xmiReader == null)
+            {
+                throw new ArgumentNullException(nameof(xmiReader));
+            }
+
+            if (xmiDataCache == null)
+            {
+                throw new ArgumentNullException(nameof(xmiDataCache));
+            }
+            
+            if (currentLocation == null)
+            {
+                throw new ArgumentNullException(nameof(currentLocation));
+            }
+
+            var xsiType = xmiReader.GetAttribute("xsi:type");
+
+            if (xsiType == null && string.IsNullOrEmpty(explicitTypeName))
+            {
+                throw new InvalidOperationException($"The xsi:type is not specified");
+            }
+
+            xsiType ??= explicitTypeName;
+            
+            if (this.readerCache.TryGetValue(xsiType, out var readerFactory))
+            {
+                return readerFactory(xmiDataCache, externalReferenceService, loggerFactory, xmiReader, currentLocation);
+            }
+            
+            throw new InvalidOperationException($"No reader found for xsi:type - {xsiType}");
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

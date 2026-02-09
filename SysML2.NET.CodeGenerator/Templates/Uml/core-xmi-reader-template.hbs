@@ -1,0 +1,152 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="{{this.Name}}Reader.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.Xmi.Readers
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Xml;
+    
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
+    using SysML2.NET.Common;
+    {{ #Class.WriteEnumerationNameSpaces this}}
+    {{ #Class.WriteNameSpaces this POCO}}
+    using SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
+
+    /// <summary>
+    /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
+    /// from the XMI document
+    /// </summary>
+    public class {{this.Name}}Reader: XmiDataReader<I{{this.Name}}>
+    {
+        /// <summary>
+        /// The instantiated logger from the injected <see cref="ILoggerFactory" /> 
+        /// </summary>
+        private readonly ILogger<{{this.Name}}Reader> logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="{{this.Name}}Reader" />
+        /// </summary>
+        /// <param name="cache">
+        /// The injected <see cref="IXmiDataCache" /> used cache to store and resolve <see cref="IData" />
+        /// </param>
+        /// <param name="xmiDataReaderFacade">
+        /// The injected <see cref="IXmiDataReaderFacade" /> that provides
+        /// <see cref="XmiDataReader{TData}" /> resolve
+        /// </param>
+        /// <param name="externalReferenceService">The injected <see cref="IExternalReferenceService"/> used to register and process external references</param>
+        /// <param name="loggerFactory">The injected <see cref="ILoggerFactory" /> used to set up logging</param>
+        public {{this.Name}}Reader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory) : base(cache, xmiDataReaderFacade, externalReferenceService, loggerFactory)
+        {
+            this.logger = loggerFactory == null ? NullLogger<{{this.Name}}Reader>.Instance : loggerFactory.CreateLogger<{{this.Name}}Reader>();
+        }
+    
+        /// <summary>
+        /// Reads the <see cref="I{{this.Name}}" /> object from its XML representation
+        /// </summary>
+        /// <param name="xmiReader">An instance of <see cref="XmlReader" /></param>
+        /// <param name="currentLocation">The <see cref="Uri" /> that keep tracks of the current location</param>
+        /// <returns>The read <see cref="I{{this.Name}}" /></returns>
+        public override I{{this.Name}} Read(XmlReader xmiReader, Uri currentLocation)
+        {
+            if (xmiReader == null)
+            {
+                throw new ArgumentNullException(nameof(xmiReader));
+            }
+
+            var xmlLineInfo = xmiReader as IXmlLineInfo;
+    
+            I{{this.Name}} poco = new SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}();
+    
+            if (xmiReader.MoveToContent() == XmlNodeType.Element)
+            {
+                this.logger.LogTrace("reading {{this.Name}} at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
+                var xsiType = xmiReader.GetAttribute("xsi:type");
+
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:{{this.Name}}")
+                {
+                    throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the {{this.Name}}Reader");
+                }
+        
+                var xmiId = xmiReader.GetAttribute("xmi:id");
+        
+                if (!Guid.TryParse(xmiId, out var guid))
+                {
+                    throw new InvalidOperationException($"The xmi:id {xmiId} could not be parsed");
+                }
+        
+                poco.Id = guid;
+        
+                if (!this.Cache.TryAdd(poco) && this.logger.IsEnabled(LogLevel.Critical))
+                {
+                    this.logger.LogCritical("Failed to add element type [{Poco}] with id [{Id}] as it was already in the Cache. The XMI document seems to have duplicate xmi:id values", "{{this.Name}}", poco.Id);
+                }
+
+                {{#with this as |class| }}
+                    {{ #each (Class.QueryAllProperties this) as | property | }}
+                        {{#unless this.IsTransient}}
+                            {{#unless this.IsDerived}}
+                                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                    {{#withPropertyClassContext property class}}
+                                        {{> core-xmi-reader-partial-for-attribute-template this}}
+                                    {{/withPropertyClassContext}}
+                                {{/unless}}
+                            {{/unless}}
+                        {{/unless}}
+                    {{/each}}
+                {{/with}}
+                while(xmiReader.Read())
+                {
+                    if(xmiReader.NodeType == XmlNodeType.Element)
+                    {
+                        switch(xmiReader.LocalName)
+                        {
+                            {{#with this as |class| }}
+                                {{ #each (Class.QueryAllProperties this) as | property | }}
+                                {{#unless this.IsTransient}}
+                                    {{#unless this.IsDerived}}
+                                        {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                            {{#withPropertyClassContext property class}}
+                                                {{> core-xmi-reader-partial-for-element-template this}}
+                                            {{/withPropertyClassContext}}
+                                        {{/unless}}
+                                    {{/unless}}
+                                {{/unless}}
+                            {{/each}}
+                            {{/with}}
+                        }
+                    }
+                }
+            }
+    
+            return poco;
+        }
+    }
+}
+        
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
