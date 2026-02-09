@@ -21,9 +21,15 @@
 namespace SysML2.NET.Serializer.Xmi
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
+    using Microsoft.Extensions.Logging;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Decorators;
 
     /// <summary>
     /// Represents a cache for storing and retrieving XMI <see cref="IData"/> during the reading process.
@@ -45,7 +51,21 @@ namespace SysML2.NET.Serializer.Xmi
         /// Gets the cached <see cref="Dictionary{TKey,TValue}"/> of read single value reference per read <see cref="IData"/>
         /// </summary>
         private readonly Dictionary<Guid, Dictionary<string, Guid>> singleReferenceCache = [];
-        
+
+        /// <summary>
+        /// Gets the injected <see cref="ILogger{TCategoryName}"/> used to produce logs
+        /// </summary>
+        private readonly ILogger<XmiDataCache> logger;
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="XmiDataCache"/>
+        /// </summary>
+        /// <param name="logger">the injected <see cref="ILogger{TCategoryName}"/> used to produce logs</param>
+        public XmiDataCache(ILogger<XmiDataCache> logger)
+        {
+            this.logger = logger;
+        }
+
         /// <summary>
         /// Adds the specified <see cref="IData"/> to the cache using the <see cref="IData.Id"/> as key 
         /// </summary>
@@ -142,6 +162,123 @@ namespace SysML2.NET.Serializer.Xmi
         {
             data = null;
             return this.cache.TryGetValue(dataId, out data);
+        }
+
+        /// <summary>
+        /// Synchronize references that has been stored into the cache
+        /// </summary>
+        public void SynchronizeReferences()
+        {
+            foreach (var data in this.cache.Values)
+            {
+                this.ResolveReferences(data);
+            }
+        }
+
+        /// <summary>
+        /// Resolve all references data for a given <see cref="IData"/>
+        /// </summary>
+        /// <param name="data">The <see cref="IData"/> that should resolve his reference</param>
+        /// <exception cref="ArgumentNullException">If the <paramref name="data"/> is null</exception>
+        /// <exception cref="InvalidOperationException">If one of the target property set on the <see cref="singleReferenceCache"/> or <see cref="multipleReferencesCache"/> is not found</exception>
+        /// <exception cref="KeyNotFoundException">If an expected generic collection can not found</exception>
+        private void ResolveReferences(IData data)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            if (this.singleReferenceCache.TryGetValue(data.Id, out var existingSingleReferenceValue))
+            {
+                foreach (var existingReference in existingSingleReferenceValue)
+                {
+                    if (!this.TryGetData(existingReference.Value, out var referencedData) && this.logger.IsEnabled(LogLevel.Warning))
+                    {
+                        this.logger.LogWarning("The reference to [{Reference}] for property [{Key}] on element type [{Element}] with id [{Id}] was not found in the cache, probably because its type is not supported.",
+                            existingReference.Value, existingReference.Key, data.GetType().Name, data.Id);
+                        
+                        continue;
+                    }
+                    
+                    var targetProperty = FindPropertyWithAttribute(data, existingReference.Key, referencedData.GetType());
+
+                    if (targetProperty is null)
+                    {
+                        throw new InvalidOperationException($"The target property {existingReference.Key} was not found on {data.GetType().Name} or the property type doesn't match the referenced {nameof(data)} type");
+                    }
+
+                    targetProperty.SetValue(data, referencedData);
+                }
+            }
+
+            if (!this.multipleReferencesCache.TryGetValue(data.Id, out var existingMultipleReferenceValues))
+            {
+                return;
+            }
+
+            foreach (var existingReference in existingMultipleReferenceValues)
+            {
+                var targetProperty = FindPropertyWithAttribute(data, existingReference.Key);
+                var underlyingType = targetProperty?.PropertyType.GetGenericArguments().FirstOrDefault();
+
+                if (targetProperty is null || underlyingType is null)
+                {
+                    throw new KeyNotFoundException($"The target property {existingReference.Key} was not found on {data.GetType().Name} or the type is null");
+                }
+                
+                var resolvedReferences = this.ResolveMultiValueReferences(existingReference.Value, existingReference.Key, underlyingType);
+
+                if (targetProperty.GetValue(data) is not IList list)
+                {
+                    continue;
+                }
+
+                foreach (var resolvedReference in resolvedReferences)
+                {
+                    list.Add(resolvedReference);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Resolved multi-values reference property
+        /// </summary>
+        /// <param name="referencedValues">A readonly collection of <see cref="Guid"/> idenfying referenced-values</param>
+        /// <param name="propertyName">The name of the current property that are being resolved</param>
+        /// <param name="underlyingType">The expected type</param>
+        /// <returns>A collection of found referenced values</returns>
+        private IReadOnlyList<IData> ResolveMultiValueReferences(IReadOnlyCollection<Guid> referencedValues, string propertyName, Type underlyingType)
+        {
+            var resolvedReferences = new List<IData>();
+
+            foreach (var referencedValue in referencedValues)
+            {
+                if (!this.TryGetData(referencedValue, out var data) || !underlyingType.IsInstanceOfType(data))
+                {
+                    this.logger.LogWarning("The reference with the id [{Key}] to [{PropertyValue}] was not found in the cache, probably because its type is not supported.", propertyName, referencedValue);
+                    continue;
+                }
+                
+                resolvedReferences.Add(data);
+            }
+            
+            return resolvedReferences;
+        }
+
+        /// <summary>
+        /// Finds a property in the given element that has the <see cref="PropertyAttribute"/> and matches the specified property name and type.
+        /// </summary>
+        /// <param name="data">The <see cref="IData"/> whose properties are to be searched.</param>
+        /// <param name="propertyName">The name of the property to find.</param>
+        /// <param name="expectedType">The expected type of the property.  If null, type checking is skipped.</param>
+        /// <returns>The <see cref="PropertyInfo"/> of the found property, or null if no matching property is found.</returns>
+        private static PropertyInfo FindPropertyWithAttribute(IData data, string propertyName, Type expectedType = null)
+        {
+            return data.GetType().GetProperties()
+                .FirstOrDefault(x => Attribute.IsDefined(x, typeof(PropertyAttribute))
+                                     && x.Name.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase)
+                                     && (expectedType == null || x.PropertyType.IsAssignableFrom(expectedType)));
         }
     }
 }

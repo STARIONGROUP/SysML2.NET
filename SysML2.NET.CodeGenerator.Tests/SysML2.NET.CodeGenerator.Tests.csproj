@@ -21,6 +21,82 @@
       <Compile Remove="Extensions\**" />
       <EmbeddedResource Remove="Extensions\**" />
       <None Remove="Extensions\**" />
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\AnnotatingElementReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\AnnotatingElementReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\AssociationReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\AssociationReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\DependencyReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\DependencyReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\EnumerationDefinitionReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\EnumerationDefinitionReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\FeatureReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\FeatureReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\FeatureTypingReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\FeatureTypingReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\FlowReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\FlowReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\FramedConcernMembershipReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\FramedConcernMembershipReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\LiteralIntegerReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\LiteralIntegerReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\LiteralRationalReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\LiteralRationalReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\MembershipReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\MembershipReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\MultiplicityRangeReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\MultiplicityRangeReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\OwningMembershipReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\OwningMembershipReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\ReferenceSubsettingReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\ReferenceSubsettingReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\RequirementUsageReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\RequirementUsageReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\SelectExpressionReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\SelectExpressionReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\SubclassificationReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\SubclassificationReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\TextualRepresentationReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\TextualRepresentationReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <Compile Remove="Expected\UML\Core\AutoGenReaders\UsageReader.cs" />
+      <None Include="Expected\UML\Core\AutoGenReaders\UsageReader.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

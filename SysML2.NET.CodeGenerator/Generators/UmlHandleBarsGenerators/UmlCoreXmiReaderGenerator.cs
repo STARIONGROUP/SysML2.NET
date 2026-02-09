@@ -188,5 +188,50 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             this.RegisterPartialTemplate("core-xmi-reader-partial-for-attribute-template");
             this.RegisterPartialTemplate("core-xmi-reader-partial-for-element-template");
         }
+
+        /// <summary>
+        /// Generate the XMI Reader class output code for a specific class
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="className">The name of the class to generate</param>
+        /// <returns>An awaitable <see cref="Task{TResult}" /> with the generated code</returns>
+        /// <exception cref="ArgumentNullException">
+        /// If the <paramref name="xmiReaderResult" /> or the
+        /// <paramref name="outputDirectory" /> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">If the <paramref name="className" /> is null or whitespace</exception>
+        public Task<string> GenerateXmiReaderClass(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        {
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+            ArgumentException.ThrowIfNullOrWhiteSpace(className);
+            
+            return this.GenerateXmiReaderClassInternal(xmiReaderResult, outputDirectory, className);
+        }
+
+        /// <summary>
+        /// Generate the XMI Reader class output code for a specific class
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">The target <see cref="DirectoryInfo" /></param>
+        /// <param name="className">The name of the class to generate</param>
+        /// <returns>An awaitable <see cref="Task{TResult}" /> with the generated code</returns>
+        private async Task<string> GenerateXmiReaderClassInternal(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory, string className)
+        {
+            var template = this.Templates[XmiReaderTemplateName];
+
+            var umlClass = xmiReaderResult.QueryContainedAndImported("SysML")
+                .SelectMany(x => x.PackagedElement.OfType<IClass>())
+                .Single(x => x.Name == className);
+            
+            var generatedXmiReader = template(umlClass);
+            generatedXmiReader = this.CodeCleanup(generatedXmiReader);
+
+            var fileName = $"{umlClass.Name.CapitalizeFirstLetter()}Reader.cs";
+            await WriteAsync(generatedXmiReader, outputDirectory, fileName);
+            
+            return generatedXmiReader;
+        }
     }
 }

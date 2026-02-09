@@ -84,12 +84,29 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="fileLocation">
         /// the <see cref="Uri"/> that locates the XMI file
         /// </param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="FileNotFoundException"></exception>
+        /// <exception cref="ArgumentNullException">If the <see cref="Uri"/> is null</exception>
+        /// <exception cref="FileNotFoundException">If the <see cref="Uri"/> does not locate an existing file</exception>
         /// <returns>
         /// The read <see cref="INamespace"/>
         /// </returns>
         public INamespace DeSerialize(Uri fileLocation)
+        {
+            return this.DeSerialize(fileLocation, true);
+        }
+
+        /// <summary>
+        /// Deserializes the XMI file to a read <see cref="INamespace"/>
+        /// </summary>
+        /// <param name="fileLocation">
+        /// the <see cref="Uri"/> that locates the XMI file
+        /// </param>
+        /// <param name="isRoot">A value indicating whether the reading occurs on the root node</param>
+        /// <exception cref="ArgumentNullException">If the <see cref="Uri"/> is null</exception>
+        /// <exception cref="FileNotFoundException">If the <see cref="Uri"/> does not locate an existing file</exception>
+        /// <returns>
+        /// The read <see cref="INamespace"/>
+        /// </returns>
+        private INamespace DeSerialize(Uri fileLocation, bool isRoot)
         {
             if (fileLocation == null)
             {
@@ -108,7 +125,7 @@ namespace SysML2.NET.Serializer.Xmi
             this.logger.LogInformation("start deserializing from {Path}", fileInfo.Name);
             var stopWatch = Stopwatch.StartNew();
 
-            var result = this.Read(fileStream, fileLocation, true);
+            var result = this.Read(fileStream, fileLocation, isRoot);
 
             this.logger.LogInformation("File {Path} deserialized in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
 
@@ -137,40 +154,45 @@ namespace SysML2.NET.Serializer.Xmi
 
             xmlReader.MoveToContent();
 
-            if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == "sysml:Namespace")
+            if (xmlReader.NodeType != XmlNodeType.Element || xmlReader.Name != "sysml:Namespace")
             {
-                var namespaceId =  xmlReader.GetAttribute("xmi:id");
-
-                if (Guid.TryParse(namespaceId, out var guid) && this.cache.TryGetData(guid, out var foundData) && foundData is INamespace existingNamespace)
-                {
-                    this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists",  namespaceId);
-                    stopWatch.Stop();
-                    return existingNamespace;
-                }
-
-                var readNamespace = (INamespace)this.xmiDataReaderFacade.QueryXmiData(xmlReader, this.cache, fileLocation, this.externalReferenceService, this.loggerFactory, xmlReader.Name);
-                stopWatch.Stop();
-                this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
-
-                this.ResolveExternalReference();
-
-                if (isRoot)
-                {
-                    this.SynchronizeReferences();
-                }
-
-                return readNamespace;
+                throw new InvalidOperationException($"The file {fileInfo.Name} does not represent a SysML:Namespace, can not process it.");
             }
 
-            throw new InvalidOperationException($"The file {fileInfo.Name} does not represent a SysML:Namespace, can not process it.");
-        }
+            var namespaceId =  xmlReader.GetAttribute("xmi:id");
 
-        private void SynchronizeReferences()
-        {
-        }
+            if (Guid.TryParse(namespaceId, out var guid) && this.cache.TryGetData(guid, out var foundData) && foundData is INamespace existingNamespace)
+            {
+                this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists",  namespaceId);
+                stopWatch.Stop();
+                return existingNamespace;
+            }
 
+            var readNamespace = (INamespace)this.xmiDataReaderFacade.QueryXmiData(xmlReader, this.cache, fileLocation, this.externalReferenceService, this.loggerFactory, xmlReader.Name);
+            stopWatch.Stop();
+            this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
+
+            this.ResolveExternalReference();
+
+            if (isRoot)
+            {
+                this.cache.SynchronizeReferences();
+            }
+
+            return readNamespace;
+        }
+        
+        /// <summary>
+        /// Resolve and read all external references
+        /// </summary>
         private void ResolveExternalReference()
         {
+            var references = this.externalReferenceService.GetExternalReferencesToProcess();
+
+            foreach (var reference in references)
+            {
+                this.DeSerialize(reference, false);
+            }
         }
     }
 }

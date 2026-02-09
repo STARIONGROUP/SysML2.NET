@@ -69,5 +69,10 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="data">The retrieved <see cref="IData"/> if applicable</param>
         /// <returns>True if the <see cref="IData"/> could was present in the cache and could be retrieved</returns>
         bool TryGetData(Guid dataId, out IData data);
+
+        /// <summary>
+        /// Synchronize references that has been stored into the cache
+        /// </summary>
+        void SynchronizeReferences();
     }
 }

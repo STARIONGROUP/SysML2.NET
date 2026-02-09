@@ -41,9 +41,9 @@ namespace SysML2.NET.Serializer.Xmi.Tests
                 .AddLogging(x => x.AddConsole())
                 .BuildServiceProvider();
             
-            this.xmiDataCache = new XmiDataCache();
+            this.xmiDataCache = new XmiDataCache(serviceProvider.GetRequiredService<ILogger<XmiDataCache>>());
             
-            this.deSerializer = new DeSerializer(new ExternalReferenceService(), new XmiDataReaderFacade(),  new XmiDataCache(), serviceProvider.GetRequiredService<ILoggerFactory>());
+            this.deSerializer = new DeSerializer(new ExternalReferenceService(serviceProvider.GetRequiredService<ILogger<ExternalReferenceService>>()), new XmiDataReaderFacade(),  this.xmiDataCache, serviceProvider.GetRequiredService<ILoggerFactory>());
         }
 
         [Test]
