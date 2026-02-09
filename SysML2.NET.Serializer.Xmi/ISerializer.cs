@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="ISerializer.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        Task SerializeAsync(IEnumerable<IData> dataItems, bool includeDerivedProperties, Stream stream,  CancellationToken cancellationToken);
+        Task SerializeAsync(IEnumerable<IData> dataItems, bool includeDerivedProperties, Stream stream, CancellationToken cancellationToken);
 
         /// <summary>
         /// Asynchronously serialize an <see cref="IData"/> as XMI to a target <see cref="Stream"/>

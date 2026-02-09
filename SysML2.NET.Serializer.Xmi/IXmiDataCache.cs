@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------
 // <copyright file="IXmiDataCache.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="propertyName">The name of multiple value reference property</param>
         /// <param name="references">Read references identifiers to add</param>
         void AddMultipleValueReferencePropertyIdentifiers(Guid dataId, string propertyName, IReadOnlyCollection<Guid> references);
-        
+
         /// <summary>
         /// Adds a read reference for a specific <see cref="IData"/>
         /// </summary>
@@ -53,7 +53,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="propertyName">The name of multiple value reference property</param>
         /// <param name="reference">Read reference identifier to add</param>
         void AddMultipleValueReferencePropertyIdentifiers(Guid dataId, string propertyName, Guid reference);
-        
+
         /// <summary>
         /// Adds read reference for a specific <see cref="IData"/>
         /// </summary>
@@ -61,7 +61,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="propertyName">The name of multiple value reference property</param>
         /// <param name="reference">The read reference identifier</param>
         void AddSingleValueReferencePropertyIdentifier(Guid dataId, string propertyName, Guid reference);
-        
+
         /// <summary>
         /// Tries to get a cached <see cref="IData"/> from its identifier
         /// </summary>

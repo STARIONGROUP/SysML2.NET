@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="ExternalReferenceService.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ namespace SysML2.NET.Serializer.Xmi
     /// <summary>
     /// Resolves external references for XMI elements 
     /// </summary>
-    public class ExternalReferenceService: IExternalReferenceService
+    public class ExternalReferenceService : IExternalReferenceService
     {
         /// <summary>
         /// Stores external references that have to be processed 
@@ -85,7 +85,7 @@ namespace SysML2.NET.Serializer.Xmi
             {
                 this.alreadyProcessedReferences.Add(uri);
             }
-            
+
             this.externalReferences.Clear();
             return toBeProcessed;
         }

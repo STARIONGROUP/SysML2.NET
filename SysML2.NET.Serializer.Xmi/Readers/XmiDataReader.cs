@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="XmiDataReader.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// </param>
         /// <param name="externalReferenceService">The injected <see cref="IExternalReferenceService"/> used to register and process external references</param>
         /// <param name="loggerFactory">The injected <see cref="ILoggerFactory" /> used to set up logging</param>
-        protected XmiDataReader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService,  ILoggerFactory loggerFactory)
+        protected XmiDataReader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory)
         {
             this.LoggerFactory = loggerFactory;
             this.XmiDataReaderFacade = xmiDataReaderFacade;

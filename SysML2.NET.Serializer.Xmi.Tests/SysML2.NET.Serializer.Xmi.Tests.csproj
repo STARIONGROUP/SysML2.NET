@@ -18,11 +18,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.2" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-        <PackageReference Include="NUnit" Version="4.4.0" />
-        <PackageReference Include="NUnit.Console" Version="3.22.0" />
-        <PackageReference Include="NUnit3TestAdapter" Version="6.1.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1"/>
+        <PackageReference Include="NUnit" Version="4.4.0"/>
+        <PackageReference Include="NUnit.Console" Version="3.22.0"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="6.1.0"/>
 
         <PackageReference Include="coverlet.collector" Version="6.0.4">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -39,134 +39,134 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SysML2.NET.Serializer.Xmi\SysML2.NET.Serializer.Xmi.csproj" />
+        <ProjectReference Include="..\SysML2.NET.Serializer.Xmi\SysML2.NET.Serializer.Xmi.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources\" />
+        <Folder Include="Resources\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Resources\Kernel Libraries\Kernel Data Type Library\Collections.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Data Type Library\ScalarValues.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Data Type Library\VectorValues.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\Quantities.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\MeasurementReferences.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQSpaceTime.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQBase.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\SI.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQ.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Base.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\SequenceFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Occurrences.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Links.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Clocks.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Objects.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\CollectionFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Transfers.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Performances.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Metaobjects.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Semantic Library\KerML.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\BaseFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\IntegerFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\RationalFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\RealFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\ComplexFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\NumericalFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\DataFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\ScalarFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Kernel Libraries\Kernel Function Library\ControlFunctions.kermlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQCharacteristicNumbers.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\SIPrefixes.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQInformation.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQAtomicNuclear.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQElectromagnetism.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQAcoustics.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQThermodynamics.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQLight.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQMechanics.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQCondensedMatter.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Resources\Domain Libraries\Quantities and Units\ISQChemistryMolecular.sysmlx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="Resources\Kernel Libraries\Kernel Data Type Library\Collections.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Data Type Library\ScalarValues.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Data Type Library\VectorValues.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\Quantities.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\MeasurementReferences.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQSpaceTime.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQBase.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\SI.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQ.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Base.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\SequenceFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Occurrences.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Links.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Clocks.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Objects.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\CollectionFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Transfers.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Performances.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\Metaobjects.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Semantic Library\KerML.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\BaseFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\IntegerFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\RationalFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\RealFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\ComplexFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\NumericalFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\DataFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\ScalarFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Kernel Libraries\Kernel Function Library\ControlFunctions.kermlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQCharacteristicNumbers.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\SIPrefixes.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQInformation.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQAtomicNuclear.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQElectromagnetism.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQAcoustics.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQThermodynamics.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQLight.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQMechanics.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQCondensedMatter.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Domain Libraries\Quantities and Units\ISQChemistryMolecular.sysmlx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

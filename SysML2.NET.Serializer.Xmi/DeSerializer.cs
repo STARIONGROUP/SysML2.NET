@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializer.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="loggerFactory">The injected <see cref="ILoggerFactory "/> used to set up logging</param>
         public DeSerializer(IExternalReferenceService externalReferenceService, IXmiDataReaderFacade xmiDataReaderFacade, IXmiDataCache cache, ILoggerFactory loggerFactory)
         {
-            this.loggerFactory =  loggerFactory ?? NullLoggerFactory.Instance;
+            this.loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             this.logger = this.loggerFactory.CreateLogger<DeSerializer>();
             this.cache = cache;
             this.externalReferenceService = externalReferenceService;
@@ -143,6 +143,7 @@ namespace SysML2.NET.Serializer.Xmi
         {
             stream.Seek(0, SeekOrigin.Begin);
             var stopWatch = Stopwatch.StartNew();
+
             var settings = new XmlReaderSettings();
 
             using var reader = new StreamReader(stream, detectEncodingFromByteOrderMarks: true);
@@ -159,11 +160,11 @@ namespace SysML2.NET.Serializer.Xmi
                 throw new InvalidOperationException($"The file {fileInfo.Name} does not represent a SysML:Namespace, can not process it.");
             }
 
-            var namespaceId =  xmlReader.GetAttribute("xmi:id");
+            var namespaceId = xmlReader.GetAttribute("xmi:id");
 
             if (Guid.TryParse(namespaceId, out var guid) && this.cache.TryGetData(guid, out var foundData) && foundData is INamespace existingNamespace)
             {
-                this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists",  namespaceId);
+                this.logger.LogInformation("Circular dependency spot, Namespace with id {NamespaceId} already exists", namespaceId);
                 stopWatch.Stop();
                 return existingNamespace;
             }
@@ -181,7 +182,7 @@ namespace SysML2.NET.Serializer.Xmi
 
             return readNamespace;
         }
-        
+
         /// <summary>
         /// Resolve and read all external references
         /// </summary>
@@ -196,4 +197,3 @@ namespace SysML2.NET.Serializer.Xmi
         }
     }
 }
-

@@ -1,7 +1,7 @@
 ﻿// -------------------------------------------------------------------------------------------------
 // <copyright file="XmiDataCache.cs" company="Starion Group S.A.">
 // 
-//   Copyright 2022-2025 Starion Group S.A.
+//   Copyright 2022-2026 Starion Group S.A.
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ namespace SysML2.NET.Serializer.Xmi
     /// <summary>
     /// Represents a cache for storing and retrieving XMI <see cref="IData"/> during the reading process.
     /// </summary>
-    public class XmiDataCache: IXmiDataCache
+    public class XmiDataCache : IXmiDataCache
     {
         /// <summary>
         /// Gets the cached <see cref="Dictionary{TKey,TValue}"/> of read <see cref="IData"/>. The <see cref="IData.Id"/> is used as key,
@@ -46,7 +46,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// Gets the cached <see cref="Dictionary{TKey,TValue}"/> of read multiple values references per read <see cref="IData"/>
         /// </summary>
         private readonly Dictionary<Guid, Dictionary<string, List<Guid>>> multipleReferencesCache = [];
-        
+
         /// <summary>
         /// Gets the cached <see cref="Dictionary{TKey,TValue}"/> of read single value reference per read <see cref="IData"/>
         /// </summary>
@@ -74,18 +74,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// be added again</returns>
         public bool TryAdd(IData data)
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
-
-            if (this.cache.ContainsKey(data.Id))
-            {
-                return false;
-            }
-            
-            this.cache[data.Id] = data;
-            return true;
+            return data == null ? throw new ArgumentNullException(nameof(data)) : this.cache.TryAdd(data.Id, data);
         }
 
         /// <summary>
@@ -143,7 +132,7 @@ namespace SysML2.NET.Serializer.Xmi
             }
             else
             {
-                var singleReference = new Dictionary<string,Guid>
+                var singleReference = new Dictionary<string, Guid>
                 {
                     [propertyName] = reference
                 };
@@ -197,10 +186,10 @@ namespace SysML2.NET.Serializer.Xmi
                     {
                         this.logger.LogWarning("The reference to [{Reference}] for property [{Key}] on element type [{Element}] with id [{Id}] was not found in the cache, probably because its type is not supported.",
                             existingReference.Value, existingReference.Key, data.GetType().Name, data.Id);
-                        
+
                         continue;
                     }
-                    
+
                     var targetProperty = FindPropertyWithAttribute(data, existingReference.Key, referencedData.GetType());
 
                     if (targetProperty is null)
@@ -226,7 +215,7 @@ namespace SysML2.NET.Serializer.Xmi
                 {
                     throw new KeyNotFoundException($"The target property {existingReference.Key} was not found on {data.GetType().Name} or the type is null");
                 }
-                
+
                 var resolvedReferences = this.ResolveMultiValueReferences(existingReference.Value, existingReference.Key, underlyingType);
 
                 if (targetProperty.GetValue(data) is not IList list)
@@ -259,10 +248,10 @@ namespace SysML2.NET.Serializer.Xmi
                     this.logger.LogWarning("The reference with the id [{Key}] to [{PropertyValue}] was not found in the cache, probably because its type is not supported.", propertyName, referencedValue);
                     continue;
                 }
-                
+
                 resolvedReferences.Add(data);
             }
-            
+
             return resolvedReferences;
         }
 
