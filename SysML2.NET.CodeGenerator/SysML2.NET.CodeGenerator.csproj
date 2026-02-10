@@ -205,6 +205,12 @@
     <None Update="Templates\Uml\Partials\core-xmi-reader-partial-for-element-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Uml\core-poco-reference-resolve-extension-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-poco-reference-resolve-extension-facade-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />

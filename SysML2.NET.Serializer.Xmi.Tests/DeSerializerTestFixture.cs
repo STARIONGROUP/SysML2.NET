@@ -26,6 +26,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
+    using SysML2.NET.Serializer.Xmi.Extensions;
     using SysML2.NET.Serializer.Xmi.Readers;
 
     [TestFixture]
@@ -41,7 +42,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
                 .AddLogging(x => x.AddConsole())
                 .BuildServiceProvider();
 
-            this.xmiDataCache = new XmiDataCache(serviceProvider.GetRequiredService<ILogger<XmiDataCache>>());
+            this.xmiDataCache = new XmiDataCache(new PocoReferenceResolveExtensionsFacade(),serviceProvider.GetRequiredService<ILogger<XmiDataCache>>());
 
             this.deSerializer = new DeSerializer(new ExternalReferenceService(serviceProvider.GetRequiredService<ILogger<ExternalReferenceService>>()), new XmiDataReaderFacade(), this.xmiDataCache, serviceProvider.GetRequiredService<ILoggerFactory>());
         }
