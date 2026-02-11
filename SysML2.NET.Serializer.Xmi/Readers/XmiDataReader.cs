@@ -21,6 +21,7 @@
 namespace SysML2.NET.Serializer.Xmi.Readers
 {
     using System;
+    using System.Threading.Tasks;
     using System.Xml;
 
     using Microsoft.Extensions.Logging;
@@ -83,5 +84,13 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// <param name="currentLocation">The <see cref="Uri" /> that keep tracks of the current location</param>
         /// <returns>The read <typeparamref name="TData" /></returns>
         public abstract TData Read(XmlReader xmiReader, Uri currentLocation);
+        
+        /// <summary>
+        /// Reads asynchronously the <typeparamref name="TData" /> object from its XML representation
+        /// </summary>
+        /// <param name="xmiReader">An instance of <see cref="XmlReader" /></param>
+        /// <param name="currentLocation">The <see cref="Uri" /> that keep tracks of the current location</param>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> with the read <typeparamref name="TData" /></returns>
+        public abstract Task<TData> ReadAsync(XmlReader xmiReader, Uri currentLocation);
     }
 }

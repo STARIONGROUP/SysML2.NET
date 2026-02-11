@@ -26,6 +26,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Xml;
     
     using Microsoft.Extensions.Logging;
@@ -129,9 +130,9 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                 {{#unless this.IsTransient}}
                                     {{#unless this.IsDerived}}
                                         {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                                            {{#withPropertyClassContext property class}}
+                                            {{#withPropertyClassContextAndAsyncState property class false}}
                                                 {{> core-xmi-reader-partial-for-element-template this}}
-                                            {{/withPropertyClassContext}}
+                                            {{/withPropertyClassContextAndAsyncState}}
                                         {{/unless}}
                                     {{/unless}}
                                 {{/unless}}
@@ -142,6 +143,87 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 }
             }
     
+            return poco;
+        }
+
+        /// <summary>
+        /// Reads asynchronously the <see cref="I{{this.Name}}" /> object from its XML representation
+        /// </summary>
+        /// <param name="xmiReader">An instance of <see cref="XmlReader" /></param>
+        /// <param name="currentLocation">The <see cref="Uri" /> that keep tracks of the current location</param>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> with the read <see cref="I{{this.Name}}" /></returns>
+        public override async Task<I{{this.Name}}> ReadAsync(XmlReader xmiReader, Uri currentLocation)
+        {
+            if (xmiReader == null)
+            {
+                throw new ArgumentNullException(nameof(xmiReader));
+            }
+        
+            var xmlLineInfo = xmiReader as IXmlLineInfo;
+        
+            I{{this.Name}} poco = new SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{this.Name}}();
+        
+            if (await xmiReader.MoveToContentAsync() == XmlNodeType.Element)
+            {
+                this.logger.LogTrace("reading {{this.Name}} at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
+                var xsiType = xmiReader.GetAttribute("xsi:type");
+            
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:{{this.Name}}")
+                {
+                    throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the {{this.Name}}Reader");
+                }
+            
+                var xmiId = xmiReader.GetAttribute("xmi:id");
+            
+                if (!Guid.TryParse(xmiId, out var guid))
+                {
+                    throw new InvalidOperationException($"The xmi:id {xmiId} could not be parsed");
+                }
+            
+                poco.Id = guid;
+            
+                if (!this.Cache.TryAdd(poco) && this.logger.IsEnabled(LogLevel.Critical))
+                {
+                    this.logger.LogCritical("Failed to add element type [{Poco}] with id [{Id}] as it was already in the Cache. The XMI document seems to have duplicate xmi:id values", "{{this.Name}}", poco.Id);
+                }
+        
+                    {{#with this as |class| }}
+                        {{ #each (Class.QueryAllProperties this) as | property | }}
+                        {{#unless this.IsTransient}}
+                            {{#unless this.IsDerived}}
+                                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                    {{#withPropertyClassContext property class}}
+                                        {{> core-xmi-reader-partial-for-attribute-template this}}
+                                    {{/withPropertyClassContext}}
+                                {{/unless}}
+                            {{/unless}}
+                        {{/unless}}
+                    {{/each}}
+                    {{/with}}
+                    while(await xmiReader.ReadAsync())
+                    {
+                        if(xmiReader.NodeType == XmlNodeType.Element)
+                        {
+                            switch(xmiReader.LocalName)
+                        {
+                    {{#with this as |class| }}
+                        {{ #each (Class.QueryAllProperties this) as | property | }}
+                        {{#unless this.IsTransient}}
+                            {{#unless this.IsDerived}}
+                                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                    {{#withPropertyClassContextAndAsyncState property class true}}
+                                        {{> core-xmi-reader-partial-for-element-template this}}
+                                    {{/withPropertyClassContextAndAsyncState}}
+                                {{/unless}}
+                            {{/unless}}
+                        {{/unless}}
+                    {{/each}}
+                    {{/with}}
+                        }
+                    }
+                }
+            }
+        
             return poco;
         }
     }

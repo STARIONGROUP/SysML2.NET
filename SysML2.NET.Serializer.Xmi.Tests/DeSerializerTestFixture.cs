@@ -22,6 +22,8 @@ namespace SysML2.NET.Serializer.Xmi.Tests
 {
     using System;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -52,6 +54,21 @@ namespace SysML2.NET.Serializer.Xmi.Tests
         {
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
             Assert.That(() => this.deSerializer.DeSerialize(new Uri(filePath)), Throws.Nothing);
+        }
+        
+        [Test]
+        public async Task VerifyCanReadXmlLibraryAsync()
+        {
+            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
+            await Assert.ThatAsync(() => this.deSerializer.DeSerializeAsync(new Uri(filePath)), Throws.Nothing);
+        }
+        
+        [Test]
+        public async Task VerifyCanCancelReadXmlLibraryAsync()
+        {
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(500));
+            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
+            await Assert.ThatAsync(() => this.deSerializer.DeSerializeAsync(new Uri(filePath), cancellationTokenSource.Token), Throws.InstanceOf<OperationCanceledException>());
         }
     }
 }

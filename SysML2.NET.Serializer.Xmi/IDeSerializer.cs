@@ -41,9 +41,25 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="fileLocation">
         /// the <see cref="Uri"/> that locates the XMI file
         /// </param>
+        /// <exception cref="ArgumentNullException">If the <see cref="Uri"/> is null</exception>
+        /// <exception cref="FileNotFoundException">If the <see cref="Uri"/> does not locate an existing file</exception>
         /// <returns>
         /// The read <see cref="INamespace"/>
         /// </returns>
         INamespace DeSerialize(Uri fileLocation);
+
+        /// <summary>
+        /// Deserializes asynchronously the XMI file to a read <see cref="INamespace"/>
+        /// </summary>
+        /// <param name="fileLocation">
+        /// the <see cref="Uri"/> that locates the XMI file
+        /// </param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the read process</param>
+        /// <exception cref="ArgumentNullException">If the <see cref="Uri"/> is null</exception>
+        /// <exception cref="FileNotFoundException">If the <see cref="Uri"/> does not locate an existing file</exception>
+        /// <returns>
+        /// An awaitable <see cref="Task{TResult}"/> with the read <see cref="INamespace"/>
+        /// </returns>
+        Task<INamespace> DeSerializeAsync(Uri fileLocation, CancellationToken cancellationToken = default);
     }
 }
