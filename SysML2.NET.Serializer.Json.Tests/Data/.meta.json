@@ -1,0 +1,90 @@
+{
+    "index": {
+        "Base": "Base.kerml",
+        "Clocks": "Clocks.kerml",
+        "ControlPerformances": "ControlPerformances.kerml",
+        "FeatureReferencingPerformances": "FeatureReferencingPerformances.kerml",
+        "KerML": "KerML.kerml",
+        "Links": "Links.kerml",
+        "Metaobjects": "Metaobjects.kerml",
+        "Objects": "Objects.kerml",
+        "Observation": "Observation.kerml",
+        "Occurrences": "Occurrences.kerml",
+        "Performances": "Performances.kerml",
+        "SpatialFrames": "SpatialFrames.kerml",
+        "StatePerformances": "StatePerformances.kerml",
+        "Transfers": "Transfers.kerml",
+        "TransitionPerformances": "TransitionPerformances.kerml",
+        "Triggers": "Triggers.kerml"
+    },
+    "created": "2025-03-13T00:00:00Z",
+    "metamodel": "https://www.omg.org/spec/KerML/20250201",
+    "includesDerived": false,
+    "includesImplied": false,
+    "checksum": {
+        "Triggers.kerml": {
+            "value": "124cad3625935e078d1363e6100ee12537ca9c51445a18108e056db8b4885609",
+            "algorithm": "SHA256"
+        },
+        "ControlPerformances.kerml": {
+            "value": "31385be7dca94bd0538f011d5c8f7925626d54f96970769f0fdb28b2186a9a03",
+            "algorithm": "SHA256"
+        },
+        "Transfers.kerml": {
+            "value": "fa40b483a7834d89f07aad0f6f57e79244adc2a58b4396c4734bddeb297d7c46",
+            "algorithm": "SHA256"
+        },
+        "Objects.kerml": {
+            "value": "9057e2781fe8793d5108973c0647318caa26310be6231c6380152a4cbc894c25",
+            "algorithm": "SHA256"
+        },
+        "Metaobjects.kerml": {
+            "value": "983dbd85a4b183d8859326ee512fc59d991fb98a115e009e72fad21d1f9d1685",
+            "algorithm": "SHA256"
+        },
+        "Performances.kerml": {
+            "value": "fd965e184b300737a192530de0c800cdbee236cb6220612f370400da21dfb327",
+            "algorithm": "SHA256"
+        },
+        "StatePerformances.kerml": {
+            "value": "f02fb7e8de58f4304c95c575ee1bcb7d271d621ce8e336ce36ea80a4e956c3da",
+            "algorithm": "SHA256"
+        },
+        "Base.kerml": {
+            "value": "56df84cda67f62c63d4e79e2786fc26046cfa361a958c4fcf0843d32a5707e09",
+            "algorithm": "SHA256"
+        },
+        "Observation.kerml": {
+            "value": "6bc57a73c43af6f61201b6eb659024a9f08f974643eb5a101e068e3637761ee4",
+            "algorithm": "SHA256"
+        },
+        "TransitionPerformances.kerml": {
+            "value": "1ce78437c817c8359a2cad43e8e72b23dd32b81d2a69dc1126c803fae72aae70",
+            "algorithm": "SHA256"
+        },
+        "FeatureReferencingPerformances.kerml": {
+            "value": "b6f9e5349c7c7f393591c0334c3bec86f1766b3e37209819179310c2f8fe1fb7",
+            "algorithm": "SHA256"
+        },
+        "KerML.kerml": {
+            "value": "8fdf4b7416e981c895cd74b75dc14b18091d13cbcaff7cdded6f9c23e2483d58",
+            "algorithm": "SHA256"
+        },
+        "Occurrences.kerml": {
+            "value": "b3a62ce0bc3a4f7e667102b4c2f68a4928ca8efeda425c6a4c8bdeadfbc9bbc1",
+            "algorithm": "SHA256"
+        },
+        "Clocks.kerml": {
+            "value": "960ac0884935e308beea55c78ed11b6946c37a386eb7958ef2c913aa275ae4c7",
+            "algorithm": "SHA256"
+        },
+        "Links.kerml": {
+            "value": "dcf3c002717cb91f8e16f1890fdf5526f4e178ada898a189621c7d0c24b5ddc0",
+            "algorithm": "SHA256"
+        },
+        "SpatialFrames.kerml": {
+            "value": "2a7790ebc2afacbd64eb781567906921e38eff385c917be03b090b8289353de7",
+            "algorithm": "SHA256"
+        }
+    }
+}

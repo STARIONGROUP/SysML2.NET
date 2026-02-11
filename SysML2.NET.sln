@@ -63,6 +63,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.Xmi",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Serializer.Xmi.Tests", "SysML2.NET.Serializer.Xmi.Tests\SysML2.NET.Serializer.Xmi.Tests.csproj", "{0E02F812-6B73-4CD9-A96F-54D7389873CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Kpar", "SysML2.NET.Kpar\SysML2.NET.Kpar.csproj", "{D199B169-CEF0-4D6E-9CC5-83AB86EB809B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Kpar.Tests", "SysML2.NET.Kpar.Tests\SysML2.NET.Kpar.Tests.csproj", "{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +141,14 @@ Global
 		{0E02F812-6B73-4CD9-A96F-54D7389873CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E02F812-6B73-4CD9-A96F-54D7389873CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E02F812-6B73-4CD9-A96F-54D7389873CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D199B169-CEF0-4D6E-9CC5-83AB86EB809B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D199B169-CEF0-4D6E-9CC5-83AB86EB809B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D199B169-CEF0-4D6E-9CC5-83AB86EB809B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D199B169-CEF0-4D6E-9CC5-83AB86EB809B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

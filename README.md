@@ -25,6 +25,7 @@ project                                                                         
 [SysML2.NET.Extensions](https://www.nuget.org/packages/SysML2.NET.Extensions)                         | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Extensions)
 [SysML2.NET.Serializer.Json](https://www.nuget.org/packages/SysML2.NET.Serializer.Json)               | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.Json)
 [SysML2.NET.Serializer.MessagePack](https://www.nuget.org/packages/SysML2.NET.Serializer.MessagePack) | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Serializer.MessagePack)
+[SysML2.NET.Kpar](https://www.nuget.org/packages/SysML2.NET.Kpar)                                     | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.Kpar)
 [SysML2.NET.REST](https://www.nuget.org/packages/SysML2.NET.REST)                                     | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.REST)
 [SysML2.NET.DAL](https://www.nuget.org/packages/SysML2.NET.DAL)                                       | ![NuGet Version](https://img.shields.io/nuget/v/SysML2.NET.DAL)
 
