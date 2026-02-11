@@ -46,6 +46,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 options.Template(output, model);
             });
+            
+            handlebars.RegisterHelper("withPropertyClassContextAndAsyncState", (output, options, context, arguments) =>
+            {
+                var model = new
+                {
+                    property = arguments[0] as IProperty,
+                    classContext = arguments[1] as IClass,
+                    asyncState = (bool)arguments[2]
+                };
+
+                options.Template(output, model);
+            });
         }
     }
 }

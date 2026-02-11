@@ -21,6 +21,7 @@
 namespace SysML2.NET.Serializer.Xmi.Readers
 {
     using System;
+    using System.Threading.Tasks;
     using System.Xml;
 
     using Microsoft.Extensions.Logging;
@@ -46,5 +47,20 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// <returns>An instance of the read <see cref="IData"/></returns>
         /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
         IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "");
+
+        /// <summary>
+        /// Queries asynchronously an instance of an <see cref="IData" /> based on the position of the <see cref="XmlReader"/>.
+        /// When the reader is at an XML Element and has an attribute of xsi:type, the value of that attribute is used to select the appropriate
+        /// XmiElementReader from which the <see cref="IData"/> is returned.
+        /// </summary>
+        /// <param name="xmiReader">The current <see cref="XmlReader"/></param>
+        /// <param name="xmiDataCache">The <see cref="IXmiDataCache"/> to register and query read <see cref="IData"/></param>
+        /// <param name="currentLocation">The <see cref="Uri"/> that keep tracks of the current location</param>
+        /// <param name="externalReferenceService">The <see cref="IExternalReferenceService"/> used to register and process external references</param>
+        /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> used to set up logging</param>
+        /// <param name="explicitTypeName">The explicit type name to resolve, in case of un-specified xsi:type</param>
+        /// <returns>An awaitable <see cref="Task" /> with the instance of the read <see cref="IData"/></returns>
+        /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
+        Task<IData> QueryXmiDataAsync(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "");
     }
 }

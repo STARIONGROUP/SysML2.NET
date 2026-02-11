@@ -16,7 +16,11 @@ case"{{String.LowerCaseFirstLetter property.Name}}":
     }
     else
     {
-        var {{String.LowerCaseFirstLetter property.Name}}Value = (I{{property.Type.Name}})this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+        {{#if asyncState}}
+            var {{String.LowerCaseFirstLetter property.Name}}Value = (I{{property.Type.Name}})await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+        {{else}}
+            var {{String.LowerCaseFirstLetter property.Name}}Value = (I{{property.Type.Name}})this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+        {{/if}}
 
         {{#if (Property.QueryIsEnumerable property)}}
             poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}Value);
@@ -25,7 +29,11 @@ case"{{String.LowerCaseFirstLetter property.Name}}":
         {{/if}}
     }
 {{else}}
-    var {{String.LowerCaseFirstLetter property.Name}}Value = xmiReader.ReadElementContentAsString();
+    {{#if asyncState}}
+        var {{String.LowerCaseFirstLetter property.Name}}Value = await xmiReader.ReadElementContentAsStringAsync();
+    {{else}}
+        var {{String.LowerCaseFirstLetter property.Name}}Value = xmiReader.ReadElementContentAsString();
+    {{/if}}
     
     if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}Value))
     {

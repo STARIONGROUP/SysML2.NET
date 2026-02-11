@@ -27,6 +27,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Xml;
 
     using Microsoft.Extensions.Logging;
@@ -46,6 +47,12 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         private readonly Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, IData>> readerCache;
 
         /// <summary>
+        /// A dictionary that contains functions that return an awaitable <see cref="Task" /> with the <see cref="IData"/> based a key that represents the xsi Type
+        /// and a provided <see cref="IXmiDataCache"/>, <see cref="IExternalReferenceService" />, <see cref="ILoggerFactory"/> and <see cref="XmlReader"/>
+        /// </summary>
+        private readonly Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, Task<IData>>> readerAsyncCache;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="XmiDataReaderFacade"/>
         /// </summary>
         public XmiDataReaderFacade()
@@ -60,6 +67,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                     return {{ String.LowerCaseFirstLetter class.Name }}Reader.Read(subXmlReader, currentLocation);
                 },
             {{/each}}
+            };
+
+            this.readerAsyncCache = new Dictionary<string, Func<IXmiDataCache, IExternalReferenceService,ILoggerFactory, XmlReader, Uri, Task<IData>>>
+            {
+                {{ #each this as | class | }}
+                    ["sysml:{{ class.Name }}"] = async (cache, externalReferenceService, loggerFactory, xmlReader, currentLocation) =>
+                    {
+                    using var subXmlReader = xmlReader.ReadSubtree();
+                    var {{ String.LowerCaseFirstLetter class.Name }}Reader = new {{ class.Name }}Reader(cache, this, externalReferenceService, loggerFactory);
+                    return await {{ String.LowerCaseFirstLetter class.Name }}Reader.ReadAsync(subXmlReader, currentLocation);
+                    },
+                {{/each}}
             };
         }
 
@@ -78,20 +97,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
         public IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "")
         {
-            if (xmiReader == null)
-            {
-                throw new ArgumentNullException(nameof(xmiReader));
-            }
-
-            if (xmiDataCache == null)
-            {
-                throw new ArgumentNullException(nameof(xmiDataCache));
-            }
-            
-            if (currentLocation == null)
-            {
-                throw new ArgumentNullException(nameof(currentLocation));
-            }
+            AssertValidQueryXmiDataParameters(xmiReader, xmiDataCache, currentLocation);
 
             var xsiType = xmiReader.GetAttribute("xsi:type");
 
@@ -108,6 +114,65 @@ namespace SysML2.NET.Serializer.Xmi.Readers
             }
             
             throw new InvalidOperationException($"No reader found for xsi:type - {xsiType}");
+        }
+
+        /// <summary>
+        /// Queries asynchronously an instance of an <see cref="IData" /> based on the position of the <see cref="XmlReader"/>.
+        /// When the reader is at an XML Element and has an attribute of xsi:type, the value of that attribute is used to select the appropriate
+        /// XmiElementReader from which the <see cref="IData"/> is returned.
+        /// </summary>
+        /// <param name="xmiReader">The current <see cref="XmlReader"/></param>
+        /// <param name="xmiDataCache">The <see cref="IXmiDataCache"/> to register and query read <see cref="IData"/></param>
+        /// <param name="currentLocation">The <see cref="Uri"/> that keep tracks of the current location</param>
+        /// <param name="externalReferenceService">The <see cref="IExternalReferenceService"/> used to register and process external references</param>
+        /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> used to set up logging</param>
+        /// <param name="explicitTypeName">The explicit type name to resolve, in case of un-specified xsi:type</param>
+        /// <returns>An awaitable <see cref="Task" /> with the instance of the read <see cref="IData"/></returns>
+        /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
+        public Task<IData> QueryXmiDataAsync(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "")
+        {
+            AssertValidQueryXmiDataParameters(xmiReader, xmiDataCache, currentLocation);
+        
+            var xsiType = xmiReader.GetAttribute("xsi:type");
+        
+            if (xsiType == null && string.IsNullOrEmpty(explicitTypeName))
+            {
+                throw new InvalidOperationException($"The xsi:type is not specified");
+            }
+    
+            xsiType ??= explicitTypeName;
+        
+            if (this.readerAsyncCache.TryGetValue(xsiType, out var readerFactory))
+            {
+                return readerFactory(xmiDataCache, externalReferenceService, loggerFactory, xmiReader, currentLocation);
+            }
+        
+            throw new InvalidOperationException($"No reader found for xsi:type - {xsiType}");
+        }
+
+        /// <summary>
+        /// Asserts that parameters provided to QueryXmiData and QueryXmiDataAsync methods are valid
+        /// </summary>
+        /// <param name="xmiReader">The current <see cref="XmlReader"/></param>
+        /// <param name="xmiDataCache">The <see cref="IXmiDataCache"/> to register and query read <see cref="IData"/></param>
+        /// <param name="currentLocation">The <see cref="Uri"/> that keep tracks of the current location</param>
+        /// <exception cref="ArgumentNullException">If one of the parameter is null</exception>
+        private static void AssertValidQueryXmiDataParameters(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation)
+        {
+            if (xmiReader == null)
+            {
+                throw new ArgumentNullException(nameof(xmiReader));
+            }
+        
+            if (xmiDataCache == null)
+            {
+                throw new ArgumentNullException(nameof(xmiDataCache));
+            }
+        
+            if (currentLocation == null)
+            {
+                throw new ArgumentNullException(nameof(currentLocation));
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Xml;
 
     using Microsoft.Extensions.Logging;
@@ -434,6 +435,390 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     else
                                     {
                                         var typeDisjoinedValue = (IType)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+
+                                        poco.TypeDisjoined = typeDisjoinedValue;
+                                    }
+
+                                    break;
+                                }
+
+                        }
+                    }
+                }
+            }
+
+            return poco;
+        }
+
+        /// <summary>
+        /// Reads asynchronously the <see cref="IDisjoining" /> object from its XML representation
+        /// </summary>
+        /// <param name="xmiReader">An instance of <see cref="XmlReader" /></param>
+        /// <param name="currentLocation">The <see cref="Uri" /> that keep tracks of the current location</param>
+        /// <returns>An awaitable <see cref="Task{TResult}"/> with the read <see cref="IDisjoining" /></returns>
+        public override async Task<IDisjoining> ReadAsync(XmlReader xmiReader, Uri currentLocation)
+        {
+            if (xmiReader == null)
+            {
+                throw new ArgumentNullException(nameof(xmiReader));
+            }
+
+            var xmlLineInfo = xmiReader as IXmlLineInfo;
+
+            IDisjoining poco = new SysML2.NET.Core.POCO.Core.Types.Disjoining();
+
+            if (await xmiReader.MoveToContentAsync() == XmlNodeType.Element)
+            {
+                this.logger.LogTrace("reading Disjoining at line:position {LineNumber}:{LinePosition}", xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
+                var xsiType = xmiReader.GetAttribute("xsi:type");
+
+                if (!string.IsNullOrEmpty(xsiType) && xsiType != "sysml:Disjoining")
+                {
+                    throw new InvalidOperationException($"The xsi:type {xsiType} is not supported by the DisjoiningReader");
+                }
+
+                var xmiId = xmiReader.GetAttribute("xmi:id");
+
+                if (!Guid.TryParse(xmiId, out var guid))
+                {
+                    throw new InvalidOperationException($"The xmi:id {xmiId} could not be parsed");
+                }
+
+                poco.Id = guid;
+
+                if (!this.Cache.TryAdd(poco) && this.logger.IsEnabled(LogLevel.Critical))
+                {
+                    this.logger.LogCritical("Failed to add element type [{Poco}] with id [{Id}] as it was already in the Cache. The XMI document seems to have duplicate xmi:id values", "Disjoining", poco.Id);
+                }
+
+                var aliasIdsXmlAttribute = xmiReader.GetAttribute("aliasIds");
+
+                if (!string.IsNullOrWhiteSpace(aliasIdsXmlAttribute))
+                {
+                    foreach (var aliasIdsXmlAttributeValue in aliasIdsXmlAttribute.Split(SplitMultiReference, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        poco.AliasIds.Add(aliasIdsXmlAttributeValue);
+                    }
+                }
+
+                var declaredNameXmlAttribute = xmiReader.GetAttribute("declaredName");
+
+                if (!string.IsNullOrWhiteSpace(declaredNameXmlAttribute))
+                {
+                    poco.DeclaredName = declaredNameXmlAttribute;
+                }
+
+                var declaredShortNameXmlAttribute = xmiReader.GetAttribute("declaredShortName");
+
+                if (!string.IsNullOrWhiteSpace(declaredShortNameXmlAttribute))
+                {
+                    poco.DeclaredShortName = declaredShortNameXmlAttribute;
+                }
+
+                var disjoiningTypeXmlAttribute = xmiReader.GetAttribute("disjoiningType");
+
+                if (!string.IsNullOrWhiteSpace(disjoiningTypeXmlAttribute))
+                {
+                    if (Guid.TryParse(disjoiningTypeXmlAttribute, out var disjoiningTypeXmlAttributeReference))
+                    {
+                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "disjoiningType", disjoiningTypeXmlAttributeReference);
+                    }
+                }
+
+                var elementIdXmlAttribute = xmiReader.GetAttribute("elementId");
+
+                if (!string.IsNullOrWhiteSpace(elementIdXmlAttribute))
+                {
+                    poco.ElementId = elementIdXmlAttribute;
+                }
+
+                var isImpliedXmlAttribute = xmiReader.GetAttribute("isImplied");
+
+                if (!string.IsNullOrWhiteSpace(isImpliedXmlAttribute))
+                {
+                    if (bool.TryParse(isImpliedXmlAttribute, out var isImpliedXmlAttributeAsBool))
+                    {
+                        poco.IsImplied = isImpliedXmlAttributeAsBool;
+                    }
+                }
+
+                var isImpliedIncludedXmlAttribute = xmiReader.GetAttribute("isImpliedIncluded");
+
+                if (!string.IsNullOrWhiteSpace(isImpliedIncludedXmlAttribute))
+                {
+                    if (bool.TryParse(isImpliedIncludedXmlAttribute, out var isImpliedIncludedXmlAttributeAsBool))
+                    {
+                        poco.IsImpliedIncluded = isImpliedIncludedXmlAttributeAsBool;
+                    }
+                }
+
+                var ownedRelatedElementXmlAttribute = xmiReader.GetAttribute("ownedRelatedElement");
+
+                if (!string.IsNullOrWhiteSpace(ownedRelatedElementXmlAttribute))
+                {
+                    var ownedRelatedElementXmlAttributeReferences = new List<Guid>();
+
+                    foreach (var ownedRelatedElementXmlAttributeValue in ownedRelatedElementXmlAttribute.Split(SplitMultiReference, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        if (Guid.TryParse(ownedRelatedElementXmlAttributeValue, out var ownedRelatedElementXmlAttributeReference))
+                        {
+                            ownedRelatedElementXmlAttributeReferences.Add(ownedRelatedElementXmlAttributeReference);
+                        }
+                    }
+
+                    if (ownedRelatedElementXmlAttributeReferences.Count != 0)
+                    {
+                        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelatedElement", ownedRelatedElementXmlAttributeReferences);
+                    }
+                }
+
+                var ownedRelationshipXmlAttribute = xmiReader.GetAttribute("ownedRelationship");
+
+                if (!string.IsNullOrWhiteSpace(ownedRelationshipXmlAttribute))
+                {
+                    var ownedRelationshipXmlAttributeReferences = new List<Guid>();
+
+                    foreach (var ownedRelationshipXmlAttributeValue in ownedRelationshipXmlAttribute.Split(SplitMultiReference, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        if (Guid.TryParse(ownedRelationshipXmlAttributeValue, out var ownedRelationshipXmlAttributeReference))
+                        {
+                            ownedRelationshipXmlAttributeReferences.Add(ownedRelationshipXmlAttributeReference);
+                        }
+                    }
+
+                    if (ownedRelationshipXmlAttributeReferences.Count != 0)
+                    {
+                        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelationship", ownedRelationshipXmlAttributeReferences);
+                    }
+                }
+
+                var owningRelatedElementXmlAttribute = xmiReader.GetAttribute("owningRelatedElement");
+
+                if (!string.IsNullOrWhiteSpace(owningRelatedElementXmlAttribute))
+                {
+                    if (Guid.TryParse(owningRelatedElementXmlAttribute, out var owningRelatedElementXmlAttributeReference))
+                    {
+                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelatedElement", owningRelatedElementXmlAttributeReference);
+                    }
+                }
+
+                var owningRelationshipXmlAttribute = xmiReader.GetAttribute("owningRelationship");
+
+                if (!string.IsNullOrWhiteSpace(owningRelationshipXmlAttribute))
+                {
+                    if (Guid.TryParse(owningRelationshipXmlAttribute, out var owningRelationshipXmlAttributeReference))
+                    {
+                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelationship", owningRelationshipXmlAttributeReference);
+                    }
+                }
+
+                var typeDisjoinedXmlAttribute = xmiReader.GetAttribute("typeDisjoined");
+
+                if (!string.IsNullOrWhiteSpace(typeDisjoinedXmlAttribute))
+                {
+                    if (Guid.TryParse(typeDisjoinedXmlAttribute, out var typeDisjoinedXmlAttributeReference))
+                    {
+                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "typeDisjoined", typeDisjoinedXmlAttributeReference);
+                    }
+                }
+
+                while (await xmiReader.ReadAsync())
+                {
+                    if (xmiReader.NodeType == XmlNodeType.Element)
+                    {
+                        switch (xmiReader.LocalName)
+                        {
+                            case "aliasIds":
+                                {
+                                    var aliasIdsValue = await xmiReader.ReadElementContentAsStringAsync();
+
+                                    if (!string.IsNullOrWhiteSpace(aliasIdsValue))
+                                    {
+                                        poco.AliasIds.Add(aliasIdsValue);
+                                    }
+
+                                    break;
+                                }
+
+                            case "declaredName":
+                                {
+                                    var declaredNameValue = await xmiReader.ReadElementContentAsStringAsync();
+
+                                    if (!string.IsNullOrWhiteSpace(declaredNameValue))
+                                    {
+                                        poco.DeclaredName = declaredNameValue;
+                                    }
+
+                                    break;
+                                }
+
+                            case "declaredShortName":
+                                {
+                                    var declaredShortNameValue = await xmiReader.ReadElementContentAsStringAsync();
+
+                                    if (!string.IsNullOrWhiteSpace(declaredShortNameValue))
+                                    {
+                                        poco.DeclaredShortName = declaredShortNameValue;
+                                    }
+
+                                    break;
+                                }
+
+                            case "disjoiningType":
+                                {
+                                    var hrefAttribute = xmiReader.GetAttribute("href");
+
+                                    if (!string.IsNullOrWhiteSpace(hrefAttribute))
+                                    {
+                                        var hrefSplit = hrefAttribute.Split('#');
+                                        this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
+                                        var disjoiningTypeId = Guid.Parse(hrefSplit[1]);
+                                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "disjoiningType", disjoiningTypeId);
+                                    }
+                                    else
+                                    {
+                                        var disjoiningTypeValue = (IType)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+
+                                        poco.DisjoiningType = disjoiningTypeValue;
+                                    }
+
+                                    break;
+                                }
+
+                            case "elementId":
+                                {
+                                    var elementIdValue = await xmiReader.ReadElementContentAsStringAsync();
+
+                                    if (!string.IsNullOrWhiteSpace(elementIdValue))
+                                    {
+                                        poco.ElementId = elementIdValue;
+                                    }
+
+                                    break;
+                                }
+
+                            case "isImplied":
+                                {
+                                    var isImpliedValue = await xmiReader.ReadElementContentAsStringAsync();
+
+                                    if (!string.IsNullOrWhiteSpace(isImpliedValue))
+                                    {
+                                        poco.IsImplied = bool.Parse(isImpliedValue);
+                                    }
+
+                                    break;
+                                }
+
+                            case "isImpliedIncluded":
+                                {
+                                    var isImpliedIncludedValue = await xmiReader.ReadElementContentAsStringAsync();
+
+                                    if (!string.IsNullOrWhiteSpace(isImpliedIncludedValue))
+                                    {
+                                        poco.IsImpliedIncluded = bool.Parse(isImpliedIncludedValue);
+                                    }
+
+                                    break;
+                                }
+
+                            case "ownedRelatedElement":
+                                {
+                                    var hrefAttribute = xmiReader.GetAttribute("href");
+
+                                    if (!string.IsNullOrWhiteSpace(hrefAttribute))
+                                    {
+                                        var hrefSplit = hrefAttribute.Split('#');
+                                        this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
+                                        var ownedRelatedElementId = Guid.Parse(hrefSplit[1]);
+                                        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelatedElement", ownedRelatedElementId);
+                                    }
+                                    else
+                                    {
+                                        var ownedRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+
+                                        poco.OwnedRelatedElement.Add(ownedRelatedElementValue);
+                                    }
+
+                                    break;
+                                }
+
+                            case "ownedRelationship":
+                                {
+                                    var hrefAttribute = xmiReader.GetAttribute("href");
+
+                                    if (!string.IsNullOrWhiteSpace(hrefAttribute))
+                                    {
+                                        var hrefSplit = hrefAttribute.Split('#');
+                                        this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
+                                        var ownedRelationshipId = Guid.Parse(hrefSplit[1]);
+                                        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelationship", ownedRelationshipId);
+                                    }
+                                    else
+                                    {
+                                        var ownedRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+
+                                        poco.OwnedRelationship.Add(ownedRelationshipValue);
+                                    }
+
+                                    break;
+                                }
+
+                            case "owningRelatedElement":
+                                {
+                                    var hrefAttribute = xmiReader.GetAttribute("href");
+
+                                    if (!string.IsNullOrWhiteSpace(hrefAttribute))
+                                    {
+                                        var hrefSplit = hrefAttribute.Split('#');
+                                        this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
+                                        var owningRelatedElementId = Guid.Parse(hrefSplit[1]);
+                                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelatedElement", owningRelatedElementId);
+                                    }
+                                    else
+                                    {
+                                        var owningRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+
+                                        poco.OwningRelatedElement = owningRelatedElementValue;
+                                    }
+
+                                    break;
+                                }
+
+                            case "owningRelationship":
+                                {
+                                    var hrefAttribute = xmiReader.GetAttribute("href");
+
+                                    if (!string.IsNullOrWhiteSpace(hrefAttribute))
+                                    {
+                                        var hrefSplit = hrefAttribute.Split('#');
+                                        this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
+                                        var owningRelationshipId = Guid.Parse(hrefSplit[1]);
+                                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelationship", owningRelationshipId);
+                                    }
+                                    else
+                                    {
+                                        var owningRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+
+                                        poco.OwningRelationship = owningRelationshipValue;
+                                    }
+
+                                    break;
+                                }
+
+                            case "typeDisjoined":
+                                {
+                                    var hrefAttribute = xmiReader.GetAttribute("href");
+
+                                    if (!string.IsNullOrWhiteSpace(hrefAttribute))
+                                    {
+                                        var hrefSplit = hrefAttribute.Split('#');
+                                        this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
+                                        var typeDisjoinedId = Guid.Parse(hrefSplit[1]);
+                                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "typeDisjoined", typeDisjoinedId);
+                                    }
+                                    else
+                                    {
+                                        var typeDisjoinedValue = (IType)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
                                         poco.TypeDisjoined = typeDisjoinedValue;
                                     }
