@@ -67,7 +67,7 @@ namespace SysML2.NET.Extensions
                 throw new InvalidOperationException("The relationship can not own itself.");
             }
 
-            // Missing logic: Child can not contain Parent at any containment level
+            // Missing logic: Target can not contain Source at any containment level
 
             if (bridgeRelationship.OwningRelatedElement != null && bridgeRelationship.OwningRelatedElement != source)
             {
