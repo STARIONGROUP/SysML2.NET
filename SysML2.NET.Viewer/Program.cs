@@ -36,7 +36,6 @@ namespace SysML2.NET.Viewer
     using Radzen;
 
     using Serilog;
-    using Serilog.Events;
     
     using SySML2.NET.REST;
     using SysML2.NET.Serializer.Json;
@@ -57,14 +56,12 @@ namespace SysML2.NET.Viewer
         /// </returns>
         public static async Task Main(string[] args)
         {
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.BrowserConsole()
+                .ReadFrom.Configuration(builder.Configuration)
                 .CreateLogger();
 
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.Services.AddLogging(loggingBuilder =>
                 loggingBuilder.AddSerilog(dispose: true));
 
