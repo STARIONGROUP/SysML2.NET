@@ -22,7 +22,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SysML2.NET\SysML2.NET.csproj"/>
+        <ProjectReference Include="..\SysML2.NET.Extensions\SysML2.NET.Extensions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Sbom.Targets" Version="4.1.5" PrivateAssets="all" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Include="..\cdp4-icon.png" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
