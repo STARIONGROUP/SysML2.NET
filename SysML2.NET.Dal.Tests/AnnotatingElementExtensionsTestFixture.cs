@@ -31,6 +31,7 @@ namespace SysML2.NET.Dal.Tests
     using SysML2.NET.Core.POCO.Root.Namespaces;
 
     using SysML2.NET.Dal;
+    using SysML2.NET.Extensions;
 
     /// <summary>
     /// Suite of tests for the <see cref="AnnotatingElementExtensions"/> class
@@ -63,11 +64,12 @@ namespace SysML2.NET.Dal.Tests
                 DeclaredName = "declared name",
                 DeclaredShortName = "declared shortname",
                 ElementId = "element id",
-                IsImpliedIncluded = true,
-                OwnedRelationship = new List<IRelationship>{ ownedMemberShip },
-                OwningRelationship = owningMemberShip
+                IsImpliedIncluded = true
             };
 
+            ((IContainedElement)poco).OwnedRelationship.Add(ownedMemberShip);
+            ((IContainedElement)poco).OwningRelationship = owningMemberShip;
+            
             var dto = poco.ToDto();
 
             Assert.That(dto.Id, Is.EqualTo(poco.Id));

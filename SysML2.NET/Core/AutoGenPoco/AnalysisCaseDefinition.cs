@@ -58,6 +58,7 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     using SysML2.NET.Core.POCO.Systems.UseCases;
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
+    using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
 
     /// <summary>
@@ -65,8 +66,19 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
     /// </summary>
     [Class(xmiId: "_19_0_2_59601fc_1590260221442_937295_1064", isAbstract: false, isFinalSpecialization: false, isActive: false)]
     [GeneratedCode("SysML2.NET", "latest")]
-    public partial class AnalysisCaseDefinition : IAnalysisCaseDefinition
+    public partial class AnalysisCaseDefinition : IAnalysisCaseDefinition, IContainedElement
     {
+        /// <summary>
+        /// Initialize a new instance of <see cref="AnalysisCaseDefinition" />
+        /// </summary>
+        public AnalysisCaseDefinition()
+        {
+            ((IContainedElement)this).OwnedRelationship = new ContainerList<IElement, IRelationship>(this,
+            (relationship, element) => ((IContainedRelationship)relationship).OwningRelatedElement = element,
+            relationship => relationship.OwningRelatedElement);
+
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>
@@ -637,7 +649,10 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_217766_16748", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwnedRelationship")]
-        public List<IRelationship> OwnedRelationship { get; set; } = [];
+        public IReadOnlyCollection<IRelationship> OwnedRelationship => ((IContainedElement)this).OwnedRelationship;
+
+        /// <summary>Backing field for IElement.OwnedRelationship</summary>
+        ContainerList<IElement, IRelationship> IContainedElement.OwnedRelationship { get; set; }
 
         /// <summary>
         /// The RenderingUsages that are ownedUsages of this Definition.
@@ -771,7 +786,10 @@ namespace SysML2.NET.Core.POCO.Systems.AnalysisCases
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_482273_43303", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_585972_43176")]
         [Implements(implementation: "IElement.OwningRelationship")]
-        public IRelationship OwningRelationship { get; set; }
+        public IRelationship OwningRelationship => ((IContainedElement)this).OwningRelationship;
+
+        /// <summary>Backing field for IElement.OwningRelationship</summary>
+        IRelationship IContainedElement.OwningRelationship { get; set; }
 
         /// <summary>
         /// The parameters of this Behavior, which are defined as its directedFeatures, whose values are passed

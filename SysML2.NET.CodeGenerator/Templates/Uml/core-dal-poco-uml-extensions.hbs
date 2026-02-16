@@ -30,6 +30,7 @@ namespace SysML2.NET.Dal
     using System.Linq;
 
     using Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
+    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
     /// A static class that provides extension methods for the <see cref="Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/> class
@@ -78,7 +79,11 @@ namespace SysML2.NET.Dal
                     
                             foreach (var identifier in {{ property.Name}}ToDelete)
                             {
-                                poco.{{ String.PascalCase property.Name}}.Remove(poco.{{ String.PascalCase property.Name}}.Single(x => x.Id == identifier));
+                        {{#if property.IsComposite }}
+                            ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}}.Remove(poco.{{ String.PascalCase property.Name}}.Single(x => x.Id == identifier));
+                        {{else}}
+                            poco.{{ String.PascalCase property.Name}}.Remove(poco.{{ String.PascalCase property.Name}}.Single(x => x.Id == identifier));
+                        {{/if}}
                             }
                     
                         {{#if property.IsComposite }}
@@ -146,12 +151,22 @@ namespace SysML2.NET.Dal
                         {
                             if (cache.TryGetValue(identifier, out lazyPoco))
                             {
-                                {{#if (Property.IsOfTypeBaseElement property)}}
-                                poco.{{ String.PascalCase property.Name}}.Add(lazyPoco.Value);
-                                {{else if property.Type.IsAbstract }}
-                                poco.{{ String.PascalCase property.Name}}.Add((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value);
+                                {{#if property.IsComposite}}
+                                    {{#if (Property.IsOfTypeBaseElement property)}}
+                                        ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}}.Add(lazyPoco.Value);
+                                    {{else if property.Type.IsAbstract }}
+                                        ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}}.Add((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value);
+                                    {{else}}
+                                        ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}}.Add((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value);
+                                    {{/if}}
                                 {{else}}
-                                poco.{{ String.PascalCase property.Name}}.Add((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value);
+                                    {{#if (Property.IsOfTypeBaseElement property)}}
+                                        poco.{{ String.PascalCase property.Name}}.Add(lazyPoco.Value);
+                                    {{else if property.Type.IsAbstract }}
+                                        poco.{{ String.PascalCase property.Name}}.Add((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value);
+                                    {{else}}
+                                        poco.{{ String.PascalCase property.Name}}.Add((Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value);
+                                    {{/if}}
                                 {{/if}}
                             }
                         }
@@ -159,33 +174,61 @@ namespace SysML2.NET.Dal
                     {{else if (Property.QueryIsNullable property) }}
                         if (dto.{{ String.PascalCase property.Name}}.HasValue && cache.TryGetValue(dto.{{ String.PascalCase property.Name}}.Value, out lazyPoco))
                         {
-                            {{#if (Property.IsOfTypeBaseElement property)}}
-                            poco.{{ String.PascalCase property.Name}} = lazyPoco.Value;
-                            {{else if property.Type.IsAbstract }}
-                            poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value;
+                            {{#if property.Opposite.IsComposite}}
+                                {{#if (Property.IsOfTypeBaseElement property)}}
+                                    ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}} = lazyPoco.Value;
+                                {{else if property.Type.IsAbstract }}
+                                    ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value;
+                                {{else}}
+                                    ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value;
+                                {{/if}}
                             {{else}}
-                            poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value;
+                                {{#if (Property.IsOfTypeBaseElement property)}}
+                                    poco.{{ String.PascalCase property.Name}} = lazyPoco.Value;
+                                {{else if property.Type.IsAbstract }}
+                                    poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value;
+                                {{else}}
+                                    poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value;
+                                {{/if}}
                             {{/if}}
                         }
                         else
                         {
-                            poco.{{ String.PascalCase property.Name}} = null;
+                            {{#if property.Opposite.IsComposite}}
+                                ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}} = null;
+                            {{else}}
+                                poco.{{ String.PascalCase property.Name}} = null;
+                            {{/if}}                        
                         }
 
                     {{else}}
                         if (cache.TryGetValue(dto.{{ String.PascalCase property.Name}}, out lazyPoco))
                         {
-                            {{#if (Property.IsOfTypeBaseElement property)}}
-                            poco.{{ String.PascalCase property.Name}} = lazyPoco.Value;
-                            {{else if property.Type.IsAbstract }}
-                            poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value;
+                            {{#if property.Opposite.IsComposite}}
+                                {{#if (Property.IsOfTypeBaseElement property)}}
+                                    ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}} = lazyPoco.Value;
+                                {{else if property.Type.IsAbstract }}
+                                    ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value;
+                                {{else}}
+                                    ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value;
+                                {{/if}}
                             {{else}}
-                            poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value;
+                                {{#if (Property.IsOfTypeBaseElement property)}}
+                                    poco.{{ String.PascalCase property.Name}} = lazyPoco.Value;
+                                {{else if property.Type.IsAbstract }}
+                                    poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.I{{ property.Type.Name }})lazyPoco.Value;
+                                {{else}}
+                                    poco.{{ String.PascalCase property.Name}} = (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace property.Type }}.{{ property.Type.Name }})lazyPoco.Value;
+                                {{/if}}
                             {{/if}}
                         }
                         else
                         {
-                            poco.{{ String.PascalCase property.Name}} = null;
+                            {{#if property.Opposite.IsComposite}}
+                                ((IContained{{property.Owner.Name}})poco).{{ String.PascalCase property.Name}} = null;            
+                            {{else}}
+                                poco.{{ String.PascalCase property.Name}} = null;
+                            {{/if}}
                         }
 
                     {{/if}}

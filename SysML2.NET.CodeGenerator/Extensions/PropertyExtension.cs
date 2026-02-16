@@ -74,5 +74,23 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             return property.IsDerived || property.IsDerivedUnion ? StringExtensions.LowerCaseFirstLetter(property.Name) : StringExtensions.CapitalizeFirstLetter(property.Name);
         }
+
+        /// <summary>
+        /// Asserts that the property is one of the part of a Composite Aggregation that is not derived
+        /// </summary>
+        /// <param name="property">The property to check</param>
+        /// <exception cref="ArgumentNullException">If the provided <see cref="IProperty"/> is null</exception>
+        /// <returns>True if the property is composite and not derived or if the opposite property is Composite and not derived</returns>
+        public static bool QueryPropertyIsPartOfNonDerivedCompositeAggregation(this IProperty property)
+        {
+            ArgumentNullException.ThrowIfNull(property);
+
+            if (property.IsComposite && !property.IsDerived)
+            {
+                return true;
+            }
+
+            return property.Opposite is { IsComposite: true, IsDerived: false };
+        }
     }
 }

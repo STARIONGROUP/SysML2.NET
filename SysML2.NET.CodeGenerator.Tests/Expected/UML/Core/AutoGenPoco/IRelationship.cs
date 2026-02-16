@@ -62,14 +62,14 @@ namespace SysML2.NET.Core.POCO.Root.Elements
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1533160674986_59873_43302", aggregation: AggregationKind.Composite, lowerValue: 0, upperValue: int.MaxValue, isOrdered: true, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        List<IElement> OwnedRelatedElement { get; set; }
+        IReadOnlyCollection<IElement> OwnedRelatedElement { get; }
 
         /// <summary>
         /// The relatedElement of this Relationship that owns the Relationship, if any.
         /// </summary>
         [Property(xmiId: "_18_5_3_12e503d9_1543092026091_693018_16749", aggregation: AggregationKind.None, lowerValue: 0, upperValue: 1, isOrdered: false, isReadOnly: false, isDerived: false, isDerivedUnion: false, isUnique: true, defaultValue: null)]
         [SubsettedProperty(propertyName: "_18_5_3_12e503d9_1533160674961_132339_43177")]
-        IElement OwningRelatedElement { get; set; }
+        IElement OwningRelatedElement { get; }
 
         /// <summary>
         /// The Elements that are related by this Relationship, derived as the union of the source and target

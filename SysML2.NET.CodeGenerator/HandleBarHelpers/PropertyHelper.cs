@@ -27,6 +27,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
     using HandlebarsDotNet;
 
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+
     using SysML2.NET.CodeGenerator.Extensions;
 
     using uml4net.SimpleClassifiers;
@@ -296,7 +298,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.QueryIsEnumerable())
                 {
-                    sb.Append($"List<{typeName}> ");
+                    if (property.QueryPropertyIsPartOfNonDerivedCompositeAggregation())
+                    {
+                        sb.Append($"IReadOnlyCollection<{typeName}> ");
+                    }
+                    else
+                    {
+                        sb.Append($"List<{typeName}> ");
+                    }
                 }
                 else
                 {
@@ -319,7 +328,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 sb.Append(propertyName);
 
-                if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion)
+                if (property.IsReadOnly || property.IsDerived || property.IsDerivedUnion || property.IsComposite || property.QueryPropertyIsPartOfNonDerivedCompositeAggregation())
                 {
                     sb.Append(" { get; }");
                 }
@@ -367,7 +376,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (property.QueryIsEnumerable())
                 {
-                    sb.Append($"List<{typeName}> ");
+                    if (property.QueryPropertyIsPartOfNonDerivedCompositeAggregation())
+                    {
+                        sb.Append($"IReadOnlyCollection<{typeName}> ");
+                    }
+                    else
+                    {
+                        sb.Append($"List<{typeName}> ");
+                    }
                 }
                 else
                 {
@@ -429,9 +445,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         sb.AppendLine("{");
                         sb.AppendLine($"\tget => {GetRedefinedPropertyGetterImplementationForPoco(property, redefiningProperty, classContext)}");
-                        
+
                         var setterImplementation = GetRedefinedPropertySetterImplementationForPoco(property, redefiningProperty, classContext);
-                        
+
                         if (string.IsNullOrWhiteSpace(setterImplementation))
                         {
                             sb.AppendLine("\tset { }");
@@ -443,16 +459,25 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             sb.AppendLine($"\t{setterImplementation}");
                             sb.Append('}');
                         }
-                        
+
                         sb.Append('}');
                     }
                     else
                     {
-                        sb.Append(" { get; set; }");
-
-                        if (property.QueryIsEnumerable())
+                        if (property.QueryPropertyIsPartOfNonDerivedCompositeAggregation())
                         {
-                            sb.Append(" = [];");
+                            var propertyOwner = property.Owner as IClass;
+                            var internalInterfaceName = $"IContained{propertyOwner?.Name}";
+                            sb.Append($" => (({internalInterfaceName})this).{propertyName};");
+                        }
+                        else
+                        {
+                            sb.Append(" { get; set; }");
+
+                            if (property.QueryIsEnumerable())
+                            {
+                                sb.Append(" = [];");
+                            }
                         }
                     }
                 }
@@ -474,6 +499,28 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         sb.Append($" = {StringExtensions.CapitalizeFirstLetter(property.Type.Name)}.{StringExtensions.CapitalizeFirstLetter(property.QueryDefaultValueAsString())};");
                     }
+                }
+
+                if (property.QueryPropertyIsPartOfNonDerivedCompositeAggregation())
+                {
+                    var propertyOwner = property.Owner as IClass;
+                    var internalInterfaceName = $"IContained{propertyOwner?.Name}";
+                    sb.AppendLine(Environment.NewLine);
+                    sb.AppendLine($"/// <summary>Backing field for I{propertyOwner?.Name}.{propertyName}</summary>");
+
+                    if (property.QueryIsEnumerable())
+                    {
+                        var oppositeTypeName = property.Opposite.Type.Name;
+
+                        sb.Append($"ContainerList<I{oppositeTypeName}, {typeName}> ");
+                    }
+                    else
+                    {
+                        sb.Append($"{typeName} ");
+                    }
+
+                    sb.Append($"{internalInterfaceName}.{propertyName}");
+                    sb.Append("{ get; set; }");
                 }
 
                 writer.WriteSafeString(sb + Environment.NewLine);
@@ -718,6 +765,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         sb.AppendLine($"dto.{StringExtensions.CapitalizeFirstLetter(property.Name)} = ReadGuidBin16(ref reader);");
                     }
                 }
+
                 writer.WriteSafeString(sb);
             });
 
@@ -967,7 +1015,29 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 return property.Type.Name == "Element";
             });
-        }
+
+            handlebars.RegisterHelper("Property.WriteForNonDerivedCompositeAggregation", (writer, context, _) =>
+            {
+                if (context.Value is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.WriteForNonDerivedCompositeAggregation context supposed to be IProperty");
+                }
+
+                var stringBuilder = new StringBuilder();
+                var propertyOwner = (IClass)property.Owner;
+
+                var interfaceName = propertyOwner.QueryInternalInterfaceName();
+                var propertyName = property.Name.CapitalizeFirstLetter();
+                var oppositePropertyName = property.Opposite.Name.CapitalizeFirstLetter();
+                var childVariableName = property.Type.Name.LowerCaseFirstLetter();
+                var parentVariableName = property.Opposite.Type.Name.LowerCaseFirstLetter();
+                
+                stringBuilder.AppendLine($"(({interfaceName})this).{propertyName} = new ContainerList<I{property.Opposite.Type.Name}, I{property.Type.Name}>(this, ");
+                stringBuilder.AppendLine($"({childVariableName}, {parentVariableName}) => ((IContained{property.Type.Name}){childVariableName}).{oppositePropertyName} = {parentVariableName},");
+                stringBuilder.AppendLine($"{childVariableName} => {childVariableName}.{oppositePropertyName});");
+                writer.WriteSafeString(stringBuilder + Environment.NewLine);
+            });
+    }
 
         /// <summary>
         /// Gets the getter implementation for an <see cref="IProperty"/> that has been redefined, for DTO generation
@@ -1061,7 +1131,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="redefinedProperty">The redefined property</param>
         /// <param name="redefinition">The property that redefines <paramref name="redefinedProperty"/></param>
         /// <param name="context">Gets the <see cref="IClass"/> context</param>
-        /// <returns>The setter imlementation</returns>
+        /// <returns>The setter implementation</returns>
         private static string GetRedefinedPropertySetterImplementationForDto(IProperty redefinedProperty, IProperty redefinition, IClass context)
         {
             if (redefinition.IsDerived || redefinition.IsDerivedUnion || redefinition.IsReadOnly)
@@ -1100,7 +1170,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="redefinedProperty">The redefined property</param>
         /// <param name="redefinition">The property that redefines <paramref name="redefinedProperty"/></param>
         /// <param name="context">Gets the <see cref="IClass"/> context</param>
-        /// <returns>The setter imlementation</returns>
+        /// <returns>The setter implementation</returns>
         private static string GetRedefinedPropertySetterImplementationForPoco(IProperty redefinedProperty, IProperty redefinition, IClass context)
         {
             if (redefinition.IsDerived || redefinition.IsDerivedUnion || redefinition.IsReadOnly)

@@ -101,5 +101,22 @@ namespace SysML2.NET.CodeGenerator.Extensions
         {
             return @class.QueryAllNonDerivedNonRedefinedProperties().Count;
         }
+
+        /// <summary>
+        /// Query the name of the internal interface to implement for an <see cref="IClass"/>
+        /// </summary>
+        /// <param name="umlClass">The <see cref="IClass"/></param>
+        /// <returns>The name of the internal interface to implement, if any</returns>
+        public static string QueryInternalInterfaceName(this IClass umlClass)
+        {
+            var classifiers = umlClass.QueryAllGeneralClassifiers();
+            
+            if (classifiers.Any(x => x.Name == "Relationship"))
+            {
+                return "IContainedRelationship";
+            }
+            
+            return classifiers.Any(x => x.Name == "Element") ? "IContainedElement" : string.Empty;
+        }
     }
 }

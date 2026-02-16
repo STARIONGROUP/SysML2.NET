@@ -30,6 +30,7 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
     using Microsoft.Extensions.Logging;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
     /// Provides extensions methods for the <see cref="{SysML2.NET.Core.POCO.Root.Annotations.{this.Name}}"/> to help resolve reference for properties
@@ -97,7 +98,7 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
                             throw new InvalidOperationException($"The referenced element with the id [{reference}] is a {referencedData.GetType().Name}, expected type: an IElement");
                         }
 
-                        poco.OwningRelatedElement = owningRelatedElementReference;
+                        ((IContainedRelationship)poco).OwningRelatedElement = owningRelatedElementReference;
                         return;
                     }
 
@@ -116,7 +117,7 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
                             throw new InvalidOperationException($"The referenced element with the id [{reference}] is a {referencedData.GetType().Name}, expected type: an IRelationship");
                         }
 
-                        poco.OwningRelationship = owningRelationshipReference;
+                        ((IContainedElement)poco).OwningRelationship = owningRelationshipReference;
                         return;
                     }
 
@@ -174,7 +175,7 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
                                 throw new InvalidOperationException($"The referenced element with the id [{reference}] is a {referencedData.GetType().Name}, expected type: an IElement");
                             }
 
-                            poco.OwnedRelatedElement.Add(ownedRelatedElementReference);
+                            ((IContainedRelationship)poco).OwnedRelatedElement.Add(ownedRelatedElementReference);
                         }
 
                         return;
@@ -197,7 +198,7 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
                                 throw new InvalidOperationException($"The referenced element with the id [{reference}] is a {referencedData.GetType().Name}, expected type: an IRelationship");
                             }
 
-                            poco.OwnedRelationship.Add(ownedRelationshipReference);
+                            ((IContainedElement)poco).OwnedRelationship.Add(ownedRelationshipReference);
                         }
 
                         return;

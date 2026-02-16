@@ -30,6 +30,7 @@ namespace SysML2.NET.Dal
     using System.Linq;
 
     using Core.POCO.Root.Annotations;
+    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
     /// A static class that provides extension methods for the <see cref="Core.POCO.Root.Annotations.Documentation"/> class
@@ -85,7 +86,7 @@ namespace SysML2.NET.Dal
 
             foreach (var identifier in ownedRelationshipToDelete)
             {
-                poco.OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
+                ((IContainedElement)poco).OwnedRelationship.Remove(poco.OwnedRelationship.Single(x => x.Id == identifier));
             }
 
             identifiersOfObjectsToDelete.AddRange(ownedRelationshipToDelete);
@@ -134,17 +135,17 @@ namespace SysML2.NET.Dal
             {
                 if (cache.TryGetValue(identifier, out lazyPoco))
                 {
-                    poco.OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
+                    ((IContainedElement)poco).OwnedRelationship.Add((Core.POCO.Root.Elements.IRelationship)lazyPoco.Value);
                 }
             }
 
             if (dto.OwningRelationship.HasValue && cache.TryGetValue(dto.OwningRelationship.Value, out lazyPoco))
             {
-                poco.OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
+                ((IContainedElement)poco).OwningRelationship = (Core.POCO.Root.Elements.IRelationship)lazyPoco.Value;
             }
             else
             {
-                poco.OwningRelationship = null;
+                ((IContainedElement)poco).OwningRelationship = null;
             }
 
         }

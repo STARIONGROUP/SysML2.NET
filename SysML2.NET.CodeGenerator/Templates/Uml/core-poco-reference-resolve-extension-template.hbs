@@ -30,7 +30,8 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
     using Microsoft.Extensions.Logging;
 
     using SysML2.NET.Common;
-    
+    using SysML2.NET.Core.POCO.Root.Elements;
+
     /// <summary>
     /// Provides extensions methods for the <see cref="{SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{this.Name}}"/> to help resolve reference for properties
     /// </summary>
@@ -85,7 +86,11 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
                                     throw new InvalidOperationException($"The referenced element with the id [{reference}] is a {referencedData.GetType().Name}, expected type: an I{{property.Type.Name}}");
                                 }
 
-                            poco.{{String.CapitalizeFirstLetter property.Name }} = {{String.LowerCaseFirstLetter property.Name}}Reference;
+                            {{#if property.Opposite.IsComposite}}
+                                    ((IContained{{property.Owner.Name}})poco).{{String.CapitalizeFirstLetter property.Name }} = {{String.LowerCaseFirstLetter property.Name}}Reference;
+                            {{else}}
+                                poco.{{String.CapitalizeFirstLetter property.Name }} = {{String.LowerCaseFirstLetter property.Name}}Reference;
+                            {{/if}}
                                 return;
                             }
                             
@@ -157,7 +162,11 @@ namespace SysML2.NET.Serializer.Xmi.Extensions
                                                 throw new InvalidOperationException($"The referenced element with the id [{reference}] is a {referencedData.GetType().Name}, expected type: an I{{property.Type.Name}}");
                                             }
 
+                                            {{#if property.IsComposite}}
+                                            ((IContained{{property.Owner.Name}})poco).{{String.CapitalizeFirstLetter property.Name }}.Add({{String.LowerCaseFirstLetter property.Name}}Reference);
+                                            {{else}}
                                             poco.{{String.CapitalizeFirstLetter property.Name }}.Add({{String.LowerCaseFirstLetter property.Name}}Reference);
+                                            {{/if}}      
                                         }
                                 
                                         return;
