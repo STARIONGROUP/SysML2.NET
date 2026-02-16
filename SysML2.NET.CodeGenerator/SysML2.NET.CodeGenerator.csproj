@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>12.0</LangVersion>
-    <Version>0.16.0</Version>
+    <Version>0.19.0</Version>
     <Description>A Library to generate SysML v2 code.</Description>
     <PackageId>SysML2.NET</PackageId>
     <Company>Starion Group S.A.</Company>
@@ -27,7 +27,7 @@
         <ProjectReference Include="..\..\..\uml4net\uml4net\uml4net.xmi\uml4net.xmi.csproj" />
         -->
     <PackageReference Include="uml4net.HandleBars" Version="6.3.2" />
-    <PackageReference Include="uml4net.Reporting" Version="6.3.2" />
+    <PackageReference Include="uml4net.Reporting" Version="6.3.3" />
     <PackageReference Include="uml4net.xmi" Version="5.3.1" />
   </ItemGroup>
   <ItemGroup>
