@@ -3,8 +3,8 @@ message: "If you use this software, please cite it as below."
 
 title: "SysML2.NET: A .NET implementation of the OMG SysML v2 specification"
 abstract: "SysML2.NET is a .NET implementation of the OMG SysML2 specification. SysML2.NET provides a number of libraries in the form of a C# SDK."
-version: "0.18.0"
-date-released: "2026-02-08"
+version: "0.19.0"
+date-released: "2026-02-16"
 url: "https://github.com/STARIONGROUP/SysML2.NET"
 
 authors:
@@ -31,6 +31,6 @@ preferred-citation:
       family-names: Théate
       affiliation: "Starion Group S.A."
     - name: "Starion Group S.A."
-  version: "0.18.0"
+  version: "0.19.0"
   url: "https://github.com/STARIONGROUP/SysML2.NET"
-  date-released: "2026-02-08"
+  date-released: "2026-02-16"
