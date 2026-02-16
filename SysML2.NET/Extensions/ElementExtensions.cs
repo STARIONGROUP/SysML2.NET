@@ -31,19 +31,20 @@ namespace SysML2.NET.Extensions
     public static class ElementExtensions
     {
         /// <summary>
-        /// Assigns the containment ownership of a child <see cref="IElement"/> to a parent <see cref="IElement"/> via the bridge <see cref="IRelationship"/>
+        /// Assigns the containment ownership of a target <see cref="IElement"/> to a source <see cref="IElement"/> via the bridge <see cref="IRelationship"/>
         /// </summary>
-        /// <param name="parent">The container<see cref="IElement"/></param>
+        /// <param name="source">The container<see cref="IElement"/></param>
         /// <param name="bridgeRelationship">The bridge <see cref="IRelationship"/></param>
-        /// <param name="child">The contained <see cref="IElement"/></param>
+        /// <param name="target">The contained <see cref="IElement"/></param>
         /// <exception cref="ArgumentNullException">If one of the parameter is null</exception>
-        /// <exception cref="InvalidOperationException">If the <paramref name="parent"/> equals the <paramref name="child"/>
-        ///  or if the <paramref name="bridgeRelationship"/> equals the <paramref name="child"/></exception>
-        public static void AssignOwnership(this IElement parent, IRelationship bridgeRelationship, IElement child)
+        /// <exception cref="InvalidOperationException">If the <paramref name="source"/> equals the <paramref name="target"/>
+        ///  or if the <paramref name="bridgeRelationship"/> equals the <paramref name="target"/></exception>
+        /// <remarks>Note: The source is the container element and the target is the containee</remarks>
+        public static void AssignOwnership(this IElement source, IRelationship bridgeRelationship, IElement target)
         {
-            if (parent == null)
+            if (source == null)
             {
-                throw new ArgumentNullException(nameof(parent));
+                throw new ArgumentNullException(nameof(source));
             }
 
             if (bridgeRelationship == null)
@@ -51,41 +52,41 @@ namespace SysML2.NET.Extensions
                 throw new ArgumentNullException(nameof(bridgeRelationship));
             }
 
-            if (child == null)
+            if (target == null)
             {
-                throw new ArgumentNullException(nameof(child));
+                throw new ArgumentNullException(nameof(target));
             }
 
-            if (parent == child)
+            if (source == target)
             {
                 throw new InvalidOperationException("The parent cannot own itself.");
             }
 
-            if (bridgeRelationship == child)
+            if (bridgeRelationship == target)
             {
                 throw new InvalidOperationException("The relationship can not own itself.");
             }
 
             // Missing logic: Child can not contain Parent at any containment level
 
-            if (bridgeRelationship.OwningRelatedElement != null && bridgeRelationship.OwningRelatedElement != parent)
+            if (bridgeRelationship.OwningRelatedElement != null && bridgeRelationship.OwningRelatedElement != source)
             {
                 ((IContainedElement)bridgeRelationship.OwningRelatedElement).OwnedRelationship.Remove(bridgeRelationship);
             }
 
-            ((IContainedRelationship)bridgeRelationship).OwningRelatedElement = parent;
+            ((IContainedRelationship)bridgeRelationship).OwningRelatedElement = source;
             
-            if (!parent.OwnedRelationship.Contains(bridgeRelationship))
+            if (!source.OwnedRelationship.Contains(bridgeRelationship))
             {
-                ((IContainedElement)parent).OwnedRelationship.Add(bridgeRelationship);
+                ((IContainedElement)source).OwnedRelationship.Add(bridgeRelationship);
             }
 
-            if (child.OwningRelationship != null && child.OwningRelationship != bridgeRelationship)
+            if (target.OwningRelationship != null && target.OwningRelationship != bridgeRelationship)
             {
-                ((IContainedRelationship)child.OwningRelationship).OwnedRelatedElement.Remove(child);
+                ((IContainedRelationship)target.OwningRelationship).OwnedRelatedElement.Remove(target);
             }
             
-            ((IContainedRelationship)bridgeRelationship).OwnedRelatedElement.Add(child);
+            ((IContainedRelationship)bridgeRelationship).OwnedRelatedElement.Add(target);
         }
     }
 }
