@@ -23,9 +23,17 @@ case"{{String.LowerCaseFirstLetter property.Name}}":
         {{/if}}
 
         {{#if (Property.QueryIsEnumerable property)}}
-            poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}Value);
+            {{#if property.IsComposite}}
+                ((IContained{{property.Owner.Name}})poco).{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}Value);
+            {{else}}
+                poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}Value);
+            {{/if}}
         {{else}}
-            poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}Value;
+            {{#if property.Opposite.IsComposite}}
+                ((IContained{{property.Owner.Name}})poco).{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}Value;
+            {{else}}
+                poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}Value;
+            {{/if}}
         {{/if}}
     }
 {{else}}

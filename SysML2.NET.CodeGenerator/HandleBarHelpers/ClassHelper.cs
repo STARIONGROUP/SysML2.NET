@@ -160,14 +160,40 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             });
 
             // writes the count of non-derived and non Redefined properties of the IClass
-            handlebars.RegisterHelper("Class.WriteCountAllNonDerivedNonRedefinedProperties", (writer, context, _) => {
-
+            handlebars.RegisterHelper("Class.WriteCountAllNonDerivedNonRedefinedProperties", (writer, context, _) => 
+            {
                 if (context.Value is not IClass @class)
                 {
                     throw new ArgumentException("supposed to be IClass");
                 }
 
                 writer.WriteSafeString(@class.CountAllNonDerivedNonRedefinedProperties());
+            });
+            
+            handlebars.RegisterHelper("Class.WriteInternalInterface", (writer, context, _) =>
+            {
+                if (context.Value is not IClass umlClass)
+                {
+                    throw new ArgumentException("Class.WriteInternalInterface context supposed to be IClass");
+                }
+
+                var interfaceName = umlClass.QueryInternalInterfaceName();
+
+                if (!string.IsNullOrWhiteSpace(interfaceName))
+                {
+                    writer.WriteSafeString($", {interfaceName}");
+                }
+            });
+            
+            handlebars.RegisterHelper("Class.QueryNonDerivedCompositeAggregation", (context, _) =>
+            {
+                if (context.Value is not IClass umlClass)
+                {
+                    throw new ArgumentException("Class.QueryNonDerivedCompositeAggregation context supposed to be IClass");
+                }
+
+                var properties = umlClass.QueryAllProperties();
+                return properties.Where(x => x.IsComposite && !x.IsDerived);
             });
         }
     }

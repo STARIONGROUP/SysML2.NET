@@ -39,7 +39,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="SysML2.NET.Serializer.Json" />
         <InternalsVisibleTo Include="SysML2.NET.Dal" />
+        <InternalsVisibleTo Include="SysML2.NET.Dal.Tests" />
+        <InternalsVisibleTo Include="SysML2.NET.Serializer.Json" />
+        <InternalsVisibleTo Include="SysML2.NET.Serializer.Xmi" />
     </ItemGroup>
 </Project>

@@ -31,13 +31,24 @@ namespace SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace thi
 
     {{ #Class.WriteEnumerationNameSpaces this}}
     {{ #Class.WriteNameSpaces this POCO}}
+    using SysML2.NET.Collections;
     using SysML2.NET.Decorators;
 
     {{ #Documentation this }}
     {{ #Decorator.WriteClassAttribute this }}
     [GeneratedCode("SysML2.NET", "latest")]
-    {{ Enum.ToString this.Visibility }} partial class {{this.Name}} : I{{this.Name}}
+    {{ Enum.ToString this.Visibility }} partial class {{this.Name}} : I{{this.Name}}{{Class.WriteInternalInterface this}}
     {
+        /// <summary>
+        /// Initialize a new instance of <see cref="{{this.Name}}" />
+        /// </summary>
+        public {{this.Name}}()
+        {
+            {{#each (Class.QueryNonDerivedCompositeAggregation this) as | property |}}
+                {{ #Property.WriteForNonDerivedCompositeAggregation property }}
+            {{/each}}
+        }
+
         /// <summary>
         /// Gets or sets the unique identifier
         /// </summary>

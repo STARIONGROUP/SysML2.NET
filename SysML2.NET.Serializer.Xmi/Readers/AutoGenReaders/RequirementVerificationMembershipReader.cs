@@ -349,7 +349,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var ownedRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
-                                        poco.OwnedRelatedElement.Add(ownedRelatedElementValue);
+                                        ((IContainedRelationship)poco).OwnedRelatedElement.Add(ownedRelatedElementValue);
                                     }
 
                                     break;
@@ -370,7 +370,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var ownedRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
-                                        poco.OwnedRelationship.Add(ownedRelationshipValue);
+                                        ((IContainedElement)poco).OwnedRelationship.Add(ownedRelationshipValue);
                                     }
 
                                     break;
@@ -391,7 +391,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var owningRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
-                                        poco.OwningRelatedElement = owningRelatedElementValue;
+                                        ((IContainedRelationship)poco).OwningRelatedElement = owningRelatedElementValue;
                                     }
 
                                     break;
@@ -412,7 +412,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var owningRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
-                                        poco.OwningRelationship = owningRelationshipValue;
+                                        ((IContainedElement)poco).OwningRelationship = owningRelationshipValue;
                                     }
 
                                     break;
@@ -715,7 +715,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var ownedRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
-                                        poco.OwnedRelatedElement.Add(ownedRelatedElementValue);
+                                        ((IContainedRelationship)poco).OwnedRelatedElement.Add(ownedRelatedElementValue);
                                     }
 
                                     break;
@@ -736,7 +736,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var ownedRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
-                                        poco.OwnedRelationship.Add(ownedRelationshipValue);
+                                        ((IContainedElement)poco).OwnedRelationship.Add(ownedRelationshipValue);
                                     }
 
                                     break;
@@ -757,7 +757,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var owningRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
-                                        poco.OwningRelatedElement = owningRelatedElementValue;
+                                        ((IContainedRelationship)poco).OwningRelatedElement = owningRelatedElementValue;
                                     }
 
                                     break;
@@ -778,7 +778,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var owningRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
 
-                                        poco.OwningRelationship = owningRelationshipValue;
+                                        ((IContainedElement)poco).OwningRelationship = owningRelationshipValue;
                                     }
 
                                     break;

@@ -36,6 +36,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     {{ #Class.WriteEnumerationNameSpaces this}}
     {{ #Class.WriteNameSpaces this POCO}}
     using SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
+    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
     /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
