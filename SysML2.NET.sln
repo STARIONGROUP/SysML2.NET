@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Kpar", "SysML2.N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Kpar.Tests", "SysML2.NET.Kpar.Tests\SysML2.NET.Kpar.Tests.csproj", "{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysML2.NET.Tests", "SysML2.NET.Tests\SysML2.NET.Tests.csproj", "{C3953262-2718-4EC6-B7EB-BB94402D335A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +151,10 @@ Global
 		{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACA8A0A2-EF4E-4F22-9164-07F6550F81F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3953262-2718-4EC6-B7EB-BB94402D335A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3953262-2718-4EC6-B7EB-BB94402D335A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3953262-2718-4EC6-B7EB-BB94402D335A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3953262-2718-4EC6-B7EB-BB94402D335A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
