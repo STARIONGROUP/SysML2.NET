@@ -21,10 +21,12 @@
 namespace SysML2.NET.Tests.Extensions
 {
     using System;
-    using Core.POCO.Core.Features;
-    using Core.POCO.Core.Types;
-    using Core.POCO.Systems.Parts;
-    using NET.Extensions;
+    
+    using SysML2.NET.Core.POCO.Core.Features;
+    using SysML2.NET.Core.POCO.Core.Types;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Extensions;
+    
     using NUnit.Framework;
 
     [TestFixture]
@@ -77,9 +79,12 @@ namespace SysML2.NET.Tests.Extensions
         {
             ElementExtensions.AssignOwnership(source, bridgeRelationship, target);
 
-            Assert.That(bridgeRelationship.OwningRelatedElement, Is.EqualTo(source));
-            Assert.That(source.OwnedRelationship, Does.Contain(bridgeRelationship));
-            Assert.That(bridgeRelationship.OwnedRelatedElement, Does.Contain(target));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(bridgeRelationship.OwningRelatedElement, Is.EqualTo(source));
+                Assert.That(source.OwnedRelationship, Does.Contain(bridgeRelationship));
+                Assert.That(bridgeRelationship.OwnedRelatedElement, Does.Contain(target));
+            }
         }
     }
 }
