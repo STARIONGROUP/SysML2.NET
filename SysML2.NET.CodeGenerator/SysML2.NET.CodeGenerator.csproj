@@ -19,6 +19,7 @@
     <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="5.0.0" />
     <!--
          -->
@@ -228,5 +229,18 @@
       <Link>datamodel\KerML_only_xmi.uml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Resources\kebnf.g4">
+      <Link>datamodel\kebnf.g4</Link>
+    </Content>
+    <Content Include="..\Resources\KerML-textual-bnf.kebnf">
+      <Link>datamodel\KerML-textual-bnf.kebnf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\SysML-textual-bnf.kebnf">
+      <Link>datamodel\SysML-textual-bnf.kebnf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
