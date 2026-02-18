@@ -46,4 +46,8 @@
         <InternalsVisibleTo Include="SysML2.NET.Serializer.Json" />
         <InternalsVisibleTo Include="SysML2.NET.Serializer.Xmi" />
     </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="SysML2.NET.Tests" />
+    </ItemGroup>
 </Project>
