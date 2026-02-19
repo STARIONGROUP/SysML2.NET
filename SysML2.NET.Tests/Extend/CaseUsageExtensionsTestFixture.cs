@@ -32,25 +32,25 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeActorParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ICaseUsage)null).ComputeActorParameter());
+            Assert.That(() => ((ICaseUsage)null).ComputeActorParameter(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeCaseDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ICaseUsage)null).ComputeCaseDefinition());
+            Assert.That(() => ((ICaseUsage)null).ComputeCaseDefinition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeObjectiveRequirement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ICaseUsage)null).ComputeObjectiveRequirement());
+            Assert.That(() => ((ICaseUsage)null).ComputeObjectiveRequirement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSubjectParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ICaseUsage)null).ComputeSubjectParameter());
+            Assert.That(() => ((ICaseUsage)null).ComputeSubjectParameter(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

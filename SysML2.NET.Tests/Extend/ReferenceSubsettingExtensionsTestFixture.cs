@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeReferencingFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IReferenceSubsetting)null).ComputeReferencingFeature());
+            Assert.That(() => ((IReferenceSubsetting)null).ComputeReferencingFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

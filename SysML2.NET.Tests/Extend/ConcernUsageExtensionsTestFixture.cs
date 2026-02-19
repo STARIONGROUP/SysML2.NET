@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeConcernDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConcernUsage)null).ComputeConcernDefinition());
+            Assert.That(() => ((IConcernUsage)null).ComputeConcernDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

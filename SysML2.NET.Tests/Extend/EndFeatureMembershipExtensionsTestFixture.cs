@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedMemberFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IEndFeatureMembership)null).ComputeOwnedMemberFeature());
+            Assert.That(() => ((IEndFeatureMembership)null).ComputeOwnedMemberFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

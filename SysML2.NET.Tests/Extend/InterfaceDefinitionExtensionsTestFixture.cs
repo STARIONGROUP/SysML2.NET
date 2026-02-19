@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeInterfaceEnd_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IInterfaceDefinition)null).ComputeInterfaceEnd());
+            Assert.That(() => ((IInterfaceDefinition)null).ComputeInterfaceEnd(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,19 +32,19 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeReferent_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAssignmentActionUsage)null).ComputeReferent());
+            Assert.That(() => ((IAssignmentActionUsage)null).ComputeReferent(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeTargetArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAssignmentActionUsage)null).ComputeTargetArgument());
+            Assert.That(() => ((IAssignmentActionUsage)null).ComputeTargetArgument(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeValueExpression_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAssignmentActionUsage)null).ComputeValueExpression());
+            Assert.That(() => ((IAssignmentActionUsage)null).ComputeValueExpression(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

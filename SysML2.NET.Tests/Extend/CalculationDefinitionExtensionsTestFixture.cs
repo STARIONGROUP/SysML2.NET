@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeCalculation_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ICalculationDefinition)null).ComputeCalculation());
+            Assert.That(() => ((ICalculationDefinition)null).ComputeCalculation(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,25 +32,25 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeDoAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IStateUsage)null).ComputeDoAction());
+            Assert.That(() => ((IStateUsage)null).ComputeDoAction(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeEntryAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IStateUsage)null).ComputeEntryAction());
+            Assert.That(() => ((IStateUsage)null).ComputeEntryAction(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeExitAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IStateUsage)null).ComputeExitAction());
+            Assert.That(() => ((IStateUsage)null).ComputeExitAction(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeStateDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IStateUsage)null).ComputeStateDefinition());
+            Assert.That(() => ((IStateUsage)null).ComputeStateDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

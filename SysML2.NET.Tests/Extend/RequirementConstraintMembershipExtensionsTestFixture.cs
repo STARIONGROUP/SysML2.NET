@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedConstraint_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementConstraintMembership)null).ComputeOwnedConstraint());
+            Assert.That(() => ((IRequirementConstraintMembership)null).ComputeOwnedConstraint(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeReferencedConstraint_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementConstraintMembership)null).ComputeReferencedConstraint());
+            Assert.That(() => ((IRequirementConstraintMembership)null).ComputeReferencedConstraint(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

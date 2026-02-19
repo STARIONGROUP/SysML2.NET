@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeMetadataDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IMetadataUsage)null).ComputeMetadataDefinition());
+            Assert.That(() => ((IMetadataUsage)null).ComputeMetadataDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

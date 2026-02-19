@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeIndividualDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IOccurrenceUsage)null).ComputeIndividualDefinition());
+            Assert.That(() => ((IOccurrenceUsage)null).ComputeIndividualDefinition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOccurrenceDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IOccurrenceUsage)null).ComputeOccurrenceDefinition());
+            Assert.That(() => ((IOccurrenceUsage)null).ComputeOccurrenceDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

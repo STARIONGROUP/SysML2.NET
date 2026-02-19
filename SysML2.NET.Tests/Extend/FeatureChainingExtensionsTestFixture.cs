@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeFeatureChained_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeatureChaining)null).ComputeFeatureChained());
+            Assert.That(() => ((IFeatureChaining)null).ComputeFeatureChained(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

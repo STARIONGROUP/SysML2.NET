@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedRequirement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementVerificationMembership)null).ComputeOwnedRequirement());
+            Assert.That(() => ((IRequirementVerificationMembership)null).ComputeOwnedRequirement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeVerifiedRequirement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementVerificationMembership)null).ComputeVerifiedRequirement());
+            Assert.That(() => ((IRequirementVerificationMembership)null).ComputeVerifiedRequirement(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

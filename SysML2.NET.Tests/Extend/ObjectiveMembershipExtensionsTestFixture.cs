@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedObjectiveRequirement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IObjectiveMembership)null).ComputeOwnedObjectiveRequirement());
+            Assert.That(() => ((IObjectiveMembership)null).ComputeOwnedObjectiveRequirement(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

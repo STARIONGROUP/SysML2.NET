@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedRendering_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewRenderingMembership)null).ComputeOwnedRendering());
+            Assert.That(() => ((IViewRenderingMembership)null).ComputeOwnedRendering(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeReferencedRendering_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewRenderingMembership)null).ComputeReferencedRendering());
+            Assert.That(() => ((IViewRenderingMembership)null).ComputeReferencedRendering(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

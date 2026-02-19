@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeTargetFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeatureChainExpression)null).ComputeTargetFeature());
+            Assert.That(() => ((IFeatureChainExpression)null).ComputeTargetFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,19 +32,19 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeBound_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IMultiplicityRange)null).ComputeBound());
+            Assert.That(() => ((IMultiplicityRange)null).ComputeBound(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeLowerBound_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IMultiplicityRange)null).ComputeLowerBound());
+            Assert.That(() => ((IMultiplicityRange)null).ComputeLowerBound(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeUpperBound_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IMultiplicityRange)null).ComputeUpperBound());
+            Assert.That(() => ((IMultiplicityRange)null).ComputeUpperBound(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeIsReference_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IReferenceUsage)null).ComputeIsReference());
+            Assert.That(() => ((IReferenceUsage)null).ComputeIsReference(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

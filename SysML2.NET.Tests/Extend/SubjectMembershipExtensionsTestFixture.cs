@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedSubjectParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ISubjectMembership)null).ComputeOwnedSubjectParameter());
+            Assert.That(() => ((ISubjectMembership)null).ComputeOwnedSubjectParameter(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

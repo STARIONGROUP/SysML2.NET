@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeTypeUnioned_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IUnioning)null).ComputeTypeUnioned());
+            Assert.That(() => ((IUnioning)null).ComputeTypeUnioned(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

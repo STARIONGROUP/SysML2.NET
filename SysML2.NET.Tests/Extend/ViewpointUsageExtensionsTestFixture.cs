@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeViewpointDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewpointUsage)null).ComputeViewpointDefinition());
+            Assert.That(() => ((IViewpointUsage)null).ComputeViewpointDefinition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeViewpointStakeholder_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewpointUsage)null).ComputeViewpointStakeholder());
+            Assert.That(() => ((IViewpointUsage)null).ComputeViewpointStakeholder(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

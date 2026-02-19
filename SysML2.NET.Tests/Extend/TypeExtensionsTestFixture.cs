@@ -32,133 +32,133 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeDifferencingType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeDifferencingType());
+            Assert.That(() => ((IType)null).ComputeDifferencingType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeDirectedFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeDirectedFeature());
+            Assert.That(() => ((IType)null).ComputeDirectedFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeEndFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeEndFeature());
+            Assert.That(() => ((IType)null).ComputeEndFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeFeature());
+            Assert.That(() => ((IType)null).ComputeFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeFeatureMembership_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeFeatureMembership());
+            Assert.That(() => ((IType)null).ComputeFeatureMembership(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeInheritedFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeInheritedFeature());
+            Assert.That(() => ((IType)null).ComputeInheritedFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeInheritedMembership_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeInheritedMembership());
+            Assert.That(() => ((IType)null).ComputeInheritedMembership(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeInput_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeInput());
+            Assert.That(() => ((IType)null).ComputeInput(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeIntersectingType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeIntersectingType());
+            Assert.That(() => ((IType)null).ComputeIntersectingType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeIsConjugated_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeIsConjugated());
+            Assert.That(() => ((IType)null).ComputeIsConjugated(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeMultiplicity_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeMultiplicity());
+            Assert.That(() => ((IType)null).ComputeMultiplicity(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOutput_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOutput());
+            Assert.That(() => ((IType)null).ComputeOutput(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedConjugator_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedConjugator());
+            Assert.That(() => ((IType)null).ComputeOwnedConjugator(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedDifferencing_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedDifferencing());
+            Assert.That(() => ((IType)null).ComputeOwnedDifferencing(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedDisjoining_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedDisjoining());
+            Assert.That(() => ((IType)null).ComputeOwnedDisjoining(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedEndFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedEndFeature());
+            Assert.That(() => ((IType)null).ComputeOwnedEndFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedFeature());
+            Assert.That(() => ((IType)null).ComputeOwnedFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedFeatureMembership_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedFeatureMembership());
+            Assert.That(() => ((IType)null).ComputeOwnedFeatureMembership(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedIntersecting_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedIntersecting());
+            Assert.That(() => ((IType)null).ComputeOwnedIntersecting(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedSpecialization_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedSpecialization());
+            Assert.That(() => ((IType)null).ComputeOwnedSpecialization(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedUnioning_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeOwnedUnioning());
+            Assert.That(() => ((IType)null).ComputeOwnedUnioning(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeUnioningType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IType)null).ComputeUnioningType());
+            Assert.That(() => ((IType)null).ComputeUnioningType(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

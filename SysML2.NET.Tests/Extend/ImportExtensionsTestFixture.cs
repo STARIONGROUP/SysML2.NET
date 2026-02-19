@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeImportedElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IImport)null).ComputeImportedElement());
+            Assert.That(() => ((IImport)null).ComputeImportedElement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeImportOwningNamespace_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IImport)null).ComputeImportOwningNamespace());
+            Assert.That(() => ((IImport)null).ComputeImportOwningNamespace(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

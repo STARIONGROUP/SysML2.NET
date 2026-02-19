@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeAttributeDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAttributeUsage)null).ComputeAttributeDefinition());
+            Assert.That(() => ((IAttributeUsage)null).ComputeAttributeDefinition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeIsReference_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAttributeUsage)null).ComputeIsReference());
+            Assert.That(() => ((IAttributeUsage)null).ComputeIsReference(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeCrossingFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ICrossSubsetting)null).ComputeCrossingFeature());
+            Assert.That(() => ((ICrossSubsetting)null).ComputeCrossingFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeItemDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IItemUsage)null).ComputeItemDefinition());
+            Assert.That(() => ((IItemUsage)null).ComputeItemDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeUntilArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IWhileLoopActionUsage)null).ComputeUntilArgument());
+            Assert.That(() => ((IWhileLoopActionUsage)null).ComputeUntilArgument(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeWhileArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IWhileLoopActionUsage)null).ComputeWhileArgument());
+            Assert.That(() => ((IWhileLoopActionUsage)null).ComputeWhileArgument(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

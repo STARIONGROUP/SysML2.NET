@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeFilterCondition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IPackage)null).ComputeFilterCondition());
+            Assert.That(() => ((IPackage)null).ComputeFilterCondition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

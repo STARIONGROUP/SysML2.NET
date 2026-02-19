@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeEventOccurrence_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IEventOccurrenceUsage)null).ComputeEventOccurrence());
+            Assert.That(() => ((IEventOccurrenceUsage)null).ComputeEventOccurrence(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeIsReference_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IEventOccurrenceUsage)null).ComputeIsReference());
+            Assert.That(() => ((IEventOccurrenceUsage)null).ComputeIsReference(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

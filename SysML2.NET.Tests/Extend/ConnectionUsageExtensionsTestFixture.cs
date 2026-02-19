@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeConnectionDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConnectionUsage)null).ComputeConnectionDefinition());
+            Assert.That(() => ((IConnectionUsage)null).ComputeConnectionDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

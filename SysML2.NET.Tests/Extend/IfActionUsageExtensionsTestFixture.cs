@@ -32,19 +32,19 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeElseAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IIfActionUsage)null).ComputeElseAction());
+            Assert.That(() => ((IIfActionUsage)null).ComputeElseAction(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeIfArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IIfActionUsage)null).ComputeIfArgument());
+            Assert.That(() => ((IIfActionUsage)null).ComputeIfArgument(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeThenAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IIfActionUsage)null).ComputeThenAction());
+            Assert.That(() => ((IIfActionUsage)null).ComputeThenAction(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

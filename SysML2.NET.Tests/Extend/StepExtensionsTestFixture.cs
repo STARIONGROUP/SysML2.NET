@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeBehavior_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IStep)null).ComputeBehavior());
+            Assert.That(() => ((IStep)null).ComputeBehavior(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IStep)null).ComputeParameter());
+            Assert.That(() => ((IStep)null).ComputeParameter(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

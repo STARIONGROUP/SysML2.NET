@@ -32,25 +32,25 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeAnnotatedElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnnotatingElement)null).ComputeAnnotatedElement());
+            Assert.That(() => ((IAnnotatingElement)null).ComputeAnnotatedElement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeAnnotation_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnnotatingElement)null).ComputeAnnotation());
+            Assert.That(() => ((IAnnotatingElement)null).ComputeAnnotation(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedAnnotatingRelationship_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnnotatingElement)null).ComputeOwnedAnnotatingRelationship());
+            Assert.That(() => ((IAnnotatingElement)null).ComputeOwnedAnnotatingRelationship(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwningAnnotatingRelationship_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnnotatingElement)null).ComputeOwningAnnotatingRelationship());
+            Assert.That(() => ((IAnnotatingElement)null).ComputeOwningAnnotatingRelationship(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

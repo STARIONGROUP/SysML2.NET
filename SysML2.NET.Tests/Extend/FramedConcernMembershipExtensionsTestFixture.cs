@@ -32,12 +32,12 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedConcern_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFramedConcernMembership)null).ComputeOwnedConcern());
+            Assert.That(() => ((IFramedConcernMembership)null).ComputeOwnedConcern(), Throws.TypeOf<NotSupportedException>());
         }
         [Test]
         public void ComputeReferencedConcern_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFramedConcernMembership)null).ComputeReferencedConcern());
+            Assert.That(() => ((IFramedConcernMembership)null).ComputeReferencedConcern(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

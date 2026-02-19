@@ -32,97 +32,97 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeChainingFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeChainingFeature());
+            Assert.That(() => ((IFeature)null).ComputeChainingFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeCrossFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeCrossFeature());
+            Assert.That(() => ((IFeature)null).ComputeCrossFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeEndOwningType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeEndOwningType());
+            Assert.That(() => ((IFeature)null).ComputeEndOwningType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeFeatureTarget_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeFeatureTarget());
+            Assert.That(() => ((IFeature)null).ComputeFeatureTarget(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeFeaturingType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeFeaturingType());
+            Assert.That(() => ((IFeature)null).ComputeFeaturingType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedCrossSubsetting_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwnedCrossSubsetting());
+            Assert.That(() => ((IFeature)null).ComputeOwnedCrossSubsetting(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedFeatureChaining_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwnedFeatureChaining());
+            Assert.That(() => ((IFeature)null).ComputeOwnedFeatureChaining(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedFeatureInverting_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwnedFeatureInverting());
+            Assert.That(() => ((IFeature)null).ComputeOwnedFeatureInverting(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedRedefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwnedRedefinition());
+            Assert.That(() => ((IFeature)null).ComputeOwnedRedefinition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedReferenceSubsetting_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwnedReferenceSubsetting());
+            Assert.That(() => ((IFeature)null).ComputeOwnedReferenceSubsetting(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedSubsetting_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwnedSubsetting());
+            Assert.That(() => ((IFeature)null).ComputeOwnedSubsetting(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedTypeFeaturing_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwnedTypeFeaturing());
+            Assert.That(() => ((IFeature)null).ComputeOwnedTypeFeaturing(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedTyping_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwnedTyping());
+            Assert.That(() => ((IFeature)null).ComputeOwnedTyping(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwningFeatureMembership_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwningFeatureMembership());
+            Assert.That(() => ((IFeature)null).ComputeOwningFeatureMembership(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwningType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeOwningType());
+            Assert.That(() => ((IFeature)null).ComputeOwningType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeature)null).ComputeType());
+            Assert.That(() => ((IFeature)null).ComputeType(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IInstantiationExpression)null).ComputeArgument());
+            Assert.That(() => ((IInstantiationExpression)null).ComputeArgument(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeInstantiatedType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IInstantiationExpression)null).ComputeInstantiatedType());
+            Assert.That(() => ((IInstantiationExpression)null).ComputeInstantiatedType(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

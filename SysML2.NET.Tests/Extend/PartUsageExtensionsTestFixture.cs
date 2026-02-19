@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputePartDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IPartUsage)null).ComputePartDefinition());
+            Assert.That(() => ((IPartUsage)null).ComputePartDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

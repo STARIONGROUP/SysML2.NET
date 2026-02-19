@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeMemberElementId_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IMembership)null).ComputeMemberElementId());
+            Assert.That(() => ((IMembership)null).ComputeMemberElementId(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeMembershipOwningNamespace_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IMembership)null).ComputeMembershipOwningNamespace());
+            Assert.That(() => ((IMembership)null).ComputeMembershipOwningNamespace(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

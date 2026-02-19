@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeVerifiedRequirement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IVerificationCaseDefinition)null).ComputeVerifiedRequirement());
+            Assert.That(() => ((IVerificationCaseDefinition)null).ComputeVerifiedRequirement(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

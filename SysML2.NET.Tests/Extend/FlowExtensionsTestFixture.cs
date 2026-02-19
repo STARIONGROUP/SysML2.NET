@@ -32,37 +32,37 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeFlowEnd_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFlow)null).ComputeFlowEnd());
+            Assert.That(() => ((IFlow)null).ComputeFlowEnd(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeInteraction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFlow)null).ComputeInteraction());
+            Assert.That(() => ((IFlow)null).ComputeInteraction(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputePayloadFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFlow)null).ComputePayloadFeature());
+            Assert.That(() => ((IFlow)null).ComputePayloadFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputePayloadType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFlow)null).ComputePayloadType());
+            Assert.That(() => ((IFlow)null).ComputePayloadType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSourceOutputFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFlow)null).ComputeSourceOutputFeature());
+            Assert.That(() => ((IFlow)null).ComputeSourceOutputFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeTargetInputFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFlow)null).ComputeTargetInputFeature());
+            Assert.That(() => ((IFlow)null).ComputeTargetInputFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

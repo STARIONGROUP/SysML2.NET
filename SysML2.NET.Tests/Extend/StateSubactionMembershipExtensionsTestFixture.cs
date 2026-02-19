@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IStateSubactionMembership)null).ComputeAction());
+            Assert.That(() => ((IStateSubactionMembership)null).ComputeAction(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputePredicate_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IBooleanExpression)null).ComputePredicate());
+            Assert.That(() => ((IBooleanExpression)null).ComputePredicate(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

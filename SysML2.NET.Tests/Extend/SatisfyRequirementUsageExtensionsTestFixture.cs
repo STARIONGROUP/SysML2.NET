@@ -32,12 +32,12 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeSatisfiedRequirement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ISatisfyRequirementUsage)null).ComputeSatisfiedRequirement());
+            Assert.That(() => ((ISatisfyRequirementUsage)null).ComputeSatisfiedRequirement(), Throws.TypeOf<NotSupportedException>());
         }
         [Test]
         public void ComputeSatisfyingFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ISatisfyRequirementUsage)null).ComputeSatisfyingFeature());
+            Assert.That(() => ((ISatisfyRequirementUsage)null).ComputeSatisfyingFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

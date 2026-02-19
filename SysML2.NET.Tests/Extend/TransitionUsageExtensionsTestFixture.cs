@@ -32,37 +32,37 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeEffectAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITransitionUsage)null).ComputeEffectAction());
+            Assert.That(() => ((ITransitionUsage)null).ComputeEffectAction(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeGuardExpression_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITransitionUsage)null).ComputeGuardExpression());
+            Assert.That(() => ((ITransitionUsage)null).ComputeGuardExpression(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSource_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITransitionUsage)null).ComputeSource());
+            Assert.That(() => ((ITransitionUsage)null).ComputeSource(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSuccession_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITransitionUsage)null).ComputeSuccession());
+            Assert.That(() => ((ITransitionUsage)null).ComputeSuccession(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeTarget_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITransitionUsage)null).ComputeTarget());
+            Assert.That(() => ((ITransitionUsage)null).ComputeTarget(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeTriggerAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITransitionUsage)null).ComputeTriggerAction());
+            Assert.That(() => ((ITransitionUsage)null).ComputeTriggerAction(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

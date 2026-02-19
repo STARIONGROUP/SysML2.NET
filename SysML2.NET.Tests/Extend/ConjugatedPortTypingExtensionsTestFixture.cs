@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputePortDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConjugatedPortTyping)null).ComputePortDefinition());
+            Assert.That(() => ((IConjugatedPortTyping)null).ComputePortDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

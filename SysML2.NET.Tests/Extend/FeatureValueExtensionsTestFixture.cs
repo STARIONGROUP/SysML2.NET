@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeFeatureWithValue_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeatureValue)null).ComputeFeatureWithValue());
+            Assert.That(() => ((IFeatureValue)null).ComputeFeatureWithValue(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeValue_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFeatureValue)null).ComputeValue());
+            Assert.That(() => ((IFeatureValue)null).ComputeValue(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

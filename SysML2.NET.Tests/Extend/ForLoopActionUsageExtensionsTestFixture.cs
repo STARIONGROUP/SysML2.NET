@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeLoopVariable_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IForLoopActionUsage)null).ComputeLoopVariable());
+            Assert.That(() => ((IForLoopActionUsage)null).ComputeLoopVariable(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSeqArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IForLoopActionUsage)null).ComputeSeqArgument());
+            Assert.That(() => ((IForLoopActionUsage)null).ComputeSeqArgument(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

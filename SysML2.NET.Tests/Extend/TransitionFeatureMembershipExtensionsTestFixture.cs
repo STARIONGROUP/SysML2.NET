@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeTransitionFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITransitionFeatureMembership)null).ComputeTransitionFeature());
+            Assert.That(() => ((ITransitionFeatureMembership)null).ComputeTransitionFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

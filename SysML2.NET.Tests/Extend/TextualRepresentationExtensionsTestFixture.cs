@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeRepresentedElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITextualRepresentation)null).ComputeRepresentedElement());
+            Assert.That(() => ((ITextualRepresentation)null).ComputeRepresentedElement(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeFlowEnd_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IFlowDefinition)null).ComputeFlowEnd());
+            Assert.That(() => ((IFlowDefinition)null).ComputeFlowEnd(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeTypeDifferenced_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDifferencing)null).ComputeTypeDifferenced());
+            Assert.That(() => ((IDifferencing)null).ComputeTypeDifferenced(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

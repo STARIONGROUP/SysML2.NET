@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeRelatedElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRelationship)null).ComputeRelatedElement());
+            Assert.That(() => ((IRelationship)null).ComputeRelatedElement(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

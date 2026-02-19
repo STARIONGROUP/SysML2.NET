@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeEnumerationDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IEnumerationUsage)null).ComputeEnumerationDefinition());
+            Assert.That(() => ((IEnumerationUsage)null).ComputeEnumerationDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

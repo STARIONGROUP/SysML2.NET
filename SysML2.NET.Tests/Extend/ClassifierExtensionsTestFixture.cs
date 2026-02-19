@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedSubclassification_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IClassifier)null).ComputeOwnedSubclassification());
+            Assert.That(() => ((IClassifier)null).ComputeOwnedSubclassification(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

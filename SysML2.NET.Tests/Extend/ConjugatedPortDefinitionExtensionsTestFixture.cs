@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOriginalPortDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConjugatedPortDefinition)null).ComputeOriginalPortDefinition());
+            Assert.That(() => ((IConjugatedPortDefinition)null).ComputeOriginalPortDefinition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedPortConjugator_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConjugatedPortDefinition)null).ComputeOwnedPortConjugator());
+            Assert.That(() => ((IConjugatedPortDefinition)null).ComputeOwnedPortConjugator(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

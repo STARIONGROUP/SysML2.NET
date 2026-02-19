@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeExhibitedState_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IExhibitStateUsage)null).ComputeExhibitedState());
+            Assert.That(() => ((IExhibitStateUsage)null).ComputeExhibitedState(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

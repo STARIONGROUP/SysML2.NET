@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeAllocationDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAllocationUsage)null).ComputeAllocationDefinition());
+            Assert.That(() => ((IAllocationUsage)null).ComputeAllocationDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

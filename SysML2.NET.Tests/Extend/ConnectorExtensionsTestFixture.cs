@@ -32,37 +32,37 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeAssociation_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConnector)null).ComputeAssociation());
+            Assert.That(() => ((IConnector)null).ComputeAssociation(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeConnectorEnd_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConnector)null).ComputeConnectorEnd());
+            Assert.That(() => ((IConnector)null).ComputeConnectorEnd(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeDefaultFeaturingType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConnector)null).ComputeDefaultFeaturingType());
+            Assert.That(() => ((IConnector)null).ComputeDefaultFeaturingType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeRelatedFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConnector)null).ComputeRelatedFeature());
+            Assert.That(() => ((IConnector)null).ComputeRelatedFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSourceFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConnector)null).ComputeSourceFeature());
+            Assert.That(() => ((IConnector)null).ComputeSourceFeature(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeTargetFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConnector)null).ComputeTargetFeature());
+            Assert.That(() => ((IConnector)null).ComputeTargetFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

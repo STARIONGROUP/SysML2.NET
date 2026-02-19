@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeBodyAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ILoopActionUsage)null).ComputeBodyAction());
+            Assert.That(() => ((ILoopActionUsage)null).ComputeBodyAction(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

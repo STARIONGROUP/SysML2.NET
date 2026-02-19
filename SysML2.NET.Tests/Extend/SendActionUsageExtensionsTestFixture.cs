@@ -32,19 +32,19 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputePayloadArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ISendActionUsage)null).ComputePayloadArgument());
+            Assert.That(() => ((ISendActionUsage)null).ComputePayloadArgument(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeReceiverArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ISendActionUsage)null).ComputeReceiverArgument());
+            Assert.That(() => ((ISendActionUsage)null).ComputeReceiverArgument(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSenderArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ISendActionUsage)null).ComputeSenderArgument());
+            Assert.That(() => ((ISendActionUsage)null).ComputeSenderArgument(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeRenderingDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRenderingUsage)null).ComputeRenderingDefinition());
+            Assert.That(() => ((IRenderingUsage)null).ComputeRenderingDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

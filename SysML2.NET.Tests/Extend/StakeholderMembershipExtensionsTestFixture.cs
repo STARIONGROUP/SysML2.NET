@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedStakeholderParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IStakeholderMembership)null).ComputeOwnedStakeholderParameter());
+            Assert.That(() => ((IStakeholderMembership)null).ComputeOwnedStakeholderParameter(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

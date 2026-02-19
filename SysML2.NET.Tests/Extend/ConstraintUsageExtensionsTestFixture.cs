@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeConstraintDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConstraintUsage)null).ComputeConstraintDefinition());
+            Assert.That(() => ((IConstraintUsage)null).ComputeConstraintDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

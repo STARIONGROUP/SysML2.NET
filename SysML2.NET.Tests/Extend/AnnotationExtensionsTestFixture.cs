@@ -32,25 +32,25 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeAnnotatingElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnnotation)null).ComputeAnnotatingElement());
+            Assert.That(() => ((IAnnotation)null).ComputeAnnotatingElement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedAnnotatingElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnnotation)null).ComputeOwnedAnnotatingElement());
+            Assert.That(() => ((IAnnotation)null).ComputeOwnedAnnotatingElement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwningAnnotatedElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnnotation)null).ComputeOwningAnnotatedElement());
+            Assert.That(() => ((IAnnotation)null).ComputeOwningAnnotatedElement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwningAnnotatingElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnnotation)null).ComputeOwningAnnotatingElement());
+            Assert.That(() => ((IAnnotation)null).ComputeOwningAnnotatingElement(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

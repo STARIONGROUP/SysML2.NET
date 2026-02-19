@@ -32,12 +32,12 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeIncludedUseCase_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IUseCaseUsage)null).ComputeIncludedUseCase());
+            Assert.That(() => ((IUseCaseUsage)null).ComputeIncludedUseCase(), Throws.TypeOf<NotSupportedException>());
         }
         [Test]
         public void ComputeUseCaseDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IUseCaseUsage)null).ComputeUseCaseDefinition());
+            Assert.That(() => ((IUseCaseUsage)null).ComputeUseCaseDefinition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

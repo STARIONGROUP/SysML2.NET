@@ -32,13 +32,13 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeAnalysisCaseDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnalysisCaseUsage)null).ComputeAnalysisCaseDefinition());
+            Assert.That(() => ((IAnalysisCaseUsage)null).ComputeAnalysisCaseDefinition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeResultExpression_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnalysisCaseUsage)null).ComputeResultExpression());
+            Assert.That(() => ((IAnalysisCaseUsage)null).ComputeResultExpression(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

@@ -32,19 +32,19 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeFunction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IExpression)null).ComputeFunction());
+            Assert.That(() => ((IExpression)null).ComputeFunction(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeIsModelLevelEvaluable_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IExpression)null).ComputeIsModelLevelEvaluable());
+            Assert.That(() => ((IExpression)null).ComputeIsModelLevelEvaluable(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeResult_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IExpression)null).ComputeResult());
+            Assert.That(() => ((IExpression)null).ComputeResult(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

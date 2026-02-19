@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeMetaclass_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IMetadataFeature)null).ComputeMetaclass());
+            Assert.That(() => ((IMetadataFeature)null).ComputeMetaclass(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

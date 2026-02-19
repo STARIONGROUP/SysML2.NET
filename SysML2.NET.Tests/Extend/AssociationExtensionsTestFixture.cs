@@ -32,25 +32,25 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeAssociationEnd_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAssociation)null).ComputeAssociationEnd());
+            Assert.That(() => ((IAssociation)null).ComputeAssociationEnd(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeRelatedType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAssociation)null).ComputeRelatedType());
+            Assert.That(() => ((IAssociation)null).ComputeRelatedType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSourceType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAssociation)null).ComputeSourceType());
+            Assert.That(() => ((IAssociation)null).ComputeSourceType(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeTargetType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAssociation)null).ComputeTargetType());
+            Assert.That(() => ((IAssociation)null).ComputeTargetType(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

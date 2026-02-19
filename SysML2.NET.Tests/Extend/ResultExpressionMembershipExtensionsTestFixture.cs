@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedResultExpression_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IResultExpressionMembership)null).ComputeOwnedResultExpression());
+            Assert.That(() => ((IResultExpressionMembership)null).ComputeOwnedResultExpression(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

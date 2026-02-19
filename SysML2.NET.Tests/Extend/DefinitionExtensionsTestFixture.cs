@@ -32,188 +32,188 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeDirectedUsage_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeDirectedUsage());
+            Assert.That(() => ((IDefinition)null).ComputeDirectedUsage(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedAction_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedAction());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedAction(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedAllocation_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedAllocation());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedAllocation(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedAnalysisCase_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedAnalysisCase());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedAnalysisCase(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedAttribute_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedAttribute());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedAttribute(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedCalculation_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedCalculation());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedCalculation(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedCase_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedCase());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedCase(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedConcern_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedConcern());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedConcern(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedConnection_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedConnection());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedConnection(), Throws.TypeOf<NotSupportedException>());
         }
         
         
         [Test]
         public void ComputeOwnedConstraint_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedConstraint());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedConstraint(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedEnumeration_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedEnumeration());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedEnumeration(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedFlow_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedFlow());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedFlow(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedInterface_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedInterface());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedInterface(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedItem_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedItem());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedItem(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedMetadata_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedMetadata());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedMetadata(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedOccurrence_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedOccurrence());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedOccurrence(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedPart_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedPart());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedPart(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedPort_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedPort());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedPort(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedReference_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedReference());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedReference(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedRendering_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedRendering());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedRendering(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedRequirement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedRequirement());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedRequirement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedState_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedState());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedState(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedTransition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedTransition());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedTransition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedUsage_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedUsage());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedUsage(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedUseCase_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedUseCase());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedUseCase(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedVerificationCase_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedVerificationCase());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedVerificationCase(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedView_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedView());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedView(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedViewpoint_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeOwnedViewpoint());
+            Assert.That(() => ((IDefinition)null).ComputeOwnedViewpoint(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeUsage_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeUsage());
+            Assert.That(() => ((IDefinition)null).ComputeUsage(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeVariant_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeVariant());
+            Assert.That(() => ((IDefinition)null).ComputeVariant(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeVariantMembership_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IDefinition)null).ComputeVariantMembership());
+            Assert.That(() => ((IDefinition)null).ComputeVariantMembership(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

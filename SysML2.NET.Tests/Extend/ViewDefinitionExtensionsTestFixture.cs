@@ -32,25 +32,25 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeSatisfiedViewpoint_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewDefinition)null).ComputeSatisfiedViewpoint());
+            Assert.That(() => ((IViewDefinition)null).ComputeSatisfiedViewpoint(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeView_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewDefinition)null).ComputeView());
+            Assert.That(() => ((IViewDefinition)null).ComputeView(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeViewCondition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewDefinition)null).ComputeViewCondition());
+            Assert.That(() => ((IViewDefinition)null).ComputeViewCondition(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeViewRendering_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewDefinition)null).ComputeViewRendering());
+            Assert.That(() => ((IViewDefinition)null).ComputeViewRendering(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

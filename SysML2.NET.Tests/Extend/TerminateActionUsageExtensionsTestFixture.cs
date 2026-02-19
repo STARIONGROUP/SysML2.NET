@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeTerminatedOccurrenceArgument_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ITerminateActionUsage)null).ComputeTerminatedOccurrenceArgument());
+            Assert.That(() => ((ITerminateActionUsage)null).ComputeTerminatedOccurrenceArgument(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

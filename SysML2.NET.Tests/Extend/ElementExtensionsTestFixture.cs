@@ -32,67 +32,67 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeDocumentation_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeDocumentation());
+            Assert.That(() => ((IElement)null).ComputeDocumentation(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeIsLibraryElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeIsLibraryElement());
+            Assert.That(() => ((IElement)null).ComputeIsLibraryElement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeName_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeName());
+            Assert.That(() => ((IElement)null).ComputeName(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedAnnotation_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeOwnedAnnotation());
+            Assert.That(() => ((IElement)null).ComputeOwnedAnnotation(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwnedElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeOwnedElement());
+            Assert.That(() => ((IElement)null).ComputeOwnedElement(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwner_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeOwner());
+            Assert.That(() => ((IElement)null).ComputeOwner(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwningMembership_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeOwningMembership());
+            Assert.That(() => ((IElement)null).ComputeOwningMembership(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeOwningNamespace_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeOwningNamespace());
+            Assert.That(() => ((IElement)null).ComputeOwningNamespace(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeQualifiedName_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeQualifiedName());
+            Assert.That(() => ((IElement)null).ComputeQualifiedName(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeShortName_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeShortName());
+            Assert.That(() => ((IElement)null).ComputeShortName(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeTextualRepresentation_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElement)null).ComputeTextualRepresentation());
+            Assert.That(() => ((IElement)null).ComputeTextualRepresentation(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

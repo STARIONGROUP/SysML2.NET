@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeCondition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IElementFilterMembership)null).ComputeCondition());
+            Assert.That(() => ((IElementFilterMembership)null).ComputeCondition(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

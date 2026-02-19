@@ -32,42 +32,42 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeActorParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementDefinition)null).ComputeActorParameter());
+            Assert.That(() => ((IRequirementDefinition)null).ComputeActorParameter(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeAssumedConstraint_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementDefinition)null).ComputeAssumedConstraint());
+            Assert.That(() => ((IRequirementDefinition)null).ComputeAssumedConstraint(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeFramedConcern_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementDefinition)null).ComputeFramedConcern());
+            Assert.That(() => ((IRequirementDefinition)null).ComputeFramedConcern(), Throws.TypeOf<NotSupportedException>());
         }
         [Test]
         public void ComputeRequiredConstraint_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementDefinition)null).ComputeRequiredConstraint());
+            Assert.That(() => ((IRequirementDefinition)null).ComputeRequiredConstraint(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeStakeholderParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementDefinition)null).ComputeStakeholderParameter());
+            Assert.That(() => ((IRequirementDefinition)null).ComputeStakeholderParameter(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeSubjectParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementDefinition)null).ComputeSubjectParameter());
+            Assert.That(() => ((IRequirementDefinition)null).ComputeSubjectParameter(), Throws.TypeOf<NotSupportedException>());
         }
         
         [Test]
         public void ComputeText_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IRequirementDefinition)null).ComputeText());
+            Assert.That(() => ((IRequirementDefinition)null).ComputeText(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

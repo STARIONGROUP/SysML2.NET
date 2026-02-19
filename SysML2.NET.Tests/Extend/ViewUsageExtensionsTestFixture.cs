@@ -32,27 +32,27 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeExposedElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewUsage)null).ComputeExposedElement());
+            Assert.That(() => ((IViewUsage)null).ComputeExposedElement(), Throws.TypeOf<NotSupportedException>());
         }
         [Test]
         public void ComputeSatisfiedViewpoint_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewUsage)null).ComputeSatisfiedViewpoint());
+            Assert.That(() => ((IViewUsage)null).ComputeSatisfiedViewpoint(), Throws.TypeOf<NotSupportedException>());
         }
         [Test]
         public void ComputeViewCondition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewUsage)null).ComputeViewCondition());
+            Assert.That(() => ((IViewUsage)null).ComputeViewCondition(), Throws.TypeOf<NotSupportedException>());
         }
         [Test]
         public void ComputeViewDefinition_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewUsage)null).ComputeViewDefinition());
+            Assert.That(() => ((IViewUsage)null).ComputeViewDefinition(), Throws.TypeOf<NotSupportedException>());
         }
         [Test]
         public void ComputeViewRendering_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IViewUsage)null).ComputeViewRendering());
+            Assert.That(() => ((IViewUsage)null).ComputeViewRendering(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

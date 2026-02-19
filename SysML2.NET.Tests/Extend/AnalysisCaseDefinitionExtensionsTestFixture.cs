@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeResultExpression_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IAnalysisCaseDefinition)null).ComputeResultExpression());
+            Assert.That(() => ((IAnalysisCaseDefinition)null).ComputeResultExpression(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

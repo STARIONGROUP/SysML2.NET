@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwningFeature_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((ISubsetting)null).ComputeOwningFeature());
+            Assert.That(() => ((ISubsetting)null).ComputeOwningFeature(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

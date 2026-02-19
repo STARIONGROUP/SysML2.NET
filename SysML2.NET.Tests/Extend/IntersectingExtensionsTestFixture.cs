@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeTypeIntersected_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IIntersecting)null).ComputeTypeIntersected());
+            Assert.That(() => ((IIntersecting)null).ComputeTypeIntersected(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

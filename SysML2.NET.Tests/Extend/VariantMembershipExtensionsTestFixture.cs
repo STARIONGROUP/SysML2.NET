@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedVariantUsage_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IVariantMembership)null).ComputeOwnedVariantUsage());
+            Assert.That(() => ((IVariantMembership)null).ComputeOwnedVariantUsage(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

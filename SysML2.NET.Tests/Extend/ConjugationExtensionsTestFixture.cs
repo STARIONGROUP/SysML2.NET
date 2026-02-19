@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwningType_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IConjugation)null).ComputeOwningType());
+            Assert.That(() => ((IConjugation)null).ComputeOwningType(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

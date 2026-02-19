@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeReferencedElement_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IMetadataAccessExpression)null).ComputeReferencedElement());
+            Assert.That(() => ((IMetadataAccessExpression)null).ComputeReferencedElement(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

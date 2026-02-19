@@ -32,7 +32,7 @@ namespace SysML2.NET.Tests.Extend
         [Test]
         public void ComputeOwnedActorParameter_ThrowsNotSupportedException()
         {
-            Assert.Throws<NotSupportedException>(() => ((IActorMembership)null).ComputeOwnedActorParameter());
+            Assert.That(() => ((IActorMembership)null).ComputeOwnedActorParameter(), Throws.TypeOf<NotSupportedException>());
         }
     }
 }
