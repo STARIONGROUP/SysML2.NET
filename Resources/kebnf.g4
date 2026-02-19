@@ -31,7 +31,7 @@ element
     ;
 
 assignment
-    : property=dotted_id op=(ASSIGN | ADD_ASSIGN | BOOL_ASSIGN) content=element_core (suffix=suffix_op)?
+    : property=dotted_id op=(ASSIGN | ADD_ASSIGN | BOOL_ASSIGN) (prefix=TILDE)?content=element_core (suffix=suffix_op)?
     ;
 
 non_parsing_assignment

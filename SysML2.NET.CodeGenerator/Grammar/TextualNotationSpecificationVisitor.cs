@@ -56,6 +56,11 @@ namespace SysML2.NET.CodeGenerator.Grammar
                 TargetElementName = context.name.Text
             };
 
+            if (string.IsNullOrWhiteSpace(rule.RuleName))
+            {
+                rule.RuleName = rule.TargetElementName;
+            }
+
             if (context.parameter_list() != null)
             {
                 rule.Parameter = new RuleParameter()
@@ -103,7 +108,8 @@ namespace SysML2.NET.CodeGenerator.Grammar
                 Property = context.property.GetText(),
                 Operator = context.op.Text,
                 Suffix = context.suffix?.GetText(),
-                Value = (RuleElement)this.Visit(context.content)
+                Value = (RuleElement)this.Visit(context.content),
+                Prefix = context.prefix?.Text
             };
         }
 

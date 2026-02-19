@@ -152,7 +152,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
             foreach (var umlClass in classes)
             {
-                var generatedBuilder = template(umlClass);
+                var generatedBuilder = template(new {ClassContext = umlClass, Rules = textualNotationSpecification.Rules});
                 generatedBuilder = this.CodeCleanup(generatedBuilder);
 
                 var fileName = $"{umlClass.Name.CapitalizeFirstLetter()}TextualNotationBuilder.cs";

@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="{{ this.Name }}TextualNotationBuilder.cs" company="Starion Group S.A.">
+// <copyright file="{{ this.ClassContext.Name }}TextualNotationBuilder.cs" company="Starion Group S.A.">
 //
 //   Copyright 2022-2026 Starion Group S.A.
 //
@@ -24,29 +24,33 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="{{ this.Name }}TextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}" /> element
+    /// The <see cref="{{ this.ClassContext.Name }}TextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this.ClassContext }}.{{ this.ClassContext.Name }}" /> element
     /// </summary>
-    public class {{this.Name}}TextualNotationBuilder: TextualNotationBuilder<SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}>
+    public class {{this.ClassContext.Name}}TextualNotationBuilder: TextualNotationBuilder<SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this.ClassContext }}.{{ this.ClassContext.Name }}>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="{{this.ClassContext.Name}}TextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public {{this.Name}}TextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        public {{this.ClassContext.Name}}TextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
         {
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/>
+        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this.ClassContext }}.{{ this.ClassContext.Name }}"/>
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }}"/> from which the textual notation should be build</param>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this.ClassContext }}.{{ this.ClassContext.Name }}"/> from which the textual notation should be build</param>
         /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }}.{{ this.Name }} poco)
+        public override string BuildTextualNotation(SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this.ClassContext }}.{{ this.ClassContext.Name }} poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            {{RulesHelper.WriteForPoco this.ClassContext this.Rules}}
+            return stringBuilder.ToString();
         }
     }
 }

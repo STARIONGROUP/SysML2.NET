@@ -22,6 +22,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Grammar
 {
     using System;
     using System.IO;
+    using System.Linq;
 
     using Antlr4.Runtime;
 
@@ -54,6 +55,7 @@ namespace SysML2.NET.CodeGenerator.Tests.Grammar
             {
                 Assert.That(rules, Is.Not.Null);
                 Assert.That(rules, Is.Not.Empty);
+                Assert.That(rules.DistinctBy(x => x.RuleName), Is.EquivalentTo(rules));
             }
             
             Console.WriteLine($"Found {rules.Count} rules");
