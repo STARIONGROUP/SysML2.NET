@@ -36,8 +36,13 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         public string Operator { get; set; }
         
         /// <summary>
-        /// Getss or sets the assignment value
+        /// Gets or sets the assignment value
         /// </summary>
         public RuleElement Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets an optional prefix
+        /// </summary>
+        public string Prefix { get; set; }
     }
 }
