@@ -73,7 +73,7 @@ dotted_id
 
 suffix_op : '*' | '+' | '?' ;
 
-value_literal : ID | 'true' | 'false' | 'this' | INT | STRING | '[QualifiedName]' | SINGLE_QUOTED_STRING;
+value_literal : ID | INT | STRING | '[QualifiedName]' | SINGLE_QUOTED_STRING;
 
 // Lexer
 ASSIGN : '::=' | '=' ;
