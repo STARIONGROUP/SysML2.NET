@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class LiteralExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.LiteralExpression>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="LiteralExpressionTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public LiteralExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,30 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.LiteralExpression poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : LiteralExpression=LiteralBoolean|LiteralString|LiteralInteger|LiteralReal|LiteralInfinity
+
+            // non Terminal : LiteralBoolean; Found rule LiteralBoolean=value=BooleanValue
+
+
+            // non Terminal : LiteralString; Found rule LiteralString=value=STRING_VALUE
+
+
+            // non Terminal : LiteralInteger; Found rule LiteralInteger=value=DECIMAL_VALUE
+
+
+            // non Terminal : LiteralReal; Found rule LiteralReal=value=RealValue
+
+
+            // non Terminal : LiteralInfinity; Found rule LiteralInfinity='*'
+
+
+
+
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

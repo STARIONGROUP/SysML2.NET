@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class AnnotatingElementTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="AnnotatingElementTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public AnnotatingElementTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,31 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : AnnotatingElement=Comment|Documentation|TextualRepresentation|MetadataFeature
+
+
+
+            // non Terminal : Comment; Found rule Comment=('comment'Identification('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?)?('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT
+
+
+            // non Terminal : Documentation; Found rule Documentation='doc'Identification('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT
+
+
+
+
+            // non Terminal : TextualRepresentation; Found rule TextualRepresentation=('rep'Identification)?'language'language=STRING_VALUEbody=REGULAR_COMMENT
+
+
+
+
+
+
+            // non Terminal : MetadataFeature; Found rule MetadataFeature=(ownedRelationship+=PrefixMetadataMember)*('@'|'metadata')MetadataFeatureDeclaration('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?MetadataBody
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

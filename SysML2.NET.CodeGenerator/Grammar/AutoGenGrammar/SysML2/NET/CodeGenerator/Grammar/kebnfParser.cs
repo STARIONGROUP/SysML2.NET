@@ -40,7 +40,8 @@ public partial class kebnfParser : Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, ASSIGN=8, ADD_ASSIGN=9, 
 		BOOL_ASSIGN=10, PIPE=11, COLON=12, SEMICOLON=13, COMMA=14, LPAREN=15, 
 		RPAREN=16, LBRACK=17, RBRACK=18, LBRACE=19, RBRACE=20, DOT=21, TILDE=22, 
-		ID=23, INT=24, STRING=25, COMMENT=26, WS=27, CONTINUATION=28, NL=29;
+		UPPER_ID=23, ID=24, SINGLE_QUOTED_STRING=25, INT=26, STRING=27, COMMENT=28, 
+		WS=29, CONTINUATION=30, NL=31;
 	public const int
 		RULE_specification = 0, RULE_rule_definition = 1, RULE_parameter_list = 2, 
 		RULE_alternatives = 3, RULE_alternative = 4, RULE_element = 5, RULE_assignment = 6, 
@@ -62,8 +63,9 @@ public partial class kebnfParser : Parser {
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, "ASSIGN", "ADD_ASSIGN", 
 		"BOOL_ASSIGN", "PIPE", "COLON", "SEMICOLON", "COMMA", "LPAREN", "RPAREN", 
-		"LBRACK", "RBRACK", "LBRACE", "RBRACE", "DOT", "TILDE", "ID", "INT", "STRING", 
-		"COMMENT", "WS", "CONTINUATION", "NL"
+		"LBRACK", "RBRACK", "LBRACE", "RBRACE", "DOT", "TILDE", "UPPER_ID", "ID", 
+		"SINGLE_QUOTED_STRING", "INT", "STRING", "COMMENT", "WS", "CONTINUATION", 
+		"NL"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -167,7 +169,7 @@ public partial class kebnfParser : Parser {
 				State = 43;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			} while ( _la==ID );
+			} while ( _la==UPPER_ID );
 			State = 45;
 			Match(Eof);
 			}
@@ -189,9 +191,9 @@ public partial class kebnfParser : Parser {
 		public IToken target_ast;
 		public AlternativesContext rule_body;
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ASSIGN() { return GetToken(kebnfParser.ASSIGN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] ID() { return GetTokens(kebnfParser.ID); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID(int i) {
-			return GetToken(kebnfParser.ID, i);
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] UPPER_ID() { return GetTokens(kebnfParser.UPPER_ID); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode UPPER_ID(int i) {
+			return GetToken(kebnfParser.UPPER_ID, i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public AlternativesContext alternatives() {
 			return GetRuleContext<AlternativesContext>(0);
@@ -237,7 +239,7 @@ public partial class kebnfParser : Parser {
 			EnterOuterAlt(_localctx, 1);
 			{
 			State = 47;
-			_localctx.name = Match(ID);
+			_localctx.name = Match(UPPER_ID);
 			State = 49;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
@@ -256,7 +258,7 @@ public partial class kebnfParser : Parser {
 				State = 51;
 				Match(COLON);
 				State = 52;
-				_localctx.target_ast = Match(ID);
+				_localctx.target_ast = Match(UPPER_ID);
 				}
 			}
 
@@ -478,7 +480,7 @@ public partial class kebnfParser : Parser {
 			State = 82;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 63602928L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 264929520L) != 0)) {
 				{
 				{
 				State = 79;
@@ -524,6 +526,9 @@ public partial class kebnfParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public Non_terminalContext non_terminal() {
 			return GetRuleContext<Non_terminalContext>(0);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public Value_literalContext value_literal() {
+			return GetRuleContext<Value_literalContext>(0);
+		}
 		public ElementContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -552,7 +557,7 @@ public partial class kebnfParser : Parser {
 		ElementContext _localctx = new ElementContext(Context, State);
 		EnterRule(_localctx, 10, RULE_element);
 		try {
-			State = 92;
+			State = 93;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,8,Context) ) {
 			case 1:
@@ -602,6 +607,13 @@ public partial class kebnfParser : Parser {
 				{
 				State = 91;
 				non_terminal();
+				}
+				break;
+			case 8:
+				EnterOuterAlt(_localctx, 8);
+				{
+				State = 92;
+				value_literal();
 				}
 				break;
 			}
@@ -667,9 +679,9 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 94;
-			_localctx.property = dotted_id();
 			State = 95;
+			_localctx.property = dotted_id();
+			State = 96;
 			_localctx.op = TokenStream.LT(1);
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1792L) != 0)) ) {
@@ -679,24 +691,24 @@ public partial class kebnfParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 97;
+			State = 98;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,9,Context) ) {
 			case 1:
 				{
-				State = 96;
+				State = 97;
 				_localctx.prefix = Match(TILDE);
 				}
 				break;
 			}
-			State = 99;
+			State = 100;
 			_localctx.content = element_core();
-			State = 101;
+			State = 102;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 14L) != 0)) {
 				{
-				State = 100;
+				State = 101;
 				_localctx.suffix = suffix_op();
 				}
 			}
@@ -759,11 +771,11 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 103;
-			Match(LBRACE);
 			State = 104;
-			_localctx.property = dotted_id();
+			Match(LBRACE);
 			State = 105;
+			_localctx.property = dotted_id();
+			State = 106;
 			_localctx.op = TokenStream.LT(1);
 			_la = TokenStream.LA(1);
 			if ( !(_la==ASSIGN || _la==ADD_ASSIGN) ) {
@@ -773,9 +785,9 @@ public partial class kebnfParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 106;
-			_localctx.val = value_literal();
 			State = 107;
+			_localctx.val = value_literal();
+			State = 108;
 			Match(RBRACE);
 			}
 		}
@@ -823,9 +835,9 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 109;
-			Match(LBRACE);
 			State = 110;
+			Match(LBRACE);
+			State = 111;
 			Match(RBRACE);
 			}
 		}
@@ -877,21 +889,21 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 113;
+			State = 114;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==TILDE) {
 				{
-				State = 112;
+				State = 113;
 				Match(TILDE);
 				}
 			}
 
-			State = 115;
-			Match(LBRACK);
 			State = 116;
-			_localctx.@ref = Match(ID);
+			Match(LBRACK);
 			State = 117;
+			_localctx.@ref = Match(ID);
+			State = 118;
 			Match(RBRACK);
 			}
 		}
@@ -946,18 +958,18 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 119;
-			Match(LPAREN);
 			State = 120;
-			alternatives();
+			Match(LPAREN);
 			State = 121;
+			alternatives();
+			State = 122;
 			Match(RPAREN);
-			State = 123;
+			State = 124;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,12,Context) ) {
 			case 1:
 				{
-				State = 122;
+				State = 123;
 				_localctx.suffix = suffix_op();
 				}
 				break;
@@ -976,11 +988,9 @@ public partial class kebnfParser : Parser {
 	}
 
 	public partial class TerminalContext : ParserRuleContext {
-		public Value_literalContext val;
+		public IToken val;
 		public Suffix_opContext suffix;
-		[System.Diagnostics.DebuggerNonUserCode] public Value_literalContext value_literal() {
-			return GetRuleContext<Value_literalContext>(0);
-		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SINGLE_QUOTED_STRING() { return GetToken(kebnfParser.SINGLE_QUOTED_STRING, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public Suffix_opContext suffix_op() {
 			return GetRuleContext<Suffix_opContext>(0);
 		}
@@ -1014,14 +1024,14 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 125;
-			_localctx.val = value_literal();
-			State = 127;
+			State = 126;
+			_localctx.val = Match(SINGLE_QUOTED_STRING);
+			State = 128;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,13,Context) ) {
 			case 1:
 				{
-				State = 126;
+				State = 127;
 				_localctx.suffix = suffix_op();
 				}
 				break;
@@ -1042,7 +1052,7 @@ public partial class kebnfParser : Parser {
 	public partial class Non_terminalContext : ParserRuleContext {
 		public IToken name;
 		public Suffix_opContext suffix;
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(kebnfParser.ID, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode UPPER_ID() { return GetToken(kebnfParser.UPPER_ID, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public Suffix_opContext suffix_op() {
 			return GetRuleContext<Suffix_opContext>(0);
 		}
@@ -1076,14 +1086,14 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 129;
-			_localctx.name = Match(ID);
-			State = 131;
+			State = 130;
+			_localctx.name = Match(UPPER_ID);
+			State = 132;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,14,Context) ) {
 			case 1:
 				{
-				State = 130;
+				State = 131;
 				_localctx.suffix = suffix_op();
 				}
 				break;
@@ -1114,6 +1124,9 @@ public partial class kebnfParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public Non_terminalContext non_terminal() {
 			return GetRuleContext<Non_terminalContext>(0);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public Value_literalContext value_literal() {
+			return GetRuleContext<Value_literalContext>(0);
+		}
 		public Element_coreContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -1142,35 +1155,42 @@ public partial class kebnfParser : Parser {
 		Element_coreContext _localctx = new Element_coreContext(Context, State);
 		EnterRule(_localctx, 26, RULE_element_core);
 		try {
-			State = 137;
+			State = 139;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,15,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 133;
+				State = 134;
 				cross_reference();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 134;
+				State = 135;
 				group();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 135;
+				State = 136;
 				terminal();
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 136;
+				State = 137;
 				non_terminal();
+				}
+				break;
+			case 5:
+				EnterOuterAlt(_localctx, 5);
+				{
+				State = 138;
+				value_literal();
 				}
 				break;
 			}
@@ -1226,21 +1246,21 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 139;
+			State = 141;
 			Match(ID);
-			State = 144;
+			State = 146;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==DOT) {
 				{
 				{
-				State = 140;
+				State = 142;
 				Match(DOT);
-				State = 141;
+				State = 143;
 				Match(ID);
 				}
 				}
-				State = 146;
+				State = 148;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1289,7 +1309,7 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 147;
+			State = 149;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 14L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -1315,6 +1335,7 @@ public partial class kebnfParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ID() { return GetToken(kebnfParser.ID, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INT() { return GetToken(kebnfParser.INT, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING() { return GetToken(kebnfParser.STRING, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SINGLE_QUOTED_STRING() { return GetToken(kebnfParser.SINGLE_QUOTED_STRING, 0); }
 		public Value_literalContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -1346,9 +1367,9 @@ public partial class kebnfParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 149;
+			State = 151;
 			_la = TokenStream.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 58720496L) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 251658480L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -1369,53 +1390,54 @@ public partial class kebnfParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,29,152,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		4,1,31,154,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
 		7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,1,0,5,0,36,8,0,10,0,12,0,39,9,0,1,0,4,0,42,8,0,11,
 		0,12,0,43,1,0,1,0,1,1,1,1,3,1,50,8,1,1,1,1,1,3,1,54,8,1,1,1,1,1,1,1,3,
 		1,59,8,1,1,1,4,1,62,8,1,11,1,12,1,63,1,2,1,2,1,2,1,2,1,2,1,2,1,3,1,3,1,
 		3,5,3,75,8,3,10,3,12,3,78,9,3,1,4,5,4,81,8,4,10,4,12,4,84,9,4,1,5,1,5,
-		1,5,1,5,1,5,1,5,1,5,3,5,93,8,5,1,6,1,6,1,6,3,6,98,8,6,1,6,1,6,3,6,102,
-		8,6,1,7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,9,3,9,114,8,9,1,9,1,9,1,9,1,
-		9,1,10,1,10,1,10,1,10,3,10,124,8,10,1,11,1,11,3,11,128,8,11,1,12,1,12,
-		3,12,132,8,12,1,13,1,13,1,13,1,13,3,13,138,8,13,1,14,1,14,1,14,5,14,143,
-		8,14,10,14,12,14,146,9,14,1,15,1,15,1,16,1,16,1,16,0,0,17,0,2,4,6,8,10,
-		12,14,16,18,20,22,24,26,28,30,32,0,4,1,0,8,10,1,0,8,9,1,0,1,3,2,0,4,7,
-		23,25,158,0,37,1,0,0,0,2,47,1,0,0,0,4,65,1,0,0,0,6,71,1,0,0,0,8,82,1,0,
-		0,0,10,92,1,0,0,0,12,94,1,0,0,0,14,103,1,0,0,0,16,109,1,0,0,0,18,113,1,
-		0,0,0,20,119,1,0,0,0,22,125,1,0,0,0,24,129,1,0,0,0,26,137,1,0,0,0,28,139,
-		1,0,0,0,30,147,1,0,0,0,32,149,1,0,0,0,34,36,5,29,0,0,35,34,1,0,0,0,36,
-		39,1,0,0,0,37,35,1,0,0,0,37,38,1,0,0,0,38,41,1,0,0,0,39,37,1,0,0,0,40,
-		42,3,2,1,0,41,40,1,0,0,0,42,43,1,0,0,0,43,41,1,0,0,0,43,44,1,0,0,0,44,
-		45,1,0,0,0,45,46,5,0,0,1,46,1,1,0,0,0,47,49,5,23,0,0,48,50,3,4,2,0,49,
-		48,1,0,0,0,49,50,1,0,0,0,50,53,1,0,0,0,51,52,5,12,0,0,52,54,5,23,0,0,53,
-		51,1,0,0,0,53,54,1,0,0,0,54,55,1,0,0,0,55,56,5,8,0,0,56,58,3,6,3,0,57,
-		59,5,13,0,0,58,57,1,0,0,0,58,59,1,0,0,0,59,61,1,0,0,0,60,62,5,29,0,0,61,
-		60,1,0,0,0,62,63,1,0,0,0,63,61,1,0,0,0,63,64,1,0,0,0,64,3,1,0,0,0,65,66,
-		5,15,0,0,66,67,5,23,0,0,67,68,5,12,0,0,68,69,5,23,0,0,69,70,5,16,0,0,70,
-		5,1,0,0,0,71,76,3,8,4,0,72,73,5,11,0,0,73,75,3,8,4,0,74,72,1,0,0,0,75,
-		78,1,0,0,0,76,74,1,0,0,0,76,77,1,0,0,0,77,7,1,0,0,0,78,76,1,0,0,0,79,81,
-		3,10,5,0,80,79,1,0,0,0,81,84,1,0,0,0,82,80,1,0,0,0,82,83,1,0,0,0,83,9,
-		1,0,0,0,84,82,1,0,0,0,85,93,3,12,6,0,86,93,3,14,7,0,87,93,3,16,8,0,88,
-		93,3,18,9,0,89,93,3,20,10,0,90,93,3,22,11,0,91,93,3,24,12,0,92,85,1,0,
-		0,0,92,86,1,0,0,0,92,87,1,0,0,0,92,88,1,0,0,0,92,89,1,0,0,0,92,90,1,0,
-		0,0,92,91,1,0,0,0,93,11,1,0,0,0,94,95,3,28,14,0,95,97,7,0,0,0,96,98,5,
-		22,0,0,97,96,1,0,0,0,97,98,1,0,0,0,98,99,1,0,0,0,99,101,3,26,13,0,100,
-		102,3,30,15,0,101,100,1,0,0,0,101,102,1,0,0,0,102,13,1,0,0,0,103,104,5,
-		19,0,0,104,105,3,28,14,0,105,106,7,1,0,0,106,107,3,32,16,0,107,108,5,20,
-		0,0,108,15,1,0,0,0,109,110,5,19,0,0,110,111,5,20,0,0,111,17,1,0,0,0,112,
-		114,5,22,0,0,113,112,1,0,0,0,113,114,1,0,0,0,114,115,1,0,0,0,115,116,5,
-		17,0,0,116,117,5,23,0,0,117,118,5,18,0,0,118,19,1,0,0,0,119,120,5,15,0,
-		0,120,121,3,6,3,0,121,123,5,16,0,0,122,124,3,30,15,0,123,122,1,0,0,0,123,
-		124,1,0,0,0,124,21,1,0,0,0,125,127,3,32,16,0,126,128,3,30,15,0,127,126,
-		1,0,0,0,127,128,1,0,0,0,128,23,1,0,0,0,129,131,5,23,0,0,130,132,3,30,15,
-		0,131,130,1,0,0,0,131,132,1,0,0,0,132,25,1,0,0,0,133,138,3,18,9,0,134,
-		138,3,20,10,0,135,138,3,22,11,0,136,138,3,24,12,0,137,133,1,0,0,0,137,
-		134,1,0,0,0,137,135,1,0,0,0,137,136,1,0,0,0,138,27,1,0,0,0,139,144,5,23,
-		0,0,140,141,5,21,0,0,141,143,5,23,0,0,142,140,1,0,0,0,143,146,1,0,0,0,
-		144,142,1,0,0,0,144,145,1,0,0,0,145,29,1,0,0,0,146,144,1,0,0,0,147,148,
-		7,2,0,0,148,31,1,0,0,0,149,150,7,3,0,0,150,33,1,0,0,0,17,37,43,49,53,58,
-		63,76,82,92,97,101,113,123,127,131,137,144
+		1,5,1,5,1,5,1,5,1,5,1,5,3,5,94,8,5,1,6,1,6,1,6,3,6,99,8,6,1,6,1,6,3,6,
+		103,8,6,1,7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,9,3,9,115,8,9,1,9,1,9,1,
+		9,1,9,1,10,1,10,1,10,1,10,3,10,125,8,10,1,11,1,11,3,11,129,8,11,1,12,1,
+		12,3,12,133,8,12,1,13,1,13,1,13,1,13,1,13,3,13,140,8,13,1,14,1,14,1,14,
+		5,14,145,8,14,10,14,12,14,148,9,14,1,15,1,15,1,16,1,16,1,16,0,0,17,0,2,
+		4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,0,4,1,0,8,10,1,0,8,9,1,0,1,3,
+		2,0,4,7,24,27,162,0,37,1,0,0,0,2,47,1,0,0,0,4,65,1,0,0,0,6,71,1,0,0,0,
+		8,82,1,0,0,0,10,93,1,0,0,0,12,95,1,0,0,0,14,104,1,0,0,0,16,110,1,0,0,0,
+		18,114,1,0,0,0,20,120,1,0,0,0,22,126,1,0,0,0,24,130,1,0,0,0,26,139,1,0,
+		0,0,28,141,1,0,0,0,30,149,1,0,0,0,32,151,1,0,0,0,34,36,5,31,0,0,35,34,
+		1,0,0,0,36,39,1,0,0,0,37,35,1,0,0,0,37,38,1,0,0,0,38,41,1,0,0,0,39,37,
+		1,0,0,0,40,42,3,2,1,0,41,40,1,0,0,0,42,43,1,0,0,0,43,41,1,0,0,0,43,44,
+		1,0,0,0,44,45,1,0,0,0,45,46,5,0,0,1,46,1,1,0,0,0,47,49,5,23,0,0,48,50,
+		3,4,2,0,49,48,1,0,0,0,49,50,1,0,0,0,50,53,1,0,0,0,51,52,5,12,0,0,52,54,
+		5,23,0,0,53,51,1,0,0,0,53,54,1,0,0,0,54,55,1,0,0,0,55,56,5,8,0,0,56,58,
+		3,6,3,0,57,59,5,13,0,0,58,57,1,0,0,0,58,59,1,0,0,0,59,61,1,0,0,0,60,62,
+		5,31,0,0,61,60,1,0,0,0,62,63,1,0,0,0,63,61,1,0,0,0,63,64,1,0,0,0,64,3,
+		1,0,0,0,65,66,5,15,0,0,66,67,5,24,0,0,67,68,5,12,0,0,68,69,5,24,0,0,69,
+		70,5,16,0,0,70,5,1,0,0,0,71,76,3,8,4,0,72,73,5,11,0,0,73,75,3,8,4,0,74,
+		72,1,0,0,0,75,78,1,0,0,0,76,74,1,0,0,0,76,77,1,0,0,0,77,7,1,0,0,0,78,76,
+		1,0,0,0,79,81,3,10,5,0,80,79,1,0,0,0,81,84,1,0,0,0,82,80,1,0,0,0,82,83,
+		1,0,0,0,83,9,1,0,0,0,84,82,1,0,0,0,85,94,3,12,6,0,86,94,3,14,7,0,87,94,
+		3,16,8,0,88,94,3,18,9,0,89,94,3,20,10,0,90,94,3,22,11,0,91,94,3,24,12,
+		0,92,94,3,32,16,0,93,85,1,0,0,0,93,86,1,0,0,0,93,87,1,0,0,0,93,88,1,0,
+		0,0,93,89,1,0,0,0,93,90,1,0,0,0,93,91,1,0,0,0,93,92,1,0,0,0,94,11,1,0,
+		0,0,95,96,3,28,14,0,96,98,7,0,0,0,97,99,5,22,0,0,98,97,1,0,0,0,98,99,1,
+		0,0,0,99,100,1,0,0,0,100,102,3,26,13,0,101,103,3,30,15,0,102,101,1,0,0,
+		0,102,103,1,0,0,0,103,13,1,0,0,0,104,105,5,19,0,0,105,106,3,28,14,0,106,
+		107,7,1,0,0,107,108,3,32,16,0,108,109,5,20,0,0,109,15,1,0,0,0,110,111,
+		5,19,0,0,111,112,5,20,0,0,112,17,1,0,0,0,113,115,5,22,0,0,114,113,1,0,
+		0,0,114,115,1,0,0,0,115,116,1,0,0,0,116,117,5,17,0,0,117,118,5,24,0,0,
+		118,119,5,18,0,0,119,19,1,0,0,0,120,121,5,15,0,0,121,122,3,6,3,0,122,124,
+		5,16,0,0,123,125,3,30,15,0,124,123,1,0,0,0,124,125,1,0,0,0,125,21,1,0,
+		0,0,126,128,5,25,0,0,127,129,3,30,15,0,128,127,1,0,0,0,128,129,1,0,0,0,
+		129,23,1,0,0,0,130,132,5,23,0,0,131,133,3,30,15,0,132,131,1,0,0,0,132,
+		133,1,0,0,0,133,25,1,0,0,0,134,140,3,18,9,0,135,140,3,20,10,0,136,140,
+		3,22,11,0,137,140,3,24,12,0,138,140,3,32,16,0,139,134,1,0,0,0,139,135,
+		1,0,0,0,139,136,1,0,0,0,139,137,1,0,0,0,139,138,1,0,0,0,140,27,1,0,0,0,
+		141,146,5,24,0,0,142,143,5,21,0,0,143,145,5,24,0,0,144,142,1,0,0,0,145,
+		148,1,0,0,0,146,144,1,0,0,0,146,147,1,0,0,0,147,29,1,0,0,0,148,146,1,0,
+		0,0,149,150,7,2,0,0,150,31,1,0,0,0,151,152,7,3,0,0,152,33,1,0,0,0,17,37,
+		43,49,53,58,63,76,82,93,98,102,114,124,128,132,139,146
 	};
 
 	public static readonly ATN _ATN =

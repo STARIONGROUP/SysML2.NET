@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class DisjoiningTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Disjoining>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="DisjoiningTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public DisjoiningTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,21 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Disjoining poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Disjoining=('disjoining'Identification)?'disjoint'(typeDisjoined=[QualifiedName]|typeDisjoined=FeatureChain{ownedRelatedElement+=typeDisjoined})'from'(disjoiningType=[QualifiedName]|disjoiningType=FeatureChain{ownedRelatedElement+=disjoiningType})RelationshipBody
+
+            // Group Element 
+            stringBuilder.Append("disjoint ");
+            // Group Element 
+            stringBuilder.Append("from ");
+            // Group Element 
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
+
+
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

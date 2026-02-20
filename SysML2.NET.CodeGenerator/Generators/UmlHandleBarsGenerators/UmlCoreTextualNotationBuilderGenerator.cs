@@ -27,6 +27,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
 
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Grammar.Model;
+    using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
     using uml4net.Extensions;
     using uml4net.HandleBars;
@@ -57,6 +58,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             NamedElementHelper.RegisterNamedElementHelper(this.Handlebars);
             this.Handlebars.RegisterStringHelper();
+            this.Handlebars.RegisterRulesHelper();
         }
 
         /// <summary>

@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class ConjugationTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Conjugation>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="ConjugationTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public ConjugationTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,27 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Conjugation poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Conjugation=('conjugation'Identification)?'conjugate'(conjugatedType=[QualifiedName]|conjugatedType=FeatureChain{ownedRelatedElement+=conjugatedType})CONJUGATES(originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType})RelationshipBody
+
+            // Group Element 
+            stringBuilder.Append("conjugate ");
+            // Group Element 
+            // non Terminal : CONJUGATES; Found rule CONJUGATES='~'|'conjugates'
+
+
+
+
+
+
+            // Group Element 
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
+
+
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -53,7 +53,8 @@ namespace SysML2.NET.CodeGenerator.Grammar
             var rule = new TextualNotationRule()
             {
                 RuleName = context.name.Text,
-                TargetElementName = context.name.Text
+                TargetElementName = context.target_ast?.Text,
+                RawRule = context.GetText()
             };
 
             if (string.IsNullOrWhiteSpace(rule.RuleName))
@@ -81,7 +82,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
         /// <return>The visitor result, as a collection of <see cref="RuleElement" /></return>
         public override object VisitAlternatives(kebnfParser.AlternativesContext context)
         {
-            return context.alternative().Select(a => (Alternatives)this.Visit(a)).SelectMany(x => x.Elements).ToList();
+            return context.alternative().Select(a => (Alternatives)this.Visit(a)).SelectMany(x => x.Elements.Where(e => e!=null)).ToList();
         }
 
         /// <summary>
@@ -129,6 +130,23 @@ namespace SysML2.NET.CodeGenerator.Grammar
         }
 
         /// <summary>
+        /// Visit a parse tree produced by <see cref="kebnfParser.value_literal"/>.
+        /// <para>
+        /// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+        /// on <paramref name="context"/>.
+        /// </para>
+        /// </summary>
+        /// <param name="context">The parse tree.</param>
+        /// <return>The visitor result.</return>
+        public override object VisitValue_literal(kebnfParser.Value_literalContext context)
+        {
+            return new ValueLiteralElement()
+            {
+                Value = context.GetText()
+            };
+        }
+
+        /// <summary>
         /// Visit a parse tree produced by <see cref="kebnfParser.group"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
@@ -153,7 +171,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
         {
             return new TerminalElement()
             {
-                Value = context.val.GetText().Trim('\''),
+                Value = context.val.Text.Trim('\''),
                 Suffix = context.suffix?.GetText()
             };
         }

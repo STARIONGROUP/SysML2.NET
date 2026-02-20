@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class TypeFeaturingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.TypeFeaturing>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="TypeFeaturingTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public TypeFeaturingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,21 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.TypeFeaturing poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : TypeFeaturing='featuring'(Identification'of')?featureOfType=[QualifiedName]'by'featuringType=[QualifiedName]RelationshipBody
+
+            stringBuilder.Append("featuring ");
+            // Group Element 
+            // Assignment Element : featureOfType = 
+            stringBuilder.Append("by ");
+            // Assignment Element : featuringType = 
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
+
+
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

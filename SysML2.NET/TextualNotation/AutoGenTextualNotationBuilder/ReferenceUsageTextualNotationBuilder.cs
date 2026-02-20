@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class ReferenceUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="ReferenceUsageTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public ReferenceUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,16 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : ReferenceUsage=(EndUsagePrefix|RefPrefix)'ref'Usage
+
+            // Group Element 
+            stringBuilder.Append("ref ");
+            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

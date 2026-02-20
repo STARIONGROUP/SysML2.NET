@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class ConjugatedPortTypingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="ConjugatedPortTypingTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public ConjugatedPortTypingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,26 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : ConjugatedPortTyping:ConjugatedPortTyping='~'originalPortDefinition=~[QualifiedName]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            stringBuilder.Append("~ ");
+            // Assignment Element : originalPortDefinition = 
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class SuccessionAsUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Connections.SuccessionAsUsage>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="SuccessionAsUsageTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public SuccessionAsUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,26 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Connections.SuccessionAsUsage poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : SuccessionAsUsage=UsagePrefix('succession'UsageDeclaration)?'first's.ownedRelationship+=ConnectorEndMember'then's.ownedRelationship+=ConnectorEndMemberUsageBody
+
+
+
+
+
+            // non Terminal : UsagePrefix; Found rule UsagePrefix:Usage=UnextendedUsagePrefixUsageExtensionKeyword*
+
+
+            // Group Element 
+            stringBuilder.Append("first ");
+            // Assignment Element : s.ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("then ");
+            // Assignment Element : s.ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // non Terminal : UsageBody; Found rule UsageBody:Usage=DefinitionBody
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

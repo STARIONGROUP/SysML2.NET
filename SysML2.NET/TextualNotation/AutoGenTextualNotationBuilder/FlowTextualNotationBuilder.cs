@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class FlowTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Interactions.Flow>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="FlowTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public FlowTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,23 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Interactions.Flow poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Flow=FeaturePrefix'flow'FlowDeclarationTypeBody
+
+            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)*
+
+
+
+
+            stringBuilder.Append("flow ");
+            // non Terminal : FlowDeclaration; Found rule FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember
+
+
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

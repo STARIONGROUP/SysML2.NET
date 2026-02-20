@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class NamespaceImportTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Namespaces.NamespaceImport>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="NamespaceImportTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public NamespaceImportTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,17 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Namespaces.NamespaceImport poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : NamespaceImport=importedNamespace=[QualifiedName]'::''*'('::'isRecursive?='**')?|importedNamespace=FilterPackage{ownedRelatedElement+=importedNamespace}
+
+            // Assignment Element : importedNamespace = 
+            stringBuilder.Append(":: ");
+            stringBuilder.Append("* ");
+            // Group Element 
+            // Assignment Element : importedNamespace = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelatedElement += importedNamespace
+
+            return stringBuilder.ToString();
         }
     }
 }

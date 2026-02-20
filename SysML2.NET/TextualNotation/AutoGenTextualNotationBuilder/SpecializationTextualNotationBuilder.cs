@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class SpecializationTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Specialization>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="SpecializationTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public SpecializationTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,29 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Specialization poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Specialization=('specialization'Identification)?'subtype'SpecificTypeSPECIALIZESGeneralTypeRelationshipBody
+
+            // Group Element 
+            stringBuilder.Append("subtype ");
+            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}
+
+
+            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes'
+
+
+            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}
+
+
+
+
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
+
+
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

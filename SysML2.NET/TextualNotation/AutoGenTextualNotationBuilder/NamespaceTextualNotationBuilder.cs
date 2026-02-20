@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -46,7 +48,20 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Namespaces.Namespace poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Namespace=(ownedRelationship+=PrefixMetadataMember)*NamespaceDeclarationNamespaceBody
+
+
+
+            // Group Element 
+            // non Terminal : NamespaceDeclaration; Found rule NamespaceDeclaration:Namespace='namespace'Identification
+
+
+            // non Terminal : NamespaceBody; Found rule NamespaceBody:Namespace=';'|'{'NamespaceBodyElement*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

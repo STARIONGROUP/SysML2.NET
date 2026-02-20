@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class PortDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Ports.PortDefinition>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="PortDefinitionTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public PortDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,23 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Ports.PortDefinition poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : PortDefinition=DefinitionPrefix'port''def'DefinitionownedRelationship+=ConjugatedPortDefinitionMember{conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition=this}
+
+
+
+            // non Terminal : DefinitionPrefix; Found rule DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword*
+
+
+            stringBuilder.Append("port ");
+            stringBuilder.Append("def ");
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody
+
+
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition = this
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class DependencyTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Dependencies.Dependency>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="DependencyTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public DependencyTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,25 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Dependencies.Dependency poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Dependency=(ownedRelationship+=PrefixMetadataAnnotation)*'dependency'DependencyDeclarationRelationshipBody
+
+            // Group Element 
+            stringBuilder.Append("dependency ");
+            // non Terminal : DependencyDeclaration; Found rule DependencyDeclaration=(Identification'from')?client+=[QualifiedName](','client+=[QualifiedName])*'to'supplier+=[QualifiedName](','supplier+=[QualifiedName])*
+
+
+
+
+
+
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
+
+
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }
