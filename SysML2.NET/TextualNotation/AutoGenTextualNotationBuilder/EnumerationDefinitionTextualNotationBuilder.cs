@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class EnumerationDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Enumerations.EnumerationDefinition>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="EnumerationDefinitionTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public EnumerationDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,22 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Enumerations.EnumerationDefinition poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : EnumerationDefinition=DefinitionExtensionKeyword*'enum''def'DefinitionDeclarationEnumerationBody
+
+            // non Terminal : DefinitionExtensionKeyword; Found rule DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember
+
+
+            stringBuilder.Append("enum ");
+            stringBuilder.Append("def ");
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+
+
+            // non Terminal : EnumerationBody; Found rule EnumerationBody:EnumerationDefinition=';'|'{'(ownedRelationship+=AnnotatingMember|ownedRelationship+=EnumerationUsageMember)*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

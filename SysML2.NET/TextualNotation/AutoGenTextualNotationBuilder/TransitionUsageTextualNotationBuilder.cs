@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class TransitionUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.States.TransitionUsage>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="TransitionUsageTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public TransitionUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,23 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.States.TransitionUsage poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : TransitionUsage='transition'(UsageDeclaration'first')?ownedRelationship+=FeatureChainMemberownedRelationship+=EmptyParameterMember(ownedRelationship+=EmptyParameterMemberownedRelationship+=TriggerActionMember)?(ownedRelationship+=GuardExpressionMember)?(ownedRelationship+=EffectBehaviorMember)?'then'ownedRelationship+=TransitionSuccessionMemberActionBody
+
+            stringBuilder.Append("transition ");
+            // Group Element 
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element 
+            // Group Element 
+            // Group Element 
+            stringBuilder.Append("then ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

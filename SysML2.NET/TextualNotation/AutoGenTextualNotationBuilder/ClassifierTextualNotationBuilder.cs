@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class ClassifierTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Classifiers.Classifier>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="ClassifierTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public ClassifierTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,21 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Classifiers.Classifier poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Classifier=TypePrefix'classifier'ClassifierDeclarationTypeBody
+
+            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)*
+
+
+            stringBuilder.Append("classifier ");
+            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart*
+
+
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

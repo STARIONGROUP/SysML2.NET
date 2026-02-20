@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class InvariantTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Functions.Invariant>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="InvariantTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public InvariantTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,31 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Functions.Invariant poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Invariant=FeaturePrefix'inv'('true'|isNegated?='false')?FeatureDeclarationValuePart?FunctionBody
+
+
+
+
+
+            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)*
+
+
+
+
+            stringBuilder.Append("inv ");
+            // Group Element 
+            // non Terminal : FeatureDeclaration; Found rule FeatureDeclaration:Feature=(isSufficient?='all')?(FeatureIdentification(FeatureSpecializationPart|ConjugationPart)?|FeatureSpecializationPart|ConjugationPart)FeatureRelationshipPart*
+
+
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue
+
+
+            // non Terminal : FunctionBody; Found rule FunctionBody:Type=';'|'{'FunctionBodyPart'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

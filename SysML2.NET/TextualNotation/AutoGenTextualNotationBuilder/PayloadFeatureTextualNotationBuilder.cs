@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class PayloadFeatureTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Interactions.PayloadFeature>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="PayloadFeatureTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public PayloadFeatureTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,24 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Interactions.PayloadFeature poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : PayloadFeature:Feature=Identification?PayloadFeatureSpecializationPartValuePart?|ownedRelationship+=OwnedFeatureTyping(ownedRelationship+=OwnedMultiplicity)?|ownedRelationship+=OwnedMultiplicityownedRelationship+=OwnedFeatureTyping
+
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)?
+
+
+            // non Terminal : PayloadFeatureSpecializationPart; Found rule PayloadFeatureSpecializationPart:Feature=(FeatureSpecialization)+MultiplicityPart?FeatureSpecialization*|MultiplicityPartFeatureSpecialization+
+
+
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue
+
+
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element 
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+            return stringBuilder.ToString();
         }
     }
 }

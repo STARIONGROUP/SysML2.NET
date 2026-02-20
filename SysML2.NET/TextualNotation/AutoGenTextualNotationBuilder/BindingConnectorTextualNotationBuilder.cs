@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class BindingConnectorTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Connectors.BindingConnector>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="BindingConnectorTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public BindingConnectorTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,25 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Connectors.BindingConnector poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : BindingConnector=FeaturePrefix'binding'BindingConnectorDeclarationTypeBody
+
+            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)*
+
+
+
+
+            stringBuilder.Append("binding ");
+            // non Terminal : BindingConnectorDeclaration; Found rule BindingConnectorDeclaration:BindingConnector=FeatureDeclaration('of'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?|(isSufficient?='all')?('of'?ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?
+
+
+
+
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -5,7 +5,7 @@ grammar kebnf;
 specification : (NL)* rule_definition+ EOF ;
 
 rule_definition
-    : name=ID (params=parameter_list)? (COLON target_ast=ID)? ASSIGN rule_body=alternatives SEMICOLON? NL+
+    : name=UPPER_ID (params=parameter_list)? (COLON target_ast=UPPER_ID)? ASSIGN rule_body=alternatives SEMICOLON? NL+
     ;
 
 parameter_list
@@ -28,6 +28,7 @@ element
     | group
     | terminal
     | non_terminal
+    | value_literal
     ;
 
 assignment
@@ -51,11 +52,11 @@ group
     ;
 
 terminal
-    : val=value_literal (suffix=suffix_op)?
+    : val=SINGLE_QUOTED_STRING (suffix=suffix_op)?
     ;
 
 non_terminal
-    : name=ID (suffix=suffix_op)?
+    : name=UPPER_ID (suffix=suffix_op)?
     ;
 
 element_core
@@ -63,6 +64,7 @@ element_core
     | group
     | terminal
     | non_terminal
+    | value_literal
     ;
 
 dotted_id
@@ -71,7 +73,7 @@ dotted_id
 
 suffix_op : '*' | '+' | '?' ;
 
-value_literal : ID | 'true' | 'false' | 'this' | INT | STRING | '[QualifiedName]';
+value_literal : ID | 'true' | 'false' | 'this' | INT | STRING | '[QualifiedName]' | SINGLE_QUOTED_STRING;
 
 // Lexer
 ASSIGN : '::=' | '=' ;
@@ -90,7 +92,9 @@ RBRACE : '}' ;
 DOT  : '.' ;
 TILDE : '~' ;
 
+UPPER_ID : [A-Z] [a-zA-Z0-9_]* ;
 ID : [a-zA-Z_][a-zA-Z0-9_]* ;
+SINGLE_QUOTED_STRING : '\'' (~['\\] | '\\' .)* '\'' ;
 INT : [0-9]+ ;
 STRING : '\'' ( ~['\\] | '\\' . )* '\'' ;
 

@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class AttributeDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Attributes.AttributeDefinition>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="AttributeDefinitionTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public AttributeDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,19 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Attributes.AttributeDefinition poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : AttributeDefinition:AttributeDefinition=DefinitionPrefix'attribute''def'Definition
+
+            // non Terminal : DefinitionPrefix; Found rule DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword*
+
+
+            stringBuilder.Append("attribute ");
+            stringBuilder.Append("def ");
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

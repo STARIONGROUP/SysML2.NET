@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class ForkNodeTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Actions.ForkNode>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="ForkNodeTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public ForkNodeTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,23 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Actions.ForkNode poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : ForkNode=ControlNodePrefixisComposite?='fork'UsageDeclarationActionBody
+
+
+
+            // non Terminal : ControlNodePrefix; Found rule ControlNodePrefix:OccurrenceUsage=RefPrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
+
+
+            // Assignment Element : isComposite ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart?
+
+
+            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class SubsettingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.Subsetting>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="SubsettingTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public SubsettingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,29 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.Subsetting poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Subsetting=('specialization'Identification)?'subset'SpecificTypeSUBSETSGeneralTypeRelationshipBody
+
+            // Group Element 
+            stringBuilder.Append("subset ");
+            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}
+
+
+            // non Terminal : SUBSETS; Found rule SUBSETS=':>'|'subsets'
+
+
+            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}
+
+
+
+
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
+
+
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

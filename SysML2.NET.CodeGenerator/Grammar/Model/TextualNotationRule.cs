@@ -46,5 +46,10 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         /// Gets the collection of defined <see cref="RuleElement" />
         /// </summary>
         public List<RuleElement> Elements { get; } = [];
+
+        /// <summary>
+        /// Gets or sets the raw string that declares the rule
+        /// </summary>
+        public string RawRule { get; set; }
     }
 }

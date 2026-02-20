@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class SuccessionFlowUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Flows.SuccessionFlowUsage>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="SuccessionFlowUsageTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public SuccessionFlowUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,22 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Flows.SuccessionFlowUsage poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : SuccessionFlowUsage=OccurrenceUsagePrefix'succession''flow'FlowDeclarationDefinitionBody
+
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
+
+
+            stringBuilder.Append("succession ");
+            stringBuilder.Append("flow ");
+            // non Terminal : FlowDeclaration; Found rule FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember
+
+
+            // non Terminal : DefinitionBody; Found rule DefinitionBody:Type=';'|'{'DefinitionBodyItem*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class MultiplicityTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Multiplicity>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="MultiplicityTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public MultiplicityTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,17 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Multiplicity poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Multiplicity=MultiplicitySubset|MultiplicityRange
+
+            // non Terminal : MultiplicitySubset; Found rule MultiplicitySubset:Multiplicity='multiplicity'IdentificationSubsetsTypeBody
+
+
+            // non Terminal : MultiplicityRange; Found rule MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

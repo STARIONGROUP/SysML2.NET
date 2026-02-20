@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class DocumentationTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Annotations.Documentation>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="DocumentationTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public DocumentationTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,19 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Annotations.Documentation poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : Documentation='doc'Identification('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT
+
+
+
+            stringBuilder.Append("doc ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)?
+
+
+            // Group Element 
+            // Assignment Element : body = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+            return stringBuilder.ToString();
         }
     }
 }

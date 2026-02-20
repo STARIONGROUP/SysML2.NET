@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class InterfaceUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Interfaces.InterfaceUsage>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="InterfaceUsageTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public InterfaceUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,21 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Interfaces.InterfaceUsage poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : InterfaceUsage=OccurrenceUsagePrefix'interface'InterfaceUsageDeclarationInterfaceBody
+
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
+
+
+            stringBuilder.Append("interface ");
+            // non Terminal : InterfaceUsageDeclaration; Found rule InterfaceUsageDeclaration:InterfaceUsage=UsageDeclarationValuePart?('connect'InterfacePart)?|InterfacePart
+
+
+            // non Terminal : InterfaceBody; Found rule InterfaceBody:Type=';'|'{'InterfaceBodyItem*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

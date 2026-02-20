@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class FeatureTypingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="FeatureTypingTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public FeatureTypingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,30 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.FeatureTyping poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : FeatureTyping=OwnedFeatureTyping|ConjugatedPortTyping
+
+            // non Terminal : OwnedFeatureTyping; Found rule OwnedFeatureTyping:FeatureTyping=type=[QualifiedName]|type=OwnedFeatureChain{ownedRelatedElement+=type}
+
+
+            // non Terminal : ConjugatedPortTyping; Found rule ConjugatedPortTyping:ConjugatedPortTyping='~'originalPortDefinition=~[QualifiedName]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class NamespaceExposeTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Views.NamespaceExpose>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="NamespaceExposeTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public NamespaceExposeTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,16 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Views.NamespaceExpose poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : NamespaceExpose=NamespaceImport
+
+
+
+            // non Terminal : NamespaceImport; Found rule NamespaceImport=importedNamespace=[QualifiedName]'::''*'('::'isRecursive?='**')?|importedNamespace=FilterPackage{ownedRelatedElement+=importedNamespace}
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }

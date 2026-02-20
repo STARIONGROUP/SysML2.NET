@@ -24,6 +24,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Text;
+
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
@@ -32,7 +34,7 @@ namespace SysML2.NET.TextualNotation
     public class MetadataFeatureTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Metadata.MetadataFeature>
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Initializes a new instance of a <see cref="MetadataFeatureTextualNotationBuilder"/>
         /// </summary>
         /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
         public MetadataFeatureTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
@@ -46,7 +48,20 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The built textual notation string</returns>
         public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Metadata.MetadataFeature poco)
         {
-            return string.Empty;
+            var stringBuilder = new StringBuilder();
+            // Rule definition : MetadataFeature=(ownedRelationship+=PrefixMetadataMember)*('@'|'metadata')MetadataFeatureDeclaration('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?MetadataBody
+
+            // Group Element 
+            // Group Element 
+            // non Terminal : MetadataFeatureDeclaration; Found rule MetadataFeatureDeclaration:MetadataFeature=(Identification(':'|'typed''by'))?ownedRelationship+=OwnedFeatureTyping
+
+
+            // Group Element 
+            // non Terminal : MetadataBody; Found rule MetadataBody:Type=';'|'{'(ownedRelationship+=DefinitionMember|ownedRelationship+=MetadataBodyUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import)*'}'
+
+
+
+            return stringBuilder.ToString();
         }
     }
 }
