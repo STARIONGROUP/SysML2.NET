@@ -29,42 +29,27 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ForkNodeTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.ForkNode" /> element
+    /// The <see cref="ForkNodeTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.IForkNode" /> element
     /// </summary>
-    public class ForkNodeTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Actions.ForkNode>
+    public static partial class ForkNodeTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ForkNodeTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ForkNode
+        /// <para>ForkNode=ControlNodePrefixisComposite?='fork'UsageDeclarationActionBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ForkNodeTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IForkNode" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildForkNode(SysML2.NET.Core.POCO.Systems.Actions.IForkNode poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Actions.ForkNode"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ForkNode"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Actions.ForkNode poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ForkNode=ControlNodePrefixisComposite?='fork'UsageDeclarationActionBody
-
-
-
-            // non Terminal : ControlNodePrefix; Found rule ControlNodePrefix:OccurrenceUsage=RefPrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : ControlNodePrefix; Found rule ControlNodePrefix:OccurrenceUsage=RefPrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, stringBuilder);
             // Assignment Element : isComposite ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart?
+            // If property isComposite value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
-
-            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

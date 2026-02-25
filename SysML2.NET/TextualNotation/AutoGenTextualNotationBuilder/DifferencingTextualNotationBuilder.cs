@@ -29,34 +29,19 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="DifferencingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.Differencing" /> element
+    /// The <see cref="DifferencingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.IDifferencing" /> element
     /// </summary>
-    public class DifferencingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Differencing>
+    public static partial class DifferencingTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="DifferencingTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule Differencing
+        /// <para>Differencing=differencingType=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public DifferencingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IDifferencing" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDifferencing(SysML2.NET.Core.POCO.Core.Types.IDifferencing poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Types.Differencing"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.Differencing"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Differencing poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Differencing=differencingType=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain
-
-
-
-            // Assignment Element : differencingType = 
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-
-            return stringBuilder.ToString();
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

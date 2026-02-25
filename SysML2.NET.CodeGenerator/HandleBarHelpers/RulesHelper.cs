@@ -26,8 +26,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
     using HandlebarsDotNet;
 
+    using SysML2.NET.CodeGenerator.Extensions;
+    using SysML2.NET.CodeGenerator.Grammar;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
+    using uml4net.CommonStructure;
+    using uml4net.Extensions;
     using uml4net.StructuredClassifiers;
 
     /// <summary>
@@ -41,63 +45,133 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="handlebars">The <see cref="IHandlebars"/> context with which the helper needs to be registered</param>
         public static void RegisterRulesHelper(this IHandlebars handlebars)
         {
-            handlebars.RegisterHelper("RulesHelper.WriteForPoco", (writer, _, arguments) =>
+            handlebars.RegisterHelper("RulesHelper.WriteRule", (writer, _, arguments) =>
             {
-                if (arguments.Length != 2)
+                if (arguments.Length != 3)
                 {
-                    throw new ArgumentException("RulesHelper.WriteForPoco expects to have 2 arguments");
+                    throw new ArgumentException("RulesHelper.WriteRule expects to have 3 arguments");
                 }
 
-                if (arguments[0] is not IClass umlClass)
+                if (arguments[0] is not TextualNotationRule textualRule)
                 {
-                    throw new ArgumentException("RulesHelper.WriteForPoco expects IClass as first argument");
+                    throw new ArgumentException("RulesHelper.WriteRule expects TextualNotationRule as first argument");
                 }
 
-                if (arguments[1] is not List<TextualNotationRule> rules)
+                if (arguments[1] is not INamedElement namedElement)
                 {
-                    throw new ArgumentException("RulesHelper.WriteForPoco expects a list of TextualNotationRule as second argument");
-                }
-                
-                var canonicalRule = rules.SingleOrDefault(x => x.RuleName ==  umlClass.Name);
-
-                if (canonicalRule == null)
-                {
-                    return;
+                    throw new ArgumentException("RulesHelper.WriteRule expects INamedElement as second argument");
                 }
 
-                writer.WriteSafeString($"// Rule definition : {canonicalRule.RawRule}");
-                WriteForRule(writer, umlClass, canonicalRule, rules);
+                if (arguments[2] is not List<TextualNotationRule> allRules)
+                {
+                    throw new ArgumentException("RulesHelper.WriteRule expects a list of TextualNotationRule as third argument");
+                }
+
+                if (namedElement is IClass umlClass)
+                {
+                    ProcessAlternatives(writer, umlClass, textualRule.Alternatives, allRules);
+                }
             });
         }
 
-        private static void WriteForRule(EncodedTextWriter writer, IClass umlClass, TextualNotationRule textualRule, List<TextualNotationRule> rules)
+        /// <summary>
+        /// Processes a collection of a <see cref="Alternatives"/>
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
+        /// <param name="umlClass">The related <see cref="IClass"/></param>
+        /// <param name="alternatives">The collection of alternatives to process</param>
+        /// <param name="rules">A collection of all existing rules</param>
+        private static void ProcessAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, IReadOnlyCollection<TextualNotationRule> rules)
         {
-            foreach (var textualRuleElement in textualRule.Elements)
+            if (alternatives.Count == 1)
             {
-                switch (textualRuleElement)
+                foreach (var textualRuleElement in alternatives.ElementAt(0).Elements)
                 {
-                    case TerminalElement terminalElement:
-                        writer.WriteSafeString($"stringBuilder.Append(\"{terminalElement.Value} \");");
-                        break;
-                    case NonTerminalElement nonTerminalElement:
-                        var referencedRule = rules.SingleOrDefault(x => x.RuleName ==  nonTerminalElement.Name);
-                        writer.WriteSafeString($"// non Terminal : {nonTerminalElement.Name}; Found rule {referencedRule?.RawRule}");
-                        break;
-                    case GroupElement groupElement:
-                        writer.WriteSafeString("// Group Element ");
-                        break;
-                    case AssignmentElement assignmentElement:
-                        writer.WriteSafeString($"// Assignment Element : {assignmentElement.Property} {assignmentElement.Operator} {assignmentElement.Value}");
-                        break;
-                    case NonParsingAssignmentElement nonParsingAssignmentElement:
-                        writer.WriteSafeString($"// Assignment Element : {nonParsingAssignmentElement.PropertyName} {nonParsingAssignmentElement.Operator} {nonParsingAssignmentElement.Value}");
-                        break;
-                    default:
-                        throw new ArgumentException("Unknown element type");
+                    ProcessRuleElement(writer, umlClass, rules, textualRuleElement);
                 }
-                
-                writer.WriteSafeString(Environment.NewLine);
             }
+            else
+            {
+                writer.WriteSafeString("throw new System.NotSupportedException(\"Multiple alternatives not implemented yet\");");
+            }
+        }
+
+        /// <summary>
+        /// Processes a <see cref="RuleElement"/>
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
+        /// <param name="umlClass">The related <see cref="IClass"/></param>
+        /// <param name="rules">A collection of all existing rules</param>
+        /// <param name="textualRuleElement">The <see cref="RuleElement"/> to process</param>
+        /// <exception cref="ArgumentException">If the type of the <see cref="RuleElement"/> is not supported</exception>
+        private static void ProcessRuleElement(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<TextualNotationRule> rules, RuleElement textualRuleElement)
+        {
+            switch (textualRuleElement)
+            {
+                case TerminalElement terminalElement:
+                    writer.WriteSafeString($"stringBuilder.Append(\"{terminalElement.Value} \");");
+                    break;
+                case NonTerminalElement nonTerminalElement:
+                    var referencedRule = rules.Single(x => x.RuleName == nonTerminalElement.Name);
+                    var typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
+                    writer.WriteSafeString($"// non Terminal : {nonTerminalElement.Name}; Found rule {referencedRule.RawRule} {Environment.NewLine}");
+                            
+                    if (typeTarget != umlClass.Name)
+                    {
+                        var targetType = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget);
+                                
+                        if (targetType != null)
+                        {
+                            if (targetType is IClass targetClass && umlClass.QueryAllGeneralClassifiers().Contains(targetClass))
+                            {
+                                writer.WriteSafeString($"{targetType.Name}TextualNotationBuilder.Build{referencedRule.RuleName}(poco, stringBuilder);");
+                            }
+                            else
+                            {
+                                ProcessAlternatives(writer, umlClass, referencedRule.Alternatives, rules);
+                            }
+                        }
+                        else
+                        {
+                            ProcessAlternatives(writer, umlClass, referencedRule.Alternatives, rules);
+                        }
+                    }
+                    else
+                    {
+                        writer.WriteSafeString($"Build{referencedRule.RuleName}(poco, stringBuilder);");
+                    }
+
+                    break;
+                case GroupElement groupElement:
+                    writer.WriteSafeString($"// Group Element{Environment.NewLine}");
+                    ProcessAlternatives(writer, umlClass, groupElement.Alternatives, rules);
+                    break;
+                case AssignmentElement assignmentElement:
+                    writer.WriteSafeString($"// Assignment Element : {assignmentElement.Property} {assignmentElement.Operator} {assignmentElement.Value}{Environment.NewLine}");
+                    var properties = umlClass.QueryAllProperties();
+                    var targetProperty = properties.SingleOrDefault(x => string.Equals(x.Name, assignmentElement.Property, StringComparison.OrdinalIgnoreCase));
+
+                    if (targetProperty != null)
+                    {
+                        writer.WriteSafeString($"// If property {targetProperty.Name} value is set, print {assignmentElement.Value}");
+                    }
+                    else
+                    {
+                        writer.WriteSafeString($"Build{assignmentElement.Property.CapitalizeFirstLetter()}(poco, stringBuilder);");
+                    }
+
+                    break;
+                case NonParsingAssignmentElement nonParsingAssignmentElement:
+                    writer.WriteSafeString($"// Assignment Element : {nonParsingAssignmentElement.PropertyName} {nonParsingAssignmentElement.Operator} {nonParsingAssignmentElement.Value}");
+                    break;
+                case ValueLiteralElement valueLiteralElement:
+                    writer.WriteSafeString($"// Value Literal Element : {valueLiteralElement.Value}");
+                    break;
+                default:
+                    throw new ArgumentException("Unknown element type");
+            }
+
+            writer.WriteSafeString(Environment.NewLine);
         }
     }
 }

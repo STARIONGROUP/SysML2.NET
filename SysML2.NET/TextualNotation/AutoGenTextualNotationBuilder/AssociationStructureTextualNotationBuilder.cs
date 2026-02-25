@@ -29,45 +29,27 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="AssociationStructureTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Associations.AssociationStructure" /> element
+    /// The <see cref="AssociationStructureTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Associations.IAssociationStructure" /> element
     /// </summary>
-    public class AssociationStructureTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Associations.AssociationStructure>
+    public static partial class AssociationStructureTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="AssociationStructureTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule AssociationStructure
+        /// <para>AssociationStructure=TypePrefix'assoc''struct'ClassifierDeclarationTypeBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public AssociationStructureTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Associations.IAssociationStructure" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildAssociationStructure(SysML2.NET.Core.POCO.Kernel.Associations.IAssociationStructure poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Associations.AssociationStructure"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Associations.AssociationStructure"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Associations.AssociationStructure poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : AssociationStructure=TypePrefix'assoc''struct'ClassifierDeclarationTypeBody
-
-
-
-
-
-            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)*
-
-
+            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)* 
+            TypeTextualNotationBuilder.BuildTypePrefix(poco, stringBuilder);
             stringBuilder.Append("assoc ");
             stringBuilder.Append("struct ");
-            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart*
+            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart* 
+            ClassifierTextualNotationBuilder.BuildClassifierDeclaration(poco, stringBuilder);
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
+            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
 
-
-            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

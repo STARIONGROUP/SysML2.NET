@@ -29,28 +29,111 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="MembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.Membership" /> element
+    /// The <see cref="MembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> element
     /// </summary>
-    public class MembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Namespaces.Membership>
+    public static partial class MembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="MembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule MemberPrefix
+        /// <para>MemberPrefix:Membership=(visibility=VisibilityIndicator)?</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public MembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMemberPrefix(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
+            // Group Element
+            // Assignment Element : visibility = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property visibility value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Root.Namespaces.Membership"/>
+        /// Builds the Textual Notation string for the rule AliasMember
+        /// <para>AliasMember:Membership=MemberPrefix'alias'('&lt;'memberShortName=NAME'&gt;')?(memberName=NAME)?'for'memberElement=[QualifiedName]RelationshipBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.Membership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Namespaces.Membership poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildAliasMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
+            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
+            BuildMemberPrefix(poco, stringBuilder);
+            stringBuilder.Append("alias ");
+            // Group Element
+            stringBuilder.Append("< ");
+            // Assignment Element : memberShortName = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property memberShortName value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("> ");
 
-            return stringBuilder.ToString();
+            // Group Element
+            // Assignment Element : memberName = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property memberName value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+            stringBuilder.Append("for ");
+            // Assignment Element : memberElement = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property memberElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureChainMember
+        /// <para>FeatureChainMember:Membership=memberElement=[QualifiedName]|OwnedFeatureChainMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureReferenceMember
+        /// <para>FeatureReferenceMember:Membership=memberElement=FeatureReference</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : memberElement = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property memberElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ElementReferenceMember
+        /// <para>ElementReferenceMember:Membership=memberElement=[QualifiedName]</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildElementReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : memberElement = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property memberElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule InstantiatedTypeMember
+        /// <para>InstantiatedTypeMember:Membership=memberElement=InstantiatedTypeReference|OwnedFeatureChainMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildInstantiatedTypeMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule MetadataBodyElement
+        /// <para>MetadataBodyElement:Membership=NonFeatureMember|MetadataBodyFeatureMember|AliasMember|Import</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMetadataBodyElement(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

@@ -29,40 +29,26 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="CalculationUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Calculations.CalculationUsage" /> element
+    /// The <see cref="CalculationUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage" /> element
     /// </summary>
-    public class CalculationUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Calculations.CalculationUsage>
+    public static partial class CalculationUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="CalculationUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule CalculationUsage
+        /// <para>CalculationUsage:CalculationUsage=OccurrenceUsagePrefix'calc'ActionUsageDeclarationCalculationBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public CalculationUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildCalculationUsage(SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Calculations.CalculationUsage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Calculations.CalculationUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Calculations.CalculationUsage poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : CalculationUsage:CalculationUsage=OccurrenceUsagePrefix'calc'ActionUsageDeclarationCalculationBody
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("calc ");
-            // non Terminal : ActionUsageDeclaration; Found rule ActionUsageDeclaration:ActionUsage=UsageDeclarationValuePart?
+            // non Terminal : ActionUsageDeclaration; Found rule ActionUsageDeclaration:ActionUsage=UsageDeclarationValuePart? 
+            ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, stringBuilder);
+            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}' 
+            TypeTextualNotationBuilder.BuildCalculationBody(poco, stringBuilder);
 
-
-            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

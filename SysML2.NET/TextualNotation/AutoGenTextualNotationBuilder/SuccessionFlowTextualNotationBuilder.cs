@@ -29,43 +29,33 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="SuccessionFlowTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.SuccessionFlow" /> element
+    /// The <see cref="SuccessionFlowTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.ISuccessionFlow" /> element
     /// </summary>
-    public class SuccessionFlowTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Interactions.SuccessionFlow>
+    public static partial class SuccessionFlowTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="SuccessionFlowTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule SuccessionFlow
+        /// <para>SuccessionFlow=FeaturePrefix'succession''flow'FlowDeclarationTypeBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public SuccessionFlowTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.ISuccessionFlow" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSuccessionFlow(SysML2.NET.Core.POCO.Kernel.Interactions.ISuccessionFlow poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.SuccessionFlow"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.SuccessionFlow"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Interactions.SuccessionFlow poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : SuccessionFlow=FeaturePrefix'succession''flow'FlowDeclarationTypeBody
-
-            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)*
-
-
+            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)* 
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
             stringBuilder.Append("succession ");
             stringBuilder.Append("flow ");
-            // non Terminal : FlowDeclaration; Found rule FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember
+            // non Terminal : FlowDeclaration; Found rule FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
+            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
 
-
-            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

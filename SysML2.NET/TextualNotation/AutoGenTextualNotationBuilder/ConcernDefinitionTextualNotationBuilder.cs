@@ -29,41 +29,27 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ConcernDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ConcernDefinition" /> element
+    /// The <see cref="ConcernDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IConcernDefinition" /> element
     /// </summary>
-    public class ConcernDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Requirements.ConcernDefinition>
+    public static partial class ConcernDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ConcernDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ConcernDefinition
+        /// <para>ConcernDefinition=OccurrenceDefinitionPrefix'concern''def'DefinitionDeclarationRequirementBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ConcernDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IConcernDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConcernDefinition(SysML2.NET.Core.POCO.Systems.Requirements.IConcernDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ConcernDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ConcernDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Requirements.ConcernDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ConcernDefinition=OccurrenceDefinitionPrefix'concern''def'DefinitionDeclarationRequirementBody
-
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("concern ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
+            // non Terminal : RequirementBody; Found rule RequirementBody:Type=';'|'{'RequirementBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, stringBuilder);
 
-
-            // non Terminal : RequirementBody; Found rule RequirementBody:Type=';'|'{'RequirementBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

@@ -29,43 +29,28 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ExhibitStateUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.States.ExhibitStateUsage" /> element
+    /// The <see cref="ExhibitStateUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.States.IExhibitStateUsage" /> element
     /// </summary>
-    public class ExhibitStateUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.States.ExhibitStateUsage>
+    public static partial class ExhibitStateUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ExhibitStateUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ExhibitStateUsage
+        /// <para>ExhibitStateUsage=OccurrenceUsagePrefix'exhibit'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'state'UsageDeclaration)ValuePart?StateUsageBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ExhibitStateUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IExhibitStateUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildExhibitStateUsage(SysML2.NET.Core.POCO.Systems.States.IExhibitStateUsage poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.States.ExhibitStateUsage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.ExhibitStateUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.States.ExhibitStateUsage poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ExhibitStateUsage=OccurrenceUsagePrefix'exhibit'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'state'UsageDeclaration)ValuePart?StateUsageBody
-
-
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("exhibit ");
-            // Group Element 
-            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
+            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            // non Terminal : StateUsageBody; Found rule StateUsageBody:StateUsage=';'|(isParallel?='parallel')?'{'StateBodyItem*'}' 
+            StateUsageTextualNotationBuilder.BuildStateUsageBody(poco, stringBuilder);
 
-
-            // non Terminal : StateUsageBody; Found rule StateUsageBody:StateUsage=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

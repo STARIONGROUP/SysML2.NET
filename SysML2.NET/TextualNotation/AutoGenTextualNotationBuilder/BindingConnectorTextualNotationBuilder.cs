@@ -29,44 +29,43 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="BindingConnectorTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.BindingConnector" /> element
+    /// The <see cref="BindingConnectorTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector" /> element
     /// </summary>
-    public class BindingConnectorTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Connectors.BindingConnector>
+    public static partial class BindingConnectorTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="BindingConnectorTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule BindingConnectorDeclaration
+        /// <para>BindingConnectorDeclaration:BindingConnector=FeatureDeclaration('of'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?|(isSufficient?='all')?('of'?ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public BindingConnectorTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBindingConnectorDeclaration(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.BindingConnector"/>
+        /// Builds the Textual Notation string for the rule BindingConnector
+        /// <para>BindingConnector=FeaturePrefix'binding'BindingConnectorDeclarationTypeBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.BindingConnector"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Connectors.BindingConnector poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBindingConnector(SysML2.NET.Core.POCO.Kernel.Connectors.IBindingConnector poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : BindingConnector=FeaturePrefix'binding'BindingConnectorDeclarationTypeBody
-
-            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)*
-
-
+            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)* 
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
             stringBuilder.Append("binding ");
-            // non Terminal : BindingConnectorDeclaration; Found rule BindingConnectorDeclaration:BindingConnector=FeatureDeclaration('of'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?|(isSufficient?='all')?('of'?ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?
+            // non Terminal : BindingConnectorDeclaration; Found rule BindingConnectorDeclaration:BindingConnector=FeatureDeclaration('of'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)?|(isSufficient?='all')?('of'?ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMember)? 
+            BuildBindingConnectorDeclaration(poco, stringBuilder);
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
+            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
 
-
-
-
-            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

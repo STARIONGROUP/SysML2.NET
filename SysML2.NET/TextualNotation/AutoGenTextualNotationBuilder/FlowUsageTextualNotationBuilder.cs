@@ -29,40 +29,67 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="FlowUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Flows.FlowUsage" /> element
+    /// The <see cref="FlowUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> element
     /// </summary>
-    public class FlowUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Flows.FlowUsage>
+    public static partial class FlowUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="FlowUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule Message
+        /// <para>Message:FlowUsage=OccurrenceUsagePrefix'message'MessageDeclarationDefinitionBody{isAbstract=true}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public FlowUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMessage(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, StringBuilder stringBuilder)
         {
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            stringBuilder.Append("message ");
+            // non Terminal : MessageDeclaration; Found rule MessageDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=MessageEventMember'to'ownedRelationship+=MessageEventMember)?|ownedRelationship+=MessageEventMember'to'ownedRelationship+=MessageEventMember 
+            BuildMessageDeclaration(poco, stringBuilder);
+            // non Terminal : DefinitionBody; Found rule DefinitionBody:Type=';'|'{'DefinitionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
+            // Assignment Element : isAbstract = true
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Flows.FlowUsage"/>
+        /// Builds the Textual Notation string for the rule MessageDeclaration
+        /// <para>MessageDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=MessageEventMember'to'ownedRelationship+=MessageEventMember)?|ownedRelationship+=MessageEventMember'to'ownedRelationship+=MessageEventMember</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.FlowUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Flows.FlowUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMessageDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : FlowUsage=OccurrenceUsagePrefix'flow'FlowDeclarationDefinitionBody
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FlowDeclaration
+        /// <para>FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFlowDeclaration(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FlowUsage
+        /// <para>FlowUsage=OccurrenceUsagePrefix'flow'FlowDeclarationDefinitionBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFlowUsage(SysML2.NET.Core.POCO.Systems.Flows.IFlowUsage poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("flow ");
-            // non Terminal : FlowDeclaration; Found rule FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember
+            // non Terminal : FlowDeclaration; Found rule FlowDeclaration:FlowUsage=UsageDeclarationValuePart?('of'ownedRelationship+=FlowPayloadFeatureMember)?('from'ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember)?|ownedRelationship+=FlowEndMember'to'ownedRelationship+=FlowEndMember 
+            BuildFlowDeclaration(poco, stringBuilder);
+            // non Terminal : DefinitionBody; Found rule DefinitionBody:Type=';'|'{'DefinitionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
 
-
-            // non Terminal : DefinitionBody; Found rule DefinitionBody:Type=';'|'{'DefinitionBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

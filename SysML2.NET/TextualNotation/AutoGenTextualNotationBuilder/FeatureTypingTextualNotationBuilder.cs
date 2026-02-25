@@ -29,49 +29,43 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="FeatureTypingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.FeatureTyping" /> element
+    /// The <see cref="FeatureTypingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> element
     /// </summary>
-    public class FeatureTypingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>
+    public static partial class FeatureTypingTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="FeatureTypingTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedFeatureTyping
+        /// <para>OwnedFeatureTyping:FeatureTyping=type=[QualifiedName]|type=OwnedFeatureChain{ownedRelatedElement+=type}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public FeatureTypingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Features.FeatureTyping"/>
+        /// Builds the Textual Notation string for the rule ReferenceTyping
+        /// <para>ReferenceTyping:FeatureTyping=type=[QualifiedName]</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.FeatureTyping"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.FeatureTyping poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildReferenceTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : FeatureTyping=OwnedFeatureTyping|ConjugatedPortTyping
+            // Assignment Element : type = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property type value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
 
-            // non Terminal : OwnedFeatureTyping; Found rule OwnedFeatureTyping:FeatureTyping=type=[QualifiedName]|type=OwnedFeatureChain{ownedRelatedElement+=type}
+        }
 
-
-            // non Terminal : ConjugatedPortTyping; Found rule ConjugatedPortTyping:ConjugatedPortTyping='~'originalPortDefinition=~[QualifiedName]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            return stringBuilder.ToString();
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureTyping
+        /// <para>FeatureTyping=OwnedFeatureTyping|ConjugatedPortTyping</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeatureTyping" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

@@ -29,28 +29,25 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="RequirementVerificationMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.VerificationCases.RequirementVerificationMembership" /> element
+    /// The <see cref="RequirementVerificationMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership" /> element
     /// </summary>
-    public class RequirementVerificationMembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.VerificationCases.RequirementVerificationMembership>
+    public static partial class RequirementVerificationMembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="RequirementVerificationMembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule RequirementVerificationMember
+        /// <para>RequirementVerificationMember:RequirementVerificationMembership=MemberPrefix'verify'{kind='requirement'}ownedRelatedElement+=RequirementVerificationUsage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public RequirementVerificationMembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRequirementVerificationMember(SysML2.NET.Core.POCO.Systems.VerificationCases.IRequirementVerificationMembership poco, StringBuilder stringBuilder)
         {
-        }
+            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            stringBuilder.Append("verify ");
+            // Assignment Element : kind = 'requirement'
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.VerificationCases.RequirementVerificationMembership"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.VerificationCases.RequirementVerificationMembership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.VerificationCases.RequirementVerificationMembership poco)
-        {
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString();
         }
     }
 }

@@ -29,28 +29,30 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="TerminateActionUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.TerminateActionUsage" /> element
+    /// The <see cref="TerminateActionUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.ITerminateActionUsage" /> element
     /// </summary>
-    public class TerminateActionUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Actions.TerminateActionUsage>
+    public static partial class TerminateActionUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="TerminateActionUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule TerminateNode
+        /// <para>TerminateNode:TerminateActionUsage=OccurrenceUsagePrefixActionNodeUsageDeclaration?'terminate'(ownedRelationship+=NodeParameterMember)?ActionBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public TerminateActionUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ITerminateActionUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTerminateNode(SysML2.NET.Core.POCO.Systems.Actions.ITerminateActionUsage poco, StringBuilder stringBuilder)
         {
-        }
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            // non Terminal : ActionNodeUsageDeclaration; Found rule ActionNodeUsageDeclaration:ActionUsage='action'UsageDeclaration? 
+            ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, stringBuilder);
+            stringBuilder.Append("terminate ");
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Actions.TerminateActionUsage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.TerminateActionUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Actions.TerminateActionUsage poco)
-        {
-            var stringBuilder = new StringBuilder();
+            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
-            return stringBuilder.ToString();
         }
     }
 }

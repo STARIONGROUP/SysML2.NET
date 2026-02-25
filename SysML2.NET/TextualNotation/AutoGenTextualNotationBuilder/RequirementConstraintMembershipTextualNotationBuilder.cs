@@ -29,28 +29,36 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="RequirementConstraintMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.RequirementConstraintMembership" /> element
+    /// The <see cref="RequirementConstraintMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership" /> element
     /// </summary>
-    public class RequirementConstraintMembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Requirements.RequirementConstraintMembership>
+    public static partial class RequirementConstraintMembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="RequirementConstraintMembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule RequirementConstraintMember
+        /// <para>RequirementConstraintMember:RequirementConstraintMembership=MemberPrefix?RequirementKindownedRelatedElement+=RequirementConstraintUsage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public RequirementConstraintMembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRequirementConstraintMember(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, StringBuilder stringBuilder)
         {
+            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            // non Terminal : RequirementKind; Found rule RequirementKind:RequirementConstraintMembership='assume'{kind='assumption'}|'require'{kind='requirement'} 
+            BuildRequirementKind(poco, stringBuilder);
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Requirements.RequirementConstraintMembership"/>
+        /// Builds the Textual Notation string for the rule RequirementKind
+        /// <para>RequirementKind:RequirementConstraintMembership='assume'{kind='assumption'}|'require'{kind='requirement'}</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.RequirementConstraintMembership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Requirements.RequirementConstraintMembership poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRequirementKind(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementConstraintMembership poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString();
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

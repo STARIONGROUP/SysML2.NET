@@ -29,39 +29,71 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="MetadataFeatureTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.MetadataFeature" /> element
+    /// The <see cref="MetadataFeatureTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature" /> element
     /// </summary>
-    public class MetadataFeatureTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Metadata.MetadataFeature>
+    public static partial class MetadataFeatureTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="MetadataFeatureTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule PrefixMetadataFeature
+        /// <para>PrefixMetadataFeature:MetadataFeature=ownedRelationship+=OwnedFeatureTyping</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public MetadataFeatureTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPrefixMetadataFeature(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.MetadataFeature"/>
+        /// Builds the Textual Notation string for the rule MetadataFeatureDeclaration
+        /// <para>MetadataFeatureDeclaration:MetadataFeature=(Identification(':'|'typed''by'))?ownedRelationship+=OwnedFeatureTyping</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.MetadataFeature"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Metadata.MetadataFeature poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMetadataFeatureDeclaration(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : MetadataFeature=(ownedRelationship+=PrefixMetadataMember)*('@'|'metadata')MetadataFeatureDeclaration('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?MetadataBody
+            // Group Element
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
 
-            // Group Element 
-            // Group Element 
-            // non Terminal : MetadataFeatureDeclaration; Found rule MetadataFeatureDeclaration:MetadataFeature=(Identification(':'|'typed''by'))?ownedRelationship+=OwnedFeatureTyping
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule MetadataFeature
+        /// <para>MetadataFeature=(ownedRelationship+=PrefixMetadataMember)*('@'|'metadata')MetadataFeatureDeclaration('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?MetadataBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMetadataFeature(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : MetadataFeatureDeclaration; Found rule MetadataFeatureDeclaration:MetadataFeature=(Identification(':'|'typed''by'))?ownedRelationship+=OwnedFeatureTyping 
+            BuildMetadataFeatureDeclaration(poco, stringBuilder);
+            // Group Element
+            stringBuilder.Append("about ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
-            // Group Element 
-            // non Terminal : MetadataBody; Found rule MetadataBody:Type=';'|'{'(ownedRelationship+=DefinitionMember|ownedRelationship+=MetadataBodyUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import)*'}'
+            // non Terminal : MetadataBody; Found rule MetadataBody:Type=';'|'{'(ownedRelationship+=DefinitionMember|ownedRelationship+=MetadataBodyUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import)*'}' 
+            TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

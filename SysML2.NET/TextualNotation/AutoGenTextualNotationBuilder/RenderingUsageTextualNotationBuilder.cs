@@ -29,39 +29,35 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="RenderingUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.RenderingUsage" /> element
+    /// The <see cref="RenderingUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage" /> element
     /// </summary>
-    public class RenderingUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Views.RenderingUsage>
+    public static partial class RenderingUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="RenderingUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ViewRenderingUsage
+        /// <para>ViewRenderingUsage:RenderingUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?UsageBody|(UsageExtensionKeyword*'rendering'|UsageExtensionKeyword+)Usage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public RenderingUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildViewRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Views.RenderingUsage"/>
+        /// Builds the Textual Notation string for the rule RenderingUsage
+        /// <para>RenderingUsage=OccurrenceUsagePrefix'rendering'Usage</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.RenderingUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Views.RenderingUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : RenderingUsage=OccurrenceUsagePrefix'rendering'Usage
-
-
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("rendering ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion
+            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
+            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

@@ -29,50 +29,70 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="RedefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.Redefinition" /> element
+    /// The <see cref="RedefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> element
     /// </summary>
-    public class RedefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.Redefinition>
+    public static partial class RedefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="RedefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedRedefinition
+        /// <para>OwnedRedefinition:Redefinition=redefinedFeature=[QualifiedName]|redefinedFeature=OwnedFeatureChain{ownedRelatedElement+=redefinedFeature}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public RedefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Features.Redefinition"/>
+        /// Builds the Textual Notation string for the rule FlowFeatureRedefinition
+        /// <para>FlowFeatureRedefinition:Redefinition=redefinedFeature=[QualifiedName]</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.Redefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.Redefinition poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFlowFeatureRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Redefinition=('specialization'Identification)?'redefinition'SpecificTypeREDEFINESGeneralTypeRelationshipBody
+            // Assignment Element : redefinedFeature = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property redefinedFeature value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
 
-            // Group Element 
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ParameterRedefinition
+        /// <para>ParameterRedefinition:Redefinition=redefinedFeature=[QualifiedName]</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildParameterRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : redefinedFeature = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property redefinedFeature value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Redefinition
+        /// <para>Redefinition=('specialization'Identification)?'redefinition'SpecificTypeREDEFINESGeneralTypeRelationshipBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IRedefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            stringBuilder.Append("specialization ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+
             stringBuilder.Append("redefinition ");
-            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}
+            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific} 
+            SpecializationTextualNotationBuilder.BuildSpecificType(poco, stringBuilder);
+            // non Terminal : REDEFINES; Found rule REDEFINES=':>>'|'redefines' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general} 
+            SpecializationTextualNotationBuilder.BuildGeneralType(poco, stringBuilder);
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
-
-            // non Terminal : REDEFINES; Found rule REDEFINES=':>>'|'redefines'
-
-
-
-
-            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}
-
-
-
-
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
-
-
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

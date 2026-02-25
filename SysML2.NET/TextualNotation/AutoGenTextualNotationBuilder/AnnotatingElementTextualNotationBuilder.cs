@@ -29,50 +29,19 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="AnnotatingElementTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement" /> element
+    /// The <see cref="AnnotatingElementTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement" /> element
     /// </summary>
-    public class AnnotatingElementTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement>
+    public static partial class AnnotatingElementTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="AnnotatingElementTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule AnnotatingElement
+        /// <para>AnnotatingElement=Comment|Documentation|TextualRepresentation|MetadataFeature</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public AnnotatingElementTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildAnnotatingElement(SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : AnnotatingElement=Comment|Documentation|TextualRepresentation|MetadataFeature
-
-
-
-            // non Terminal : Comment; Found rule Comment=('comment'Identification('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?)?('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT
-
-
-            // non Terminal : Documentation; Found rule Documentation='doc'Identification('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT
-
-
-
-
-            // non Terminal : TextualRepresentation; Found rule TextualRepresentation=('rep'Identification)?'language'language=STRING_VALUEbody=REGULAR_COMMENT
-
-
-
-
-
-
-            // non Terminal : MetadataFeature; Found rule MetadataFeature=(ownedRelationship+=PrefixMetadataMember)*('@'|'metadata')MetadataFeatureDeclaration('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?MetadataBody
-
-
-
-            return stringBuilder.ToString();
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

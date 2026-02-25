@@ -29,36 +29,84 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="DefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Definition" /> element
+    /// The <see cref="DefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> element
     /// </summary>
-    public class DefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Definition>
+    public static partial class DefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="DefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule DefinitionExtensionKeyword
+        /// <para>DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public DefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDefinitionExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Definition"/>
+        /// Builds the Textual Notation string for the rule DefinitionPrefix
+        /// <para>DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword*</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Definition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Definition poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDefinitionPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Definition=DefinitionDeclarationDefinitionBody
+            // non Terminal : BasicDefinitionPrefix; Found rule BasicDefinitionPrefix=isAbstract?='abstract'|isVariation?='variation' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : DefinitionExtensionKeyword; Found rule DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember 
+            BuildDefinitionExtensionKeyword(poco, stringBuilder);
 
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+        }
 
+        /// <summary>
+        /// Builds the Textual Notation string for the rule DefinitionDeclaration
+        /// <para>DefinitionDeclaration:Definition=IdentificationSubclassificationPart?</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDefinitionDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            // non Terminal : SubclassificationPart; Found rule SubclassificationPart:Classifier=SPECIALIZESownedRelationship+=OwnedSubclassification(','ownedRelationship+=OwnedSubclassification)* 
+            ClassifierTextualNotationBuilder.BuildSubclassificationPart(poco, stringBuilder);
 
-            // non Terminal : DefinitionBody; Found rule DefinitionBody:Type=';'|'{'DefinitionBodyItem*'}'
+        }
 
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ExtendedDefinition
+        /// <para>ExtendedDefinition:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword+'def'Definition</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildExtendedDefinition(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : BasicDefinitionPrefix; Found rule BasicDefinitionPrefix=isAbstract?='abstract'|isVariation?='variation' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : DefinitionExtensionKeyword; Found rule DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember 
+            BuildDefinitionExtensionKeyword(poco, stringBuilder);
+            stringBuilder.Append("def ");
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
+            BuildDefinition(poco, stringBuilder);
 
+        }
 
-            return stringBuilder.ToString();
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Definition
+        /// <para>Definition=DefinitionDeclarationDefinitionBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDefinition(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IDefinition poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
+            BuildDefinitionDeclaration(poco, stringBuilder);
+            // non Terminal : DefinitionBody; Found rule DefinitionBody:Type=';'|'{'DefinitionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
+
         }
     }
 }

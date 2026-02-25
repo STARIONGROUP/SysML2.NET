@@ -54,7 +54,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
             {
                 RuleName = context.name.Text,
                 TargetElementName = context.target_ast?.Text,
-                RawRule = context.GetText()
+                RawRule = context.GetText().Trim()
             };
 
             if (string.IsNullOrWhiteSpace(rule.RuleName))
@@ -71,7 +71,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
                 };
             }
             
-            rule.Elements.AddRange((List<RuleElement>)this.Visit(context.rule_body));
+            rule.Alternatives.AddRange((IEnumerable<Alternatives>)this.Visit(context.rule_body));
             return rule;
         }
         
@@ -79,10 +79,10 @@ namespace SysML2.NET.CodeGenerator.Grammar
         /// Visit a parse tree produced by <see cref="kebnfParser.AlternativesContext"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
-        /// <return>The visitor result, as a collection of <see cref="RuleElement" /></return>
+        /// <return>The visitor result, as an <see cref="Alternatives"/></return>
         public override object VisitAlternatives(kebnfParser.AlternativesContext context)
         {
-            return context.alternative().Select(a => (Alternatives)this.Visit(a)).SelectMany(x => x.Elements.Where(e => e!=null)).ToList();
+            return context.alternative().Select(a => (Alternatives)this.Visit(a));
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
         public override object VisitAlternative(kebnfParser.AlternativeContext context)
         {
             var alternatives = new Alternatives();
-            alternatives.Elements.AddRange(context.element().Select(e => (RuleElement)this.Visit(e)));
+            alternatives.Elements.AddRange(context.element().Select(e => (RuleElement)this.Visit(e)).Where(x => x != null));
             return alternatives;
         }
 
@@ -106,7 +106,7 @@ namespace SysML2.NET.CodeGenerator.Grammar
         {
             return new AssignmentElement()
             {
-                Property = context.property.GetText(),
+                Property = context.property.GetText().Split(".")[^1],
                 Operator = context.op.Text,
                 Suffix = context.suffix?.GetText(),
                 Value = (RuleElement)this.Visit(context.content),
@@ -131,10 +131,6 @@ namespace SysML2.NET.CodeGenerator.Grammar
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="kebnfParser.value_literal"/>.
-        /// <para>
-        /// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-        /// on <paramref name="context"/>.
-        /// </para>
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
@@ -153,12 +149,13 @@ namespace SysML2.NET.CodeGenerator.Grammar
         /// <return>The visitor result, as <see cref="GroupElement"/>.</return>
         public override object VisitGroup(kebnfParser.GroupContext context)
         {
-            var group = new GroupElement()
+            var group = new GroupElement
             {
                 Suffix = context.suffix?.GetText(),
             };
+
+            group.Alternatives.AddRange((IEnumerable<Alternatives>)this.Visit(context.alternatives()));
             
-            group.Elements.AddRange((List<RuleElement>)this.Visit(context.alternatives()));
             return group;
         }
 
@@ -188,17 +185,6 @@ namespace SysML2.NET.CodeGenerator.Grammar
                 Name = context.name.Text,
                 Suffix = context.suffix?.GetText()
             };
-        }
-
-        /// <summary>
-        /// Provides mapping data class for the alternative grammar part
-        /// </summary>
-        private class Alternatives
-        {
-            /// <summary>
-            /// Gets a collection of <see cref="RuleElement" /> that is part of the <see cref="Alternatives" />
-            /// </summary>
-            public List<RuleElement> Elements { get; } = [];
         }
     }
 }

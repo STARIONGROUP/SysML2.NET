@@ -29,39 +29,30 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="AssertConstraintUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Constraints.AssertConstraintUsage" /> element
+    /// The <see cref="AssertConstraintUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IAssertConstraintUsage" /> element
     /// </summary>
-    public class AssertConstraintUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Constraints.AssertConstraintUsage>
+    public static partial class AssertConstraintUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="AssertConstraintUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule AssertConstraintUsage
+        /// <para>AssertConstraintUsage=OccurrenceUsagePrefix'assert'(isNegated?='not')?(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'constraint'ConstraintUsageDeclaration)CalculationBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public AssertConstraintUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IAssertConstraintUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildAssertConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IAssertConstraintUsage poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Constraints.AssertConstraintUsage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.AssertConstraintUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Constraints.AssertConstraintUsage poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : AssertConstraintUsage=OccurrenceUsagePrefix'assert'(isNegated?='not')?(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'constraint'ConstraintUsageDeclaration)CalculationBody
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("assert ");
-            // Group Element 
-            // Group Element 
-            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}'
+            // Group Element
+            // Assignment Element : isNegated ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isNegated value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
 
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}' 
+            TypeTextualNotationBuilder.BuildCalculationBody(poco, stringBuilder);
 
-
-            return stringBuilder.ToString();
         }
     }
 }

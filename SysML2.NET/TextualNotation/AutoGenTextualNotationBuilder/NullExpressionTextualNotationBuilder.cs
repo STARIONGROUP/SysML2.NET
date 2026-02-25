@@ -29,33 +29,19 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="NullExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.NullExpression" /> element
+    /// The <see cref="NullExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.INullExpression" /> element
     /// </summary>
-    public class NullExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.NullExpression>
+    public static partial class NullExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NullExpressionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule NullExpression
+        /// <para>NullExpression:NullExpression='null'|'('')'</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public NullExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.INullExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildNullExpression(SysML2.NET.Core.POCO.Kernel.Expressions.INullExpression poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.NullExpression"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.NullExpression"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.NullExpression poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : NullExpression:NullExpression='null'|'('')'
-
-            stringBuilder.Append("null ");
-            stringBuilder.Append("( ");
-            stringBuilder.Append(") ");
-
-            return stringBuilder.ToString();
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

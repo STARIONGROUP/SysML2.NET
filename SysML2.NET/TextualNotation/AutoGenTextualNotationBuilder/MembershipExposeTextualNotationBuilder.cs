@@ -29,33 +29,21 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="MembershipExposeTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.MembershipExpose" /> element
+    /// The <see cref="MembershipExposeTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose" /> element
     /// </summary>
-    public class MembershipExposeTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Views.MembershipExpose>
+    public static partial class MembershipExposeTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="MembershipExposeTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule MembershipExpose
+        /// <para>MembershipExpose=MembershipImport</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public MembershipExposeTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMembershipExpose(SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose poco, StringBuilder stringBuilder)
         {
-        }
+            // non Terminal : MembershipImport; Found rule MembershipImport=importedMembership=[QualifiedName]('::'isRecursive?='**')? 
+            MembershipImportTextualNotationBuilder.BuildMembershipImport(poco, stringBuilder);
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Views.MembershipExpose"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.MembershipExpose"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Views.MembershipExpose poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : MembershipExpose=MembershipImport
-
-            // non Terminal : MembershipImport; Found rule MembershipImport=importedMembership=[QualifiedName]('::'isRecursive?='**')?
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

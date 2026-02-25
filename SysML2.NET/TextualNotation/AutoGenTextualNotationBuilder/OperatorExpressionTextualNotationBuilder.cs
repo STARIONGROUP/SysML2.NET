@@ -29,28 +29,172 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="OperatorExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.OperatorExpression" /> element
+    /// The <see cref="OperatorExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> element
     /// </summary>
-    public class OperatorExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.OperatorExpression>
+    public static partial class OperatorExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="OperatorExpressionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ConditionalExpression
+        /// <para>ConditionalExpression:OperatorExpression=operator='if'ownedRelationship+=ArgumentMember'?'ownedRelationship+=ArgumentExpressionMember'else'ownedRelationship+=ArgumentExpressionMemberownedRelationship+=EmptyResultMember</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public OperatorExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConditionalExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : operator = SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property operator value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("? ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("else ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.OperatorExpression"/>
+        /// Builds the Textual Notation string for the rule ConditionalBinaryOperatorExpression
+        /// <para>ConditionalBinaryOperatorExpression:OperatorExpression=ownedRelationship+=ArgumentMemberoperator=ConditionalBinaryOperatorownedRelationship+=ArgumentExpressionMemberownedRelationship+=EmptyResultMember</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.OperatorExpression"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.OperatorExpression poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConditionalBinaryOperatorExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : operator = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property operator value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule BinaryOperatorExpression
+        /// <para>BinaryOperatorExpression:OperatorExpression=ownedRelationship+=ArgumentMemberoperator=BinaryOperatorownedRelationship+=ArgumentMemberownedRelationship+=EmptyResultMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBinaryOperatorExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : operator = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property operator value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule UnaryOperatorExpression
+        /// <para>UnaryOperatorExpression:OperatorExpression=operator=UnaryOperatorownedRelationship+=ArgumentMemberownedRelationship+=EmptyResultMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildUnaryOperatorExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : operator = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property operator value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ClassificationExpression
+        /// <para>ClassificationExpression:OperatorExpression=(ownedRelationship+=ArgumentMember)?(operator=ClassificationTestOperatorownedRelationship+=TypeReferenceMember|operator=CastOperatorownedRelationship+=TypeResultMember)ownedRelationship+=EmptyResultMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildClassificationExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule MetaclassificationExpression
+        /// <para>MetaclassificationExpression:OperatorExpression=ownedRelationship+=MetadataArgumentMember(operator=ClassificationTestOperatorownedRelationship+=TypeReferenceMember|operator=MetaCastOperatorownedRelationship+=TypeResultMember)ownedRelationship+=EmptyResultMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMetaclassificationExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ExtentExpression
+        /// <para>ExtentExpression:OperatorExpression=operator='all'ownedRelationship+=TypeReferenceMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildExtentExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : operator = SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property operator value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule BracketExpression
+        /// <para>BracketExpression:OperatorExpression=ownedRelationship+=PrimaryArgumentMemberoperator='['ownedRelationship+=SequenceExpressionListMember']'</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBracketExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : operator = SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property operator value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("] ");
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule SequenceOperatorExpression
+        /// <para>SequenceOperatorExpression:OperatorExpression=ownedRelationship+=OwnedExpressionMemberoperator=','ownedRelationship+=SequenceExpressionListMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSequenceOperatorExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IOperatorExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : operator = SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property operator value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
     }
 }

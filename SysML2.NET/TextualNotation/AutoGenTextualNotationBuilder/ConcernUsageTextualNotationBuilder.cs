@@ -29,46 +29,37 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ConcernUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage" /> element
+    /// The <see cref="ConcernUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage" /> element
     /// </summary>
-    public class ConcernUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage>
+    public static partial class ConcernUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ConcernUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule FramedConcernUsage
+        /// <para>FramedConcernUsage:ConcernUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?CalculationBody|(UsageExtensionKeyword*'concern'|UsageExtensionKeyword+)CalculationUsageDeclarationCalculationBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ConcernUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFramedConcernUsage(SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage"/>
+        /// Builds the Textual Notation string for the rule ConcernUsage
+        /// <para>ConcernUsage=OccurrenceUsagePrefix'concern'ConstraintUsageDeclarationRequirementBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConcernUsage(SysML2.NET.Core.POCO.Systems.Requirements.IConcernUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ConcernUsage=OccurrenceUsagePrefix'concern'ConstraintUsageDeclarationRequirementBody
-
-
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("concern ");
-            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart?
+            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart? 
+            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, stringBuilder);
+            // non Terminal : RequirementBody; Found rule RequirementBody:Type=';'|'{'RequirementBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, stringBuilder);
 
-
-
-
-
-
-            // non Terminal : RequirementBody; Found rule RequirementBody:Type=';'|'{'RequirementBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

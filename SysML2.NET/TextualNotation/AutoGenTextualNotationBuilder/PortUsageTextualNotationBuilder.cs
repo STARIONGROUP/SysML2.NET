@@ -29,37 +29,62 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="PortUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Ports.PortUsage" /> element
+    /// The <see cref="PortUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortUsage" /> element
     /// </summary>
-    public class PortUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Ports.PortUsage>
+    public static partial class PortUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="PortUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule DefaultInterfaceEnd
+        /// <para>DefaultInterfaceEnd:PortUsage=isEnd?='end'Usage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public PortUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDefaultInterfaceEnd(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : isEnd ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isEnd value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
+            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Ports.PortUsage"/>
+        /// Builds the Textual Notation string for the rule InterfaceEnd
+        /// <para>InterfaceEnd:PortUsage=(ownedRelationship+=OwnedCrossMultiplicityMember)?(declaredName=NAMEREFERENCES)?ownedRelationship+=OwnedReferenceSubsetting</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.PortUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Ports.PortUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildInterfaceEnd(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : PortUsage=OccurrenceUsagePrefix'port'Usage
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
+            // Group Element
+            // Assignment Element : declaredName = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property declaredName value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // non Terminal : REFERENCES; Found rule REFERENCES='::>'|'references' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
 
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PortUsage
+        /// <para>PortUsage=OccurrenceUsagePrefix'port'Usage</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPortUsage(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("port ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion
+            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
+            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

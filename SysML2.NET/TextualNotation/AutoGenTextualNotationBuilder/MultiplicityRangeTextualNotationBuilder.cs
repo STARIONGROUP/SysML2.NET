@@ -29,34 +29,61 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="MultiplicityRangeTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange" /> element
+    /// The <see cref="MultiplicityRangeTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange" /> element
     /// </summary>
-    public class MultiplicityRangeTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange>
+    public static partial class MultiplicityRangeTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="MultiplicityRangeTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedMultiplicityRange
+        /// <para>OwnedMultiplicityRange:MultiplicityRange=MultiplicityBounds</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public MultiplicityRangeTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedMultiplicityRange(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, StringBuilder stringBuilder)
         {
+            // non Terminal : MultiplicityBounds; Found rule MultiplicityBounds:MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']' 
+            BuildMultiplicityBounds(poco, stringBuilder);
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange"/>
+        /// Builds the Textual Notation string for the rule MultiplicityBounds
+        /// <para>MultiplicityBounds:MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMultiplicityBounds(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'
-
             stringBuilder.Append("[ ");
-            // Group Element 
+            // Group Element
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(".. ");
+
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
             stringBuilder.Append("] ");
 
-            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule MultiplicityRange
+        /// <para>MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMultiplicityRange(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("[ ");
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(".. ");
+
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("] ");
+
         }
     }
 }

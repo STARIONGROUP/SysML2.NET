@@ -29,48 +29,68 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="SpecializationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.Specialization" /> element
+    /// The <see cref="SpecializationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> element
     /// </summary>
-    public class SpecializationTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Specialization>
+    public static partial class SpecializationTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="SpecializationTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedSpecialization
+        /// <para>OwnedSpecialization:Specialization=GeneralType</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public SpecializationTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, StringBuilder stringBuilder)
         {
+            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general} 
+            BuildGeneralType(poco, stringBuilder);
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Types.Specialization"/>
+        /// Builds the Textual Notation string for the rule SpecificType
+        /// <para>SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.Specialization"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Specialization poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSpecificType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Specialization=('specialization'Identification)?'subtype'SpecificTypeSPECIALIZESGeneralTypeRelationshipBody
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-            // Group Element 
+        /// <summary>
+        /// Builds the Textual Notation string for the rule GeneralType
+        /// <para>GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildGeneralType(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Specialization
+        /// <para>Specialization=('specialization'Identification)?'subtype'SpecificTypeSPECIALIZESGeneralTypeRelationshipBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.ISpecialization" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            stringBuilder.Append("specialization ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+
             stringBuilder.Append("subtype ");
-            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}
+            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific} 
+            BuildSpecificType(poco, stringBuilder);
+            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general} 
+            BuildGeneralType(poco, stringBuilder);
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
-
-            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes'
-
-
-            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}
-
-
-
-
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
-
-
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

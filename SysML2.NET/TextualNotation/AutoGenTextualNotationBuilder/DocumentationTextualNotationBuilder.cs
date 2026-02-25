@@ -29,38 +29,29 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="DocumentationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Annotations.Documentation" /> element
+    /// The <see cref="DocumentationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Annotations.IDocumentation" /> element
     /// </summary>
-    public class DocumentationTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Annotations.Documentation>
+    public static partial class DocumentationTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="DocumentationTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule Documentation
+        /// <para>Documentation='doc'Identification('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public DocumentationTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IDocumentation" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDocumentation(SysML2.NET.Core.POCO.Root.Annotations.IDocumentation poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Root.Annotations.Documentation"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.Documentation"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Annotations.Documentation poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Documentation='doc'Identification('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT
-
-
-
             stringBuilder.Append("doc ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)?
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            // Group Element
+            stringBuilder.Append("locale ");
+            // Assignment Element : locale = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property locale value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-
-            // Group Element 
             // Assignment Element : body = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property body value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
         }
     }
 }

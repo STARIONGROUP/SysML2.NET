@@ -29,41 +29,27 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="AnalysisCaseDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition" /> element
+    /// The <see cref="AnalysisCaseDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.AnalysisCases.IAnalysisCaseDefinition" /> element
     /// </summary>
-    public class AnalysisCaseDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition>
+    public static partial class AnalysisCaseDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="AnalysisCaseDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule AnalysisCaseDefinition
+        /// <para>AnalysisCaseDefinition=OccurrenceDefinitionPrefix'analysis''def'DefinitionDeclarationCaseBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public AnalysisCaseDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.AnalysisCases.IAnalysisCaseDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildAnalysisCaseDefinition(SysML2.NET.Core.POCO.Systems.AnalysisCases.IAnalysisCaseDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.AnalysisCases.AnalysisCaseDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : AnalysisCaseDefinition=OccurrenceDefinitionPrefix'analysis''def'DefinitionDeclarationCaseBody
-
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("analysis ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
+            // non Terminal : CaseBody; Found rule CaseBody:Type=';'|'{'CaseBodyItem*(ownedRelationship+=ResultExpressionMember)?'}' 
+            TypeTextualNotationBuilder.BuildCaseBody(poco, stringBuilder);
 
-
-            // non Terminal : CaseBody; Found rule CaseBody:Type=';'|'{'CaseBodyItem*(ownedRelationship+=ResultExpressionMember)?'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

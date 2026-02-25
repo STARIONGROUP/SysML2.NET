@@ -29,37 +29,80 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="PackageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Packages.Package" /> element
+    /// The <see cref="PackageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> element
     /// </summary>
-    public class PackageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Packages.Package>
+    public static partial class PackageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="PackageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule PackageDeclaration
+        /// <para>PackageDeclaration:Package='package'Identification</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public PackageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPackageDeclaration(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
         {
+            stringBuilder.Append("package ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Packages.Package"/>
+        /// Builds the Textual Notation string for the rule PackageBody
+        /// <para>PackageBody:Package=';'|'{'PackageBodyElement*'}'</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.Package"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Packages.Package poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPackageBody(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Package=(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-            // Group Element 
-            // non Terminal : PackageDeclaration; Found rule PackageDeclaration:Package='package'Identification
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PackageBodyElement
+        /// <para>PackageBodyElement:Package=ownedRelationship+=PackageMember|ownedRelationship+=ElementFilterMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPackageBodyElement(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FilterPackage
+        /// <para>FilterPackage:Package=ownedRelationship+=FilterPackageImport(ownedRelationship+=FilterPackageMember)+</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFilterPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
-            // non Terminal : PackageBody; Found rule PackageBody:Package=';'|'{'PackageBodyElement*'}'
+        }
 
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Package
+        /// <para>Package=(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IPackage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
+            // non Terminal : PackageDeclaration; Found rule PackageDeclaration:Package='package'Identification 
+            BuildPackageDeclaration(poco, stringBuilder);
+            // non Terminal : PackageBody; Found rule PackageBody:Package=';'|'{'PackageBodyElement*'}' 
+            BuildPackageBody(poco, stringBuilder);
 
-            return stringBuilder.ToString();
         }
     }
 }

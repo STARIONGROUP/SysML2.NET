@@ -29,41 +29,27 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ActionDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.ActionDefinition" /> element
+    /// The <see cref="ActionDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.IActionDefinition" /> element
     /// </summary>
-    public class ActionDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Actions.ActionDefinition>
+    public static partial class ActionDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ActionDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ActionDefinition
+        /// <para>ActionDefinition=OccurrenceDefinitionPrefix'action''def'DefinitionDeclarationActionBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ActionDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IActionDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildActionDefinition(SysML2.NET.Core.POCO.Systems.Actions.IActionDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Actions.ActionDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ActionDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Actions.ActionDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ActionDefinition=OccurrenceDefinitionPrefix'action''def'DefinitionDeclarationActionBody
-
-            
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("action ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
+            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
-
-            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

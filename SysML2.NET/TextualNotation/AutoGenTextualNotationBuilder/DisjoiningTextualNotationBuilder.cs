@@ -29,40 +29,43 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="DisjoiningTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.Disjoining" /> element
+    /// The <see cref="DisjoiningTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.IDisjoining" /> element
     /// </summary>
-    public class DisjoiningTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Disjoining>
+    public static partial class DisjoiningTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="DisjoiningTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedDisjoining
+        /// <para>OwnedDisjoining:Disjoining=disjoiningType=[QualifiedName]|disjoiningType=FeatureChain{ownedRelatedElement+=disjoiningType}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public DisjoiningTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IDisjoining" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Types.Disjoining"/>
+        /// Builds the Textual Notation string for the rule Disjoining
+        /// <para>Disjoining=('disjoining'Identification)?'disjoint'(typeDisjoined=[QualifiedName]|typeDisjoined=FeatureChain{ownedRelatedElement+=typeDisjoined})'from'(disjoiningType=[QualifiedName]|disjoiningType=FeatureChain{ownedRelatedElement+=disjoiningType})RelationshipBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.Disjoining"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Disjoining poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IDisjoining" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Disjoining=('disjoining'Identification)?'disjoint'(typeDisjoined=[QualifiedName]|typeDisjoined=FeatureChain{ownedRelatedElement+=typeDisjoined})'from'(disjoiningType=[QualifiedName]|disjoiningType=FeatureChain{ownedRelatedElement+=disjoiningType})RelationshipBody
+            // Group Element
+            stringBuilder.Append("disjoining ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
-            // Group Element 
             stringBuilder.Append("disjoint ");
-            // Group Element 
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append("from ");
-            // Group Element 
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
-
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

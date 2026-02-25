@@ -29,40 +29,45 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="TypeFeaturingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.TypeFeaturing" /> element
+    /// The <see cref="TypeFeaturingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing" /> element
     /// </summary>
-    public class TypeFeaturingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.TypeFeaturing>
+    public static partial class TypeFeaturingTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="TypeFeaturingTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedTypeFeaturing
+        /// <para>OwnedTypeFeaturing:TypeFeaturing=featuringType=[QualifiedName]</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public TypeFeaturingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : featuringType = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property featuringType value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Features.TypeFeaturing"/>
+        /// Builds the Textual Notation string for the rule TypeFeaturing
+        /// <para>TypeFeaturing='featuring'(Identification'of')?featureOfType=[QualifiedName]'by'featuringType=[QualifiedName]RelationshipBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.TypeFeaturing"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.TypeFeaturing poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : TypeFeaturing='featuring'(Identification'of')?featureOfType=[QualifiedName]'by'featuringType=[QualifiedName]RelationshipBody
-
             stringBuilder.Append("featuring ");
-            // Group Element 
-            // Assignment Element : featureOfType = 
+            // Group Element
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            stringBuilder.Append("of ");
+
+            // Assignment Element : featureOfType = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property featureOfType value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
             stringBuilder.Append("by ");
-            // Assignment Element : featuringType = 
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
+            // Assignment Element : featuringType = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property featuringType value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
-
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

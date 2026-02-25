@@ -29,40 +29,27 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="DecisionNodeTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.DecisionNode" /> element
+    /// The <see cref="DecisionNodeTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.IDecisionNode" /> element
     /// </summary>
-    public class DecisionNodeTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Actions.DecisionNode>
+    public static partial class DecisionNodeTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="DecisionNodeTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule DecisionNode
+        /// <para>DecisionNode=ControlNodePrefixisComposite?='decide'UsageDeclarationActionBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public DecisionNodeTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IDecisionNode" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDecisionNode(SysML2.NET.Core.POCO.Systems.Actions.IDecisionNode poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Actions.DecisionNode"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.DecisionNode"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Actions.DecisionNode poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : DecisionNode=ControlNodePrefixisComposite?='decide'UsageDeclarationActionBody
-
-            // non Terminal : ControlNodePrefix; Found rule ControlNodePrefix:OccurrenceUsage=RefPrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : ControlNodePrefix; Found rule ControlNodePrefix:OccurrenceUsage=RefPrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, stringBuilder);
             // Assignment Element : isComposite ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart?
+            // If property isComposite value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
-
-            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

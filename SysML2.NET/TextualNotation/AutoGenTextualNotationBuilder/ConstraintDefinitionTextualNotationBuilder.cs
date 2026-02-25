@@ -29,41 +29,27 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ConstraintDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Constraints.ConstraintDefinition" /> element
+    /// The <see cref="ConstraintDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintDefinition" /> element
     /// </summary>
-    public class ConstraintDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Constraints.ConstraintDefinition>
+    public static partial class ConstraintDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ConstraintDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ConstraintDefinition
+        /// <para>ConstraintDefinition=OccurrenceDefinitionPrefix'constraint''def'DefinitionDeclarationCalculationBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ConstraintDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConstraintDefinition(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Constraints.ConstraintDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.ConstraintDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Constraints.ConstraintDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ConstraintDefinition=OccurrenceDefinitionPrefix'constraint''def'DefinitionDeclarationCalculationBody
-
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("constraint ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
+            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}' 
+            TypeTextualNotationBuilder.BuildCalculationBody(poco, stringBuilder);
 
-
-            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

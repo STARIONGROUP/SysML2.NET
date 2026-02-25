@@ -29,28 +29,24 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ViewRenderingMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership" /> element
+    /// The <see cref="ViewRenderingMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership" /> element
     /// </summary>
-    public class ViewRenderingMembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership>
+    public static partial class ViewRenderingMembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ViewRenderingMembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ViewRenderingMember
+        /// <para>ViewRenderingMember:ViewRenderingMembership=MemberPrefix'render'ownedRelatedElement+=ViewRenderingUsage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ViewRenderingMembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildViewRenderingMember(SysML2.NET.Core.POCO.Systems.Views.IViewRenderingMembership poco, StringBuilder stringBuilder)
         {
-        }
+            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            stringBuilder.Append("render ");
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership poco)
-        {
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString();
         }
     }
 }

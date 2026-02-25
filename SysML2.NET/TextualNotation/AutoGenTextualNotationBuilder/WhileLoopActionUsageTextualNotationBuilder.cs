@@ -29,28 +29,31 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="WhileLoopActionUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.WhileLoopActionUsage" /> element
+    /// The <see cref="WhileLoopActionUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.IWhileLoopActionUsage" /> element
     /// </summary>
-    public class WhileLoopActionUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Actions.WhileLoopActionUsage>
+    public static partial class WhileLoopActionUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="WhileLoopActionUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule WhileLoopNode
+        /// <para>WhileLoopNode:WhileLoopActionUsage=ActionNodePrefix('while'ownedRelationship+=ExpressionParameterMember|'loop'ownedRelationship+=EmptyParameterMember)ownedRelationship+=ActionBodyParameterMember('until'ownedRelationship+=ExpressionParameterMember';')?</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public WhileLoopActionUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IWhileLoopActionUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildWhileLoopNode(SysML2.NET.Core.POCO.Systems.Actions.IWhileLoopActionUsage poco, StringBuilder stringBuilder)
         {
-        }
+            // non Terminal : ActionNodePrefix; Found rule ActionNodePrefix:ActionUsage=OccurrenceUsagePrefixActionNodeUsageDeclaration? 
+            ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append("until ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("; ");
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Actions.WhileLoopActionUsage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.WhileLoopActionUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Actions.WhileLoopActionUsage poco)
-        {
-            var stringBuilder = new StringBuilder();
 
-            return stringBuilder.ToString();
         }
     }
 }

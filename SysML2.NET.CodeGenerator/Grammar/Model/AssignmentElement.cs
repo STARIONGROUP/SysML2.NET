@@ -43,6 +43,6 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         /// <summary>
         /// Gets or sets an optional prefix
         /// </summary>
-        public string Prefix { get; set; }
+        public string Prefix { get; set; } 
     }
 }

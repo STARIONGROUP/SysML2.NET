@@ -29,38 +29,25 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ItemDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Items.ItemDefinition" /> element
+    /// The <see cref="ItemDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Items.IItemDefinition" /> element
     /// </summary>
-    public class ItemDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Items.ItemDefinition>
+    public static partial class ItemDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ItemDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ItemDefinition
+        /// <para>ItemDefinition=OccurrenceDefinitionPrefix'item''def'Definition</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ItemDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Items.IItemDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildItemDefinition(SysML2.NET.Core.POCO.Systems.Items.IItemDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Items.ItemDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Items.ItemDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Items.ItemDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ItemDefinition=OccurrenceDefinitionPrefix'item''def'Definition
-
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("item ");
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

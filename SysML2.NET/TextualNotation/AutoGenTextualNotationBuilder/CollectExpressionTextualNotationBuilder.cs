@@ -29,33 +29,24 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="CollectExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.CollectExpression" /> element
+    /// The <see cref="CollectExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ICollectExpression" /> element
     /// </summary>
-    public class CollectExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.CollectExpression>
+    public static partial class CollectExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="CollectExpressionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule CollectExpression
+        /// <para>CollectExpression=ownedRelationship+=PrimaryArgumentMember'.'ownedRelationship+=BodyArgumentMember</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public CollectExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ICollectExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildCollectExpression(SysML2.NET.Core.POCO.Kernel.Expressions.ICollectExpression poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.CollectExpression"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.CollectExpression"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.CollectExpression poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : CollectExpression=ownedRelationship+=PrimaryArgumentMember'.'ownedRelationship+=BodyArgumentMember
-
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
             stringBuilder.Append(". ");
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
         }
     }
 }

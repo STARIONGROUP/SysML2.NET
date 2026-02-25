@@ -29,33 +29,24 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ConstructorExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ConstructorExpression" /> element
+    /// The <see cref="ConstructorExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IConstructorExpression" /> element
     /// </summary>
-    public class ConstructorExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.ConstructorExpression>
+    public static partial class ConstructorExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ConstructorExpressionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ConstructorExpression
+        /// <para>ConstructorExpression='new'ownedRelationship+=InstantiatedTypeMemberownedRelationship+=ConstructorResultMember</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ConstructorExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IConstructorExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConstructorExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IConstructorExpression poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ConstructorExpression"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ConstructorExpression"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.ConstructorExpression poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ConstructorExpression='new'ownedRelationship+=InstantiatedTypeMemberownedRelationship+=ConstructorResultMember
-
             stringBuilder.Append("new ");
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
         }
     }
 }

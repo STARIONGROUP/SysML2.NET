@@ -29,42 +29,26 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="InteractionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.Interaction" /> element
+    /// The <see cref="InteractionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.IInteraction" /> element
     /// </summary>
-    public class InteractionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Interactions.Interaction>
+    public static partial class InteractionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="InteractionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule Interaction
+        /// <para>Interaction=TypePrefix'interaction'ClassifierDeclarationTypeBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public InteractionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.IInteraction" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildInteraction(SysML2.NET.Core.POCO.Kernel.Interactions.IInteraction poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.Interaction"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.Interaction"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Interactions.Interaction poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Interaction=TypePrefix'interaction'ClassifierDeclarationTypeBody
-
-
-
-            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)*
-
-
+            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)* 
+            TypeTextualNotationBuilder.BuildTypePrefix(poco, stringBuilder);
             stringBuilder.Append("interaction ");
-            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart*
+            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart* 
+            ClassifierTextualNotationBuilder.BuildClassifierDeclaration(poco, stringBuilder);
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
+            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
 
-
-            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

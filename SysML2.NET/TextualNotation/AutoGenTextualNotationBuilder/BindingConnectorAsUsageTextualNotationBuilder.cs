@@ -29,43 +29,34 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="BindingConnectorAsUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Connections.BindingConnectorAsUsage" /> element
+    /// The <see cref="BindingConnectorAsUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage" /> element
     /// </summary>
-    public class BindingConnectorAsUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Connections.BindingConnectorAsUsage>
+    public static partial class BindingConnectorAsUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="BindingConnectorAsUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule BindingConnectorAsUsage
+        /// <para>BindingConnectorAsUsage=UsagePrefix('binding'UsageDeclaration)?'bind'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMemberUsageBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public BindingConnectorAsUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBindingConnectorAsUsage(SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage poco, StringBuilder stringBuilder)
         {
-        }
+            // non Terminal : UsagePrefix; Found rule UsagePrefix:Usage=UnextendedUsagePrefixUsageExtensionKeyword* 
+            UsageTextualNotationBuilder.BuildUsagePrefix(poco, stringBuilder);
+            // Group Element
+            stringBuilder.Append("binding ");
+            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Connections.BindingConnectorAsUsage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Connections.BindingConnectorAsUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Connections.BindingConnectorAsUsage poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : BindingConnectorAsUsage=UsagePrefix('binding'UsageDeclaration)?'bind'ownedRelationship+=ConnectorEndMember'='ownedRelationship+=ConnectorEndMemberUsageBody
-
-
-
-            // non Terminal : UsagePrefix; Found rule UsagePrefix:Usage=UnextendedUsagePrefixUsageExtensionKeyword*
-
-
-            // Group Element 
             stringBuilder.Append("bind ");
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
             stringBuilder.Append("= ");
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // non Terminal : UsageBody; Found rule UsageBody:Usage=DefinitionBody
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // non Terminal : UsageBody; Found rule UsageBody:Usage=DefinitionBody 
+            UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

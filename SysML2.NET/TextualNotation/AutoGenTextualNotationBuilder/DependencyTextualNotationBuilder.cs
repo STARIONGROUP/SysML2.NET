@@ -29,44 +29,48 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="DependencyTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Dependencies.Dependency" /> element
+    /// The <see cref="DependencyTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Dependencies.IDependency" /> element
     /// </summary>
-    public class DependencyTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Dependencies.Dependency>
+    public static partial class DependencyTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="DependencyTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule Dependency
+        /// <para>Dependency=(ownedRelationship+=PrefixMetadataAnnotation)*'dependency'DependencyDeclarationRelationshipBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public DependencyTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Dependencies.IDependency" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildDependency(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, StringBuilder stringBuilder)
         {
-        }
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Root.Dependencies.Dependency"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Dependencies.Dependency"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Dependencies.Dependency poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Dependency=(ownedRelationship+=PrefixMetadataAnnotation)*'dependency'DependencyDeclarationRelationshipBody
-
-            // Group Element 
             stringBuilder.Append("dependency ");
-            // non Terminal : DependencyDeclaration; Found rule DependencyDeclaration=(Identification'from')?client+=[QualifiedName](','client+=[QualifiedName])*'to'supplier+=[QualifiedName](','supplier+=[QualifiedName])*
+            // non Terminal : DependencyDeclaration; Found rule DependencyDeclaration=(Identification'from')?client+=[QualifiedName](','client+=[QualifiedName])*'to'supplier+=[QualifiedName](','supplier+=[QualifiedName])* 
+            // Group Element
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            stringBuilder.Append("from ");
+
+            // Assignment Element : client += SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property client value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : client += SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property client value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+
+            stringBuilder.Append("to ");
+            // Assignment Element : supplier += SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property supplier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : supplier += SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property supplier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
 
 
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
-
-
-
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
-
-
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

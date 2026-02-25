@@ -29,28 +29,24 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="FramedConcernMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership" /> element
+    /// The <see cref="FramedConcernMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership" /> element
     /// </summary>
-    public class FramedConcernMembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership>
+    public static partial class FramedConcernMembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="FramedConcernMembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule FramedConcernMember
+        /// <para>FramedConcernMember:FramedConcernMembership=MemberPrefix?'frame'ownedRelatedElement+=FramedConcernUsage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public FramedConcernMembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFramedConcernMember(SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership poco, StringBuilder stringBuilder)
         {
-        }
+            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            stringBuilder.Append("frame ");
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership poco)
-        {
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString();
         }
     }
 }

@@ -29,35 +29,26 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="IndexExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IndexExpression" /> element
+    /// The <see cref="IndexExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression" /> element
     /// </summary>
-    public class IndexExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.IndexExpression>
+    public static partial class IndexExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="IndexExpressionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule IndexExpression
+        /// <para>IndexExpression=ownedRelationship+=PrimaryArgumentMember'#''('ownedRelationship+=SequenceExpressionListMember')'</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public IndexExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildIndexExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IIndexExpression poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IndexExpression"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IndexExpression"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.IndexExpression poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : IndexExpression=ownedRelationship+=PrimaryArgumentMember'#''('ownedRelationship+=SequenceExpressionListMember')'
-
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
             stringBuilder.Append("# ");
             stringBuilder.Append("( ");
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
             stringBuilder.Append(") ");
 
-            return stringBuilder.ToString();
         }
     }
 }

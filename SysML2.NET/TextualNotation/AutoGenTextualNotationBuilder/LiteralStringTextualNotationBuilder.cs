@@ -29,31 +29,21 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="LiteralStringTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralString" /> element
+    /// The <see cref="LiteralStringTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralString" /> element
     /// </summary>
-    public class LiteralStringTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.LiteralString>
+    public static partial class LiteralStringTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="LiteralStringTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule LiteralString
+        /// <para>LiteralString=value=STRING_VALUE</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public LiteralStringTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralString" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildLiteralString(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralString poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralString"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralString"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.LiteralString poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : LiteralString=value=STRING_VALUE
-
             // Assignment Element : value = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property value value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
         }
     }
 }

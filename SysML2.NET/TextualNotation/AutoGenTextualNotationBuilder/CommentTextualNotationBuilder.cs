@@ -29,33 +29,41 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="CommentTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Annotations.Comment" /> element
+    /// The <see cref="CommentTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Annotations.IComment" /> element
     /// </summary>
-    public class CommentTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Annotations.Comment>
+    public static partial class CommentTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="CommentTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule Comment
+        /// <para>Comment=('comment'Identification('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?)?('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public CommentTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IComment" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildComment(SysML2.NET.Core.POCO.Root.Annotations.IComment poco, StringBuilder stringBuilder)
         {
-        }
+            // Group Element
+            stringBuilder.Append("comment ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            // Group Element
+            stringBuilder.Append("about ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Root.Annotations.Comment"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.Comment"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Annotations.Comment poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Comment=('comment'Identification('about'ownedRelationship+=Annotation(','ownedRelationship+=Annotation)*)?)?('locale'locale=STRING_VALUE)?body=REGULAR_COMMENT
 
-            // Group Element 
-            // Group Element 
+
+            // Group Element
+            stringBuilder.Append("locale ");
+            // Assignment Element : locale = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property locale value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
             // Assignment Element : body = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property body value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
         }
     }
 }

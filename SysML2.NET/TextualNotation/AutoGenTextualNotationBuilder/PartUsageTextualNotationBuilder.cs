@@ -29,39 +29,56 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="PartUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Parts.PartUsage" /> element
+    /// The <see cref="PartUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Parts.IPartUsage" /> element
     /// </summary>
-    public class PartUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Parts.PartUsage>
+    public static partial class PartUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="PartUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ActorUsage
+        /// <para>ActorUsage:PartUsage='actor'UsageExtensionKeyword*Usage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public PartUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Parts.IPartUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildActorUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
         {
+            stringBuilder.Append("actor ");
+            // non Terminal : UsageExtensionKeyword; Found rule UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember 
+            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
+            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Parts.PartUsage"/>
+        /// Builds the Textual Notation string for the rule StakeholderUsage
+        /// <para>StakeholderUsage:PartUsage='stakeholder'UsageExtensionKeyword*Usage</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Parts.PartUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Parts.PartUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Parts.IPartUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildStakeholderUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : PartUsage=OccurrenceUsagePrefix'part'Usage
+            stringBuilder.Append("stakeholder ");
+            // non Terminal : UsageExtensionKeyword; Found rule UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember 
+            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
+            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
+        }
 
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PartUsage
+        /// <para>PartUsage=OccurrenceUsagePrefix'part'Usage</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Parts.IPartUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPartUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("part ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion
+            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
+            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

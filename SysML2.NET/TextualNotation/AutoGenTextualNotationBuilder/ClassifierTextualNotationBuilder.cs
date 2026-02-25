@@ -29,40 +29,91 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ClassifierTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Classifiers.Classifier" /> element
+    /// The <see cref="ClassifierTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> element
     /// </summary>
-    public class ClassifierTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Classifiers.Classifier>
+    public static partial class ClassifierTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ClassifierTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule SubclassificationPart
+        /// <para>SubclassificationPart:Classifier=SPECIALIZESownedRelationship+=OwnedSubclassification(','ownedRelationship+=OwnedSubclassification)*</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ClassifierTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSubclassificationPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
         {
+            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Classifiers.Classifier"/>
+        /// Builds the Textual Notation string for the rule ClassifierDeclaration
+        /// <para>ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart*</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.Classifier"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Classifiers.Classifier poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildClassifierDeclaration(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Classifier=TypePrefix'classifier'ClassifierDeclarationTypeBody
+            // Group Element
+            // Assignment Element : isSufficient ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isSufficient value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
 
-            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)*
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : TypeRelationshipPart; Found rule TypeRelationshipPart:Type=DisjoiningPart|UnioningPart|IntersectingPart|DifferencingPart 
+            TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, stringBuilder);
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule SuperclassingPart
+        /// <para>SuperclassingPart:Classifier=SPECIALIZESownedRelationship+=OwnedSubclassification(','ownedRelationship+=OwnedSubclassification)*</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSuperclassingPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Classifier
+        /// <para>Classifier=TypePrefix'classifier'ClassifierDeclarationTypeBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.IClassifier" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildClassifier(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)* 
+            TypeTextualNotationBuilder.BuildTypePrefix(poco, stringBuilder);
             stringBuilder.Append("classifier ");
-            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart*
+            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart* 
+            BuildClassifierDeclaration(poco, stringBuilder);
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
+            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
 
-
-            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

@@ -28,8 +28,8 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
     public class GroupElement: RuleElement
     {
         /// <summary>
-        /// All <see cref="RuleElement"/> that are part of the group
+        /// Gets the collection <see cref="Alternatives"/> that are part of the <see cref="GroupElement" /> 
         /// </summary>
-        public List<RuleElement> Elements { get; } = [];
+        public List<Alternatives> Alternatives { get; } = [];
     }
 }

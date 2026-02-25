@@ -29,28 +29,24 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ObjectiveMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Cases.ObjectiveMembership" /> element
+    /// The <see cref="ObjectiveMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Cases.IObjectiveMembership" /> element
     /// </summary>
-    public class ObjectiveMembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Cases.ObjectiveMembership>
+    public static partial class ObjectiveMembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ObjectiveMembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ObjectiveMember
+        /// <para>ObjectiveMember:ObjectiveMembership=MemberPrefix'objective'ownedRelatedElement+=ObjectiveRequirementUsage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ObjectiveMembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Cases.IObjectiveMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildObjectiveMember(SysML2.NET.Core.POCO.Systems.Cases.IObjectiveMembership poco, StringBuilder stringBuilder)
         {
-        }
+            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            stringBuilder.Append("objective ");
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Cases.ObjectiveMembership"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Cases.ObjectiveMembership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Cases.ObjectiveMembership poco)
-        {
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString();
         }
     }
 }

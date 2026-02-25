@@ -29,39 +29,24 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ItemUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Items.ItemUsage" /> element
+    /// The <see cref="ItemUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Items.IItemUsage" /> element
     /// </summary>
-    public class ItemUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Items.ItemUsage>
+    public static partial class ItemUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ItemUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ItemUsage
+        /// <para>ItemUsage=OccurrenceUsagePrefix'item'Usage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ItemUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Items.IItemUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildItemUsage(SysML2.NET.Core.POCO.Systems.Items.IItemUsage poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Items.ItemUsage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Items.ItemUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Items.ItemUsage poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ItemUsage=OccurrenceUsagePrefix'item'Usage
-
-
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("item ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion
+            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
+            UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

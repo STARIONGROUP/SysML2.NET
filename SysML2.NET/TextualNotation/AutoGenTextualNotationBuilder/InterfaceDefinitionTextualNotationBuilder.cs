@@ -29,41 +29,27 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="InterfaceDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.InterfaceDefinition" /> element
+    /// The <see cref="InterfaceDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition" /> element
     /// </summary>
-    public class InterfaceDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Interfaces.InterfaceDefinition>
+    public static partial class InterfaceDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="InterfaceDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule InterfaceDefinition
+        /// <para>InterfaceDefinition=OccurrenceDefinitionPrefix'interface''def'DefinitionDeclarationInterfaceBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public InterfaceDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildInterfaceDefinition(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.InterfaceDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Interfaces.InterfaceDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Interfaces.InterfaceDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : InterfaceDefinition=OccurrenceDefinitionPrefix'interface''def'DefinitionDeclarationInterfaceBody
-
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("interface ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
+            // non Terminal : InterfaceBody; Found rule InterfaceBody:Type=';'|'{'InterfaceBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildInterfaceBody(poco, stringBuilder);
 
-
-            // non Terminal : InterfaceBody; Found rule InterfaceBody:Type=';'|'{'InterfaceBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

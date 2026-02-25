@@ -29,42 +29,26 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="PredicateTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Functions.Predicate" /> element
+    /// The <see cref="PredicateTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IPredicate" /> element
     /// </summary>
-    public class PredicateTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Functions.Predicate>
+    public static partial class PredicateTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="PredicateTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule Predicate
+        /// <para>Predicate=TypePrefix'predicate'ClassifierDeclarationFunctionBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public PredicateTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IPredicate" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPredicate(SysML2.NET.Core.POCO.Kernel.Functions.IPredicate poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Functions.Predicate"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.Predicate"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Functions.Predicate poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Predicate=TypePrefix'predicate'ClassifierDeclarationFunctionBody
-
-
-
-            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)*
-
-
+            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)* 
+            TypeTextualNotationBuilder.BuildTypePrefix(poco, stringBuilder);
             stringBuilder.Append("predicate ");
-            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart*
+            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart* 
+            ClassifierTextualNotationBuilder.BuildClassifierDeclaration(poco, stringBuilder);
+            // non Terminal : FunctionBody; Found rule FunctionBody:Type=';'|'{'FunctionBodyPart'}' 
+            TypeTextualNotationBuilder.BuildFunctionBody(poco, stringBuilder);
 
-
-            // non Terminal : FunctionBody; Found rule FunctionBody:Type=';'|'{'FunctionBodyPart'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

@@ -29,42 +29,28 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="PortDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Ports.PortDefinition" /> element
+    /// The <see cref="PortDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortDefinition" /> element
     /// </summary>
-    public class PortDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Ports.PortDefinition>
+    public static partial class PortDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="PortDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule PortDefinition
+        /// <para>PortDefinition=DefinitionPrefix'port''def'DefinitionownedRelationship+=ConjugatedPortDefinitionMember{conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition=this}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public PortDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IPortDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPortDefinition(SysML2.NET.Core.POCO.Systems.Ports.IPortDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Ports.PortDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.PortDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Ports.PortDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : PortDefinition=DefinitionPrefix'port''def'DefinitionownedRelationship+=ConjugatedPortDefinitionMember{conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition=this}
-
-
-
-            // non Terminal : DefinitionPrefix; Found rule DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword*
-
-
+            // non Terminal : DefinitionPrefix; Found rule DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword* 
+            DefinitionTextualNotationBuilder.BuildDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("port ");
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody
-
-
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
             // Assignment Element : conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition = this
 
-            return stringBuilder.ToString();
         }
     }
 }

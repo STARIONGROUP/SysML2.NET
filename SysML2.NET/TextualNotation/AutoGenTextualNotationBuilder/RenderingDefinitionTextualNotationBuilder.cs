@@ -29,38 +29,25 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="RenderingDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.RenderingDefinition" /> element
+    /// The <see cref="RenderingDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition" /> element
     /// </summary>
-    public class RenderingDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Views.RenderingDefinition>
+    public static partial class RenderingDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="RenderingDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule RenderingDefinition
+        /// <para>RenderingDefinition=OccurrenceDefinitionPrefix'rendering''def'Definition</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public RenderingDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRenderingDefinition(SysML2.NET.Core.POCO.Systems.Views.IRenderingDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Views.RenderingDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.RenderingDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Views.RenderingDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : RenderingDefinition=OccurrenceDefinitionPrefix'rendering''def'Definition
-
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("rendering ");
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

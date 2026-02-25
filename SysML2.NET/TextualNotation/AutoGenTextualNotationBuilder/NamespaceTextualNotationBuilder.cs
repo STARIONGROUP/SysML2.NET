@@ -29,39 +29,76 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="NamespaceTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.Namespace" /> element
+    /// The <see cref="NamespaceTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.INamespace" /> element
     /// </summary>
-    public class NamespaceTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Namespaces.Namespace>
+    public static partial class NamespaceTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="NamespaceTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule RootNamespace
+        /// <para>RootNamespace:Namespace=PackageBodyElement*</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public NamespaceTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.INamespace" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRootNamespace(SysML2.NET.Core.POCO.Root.Namespaces.INamespace poco, StringBuilder stringBuilder)
         {
+            // non Terminal : PackageBodyElement; Found rule PackageBodyElement:Package=ownedRelationship+=PackageMember|ownedRelationship+=ElementFilterMember|ownedRelationship+=AliasMember|ownedRelationship+=Import 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Root.Namespaces.Namespace"/>
+        /// Builds the Textual Notation string for the rule NamespaceDeclaration
+        /// <para>NamespaceDeclaration:Namespace='namespace'Identification</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.Namespace"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Namespaces.Namespace poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.INamespace" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildNamespaceDeclaration(SysML2.NET.Core.POCO.Root.Namespaces.INamespace poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Namespace=(ownedRelationship+=PrefixMetadataMember)*NamespaceDeclarationNamespaceBody
+            stringBuilder.Append("namespace ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
+        }
 
+        /// <summary>
+        /// Builds the Textual Notation string for the rule NamespaceBody
+        /// <para>NamespaceBody:Namespace=';'|'{'NamespaceBodyElement*'}'</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.INamespace" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildNamespaceBody(SysML2.NET.Core.POCO.Root.Namespaces.INamespace poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-            // Group Element 
-            // non Terminal : NamespaceDeclaration; Found rule NamespaceDeclaration:Namespace='namespace'Identification
+        /// <summary>
+        /// Builds the Textual Notation string for the rule NamespaceBodyElement
+        /// <para>NamespaceBodyElement:Namespace=ownedRelationship+=NamespaceMember|ownedRelationship+=AliasMember|ownedRelationship+=Import</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.INamespace" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildNamespaceBodyElement(SysML2.NET.Core.POCO.Root.Namespaces.INamespace poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Namespace
+        /// <para>Namespace=(ownedRelationship+=PrefixMetadataMember)*NamespaceDeclarationNamespaceBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.INamespace" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildNamespace(SysML2.NET.Core.POCO.Root.Namespaces.INamespace poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            // non Terminal : NamespaceBody; Found rule NamespaceBody:Namespace=';'|'{'NamespaceBodyElement*'}'
+            // non Terminal : NamespaceDeclaration; Found rule NamespaceDeclaration:Namespace='namespace'Identification 
+            BuildNamespaceDeclaration(poco, stringBuilder);
+            // non Terminal : NamespaceBody; Found rule NamespaceBody:Namespace=';'|'{'NamespaceBodyElement*'}' 
+            BuildNamespaceBody(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

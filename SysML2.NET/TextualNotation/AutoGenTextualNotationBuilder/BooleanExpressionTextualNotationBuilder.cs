@@ -29,45 +29,34 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="BooleanExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Functions.BooleanExpression" /> element
+    /// The <see cref="BooleanExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression" /> element
     /// </summary>
-    public class BooleanExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Functions.BooleanExpression>
+    public static partial class BooleanExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="BooleanExpressionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule BooleanExpression
+        /// <para>BooleanExpression=FeaturePrefix'bool'FeatureDeclarationValuePart?FunctionBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public BooleanExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBooleanExpression(SysML2.NET.Core.POCO.Kernel.Functions.IBooleanExpression poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Functions.BooleanExpression"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Functions.BooleanExpression"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Functions.BooleanExpression poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : BooleanExpression=FeaturePrefix'bool'FeatureDeclarationValuePart?FunctionBody
-
-            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)*
-
-
+            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)* 
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
             stringBuilder.Append("bool ");
-            // non Terminal : FeatureDeclaration; Found rule FeatureDeclaration:Feature=(isSufficient?='all')?(FeatureIdentification(FeatureSpecializationPart|ConjugationPart)?|FeatureSpecializationPart|ConjugationPart)FeatureRelationshipPart*
+            // non Terminal : FeatureDeclaration; Found rule FeatureDeclaration:Feature=(isSufficient?='all')?(FeatureIdentification(FeatureSpecializationPart|ConjugationPart)?|FeatureSpecializationPart|ConjugationPart)FeatureRelationshipPart* 
+            FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, stringBuilder);
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
+            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            // non Terminal : FunctionBody; Found rule FunctionBody:Type=';'|'{'FunctionBodyPart'}' 
+            TypeTextualNotationBuilder.BuildFunctionBody(poco, stringBuilder);
 
-
-            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue
-
-
-            // non Terminal : FunctionBody; Found rule FunctionBody:Type=';'|'{'FunctionBodyPart'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

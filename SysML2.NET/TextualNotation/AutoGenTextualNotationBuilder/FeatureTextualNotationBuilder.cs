@@ -29,39 +29,667 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="FeatureTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.Feature" /> element
+    /// The <see cref="FeatureTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> element
     /// </summary>
-    public class FeatureTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.Feature>
+    public static partial class FeatureTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="FeatureTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ValuePart
+        /// <para>ValuePart:Feature=ownedRelationship+=FeatureValue</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public FeatureTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildValuePart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Features.Feature"/>
+        /// Builds the Textual Notation string for the rule FeatureSpecializationPart
+        /// <para>FeatureSpecializationPart:Feature=FeatureSpecialization+MultiplicityPart?FeatureSpecialization*|MultiplicityPartFeatureSpecialization*</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.Feature"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.Feature poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureSpecializationPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Feature=(FeaturePrefix('feature'|ownedRelationship+=PrefixMetadataMember)FeatureDeclaration?|(EndFeaturePrefix|BasicFeaturePrefix)FeatureDeclaration)ValuePart?TypeBody
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureSpecialization
+        /// <para>FeatureSpecialization:Feature=Typings|Subsettings|References|Crosses|Redefinitions</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureSpecialization(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Typings
+        /// <para>Typings:Feature=TypedBy(','ownedRelationship+=FeatureTyping)*</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTypings(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : TypedBy; Found rule TypedBy:Feature=DEFINED_BYownedRelationship+=FeatureTyping 
+            BuildTypedBy(poco, stringBuilder);
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
+        }
 
-            // Group Element 
-            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue
+        /// <summary>
+        /// Builds the Textual Notation string for the rule TypedBy
+        /// <para>TypedBy:Feature=DEFINED_BYownedRelationship+=FeatureTyping</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTypedBy(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : DEFINED_BY; Found rule DEFINED_BY=':'|'defined''by' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Subsettings
+        /// <para>Subsettings:Feature=Subsets(','ownedRelationship+=OwnedSubsetting)*</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSubsettings(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : Subsets; Found rule Subsets:Feature=SUBSETSownedRelationship+=OwnedSubsetting 
+            BuildSubsets(poco, stringBuilder);
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
-            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}'
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Subsets
+        /// <para>Subsets:Feature=SUBSETSownedRelationship+=OwnedSubsetting</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSubsets(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : SUBSETS; Found rule SUBSETS=':>'|'subsets' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule References
+        /// <para>References:Feature=REFERENCESownedRelationship+=OwnedReferenceSubsetting</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildReferences(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : REFERENCES; Found rule REFERENCES='::>'|'references' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Crosses
+        /// <para>Crosses:Feature=CROSSESownedRelationship+=OwnedCrossSubsetting</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildCrosses(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : CROSSES; Found rule CROSSES='=>'|'crosses' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Redefinitions
+        /// <para>Redefinitions:Feature=Redefines(','ownedRelationship+=OwnedRedefinition)*</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRedefinitions(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : Redefines; Found rule Redefines:Feature=REDEFINESownedRelationship+=OwnedRedefinition 
+            BuildRedefines(poco, stringBuilder);
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
 
+        }
 
-            return stringBuilder.ToString();
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Redefines
+        /// <para>Redefines:Feature=REDEFINESownedRelationship+=OwnedRedefinition</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRedefines(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : REDEFINES; Found rule REDEFINES=':>>'|'redefines' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule OwnedFeatureChain
+        /// <para>OwnedFeatureChain:Feature=ownedRelationship+=OwnedFeatureChaining('.'ownedRelationship+=OwnedFeatureChaining)+</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedFeatureChain(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(". ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule MultiplicityPart
+        /// <para>MultiplicityPart:Feature=ownedRelationship+=OwnedMultiplicity|(ownedRelationship+=OwnedMultiplicity)?(isOrdered?='ordered'({isUnique=false}'nonunique')?|{isUnique=false}'nonunique'(isOrdered?='ordered')?)</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMultiplicityPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule OwnedCrossMultiplicity
+        /// <para>OwnedCrossMultiplicity:Feature=ownedRelationship+=OwnedMultiplicity</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedCrossMultiplicity(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PayloadFeature
+        /// <para>PayloadFeature:Feature=Identification?PayloadFeatureSpecializationPartValuePart?|ownedRelationship+=OwnedFeatureTyping(ownedRelationship+=OwnedMultiplicity)?|ownedRelationship+=OwnedMultiplicityownedRelationship+=OwnedFeatureTyping</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPayloadFeature(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PayloadFeatureSpecializationPart
+        /// <para>PayloadFeatureSpecializationPart:Feature=(FeatureSpecialization)+MultiplicityPart?FeatureSpecialization*|MultiplicityPartFeatureSpecialization+</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPayloadFeatureSpecializationPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureChainPrefix
+        /// <para>FeatureChainPrefix:Feature=(ownedRelationship+=OwnedFeatureChaining'.')+ownedRelationship+=OwnedFeatureChaining'.'</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureChainPrefix(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(". ");
+
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(". ");
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule TriggerValuePart
+        /// <para>TriggerValuePart:Feature=ownedRelationship+=TriggerFeatureValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTriggerValuePart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Argument
+        /// <para>Argument:Feature=ownedRelationship+=ArgumentValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ArgumentExpression
+        /// <para>ArgumentExpression:Feature=ownedRelationship+=ArgumentExpressionValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildArgumentExpression(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureElement
+        /// <para>FeatureElement:Feature=Feature|Step|Expression|BooleanExpression|Invariant|Connector|BindingConnector|Succession|Flow|SuccessionFlow</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureElement(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule EndFeaturePrefix
+        /// <para>EndFeaturePrefix:Feature=(isConstant?='const'{isVariable=true})?isEnd?='end'</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildEndFeaturePrefix(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            // Assignment Element : isConstant ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isConstant value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // Assignment Element : isVariable = true
+
+            // Assignment Element : isEnd ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isEnd value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule BasicFeaturePrefix
+        /// <para>BasicFeaturePrefix:Feature=(direction=FeatureDirection)?(isDerived?='derived')?(isAbstract?='abstract')?(isComposite?='composite'|isPortion?='portion')?(isVariable?='var'|isConstant?='const'{isVariable=true})?</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBasicFeaturePrefix(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            // Assignment Element : direction = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property direction value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+            // Group Element
+            // Assignment Element : isDerived ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isDerived value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+
+            // Group Element
+            // Assignment Element : isAbstract ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isAbstract value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureDeclaration
+        /// <para>FeatureDeclaration:Feature=(isSufficient?='all')?(FeatureIdentification(FeatureSpecializationPart|ConjugationPart)?|FeatureSpecializationPart|ConjugationPart)FeatureRelationshipPart*</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureDeclaration(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            // Assignment Element : isSufficient ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isSufficient value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : FeatureRelationshipPart; Found rule FeatureRelationshipPart:Feature=TypeRelationshipPart|ChainingPart|InvertingPart|TypeFeaturingPart 
+            BuildFeatureRelationshipPart(poco, stringBuilder);
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureIdentification
+        /// <para>FeatureIdentification:Feature='&lt;'declaredShortName=NAME'&gt;'(declaredName=NAME)?|declaredName=NAME</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureIdentification(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureRelationshipPart
+        /// <para>FeatureRelationshipPart:Feature=TypeRelationshipPart|ChainingPart|InvertingPart|TypeFeaturingPart</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureRelationshipPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ChainingPart
+        /// <para>ChainingPart:Feature='chains'(ownedRelationship+=OwnedFeatureChaining|FeatureChain)</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildChainingPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("chains ");
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule InvertingPart
+        /// <para>InvertingPart:Feature='inverse''of'ownedRelationship+=OwnedFeatureInverting</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildInvertingPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("inverse ");
+            stringBuilder.Append("of ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule TypeFeaturingPart
+        /// <para>TypeFeaturingPart:Feature='featured''by'ownedRelationship+=OwnedTypeFeaturing(','ownedTypeFeaturing+=OwnedTypeFeaturing)*</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTypeFeaturingPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("featured ");
+            stringBuilder.Append("by ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedTypeFeaturing += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedTypeFeaturing value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureChain
+        /// <para>FeatureChain:Feature=ownedRelationship+=OwnedFeatureChaining('.'ownedRelationship+=OwnedFeatureChaining)+</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureChain(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(". ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule MetadataArgument
+        /// <para>MetadataArgument:Feature=ownedRelationship+=MetadataValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMetadataArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule TypeReference
+        /// <para>TypeReference:Feature=ownedRelationship+=ReferenceTyping</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTypeReference(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PrimaryArgument
+        /// <para>PrimaryArgument:Feature=ownedRelationship+=PrimaryArgumentValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPrimaryArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule NonFeatureChainPrimaryArgument
+        /// <para>NonFeatureChainPrimaryArgument:Feature=ownedRelationship+=NonFeatureChainPrimaryArgumentValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildNonFeatureChainPrimaryArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule BodyArgument
+        /// <para>BodyArgument:Feature=ownedRelationship+=BodyArgumentValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBodyArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FunctionReferenceArgument
+        /// <para>FunctionReferenceArgument:Feature=ownedRelationship+=FunctionReferenceArgumentValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFunctionReferenceArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureReference
+        /// <para>FeatureReference:Feature=[QualifiedName]</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureReference(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Value Literal Element : [QualifiedName]
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ConstructorResult
+        /// <para>ConstructorResult:Feature=ArgumentList</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConstructorResult(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : ArgumentList; Found rule ArgumentList:Feature='('(PositionalArgumentList|NamedArgumentList)?')' 
+            BuildArgumentList(poco, stringBuilder);
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ArgumentList
+        /// <para>ArgumentList:Feature='('(PositionalArgumentList|NamedArgumentList)?')'</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildArgumentList(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("( ");
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(") ");
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule PositionalArgumentList
+        /// <para>PositionalArgumentList:Feature=e.ownedRelationship+=ArgumentMember(','e.ownedRelationship+=ArgumentMember)*</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPositionalArgumentList(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule NamedArgumentList
+        /// <para>NamedArgumentList:Feature=ownedRelationship+=NamedArgumentMember(','ownedRelationship+=NamedArgumentMember)*</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildNamedArgumentList(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Group Element
+            stringBuilder.Append(", ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule NamedArgument
+        /// <para>NamedArgument:Feature=ownedRelationship+=ParameterRedefinition'='ownedRelationship+=ArgumentValue</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildNamedArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("= ");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule MetadataBodyFeature
+        /// <para>MetadataBodyFeature:Feature='feature'?(':&gt;&gt;'|'redefines')?ownedRelationship+=OwnedRedefinitionFeatureSpecializationPart?ValuePart?MetadataBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMetadataBodyFeature(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("feature ");
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // non Terminal : FeatureSpecializationPart; Found rule FeatureSpecializationPart:Feature=FeatureSpecialization+MultiplicityPart?FeatureSpecialization*|MultiplicityPartFeatureSpecialization* 
+            BuildFeatureSpecializationPart(poco, stringBuilder);
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
+            BuildValuePart(poco, stringBuilder);
+            // non Terminal : MetadataBody; Found rule MetadataBody:Type=';'|'{'(ownedRelationship+=DefinitionMember|ownedRelationship+=MetadataBodyUsageMember|ownedRelationship+=AliasMember|ownedRelationship+=Import)*'}' 
+            TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Feature
+        /// <para>Feature=(FeaturePrefix('feature'|ownedRelationship+=PrefixMetadataMember)FeatureDeclaration?|(EndFeaturePrefix|BasicFeaturePrefix)FeatureDeclaration)ValuePart?TypeBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IFeature" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeature(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
+        {
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
+            BuildValuePart(poco, stringBuilder);
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
+            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
+
         }
     }
 }

@@ -43,13 +43,13 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         public RuleParameter Parameter { get; set; }
         
         /// <summary>
-        /// Gets the collection of defined <see cref="RuleElement" />
-        /// </summary>
-        public List<RuleElement> Elements { get; } = [];
-
-        /// <summary>
         /// Gets or sets the raw string that declares the rule
         /// </summary>
         public string RawRule { get; set; }
+
+        /// <summary>
+        /// Gets or the collection of <see cref="Alternatives"/> defined by the rule
+        /// </summary>
+        public List<Alternatives> Alternatives { get; } = [];
     }
 }
