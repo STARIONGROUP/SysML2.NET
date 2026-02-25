@@ -29,48 +29,44 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="SubsettingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.Subsetting" /> element
+    /// The <see cref="SubsettingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.ISubsetting" /> element
     /// </summary>
-    public class SubsettingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.Subsetting>
+    public static partial class SubsettingTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="SubsettingTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedSubsetting
+        /// <para>OwnedSubsetting:Subsetting=subsettedFeature=[QualifiedName]|subsettedFeature=OwnedFeatureChain{ownedRelatedElement+=subsettedFeature}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public SubsettingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ISubsetting" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Features.Subsetting"/>
+        /// Builds the Textual Notation string for the rule Subsetting
+        /// <para>Subsetting=('specialization'Identification)?'subset'SpecificTypeSUBSETSGeneralTypeRelationshipBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.Subsetting"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.Subsetting poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ISubsetting" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Subsetting=('specialization'Identification)?'subset'SpecificTypeSUBSETSGeneralTypeRelationshipBody
+            // Group Element
+            stringBuilder.Append("specialization ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
-            // Group Element 
             stringBuilder.Append("subset ");
-            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific}
+            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific} 
+            SpecializationTextualNotationBuilder.BuildSpecificType(poco, stringBuilder);
+            // non Terminal : SUBSETS; Found rule SUBSETS=':>'|'subsets' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general} 
+            SpecializationTextualNotationBuilder.BuildGeneralType(poco, stringBuilder);
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
-
-            // non Terminal : SUBSETS; Found rule SUBSETS=':>'|'subsets'
-
-
-            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general}
-
-
-
-
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
-
-
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

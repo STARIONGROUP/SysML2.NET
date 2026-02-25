@@ -29,40 +29,37 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="StateUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.States.StateUsage" /> element
+    /// The <see cref="StateUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.States.IStateUsage" /> element
     /// </summary>
-    public class StateUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.States.StateUsage>
+    public static partial class StateUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="StateUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule StateUsageBody
+        /// <para>StateUsageBody:StateUsage=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public StateUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildStateUsageBody(SysML2.NET.Core.POCO.Systems.States.IStateUsage poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.States.StateUsage"/>
+        /// Builds the Textual Notation string for the rule StateUsage
+        /// <para>StateUsage=OccurrenceUsagePrefix'state'ActionUsageDeclarationStateUsageBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.StateUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.States.StateUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildStateUsage(SysML2.NET.Core.POCO.Systems.States.IStateUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : StateUsage=OccurrenceUsagePrefix'state'ActionUsageDeclarationStateUsageBody
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("state ");
-            // non Terminal : ActionUsageDeclaration; Found rule ActionUsageDeclaration:ActionUsage=UsageDeclarationValuePart?
+            // non Terminal : ActionUsageDeclaration; Found rule ActionUsageDeclaration:ActionUsage=UsageDeclarationValuePart? 
+            ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, stringBuilder);
+            // non Terminal : StateUsageBody; Found rule StateUsageBody:StateUsage=';'|(isParallel?='parallel')?'{'StateBodyItem*'}' 
+            BuildStateUsageBody(poco, stringBuilder);
 
-
-            // non Terminal : StateUsageBody; Found rule StateUsageBody:StateUsage=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

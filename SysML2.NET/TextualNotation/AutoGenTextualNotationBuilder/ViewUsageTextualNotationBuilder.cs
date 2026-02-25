@@ -29,43 +29,50 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ViewUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewUsage" /> element
+    /// The <see cref="ViewUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewUsage" /> element
     /// </summary>
-    public class ViewUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Views.ViewUsage>
+    public static partial class ViewUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ViewUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ViewBody
+        /// <para>ViewBody:ViewUsage=';'|'{'ViewBodyItem*'}'</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ViewUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildViewBody(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewUsage"/>
+        /// Builds the Textual Notation string for the rule ViewBodyItem
+        /// <para>ViewBodyItem:ViewUsage=DefinitionBodyItem|ownedRelationship+=ElementFilterMember|ownedRelationship+=ViewRenderingMember|ownedRelationship+=Expose</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Views.ViewUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildViewBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ViewUsage=OccurrenceUsagePrefix'view'UsageDeclaration?ValuePart?ViewBody
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ViewUsage
+        /// <para>ViewUsage=OccurrenceUsagePrefix'view'UsageDeclaration?ValuePart?ViewBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildViewUsage(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("view ");
-            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart?
+            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
+            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            // non Terminal : ViewBody; Found rule ViewBody:ViewUsage=';'|'{'ViewBodyItem*'}' 
+            BuildViewBody(poco, stringBuilder);
 
-
-            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue
-
-
-            // non Terminal : ViewBody; Found rule ViewBody:ViewUsage=';'|'{'ViewBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

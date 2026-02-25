@@ -29,44 +29,52 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ConstraintUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Constraints.ConstraintUsage" /> element
+    /// The <see cref="ConstraintUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage" /> element
     /// </summary>
-    public class ConstraintUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Constraints.ConstraintUsage>
+    public static partial class ConstraintUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ConstraintUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ConstraintUsageDeclaration
+        /// <para>ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart?</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ConstraintUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConstraintUsageDeclaration(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, StringBuilder stringBuilder)
         {
+            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
+            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Constraints.ConstraintUsage"/>
+        /// Builds the Textual Notation string for the rule RequirementConstraintUsage
+        /// <para>RequirementConstraintUsage:ConstraintUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?RequirementBody|(UsageExtensionKeyword*'constraint'|UsageExtensionKeyword+)ConstraintUsageDeclarationCalculationBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.ConstraintUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Constraints.ConstraintUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRequirementConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ConstraintUsage=OccurrenceUsagePrefix'constraint'ConstraintUsageDeclarationCalculationBody
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ConstraintUsage
+        /// <para>ConstraintUsage=OccurrenceUsagePrefix'constraint'ConstraintUsageDeclarationCalculationBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConstraintUsage(SysML2.NET.Core.POCO.Systems.Constraints.IConstraintUsage poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("constraint ");
-            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart?
+            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart? 
+            BuildConstraintUsageDeclaration(poco, stringBuilder);
+            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}' 
+            TypeTextualNotationBuilder.BuildCalculationBody(poco, stringBuilder);
 
-
-
-
-
-
-            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

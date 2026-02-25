@@ -29,31 +29,21 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="LiteralBooleanTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralBoolean" /> element
+    /// The <see cref="LiteralBooleanTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralBoolean" /> element
     /// </summary>
-    public class LiteralBooleanTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.LiteralBoolean>
+    public static partial class LiteralBooleanTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="LiteralBooleanTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule LiteralBoolean
+        /// <para>LiteralBoolean=value=BooleanValue</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public LiteralBooleanTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralBoolean" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildLiteralBoolean(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralBoolean poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralBoolean"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralBoolean"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.LiteralBoolean poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : LiteralBoolean=value=BooleanValue
-
             // Assignment Element : value = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property value value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
         }
     }
 }

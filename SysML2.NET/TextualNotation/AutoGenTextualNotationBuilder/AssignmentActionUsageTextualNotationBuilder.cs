@@ -29,28 +29,59 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="AssignmentActionUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.AssignmentActionUsage" /> element
+    /// The <see cref="AssignmentActionUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage" /> element
     /// </summary>
-    public class AssignmentActionUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Actions.AssignmentActionUsage>
+    public static partial class AssignmentActionUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="AssignmentActionUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule AssignmentNode
+        /// <para>AssignmentNode:AssignmentActionUsage=OccurrenceUsagePrefixAssignmentNodeDeclarationActionBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public AssignmentActionUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildAssignmentNode(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
         {
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            // non Terminal : AssignmentNodeDeclaration; Found rule AssignmentNodeDeclaration:ActionUsage=(ActionNodeUsageDeclaration)?'assign'ownedRelationship+=AssignmentTargetMemberownedRelationship+=FeatureChainMember':='ownedRelationship+=NodeParameterMember 
+            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
+            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Actions.AssignmentActionUsage"/>
+        /// Builds the Textual Notation string for the rule StateAssignmentActionUsage
+        /// <para>StateAssignmentActionUsage:AssignmentActionUsage=AssignmentNodeDeclarationActionBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.AssignmentActionUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Actions.AssignmentActionUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildStateAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
+            // non Terminal : AssignmentNodeDeclaration; Found rule AssignmentNodeDeclaration:ActionUsage=(ActionNodeUsageDeclaration)?'assign'ownedRelationship+=AssignmentTargetMemberownedRelationship+=FeatureChainMember':='ownedRelationship+=NodeParameterMember 
+            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
+            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
-            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule TransitionAssignmentActionUsage
+        /// <para>TransitionAssignmentActionUsage:AssignmentActionUsage=AssignmentNodeDeclaration('{'ActionBodyItem*'}')?</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTransitionAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : AssignmentNodeDeclaration; Found rule AssignmentNodeDeclaration:ActionUsage=(ActionNodeUsageDeclaration)?'assign'ownedRelationship+=AssignmentTargetMemberownedRelationship+=FeatureChainMember':='ownedRelationship+=NodeParameterMember 
+            ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
+            // Group Element
+            stringBuilder.Append("{ ");
+            // non Terminal : ActionBodyItem; Found rule ActionBodyItem:Type=NonBehaviorBodyItem|ownedRelationship+=InitialNodeMember(ownedRelationship+=ActionTargetSuccessionMember)*|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=ActionBehaviorMember(ownedRelationship+=ActionTargetSuccessionMember)*|ownedRelationship+=GuardedSuccessionMember 
+            TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+            stringBuilder.Append("} ");
+
+
         }
     }
 }

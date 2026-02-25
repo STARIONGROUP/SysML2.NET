@@ -29,36 +29,48 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="MultiplicityTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.Multiplicity" /> element
+    /// The <see cref="MultiplicityTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.IMultiplicity" /> element
     /// </summary>
-    public class MultiplicityTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Multiplicity>
+    public static partial class MultiplicityTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="MultiplicityTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule EmptyMultiplicity
+        /// <para>EmptyMultiplicity:Multiplicity={}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public MultiplicityTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IMultiplicity" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildEmptyMultiplicity(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, StringBuilder stringBuilder)
         {
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Types.Multiplicity"/>
+        /// Builds the Textual Notation string for the rule MultiplicitySubset
+        /// <para>MultiplicitySubset:Multiplicity='multiplicity'IdentificationSubsetsTypeBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.Multiplicity"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Multiplicity poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IMultiplicity" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMultiplicitySubset(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Multiplicity=MultiplicitySubset|MultiplicityRange
+            stringBuilder.Append("multiplicity ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+            // non Terminal : Subsets; Found rule Subsets:Feature=SUBSETSownedRelationship+=OwnedSubsetting 
+            FeatureTextualNotationBuilder.BuildSubsets(poco, stringBuilder);
+            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
+            TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
 
-            // non Terminal : MultiplicitySubset; Found rule MultiplicitySubset:Multiplicity='multiplicity'IdentificationSubsetsTypeBody
+        }
 
-
-            // non Terminal : MultiplicityRange; Found rule MultiplicityRange='['(ownedRelationship+=MultiplicityExpressionMember'..')?ownedRelationship+=MultiplicityExpressionMember']'
-
-
-
-            return stringBuilder.ToString();
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Multiplicity
+        /// <para>Multiplicity=MultiplicitySubset|MultiplicityRange</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IMultiplicity" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMultiplicity(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, StringBuilder stringBuilder)
+        {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

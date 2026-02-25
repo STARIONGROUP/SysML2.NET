@@ -29,38 +29,25 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="FlowDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Flows.FlowDefinition" /> element
+    /// The <see cref="FlowDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowDefinition" /> element
     /// </summary>
-    public class FlowDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Flows.FlowDefinition>
+    public static partial class FlowDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="FlowDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule FlowDefinition
+        /// <para>FlowDefinition=OccurrenceDefinitionPrefix'flow''def'Definition</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public FlowDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.IFlowDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFlowDefinition(SysML2.NET.Core.POCO.Systems.Flows.IFlowDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Flows.FlowDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Flows.FlowDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Flows.FlowDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : FlowDefinition=OccurrenceDefinitionPrefix'flow''def'Definition
-
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("flow ");
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

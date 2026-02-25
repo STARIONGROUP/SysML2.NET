@@ -29,32 +29,75 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="FeatureReferenceExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression" /> element
+    /// The <see cref="FeatureReferenceExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> element
     /// </summary>
-    public class FeatureReferenceExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression>
+    public static partial class FeatureReferenceExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="FeatureReferenceExpressionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule SatisfactionReferenceExpression
+        /// <para>SatisfactionReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FeatureChainMember</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public FeatureReferenceExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSatisfactionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression"/>
+        /// Builds the Textual Notation string for the rule OwnedExpressionReference
+        /// <para>OwnedExpressionReference:FeatureReferenceExpression=ownedRelationship+=OwnedExpressionMember</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedExpressionReference(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : FeatureReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FeatureReferenceMemberownedRelationship+=EmptyResultMember
-
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FunctionReferenceExpression
+        /// <para>FunctionReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FunctionReferenceMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFunctionReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule FeatureReferenceExpression
+        /// <para>FeatureReferenceExpression:FeatureReferenceExpression=ownedRelationship+=FeatureReferenceMemberownedRelationship+=EmptyResultMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFeatureReferenceExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule BodyExpression
+        /// <para>BodyExpression:FeatureReferenceExpression=ownedRelationship+=ExpressionBodyMember</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildBodyExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IFeatureReferenceExpression poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
     }
 }

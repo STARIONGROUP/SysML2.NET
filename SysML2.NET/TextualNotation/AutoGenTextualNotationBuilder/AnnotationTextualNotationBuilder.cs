@@ -29,31 +29,49 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="AnnotationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Annotations.Annotation" /> element
+    /// The <see cref="AnnotationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> element
     /// </summary>
-    public class AnnotationTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Annotations.Annotation>
+    public static partial class AnnotationTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="AnnotationTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedAnnotation
+        /// <para>OwnedAnnotation:Annotation=ownedRelatedElement+=AnnotatingElement</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public AnnotationTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Root.Annotations.Annotation"/>
+        /// Builds the Textual Notation string for the rule PrefixMetadataAnnotation
+        /// <para>PrefixMetadataAnnotation:Annotation='#'annotatingElement=PrefixMetadataUsage{ownedRelatedElement+=annotatingElement}</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.Annotation"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Annotations.Annotation poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildPrefixMetadataAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Annotation=annotatedElement=[QualifiedName]
+            stringBuilder.Append("# ");
+            // Assignment Element : annotatingElement = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property annotatingElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // Assignment Element : ownedRelatedElement += annotatingElement
 
-            // Assignment Element : annotatedElement = 
+        }
 
-            return stringBuilder.ToString();
+        /// <summary>
+        /// Builds the Textual Notation string for the rule Annotation
+        /// <para>Annotation=annotatedElement=[QualifiedName]</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Annotations.IAnnotation" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, StringBuilder stringBuilder)
+        {
+            // Assignment Element : annotatedElement = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property annotatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+
         }
     }
 }

@@ -29,28 +29,19 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="TriggerInvocationExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.TriggerInvocationExpression" /> element
+    /// The <see cref="TriggerInvocationExpressionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression" /> element
     /// </summary>
-    public class TriggerInvocationExpressionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Actions.TriggerInvocationExpression>
+    public static partial class TriggerInvocationExpressionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="TriggerInvocationExpressionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule TriggerExpression
+        /// <para>TriggerExpression:TriggerInvocationExpression=kind=('at'|'after')ownedRelationship+=ArgumentMember|kind='when'ownedRelationship+=ArgumentExpressionMember</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public TriggerInvocationExpressionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTriggerExpression(SysML2.NET.Core.POCO.Systems.Actions.ITriggerInvocationExpression poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Actions.TriggerInvocationExpression"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Actions.TriggerInvocationExpression"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Actions.TriggerInvocationExpression poco)
-        {
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString();
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

@@ -29,44 +29,30 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="CaseUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Cases.CaseUsage" /> element
+    /// The <see cref="CaseUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Cases.ICaseUsage" /> element
     /// </summary>
-    public class CaseUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Cases.CaseUsage>
+    public static partial class CaseUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="CaseUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule CaseUsage
+        /// <para>CaseUsage=OccurrenceUsagePrefix'case'ConstraintUsageDeclarationCaseBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public CaseUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Cases.ICaseUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildCaseUsage(SysML2.NET.Core.POCO.Systems.Cases.ICaseUsage poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Cases.CaseUsage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Cases.CaseUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Cases.CaseUsage poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : CaseUsage=OccurrenceUsagePrefix'case'ConstraintUsageDeclarationCaseBody
-
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("case ");
-            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart?
+            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart? 
+            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
+            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
+            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
 
+            // non Terminal : CaseBody; Found rule CaseBody:Type=';'|'{'CaseBodyItem*(ownedRelationship+=ResultExpressionMember)?'}' 
+            TypeTextualNotationBuilder.BuildCaseBody(poco, stringBuilder);
 
-
-
-
-
-            // non Terminal : CaseBody; Found rule CaseBody:Type=';'|'{'CaseBodyItem*(ownedRelationship+=ResultExpressionMember)?'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

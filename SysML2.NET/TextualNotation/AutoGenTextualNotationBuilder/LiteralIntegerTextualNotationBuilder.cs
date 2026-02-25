@@ -29,31 +29,21 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="LiteralIntegerTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralInteger" /> element
+    /// The <see cref="LiteralIntegerTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger" /> element
     /// </summary>
-    public class LiteralIntegerTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Expressions.LiteralInteger>
+    public static partial class LiteralIntegerTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="LiteralIntegerTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule LiteralInteger
+        /// <para>LiteralInteger=value=DECIMAL_VALUE</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public LiteralIntegerTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildLiteralInteger(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralInteger"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Expressions.LiteralInteger"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Expressions.LiteralInteger poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : LiteralInteger=value=DECIMAL_VALUE
-
             // Assignment Element : value = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property value value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
         }
     }
 }

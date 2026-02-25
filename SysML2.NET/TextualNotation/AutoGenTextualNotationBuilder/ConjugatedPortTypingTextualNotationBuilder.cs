@@ -29,45 +29,22 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ConjugatedPortTypingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping" /> element
+    /// The <see cref="ConjugatedPortTypingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping" /> element
     /// </summary>
-    public class ConjugatedPortTypingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping>
+    public static partial class ConjugatedPortTypingTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ConjugatedPortTypingTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ConjugatedPortTyping
+        /// <para>ConjugatedPortTyping:ConjugatedPortTyping='~'originalPortDefinition=~[QualifiedName]</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ConjugatedPortTypingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConjugatedPortTyping(SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ConjugatedPortTyping:ConjugatedPortTyping='~'originalPortDefinition=~[QualifiedName]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             stringBuilder.Append("~ ");
-            // Assignment Element : originalPortDefinition = 
+            // Assignment Element : originalPortDefinition = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            BuildOriginalPortDefinition(poco, stringBuilder);
 
-            return stringBuilder.ToString();
         }
     }
 }

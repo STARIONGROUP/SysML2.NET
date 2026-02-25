@@ -29,28 +29,36 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="SubjectMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership" /> element
+    /// The <see cref="SubjectMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership" /> element
     /// </summary>
-    public class SubjectMembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership>
+    public static partial class SubjectMembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="SubjectMembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule SubjectMember
+        /// <para>SubjectMember:SubjectMembership=MemberPrefixownedRelatedElement+=SubjectUsage</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public SubjectMembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSubjectMember(SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership poco, StringBuilder stringBuilder)
         {
+            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership"/>
+        /// Builds the Textual Notation string for the rule SatisfactionSubjectMember
+        /// <para>SatisfactionSubjectMember:SubjectMembership=ownedRelatedElement+=SatisfactionParameter</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSatisfactionSubjectMember(SysML2.NET.Core.POCO.Systems.Requirements.ISubjectMembership poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
         }
     }
 }

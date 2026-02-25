@@ -29,38 +29,25 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="AttributeDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Attributes.AttributeDefinition" /> element
+    /// The <see cref="AttributeDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition" /> element
     /// </summary>
-    public class AttributeDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Attributes.AttributeDefinition>
+    public static partial class AttributeDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="AttributeDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule AttributeDefinition
+        /// <para>AttributeDefinition:AttributeDefinition=DefinitionPrefix'attribute''def'Definition</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public AttributeDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildAttributeDefinition(SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Attributes.AttributeDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Attributes.AttributeDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Attributes.AttributeDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : AttributeDefinition:AttributeDefinition=DefinitionPrefix'attribute''def'Definition
-
-            // non Terminal : DefinitionPrefix; Found rule DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword*
-
-
+            // non Terminal : DefinitionPrefix; Found rule DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword* 
+            DefinitionTextualNotationBuilder.BuildDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("attribute ");
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

@@ -29,28 +29,30 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ReferenceSubsettingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting" /> element
+    /// The <see cref="ReferenceSubsettingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting" /> element
     /// </summary>
-    public class ReferenceSubsettingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>
+    public static partial class ReferenceSubsettingTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ReferenceSubsettingTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedReferenceSubsetting
+        /// <para>OwnedReferenceSubsetting:ReferenceSubsetting=referencedFeature=[QualifiedName]|referencedFeature=OwnedFeatureChain{ownedRelatedElement+=referenceFeature}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ReferenceSubsettingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedReferenceSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting"/>
+        /// Builds the Textual Notation string for the rule FlowEndSubsetting
+        /// <para>FlowEndSubsetting:ReferenceSubsetting=referencedFeature=[QualifiedName]|referencedFeature=FeatureChainPrefix{ownedRelatedElement+=referencedFeature}</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFlowEndSubsetting(SysML2.NET.Core.POCO.Core.Features.IReferenceSubsetting poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString();
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

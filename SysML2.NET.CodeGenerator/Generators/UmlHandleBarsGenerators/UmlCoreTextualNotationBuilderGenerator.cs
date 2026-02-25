@@ -29,6 +29,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
     using SysML2.NET.CodeGenerator.Grammar.Model;
     using SysML2.NET.CodeGenerator.HandleBarHelpers;
 
+    using uml4net.CommonStructure;
     using uml4net.Extensions;
     using uml4net.HandleBars;
     using uml4net.StructuredClassifiers;
@@ -104,11 +105,11 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         public async Task GenerateAsync(XmiReaderResult xmiReaderResult, TextualNotationSpecification textualNotationSpecification, DirectoryInfo outputDirectory)
         {
             await this.GenerateBuilderClasses(xmiReaderResult, textualNotationSpecification, outputDirectory);
-            await this.GenerateBuilderFacade(xmiReaderResult, outputDirectory);
+           // await this.GenerateBuilderFacade(xmiReaderResult, outputDirectory);
         }
 
         /// <summary>
-        /// Generates Textual Notation builder classes for each concrete <see cref="IClass"/>
+        /// Generates Textual Notation builder classes for each <see cref="IClass"/> targeted by a rule
         /// </summary>
         /// <param name="xmiReaderResult">
         /// the <see cref="XmiReaderResult"/> that contains the UML model to generate from
@@ -131,7 +132,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         }
 
         /// <summary>
-        /// Generates Textual Notation builder classes for each concrete <see cref="IClass"/>
+        /// Generates Textual Notation builder classes for each <see cref="IClass"/> targeted by a rule
         /// </summary>
         /// <param name="xmiReaderResult">
         /// the <see cref="XmiReaderResult"/> that contains the UML model to generate from
@@ -147,17 +148,39 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         {
             var template = this.Templates[BuilderTemplateName];
 
-            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
-                .SelectMany(x => x.PackagedElement.OfType<IClass>())
-                .Where(x => !x.IsAbstract)
+            var namedElements = xmiReaderResult.QueryContainedAndImported("SysML")
+                .SelectMany(x => x.PackagedElement.OfType<INamedElement>())
                 .ToList();
 
-            foreach (var umlClass in classes)
+            var rulesGroupedByType = textualNotationSpecification.Rules
+                .Where(x => !string.IsNullOrWhiteSpace(x.TargetElementName) && namedElements.Any(n => n.Name == x.TargetElementName))
+                .GroupBy(x => x.TargetElementName).ToDictionary(x => x.Key, x => x.ToList());
+
+            foreach (var nonTargetingRule in textualNotationSpecification.Rules.Where(x => string.IsNullOrWhiteSpace(x.TargetElementName)))
             {
-                var generatedBuilder = template(new {ClassContext = umlClass, Rules = textualNotationSpecification.Rules});
+                var matchingClass = namedElements.SingleOrDefault(x => x.Name == nonTargetingRule.RuleName);
+
+                if (matchingClass != null)
+                {
+                    if (rulesGroupedByType.TryGetValue(matchingClass.Name, out var existingRules))
+                    {
+                        existingRules.Add(nonTargetingRule);
+                    }
+                    else
+                    {
+                        rulesGroupedByType[matchingClass.Name] = [nonTargetingRule];
+                    }
+                }
+            }
+            
+            foreach (var rulesPerType in rulesGroupedByType)
+            {
+                var targetClassContext = namedElements.Single(x => x.Name == rulesPerType.Key);
+                
+                var generatedBuilder = template(new {Context = targetClassContext, Rules = rulesPerType.Value, AllRules = textualNotationSpecification.Rules});
                 generatedBuilder = this.CodeCleanup(generatedBuilder);
 
-                var fileName = $"{umlClass.Name.CapitalizeFirstLetter()}TextualNotationBuilder.cs";
+                var fileName = $"{targetClassContext.Name.CapitalizeFirstLetter()}TextualNotationBuilder.cs";
 
                 await WriteAsync(generatedBuilder, outputDirectory, fileName);
             }

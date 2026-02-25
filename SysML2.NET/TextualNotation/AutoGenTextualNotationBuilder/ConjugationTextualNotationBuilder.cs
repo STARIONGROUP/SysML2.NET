@@ -29,46 +29,44 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ConjugationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.Conjugation" /> element
+    /// The <see cref="ConjugationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> element
     /// </summary>
-    public class ConjugationTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Conjugation>
+    public static partial class ConjugationTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ConjugationTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedConjugation
+        /// <para>OwnedConjugation:Conjugation=originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ConjugationTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Types.Conjugation"/>
+        /// Builds the Textual Notation string for the rule Conjugation
+        /// <para>Conjugation=('conjugation'Identification)?'conjugate'(conjugatedType=[QualifiedName]|conjugatedType=FeatureChain{ownedRelatedElement+=conjugatedType})CONJUGATES(originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType})RelationshipBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.Conjugation"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Conjugation poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IConjugation" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Conjugation=('conjugation'Identification)?'conjugate'(conjugatedType=[QualifiedName]|conjugatedType=FeatureChain{ownedRelatedElement+=conjugatedType})CONJUGATES(originalType=[QualifiedName]|originalType=FeatureChain{ownedRelatedElement+=originalType})RelationshipBody
+            // Group Element
+            stringBuilder.Append("conjugation ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
-            // Group Element 
             stringBuilder.Append("conjugate ");
-            // Group Element 
-            // non Terminal : CONJUGATES; Found rule CONJUGATES='~'|'conjugates'
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : CONJUGATES; Found rule CONJUGATES='~'|'conjugates' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Group Element
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
-
-
-
-
-
-            // Group Element 
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
-
-
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

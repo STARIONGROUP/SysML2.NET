@@ -29,44 +29,54 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="RequirementUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage" /> element
+    /// The <see cref="RequirementUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage" /> element
     /// </summary>
-    public class RequirementUsageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage>
+    public static partial class RequirementUsageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="RequirementUsageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ObjectiveRequirementUsage
+        /// <para>ObjectiveRequirementUsage:RequirementUsage=UsageExtensionKeyword*ConstraintUsageDeclarationRequirementBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public RequirementUsageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildObjectiveRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, StringBuilder stringBuilder)
         {
+            // non Terminal : UsageExtensionKeyword; Found rule UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember 
+            UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
+            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart? 
+            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, stringBuilder);
+            // non Terminal : RequirementBody; Found rule RequirementBody:Type=';'|'{'RequirementBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, stringBuilder);
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage"/>
+        /// Builds the Textual Notation string for the rule RequirementVerificationUsage
+        /// <para>RequirementVerificationUsage:RequirementUsage=ownedRelationship+=OwnedReferenceSubsettingFeatureSpecialization*RequirementBody|(UsageExtensionKeyword*'requirement'|UsageExtensionKeyword+)ConstraintUsageDeclarationRequirementBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRequirementVerificationUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : RequirementUsage=OccurrenceUsagePrefix'requirement'ConstraintUsageDeclarationRequirementBody
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword*
-
-
+        /// <summary>
+        /// Builds the Textual Notation string for the rule RequirementUsage
+        /// <para>RequirementUsage=OccurrenceUsagePrefix'requirement'ConstraintUsageDeclarationRequirementBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.IRequirementUsage poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("requirement ");
-            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart?
+            // non Terminal : ConstraintUsageDeclaration; Found rule ConstraintUsageDeclaration:ConstraintUsage=UsageDeclarationValuePart? 
+            ConstraintUsageTextualNotationBuilder.BuildConstraintUsageDeclaration(poco, stringBuilder);
+            // non Terminal : RequirementBody; Found rule RequirementBody:Type=';'|'{'RequirementBodyItem*'}' 
+            TypeTextualNotationBuilder.BuildRequirementBody(poco, stringBuilder);
 
-
-
-
-
-
-            // non Terminal : RequirementBody; Found rule RequirementBody:Type=';'|'{'RequirementBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

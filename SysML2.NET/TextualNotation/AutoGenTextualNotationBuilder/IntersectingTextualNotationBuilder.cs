@@ -29,32 +29,19 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="IntersectingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.Intersecting" /> element
+    /// The <see cref="IntersectingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Types.IIntersecting" /> element
     /// </summary>
-    public class IntersectingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Types.Intersecting>
+    public static partial class IntersectingTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="IntersectingTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule Intersecting
+        /// <para>Intersecting=intersectingType=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public IntersectingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.IIntersecting" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildIntersecting(SysML2.NET.Core.POCO.Core.Types.IIntersecting poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Types.Intersecting"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Types.Intersecting"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Types.Intersecting poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Intersecting=intersectingType=[QualifiedName]|ownedRelatedElement+=OwnedFeatureChain
-
-            // Assignment Element : intersectingType = 
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-
-            return stringBuilder.ToString();
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

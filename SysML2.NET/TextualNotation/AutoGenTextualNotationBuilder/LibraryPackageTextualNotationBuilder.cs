@@ -29,39 +29,32 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="LibraryPackageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Packages.LibraryPackage" /> element
+    /// The <see cref="LibraryPackageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage" /> element
     /// </summary>
-    public class LibraryPackageTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Packages.LibraryPackage>
+    public static partial class LibraryPackageTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="LibraryPackageTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule LibraryPackage
+        /// <para>LibraryPackage=(isStandard?='standard')'library'(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public LibraryPackageTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, StringBuilder stringBuilder)
         {
-        }
+            // Group Element
+            // Assignment Element : isStandard ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isStandard value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Packages.LibraryPackage"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.LibraryPackage"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Packages.LibraryPackage poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : LibraryPackage=(isStandard?='standard')'library'(ownedRelationship+=PrefixMetadataMember)*PackageDeclarationPackageBody
-
-            // Group Element 
             stringBuilder.Append("library ");
-            // Group Element 
-            // non Terminal : PackageDeclaration; Found rule PackageDeclaration:Package='package'Identification
+            // Group Element
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
+            // non Terminal : PackageDeclaration; Found rule PackageDeclaration:Package='package'Identification 
+            PackageTextualNotationBuilder.BuildPackageDeclaration(poco, stringBuilder);
+            // non Terminal : PackageBody; Found rule PackageBody:Package=';'|'{'PackageBodyElement*'}' 
+            PackageTextualNotationBuilder.BuildPackageBody(poco, stringBuilder);
 
-            // non Terminal : PackageBody; Found rule PackageBody:Package=';'|'{'PackageBodyElement*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

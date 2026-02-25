@@ -29,28 +29,53 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="TransitionFeatureMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership" /> element
+    /// The <see cref="TransitionFeatureMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership" /> element
     /// </summary>
-    public class TransitionFeatureMembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership>
+    public static partial class TransitionFeatureMembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="TransitionFeatureMembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule TriggerActionMember
+        /// <para>TriggerActionMember:TransitionFeatureMembership='accept'{kind='trigger'}ownedRelatedElement+=TriggerAction</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public TransitionFeatureMembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildTriggerActionMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, StringBuilder stringBuilder)
         {
+            stringBuilder.Append("accept ");
+            // Assignment Element : kind = 'trigger'
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership"/>
+        /// Builds the Textual Notation string for the rule GuardExpressionMember
+        /// <para>GuardExpressionMember:TransitionFeatureMembership='if'{kind='guard'}ownedRelatedElement+=OwnedExpression</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildGuardExpressionMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("if ");
+            // Assignment Element : kind = 'guard'
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Builds the Textual Notation string for the rule EffectBehaviorMember
+        /// <para>EffectBehaviorMember:TransitionFeatureMembership='do'{kind='effect'}ownedRelatedElement+=EffectBehaviorUsage</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildEffectBehaviorMember(SysML2.NET.Core.POCO.Systems.States.ITransitionFeatureMembership poco, StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("do ");
+            // Assignment Element : kind = 'effect'
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
     }
 }

@@ -29,39 +29,29 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="MetadataDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Metadata.MetadataDefinition" /> element
+    /// The <see cref="MetadataDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition" /> element
     /// </summary>
-    public class MetadataDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Metadata.MetadataDefinition>
+    public static partial class MetadataDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="MetadataDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule MetadataDefinition
+        /// <para>MetadataDefinition=(isAbstract?='abstract')?DefinitionExtensionKeyword*'metadata''def'Definition</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public MetadataDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMetadataDefinition(SysML2.NET.Core.POCO.Systems.Metadata.IMetadataDefinition poco, StringBuilder stringBuilder)
         {
-        }
+            // Group Element
+            // Assignment Element : isAbstract ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isAbstract value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Metadata.MetadataDefinition"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Metadata.MetadataDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Metadata.MetadataDefinition poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : MetadataDefinition=(isAbstract?='abstract')?DefinitionExtensionKeyword*'metadata''def'Definition
-
-            // Group Element 
-            // non Terminal : DefinitionExtensionKeyword; Found rule DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember
-
-
+            // non Terminal : DefinitionExtensionKeyword; Found rule DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember 
+            DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, stringBuilder);
             stringBuilder.Append("metadata ");
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody
+            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
+            DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
 
-
-
-            return stringBuilder.ToString();
         }
     }
 }

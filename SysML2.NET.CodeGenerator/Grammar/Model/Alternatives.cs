@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="ITextualNotationBuilderFacade.cs" company="Starion Group S.A.">
+// <copyright file="Alternatives.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
 // 
@@ -18,20 +18,20 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.TextualNotation
+namespace SysML2.NET.CodeGenerator.Grammar
 {
-    using SysML2.NET.Core.POCO.Root.Elements;
+    using System.Collections.Generic;
+
+    using SysML2.NET.CodeGenerator.Grammar.Model;
 
     /// <summary>
-    /// The <see cref="ITextualNotationBuilderFacade"/> provides access to built textual notation for <see cref="IElement" /> via <see cref="TextualNotationBuilder{TElement}" />
+    /// Provides mapping data class for the alternative grammar part
     /// </summary>
-    public interface ITextualNotationBuilderFacade
+    public class Alternatives
     {
         /// <summary>
-        /// Queries the Textual Notation of an <see cref="IElement"/> 
+        /// Gets a collection of <see cref="RuleElement" /> that is part of the <see cref="Alternatives" />
         /// </summary>
-        /// <param name="element">The <see cref="IElement"/> to built textual notation from</param>
-        /// <returns>The built textual notation string</returns>
-        string QueryTextualNotationOfElement(IElement element);
+        public List<RuleElement> Elements { get; } = [];
     }
 }

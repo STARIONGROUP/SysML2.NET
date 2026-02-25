@@ -29,32 +29,25 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="FlowEndTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.FlowEnd" /> element
+    /// The <see cref="FlowEndTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd" /> element
     /// </summary>
-    public class FlowEndTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Interactions.FlowEnd>
+    public static partial class FlowEndTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="FlowEndTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule FlowEnd
+        /// <para>FlowEnd=(ownedRelationship+=FlowEndSubsetting)?ownedRelationship+=FlowFeatureMember</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public FlowEndTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFlowEnd(SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.FlowEnd"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Interactions.FlowEnd"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Interactions.FlowEnd poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : FlowEnd=(ownedRelationship+=FlowEndSubsetting)?ownedRelationship+=FlowFeatureMember
-
-            // Group Element 
+            // Group Element
             // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
-            return stringBuilder.ToString();
+            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+
         }
     }
 }

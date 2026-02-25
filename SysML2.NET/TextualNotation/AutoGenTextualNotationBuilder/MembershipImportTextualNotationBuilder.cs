@@ -29,32 +29,26 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="MembershipImportTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.MembershipImport" /> element
+    /// The <see cref="MembershipImportTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport" /> element
     /// </summary>
-    public class MembershipImportTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Root.Namespaces.MembershipImport>
+    public static partial class MembershipImportTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="MembershipImportTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule MembershipImport
+        /// <para>MembershipImport=importedMembership=[QualifiedName]('::'isRecursive?='**')?</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public MembershipImportTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildMembershipImport(SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport poco, StringBuilder stringBuilder)
         {
-        }
+            // Assignment Element : importedMembership = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property importedMembership value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // Group Element
+            stringBuilder.Append(":: ");
+            // Assignment Element : isRecursive ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            // If property isRecursive value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
 
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Root.Namespaces.MembershipImport"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Root.Namespaces.MembershipImport"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Root.Namespaces.MembershipImport poco)
-        {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : MembershipImport=importedMembership=[QualifiedName]('::'isRecursive?='**')?
 
-            // Assignment Element : importedMembership = 
-            // Group Element 
-
-            return stringBuilder.ToString();
         }
     }
 }

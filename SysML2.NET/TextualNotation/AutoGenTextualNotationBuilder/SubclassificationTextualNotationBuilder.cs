@@ -29,42 +29,46 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="SubclassificationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Classifiers.Subclassification" /> element
+    /// The <see cref="SubclassificationTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification" /> element
     /// </summary>
-    public class SubclassificationTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>
+    public static partial class SubclassificationTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="SubclassificationTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedSubclassification
+        /// <para>OwnedSubclassification:Subclassification=superClassifier=[QualifiedName]</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public SubclassificationTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, StringBuilder stringBuilder)
         {
+            // Assignment Element : superClassifier = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property superclassifier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Classifiers.Subclassification"/>
+        /// Builds the Textual Notation string for the rule Subclassification
+        /// <para>Subclassification=('specialization'Identification)?'subclassifier'subclassifier=[QualifiedName]SPECIALIZESsuperclassifier=[QualifiedName]RelationshipBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.Subclassification"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Classifiers.Subclassification poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : Subclassification=('specialization'Identification)?'subclassifier'subclassifier=[QualifiedName]SPECIALIZESsuperclassifier=[QualifiedName]RelationshipBody
+            // Group Element
+            stringBuilder.Append("specialization ");
+            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
+            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
-            // Group Element 
             stringBuilder.Append("subclassifier ");
-            // Assignment Element : subclassifier = 
-            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes'
+            // Assignment Element : subclassifier = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property subclassifier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes' 
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            // Assignment Element : superclassifier = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // If property superclassifier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
-
-            // Assignment Element : superclassifier = 
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}'
-
-
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

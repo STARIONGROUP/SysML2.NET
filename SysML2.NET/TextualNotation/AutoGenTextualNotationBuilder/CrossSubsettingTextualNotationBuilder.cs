@@ -29,28 +29,19 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="CrossSubsettingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.CrossSubsetting" /> element
+    /// The <see cref="CrossSubsettingTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting" /> element
     /// </summary>
-    public class CrossSubsettingTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Core.Features.CrossSubsetting>
+    public static partial class CrossSubsettingTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="CrossSubsettingTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule OwnedCrossSubsetting
+        /// <para>OwnedCrossSubsetting:CrossSubsetting=crossedFeature=[QualifiedName]|crossedFeature=OwnedFeatureChain{ownedRelatedElement+=crossedFeature}</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public CrossSubsettingTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildOwnedCrossSubsetting(SysML2.NET.Core.POCO.Core.Features.ICrossSubsetting poco, StringBuilder stringBuilder)
         {
-        }
-
-        /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Core.Features.CrossSubsetting"/>
-        /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Core.Features.CrossSubsetting"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Core.Features.CrossSubsetting poco)
-        {
-            var stringBuilder = new StringBuilder();
-
-            return stringBuilder.ToString();
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
     }
 }

@@ -29,41 +29,49 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ViewDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewDefinition" /> element
+    /// The <see cref="ViewDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewDefinition" /> element
     /// </summary>
-    public class ViewDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.Views.ViewDefinition>
+    public static partial class ViewDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ViewDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ViewDefinitionBody
+        /// <para>ViewDefinitionBody:ViewDefinition=';'|'{'ViewDefinitionBodyItem*'}'</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ViewDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildViewDefinitionBody(SysML2.NET.Core.POCO.Systems.Views.IViewDefinition poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewDefinition"/>
+        /// Builds the Textual Notation string for the rule ViewDefinitionBodyItem
+        /// <para>ViewDefinitionBodyItem:ViewDefinition=DefinitionBodyItem|ownedRelationship+=ElementFilterMember|ownedRelationship+=ViewRenderingMember</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.ViewDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.Views.ViewDefinition poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildViewDefinitionBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewDefinition poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : ViewDefinition=OccurrenceDefinitionPrefix'view''def'DefinitionDeclarationViewDefinitionBody
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+        }
 
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+        /// <summary>
+        /// Builds the Textual Notation string for the rule ViewDefinition
+        /// <para>ViewDefinition=OccurrenceDefinitionPrefix'view''def'DefinitionDeclarationViewDefinitionBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.Views.IViewDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildViewDefinition(SysML2.NET.Core.POCO.Systems.Views.IViewDefinition poco, StringBuilder stringBuilder)
+        {
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("view ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
+            // non Terminal : ViewDefinitionBody; Found rule ViewDefinitionBody:ViewDefinition=';'|'{'ViewDefinitionBodyItem*'}' 
+            BuildViewDefinitionBody(poco, stringBuilder);
 
-
-            // non Terminal : ViewDefinitionBody; Found rule ViewDefinitionBody:ViewDefinition=';'|'{'ViewDefinitionBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

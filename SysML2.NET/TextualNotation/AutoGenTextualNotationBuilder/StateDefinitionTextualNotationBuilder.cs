@@ -29,41 +29,38 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="StateDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.States.StateDefinition" /> element
+    /// The <see cref="StateDefinitionTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.States.IStateDefinition" /> element
     /// </summary>
-    public class StateDefinitionTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Systems.States.StateDefinition>
+    public static partial class StateDefinitionTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="StateDefinitionTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule StateDefBody
+        /// <para>StateDefBody:StateDefinition=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public StateDefinitionTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildStateDefBody(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, StringBuilder stringBuilder)
         {
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Systems.States.StateDefinition"/>
+        /// Builds the Textual Notation string for the rule StateDefinition
+        /// <para>StateDefinition=OccurrenceDefinitionPrefix'state''def'DefinitionDeclarationStateDefBody</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.StateDefinition"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Systems.States.StateDefinition poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.States.IStateDefinition" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildStateDefinition(SysML2.NET.Core.POCO.Systems.States.IStateDefinition poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
-            // Rule definition : StateDefinition=OccurrenceDefinitionPrefix'state''def'DefinitionDeclarationStateDefBody
-
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword*
-
-
+            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
+            OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("state ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart?
+            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
+            DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
+            // non Terminal : StateDefBody; Found rule StateDefBody:StateDefinition=';'|(isParallel?='parallel')?'{'StateBodyItem*'}' 
+            BuildStateDefBody(poco, stringBuilder);
 
-
-            // non Terminal : StateDefBody; Found rule StateDefBody:StateDefinition=';'|(isParallel?='parallel')?'{'StateBodyItem*'}'
-
-
-
-            return stringBuilder.ToString();
         }
     }
 }

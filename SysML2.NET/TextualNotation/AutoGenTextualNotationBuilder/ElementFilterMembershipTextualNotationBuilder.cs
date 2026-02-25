@@ -29,28 +29,40 @@ namespace SysML2.NET.TextualNotation
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// The <see cref="ElementFilterMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership" /> element
+    /// The <see cref="ElementFilterMembershipTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership" /> element
     /// </summary>
-    public class ElementFilterMembershipTextualNotationBuilder : TextualNotationBuilder<SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership>
+    public static partial class ElementFilterMembershipTextualNotationBuilder
     {
         /// <summary>
-        /// Initializes a new instance of a <see cref="ElementFilterMembershipTextualNotationBuilder"/>
+        /// Builds the Textual Notation string for the rule ElementFilterMember
+        /// <para>ElementFilterMember:ElementFilterMembership=MemberPrefix'filter'ownedRelatedElement+=OwnedExpression';'</para>    
         /// </summary>
-        /// <param name="facade">The <see cref="ITextualNotationBuilderFacade"/> used to query textual notation of referenced <see cref="IElement"/></param>
-        public ElementFilterMembershipTextualNotationBuilder(ITextualNotationBuilderFacade facade) : base(facade)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildElementFilterMember(SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership poco, StringBuilder stringBuilder)
         {
+            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
+            MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
+            stringBuilder.Append("filter ");
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("; ");
+
         }
 
         /// <summary>
-        /// Builds the Textual Notation string for the provided <see cref="SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership"/>
+        /// Builds the Textual Notation string for the rule FilterPackageMember
+        /// <para>FilterPackageMember:ElementFilterMembership='['ownedRelatedElement+=OwnedExpression']'</para>    
         /// </summary>
-        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership"/> from which the textual notation should be build</param>
-        /// <returns>The built textual notation string</returns>
-        public override string BuildTextualNotation(SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership poco)
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildFilterPackageMember(SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership poco, StringBuilder stringBuilder)
         {
-            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("[ ");
+            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("] ");
 
-            return stringBuilder.ToString();
         }
     }
 }
