@@ -52,19 +52,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("conjugation ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
             stringBuilder.Append("conjugate ");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : CONJUGATES; Found rule CONJUGATES='~'|'conjugates' 
+            stringBuilder.Append(' ');
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

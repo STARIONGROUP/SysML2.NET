@@ -41,8 +41,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataReference(SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -54,9 +53,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataAccessExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IMetadataAccessExpression poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            stringBuilder.Append(". ");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            stringBuilder.Append(".");
             stringBuilder.Append("metadata ");
 
         }

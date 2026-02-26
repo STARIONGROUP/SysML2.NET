@@ -42,10 +42,8 @@ namespace SysML2.NET.TextualNotation
         public static void BuildConstructorExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IConstructorExpression poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("new ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
     }

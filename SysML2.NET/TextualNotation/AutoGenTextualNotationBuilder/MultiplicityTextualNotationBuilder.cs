@@ -53,11 +53,8 @@ namespace SysML2.NET.TextualNotation
         public static void BuildMultiplicitySubset(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("multiplicity ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
             ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            // non Terminal : Subsets; Found rule Subsets:Feature=SUBSETSownedRelationship+=OwnedSubsetting 
             FeatureTextualNotationBuilder.BuildSubsets(poco, stringBuilder);
-            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
             TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
 
         }

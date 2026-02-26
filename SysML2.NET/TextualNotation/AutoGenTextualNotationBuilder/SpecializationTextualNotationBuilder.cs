@@ -41,7 +41,6 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, StringBuilder stringBuilder)
         {
-            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general} 
             BuildGeneralType(poco, stringBuilder);
 
         }
@@ -76,19 +75,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSpecialization(SysML2.NET.Core.POCO.Core.Types.ISpecialization poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("specialization ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
             stringBuilder.Append("subtype ");
-            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific} 
             BuildSpecificType(poco, stringBuilder);
-            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes' 
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general} 
             BuildGeneralType(poco, stringBuilder);
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

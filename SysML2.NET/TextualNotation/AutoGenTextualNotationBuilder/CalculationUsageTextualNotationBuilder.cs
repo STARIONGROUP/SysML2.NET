@@ -41,12 +41,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildCalculationUsage(SysML2.NET.Core.POCO.Systems.Calculations.ICalculationUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("calc ");
-            // non Terminal : ActionUsageDeclaration; Found rule ActionUsageDeclaration:ActionUsage=UsageDeclarationValuePart? 
             ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, stringBuilder);
-            // non Terminal : CalculationBody; Found rule CalculationBody:Type=';'|'{'CalculationBodyPart'}' 
             TypeTextualNotationBuilder.BuildCalculationBody(poco, stringBuilder);
 
         }

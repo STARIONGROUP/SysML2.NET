@@ -41,7 +41,6 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamespaceExpose(SysML2.NET.Core.POCO.Systems.Views.INamespaceExpose poco, StringBuilder stringBuilder)
         {
-            // non Terminal : NamespaceImport; Found rule NamespaceImport=importedNamespace=[QualifiedName]'::''*'('::'isRecursive?='**')?|importedNamespace=FilterPackage{ownedRelatedElement+=importedNamespace} 
             NamespaceImportTextualNotationBuilder.BuildNamespaceImport(poco, stringBuilder);
 
         }

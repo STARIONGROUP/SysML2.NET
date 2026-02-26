@@ -41,12 +41,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMembershipImport(SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : importedMembership = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property importedMembership value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // Group Element
-            stringBuilder.Append(":: ");
-            // Assignment Element : isRecursive ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isRecursive value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+            if (poco.IsRecursive)
+            {
+                stringBuilder.Append(":: ");
+                stringBuilder.Append("**");
+                stringBuilder.Append(' ');
+            }
 
 
         }

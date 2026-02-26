@@ -41,11 +41,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAttributeDefinition(SysML2.NET.Core.POCO.Systems.Attributes.IAttributeDefinition poco, StringBuilder stringBuilder)
         {
-            // non Terminal : DefinitionPrefix; Found rule DefinitionPrefix:Definition=BasicDefinitionPrefix?DefinitionExtensionKeyword* 
             DefinitionTextualNotationBuilder.BuildDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("attribute ");
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
             DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
 
         }

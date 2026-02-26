@@ -41,20 +41,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBindingConnectorAsUsage(SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : UsagePrefix; Found rule UsagePrefix:Usage=UnextendedUsagePrefixUsageExtensionKeyword* 
             UsageTextualNotationBuilder.BuildUsagePrefix(poco, stringBuilder);
-            // Group Element
-            stringBuilder.Append("binding ");
-            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
-            UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
 
             stringBuilder.Append("bind ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            stringBuilder.Append("= ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // non Terminal : UsageBody; Found rule UsageBody:Usage=DefinitionBody 
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            stringBuilder.Append("=");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }

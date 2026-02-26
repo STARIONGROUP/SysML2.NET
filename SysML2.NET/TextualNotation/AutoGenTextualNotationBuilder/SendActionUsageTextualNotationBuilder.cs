@@ -41,14 +41,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSendNode(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
-            // non Terminal : ActionUsageDeclaration; Found rule ActionUsageDeclaration:ActionUsage=UsageDeclarationValuePart? 
             ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, stringBuilder);
             stringBuilder.Append("send ");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }
@@ -61,12 +57,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSendNodeDeclaration(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : ActionNodeUsageDeclaration; Found rule ActionNodeUsageDeclaration:ActionUsage='action'UsageDeclaration? 
             ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, stringBuilder);
             stringBuilder.Append("send ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // non Terminal : SenderReceiverPart; Found rule SenderReceiverPart:SendActionUsage='via'ownedRelationship+=NodeParameterMember('to'ownedRelationship+=NodeParameterMember)?|ownedRelationship+=EmptyParameterMember'to'ownedRelationship+=NodeParameterMember 
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
             BuildSenderReceiverPart(poco, stringBuilder);
 
         }
@@ -90,9 +83,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildStateSendActionUsage(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : SendNodeDeclaration; Found rule SendNodeDeclaration:SendActionUsage=ActionNodeUsageDeclaration?'send'ownedRelationship+=NodeParameterMemberSenderReceiverPart? 
             BuildSendNodeDeclaration(poco, stringBuilder);
-            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }
@@ -105,13 +96,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTransitionSendActionUsage(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : SendNodeDeclaration; Found rule SendNodeDeclaration:SendActionUsage=ActionNodeUsageDeclaration?'send'ownedRelationship+=NodeParameterMemberSenderReceiverPart? 
             BuildSendNodeDeclaration(poco, stringBuilder);
-            // Group Element
-            stringBuilder.Append("{ ");
-            // non Terminal : ActionBodyItem; Found rule ActionBodyItem:Type=NonBehaviorBodyItem|ownedRelationship+=InitialNodeMember(ownedRelationship+=ActionTargetSuccessionMember)*|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=ActionBehaviorMember(ownedRelationship+=ActionTargetSuccessionMember)*|ownedRelationship+=GuardedSuccessionMember 
-            TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
-            stringBuilder.Append("} ");
 
 
         }

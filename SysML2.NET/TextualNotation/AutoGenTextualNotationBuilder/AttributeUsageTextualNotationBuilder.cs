@@ -41,10 +41,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAttributeUsage(SysML2.NET.Core.POCO.Systems.Attributes.IAttributeUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : UsagePrefix; Found rule UsagePrefix:Usage=UnextendedUsagePrefixUsageExtensionKeyword* 
             UsageTextualNotationBuilder.BuildUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("attribute ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }

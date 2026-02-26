@@ -42,7 +42,6 @@ namespace SysML2.NET.TextualNotation
         public static void BuildEnumeratedValue(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("enum ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }
@@ -55,10 +54,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEnumerationUsage(SysML2.NET.Core.POCO.Systems.Enumerations.IEnumerationUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : UsagePrefix; Found rule UsagePrefix:Usage=UnextendedUsagePrefixUsageExtensionKeyword* 
             UsageTextualNotationBuilder.BuildUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("enum ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }

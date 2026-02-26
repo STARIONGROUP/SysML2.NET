@@ -41,13 +41,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildJoinNode(SysML2.NET.Core.POCO.Systems.Actions.IJoinNode poco, StringBuilder stringBuilder)
         {
-            // non Terminal : ControlNodePrefix; Found rule ControlNodePrefix:OccurrenceUsage=RefPrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, stringBuilder);
-            // Assignment Element : isComposite ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isComposite value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
+            stringBuilder.Append("join");
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
-            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }

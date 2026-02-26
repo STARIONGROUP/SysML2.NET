@@ -41,13 +41,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAssociationStructure(SysML2.NET.Core.POCO.Kernel.Associations.IAssociationStructure poco, StringBuilder stringBuilder)
         {
-            // non Terminal : TypePrefix; Found rule TypePrefix:Type=(isAbstract?='abstract')?(ownedRelationship+=PrefixMetadataMember)* 
             TypeTextualNotationBuilder.BuildTypePrefix(poco, stringBuilder);
             stringBuilder.Append("assoc ");
             stringBuilder.Append("struct ");
-            // non Terminal : ClassifierDeclaration; Found rule ClassifierDeclaration:Classifier=(isSufficient?='all')?Identification(ownedRelationship+=OwnedMultiplicity)?(SuperclassingPart|ConjugationPart)?TypeRelationshipPart* 
             ClassifierTextualNotationBuilder.BuildClassifierDeclaration(poco, stringBuilder);
-            // non Terminal : TypeBody; Found rule TypeBody:Type=';'|'{'TypeBodyElement*'}' 
             TypeTextualNotationBuilder.BuildTypeBody(poco, stringBuilder);
 
         }

@@ -41,12 +41,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFlowEnd(SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
     }

@@ -92,5 +92,49 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             return property.Opposite is { IsComposite: true, IsDerived: false };
         }
+
+        /// <summary>
+        /// Queries the content of a IF statement for non-empty values
+        /// </summary>
+        /// <param name="property">The property that have to be used to produce the content</param>
+        /// <param name="variableName">The name of the name</param>
+        /// <returns>The If Statement content</returns>
+        public static string QueryIfStatementContentForNonEmpty(this IProperty property, string variableName)
+        {
+            var propertyName = property.QueryPropertyNameBasedOnUmlProperties();
+
+            if (property.QueryIsEnumerable())
+            {
+                return $"{variableName}.{propertyName}.Count != 0";
+            }
+
+            if (property.QueryIsReferenceProperty())
+            {
+                return $"{variableName}.{propertyName} != null";
+            }
+
+            if (property.QueryIsNullableAndNotString())
+            {
+                return  $"{variableName}.{propertyName}.HasValue";
+            }
+
+            if (property.QueryIsString())
+            {
+                return $"!string.IsNullOrWhiteSpace({variableName}.{propertyName})";
+            }
+
+            if (property.QueryIsBool())
+            {
+                return $"{variableName}.{propertyName}";
+            }
+
+            if (property.QueryIsEnum())
+            {
+                var defaultValue = property.QueryIsEnumPropertyWithDefaultValue() ? $"{property.Type.QueryFullyQualifiedTypeName()}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()}" : ((IEnumeration)property.Type).OwnedLiteral[0].Name;
+                return $"{variableName}.{propertyName} != {defaultValue}";
+            }
+
+            return "THIS WILL PRODUCE COMPILE ERROR";
+        }
     }
 }

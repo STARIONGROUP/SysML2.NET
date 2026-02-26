@@ -41,18 +41,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            // Assignment Element : isStandard ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isStandard value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            stringBuilder.Append("standard");
 
+            stringBuilder.Append(' ');
             stringBuilder.Append("library ");
-            // Group Element
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
-            // non Terminal : PackageDeclaration; Found rule PackageDeclaration:Package='package'Identification 
             PackageTextualNotationBuilder.BuildPackageDeclaration(poco, stringBuilder);
-            // non Terminal : PackageBody; Found rule PackageBody:Package=';'|'{'PackageBodyElement*'}' 
             PackageTextualNotationBuilder.BuildPackageBody(poco, stringBuilder);
 
         }

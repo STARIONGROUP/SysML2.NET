@@ -41,15 +41,19 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildIdentification(SysML2.NET.Core.POCO.Root.Elements.IElement poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("< ");
-            // Assignment Element : declaredShortName = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property declaredShortName value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            stringBuilder.Append("> ");
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName))
+            {
+                stringBuilder.Append("<");
+                stringBuilder.Append(poco.DeclaredShortName);
+                stringBuilder.Append(">");
+                stringBuilder.Append(' ');
+            }
 
-            // Group Element
-            // Assignment Element : declaredName = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property declaredName value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
+            {
+                stringBuilder.Append(poco.DeclaredName);
+                stringBuilder.Append(' ');
+            }
 
 
         }

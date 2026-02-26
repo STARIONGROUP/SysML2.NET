@@ -52,19 +52,24 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRefPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            // Assignment Element : direction = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property direction value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (poco.Direction.HasValue)
+            {
+                stringBuilder.Append(poco.Direction.ToString().ToLower());
+                stringBuilder.Append(' ');
+            }
 
-            // Group Element
-            // Assignment Element : isDerived ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isDerived value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            if (poco.IsDerived)
+            {
+                stringBuilder.Append("derived");
+                stringBuilder.Append(' ');
+            }
 
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // Group Element
-            // Assignment Element : isConstant ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isConstant value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            if (poco.IsConstant)
+            {
+                stringBuilder.Append("constant");
+                stringBuilder.Append(' ');
+            }
 
 
         }
@@ -77,11 +82,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBasicUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : RefPrefix; Found rule RefPrefix:Usage=(direction=FeatureDirection)?(isDerived?='derived')?(isAbstract?='abstract'|isVariation?='variation')?(isConstant?='constant')? 
             BuildRefPrefix(poco, stringBuilder);
-            // Group Element
-            // Assignment Element : isReference ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isReference value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            if (poco.isReference)
+            {
+                stringBuilder.Append("ref");
+                stringBuilder.Append(' ');
+            }
 
 
         }
@@ -94,11 +100,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEndUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : isEnd ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isEnd value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // Group Element
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("end");
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
 
         }
@@ -111,8 +118,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUsageExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -135,9 +141,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : UnextendedUsagePrefix; Found rule UnextendedUsagePrefix:Usage=EndUsagePrefix|BasicUsagePrefix 
             BuildUnextendedUsagePrefix(poco, stringBuilder);
-            // non Terminal : UsageExtensionKeyword; Found rule UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember 
             BuildUsageExtensionKeyword(poco, stringBuilder);
 
         }
@@ -150,9 +154,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUsageDeclaration(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
             ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            // non Terminal : FeatureSpecializationPart; Found rule FeatureSpecializationPart:Feature=FeatureSpecialization+MultiplicityPart?FeatureSpecialization*|MultiplicityPartFeatureSpecialization* 
             FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, stringBuilder);
 
         }
@@ -165,9 +167,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUsageCompletion(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
             FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
-            // non Terminal : UsageBody; Found rule UsageBody:Usage=DefinitionBody 
             BuildUsageBody(poco, stringBuilder);
 
         }
@@ -180,7 +180,6 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUsageBody(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : DefinitionBody; Found rule DefinitionBody:Type=';'|'{'DefinitionBodyItem*'}' 
             TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
 
         }
@@ -270,9 +269,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildActionTargetSuccession(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : UsageBody; Found rule UsageBody:Usage=DefinitionBody 
+            stringBuilder.Append(' ');
             BuildUsageBody(poco, stringBuilder);
 
         }
@@ -285,11 +283,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExtendedUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : UnextendedUsagePrefix; Found rule UnextendedUsagePrefix:Usage=EndUsagePrefix|BasicUsagePrefix 
             BuildUnextendedUsagePrefix(poco, stringBuilder);
-            // non Terminal : UsageExtensionKeyword; Found rule UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember 
             BuildUsageExtensionKeyword(poco, stringBuilder);
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             BuildUsage(poco, stringBuilder);
 
         }
@@ -302,9 +297,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : UsageDeclaration; Found rule UsageDeclaration:Usage=IdentificationFeatureSpecializationPart? 
             BuildUsageDeclaration(poco, stringBuilder);
-            // non Terminal : UsageCompletion; Found rule UsageCompletion:Usage=ValuePart?UsageBody 
             BuildUsageCompletion(poco, stringBuilder);
 
         }

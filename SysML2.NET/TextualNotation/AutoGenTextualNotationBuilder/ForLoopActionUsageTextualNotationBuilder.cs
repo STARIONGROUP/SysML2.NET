@@ -41,16 +41,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildForLoopNode(SysML2.NET.Core.POCO.Systems.Actions.IForLoopActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : ActionNodePrefix; Found rule ActionNodePrefix:ActionUsage=OccurrenceUsagePrefixActionNodeUsageDeclaration? 
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
             stringBuilder.Append("for ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
             stringBuilder.Append("in ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
     }

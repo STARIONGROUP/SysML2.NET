@@ -41,17 +41,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildWhileLoopNode(SysML2.NET.Core.POCO.Systems.Actions.IWhileLoopActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : ActionNodePrefix; Found rule ActionNodePrefix:ActionUsage=OccurrenceUsagePrefixActionNodeUsageDeclaration? 
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Group Element
-            stringBuilder.Append("until ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            stringBuilder.Append("; ");
+            stringBuilder.Append(' ');
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                stringBuilder.Append("until ");
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(";");
+                stringBuilder.Append(' ');
+            }
 
 
         }

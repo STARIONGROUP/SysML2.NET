@@ -41,8 +41,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : featuringType = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property featuringType value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
 
         }
 
@@ -55,17 +54,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("featuring ");
-            // Group Element
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            stringBuilder.Append("of ");
 
-            // Assignment Element : featureOfType = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property featureOfType value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
             stringBuilder.Append("by ");
-            // Assignment Element : featuringType = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property featuringType value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

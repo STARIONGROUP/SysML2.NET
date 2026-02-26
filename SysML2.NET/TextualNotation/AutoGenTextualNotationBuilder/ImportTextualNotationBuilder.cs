@@ -52,16 +52,15 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildImport(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : visibility = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property visibility value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(poco.Visibility.ToString().ToLower());
             stringBuilder.Append("import ");
-            // Group Element
-            // Assignment Element : isImportAll ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isImportAll value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            if (poco.IsImportAll)
+            {
+                stringBuilder.Append("all");
+                stringBuilder.Append(' ');
+            }
 
-            // non Terminal : ImportDeclaration; Found rule ImportDeclaration:Import=MembershipImport|NamespaceImport 
             BuildImportDeclaration(poco, stringBuilder);
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

@@ -41,9 +41,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDefaultInterfaceEnd(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : isEnd ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isEnd value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
+            stringBuilder.Append("end");
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }
@@ -56,18 +54,20 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfaceEnd(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
-            // Group Element
-            // Assignment Element : declaredName = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property declaredName value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // non Terminal : REFERENCES; Found rule REFERENCES='::>'|'references' 
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
+            {
+                stringBuilder.Append(poco.DeclaredName);
+                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                stringBuilder.Append(' ');
+            }
 
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -79,10 +79,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPortUsage(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("port ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }

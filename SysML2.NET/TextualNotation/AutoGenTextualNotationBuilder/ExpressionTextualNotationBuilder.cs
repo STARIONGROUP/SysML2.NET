@@ -74,10 +74,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSequenceExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("( ");
-            // non Terminal : SequenceExpressionList; Found rule SequenceExpressionList:Expression=OwnedExpression','?|SequenceOperatorExpression 
+            stringBuilder.Append("(");
             BuildSequenceExpressionList(poco, stringBuilder);
-            stringBuilder.Append(") ");
+            stringBuilder.Append(")");
 
         }
 
@@ -100,8 +99,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFunctionReference(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -124,10 +122,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExpressionBody(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("{ ");
-            // non Terminal : FunctionBodyPart; Found rule FunctionBodyPart:Type=(TypeBodyElement|ownedRelationship+=ReturnFeatureMember)*(ownedRelationship+=ResultExpressionMember)? 
+            stringBuilder.Append("{");
             TypeTextualNotationBuilder.BuildFunctionBodyPart(poco, stringBuilder);
-            stringBuilder.Append("} ");
+            stringBuilder.Append("}");
 
         }
 
@@ -139,20 +136,18 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
         {
-            // non Terminal : FeaturePrefix; Found rule FeaturePrefix=(EndFeaturePrefix(ownedRelationship+=OwnedCrossFeatureMember)?|BasicFeaturePrefix)(ownedRelationship+=PrefixMetadataMember)* 
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // Group Element
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(' ');
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
 
             stringBuilder.Append("expr ");
-            // non Terminal : FeatureDeclaration; Found rule FeatureDeclaration:Feature=(isSufficient?='all')?(FeatureIdentification(FeatureSpecializationPart|ConjugationPart)?|FeatureSpecializationPart|ConjugationPart)FeatureRelationshipPart* 
             FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, stringBuilder);
-            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
             FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
-            // non Terminal : FunctionBody; Found rule FunctionBody:Type=';'|'{'FunctionBodyPart'}' 
             TypeTextualNotationBuilder.BuildFunctionBody(poco, stringBuilder);
 
         }

@@ -41,9 +41,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMemberPrefix(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            // Assignment Element : visibility = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property visibility value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
+            {
+                stringBuilder.Append(poco.Visibility.ToString().ToLower());
+                stringBuilder.Append(' ');
+            }
 
 
         }
@@ -56,23 +58,24 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAliasMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
             BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("alias ");
-            // Group Element
-            stringBuilder.Append("< ");
-            // Assignment Element : memberShortName = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property memberShortName value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            stringBuilder.Append("> ");
+            if (!string.IsNullOrWhiteSpace(poco.MemberShortName))
+            {
+                stringBuilder.Append("<");
+                stringBuilder.Append(poco.MemberShortName);
+                stringBuilder.Append(">");
+                stringBuilder.Append(' ');
+            }
 
-            // Group Element
-            // Assignment Element : memberName = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property memberName value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (!string.IsNullOrWhiteSpace(poco.MemberName))
+            {
+                stringBuilder.Append(poco.MemberName);
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("for ");
-            // Assignment Element : memberElement = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property memberElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }
@@ -96,8 +99,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : memberElement = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property memberElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
 
         }
 
@@ -109,8 +111,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildElementReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : memberElement = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property memberElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
 
         }
 

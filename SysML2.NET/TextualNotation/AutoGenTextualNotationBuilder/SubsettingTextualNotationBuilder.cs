@@ -52,19 +52,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSubsetting(SysML2.NET.Core.POCO.Core.Features.ISubsetting poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("specialization ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
             stringBuilder.Append("subset ");
-            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific} 
             SpecializationTextualNotationBuilder.BuildSpecificType(poco, stringBuilder);
-            // non Terminal : SUBSETS; Found rule SUBSETS=':>'|'subsets' 
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general} 
             SpecializationTextualNotationBuilder.BuildGeneralType(poco, stringBuilder);
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

@@ -41,34 +41,32 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDependency(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("dependency ");
-            // non Terminal : DependencyDeclaration; Found rule DependencyDeclaration=(Identification'from')?client+=[QualifiedName](','client+=[QualifiedName])*'to'supplier+=[QualifiedName](','supplier+=[QualifiedName])* 
-            // Group Element
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            stringBuilder.Append("from ");
 
-            // Assignment Element : client += SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property client value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // Group Element
-            stringBuilder.Append(", ");
-            // Assignment Element : client += SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property client value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            if (poco.Client.Count != 0)
+            {
+                stringBuilder.Append(",");
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("to ");
-            // Assignment Element : supplier += SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property supplier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // Group Element
-            stringBuilder.Append(", ");
-            // Assignment Element : supplier += SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property supplier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            if (poco.Supplier.Count != 0)
+            {
+                stringBuilder.Append(",");
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
 
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

@@ -52,11 +52,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBinaryConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
             stringBuilder.Append("to ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -68,18 +66,18 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNaryConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("( ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            stringBuilder.Append(", ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Group Element
-            stringBuilder.Append(", ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append("(");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            stringBuilder.Append(",");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                stringBuilder.Append(",");
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
-            stringBuilder.Append(") ");
+            stringBuilder.Append(")");
 
         }
 
@@ -91,11 +89,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConnectionUsage(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : UsageBody; Found rule UsageBody:Usage=DefinitionBody 
+            stringBuilder.Append(' ');
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }

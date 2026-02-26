@@ -52,18 +52,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("disjoining ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
             stringBuilder.Append("disjoint ");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(' ');
             stringBuilder.Append("from ");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

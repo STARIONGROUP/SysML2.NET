@@ -41,28 +41,15 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildComment(SysML2.NET.Core.POCO.Root.Annotations.IComment poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("comment ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            // Group Element
-            stringBuilder.Append("about ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Group Element
-            stringBuilder.Append(", ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
 
+            if (!string.IsNullOrWhiteSpace(poco.Locale))
+            {
+                stringBuilder.Append("locale ");
+                stringBuilder.Append(poco.Locale);
+                stringBuilder.Append(' ');
+            }
 
-
-            // Group Element
-            stringBuilder.Append("locale ");
-            // Assignment Element : locale = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property locale value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-
-            // Assignment Element : body = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property body value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(poco.Body);
 
         }
     }

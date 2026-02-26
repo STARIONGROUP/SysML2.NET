@@ -41,8 +41,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConjugatedPortTyping(SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortTyping poco, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("~ ");
-            // Assignment Element : originalPortDefinition = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            stringBuilder.Append("~");
             BuildOriginalPortDefinition(poco, stringBuilder);
 
         }

@@ -52,10 +52,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRenderingUsage(SysML2.NET.Core.POCO.Systems.Views.IRenderingUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("rendering ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }

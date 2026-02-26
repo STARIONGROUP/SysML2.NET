@@ -41,8 +41,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildLiteralInteger(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInteger poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : value = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property value value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
 
         }
     }
