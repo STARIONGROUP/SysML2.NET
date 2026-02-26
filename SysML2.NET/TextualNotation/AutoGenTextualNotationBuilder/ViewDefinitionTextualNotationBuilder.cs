@@ -63,13 +63,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildViewDefinition(SysML2.NET.Core.POCO.Systems.Views.IViewDefinition poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
             OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("view ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
             DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
-            // non Terminal : ViewDefinitionBody; Found rule ViewDefinitionBody:ViewDefinition=';'|'{'ViewDefinitionBodyItem*'}' 
             BuildViewDefinitionBody(poco, stringBuilder);
 
         }

@@ -41,11 +41,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAssignmentNode(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
-            // non Terminal : AssignmentNodeDeclaration; Found rule AssignmentNodeDeclaration:ActionUsage=(ActionNodeUsageDeclaration)?'assign'ownedRelationship+=AssignmentTargetMemberownedRelationship+=FeatureChainMember':='ownedRelationship+=NodeParameterMember 
             ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
-            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }
@@ -58,9 +55,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildStateAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : AssignmentNodeDeclaration; Found rule AssignmentNodeDeclaration:ActionUsage=(ActionNodeUsageDeclaration)?'assign'ownedRelationship+=AssignmentTargetMemberownedRelationship+=FeatureChainMember':='ownedRelationship+=NodeParameterMember 
             ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
-            // non Terminal : ActionBody; Found rule ActionBody:Type=';'|'{'ActionBodyItem*'}' 
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }
@@ -73,13 +68,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTransitionAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : AssignmentNodeDeclaration; Found rule AssignmentNodeDeclaration:ActionUsage=(ActionNodeUsageDeclaration)?'assign'ownedRelationship+=AssignmentTargetMemberownedRelationship+=FeatureChainMember':='ownedRelationship+=NodeParameterMember 
             ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
-            // Group Element
-            stringBuilder.Append("{ ");
-            // non Terminal : ActionBodyItem; Found rule ActionBodyItem:Type=NonBehaviorBodyItem|ownedRelationship+=InitialNodeMember(ownedRelationship+=ActionTargetSuccessionMember)*|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=ActionBehaviorMember(ownedRelationship+=ActionTargetSuccessionMember)*|ownedRelationship+=GuardedSuccessionMember 
-            TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
-            stringBuilder.Append("} ");
 
 
         }

@@ -41,12 +41,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEntryActionMember(SysML2.NET.Core.POCO.Systems.States.IStateSubactionMembership poco, StringBuilder stringBuilder)
         {
-            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            // Assignment Element : kind = SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property kind value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(poco.Kind.ToString().ToLower());
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -58,12 +55,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDoActionMember(SysML2.NET.Core.POCO.Systems.States.IStateSubactionMembership poco, StringBuilder stringBuilder)
         {
-            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            // Assignment Element : kind = SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property kind value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(poco.Kind.ToString().ToLower());
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -75,12 +69,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExitActionMember(SysML2.NET.Core.POCO.Systems.States.IStateSubactionMembership poco, StringBuilder stringBuilder)
         {
-            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            // Assignment Element : kind = SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property kind value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(poco.Kind.ToString().ToLower());
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
     }

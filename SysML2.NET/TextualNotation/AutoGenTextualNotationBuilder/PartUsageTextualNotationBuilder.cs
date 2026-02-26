@@ -42,9 +42,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildActorUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("actor ");
-            // non Terminal : UsageExtensionKeyword; Found rule UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember 
             UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }
@@ -58,9 +56,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildStakeholderUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("stakeholder ");
-            // non Terminal : UsageExtensionKeyword; Found rule UsageExtensionKeyword:Usage=ownedRelationship+=PrefixMetadataMember 
             UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }
@@ -73,10 +69,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPartUsage(SysML2.NET.Core.POCO.Systems.Parts.IPartUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("part ");
-            // non Terminal : Usage; Found rule Usage=UsageDeclarationUsageCompletion 
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }

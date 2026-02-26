@@ -41,12 +41,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildElementFilterMember(SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership poco, StringBuilder stringBuilder)
         {
-            // non Terminal : MemberPrefix; Found rule MemberPrefix:Membership=(visibility=VisibilityIndicator)? 
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("filter ");
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            stringBuilder.Append("; ");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            stringBuilder.Append(";");
 
         }
 
@@ -58,10 +56,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFilterPackageMember(SysML2.NET.Core.POCO.Kernel.Packages.IElementFilterMembership poco, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("[ ");
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            stringBuilder.Append("] ");
+            stringBuilder.Append("[");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            stringBuilder.Append("]");
 
         }
     }

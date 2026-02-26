@@ -41,13 +41,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfaceDefinition(SysML2.NET.Core.POCO.Systems.Interfaces.IInterfaceDefinition poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
             OccurrenceDefinitionTextualNotationBuilder.BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("interface ");
             stringBuilder.Append("def ");
-            // non Terminal : DefinitionDeclaration; Found rule DefinitionDeclaration:Definition=IdentificationSubclassificationPart? 
             DefinitionTextualNotationBuilder.BuildDefinitionDeclaration(poco, stringBuilder);
-            // non Terminal : InterfaceBody; Found rule InterfaceBody:Type=';'|'{'InterfaceBodyItem*'}' 
             TypeTextualNotationBuilder.BuildInterfaceBody(poco, stringBuilder);
 
         }

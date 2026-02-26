@@ -42,15 +42,15 @@ namespace SysML2.NET.TextualNotation
         public static void BuildDocumentation(SysML2.NET.Core.POCO.Root.Annotations.IDocumentation poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("doc ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
             ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            // Group Element
-            stringBuilder.Append("locale ");
-            // Assignment Element : locale = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property locale value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (!string.IsNullOrWhiteSpace(poco.Locale))
+            {
+                stringBuilder.Append("locale ");
+                stringBuilder.Append(poco.Locale);
+                stringBuilder.Append(' ');
+            }
 
-            // Assignment Element : body = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property body value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(poco.Body);
 
         }
     }

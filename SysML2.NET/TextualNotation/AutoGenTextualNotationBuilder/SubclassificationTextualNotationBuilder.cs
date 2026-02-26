@@ -41,8 +41,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : superClassifier = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property superclassifier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
 
         }
 
@@ -54,19 +53,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("specialization ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
             stringBuilder.Append("subclassifier ");
-            // Assignment Element : subclassifier = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property subclassifier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // non Terminal : SPECIALIZES; Found rule SPECIALIZES=':>'|'specializes' 
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // Assignment Element : superclassifier = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property superclassifier value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

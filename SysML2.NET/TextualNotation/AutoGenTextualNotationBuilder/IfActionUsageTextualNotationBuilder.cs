@@ -41,17 +41,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildIfNode(SysML2.NET.Core.POCO.Systems.Actions.IIfActionUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : ActionNodePrefix; Found rule ActionNodePrefix:ActionUsage=OccurrenceUsagePrefixActionNodeUsageDeclaration? 
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
             stringBuilder.Append("if ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Group Element
-            stringBuilder.Append("else ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.GroupElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.GroupElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                stringBuilder.Append("else ");
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
 
         }

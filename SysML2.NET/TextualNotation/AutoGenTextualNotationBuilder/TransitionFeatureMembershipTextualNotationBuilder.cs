@@ -43,8 +43,7 @@ namespace SysML2.NET.TextualNotation
         {
             stringBuilder.Append("accept ");
             // Assignment Element : kind = 'trigger'
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -58,8 +57,7 @@ namespace SysML2.NET.TextualNotation
         {
             stringBuilder.Append("if ");
             // Assignment Element : kind = 'guard'
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -73,8 +71,7 @@ namespace SysML2.NET.TextualNotation
         {
             stringBuilder.Append("do ");
             // Assignment Element : kind = 'effect'
-            // Assignment Element : ownedRelatedElement += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelatedElement value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
     }

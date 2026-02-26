@@ -41,15 +41,14 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOccurrenceDefinitionPrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
-            // non Terminal : BasicDefinitionPrefix; Found rule BasicDefinitionPrefix=isAbstract?='abstract'|isVariation?='variation' 
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // Group Element
-            // Assignment Element : isIndividual ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isIndividual value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (poco.IsIndividual && poco.OwnedRelationship.Count != 0)
+            {
+                stringBuilder.Append("individual");
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
-            // non Terminal : DefinitionExtensionKeyword; Found rule DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember 
             DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, stringBuilder);
 
         }
@@ -62,17 +61,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildIndividualDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
-            // non Terminal : BasicDefinitionPrefix; Found rule BasicDefinitionPrefix=isAbstract?='abstract'|isVariation?='variation' 
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // Assignment Element : isIndividual ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isIndividual value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // non Terminal : DefinitionExtensionKeyword; Found rule DefinitionExtensionKeyword:Definition=ownedRelationship+=PrefixMetadataMember 
+            stringBuilder.Append("individual");
             DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, stringBuilder);
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
             DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
 
         }
 
@@ -84,11 +78,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOccurrenceDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceDefinitionPrefix; Found rule OccurrenceDefinitionPrefix:OccurrenceDefinition=BasicDefinitionPrefix?(isIndividual?='individual'ownedRelationship+=EmptyMultiplicityMember)?DefinitionExtensionKeyword* 
             BuildOccurrenceDefinitionPrefix(poco, stringBuilder);
             stringBuilder.Append("occurrence ");
             stringBuilder.Append("def ");
-            // non Terminal : Definition; Found rule Definition=DefinitionDeclarationDefinitionBody 
             DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
 
         }

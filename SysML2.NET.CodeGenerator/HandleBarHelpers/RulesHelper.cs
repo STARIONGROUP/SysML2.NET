@@ -81,13 +81,45 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="alternatives">The collection of alternatives to process</param>
         /// <param name="rules">A collection of all existing rules</param>
-        private static void ProcessAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, IReadOnlyCollection<TextualNotationRule> rules)
+        /// <param name="callerElementIsOptional"></param>
+        private static void ProcessAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, IReadOnlyCollection<TextualNotationRule> rules, bool callerElementIsOptional = false)
         {
             if (alternatives.Count == 1)
             {
-                foreach (var textualRuleElement in alternatives.ElementAt(0).Elements)
+                var elements = alternatives.ElementAt(0).Elements;
+                
+                if (callerElementIsOptional)
                 {
-                    ProcessRuleElement(writer, umlClass, rules, textualRuleElement);
+                    var targetPropertiesName = elements.OfType<AssignmentElement>().Select(x => x.Property).Distinct().ToList();
+                    
+                    if (targetPropertiesName.Count > 0)
+                    {
+                        var allProperties = umlClass.QueryAllProperties();
+                        writer.WriteSafeString("if(");
+
+                        var ifStatementContent = targetPropertiesName
+                            .Select(propertyName => allProperties.SingleOrDefault(x => string.Equals(x.Name, propertyName, StringComparison.OrdinalIgnoreCase)))
+                            .Select(matchedProperty => matchedProperty.QueryIfStatementContentForNonEmpty("poco")).ToList();
+                        
+                        writer.WriteSafeString(string.Join(" && ", ifStatementContent));
+                        writer.WriteSafeString($"){Environment.NewLine}");
+                        writer.WriteSafeString($"{{{Environment.NewLine}");
+
+                        foreach (var textualRuleElement in elements)
+                        {
+                            ProcessRuleElement(writer, umlClass, rules, textualRuleElement);
+                        }
+                        
+                        writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
+                        writer.WriteSafeString($"}}{Environment.NewLine}");
+                    }
+                }
+                else
+                {
+                    foreach (var textualRuleElement in elements)
+                    {
+                        ProcessRuleElement(writer, umlClass, rules, textualRuleElement);
+                    }    
                 }
             }
             else
@@ -109,12 +141,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             switch (textualRuleElement)
             {
                 case TerminalElement terminalElement:
-                    writer.WriteSafeString($"stringBuilder.Append(\"{terminalElement.Value} \");");
+                    var valueToAdd = terminalElement.Value;
+
+                    if (valueToAdd.Length > 1)
+                    {
+                        valueToAdd += ' ';
+                    }
+
+                    writer.WriteSafeString($"stringBuilder.Append(\"{valueToAdd}\");");
                     break;
                 case NonTerminalElement nonTerminalElement:
                     var referencedRule = rules.Single(x => x.RuleName == nonTerminalElement.Name);
                     var typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
-                    writer.WriteSafeString($"// non Terminal : {nonTerminalElement.Name}; Found rule {referencedRule.RawRule} {Environment.NewLine}");
                             
                     if (typeTarget != umlClass.Name)
                     {
@@ -143,17 +181,61 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     break;
                 case GroupElement groupElement:
-                    writer.WriteSafeString($"// Group Element{Environment.NewLine}");
-                    ProcessAlternatives(writer, umlClass, groupElement.Alternatives, rules);
+                    ProcessAlternatives(writer, umlClass, groupElement.Alternatives, rules, groupElement.IsOptional);
+
+                    if (!groupElement.IsOptional)
+                    {
+                        writer.WriteSafeString($"{Environment.NewLine}stringBuilder.Append(' ');");
+                    }
+
                     break;
                 case AssignmentElement assignmentElement:
-                    writer.WriteSafeString($"// Assignment Element : {assignmentElement.Property} {assignmentElement.Operator} {assignmentElement.Value}{Environment.NewLine}");
                     var properties = umlClass.QueryAllProperties();
                     var targetProperty = properties.SingleOrDefault(x => string.Equals(x.Name, assignmentElement.Property, StringComparison.OrdinalIgnoreCase));
 
                     if (targetProperty != null)
                     {
-                        writer.WriteSafeString($"// If property {targetProperty.Name} value is set, print {assignmentElement.Value}");
+                        if (targetProperty.QueryIsEnumerable())
+                        {
+                            writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of enumerable not supported yet\");");
+                        }
+                        else
+                        {
+                            if (assignmentElement.IsOptional)
+                            {
+                                writer.WriteSafeString($"{Environment.NewLine}if({targetProperty.QueryIfStatementContentForNonEmpty("poco")}){Environment.NewLine}");
+                                writer.WriteSafeString($"{{{Environment.NewLine}");
+                                writer.WriteSafeString($"{Environment.NewLine}");
+                                writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()});{Environment.NewLine}");
+                                writer.WriteSafeString("}}");
+                            }
+                            else
+                            {
+                                if (targetProperty.QueryIsString())
+                                {
+                                    writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()});");
+                                }
+                                else if(targetProperty.QueryIsBool())
+                                {
+                                    if (assignmentElement.Value is TerminalElement terminalElement)
+                                    {
+                                        writer.WriteSafeString($"stringBuilder.Append(\"{terminalElement.Value}\");");
+                                    }
+                                    else
+                                    {
+                                        writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of bool with rule element value different than TerminalElement not supported\");");
+                                    }
+                                }
+                                else if (targetProperty.QueryIsEnum())
+                                {
+                                    writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()}.ToString().ToLower());");
+                                }
+                                else
+                                {
+                                    writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of non-string value not yet supported\");");
+                                }
+                            }
+                        }
                     }
                     else
                     {

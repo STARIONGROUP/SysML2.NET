@@ -41,7 +41,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildLiteralInfinity(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralInfinity poco, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("* ");
+            stringBuilder.Append("*");
 
         }
     }

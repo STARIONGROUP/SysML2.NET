@@ -41,24 +41,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSatisfyRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.ISatisfyRequirementUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("assert ");
-            // Group Element
-            // Assignment Element : isNegated ?= SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
-            // If property isNegated value is set, print SysML2.NET.CodeGenerator.Grammar.Model.TerminalElement
+            stringBuilder.Append("not");
 
+            stringBuilder.Append(' ');
             stringBuilder.Append("satisfy ");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : ValuePart; Found rule ValuePart:Feature=ownedRelationship+=FeatureValue 
+            stringBuilder.Append(' ');
             FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
-            // Group Element
-            stringBuilder.Append("by ");
-            // Assignment Element : ownedRelationship += SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property ownedRelationship value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            if (poco.OwnedRelationship.Count != 0)
+            {
+                stringBuilder.Append("by ");
+                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                stringBuilder.Append(' ');
+            }
 
-            // non Terminal : RequirementBody; Found rule RequirementBody:Type=';'|'{'RequirementBodyItem*'}' 
             TypeTextualNotationBuilder.BuildRequirementBody(poco, stringBuilder);
 
         }

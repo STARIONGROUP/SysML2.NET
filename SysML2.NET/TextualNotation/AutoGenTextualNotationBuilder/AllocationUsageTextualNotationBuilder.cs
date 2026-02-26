@@ -52,11 +52,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAllocationUsage(SysML2.NET.Core.POCO.Systems.Allocations.IAllocationUsage poco, StringBuilder stringBuilder)
         {
-            // non Terminal : OccurrenceUsagePrefix; Found rule OccurrenceUsagePrefix:OccurrenceUsage=BasicUsagePrefix(isIndividual?='individual')?(portionKind=PortionKind{isPortion=true})?UsageExtensionKeyword* 
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
-            // non Terminal : AllocationUsageDeclaration; Found rule AllocationUsageDeclaration:AllocationUsage='allocation'UsageDeclaration('allocate'ConnectorPart)?|'allocate'ConnectorPart 
             BuildAllocationUsageDeclaration(poco, stringBuilder);
-            // non Terminal : UsageBody; Found rule UsageBody:Usage=DefinitionBody 
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }

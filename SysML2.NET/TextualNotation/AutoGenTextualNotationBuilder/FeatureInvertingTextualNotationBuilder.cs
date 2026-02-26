@@ -52,18 +52,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("inverting ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
             stringBuilder.Append("inverse ");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(' ');
             stringBuilder.Append("of ");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

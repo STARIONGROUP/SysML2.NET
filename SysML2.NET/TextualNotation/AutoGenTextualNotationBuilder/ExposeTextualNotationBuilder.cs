@@ -42,9 +42,8 @@ namespace SysML2.NET.TextualNotation
         public static void BuildExpose(SysML2.NET.Core.POCO.Systems.Views.IExpose poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("expose ");
-            // Group Element
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
+            stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

@@ -52,8 +52,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFlowFeatureRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : redefinedFeature = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property redefinedFeature value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
 
         }
 
@@ -65,8 +64,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildParameterRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
         {
-            // Assignment Element : redefinedFeature = SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
-            // If property redefinedFeature value is set, print SysML2.NET.CodeGenerator.Grammar.Model.ValueLiteralElement
+            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
 
         }
 
@@ -78,19 +76,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("specialization ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
             stringBuilder.Append("redefinition ");
-            // non Terminal : SpecificType; Found rule SpecificType:Specialization=specific=[QualifiedName]|specific+=OwnedFeatureChain{ownedRelatedElement+=specific} 
             SpecializationTextualNotationBuilder.BuildSpecificType(poco, stringBuilder);
-            // non Terminal : REDEFINES; Found rule REDEFINES=':>>'|'redefines' 
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            // non Terminal : GeneralType; Found rule GeneralType:Specialization=general=[QualifiedName]|general+=OwnedFeatureChain{ownedRelatedElement+=general} 
             SpecializationTextualNotationBuilder.BuildGeneralType(poco, stringBuilder);
-            // non Terminal : RelationshipBody; Found rule RelationshipBody:Relationship=';'|'{'(ownedRelationship+=OwnedAnnotation)*'}' 
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

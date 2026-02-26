@@ -41,7 +41,6 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMembershipExpose(SysML2.NET.Core.POCO.Systems.Views.IMembershipExpose poco, StringBuilder stringBuilder)
         {
-            // non Terminal : MembershipImport; Found rule MembershipImport=importedMembership=[QualifiedName]('::'isRecursive?='**')? 
             MembershipImportTextualNotationBuilder.BuildMembershipImport(poco, stringBuilder);
 
         }

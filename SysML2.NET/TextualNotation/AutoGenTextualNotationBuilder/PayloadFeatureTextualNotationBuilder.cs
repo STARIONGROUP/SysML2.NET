@@ -41,7 +41,6 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFlowPayloadFeature(SysML2.NET.Core.POCO.Kernel.Interactions.IPayloadFeature poco, StringBuilder stringBuilder)
         {
-            // non Terminal : PayloadFeature; Found rule PayloadFeature:Feature=Identification?PayloadFeatureSpecializationPartValuePart?|ownedRelationship+=OwnedFeatureTyping(ownedRelationship+=OwnedMultiplicity)?|ownedRelationship+=OwnedMultiplicityownedRelationship+=OwnedFeatureTyping 
             FeatureTextualNotationBuilder.BuildPayloadFeature(poco, stringBuilder);
 
         }

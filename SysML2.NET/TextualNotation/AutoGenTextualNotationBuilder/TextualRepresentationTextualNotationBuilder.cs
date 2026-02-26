@@ -41,16 +41,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTextualRepresentation(SysML2.NET.Core.POCO.Root.Annotations.ITextualRepresentation poco, StringBuilder stringBuilder)
         {
-            // Group Element
-            stringBuilder.Append("rep ");
-            // non Terminal : Identification; Found rule Identification:Element=('<'declaredShortName=NAME'>')?(declaredName=NAME)? 
-            ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
 
             stringBuilder.Append("language ");
-            // Assignment Element : language = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property language value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // Assignment Element : body = SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
-            // If property body value is set, print SysML2.NET.CodeGenerator.Grammar.Model.NonTerminalElement
+            stringBuilder.Append(poco.Language);
+            stringBuilder.Append(poco.Body);
 
         }
     }
