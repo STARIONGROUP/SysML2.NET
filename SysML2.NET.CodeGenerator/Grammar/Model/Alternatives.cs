@@ -18,20 +18,23 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.CodeGenerator.Grammar
+namespace SysML2.NET.CodeGenerator.Grammar.Model
 {
     using System.Collections.Generic;
-
-    using SysML2.NET.CodeGenerator.Grammar.Model;
 
     /// <summary>
     /// Provides mapping data class for the alternative grammar part
     /// </summary>
-    public class Alternatives
+    public class Alternatives: IPartOfTextualRule
     {
         /// <summary>
         /// Gets a collection of <see cref="RuleElement" /> that is part of the <see cref="Alternatives" />
         /// </summary>
         public List<RuleElement> Elements { get; } = [];
+
+        /// <summary>
+        /// Gets the <see cref="IPartOfTextualRule.TextualNotationRule" />
+        /// </summary>
+        public TextualNotationRule TextualNotationRule { get; init; }
     }
 }

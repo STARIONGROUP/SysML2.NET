@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -52,11 +53,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRefPrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
+
             if (poco.Direction.HasValue)
             {
                 stringBuilder.Append(poco.Direction.ToString().ToLower());
                 stringBuilder.Append(' ');
             }
+
 
             if (poco.IsDerived)
             {
@@ -65,6 +68,7 @@ namespace SysML2.NET.TextualNotation
             }
 
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+
             if (poco.IsConstant)
             {
                 stringBuilder.Append("constant");
@@ -83,6 +87,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildBasicUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
             BuildRefPrefix(poco, stringBuilder);
+
             if (poco.isReference)
             {
                 stringBuilder.Append("ref");
@@ -100,10 +105,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEndUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             stringBuilder.Append("end");
-            if (poco.OwnedRelationship.Count != 0)
+
+            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                OwningMembershipTextualNotationBuilder.BuildOwnedCrossFeatureMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
@@ -118,7 +125,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUsageExtensionKeyword(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
 
         }
 

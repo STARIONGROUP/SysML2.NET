@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,7 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConjugatedPortDefinition(SysML2.NET.Core.POCO.Systems.Ports.IConjugatedPortDefinition poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfPortConjugationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.Ports.PortConjugation>().GetEnumerator();
+            ownedRelationshipOfPortConjugationIterator.MoveNext();
+            PortConjugationTextualNotationBuilder.BuildPortConjugation(ownedRelationshipOfPortConjugationIterator.Current, stringBuilder);
 
         }
     }

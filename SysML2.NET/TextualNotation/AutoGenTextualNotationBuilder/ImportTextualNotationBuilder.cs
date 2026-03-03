@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -54,6 +55,7 @@ namespace SysML2.NET.TextualNotation
         {
             stringBuilder.Append(poco.Visibility.ToString().ToLower());
             stringBuilder.Append("import ");
+
             if (poco.IsImportAll)
             {
                 stringBuilder.Append("all");

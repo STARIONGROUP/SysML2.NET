@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,7 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfAnnotatingElementIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement>().GetEnumerator();
+            ownedRelatedElementOfAnnotatingElementIterator.MoveNext();
+            AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(ownedRelatedElementOfAnnotatingElementIterator.Current, stringBuilder);
 
         }
 

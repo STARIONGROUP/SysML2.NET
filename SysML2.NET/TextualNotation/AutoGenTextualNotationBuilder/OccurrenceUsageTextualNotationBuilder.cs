@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -42,11 +43,13 @@ namespace SysML2.NET.TextualNotation
         public static void BuildOccurrenceUsagePrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, StringBuilder stringBuilder)
         {
             UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, stringBuilder);
+
             if (poco.IsIndividual)
             {
                 stringBuilder.Append("individual");
                 stringBuilder.Append(' ');
             }
+
 
             if (poco.PortionKind.HasValue)
             {
@@ -83,6 +86,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildPortionUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, StringBuilder stringBuilder)
         {
             UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, stringBuilder);
+
             if (poco.IsIndividual)
             {
                 stringBuilder.Append("individual");
@@ -105,11 +109,13 @@ namespace SysML2.NET.TextualNotation
         public static void BuildControlNodePrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, StringBuilder stringBuilder)
         {
             UsageTextualNotationBuilder.BuildRefPrefix(poco, stringBuilder);
+
             if (poco.IsIndividual)
             {
                 stringBuilder.Append("individual");
                 stringBuilder.Append(' ');
             }
+
 
             if (poco.PortionKind.HasValue)
             {

@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,31 +42,35 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDependency(SysML2.NET.Core.POCO.Root.Dependencies.IDependency poco, StringBuilder stringBuilder)
         {
-            if (poco.OwnedRelationship.Count != 0)
-            {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+            using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
 
+            while (ownedRelationshipOfAnnotationIterator.MoveNext())
+            {
+                AnnotationTextualNotationBuilder.BuildPrefixMetadataAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+            }
             stringBuilder.Append("dependency ");
 
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.Client.Count != 0)
+            if (BuildGroupConditionForDependencyDeclaration(poco))
             {
-                stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                stringBuilder.Append("from ");
                 stringBuilder.Append(' ');
             }
 
+            throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
+            {
+                stringBuilder.Append(",");
+                throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
+
+            }
             stringBuilder.Append("to ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.Supplier.Count != 0)
+            throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
 
+            }
 
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 

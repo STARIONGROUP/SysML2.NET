@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -53,15 +54,18 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMultiplicityBounds(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             stringBuilder.Append("[");
-            if (poco.OwnedRelationship.Count != 0)
+
+            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
             stringBuilder.Append("]");
 
         }
@@ -74,15 +78,18 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMultiplicityRange(SysML2.NET.Core.POCO.Kernel.Multiplicities.IMultiplicityRange poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             stringBuilder.Append("[");
-            if (poco.OwnedRelationship.Count != 0)
+
+            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
             stringBuilder.Append("]");
 
         }

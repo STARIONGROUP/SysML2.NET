@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -69,6 +70,14 @@ namespace SysML2.NET.TextualNotation
         public static void BuildTransitionAssignmentActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IAssignmentActionUsage poco, StringBuilder stringBuilder)
         {
             ActionUsageTextualNotationBuilder.BuildAssignmentNodeDeclaration(poco, stringBuilder);
+
+            if (BuildGroupConditionForTransitionAssignmentActionUsage(poco))
+            {
+                stringBuilder.Append("{");
+                TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+                stringBuilder.Append("}");
+                stringBuilder.Append(' ');
+            }
 
 
         }

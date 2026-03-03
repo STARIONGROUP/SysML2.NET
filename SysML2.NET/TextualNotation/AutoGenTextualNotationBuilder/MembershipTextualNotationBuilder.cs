@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,6 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMemberPrefix(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
+
             if (poco.Visibility != SysML2.NET.Core.Root.Namespaces.VisibilityKind.Public)
             {
                 stringBuilder.Append(poco.Visibility.ToString().ToLower());
@@ -60,6 +62,7 @@ namespace SysML2.NET.TextualNotation
         {
             BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("alias ");
+
             if (!string.IsNullOrWhiteSpace(poco.MemberShortName))
             {
                 stringBuilder.Append("<");
@@ -67,6 +70,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(">");
                 stringBuilder.Append(' ');
             }
+
 
             if (!string.IsNullOrWhiteSpace(poco.MemberName))
             {

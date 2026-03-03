@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -53,6 +54,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, StringBuilder stringBuilder)
         {
+
+            if (BuildGroupConditionForSubclassification(poco))
+            {
+                stringBuilder.Append("specialization ");
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("subclassifier ");
             throw new System.NotSupportedException("Assigment of non-string value not yet supported");

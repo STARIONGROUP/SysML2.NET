@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,9 +42,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFramedConcernMember(SysML2.NET.Core.POCO.Systems.Requirements.IFramedConcernMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfConcernUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("frame ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfConcernUsageIterator.MoveNext();
+            ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(ownedRelatedElementOfConcernUsageIterator.Current, stringBuilder);
 
         }
     }

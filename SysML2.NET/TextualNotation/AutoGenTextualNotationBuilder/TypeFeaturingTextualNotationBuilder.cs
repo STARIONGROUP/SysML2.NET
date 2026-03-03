@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -54,6 +55,13 @@ namespace SysML2.NET.TextualNotation
         public static void BuildTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("featuring ");
+
+            if (BuildGroupConditionForTypeFeaturing(poco))
+            {
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                stringBuilder.Append("of ");
+                stringBuilder.Append(' ');
+            }
 
             throw new System.NotSupportedException("Assigment of non-string value not yet supported");
             stringBuilder.Append("by ");

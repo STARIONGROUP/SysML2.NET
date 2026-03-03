@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,6 +42,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTextualRepresentation(SysML2.NET.Core.POCO.Root.Annotations.ITextualRepresentation poco, StringBuilder stringBuilder)
         {
+
+            if (BuildGroupConditionForTextualRepresentation(poco))
+            {
+                stringBuilder.Append("rep ");
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("language ");
             stringBuilder.Append(poco.Language);

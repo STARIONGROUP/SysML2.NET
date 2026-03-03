@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,7 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTriggerFeatureValue(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfTriggerInvocationExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.TriggerInvocationExpression>().GetEnumerator();
+            ownedRelatedElementOfTriggerInvocationExpressionIterator.MoveNext();
+            TriggerInvocationExpressionTextualNotationBuilder.BuildTriggerExpression(ownedRelatedElementOfTriggerInvocationExpressionIterator.Current, stringBuilder);
 
         }
 
@@ -65,7 +68,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildArgumentExpressionValue(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfFeatureReferenceExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression>().GetEnumerator();
+            ownedRelatedElementOfFeatureReferenceExpressionIterator.MoveNext();
+            FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(ownedRelatedElementOfFeatureReferenceExpressionIterator.Current, stringBuilder);
 
         }
 
@@ -77,7 +82,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureBinding(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
+            ownedRelatedElementOfExpressionIterator.MoveNext();
+            ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
 
         }
 
@@ -89,7 +96,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAssignmentTargetBinding(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
+            ownedRelatedElementOfExpressionIterator.MoveNext();
+            ExpressionTextualNotationBuilder.BuildNonFeatureChainPrimaryExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
 
         }
 
@@ -101,7 +110,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSatisfactionFeatureValue(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfFeatureReferenceExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression>().GetEnumerator();
+            ownedRelatedElementOfFeatureReferenceExpressionIterator.MoveNext();
+            FeatureReferenceExpressionTextualNotationBuilder.BuildSatisfactionReferenceExpression(ownedRelatedElementOfFeatureReferenceExpressionIterator.Current, stringBuilder);
 
         }
 
@@ -173,9 +184,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureValue(SysML2.NET.Core.POCO.Kernel.FeatureValues.IFeatureValue poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfExpressionIterator.MoveNext();
+            ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
 
         }
     }

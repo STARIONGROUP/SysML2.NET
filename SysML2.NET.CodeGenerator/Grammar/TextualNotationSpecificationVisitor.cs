@@ -56,6 +56,8 @@ namespace SysML2.NET.CodeGenerator.Grammar
                 TargetElementName = context.target_ast?.Text,
                 RawRule = context.GetText().Trim()
             };
+            
+            this.CurrentRule = rule;
 
             if (string.IsNullOrWhiteSpace(rule.RuleName))
             {
@@ -74,7 +76,12 @@ namespace SysML2.NET.CodeGenerator.Grammar
             rule.Alternatives.AddRange((IEnumerable<Alternatives>)this.Visit(context.rule_body));
             return rule;
         }
-        
+
+        /// <summary>
+        /// Gets or sets the current <see cref="TextualNotationRule"/> that is processed
+        /// </summary>
+        public TextualNotationRule CurrentRule { get; set; }
+
         /// <summary>
         /// Visit a parse tree produced by <see cref="kebnfParser.AlternativesContext"/>.
         /// </summary>
@@ -92,7 +99,11 @@ namespace SysML2.NET.CodeGenerator.Grammar
         /// <return>The visitor result, as an <see cref="Alternatives"/>.</return>
         public override object VisitAlternative(kebnfParser.AlternativeContext context)
         {
-            var alternatives = new Alternatives();
+            var alternatives = new Alternatives()
+            {
+                TextualNotationRule =  this.CurrentRule
+            };
+            
             alternatives.Elements.AddRange(context.element().Select(e => (RuleElement)this.Visit(e)).Where(x => x != null));
             return alternatives;
         }
@@ -104,14 +115,18 @@ namespace SysML2.NET.CodeGenerator.Grammar
         /// <return>The visitor result, as <see cref="AssignmentElement"/>.</return>
         public override object VisitAssignment(kebnfParser.AssignmentContext context)
         {
-            return new AssignmentElement()
+            var assignement =  new AssignmentElement()
             {
                 Property = context.property.GetText().Split(".")[^1],
                 Operator = context.op.Text,
                 Suffix = context.suffix?.GetText(),
                 Value = (RuleElement)this.Visit(context.content),
-                Prefix = context.prefix?.Text
+                Prefix = context.prefix?.Text,
+                TextualNotationRule =  this.CurrentRule
             };
+
+            assignement.Value.Container = assignement;
+            return assignement;
         }
 
         /// <summary>
@@ -125,7 +140,8 @@ namespace SysML2.NET.CodeGenerator.Grammar
             {
                 PropertyName = context.property.GetText(),
                 Operator = context.op.Text,
-                Value = context.val.GetText()
+                Value = context.val.GetText(),
+                TextualNotationRule =  this.CurrentRule
             };
         }
 
@@ -138,7 +154,8 @@ namespace SysML2.NET.CodeGenerator.Grammar
         {
             return new ValueLiteralElement()
             {
-                Value = context.GetText()
+                Value = context.GetText(),
+                TextualNotationRule =  this.CurrentRule
             };
         }
 
@@ -152,10 +169,16 @@ namespace SysML2.NET.CodeGenerator.Grammar
             var group = new GroupElement
             {
                 Suffix = context.suffix?.GetText(),
+                TextualNotationRule =  this.CurrentRule
             };
 
             group.Alternatives.AddRange((IEnumerable<Alternatives>)this.Visit(context.alternatives()));
-            
+
+            foreach (var element in group.Alternatives.SelectMany(x => x.Elements))
+            {
+                element.Container = group;
+            }
+
             return group;
         }
 
@@ -169,7 +192,8 @@ namespace SysML2.NET.CodeGenerator.Grammar
             return new TerminalElement()
             {
                 Value = context.val.Text.Trim('\''),
-                Suffix = context.suffix?.GetText()
+                Suffix = context.suffix?.GetText(),
+                TextualNotationRule =  this.CurrentRule
             };
         }
 
@@ -183,7 +207,8 @@ namespace SysML2.NET.CodeGenerator.Grammar
             return new NonTerminalElement()
             {
                 Name = context.name.Text,
-                Suffix = context.suffix?.GetText()
+                Suffix = context.suffix?.GetText(),
+                TextualNotationRule =  this.CurrentRule
             };
         }
     }

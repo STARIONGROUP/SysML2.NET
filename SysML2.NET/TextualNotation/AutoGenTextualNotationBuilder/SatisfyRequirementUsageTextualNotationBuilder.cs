@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,6 +42,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSatisfyRequirementUsage(SysML2.NET.Core.POCO.Systems.Requirements.ISatisfyRequirementUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
+            using var ownedRelationshipOfSubjectMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership>().GetEnumerator();
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("assert ");
             stringBuilder.Append("not");
@@ -50,10 +53,11 @@ namespace SysML2.NET.TextualNotation
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
             FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
-            if (poco.OwnedRelationship.Count != 0)
+
+            if (ownedRelationshipOfSubjectMembershipIterator.MoveNext())
             {
                 stringBuilder.Append("by ");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(ownedRelationshipOfSubjectMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(' ');
             }
 

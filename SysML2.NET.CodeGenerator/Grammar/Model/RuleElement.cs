@@ -25,7 +25,7 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
     /// <summary>
     /// Base class that provides information about element that is part of a rule
     /// </summary>
-    public abstract class RuleElement
+    public abstract class RuleElement: IPartOfTextualRule
     {
         /// <summary>
         /// Defines all suffix that defines optional elements
@@ -51,5 +51,15 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         /// Asserts that the current rule element defines an collection element
         /// </summary>
         public bool IsCollection => !string.IsNullOrEmpty(this.Suffix) && CollectionSuffix.Contains(this.Suffix);
+
+        /// <summary>
+        /// Gets or sets an optional <see cref="RuleElement" /> that acts as container
+        /// </summary>
+        public RuleElement Container { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="IPartOfTextualRule.TextualNotationRule" />
+        /// </summary>
+        public TextualNotationRule TextualNotationRule { get; init; }
     }
 }

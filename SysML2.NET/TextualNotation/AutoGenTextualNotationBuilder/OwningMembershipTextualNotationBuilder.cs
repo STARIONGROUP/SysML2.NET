@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,7 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAnnotatingMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfAnnotatingElementIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement>().GetEnumerator();
+            ownedRelatedElementOfAnnotatingElementIterator.MoveNext();
+            AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(ownedRelatedElementOfAnnotatingElementIterator.Current, stringBuilder);
 
         }
 
@@ -53,6 +56,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPackageMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementIterator = poco.OwnedRelatedElement.GetEnumerator();
+            using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
@@ -67,8 +72,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDefinitionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementIterator = poco.OwnedRelatedElement.GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementIterator.MoveNext();
+            ElementTextualNotationBuilder.BuildDefinitionElement(ownedRelatedElementIterator.Current, stringBuilder);
 
         }
 
@@ -80,7 +87,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedCrossFeatureMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
+            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
+            ReferenceUsageTextualNotationBuilder.BuildOwnedCrossFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
 
         }
 
@@ -92,7 +101,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedMultiplicity(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfMultiplicityRangeIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange>().GetEnumerator();
+            ownedRelatedElementOfMultiplicityRangeIterator.MoveNext();
+            MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(ownedRelatedElementOfMultiplicityRangeIterator.Current, stringBuilder);
 
         }
 
@@ -104,7 +115,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMultiplicityExpressionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
 
         }
 
@@ -116,7 +127,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEmptyMultiplicityMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfMultiplicityIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Types.Multiplicity>().GetEnumerator();
+            ownedRelatedElementOfMultiplicityIterator.MoveNext();
+            MultiplicityTextualNotationBuilder.BuildEmptyMultiplicity(ownedRelatedElementOfMultiplicityIterator.Current, stringBuilder);
 
         }
 
@@ -128,7 +141,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConjugatedPortDefinitionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfConjugatedPortDefinitionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortDefinition>().GetEnumerator();
+            ownedRelatedElementOfConjugatedPortDefinitionIterator.MoveNext();
+            ConjugatedPortDefinitionTextualNotationBuilder.BuildConjugatedPortDefinition(ownedRelatedElementOfConjugatedPortDefinitionIterator.Current, stringBuilder);
 
         }
 
@@ -140,7 +155,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedCrossMultiplicityMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
+            ownedRelatedElementOfFeatureIterator.MoveNext();
+            FeatureTextualNotationBuilder.BuildOwnedCrossMultiplicity(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
 
         }
 
@@ -152,7 +169,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
+            ownedRelatedElementOfFeatureIterator.MoveNext();
+            FeatureTextualNotationBuilder.BuildOwnedFeatureChain(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
 
         }
 
@@ -164,7 +183,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTransitionSuccessionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfSuccessionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Connectors.Succession>().GetEnumerator();
+            ownedRelatedElementOfSuccessionIterator.MoveNext();
+            SuccessionTextualNotationBuilder.BuildTransitionSuccession(ownedRelatedElementOfSuccessionIterator.Current, stringBuilder);
 
         }
 
@@ -176,8 +197,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPrefixMetadataMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfMetadataUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Metadata.MetadataUsage>().GetEnumerator();
             stringBuilder.Append("#");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfMetadataUsageIterator.MoveNext();
+            MetadataUsageTextualNotationBuilder.BuildPrefixMetadataUsage(ownedRelatedElementOfMetadataUsageIterator.Current, stringBuilder);
 
         }
 
@@ -200,8 +223,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNonFeatureMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementIterator = poco.OwnedRelatedElement.GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementIterator.MoveNext();
+            ElementTextualNotationBuilder.BuildMemberElement(ownedRelatedElementIterator.Current, stringBuilder);
 
         }
 
@@ -213,8 +238,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamespaceFeatureMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfFeatureIterator.MoveNext();
+            FeatureTextualNotationBuilder.BuildFeatureElement(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
 
         }
 
@@ -237,9 +264,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeFeatureMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("member ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfFeatureIterator.MoveNext();
+            FeatureTextualNotationBuilder.BuildFeatureElement(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
 
         }
     }
