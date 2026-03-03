@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -76,9 +77,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFilterPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfPackageIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Packages.Package>().GetEnumerator();
+            using var ownedRelationshipOfElementFilterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership>().GetEnumerator();
+            ownedRelationshipOfPackageIterator.MoveNext();
+            BuildFilterPackageImport(ownedRelationshipOfPackageIterator.Current, stringBuilder);
 
+            while (ownedRelationshipOfElementFilterMembershipIterator.MoveNext())
+            {
+                ElementFilterMembershipTextualNotationBuilder.BuildFilterPackageMember(ownedRelationshipOfElementFilterMembershipIterator.Current, stringBuilder);
+
+            }
             stringBuilder.Append(' ');
 
         }
@@ -91,12 +99,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPackage(SysML2.NET.Core.POCO.Kernel.Packages.IPackage poco, StringBuilder stringBuilder)
         {
-            if (poco.OwnedRelationship.Count != 0)
-            {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
 
+            while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            {
+                OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            }
             BuildPackageDeclaration(poco, stringBuilder);
             BuildPackageBody(poco, stringBuilder);
 

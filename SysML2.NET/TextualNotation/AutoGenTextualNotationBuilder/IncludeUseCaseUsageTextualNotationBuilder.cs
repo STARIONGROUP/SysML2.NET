@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,6 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildIncludeUseCaseUsage(SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("include ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");

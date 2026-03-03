@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,13 +42,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFlowEnd(SysML2.NET.Core.POCO.Kernel.Interactions.IFlowEnd poco, StringBuilder stringBuilder)
         {
-            if (poco.OwnedRelationship.Count != 0)
+            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
+            using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
+
+            if (ownedRelationshipOfReferenceSubsettingIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                ReferenceSubsettingTextualNotationBuilder.BuildFlowEndSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfFeatureMembershipIterator.MoveNext();
+            FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
 
         }
     }

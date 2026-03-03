@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,6 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPerformActionUsageDeclaration(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
             FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
@@ -69,6 +71,14 @@ namespace SysML2.NET.TextualNotation
         public static void BuildTransitionPerformActionUsage(SysML2.NET.Core.POCO.Systems.Actions.IPerformActionUsage poco, StringBuilder stringBuilder)
         {
             BuildPerformActionUsageDeclaration(poco, stringBuilder);
+
+            if (BuildGroupConditionForTransitionPerformActionUsage(poco))
+            {
+                stringBuilder.Append("{");
+                TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+                stringBuilder.Append("}");
+                stringBuilder.Append(' ');
+            }
 
 
         }

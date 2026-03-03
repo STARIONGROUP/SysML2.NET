@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -42,6 +43,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildMembershipImport(SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport poco, StringBuilder stringBuilder)
         {
             throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
             if (poco.IsRecursive)
             {
                 stringBuilder.Append(":: ");

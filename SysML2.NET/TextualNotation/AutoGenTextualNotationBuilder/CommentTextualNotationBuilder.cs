@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,6 +42,30 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildComment(SysML2.NET.Core.POCO.Root.Annotations.IComment poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
+
+            if (BuildGroupConditionForComment(poco))
+            {
+                stringBuilder.Append("comment ");
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+
+                if (ownedRelationshipOfAnnotationIterator.MoveNext())
+                {
+                    stringBuilder.Append("about ");
+                    AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                    while (ownedRelationshipOfAnnotationIterator.MoveNext())
+                    {
+                        stringBuilder.Append(",");
+                        AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                    }
+                    stringBuilder.Append(' ');
+                }
+
+                stringBuilder.Append(' ');
+            }
+
 
             if (!string.IsNullOrWhiteSpace(poco.Locale))
             {

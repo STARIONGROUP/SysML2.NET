@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,7 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPrefixMetadataFeature(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
+            ownedRelationshipOfFeatureTypingIterator.MoveNext();
+            FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
 
         }
 
@@ -53,8 +56,18 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataFeatureDeclaration(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
 
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            if (BuildGroupConditionForMetadataFeatureDeclaration(poco))
+            {
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                stringBuilder.Append(' ');
+                stringBuilder.Append(' ');
+            }
+
+            ownedRelationshipOfFeatureTypingIterator.MoveNext();
+            FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
 
         }
 
@@ -66,26 +79,29 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataFeature(SysML2.NET.Core.POCO.Kernel.Metadata.IMetadataFeature poco, StringBuilder stringBuilder)
         {
-            if (poco.OwnedRelationship.Count != 0)
-            {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
 
+            while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            {
+                OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            }
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
             BuildMetadataFeatureDeclaration(poco, stringBuilder);
-            if (poco.OwnedRelationship.Count != 0)
+
+            if (ownedRelationshipOfAnnotationIterator.MoveNext())
             {
                 stringBuilder.Append("about ");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                if (poco.OwnedRelationship.Count != 0)
+                AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                while (ownedRelationshipOfAnnotationIterator.MoveNext())
                 {
                     stringBuilder.Append(",");
-                    throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                    stringBuilder.Append(' ');
-                }
+                    AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
 
+                }
                 stringBuilder.Append(' ');
             }
 

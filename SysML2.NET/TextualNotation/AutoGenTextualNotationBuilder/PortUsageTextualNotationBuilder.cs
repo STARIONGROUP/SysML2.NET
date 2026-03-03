@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -54,11 +55,15 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfaceEnd(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, StringBuilder stringBuilder)
         {
-            if (poco.OwnedRelationship.Count != 0)
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
+
+            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(' ');
             }
+
 
             if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
@@ -67,7 +72,8 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
+            ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
 
         }
 

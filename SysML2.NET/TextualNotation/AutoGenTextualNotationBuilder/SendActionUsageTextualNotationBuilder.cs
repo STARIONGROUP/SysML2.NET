@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,6 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSendNode(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             ActionUsageTextualNotationBuilder.BuildActionUsageDeclaration(poco, stringBuilder);
             stringBuilder.Append("send ");
@@ -57,9 +59,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSendNodeDeclaration(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             ActionUsageTextualNotationBuilder.BuildActionNodeUsageDeclaration(poco, stringBuilder);
             stringBuilder.Append("send ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
             BuildSenderReceiverPart(poco, stringBuilder);
 
         }
@@ -97,6 +101,14 @@ namespace SysML2.NET.TextualNotation
         public static void BuildTransitionSendActionUsage(SysML2.NET.Core.POCO.Systems.Actions.ISendActionUsage poco, StringBuilder stringBuilder)
         {
             BuildSendNodeDeclaration(poco, stringBuilder);
+
+            if (BuildGroupConditionForTransitionSendActionUsage(poco))
+            {
+                stringBuilder.Append("{");
+                TypeTextualNotationBuilder.BuildActionBodyItem(poco, stringBuilder);
+                stringBuilder.Append("}");
+                stringBuilder.Append(' ');
+            }
 
 
         }

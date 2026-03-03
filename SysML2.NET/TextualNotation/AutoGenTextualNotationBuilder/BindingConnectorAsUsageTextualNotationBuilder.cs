@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,12 +42,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBindingConnectorAsUsage(SysML2.NET.Core.POCO.Systems.Connections.IBindingConnectorAsUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
             UsageTextualNotationBuilder.BuildUsagePrefix(poco, stringBuilder);
 
+            if (BuildGroupConditionForBindingConnectorAsUsage(poco))
+            {
+                stringBuilder.Append("binding ");
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+                stringBuilder.Append(' ');
+            }
+
             stringBuilder.Append("bind ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
             stringBuilder.Append("=");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }

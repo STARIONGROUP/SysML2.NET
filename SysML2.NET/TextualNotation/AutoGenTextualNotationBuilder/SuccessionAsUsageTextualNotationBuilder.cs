@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,7 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSourceSuccession(SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
+            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
 
         }
 
@@ -53,9 +56,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTargetSuccession(SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
+            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
             stringBuilder.Append("then ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
 
         }
 
@@ -67,12 +73,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSuccessionAsUsage(SysML2.NET.Core.POCO.Systems.Connections.ISuccessionAsUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
             UsageTextualNotationBuilder.BuildUsagePrefix(poco, stringBuilder);
 
+            if (BuildGroupConditionForSuccessionAsUsage(poco))
+            {
+                stringBuilder.Append("succession ");
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+                stringBuilder.Append(' ');
+            }
+
             stringBuilder.Append("first ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
             stringBuilder.Append("then ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
+            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }

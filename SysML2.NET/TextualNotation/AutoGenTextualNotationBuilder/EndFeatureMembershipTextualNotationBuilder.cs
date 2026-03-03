@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,7 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSourceEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
+            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
+            ReferenceUsageTextualNotationBuilder.BuildSourceEnd(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
 
         }
 
@@ -53,7 +56,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConnectorEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
+            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
+            ReferenceUsageTextualNotationBuilder.BuildConnectorEnd(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
 
         }
 
@@ -65,7 +70,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfaceEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfPortUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.PortUsage>().GetEnumerator();
+            ownedRelatedElementOfPortUsageIterator.MoveNext();
+            PortUsageTextualNotationBuilder.BuildInterfaceEnd(ownedRelatedElementOfPortUsageIterator.Current, stringBuilder);
 
         }
 
@@ -77,7 +84,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFlowEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfFlowEndIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Interactions.FlowEnd>().GetEnumerator();
+            ownedRelatedElementOfFlowEndIterator.MoveNext();
+            FlowEndTextualNotationBuilder.BuildFlowEnd(ownedRelatedElementOfFlowEndIterator.Current, stringBuilder);
 
         }
 
@@ -89,7 +98,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEmptyEndMember(SysML2.NET.Core.POCO.Core.Features.IEndFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
+            ownedRelatedElementOfReferenceUsageIterator.MoveNext();
+            ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
 
         }
     }

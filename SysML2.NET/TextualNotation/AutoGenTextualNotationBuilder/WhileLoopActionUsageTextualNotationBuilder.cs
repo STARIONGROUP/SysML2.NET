@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,14 +42,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildWhileLoopNode(SysML2.NET.Core.POCO.Systems.Actions.IWhileLoopActionUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.OwnedRelationship.Count != 0)
+            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
             {
                 stringBuilder.Append("until ");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(";");
                 stringBuilder.Append(' ');
             }

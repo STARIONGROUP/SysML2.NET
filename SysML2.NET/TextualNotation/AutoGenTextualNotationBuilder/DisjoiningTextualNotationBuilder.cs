@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -52,6 +53,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDisjoining(SysML2.NET.Core.POCO.Core.Types.IDisjoining poco, StringBuilder stringBuilder)
         {
+
+            if (BuildGroupConditionForDisjoining(poco))
+            {
+                stringBuilder.Append("disjoining ");
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("disjoint ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");

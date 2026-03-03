@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,9 +42,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConstructorExpression(SysML2.NET.Core.POCO.Kernel.Expressions.IConstructorExpression poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
+            using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             stringBuilder.Append("new ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfMembershipIterator.MoveNext();
+            MembershipTextualNotationBuilder.BuildInstantiatedTypeMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
+            ReturnParameterMembershipTextualNotationBuilder.BuildConstructorResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
 
         }
     }

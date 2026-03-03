@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -52,6 +53,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConjugation(SysML2.NET.Core.POCO.Core.Types.IConjugation poco, StringBuilder stringBuilder)
         {
+
+            if (BuildGroupConditionForConjugation(poco))
+            {
+                stringBuilder.Append("conjugation ");
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("conjugate ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");

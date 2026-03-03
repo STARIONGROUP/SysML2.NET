@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,7 +42,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildValuePart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildFeatureValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -75,14 +78,15 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypings(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
             BuildTypedBy(poco, stringBuilder);
-            if (poco.OwnedRelationship.Count != 0)
+
+            while (ownedRelationshipOfFeatureTypingIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                FeatureTypingTextualNotationBuilder.BuildFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
 
+            }
 
         }
 
@@ -94,8 +98,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypedBy(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfFeatureTypingIterator.MoveNext();
+            FeatureTypingTextualNotationBuilder.BuildFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
 
         }
 
@@ -107,14 +113,15 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSubsettings(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Subsetting>().GetEnumerator();
             BuildSubsets(poco, stringBuilder);
-            if (poco.OwnedRelationship.Count != 0)
+
+            while (ownedRelationshipOfSubsettingIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                SubsettingTextualNotationBuilder.BuildOwnedSubsetting(ownedRelationshipOfSubsettingIterator.Current, stringBuilder);
 
+            }
 
         }
 
@@ -126,8 +133,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSubsets(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Subsetting>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfSubsettingIterator.MoveNext();
+            SubsettingTextualNotationBuilder.BuildOwnedSubsetting(ownedRelationshipOfSubsettingIterator.Current, stringBuilder);
 
         }
 
@@ -139,8 +148,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildReferences(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
+            ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
 
         }
 
@@ -152,8 +163,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildCrosses(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfCrossSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.CrossSubsetting>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfCrossSubsettingIterator.MoveNext();
+            CrossSubsettingTextualNotationBuilder.BuildOwnedCrossSubsetting(ownedRelationshipOfCrossSubsettingIterator.Current, stringBuilder);
 
         }
 
@@ -165,14 +178,15 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRedefinitions(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
             BuildRedefines(poco, stringBuilder);
-            if (poco.OwnedRelationship.Count != 0)
+
+            while (ownedRelationshipOfRedefinitionIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
 
+            }
 
         }
 
@@ -184,8 +198,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRedefines(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfRedefinitionIterator.MoveNext();
+            RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
 
         }
 
@@ -197,10 +213,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedFeatureChain(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            stringBuilder.Append(".");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureChainingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureChaining>().GetEnumerator();
+            ownedRelationshipOfFeatureChainingIterator.MoveNext();
+            FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(ownedRelationshipOfFeatureChainingIterator.Current, stringBuilder);
 
+            while (ownedRelationshipOfFeatureChainingIterator.MoveNext())
+            {
+                stringBuilder.Append(".");
+                FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(ownedRelationshipOfFeatureChainingIterator.Current, stringBuilder);
+
+            }
             stringBuilder.Append(' ');
 
         }
@@ -224,7 +246,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedCrossMultiplicity(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
 
         }
 
@@ -258,11 +282,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureChainPrefix(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            stringBuilder.Append(".");
+            using var ownedRelationshipOfFeatureChainingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureChaining>().GetEnumerator();
 
+            while (ownedRelationshipOfFeatureChainingIterator.MoveNext())
+            {
+                FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(ownedRelationshipOfFeatureChainingIterator.Current, stringBuilder);
+                stringBuilder.Append(".");
+
+            }
             stringBuilder.Append(' ');
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfFeatureChainingIterator.MoveNext();
+            FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(ownedRelationshipOfFeatureChainingIterator.Current, stringBuilder);
             stringBuilder.Append(".");
 
         }
@@ -275,7 +305,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTriggerValuePart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildTriggerFeatureValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -287,7 +319,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildArgumentValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -299,7 +333,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildArgumentExpression(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildArgumentExpressionValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -322,6 +358,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEndFeaturePrefix(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+
             if (poco.IsConstant)
             {
                 stringBuilder.Append("const");
@@ -341,17 +378,20 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBasicFeaturePrefix(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+
             if (poco.Direction.HasValue)
             {
                 stringBuilder.Append(poco.Direction.ToString().ToLower());
                 stringBuilder.Append(' ');
             }
 
+
             if (poco.IsDerived)
             {
                 stringBuilder.Append("derived");
                 stringBuilder.Append(' ');
             }
+
 
             if (poco.IsAbstract)
             {
@@ -372,6 +412,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureDeclaration(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+
             if (poco.IsSufficient)
             {
                 stringBuilder.Append("all");
@@ -414,6 +455,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildChainingPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfFeatureChainingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureChaining>().GetEnumerator();
             stringBuilder.Append("chains ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
@@ -428,9 +470,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInvertingPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfFeatureInvertingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureInverting>().GetEnumerator();
             stringBuilder.Append("inverse ");
             stringBuilder.Append("of ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfFeatureInvertingIterator.MoveNext();
+            FeatureInvertingTextualNotationBuilder.BuildOwnedFeatureInverting(ownedRelationshipOfFeatureInvertingIterator.Current, stringBuilder);
 
         }
 
@@ -442,16 +486,19 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeFeaturingPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfTypeFeaturingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.TypeFeaturing>().GetEnumerator();
+            using var ownedTypeFeaturingIterator = poco.ownedTypeFeaturing.GetEnumerator();
             stringBuilder.Append("featured ");
             stringBuilder.Append("by ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.ownedTypeFeaturing.Count != 0)
+            ownedRelationshipOfTypeFeaturingIterator.MoveNext();
+            TypeFeaturingTextualNotationBuilder.BuildOwnedTypeFeaturing(ownedRelationshipOfTypeFeaturingIterator.Current, stringBuilder);
+
+            while (ownedTypeFeaturingIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                TypeFeaturingTextualNotationBuilder.BuildOwnedTypeFeaturing(ownedTypeFeaturingIterator.Current, stringBuilder);
 
+            }
 
         }
 
@@ -463,10 +510,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureChain(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            stringBuilder.Append(".");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureChainingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureChaining>().GetEnumerator();
+            ownedRelationshipOfFeatureChainingIterator.MoveNext();
+            FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(ownedRelationshipOfFeatureChainingIterator.Current, stringBuilder);
 
+            while (ownedRelationshipOfFeatureChainingIterator.MoveNext())
+            {
+                stringBuilder.Append(".");
+                FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(ownedRelationshipOfFeatureChainingIterator.Current, stringBuilder);
+
+            }
             stringBuilder.Append(' ');
 
         }
@@ -479,7 +532,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildMetadataValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -491,7 +546,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeReference(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
+            ownedRelationshipOfFeatureTypingIterator.MoveNext();
+            FeatureTypingTextualNotationBuilder.BuildReferenceTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
 
         }
 
@@ -503,7 +560,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPrimaryArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildPrimaryArgumentValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -515,7 +574,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNonFeatureChainPrimaryArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildNonFeatureChainPrimaryArgumentValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -527,7 +588,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBodyArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildBodyArgumentValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -539,7 +602,9 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFunctionReferenceArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildFunctionReferenceArgumentValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -589,14 +654,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPositionalArgumentList(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.OwnedRelationship.Count != 0)
+            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
+            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            while (ownedRelationshipOfParameterMembershipIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
 
+            }
 
         }
 
@@ -608,14 +675,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamedArgumentList(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.OwnedRelationship.Count != 0)
+            using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
+            ownedRelationshipOfFeatureMembershipIterator.MoveNext();
+            FeatureMembershipTextualNotationBuilder.BuildNamedArgumentMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            while (ownedRelationshipOfFeatureMembershipIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                FeatureMembershipTextualNotationBuilder.BuildNamedArgumentMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
 
+            }
 
         }
 
@@ -627,9 +696,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamedArgument(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
+            using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+            ownedRelationshipOfRedefinitionIterator.MoveNext();
+            RedefinitionTextualNotationBuilder.BuildParameterRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
             stringBuilder.Append("=");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfFeatureValueIterator.MoveNext();
+            FeatureValueTextualNotationBuilder.BuildArgumentValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
 
         }
 
@@ -641,9 +714,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataBodyFeature(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
             stringBuilder.Append("feature ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfRedefinitionIterator.MoveNext();
+            RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
             BuildFeatureSpecializationPart(poco, stringBuilder);
             BuildValuePart(poco, stringBuilder);
             TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);
@@ -658,6 +733,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeature(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
             BuildValuePart(poco, stringBuilder);

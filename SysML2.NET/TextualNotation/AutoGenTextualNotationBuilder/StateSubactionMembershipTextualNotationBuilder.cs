@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,9 +42,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEntryActionMember(SysML2.NET.Core.POCO.Systems.States.IStateSubactionMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.ActionUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfActionUsageIterator.MoveNext();
+            ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
 
         }
 
@@ -55,9 +58,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDoActionMember(SysML2.NET.Core.POCO.Systems.States.IStateSubactionMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.ActionUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfActionUsageIterator.MoveNext();
+            ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
 
         }
 
@@ -69,9 +74,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExitActionMember(SysML2.NET.Core.POCO.Systems.States.IStateSubactionMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.ActionUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfActionUsageIterator.MoveNext();
+            ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
 
         }
     }

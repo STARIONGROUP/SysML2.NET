@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,16 +42,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             stringBuilder.Append("standard");
 
             stringBuilder.Append(' ');
             stringBuilder.Append("library ");
-            if (poco.OwnedRelationship.Count != 0)
-            {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
 
+            while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
+            {
+                OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            }
             PackageTextualNotationBuilder.BuildPackageDeclaration(poco, stringBuilder);
             PackageTextualNotationBuilder.BuildPackageBody(poco, stringBuilder);
 

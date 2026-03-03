@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,9 +42,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSelectExpression(SysML2.NET.Core.POCO.Kernel.Expressions.ISelectExpression poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
+            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            ParameterMembershipTextualNotationBuilder.BuildPrimaryArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
             stringBuilder.Append(".? ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            ParameterMembershipTextualNotationBuilder.BuildBodyArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
 
         }
     }

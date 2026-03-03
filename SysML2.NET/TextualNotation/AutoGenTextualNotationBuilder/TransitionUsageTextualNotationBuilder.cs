@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,9 +42,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildGuardedTargetSuccession(SysML2.NET.Core.POCO.Systems.States.ITransitionUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfTransitionFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership>().GetEnumerator();
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            ownedRelationshipOfTransitionFeatureMembershipIterator.MoveNext();
+            TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
             stringBuilder.Append("then ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
 
         }
 
@@ -55,8 +60,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDefaultTargetSuccession(SysML2.NET.Core.POCO.Systems.States.ITransitionUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             stringBuilder.Append("else ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
 
         }
 
@@ -68,12 +75,25 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildGuardedSuccession(SysML2.NET.Core.POCO.Systems.States.ITransitionUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
+            using var ownedRelationshipOfTransitionFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership>().GetEnumerator();
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+
+            if (BuildGroupConditionForGuardedSuccession(poco))
+            {
+                stringBuilder.Append("succession ");
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("first ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfMembershipIterator.MoveNext();
+            MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            ownedRelationshipOfTransitionFeatureMembershipIterator.MoveNext();
+            TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
             stringBuilder.Append("then ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }
@@ -86,10 +106,15 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTargetTransitionUsage(SysML2.NET.Core.POCO.Systems.States.ITransitionUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
+            using var ownedRelationshipOfTransitionFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership>().GetEnumerator();
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append("then ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }
@@ -102,31 +127,48 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTransitionUsage(SysML2.NET.Core.POCO.Systems.States.ITransitionUsage poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
+            using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
+            using var ownedRelationshipOfTransitionFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership>().GetEnumerator();
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             stringBuilder.Append("transition ");
 
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.OwnedRelationship.Count != 0)
+            if (BuildGroupConditionForTransitionUsage(poco))
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
+                stringBuilder.Append("first ");
                 stringBuilder.Append(' ');
             }
 
-            if (poco.OwnedRelationship.Count != 0)
+            ownedRelationshipOfMembershipIterator.MoveNext();
+            MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            ownedRelationshipOfParameterMembershipIterator.MoveNext();
+            ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                TransitionFeatureMembershipTextualNotationBuilder.BuildTriggerActionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
-            if (poco.OwnedRelationship.Count != 0)
+
+            if (ownedRelationshipOfTransitionFeatureMembershipIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+                stringBuilder.Append(' ');
+            }
+
+
+            if (ownedRelationshipOfTransitionFeatureMembershipIterator.MoveNext())
+            {
+                TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("then ");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }

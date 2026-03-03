@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,15 +42,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSubclassificationPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfSubclassificationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.OwnedRelationship.Count != 0)
+            ownedRelationshipOfSubclassificationIterator.MoveNext();
+            SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+
+            while (ownedRelationshipOfSubclassificationIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
 
+            }
 
         }
 
@@ -61,6 +64,8 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildClassifierDeclaration(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
+
             if (poco.IsSufficient)
             {
                 stringBuilder.Append("all");
@@ -68,9 +73,10 @@ namespace SysML2.NET.TextualNotation
             }
 
             ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
-            if (poco.OwnedRelationship.Count != 0)
+
+            if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
@@ -87,15 +93,17 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSuperclassingPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfSubclassificationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-            if (poco.OwnedRelationship.Count != 0)
+            ownedRelationshipOfSubclassificationIterator.MoveNext();
+            SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+
+            while (ownedRelationshipOfSubclassificationIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
-                stringBuilder.Append(' ');
-            }
+                SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
 
+            }
 
         }
 

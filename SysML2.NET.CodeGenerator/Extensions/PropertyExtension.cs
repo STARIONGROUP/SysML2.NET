@@ -105,7 +105,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
 
             if (property.QueryIsEnumerable())
             {
-                return $"{variableName}.{propertyName}.Count != 0";
+                return $"{variableName}.MoveNext()";
             }
 
             if (property.QueryIsReferenceProperty())

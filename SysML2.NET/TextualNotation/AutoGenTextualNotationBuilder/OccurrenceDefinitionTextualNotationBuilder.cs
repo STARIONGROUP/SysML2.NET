@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,11 +42,13 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOccurrenceDefinitionPrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            if (poco.IsIndividual && poco.OwnedRelationship.Count != 0)
+
+            if (poco.IsIndividual && ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
                 stringBuilder.Append("individual");
-                throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+                OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
                 stringBuilder.Append(' ');
             }
 
@@ -61,12 +64,14 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildIndividualDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
+            using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append("individual");
             DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, stringBuilder);
             stringBuilder.Append("def ");
             DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelationshipOfOwningMembershipIterator.MoveNext();
+            OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
 
         }
 

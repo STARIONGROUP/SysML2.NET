@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -52,6 +53,14 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureInverting(SysML2.NET.Core.POCO.Core.Features.IFeatureInverting poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
+
+            if (BuildGroupConditionForFeatureInverting(poco))
+            {
+                stringBuilder.Append("inverting ");
+                ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+                stringBuilder.Append(' ');
+            }
 
             stringBuilder.Append("inverse ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");

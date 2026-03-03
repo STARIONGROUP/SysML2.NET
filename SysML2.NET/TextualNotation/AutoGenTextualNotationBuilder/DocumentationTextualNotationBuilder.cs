@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -43,6 +44,7 @@ namespace SysML2.NET.TextualNotation
         {
             stringBuilder.Append("doc ");
             ElementTextualNotationBuilder.BuildIdentification(poco, stringBuilder);
+
             if (!string.IsNullOrWhiteSpace(poco.Locale))
             {
                 stringBuilder.Append("locale ");

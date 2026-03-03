@@ -24,6 +24,7 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
@@ -41,8 +42,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildStakeholderMember(SysML2.NET.Core.POCO.Systems.Requirements.IStakeholderMembership poco, StringBuilder stringBuilder)
         {
+            using var ownedRelatedElementOfPartUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Parts.PartUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            throw new System.NotSupportedException("Assigment of enumerable not supported yet");
+            ownedRelatedElementOfPartUsageIterator.MoveNext();
+            PartUsageTextualNotationBuilder.BuildStakeholderUsage(ownedRelatedElementOfPartUsageIterator.Current, stringBuilder);
 
         }
     }
