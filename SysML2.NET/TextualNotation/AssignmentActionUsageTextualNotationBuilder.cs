@@ -20,6 +20,9 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Linq;
+
+    using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Systems.Actions;
 
     /// <summary>
@@ -34,7 +37,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForTransitionAssignmentActionUsage(IAssignmentActionUsage poco)
         {
-            return false;
+            return poco.OwnedRelationship.OfType<IFeature>().Any();
         }
     }
 }

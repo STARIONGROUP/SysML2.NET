@@ -34,7 +34,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForSuccessionAsUsage(ISuccessionAsUsage poco)
         {
-            return false;
+            return CommonTextualNotationBuilder.DoesDefinesUsageDeclaration(poco);
         }
     }
 }

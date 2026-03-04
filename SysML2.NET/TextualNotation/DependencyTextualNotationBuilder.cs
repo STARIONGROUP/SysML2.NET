@@ -34,7 +34,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForDependencyDeclaration(IDependency poco)
         {
-            return false;
+            return poco.Client.Count != 0 && poco.Supplier.Count != 0;
         }
     }
 }
