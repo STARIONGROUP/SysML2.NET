@@ -34,7 +34,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForSpecialization(ISpecialization poco)
         {
-            return false;
+            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco);
         }
     }
 }

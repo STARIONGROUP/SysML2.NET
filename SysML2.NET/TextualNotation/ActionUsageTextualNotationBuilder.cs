@@ -34,7 +34,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForActionBodyParameter(IActionUsage poco)
         {
-            return false;
+            return CommonTextualNotationBuilder.DoesDefinesUsageDeclaration(poco);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForAssignmentNodeDeclaration(IActionUsage poco)
         {
-            return false;
+            return CommonTextualNotationBuilder.DoesDefinesUsageDeclaration(poco);
         }
     }
 }

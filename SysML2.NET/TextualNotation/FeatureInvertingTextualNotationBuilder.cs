@@ -20,6 +20,8 @@
 
 namespace SysML2.NET.TextualNotation
 {
+    using System.Buffers;
+
     using SysML2.NET.Core.POCO.Core.Features;
 
     /// <summary>
@@ -34,7 +36,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForFeatureInverting(IFeatureInverting poco)
         {
-            return false;
+            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco);
         }
     }
 }

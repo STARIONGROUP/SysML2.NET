@@ -34,7 +34,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForComment(IComment poco)
         {
-            return false;
+            return CommonTextualNotationBuilder.DoesDefinesIdentificationProperties(poco) || poco.ownedAnnotation.Count != 0;
         }
     }
 }

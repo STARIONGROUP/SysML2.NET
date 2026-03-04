@@ -34,7 +34,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForGuardedSuccession(ITransitionUsage poco)
         {
-            return false;
+            return CommonTextualNotationBuilder.DoesDefinesUsageDeclaration(poco);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForTransitionUsage(ITransitionUsage poco)
         {
-            return false;
+            return CommonTextualNotationBuilder.DoesDefinesUsageDeclaration(poco);
         }
     }
 }

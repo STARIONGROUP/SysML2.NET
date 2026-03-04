@@ -34,7 +34,7 @@ namespace SysML2.NET.TextualNotation
         /// <returns>The assertion of the condition</returns>
         private static bool BuildGroupConditionForTransitionPerformActionUsage(IPerformActionUsage poco)
         {
-            return false;
+            return poco.OwnedRelationship.Count != 0;
         }
     }
 }
