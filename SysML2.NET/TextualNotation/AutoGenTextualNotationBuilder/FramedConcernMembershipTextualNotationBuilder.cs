@@ -46,7 +46,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("frame ");
             ownedRelatedElementOfConcernUsageIterator.MoveNext();
-            ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(ownedRelatedElementOfConcernUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfConcernUsageIterator.Current != null)
+            {
+                ConcernUsageTextualNotationBuilder.BuildFramedConcernUsage(ownedRelatedElementOfConcernUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

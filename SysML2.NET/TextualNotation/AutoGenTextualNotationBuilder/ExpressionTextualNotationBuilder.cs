@@ -102,7 +102,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
             ownedRelationshipOfFeatureTypingIterator.MoveNext();
-            FeatureTypingTextualNotationBuilder.BuildReferenceTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureTypingIterator.Current != null)
+            {
+                FeatureTypingTextualNotationBuilder.BuildReferenceTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -145,7 +149,11 @@ namespace SysML2.NET.TextualNotation
 
             while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
 
             }
 

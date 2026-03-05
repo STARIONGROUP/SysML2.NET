@@ -45,10 +45,18 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildNonFeatureChainPrimaryArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildNonFeatureChainPrimaryArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(".");
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
 
         }
     }

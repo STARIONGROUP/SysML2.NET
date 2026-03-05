@@ -48,8 +48,12 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("def ");
             DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildConjugatedPortDefinitionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
-            // Assignment Element : conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition = this
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildConjugatedPortDefinitionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
+            // NonParsing Assignment Element : conjugatedPortDefinition.ownedPortConjugator.originalPortDefinition = this => Does not have to be process
 
         }
     }

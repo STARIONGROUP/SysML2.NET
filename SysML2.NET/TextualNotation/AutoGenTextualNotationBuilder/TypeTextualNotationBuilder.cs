@@ -135,7 +135,11 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfResultExpressionMembershipIterator.MoveNext())
             {
-                ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(ownedRelationshipOfResultExpressionMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfResultExpressionMembershipIterator.Current != null)
+                {
+                    ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(ownedRelationshipOfResultExpressionMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -227,7 +231,11 @@ namespace SysML2.NET.TextualNotation
 
             while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
 
             }
 
@@ -253,7 +261,11 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -276,12 +288,20 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfSpecializationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.Specialization>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             ownedRelationshipOfSpecializationIterator.MoveNext();
-            SpecializationTextualNotationBuilder.BuildOwnedSpecialization(ownedRelationshipOfSpecializationIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfSpecializationIterator.Current != null)
+            {
+                SpecializationTextualNotationBuilder.BuildOwnedSpecialization(ownedRelationshipOfSpecializationIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfSpecializationIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                SpecializationTextualNotationBuilder.BuildOwnedSpecialization(ownedRelationshipOfSpecializationIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfSpecializationIterator.Current != null)
+                {
+                    SpecializationTextualNotationBuilder.BuildOwnedSpecialization(ownedRelationshipOfSpecializationIterator.Current, stringBuilder);
+                }
 
             }
 
@@ -298,7 +318,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfConjugationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.Conjugation>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             ownedRelationshipOfConjugationIterator.MoveNext();
-            ConjugationTextualNotationBuilder.BuildOwnedConjugation(ownedRelationshipOfConjugationIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfConjugationIterator.Current != null)
+            {
+                ConjugationTextualNotationBuilder.BuildOwnedConjugation(ownedRelationshipOfConjugationIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -325,12 +349,20 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("disjoint ");
             stringBuilder.Append("from ");
             ownedRelationshipOfDisjoiningIterator.MoveNext();
-            DisjoiningTextualNotationBuilder.BuildOwnedDisjoining(ownedRelationshipOfDisjoiningIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfDisjoiningIterator.Current != null)
+            {
+                DisjoiningTextualNotationBuilder.BuildOwnedDisjoining(ownedRelationshipOfDisjoiningIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfDisjoiningIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                DisjoiningTextualNotationBuilder.BuildOwnedDisjoining(ownedRelationshipOfDisjoiningIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfDisjoiningIterator.Current != null)
+                {
+                    DisjoiningTextualNotationBuilder.BuildOwnedDisjoining(ownedRelationshipOfDisjoiningIterator.Current, stringBuilder);
+                }
 
             }
 
@@ -347,12 +379,20 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfUnioningIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.Unioning>().GetEnumerator();
             stringBuilder.Append("unions ");
             ownedRelationshipOfUnioningIterator.MoveNext();
-            UnioningTextualNotationBuilder.BuildUnioning(ownedRelationshipOfUnioningIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfUnioningIterator.Current != null)
+            {
+                UnioningTextualNotationBuilder.BuildUnioning(ownedRelationshipOfUnioningIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfUnioningIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                UnioningTextualNotationBuilder.BuildUnioning(ownedRelationshipOfUnioningIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfUnioningIterator.Current != null)
+                {
+                    UnioningTextualNotationBuilder.BuildUnioning(ownedRelationshipOfUnioningIterator.Current, stringBuilder);
+                }
 
             }
 
@@ -369,12 +409,20 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfIntersectingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.Intersecting>().GetEnumerator();
             stringBuilder.Append("intersects ");
             ownedRelationshipOfIntersectingIterator.MoveNext();
-            IntersectingTextualNotationBuilder.BuildIntersecting(ownedRelationshipOfIntersectingIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfIntersectingIterator.Current != null)
+            {
+                IntersectingTextualNotationBuilder.BuildIntersecting(ownedRelationshipOfIntersectingIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfIntersectingIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                IntersectingTextualNotationBuilder.BuildIntersecting(ownedRelationshipOfIntersectingIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfIntersectingIterator.Current != null)
+                {
+                    IntersectingTextualNotationBuilder.BuildIntersecting(ownedRelationshipOfIntersectingIterator.Current, stringBuilder);
+                }
 
             }
 
@@ -391,12 +439,20 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfDifferencingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.Differencing>().GetEnumerator();
             stringBuilder.Append("differences ");
             ownedRelationshipOfDifferencingIterator.MoveNext();
-            DifferencingTextualNotationBuilder.BuildDifferencing(ownedRelationshipOfDifferencingIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfDifferencingIterator.Current != null)
+            {
+                DifferencingTextualNotationBuilder.BuildDifferencing(ownedRelationshipOfDifferencingIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfDifferencingIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                DifferencingTextualNotationBuilder.BuildDifferencing(ownedRelationshipOfDifferencingIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfDifferencingIterator.Current != null)
+                {
+                    DifferencingTextualNotationBuilder.BuildDifferencing(ownedRelationshipOfDifferencingIterator.Current, stringBuilder);
+                }
 
             }
 
@@ -453,7 +509,11 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfResultExpressionMembershipIterator.MoveNext())
             {
-                ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(ownedRelationshipOfResultExpressionMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfResultExpressionMembershipIterator.Current != null)
+                {
+                    ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(ownedRelationshipOfResultExpressionMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -468,7 +528,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInstantiatedTypeReference(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            // Value Literal Element : [QualifiedName]
+            stringBuilder.Append(poco.qualifiedName);
 
         }
 

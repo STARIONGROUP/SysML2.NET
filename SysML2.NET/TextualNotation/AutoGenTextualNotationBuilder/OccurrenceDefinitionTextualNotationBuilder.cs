@@ -48,7 +48,11 @@ namespace SysML2.NET.TextualNotation
             if (poco.IsIndividual && ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
                 stringBuilder.Append("individual");
-                OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -71,7 +75,11 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("def ");
             DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildEmptyMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
 
         }
 

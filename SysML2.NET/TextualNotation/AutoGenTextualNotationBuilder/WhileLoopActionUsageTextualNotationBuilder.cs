@@ -47,12 +47,20 @@ namespace SysML2.NET.TextualNotation
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
 
             if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
             {
                 stringBuilder.Append("until ");
-                ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(";");
                 stringBuilder.Append(' ');
             }

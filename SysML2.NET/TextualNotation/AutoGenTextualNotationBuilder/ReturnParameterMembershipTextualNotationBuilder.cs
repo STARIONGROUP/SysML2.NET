@@ -46,7 +46,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("return ");
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -62,7 +66,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("return ");
             ownedRelatedElementOfFeatureIterator.MoveNext();
-            FeatureTextualNotationBuilder.BuildFeatureElement(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureElement(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -76,7 +84,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -90,7 +102,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
             ownedRelatedElementOfFeatureIterator.MoveNext();
-            FeatureTextualNotationBuilder.BuildConstructorResult(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            {
+                FeatureTextualNotationBuilder.BuildConstructorResult(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+            }
 
         }
     }

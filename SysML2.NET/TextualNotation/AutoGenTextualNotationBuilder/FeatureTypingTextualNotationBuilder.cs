@@ -53,7 +53,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildReferenceTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
 
         }
 

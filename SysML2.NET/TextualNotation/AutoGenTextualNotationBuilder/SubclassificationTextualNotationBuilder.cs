@@ -42,7 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedSubclassification(SysML2.NET.Core.POCO.Core.Classifiers.ISubclassification poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
 
         }
 
@@ -63,9 +63,9 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append("subclassifier ");
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

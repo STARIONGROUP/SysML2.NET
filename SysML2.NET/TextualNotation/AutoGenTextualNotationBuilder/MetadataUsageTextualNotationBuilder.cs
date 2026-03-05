@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
             ownedRelationshipOfFeatureTypingIterator.MoveNext();
-            FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureTypingIterator.Current != null)
+            {
+                FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -67,7 +71,11 @@ namespace SysML2.NET.TextualNotation
             }
 
             ownedRelationshipOfFeatureTypingIterator.MoveNext();
-            FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureTypingIterator.Current != null)
+            {
+                FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -88,12 +96,20 @@ namespace SysML2.NET.TextualNotation
             if (ownedRelationshipOfAnnotationIterator.MoveNext())
             {
                 stringBuilder.Append("about ");
-                AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfAnnotationIterator.Current != null)
+                {
+                    AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+                }
 
                 while (ownedRelationshipOfAnnotationIterator.MoveNext())
                 {
                     stringBuilder.Append(",");
-                    AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipOfAnnotationIterator.Current != null)
+                    {
+                        AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+                    }
 
                 }
                 stringBuilder.Append(' ');

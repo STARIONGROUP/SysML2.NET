@@ -46,9 +46,17 @@ namespace SysML2.NET.TextualNotation
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
             stringBuilder.Append("if ");
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildExpressionParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
 
             if (BuildGroupConditionForIfNode(poco))
             {

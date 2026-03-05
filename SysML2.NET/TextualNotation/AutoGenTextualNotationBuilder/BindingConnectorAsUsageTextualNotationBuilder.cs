@@ -54,10 +54,18 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append("bind ");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("=");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }

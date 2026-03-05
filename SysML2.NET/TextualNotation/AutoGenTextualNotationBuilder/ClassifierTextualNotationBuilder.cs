@@ -45,12 +45,20 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfSubclassificationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             ownedRelationshipOfSubclassificationIterator.MoveNext();
-            SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfSubclassificationIterator.Current != null)
+            {
+                SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfSubclassificationIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfSubclassificationIterator.Current != null)
+                {
+                    SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+                }
 
             }
 
@@ -76,7 +84,11 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -96,12 +108,20 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfSubclassificationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>().GetEnumerator();
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             ownedRelationshipOfSubclassificationIterator.MoveNext();
-            SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfSubclassificationIterator.Current != null)
+            {
+                SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfSubclassificationIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfSubclassificationIterator.Current != null)
+                {
+                    SubclassificationTextualNotationBuilder.BuildOwnedSubclassification(ownedRelationshipOfSubclassificationIterator.Current, stringBuilder);
+                }
 
             }
 

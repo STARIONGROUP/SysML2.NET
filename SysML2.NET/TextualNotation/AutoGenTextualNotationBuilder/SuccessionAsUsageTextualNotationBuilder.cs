@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -58,10 +62,18 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildSourceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("then ");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -85,10 +97,18 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append("first ");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("then ");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }

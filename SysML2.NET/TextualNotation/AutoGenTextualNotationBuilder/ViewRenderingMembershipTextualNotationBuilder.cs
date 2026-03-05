@@ -46,7 +46,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("render ");
             ownedRelatedElementOfRenderingUsageIterator.MoveNext();
-            RenderingUsageTextualNotationBuilder.BuildViewRenderingUsage(ownedRelatedElementOfRenderingUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfRenderingUsageIterator.Current != null)
+            {
+                RenderingUsageTextualNotationBuilder.BuildViewRenderingUsage(ownedRelatedElementOfRenderingUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

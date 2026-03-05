@@ -52,12 +52,20 @@ namespace SysML2.NET.TextualNotation
                 if (ownedRelationshipOfAnnotationIterator.MoveNext())
                 {
                     stringBuilder.Append("about ");
-                    AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                    if (ownedRelationshipOfAnnotationIterator.Current != null)
+                    {
+                        AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+                    }
 
                     while (ownedRelationshipOfAnnotationIterator.MoveNext())
                     {
                         stringBuilder.Append(",");
-                        AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                        if (ownedRelationshipOfAnnotationIterator.Current != null)
+                        {
+                            AnnotationTextualNotationBuilder.BuildAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+                        }
 
                     }
                     stringBuilder.Append(' ');

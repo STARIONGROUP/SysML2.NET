@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("variant ");
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedVariantUsage != null)
+            {
+                UsageTextualNotationBuilder.BuildVariantUsageElement(poco.ownedVariantUsage, stringBuilder);
+            }
 
         }
 
@@ -59,7 +63,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfEnumerationUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Enumerations.EnumerationUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfEnumerationUsageIterator.MoveNext();
-            EnumerationUsageTextualNotationBuilder.BuildEnumeratedValue(ownedRelatedElementOfEnumerationUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfEnumerationUsageIterator.Current != null)
+            {
+                EnumerationUsageTextualNotationBuilder.BuildEnumeratedValue(ownedRelatedElementOfEnumerationUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

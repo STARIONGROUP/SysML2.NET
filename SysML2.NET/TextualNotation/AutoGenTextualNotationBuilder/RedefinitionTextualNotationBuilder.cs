@@ -53,7 +53,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFlowFeatureRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
 
         }
 
@@ -65,7 +65,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildParameterRedefinition(SysML2.NET.Core.POCO.Core.Features.IRedefinition poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
 
         }
 

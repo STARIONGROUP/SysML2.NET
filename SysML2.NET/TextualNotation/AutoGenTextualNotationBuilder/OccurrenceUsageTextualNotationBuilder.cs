@@ -54,7 +54,7 @@ namespace SysML2.NET.TextualNotation
             if (poco.PortionKind.HasValue)
             {
                 stringBuilder.Append(poco.PortionKind.ToString().ToLower());
-                // Assignment Element : isPortion = true
+                // NonParsing Assignment Element : isPortion = true => Does not have to be process
                 stringBuilder.Append(' ');
             }
 
@@ -96,7 +96,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append(poco.PortionKind.ToString().ToLower());
             UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
-            // Assignment Element : isPortion = true
+            // NonParsing Assignment Element : isPortion = true => Does not have to be process
 
         }
 
@@ -120,7 +120,7 @@ namespace SysML2.NET.TextualNotation
             if (poco.PortionKind.HasValue)
             {
                 stringBuilder.Append(poco.PortionKind.ToString().ToLower());
-                // Assignment Element : isPortion = true
+                // NonParsing Assignment Element : isPortion = true => Does not have to be process
                 stringBuilder.Append(' ');
             }
 

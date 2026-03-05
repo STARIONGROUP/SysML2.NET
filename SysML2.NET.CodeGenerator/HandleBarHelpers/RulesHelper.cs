@@ -27,7 +27,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using HandlebarsDotNet;
 
     using SysML2.NET.CodeGenerator.Extensions;
-    using SysML2.NET.CodeGenerator.Grammar;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
     using uml4net.Classification;
@@ -70,7 +69,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (namedElement is IClass umlClass)
                 {
-                    ProcessAlternatives(writer, umlClass, textualRule.Alternatives, allRules, definedIterators: null);
+                    var ruleGenerationContext = new RuleGenerationContext();
+                    ruleGenerationContext.AllRules.AddRange(allRules);
+                    ProcessAlternatives(writer, umlClass, textualRule.Alternatives, ruleGenerationContext);
                 }
             });
         }
@@ -81,21 +82,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="alternatives">The collection of alternatives to process</param>
-        /// <param name="rules">A collection of all existing rules</param>
-        /// <param name="definedIterators">Collection of <see cref="IteratorDefinition"/> that keep tracks of defined iterator</param>
-        /// <param name="callerElement">An optional <see cref="RuleElement"/> that is calling this function</param>
-        private static void ProcessAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, 
-            IReadOnlyCollection<TextualNotationRule> rules, List<IteratorDefinition> definedIterators, RuleElement callerElement = null)
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        private static void ProcessAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
         {
-            definedIterators ??= [];
+            ruleGenerationContext.DefinedIterators ??= [];
             
             if (alternatives.Count == 1)
             {
                 var alternative = alternatives.ElementAt(0);
                 var elements = alternative.Elements;
-                DeclareAllRequiredIterators(writer, umlClass, rules, alternative, definedIterators);
+                DeclareAllRequiredIterators(writer, umlClass, alternative, ruleGenerationContext);
                 
-                if (callerElement is { IsOptional: true, IsCollection: false })
+                if (ruleGenerationContext.CallerRule is { IsOptional: true, IsCollection: false })
                 {
                     var targetPropertiesName = elements.OfType<AssignmentElement>().Select(x => x.Property).Distinct().ToList();
                     var allProperties = umlClass.QueryAllProperties();
@@ -114,7 +112,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             if (property.QueryIsEnumerable())
                             {
                                 var assigment = elements.OfType<AssignmentElement>().First(x => x.Property == targetPropertyName);
-                                var iterator = definedIterators.FirstOrDefault(x => x.ApplicableRuleElements.Contains(assigment));
+                                var iterator = ruleGenerationContext.DefinedIterators.FirstOrDefault(x => x.ApplicableRuleElements.Contains(assigment));
                                 ifStatementContent.Add(iterator == null ? $"BuildGroupConditionFor{assigment.TextualNotationRule.RuleName}(poco)" : property.QueryIfStatementContentForNonEmpty(iterator.IteratorVariableName));
                             }
                             else
@@ -129,27 +127,32 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         foreach (var textualRuleElement in elements)
                         {
-                            ProcessRuleElement(writer, umlClass, rules, textualRuleElement, definedIterators);
+                            var previousCaller = ruleGenerationContext.CallerRule;
+                            ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext);
+                            ruleGenerationContext.CallerRule = previousCaller;
                         }
                     }
                     else
-                    {
+                    {   
                         writer.WriteSafeString($"{Environment.NewLine}if(BuildGroupConditionFor{alternative.TextualNotationRule.RuleName}(poco))");
                         writer.WriteSafeString($"{Environment.NewLine}{{{Environment.NewLine}");
 
                         foreach (var textualRuleElement in elements)
                         {
-                            ProcessRuleElement(writer, umlClass, rules, textualRuleElement, definedIterators);
+                            ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext);
                         }
                     }
-
+                        
+                    writer.WriteSafeString($"stringBuilder.Append(' ');{Environment.NewLine}");
                     writer.WriteSafeString($"}}{Environment.NewLine}");
                 }
                 else
                 {
                     foreach (var textualRuleElement in elements)
                     {
-                        ProcessRuleElement(writer, umlClass, rules, textualRuleElement, definedIterators);
+                        var previousCaller = ruleGenerationContext.CallerRule;
+                        ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext);
+                        ruleGenerationContext.CallerRule = previousCaller;
                     }    
                 }
             }
@@ -164,25 +167,24 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
         /// <param name="umlClass">The related <see cref="IClass"/></param>
-        /// <param name="rules">A collection of all existing rules</param>
         /// <param name="alternatives">The <see cref="Alternatives"/> to process</param>
-        /// <param name="definedIterators">Collection of <see cref="IteratorDefinition"/> that keep tracks of defined iterator</param>
-        private static void DeclareAllRequiredIterators(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<TextualNotationRule> rules, Alternatives alternatives, List<IteratorDefinition> definedIterators)
+        /// <param name="ruleGenerationContext"></param>
+        private static void DeclareAllRequiredIterators(EncodedTextWriter writer, IClass umlClass, Alternatives alternatives, RuleGenerationContext ruleGenerationContext)
         {
             foreach (var ruleElement in alternatives.Elements)
             {
                 switch (ruleElement)
                 {
                     case AssignmentElement { Value: NonTerminalElement } assignmentElement:
-                        DeclareIteratorIfRequired(writer, umlClass, rules, assignmentElement, definedIterators);
+                        DeclareIteratorIfRequired(writer, umlClass, assignmentElement, ruleGenerationContext);
                         break;
                     case AssignmentElement { Value: GroupElement } assignmentElement:
-                        DeclareIteratorIfRequired(writer, umlClass, rules, assignmentElement, definedIterators);
+                        DeclareIteratorIfRequired(writer, umlClass, assignmentElement, ruleGenerationContext);
                         break;
                     case GroupElement groupElement:
                         foreach (var groupElementAlternative in groupElement.Alternatives)
                         {
-                            DeclareAllRequiredIterators(writer, umlClass, rules, groupElementAlternative, definedIterators);
+                            DeclareAllRequiredIterators(writer, umlClass, groupElementAlternative, ruleGenerationContext);
                         }
                         
                         break;
@@ -195,53 +197,47 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
         /// <param name="umlClass">The related <see cref="IClass"/></param>
-        /// <param name="rules">A collection of all existing rules</param>
         /// <param name="textualRuleElement">The <see cref="RuleElement"/> to process</param>
-        /// <param name="definedIterators">Collection of <see cref="IteratorDefinition"/> that keep tracks of defined iterator</param>
+        /// <param name="ruleGenerationContext"></param>
         /// <exception cref="ArgumentException">If the type of the <see cref="RuleElement"/> is not supported</exception>
-        private static void ProcessRuleElement(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<TextualNotationRule> rules, RuleElement textualRuleElement, List<IteratorDefinition> definedIterators)
+        private static void ProcessRuleElement(EncodedTextWriter writer, IClass umlClass, RuleElement textualRuleElement, RuleGenerationContext ruleGenerationContext)
         {
             switch (textualRuleElement)
             {
                 case TerminalElement terminalElement:
                     var valueToAdd = terminalElement.Value;
 
-                    if (valueToAdd!="<" && valueToAdd!=">")
+                    if (valueToAdd.Length > 1)
                     {
-                        if (valueToAdd == "=")
-                        {
-                            valueToAdd = $" {valueToAdd} ";
-                        }
-                        else
-                        {
-                            valueToAdd += ' ';
-                        }
+                        valueToAdd += ' ';
                     }
 
                     writer.WriteSafeString($"stringBuilder.Append(\"{valueToAdd}\");");
                     break;
                 case NonTerminalElement nonTerminalElement:
-                    ProcessNonTerminalElement(writer, umlClass, rules, definedIterators, nonTerminalElement, "poco");
+                    ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, "poco", umlClass, ruleGenerationContext);
 
                     break;
                 case GroupElement groupElement:
+                    ruleGenerationContext.CallerRule = groupElement;
+                    
                     if (groupElement.IsCollection)
                     {
                         var assignmentRule = groupElement.Alternatives.SelectMany(x => x.Elements).FirstOrDefault(x => x is AssignmentElement { Value: NonTerminalElement });
 
                         if (assignmentRule is AssignmentElement assignmentElement)
                         {
-                            var iteratorToUse = definedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                            var iteratorToUse = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
                             writer.WriteSafeString($"{Environment.NewLine}while({iteratorToUse.IteratorVariableName}.MoveNext()){Environment.NewLine}");
                         }
 
                         writer.WriteSafeString($"{{{Environment.NewLine}");
-                        ProcessAlternatives(writer, umlClass, groupElement.Alternatives, rules, definedIterators, groupElement);
+                        ProcessAlternatives(writer, umlClass, groupElement.Alternatives, ruleGenerationContext);
                         writer.WriteSafeString($"{Environment.NewLine}}}");
                     }
                     else
                     {
-                        ProcessAlternatives(writer, umlClass, groupElement.Alternatives, rules,definedIterators, groupElement);
+                        ProcessAlternatives(writer, umlClass, groupElement.Alternatives, ruleGenerationContext);
                     }
 
                     if (!groupElement.IsOptional)
@@ -260,14 +256,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         {
                             if (assignmentElement.Value is NonTerminalElement nonTerminalElement)
                             {
-                                var iteratorToUse = definedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                                var iteratorToUse = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
                                 
                                 if (assignmentElement.Container is not GroupElement { IsCollection: true } && assignmentElement.Container is not GroupElement { IsOptional: true })
                                 {
                                     writer.WriteSafeString($"{iteratorToUse.IteratorVariableName}.MoveNext();{Environment.NewLine}");
                                 }
 
-                                ProcessNonTerminalElement(writer, umlClass, rules, definedIterators, nonTerminalElement, $"{iteratorToUse.IteratorVariableName}.Current");
+                                ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, $"{iteratorToUse.IteratorVariableName}.Current", umlClass, ruleGenerationContext);
                             }
                             else
                             {
@@ -289,7 +285,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 {
                                     writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()});");
                                 }
-                                else if(targetProperty.QueryIsBool())
+                                else if (targetProperty.QueryIsBool())
                                 {
                                     if (assignmentElement.Value is TerminalElement terminalElement)
                                     {
@@ -297,12 +293,26 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     }
                                     else
                                     {
-                                        writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of bool with rule element value different than TerminalElement not supported\");");
+                                        writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.ToString().ToLower());");
                                     }
                                 }
                                 else if (targetProperty.QueryIsEnum())
                                 {
                                     writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()}.ToString().ToLower());");
+                                }
+                                else if(targetProperty.QueryIsReferenceProperty())
+                                {
+                                    if (assignmentElement.Value is NonTerminalElement nonTerminalElement)
+                                    {
+                                        var previousCaller = ruleGenerationContext.CallerRule;
+                                        ruleGenerationContext.CallerRule = nonTerminalElement;
+                                        ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}", umlClass, ruleGenerationContext);
+                                        ruleGenerationContext.CallerRule = previousCaller;
+                                    }
+                                    else
+                                    {
+                                        writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of reference element not supported yet for this case\");");
+                                    }
                                 }
                                 else
                                 {
@@ -318,10 +328,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     break;
                 case NonParsingAssignmentElement nonParsingAssignmentElement:
-                    writer.WriteSafeString($"// Assignment Element : {nonParsingAssignmentElement.PropertyName} {nonParsingAssignmentElement.Operator} {nonParsingAssignmentElement.Value}");
+                    writer.WriteSafeString($"// NonParsing Assignment Element : {nonParsingAssignmentElement.PropertyName} {nonParsingAssignmentElement.Operator} {nonParsingAssignmentElement.Value} => Does not have to be process");
                     break;
                 case ValueLiteralElement valueLiteralElement:
-                    writer.WriteSafeString($"// Value Literal Element : {valueLiteralElement.Value}");
+                    writer.WriteSafeString(valueLiteralElement.Value == "[QualifiedName]" ? "stringBuilder.Append(poco.qualifiedName);" : "throw new System.NotSupportedException(\"Value Literal different than QualifiedName not supported\");");
+
                     break;
                 default:
                     throw new ArgumentException("Unknown element type");
@@ -335,13 +346,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
         /// <param name="umlClass">The related <see cref="IClass"/></param>
-        /// <param name="rules">A collection of all existing rules</param>
         /// <param name="nonTerminalElement">The <see cref="NonTerminalElement"/> to process</param>
-        /// <param name="definedIterators">Collection of <see cref="IteratorDefinition"/> that keep tracks of defined iterator</param>
         /// <param name="variableName">The name of the variable that should be used to call the non-terminal method</param>
-        private static void ProcessNonTerminalElement(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<TextualNotationRule> rules, List<IteratorDefinition> definedIterators, NonTerminalElement nonTerminalElement, string variableName)
+        /// <param name="callerClass">Gets the <see cref="IClass"/> that initially calls this function</param>
+        /// <param name="ruleGenerationContext"></param>
+        private static void ProcessNonTerminalElement(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, string variableName, IClass callerClass, RuleGenerationContext ruleGenerationContext)
         {
-            var referencedRule = rules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+            var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
 
             string typeTarget;
             
@@ -353,30 +364,49 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
             }
+
+            var isForProperty = variableName.Contains('.');
+            
+            if (isForProperty)
+            {
+                writer.WriteSafeString($"{Environment.NewLine}if ({variableName} != null){Environment.NewLine}");
+                writer.WriteSafeString($"{{{Environment.NewLine}");
+            }
                             
-            if (typeTarget != umlClass.Name)
+            if (typeTarget != callerClass.Name)
             {
                 var targetType = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget);
                                 
                 if (targetType != null)
                 {
-                    if (targetType is IClass targetClass && (umlClass.QueryAllGeneralClassifiers().Contains(targetClass) || variableName != "poco"))
+                    if (targetType is IClass targetClass && (umlClass.QueryAllGeneralClassifiers().Contains(targetClass) || !variableName.Contains("poco")))
                     {
                         writer.WriteSafeString($"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({variableName}, stringBuilder);");
                     }
                     else
                     {
-                        ProcessAlternatives(writer, umlClass, referencedRule!.Alternatives, rules, definedIterators);
+                        var previousCaller = ruleGenerationContext.CallerRule;
+                        ruleGenerationContext.CallerRule = nonTerminalElement;
+                        ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                        ruleGenerationContext.CallerRule = previousCaller;
                     }
                 }
                 else
                 {
-                    ProcessAlternatives(writer, umlClass, referencedRule!.Alternatives, rules, definedIterators);
+                    var previousCaller = ruleGenerationContext.CallerRule;
+                    ruleGenerationContext.CallerRule = nonTerminalElement;
+                    ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                    ruleGenerationContext.CallerRule = previousCaller;
                 }
             }
             else
             {
                 writer.WriteSafeString($"Build{ nonTerminalElement.Name}({variableName}, stringBuilder);");
+            }
+
+            if (isForProperty)
+            {
+                writer.WriteSafeString($"{Environment.NewLine}}}");
             }
         }
 
@@ -385,10 +415,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// </summary>
         /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
         /// <param name="umlClass">The related <see cref="IClass"/></param>
-        /// <param name="rules">A collection of all existing rules</param>
         /// <param name="assignmentElement">The <see cref="AssignmentElement"/> to process</param>
-        /// <param name="definedIterators">Collection of <see cref="IteratorDefinition"/> that keep tracks of defined iterator</param>
-        private static void DeclareIteratorIfRequired(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<TextualNotationRule> rules, AssignmentElement assignmentElement, List<IteratorDefinition> definedIterators)
+        /// <param name="ruleGenerationContext"></param>
+        private static void DeclareIteratorIfRequired(EncodedTextWriter writer, IClass umlClass, AssignmentElement assignmentElement, RuleGenerationContext ruleGenerationContext)
         {
             var allProperties = umlClass.QueryAllProperties();
             var targetProperty =  allProperties.SingleOrDefault(x => string.Equals(x.Name, assignmentElement.Property, StringComparison.OrdinalIgnoreCase));
@@ -404,7 +433,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 foreach (var assignment in groupedAssignment)
                 {
-                    DeclareIteratorIfRequired(writer, umlClass, rules, assignment, definedIterators);
+                    DeclareIteratorIfRequired(writer, umlClass, assignment, ruleGenerationContext);
                 }
             }
 
@@ -413,9 +442,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return;
             }
 
-            var referencedRule = rules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+            var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
             
-            if (definedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, referencedRule) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } alreadyDefinedIterator)
+            if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, referencedRule) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } alreadyDefinedIterator)
             {
                 alreadyDefinedIterator.ApplicableRuleElements.Add(assignmentElement);
                 return;
@@ -454,7 +483,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             
             writer.WriteSafeString(Environment.NewLine);
-            definedIterators.Add(iteratorToUse);
+            ruleGenerationContext.DefinedIterators.Add(iteratorToUse);
         }
 
         /// <summary>
@@ -521,6 +550,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 
                 return string.Equals(this.ConstrainedType?.Name, typeTarget, StringComparison.InvariantCultureIgnoreCase);
             }
+        }
+
+        /// <summary>
+        /// Provides context over the rule generation history
+        /// </summary>
+        private class RuleGenerationContext
+        {
+            /// <summary>
+            /// Gets or sets the collection of <see cref="IteratorDefinition" />
+            /// </summary>
+            public List<IteratorDefinition> DefinedIterators { get; set; }
+
+            /// <summary>
+            /// Gets or sets the <see cref="RuleElement"/> that called other rule
+            /// </summary>
+            public RuleElement CallerRule { get; set; }
+
+            /// <summary>
+            /// Gets the collection of all available <see cref="TextualNotationRule"/>
+            /// </summary>
+            public List<TextualNotationRule> AllRules { get; } = [];
         }
     }
 }

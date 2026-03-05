@@ -46,7 +46,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             BuildRequirementKind(poco, stringBuilder);
             ownedRelatedElementOfConstraintUsageIterator.MoveNext();
-            ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(ownedRelatedElementOfConstraintUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfConstraintUsageIterator.Current != null)
+            {
+                ConstraintUsageTextualNotationBuilder.BuildRequirementConstraintUsage(ownedRelatedElementOfConstraintUsageIterator.Current, stringBuilder);
+            }
 
         }
 

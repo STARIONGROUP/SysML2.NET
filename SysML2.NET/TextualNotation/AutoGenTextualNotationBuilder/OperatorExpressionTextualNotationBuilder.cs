@@ -46,15 +46,31 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             stringBuilder.Append(poco.Operator);
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("?");
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("else ");
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
-            ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
+            {
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -69,12 +85,24 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(poco.Operator);
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildArgumentExpressionMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
-            ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
+            {
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -89,12 +117,24 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(poco.Operator);
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
-            ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
+            {
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -110,9 +150,17 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             stringBuilder.Append(poco.Operator);
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
-            ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
+            {
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -130,14 +178,22 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
             {
-                ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
-            ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
+            {
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -153,11 +209,19 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipIterator = poco.OwnedRelationship.GetEnumerator();
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildMetadataArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildMetadataArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
-            ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
+            {
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -172,7 +236,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             stringBuilder.Append(poco.Operator);
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildTypeReferenceMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -187,10 +255,18 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildPrimaryArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildPrimaryArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(poco.Operator);
             ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-            FeatureMembershipTextualNotationBuilder.BuildSequenceExpressionListMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            {
+                FeatureMembershipTextualNotationBuilder.BuildSequenceExpressionListMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("]");
 
         }
@@ -205,10 +281,18 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
             ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-            FeatureMembershipTextualNotationBuilder.BuildOwnedExpressionMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            {
+                FeatureMembershipTextualNotationBuilder.BuildOwnedExpressionMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(poco.Operator);
             ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-            FeatureMembershipTextualNotationBuilder.BuildSequenceExpressionListMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            {
+                FeatureMembershipTextualNotationBuilder.BuildSequenceExpressionListMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
     }

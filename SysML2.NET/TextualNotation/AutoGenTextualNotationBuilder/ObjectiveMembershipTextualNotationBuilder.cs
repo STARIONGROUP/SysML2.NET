@@ -46,7 +46,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("objective ");
             ownedRelatedElementOfRequirementUsageIterator.MoveNext();
-            RequirementUsageTextualNotationBuilder.BuildObjectiveRequirementUsage(ownedRelatedElementOfRequirementUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfRequirementUsageIterator.Current != null)
+            {
+                RequirementUsageTextualNotationBuilder.BuildObjectiveRequirementUsage(ownedRelatedElementOfRequirementUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

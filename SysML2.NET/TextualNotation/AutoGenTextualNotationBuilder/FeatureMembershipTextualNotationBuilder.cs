@@ -45,7 +45,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildNonOccurrenceUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildNonOccurrenceUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -60,7 +64,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildOccurrenceUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildOccurrenceUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -75,7 +83,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildStructureUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildStructureUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -90,7 +102,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildBehaviorUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildBehaviorUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -105,7 +121,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfSuccessionAsUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Connections.SuccessionAsUsage>().GetEnumerator();
             stringBuilder.Append("then ");
             ownedRelatedElementOfSuccessionAsUsageIterator.MoveNext();
-            SuccessionAsUsageTextualNotationBuilder.BuildSourceSuccession(ownedRelatedElementOfSuccessionAsUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfSuccessionAsUsageIterator.Current != null)
+            {
+                SuccessionAsUsageTextualNotationBuilder.BuildSourceSuccession(ownedRelatedElementOfSuccessionAsUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -120,7 +140,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildInterfaceNonOccurrenceUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildInterfaceNonOccurrenceUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -135,7 +159,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildInterfaceOccurrenceUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildInterfaceOccurrenceUsageElement(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -149,7 +177,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfPayloadFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Interactions.PayloadFeature>().GetEnumerator();
             ownedRelatedElementOfPayloadFeatureIterator.MoveNext();
-            PayloadFeatureTextualNotationBuilder.BuildFlowPayloadFeature(ownedRelatedElementOfPayloadFeatureIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfPayloadFeatureIterator.Current != null)
+            {
+                PayloadFeatureTextualNotationBuilder.BuildFlowPayloadFeature(ownedRelatedElementOfPayloadFeatureIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -163,7 +195,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildFlowFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildFlowFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -204,7 +240,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.ActionUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfActionUsageIterator.MoveNext();
-            ActionUsageTextualNotationBuilder.BuildActionNode(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfActionUsageIterator.Current != null)
+            {
+                ActionUsageTextualNotationBuilder.BuildActionNode(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -219,7 +259,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildActionTargetSuccession(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildActionTargetSuccession(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -234,7 +278,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfTransitionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfTransitionUsageIterator.MoveNext();
-            TransitionUsageTextualNotationBuilder.BuildGuardedSuccession(ownedRelatedElementOfTransitionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfTransitionUsageIterator.Current != null)
+            {
+                TransitionUsageTextualNotationBuilder.BuildGuardedSuccession(ownedRelatedElementOfTransitionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -248,7 +296,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             ownedRelatedElementOfUsageIterator.MoveNext();
-            UsageTextualNotationBuilder.BuildUsageDeclaration(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfUsageIterator.Current != null)
+            {
+                UsageTextualNotationBuilder.BuildUsageDeclaration(ownedRelatedElementOfUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -280,7 +332,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfTransitionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfTransitionUsageIterator.MoveNext();
-            TransitionUsageTextualNotationBuilder.BuildTransitionUsage(ownedRelatedElementOfTransitionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfTransitionUsageIterator.Current != null)
+            {
+                TransitionUsageTextualNotationBuilder.BuildTransitionUsage(ownedRelatedElementOfTransitionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -295,7 +351,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfTransitionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfTransitionUsageIterator.MoveNext();
-            TransitionUsageTextualNotationBuilder.BuildTargetTransitionUsage(ownedRelatedElementOfTransitionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfTransitionUsageIterator.Current != null)
+            {
+                TransitionUsageTextualNotationBuilder.BuildTargetTransitionUsage(ownedRelatedElementOfTransitionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -307,7 +367,23 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataBodyUsageMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberFeature != null)
+            {
+                using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
+                stringBuilder.Append("ref ");
+                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                ownedRelationshipOfRedefinitionIterator.MoveNext();
+
+                if (ownedRelationshipOfRedefinitionIterator.Current != null)
+                {
+                    RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
+                }
+                BuildFeatureSpecializationPart(poco, stringBuilder);
+                BuildValuePart(poco, stringBuilder);
+                TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);
+
+            }
 
         }
 
@@ -322,7 +398,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfFeatureIterator.MoveNext();
-            FeatureTextualNotationBuilder.BuildFeatureElement(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            {
+                FeatureTextualNotationBuilder.BuildFeatureElement(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -336,7 +416,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureReferenceExpressionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression>().GetEnumerator();
             ownedRelationshipOfFeatureReferenceExpressionIterator.MoveNext();
-            FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(ownedRelationshipOfFeatureReferenceExpressionIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureReferenceExpressionIterator.Current != null)
+            {
+                FeatureReferenceExpressionTextualNotationBuilder.BuildOwnedExpressionReference(ownedRelationshipOfFeatureReferenceExpressionIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -360,7 +444,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildSequenceExpressionListMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberFeature != null)
+            {
+                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            }
 
         }
 
@@ -372,7 +460,18 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFunctionReferenceMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberFeature != null)
+            {
+                using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
+                ownedRelationshipOfFeatureTypingIterator.MoveNext();
+
+                if (ownedRelationshipOfFeatureTypingIterator.Current != null)
+                {
+                    FeatureTypingTextualNotationBuilder.BuildReferenceTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+                }
+
+            }
 
         }
 
@@ -384,7 +483,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamedArgumentMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberFeature != null)
+            {
+                FeatureTextualNotationBuilder.BuildNamedArgument(poco.ownedMemberFeature, stringBuilder);
+            }
 
         }
 
@@ -396,7 +499,14 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildExpressionBodyMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberFeature != null)
+            {
+                stringBuilder.Append("{");
+                TypeTextualNotationBuilder.BuildFunctionBodyPart(poco, stringBuilder);
+                stringBuilder.Append("}");
+
+            }
 
         }
 
@@ -410,7 +520,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
             ownedRelatedElementOfFeatureIterator.MoveNext();
-            FeatureTextualNotationBuilder.BuildPayloadFeature(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            {
+                FeatureTextualNotationBuilder.BuildPayloadFeature(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -422,7 +536,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataBodyFeatureMember(SysML2.NET.Core.POCO.Core.Types.IFeatureMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberFeature != null)
+            {
+                FeatureTextualNotationBuilder.BuildMetadataBodyFeature(poco.ownedMemberFeature, stringBuilder);
+            }
 
         }
     }

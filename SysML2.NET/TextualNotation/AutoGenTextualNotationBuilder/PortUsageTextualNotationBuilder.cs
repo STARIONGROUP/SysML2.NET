@@ -60,7 +60,11 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -73,7 +77,11 @@ namespace SysML2.NET.TextualNotation
             }
 
             ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
-            ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
+            {
+                ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+            }
 
         }
 

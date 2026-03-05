@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfAnnotatingElementIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Root.Annotations.AnnotatingElement>().GetEnumerator();
             ownedRelatedElementOfAnnotatingElementIterator.MoveNext();
-            AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(ownedRelatedElementOfAnnotatingElementIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfAnnotatingElementIterator.Current != null)
+            {
+                AnnotatingElementTextualNotationBuilder.BuildAnnotatingElement(ownedRelatedElementOfAnnotatingElementIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -57,8 +61,19 @@ namespace SysML2.NET.TextualNotation
         public static void BuildPrefixMetadataAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("#");
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
-            // Assignment Element : ownedRelatedElement += annotatingElement
+
+            if (poco.annotatingElement != null)
+            {
+                using var ownedRelationshipOfFeatureTypingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureTyping>().GetEnumerator();
+                ownedRelationshipOfFeatureTypingIterator.MoveNext();
+
+                if (ownedRelationshipOfFeatureTypingIterator.Current != null)
+                {
+                    FeatureTypingTextualNotationBuilder.BuildOwnedFeatureTyping(ownedRelationshipOfFeatureTypingIterator.Current, stringBuilder);
+                }
+
+            }
+            // NonParsing Assignment Element : ownedRelatedElement += annotatingElement => Does not have to be process
 
         }
 
@@ -70,7 +85,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAnnotation(SysML2.NET.Core.POCO.Root.Annotations.IAnnotation poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
 
         }
     }
