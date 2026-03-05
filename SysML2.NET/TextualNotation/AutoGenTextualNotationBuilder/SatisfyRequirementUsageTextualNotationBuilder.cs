@@ -57,7 +57,11 @@ namespace SysML2.NET.TextualNotation
             if (ownedRelationshipOfSubjectMembershipIterator.MoveNext())
             {
                 stringBuilder.Append("by ");
-                SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(ownedRelationshipOfSubjectMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfSubjectMembershipIterator.Current != null)
+                {
+                    SubjectMembershipTextualNotationBuilder.BuildSatisfactionSubjectMember(ownedRelationshipOfSubjectMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 

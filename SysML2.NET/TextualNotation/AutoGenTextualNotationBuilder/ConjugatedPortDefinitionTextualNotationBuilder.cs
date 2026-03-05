@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfPortConjugationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.Ports.PortConjugation>().GetEnumerator();
             ownedRelationshipOfPortConjugationIterator.MoveNext();
-            PortConjugationTextualNotationBuilder.BuildPortConjugation(ownedRelationshipOfPortConjugationIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfPortConjugationIterator.Current != null)
+            {
+                PortConjugationTextualNotationBuilder.BuildPortConjugation(ownedRelationshipOfPortConjugationIterator.Current, stringBuilder);
+            }
 
         }
     }

@@ -45,10 +45,18 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfTransitionFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership>().GetEnumerator();
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             ownedRelationshipOfTransitionFeatureMembershipIterator.MoveNext();
-            TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfTransitionFeatureMembershipIterator.Current != null)
+            {
+                TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("then ");
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -63,7 +71,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             stringBuilder.Append("else ");
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -88,12 +100,24 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append("first ");
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfTransitionFeatureMembershipIterator.MoveNext();
-            TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfTransitionFeatureMembershipIterator.Current != null)
+            {
+                TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("then ");
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
         }
@@ -110,11 +134,19 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfTransitionFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.States.TransitionFeatureMembership>().GetEnumerator();
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append("then ");
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }
@@ -141,34 +173,62 @@ namespace SysML2.NET.TextualNotation
             }
 
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
 
             if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
             {
-                ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
-                TransitionFeatureMembershipTextualNotationBuilder.BuildTriggerActionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildEmptyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                }
+
+                if (ownedRelationshipOfTransitionFeatureMembershipIterator.Current != null)
+                {
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildTriggerActionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
 
             if (ownedRelationshipOfTransitionFeatureMembershipIterator.MoveNext())
             {
-                TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfTransitionFeatureMembershipIterator.Current != null)
+                {
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildGuardExpressionMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
 
             if (ownedRelationshipOfTransitionFeatureMembershipIterator.MoveNext())
             {
-                TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfTransitionFeatureMembershipIterator.Current != null)
+                {
+                    TransitionFeatureMembershipTextualNotationBuilder.BuildEffectBehaviorMember(ownedRelationshipOfTransitionFeatureMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
             stringBuilder.Append("then ");
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildTransitionSuccessionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
         }

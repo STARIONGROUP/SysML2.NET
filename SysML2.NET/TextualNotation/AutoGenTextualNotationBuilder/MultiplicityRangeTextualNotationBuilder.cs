@@ -59,13 +59,21 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
             }
 
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("]");
 
         }
@@ -83,13 +91,21 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(".. ");
                 stringBuilder.Append(' ');
             }
 
             ownedRelationshipOfOwningMembershipIterator.MoveNext();
-            OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+            {
+                OwningMembershipTextualNotationBuilder.BuildMultiplicityExpressionMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("]");
 
         }

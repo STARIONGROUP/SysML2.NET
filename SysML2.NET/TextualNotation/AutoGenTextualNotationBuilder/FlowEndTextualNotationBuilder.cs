@@ -47,12 +47,20 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfReferenceSubsettingIterator.MoveNext())
             {
-                ReferenceSubsettingTextualNotationBuilder.BuildFlowEndSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
+                {
+                    ReferenceSubsettingTextualNotationBuilder.BuildFlowEndSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
             ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-            FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            {
+                FeatureMembershipTextualNotationBuilder.BuildFlowFeatureMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
     }

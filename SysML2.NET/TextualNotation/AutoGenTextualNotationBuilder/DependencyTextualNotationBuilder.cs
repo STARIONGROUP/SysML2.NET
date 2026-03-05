@@ -46,7 +46,11 @@ namespace SysML2.NET.TextualNotation
 
             while (ownedRelationshipOfAnnotationIterator.MoveNext())
             {
-                AnnotationTextualNotationBuilder.BuildPrefixMetadataAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfAnnotationIterator.Current != null)
+                {
+                    AnnotationTextualNotationBuilder.BuildPrefixMetadataAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+                }
 
             }
             stringBuilder.Append("dependency ");

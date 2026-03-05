@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildElementReferenceMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildElementReferenceMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -58,7 +62,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildElementReferenceMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildElementReferenceMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(".");
             stringBuilder.Append("metadata ");
 

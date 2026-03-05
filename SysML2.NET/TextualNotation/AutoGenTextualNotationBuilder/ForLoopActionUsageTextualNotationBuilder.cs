@@ -47,12 +47,24 @@ namespace SysML2.NET.TextualNotation
             ActionUsageTextualNotationBuilder.BuildActionNodePrefix(poco, stringBuilder);
             stringBuilder.Append("for ");
             ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-            FeatureMembershipTextualNotationBuilder.BuildForVariableDeclarationMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            {
+                FeatureMembershipTextualNotationBuilder.BuildForVariableDeclarationMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("in ");
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
     }

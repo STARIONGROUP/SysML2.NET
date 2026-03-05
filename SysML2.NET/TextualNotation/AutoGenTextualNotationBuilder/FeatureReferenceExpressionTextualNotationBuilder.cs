@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -58,7 +62,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
             ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-            FeatureMembershipTextualNotationBuilder.BuildOwnedExpressionMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            {
+                FeatureMembershipTextualNotationBuilder.BuildOwnedExpressionMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -72,7 +80,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
             ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-            FeatureMembershipTextualNotationBuilder.BuildFunctionReferenceMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            {
+                FeatureMembershipTextualNotationBuilder.BuildFunctionReferenceMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -87,9 +99,17 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.Membership>().GetEnumerator();
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildFeatureReferenceMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildFeatureReferenceMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
-            ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
+            {
+                ReturnParameterMembershipTextualNotationBuilder.BuildEmptyResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -103,7 +123,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.FeatureMembership>().GetEnumerator();
             ownedRelationshipOfFeatureMembershipIterator.MoveNext();
-            FeatureMembershipTextualNotationBuilder.BuildExpressionBodyMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureMembershipIterator.Current != null)
+            {
+                FeatureMembershipTextualNotationBuilder.BuildExpressionBodyMember(ownedRelationshipOfFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
     }

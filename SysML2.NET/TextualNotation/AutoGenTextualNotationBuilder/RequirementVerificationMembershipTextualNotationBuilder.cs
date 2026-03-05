@@ -45,9 +45,13 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfRequirementUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("verify ");
-            // Assignment Element : kind = 'requirement'
+            // NonParsing Assignment Element : kind = 'requirement' => Does not have to be process
             ownedRelatedElementOfRequirementUsageIterator.MoveNext();
-            RequirementUsageTextualNotationBuilder.BuildRequirementVerificationUsage(ownedRelatedElementOfRequirementUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfRequirementUsageIterator.Current != null)
+            {
+                RequirementUsageTextualNotationBuilder.BuildRequirementVerificationUsage(ownedRelatedElementOfRequirementUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

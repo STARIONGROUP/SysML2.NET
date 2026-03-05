@@ -46,7 +46,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
             ownedRelatedElementOfActionUsageIterator.MoveNext();
-            ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfActionUsageIterator.Current != null)
+            {
+                ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -62,7 +66,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
             ownedRelatedElementOfActionUsageIterator.MoveNext();
-            ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfActionUsageIterator.Current != null)
+            {
+                ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -78,7 +86,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append(poco.Kind.ToString().ToLower());
             ownedRelatedElementOfActionUsageIterator.MoveNext();
-            ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfActionUsageIterator.Current != null)
+            {
+                ActionUsageTextualNotationBuilder.BuildStateActionUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

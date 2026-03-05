@@ -80,11 +80,19 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfPackageIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Packages.Package>().GetEnumerator();
             using var ownedRelationshipOfElementFilterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership>().GetEnumerator();
             ownedRelationshipOfPackageIterator.MoveNext();
-            BuildFilterPackageImport(ownedRelationshipOfPackageIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfPackageIterator.Current != null)
+            {
+                BuildFilterPackageImport(ownedRelationshipOfPackageIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfElementFilterMembershipIterator.MoveNext())
             {
-                ElementFilterMembershipTextualNotationBuilder.BuildFilterPackageMember(ownedRelationshipOfElementFilterMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfElementFilterMembershipIterator.Current != null)
+                {
+                    ElementFilterMembershipTextualNotationBuilder.BuildFilterPackageMember(ownedRelationshipOfElementFilterMembershipIterator.Current, stringBuilder);
+                }
 
             }
             stringBuilder.Append(' ');
@@ -103,7 +111,11 @@ namespace SysML2.NET.TextualNotation
 
             while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
 
             }
             BuildPackageDeclaration(poco, stringBuilder);

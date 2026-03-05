@@ -45,7 +45,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfPartUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Parts.PartUsage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfPartUsageIterator.MoveNext();
-            PartUsageTextualNotationBuilder.BuildStakeholderUsage(ownedRelatedElementOfPartUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfPartUsageIterator.Current != null)
+            {
+                PartUsageTextualNotationBuilder.BuildStakeholderUsage(ownedRelatedElementOfPartUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

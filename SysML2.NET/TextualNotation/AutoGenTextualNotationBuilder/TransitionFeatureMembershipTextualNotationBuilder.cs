@@ -44,9 +44,13 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfAcceptActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.AcceptActionUsage>().GetEnumerator();
             stringBuilder.Append("accept ");
-            // Assignment Element : kind = 'trigger'
+            // NonParsing Assignment Element : kind = 'trigger' => Does not have to be process
             ownedRelatedElementOfAcceptActionUsageIterator.MoveNext();
-            AcceptActionUsageTextualNotationBuilder.BuildTriggerAction(ownedRelatedElementOfAcceptActionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfAcceptActionUsageIterator.Current != null)
+            {
+                AcceptActionUsageTextualNotationBuilder.BuildTriggerAction(ownedRelatedElementOfAcceptActionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -60,9 +64,13 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
             stringBuilder.Append("if ");
-            // Assignment Element : kind = 'guard'
+            // NonParsing Assignment Element : kind = 'guard' => Does not have to be process
             ownedRelatedElementOfExpressionIterator.MoveNext();
-            ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            {
+                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -76,9 +84,13 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.ActionUsage>().GetEnumerator();
             stringBuilder.Append("do ");
-            // Assignment Element : kind = 'effect'
+            // NonParsing Assignment Element : kind = 'effect' => Does not have to be process
             ownedRelatedElementOfActionUsageIterator.MoveNext();
-            ActionUsageTextualNotationBuilder.BuildEffectBehaviorUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfActionUsageIterator.Current != null)
+            {
+                ActionUsageTextualNotationBuilder.BuildEffectBehaviorUsage(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

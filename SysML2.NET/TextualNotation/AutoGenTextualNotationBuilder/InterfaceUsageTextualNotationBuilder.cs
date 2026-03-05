@@ -66,10 +66,18 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("to ");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -84,15 +92,27 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
             stringBuilder.Append("(");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(",");
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
 
             while (ownedRelationshipOfEndFeatureMembershipIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+                {
+                    EndFeatureMembershipTextualNotationBuilder.BuildInterfaceEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+                }
 
             }
             stringBuilder.Append(")");

@@ -103,12 +103,24 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append("assign ");
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildAssignmentTargetMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildAssignmentTargetMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildFeatureChainMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(":= ");
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
 

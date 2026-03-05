@@ -28,7 +28,6 @@ namespace SysML2.NET.TextualNotation
     using System.Text;
 
     using SysML2.NET.Core.POCO.Root.Elements;
-    using SysML2.NET.Core.POCO.Systems.Actions;
 
     /// <summary>
     /// The <see cref="AcceptActionUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.Actions.IAcceptActionUsage" /> element
@@ -73,12 +72,20 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Behaviors.ParameterMembership>().GetEnumerator();
             ownedRelationshipOfParameterMembershipIterator.MoveNext();
-            ParameterMembershipTextualNotationBuilder.BuildPayloadParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+            {
+                ParameterMembershipTextualNotationBuilder.BuildPayloadParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+            }
 
             if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
             {
                 stringBuilder.Append("via ");
-                ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildNodeParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 

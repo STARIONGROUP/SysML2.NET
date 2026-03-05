@@ -46,7 +46,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("message ");
             BuildMessageDeclaration(poco, stringBuilder);
             TypeTextualNotationBuilder.BuildDefinitionBody(poco, stringBuilder);
-            // Assignment Element : isAbstract = true
+            // NonParsing Assignment Element : isAbstract = true => Does not have to be process
 
         }
 

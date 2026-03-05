@@ -45,7 +45,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             ownedRelatedElementOfExpressionIterator.MoveNext();
-            ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            {
+                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+            }
 
         }
     }

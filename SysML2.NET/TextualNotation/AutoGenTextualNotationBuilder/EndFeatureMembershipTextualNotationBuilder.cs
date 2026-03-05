@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildSourceEnd(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildSourceEnd(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -58,7 +62,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildConnectorEnd(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildConnectorEnd(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -72,7 +80,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfPortUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Ports.PortUsage>().GetEnumerator();
             ownedRelatedElementOfPortUsageIterator.MoveNext();
-            PortUsageTextualNotationBuilder.BuildInterfaceEnd(ownedRelatedElementOfPortUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfPortUsageIterator.Current != null)
+            {
+                PortUsageTextualNotationBuilder.BuildInterfaceEnd(ownedRelatedElementOfPortUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -86,7 +98,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfFlowEndIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Interactions.FlowEnd>().GetEnumerator();
             ownedRelatedElementOfFlowEndIterator.MoveNext();
-            FlowEndTextualNotationBuilder.BuildFlowEnd(ownedRelatedElementOfFlowEndIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfFlowEndIterator.Current != null)
+            {
+                FlowEndTextualNotationBuilder.BuildFlowEnd(ownedRelatedElementOfFlowEndIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -100,7 +116,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildEmptyFeature(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
     }

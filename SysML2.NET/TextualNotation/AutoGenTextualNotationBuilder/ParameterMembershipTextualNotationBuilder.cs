@@ -44,7 +44,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfEventOccurrenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Occurrences.EventOccurrenceUsage>().GetEnumerator();
             ownedRelatedElementOfEventOccurrenceUsageIterator.MoveNext();
-            EventOccurrenceUsageTextualNotationBuilder.BuildMessageEvent(ownedRelatedElementOfEventOccurrenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfEventOccurrenceUsageIterator.Current != null)
+            {
+                EventOccurrenceUsageTextualNotationBuilder.BuildMessageEvent(ownedRelatedElementOfEventOccurrenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -58,7 +62,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildPayloadParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildPayloadParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -70,7 +78,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildArgumentMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberParameter != null)
+            {
+                FeatureTextualNotationBuilder.BuildArgument(poco.ownedMemberParameter, stringBuilder);
+            }
 
         }
 
@@ -84,7 +96,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
             ownedRelatedElementOfFeatureIterator.MoveNext();
-            FeatureTextualNotationBuilder.BuildArgumentExpression(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            {
+                FeatureTextualNotationBuilder.BuildArgumentExpression(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -98,7 +114,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildNodeParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildNodeParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -112,7 +132,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildEmptyUsage(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildEmptyUsage(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -126,7 +150,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfReferenceUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage>().GetEnumerator();
             ownedRelatedElementOfReferenceUsageIterator.MoveNext();
-            ReferenceUsageTextualNotationBuilder.BuildAssignmentTargetParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfReferenceUsageIterator.Current != null)
+            {
+                ReferenceUsageTextualNotationBuilder.BuildAssignmentTargetParameter(ownedRelatedElementOfReferenceUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -140,7 +168,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
             ownedRelatedElementOfExpressionIterator.MoveNext();
-            ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            {
+                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -154,7 +186,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.ActionUsage>().GetEnumerator();
             ownedRelatedElementOfActionUsageIterator.MoveNext();
-            ActionUsageTextualNotationBuilder.BuildActionBodyParameter(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfActionUsageIterator.Current != null)
+            {
+                ActionUsageTextualNotationBuilder.BuildActionBodyParameter(ownedRelatedElementOfActionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -168,7 +204,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfIfActionUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.Actions.IfActionUsage>().GetEnumerator();
             ownedRelatedElementOfIfActionUsageIterator.MoveNext();
-            IfActionUsageTextualNotationBuilder.BuildIfNode(ownedRelatedElementOfIfActionUsageIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfIfActionUsageIterator.Current != null)
+            {
+                IfActionUsageTextualNotationBuilder.BuildIfNode(ownedRelatedElementOfIfActionUsageIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -182,7 +222,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
             ownedRelatedElementOfFeatureIterator.MoveNext();
-            FeatureTextualNotationBuilder.BuildMetadataArgument(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfFeatureIterator.Current != null)
+            {
+                FeatureTextualNotationBuilder.BuildMetadataArgument(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -194,7 +238,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeReferenceMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberFeature != null)
+            {
+                FeatureTextualNotationBuilder.BuildTypeReference(poco.ownedMemberFeature, stringBuilder);
+            }
 
         }
 
@@ -206,7 +254,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPrimaryArgumentMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberParameter != null)
+            {
+                FeatureTextualNotationBuilder.BuildPrimaryArgument(poco.ownedMemberParameter, stringBuilder);
+            }
 
         }
 
@@ -218,7 +270,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNonFeatureChainPrimaryArgumentMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberParameter != null)
+            {
+                FeatureTextualNotationBuilder.BuildPrimaryArgument(poco.ownedMemberParameter, stringBuilder);
+            }
 
         }
 
@@ -230,7 +286,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBodyArgumentMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberParameter != null)
+            {
+                FeatureTextualNotationBuilder.BuildBodyArgument(poco.ownedMemberParameter, stringBuilder);
+            }
 
         }
 
@@ -242,7 +302,11 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFunctionReferenceArgumentMember(SysML2.NET.Core.POCO.Kernel.Behaviors.IParameterMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of non-string value not yet supported");
+
+            if (poco.ownedMemberParameter != null)
+            {
+                FeatureTextualNotationBuilder.BuildFunctionReferenceArgument(poco.ownedMemberParameter, stringBuilder);
+            }
 
         }
     }

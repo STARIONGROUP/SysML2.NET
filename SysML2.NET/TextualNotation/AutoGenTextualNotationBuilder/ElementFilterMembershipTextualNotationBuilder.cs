@@ -46,7 +46,11 @@ namespace SysML2.NET.TextualNotation
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
             stringBuilder.Append("filter ");
             ownedRelatedElementOfExpressionIterator.MoveNext();
-            ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            {
+                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+            }
             stringBuilder.Append(";");
 
         }
@@ -62,7 +66,11 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementOfExpressionIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Kernel.Functions.Expression>().GetEnumerator();
             stringBuilder.Append("[");
             ownedRelatedElementOfExpressionIterator.MoveNext();
-            ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+
+            if (ownedRelatedElementOfExpressionIterator.Current != null)
+            {
+                ExpressionTextualNotationBuilder.BuildOwnedExpression(ownedRelatedElementOfExpressionIterator.Current, stringBuilder);
+            }
             stringBuilder.Append("]");
 
         }

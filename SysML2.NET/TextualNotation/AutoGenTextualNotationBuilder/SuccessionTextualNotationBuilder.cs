@@ -44,9 +44,17 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfEndFeatureMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.EndFeatureMembership>().GetEnumerator();
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildEmptyEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildEmptyEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfEndFeatureMembershipIterator.MoveNext();
-            EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfEndFeatureMembershipIterator.Current != null)
+            {
+                EndFeatureMembershipTextualNotationBuilder.BuildConnectorEndMember(ownedRelationshipOfEndFeatureMembershipIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -75,7 +83,11 @@ namespace SysML2.NET.TextualNotation
 
             while (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildPrefixMetadataMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
 
             }
 

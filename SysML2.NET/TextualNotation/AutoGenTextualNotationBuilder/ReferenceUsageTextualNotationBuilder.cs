@@ -70,7 +70,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
             ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
-            ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
+            {
+                ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+            }
             FeatureTextualNotationBuilder.BuildFeatureSpecialization(poco, stringBuilder);
             UsageTextualNotationBuilder.BuildUsageBody(poco, stringBuilder);
 
@@ -88,7 +92,11 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildOwnedMultiplicity(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -108,7 +116,11 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfOwningMembershipIterator.Current != null)
+                {
+                    OwningMembershipTextualNotationBuilder.BuildOwnedCrossMultiplicityMember(ownedRelationshipOfOwningMembershipIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(' ');
             }
 
@@ -121,7 +133,11 @@ namespace SysML2.NET.TextualNotation
             }
 
             ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
-            ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
+            {
+                ReferenceSubsettingTextualNotationBuilder.BuildOwnedReferenceSubsetting(ownedRelationshipOfReferenceSubsettingIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -135,7 +151,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
             ownedRelationshipOfRedefinitionIterator.MoveNext();
-            RedefinitionTextualNotationBuilder.BuildFlowFeatureRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfRedefinitionIterator.Current != null)
+            {
+                RedefinitionTextualNotationBuilder.BuildFlowFeatureRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -160,7 +180,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
             ownedRelationshipOfFeatureValueIterator.MoveNext();
-            FeatureValueTextualNotationBuilder.BuildFeatureBinding(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureValueIterator.Current != null)
+            {
+                FeatureValueTextualNotationBuilder.BuildFeatureBinding(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -187,7 +211,11 @@ namespace SysML2.NET.TextualNotation
 
             if (ownedRelationshipOfFeatureValueIterator.MoveNext())
             {
-                FeatureValueTextualNotationBuilder.BuildAssignmentTargetBinding(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+
+                if (ownedRelationshipOfFeatureValueIterator.Current != null)
+                {
+                    FeatureValueTextualNotationBuilder.BuildAssignmentTargetBinding(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+                }
                 stringBuilder.Append(".");
                 stringBuilder.Append(' ');
             }
@@ -242,7 +270,11 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
             ownedRelationshipOfFeatureValueIterator.MoveNext();
-            FeatureValueTextualNotationBuilder.BuildSatisfactionFeatureValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfFeatureValueIterator.Current != null)
+            {
+                FeatureValueTextualNotationBuilder.BuildSatisfactionFeatureValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+            }
 
         }
 
@@ -258,7 +290,11 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("ref ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             ownedRelationshipOfRedefinitionIterator.MoveNext();
-            RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfRedefinitionIterator.Current != null)
+            {
+                RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
+            }
             FeatureTextualNotationBuilder.BuildFeatureSpecializationPart(poco, stringBuilder);
             FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
             TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);

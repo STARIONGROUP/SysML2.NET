@@ -46,9 +46,17 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             stringBuilder.Append("new ");
             ownedRelationshipOfMembershipIterator.MoveNext();
-            MembershipTextualNotationBuilder.BuildInstantiatedTypeMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfMembershipIterator.Current != null)
+            {
+                MembershipTextualNotationBuilder.BuildInstantiatedTypeMember(ownedRelationshipOfMembershipIterator.Current, stringBuilder);
+            }
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
-            ReturnParameterMembershipTextualNotationBuilder.BuildConstructorResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+
+            if (ownedRelationshipOfReturnParameterMembershipIterator.Current != null)
+            {
+                ReturnParameterMembershipTextualNotationBuilder.BuildConstructorResultMember(ownedRelationshipOfReturnParameterMembershipIterator.Current, stringBuilder);
+            }
 
         }
     }
