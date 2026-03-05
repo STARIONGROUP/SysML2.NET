@@ -93,7 +93,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var elements = alternative.Elements;
                 DeclareAllRequiredIterators(writer, umlClass, alternative, ruleGenerationContext);
                 
-                if (ruleGenerationContext.CallerRule is { IsOptional: true, IsCollection: false })
+                if (ruleGenerationContext.CallerContext?.CallerRule is { IsOptional: true, IsCollection: false })
                 {
                     var targetPropertiesName = elements.OfType<AssignmentElement>().Select(x => x.Property).Distinct().ToList();
                     var allProperties = umlClass.QueryAllProperties();
@@ -127,9 +127,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         foreach (var textualRuleElement in elements)
                         {
-                            var previousCaller = ruleGenerationContext.CallerRule;
+                            var previousCaller = ruleGenerationContext.CallerContext;
                             ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext);
-                            ruleGenerationContext.CallerRule = previousCaller;
+                            ruleGenerationContext.CallerContext = previousCaller;
                         }
                     }
                     else
@@ -150,9 +150,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     foreach (var textualRuleElement in elements)
                     {
-                        var previousCaller = ruleGenerationContext.CallerRule;
+                        var previousCaller = ruleGenerationContext.CallerContext;
                         ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext);
-                        ruleGenerationContext.CallerRule = previousCaller;
+                        ruleGenerationContext.CallerContext = previousCaller;
                     }    
                 }
             }
@@ -215,11 +215,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"stringBuilder.Append(\"{valueToAdd}\");");
                     break;
                 case NonTerminalElement nonTerminalElement:
-                    ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, "poco", umlClass, ruleGenerationContext);
+                    if (ruleGenerationContext.CallerContext?.CallerRule is NonTerminalElement callerNonTerminalElement && callerNonTerminalElement.Container is AssignmentElement)
+                    {
+                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, "poco", ruleGenerationContext.CallerContext.CallerClassContext, ruleGenerationContext);
+                    }
+                    else
+                    {
+                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, "poco", umlClass, ruleGenerationContext);
+                    }
 
                     break;
                 case GroupElement groupElement:
-                    ruleGenerationContext.CallerRule = groupElement;
+                    ruleGenerationContext.CallerContext = new CallerContext(groupElement);
                     
                     if (groupElement.IsCollection)
                     {
@@ -304,10 +311,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 {
                                     if (assignmentElement.Value is NonTerminalElement nonTerminalElement)
                                     {
-                                        var previousCaller = ruleGenerationContext.CallerRule;
-                                        ruleGenerationContext.CallerRule = nonTerminalElement;
+                                        var previousCaller = ruleGenerationContext.CallerContext;
+                                        ruleGenerationContext.CallerContext = new CallerContext(nonTerminalElement);
                                         ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}", umlClass, ruleGenerationContext);
-                                        ruleGenerationContext.CallerRule = previousCaller;
+                                        ruleGenerationContext.CallerContext = previousCaller;
                                     }
                                     else
                                     {
@@ -385,18 +392,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        var previousCaller = ruleGenerationContext.CallerRule;
-                        ruleGenerationContext.CallerRule = nonTerminalElement;
-                        ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
-                        ruleGenerationContext.CallerRule = previousCaller;
+                        var previousCaller = ruleGenerationContext.CallerContext;
+                        ruleGenerationContext.CallerContext = new CallerContext(nonTerminalElement, targetType as  IClass);
+                        ProcessAlternatives(writer, callerClass, referencedRule?.Alternatives, ruleGenerationContext);
+                        ruleGenerationContext.CallerContext = previousCaller;
                     }
                 }
                 else
                 {
-                    var previousCaller = ruleGenerationContext.CallerRule;
-                    ruleGenerationContext.CallerRule = nonTerminalElement;
-                    ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
-                    ruleGenerationContext.CallerRule = previousCaller;
+                    var previousCaller = ruleGenerationContext.CallerContext;
+                    ruleGenerationContext.CallerContext = new CallerContext(nonTerminalElement);
+                    ProcessAlternatives(writer, callerClass, referencedRule?.Alternatives, ruleGenerationContext);
+                    ruleGenerationContext.CallerContext = previousCaller;
                 }
             }
             else
@@ -553,6 +560,29 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
+        /// Provide context about the caller context 
+        /// </summary>
+        private class CallerContext
+        {
+            /// <summary>Initializes a new instance of the <see cref="CallerContext" /> class.</summary>
+            public CallerContext(RuleElement callerRule, IClass callerClassContext = null)
+            {
+                this.CallerRule = callerRule;
+                this.CallerClassContext = callerClassContext;
+            }
+
+            /// <summary>
+            /// Gets or sets the <see cref="RuleElement"/> that called other rule
+            /// </summary>
+            public RuleElement CallerRule { get; }
+
+            /// <summary>
+            /// Gets or sets the <see cref="IClass"/> used during the caller rule
+            /// </summary>
+            public IClass CallerClassContext { get; }
+        }
+
+        /// <summary>
         /// Provides context over the rule generation history
         /// </summary>
         private class RuleGenerationContext
@@ -563,14 +593,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             public List<IteratorDefinition> DefinedIterators { get; set; }
 
             /// <summary>
-            /// Gets or sets the <see cref="RuleElement"/> that called other rule
-            /// </summary>
-            public RuleElement CallerRule { get; set; }
-
-            /// <summary>
             /// Gets the collection of all available <see cref="TextualNotationRule"/>
             /// </summary>
             public List<TextualNotationRule> AllRules { get; } = [];
+
+            /// <summary>
+            /// Gets or sets the <see cref="CallerContext"/>
+            /// </summary>
+            public CallerContext CallerContext { get; set; }
         }
     }
 }
