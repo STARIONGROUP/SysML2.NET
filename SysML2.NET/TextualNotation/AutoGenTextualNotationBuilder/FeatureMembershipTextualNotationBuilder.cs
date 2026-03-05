@@ -379,9 +379,21 @@ namespace SysML2.NET.TextualNotation
                 {
                     RedefinitionTextualNotationBuilder.BuildOwnedRedefinition(ownedRelationshipOfRedefinitionIterator.Current, stringBuilder);
                 }
-                BuildFeatureSpecializationPart(poco, stringBuilder);
-                BuildValuePart(poco, stringBuilder);
-                TypeTextualNotationBuilder.BuildMetadataBody(poco, stringBuilder);
+                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                using var ownedRelationshipOfFeatureValueIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.FeatureValues.FeatureValue>().GetEnumerator();
+
+                if (ownedRelationshipOfFeatureValueIterator.MoveNext())
+                {
+                    ownedRelationshipOfFeatureValueIterator.MoveNext();
+
+                    if (ownedRelationshipOfFeatureValueIterator.Current != null)
+                    {
+                        FeatureValueTextualNotationBuilder.BuildFeatureValue(ownedRelationshipOfFeatureValueIterator.Current, stringBuilder);
+                    }
+                    stringBuilder.Append(' ');
+                }
+
+                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
 
             }
 
@@ -503,7 +515,25 @@ namespace SysML2.NET.TextualNotation
             if (poco.ownedMemberFeature != null)
             {
                 stringBuilder.Append("{");
-                TypeTextualNotationBuilder.BuildFunctionBodyPart(poco, stringBuilder);
+                using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
+                using var ownedRelationshipOfResultExpressionMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ResultExpressionMembership>().GetEnumerator();
+
+                while (ownedRelationshipOfReturnParameterMembershipIterator.MoveNext())
+                {
+                    throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                }
+
+                if (ownedRelationshipOfResultExpressionMembershipIterator.MoveNext())
+                {
+
+                    if (ownedRelationshipOfResultExpressionMembershipIterator.Current != null)
+                    {
+                        ResultExpressionMembershipTextualNotationBuilder.BuildResultExpressionMember(ownedRelationshipOfResultExpressionMembershipIterator.Current, stringBuilder);
+                    }
+                    stringBuilder.Append(' ');
+                }
+
+
                 stringBuilder.Append("}");
 
             }
