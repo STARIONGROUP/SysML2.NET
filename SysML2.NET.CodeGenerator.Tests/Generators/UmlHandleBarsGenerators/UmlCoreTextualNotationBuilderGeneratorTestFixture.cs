@@ -30,8 +30,6 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators.UmlHandleBarsGenerators
     using SysML2.NET.CodeGenerator.Grammar;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
-    using uml4net.CommonStructure;
-
     [TestFixture]
     public class UmlCoreTextualNotationBuilderGeneratorTestFixture
     {

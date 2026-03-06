@@ -729,6 +729,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildFeatureReference(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append(poco.qualifiedName);
+            stringBuilder.Append(' ');
 
         }
 

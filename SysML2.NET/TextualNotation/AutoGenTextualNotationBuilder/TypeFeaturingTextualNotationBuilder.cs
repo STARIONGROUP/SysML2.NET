@@ -42,7 +42,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedTypeFeaturing(SysML2.NET.Core.POCO.Core.Features.ITypeFeaturing poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
+
+            if (poco.FeaturingType != null)
+            {
+                stringBuilder.Append(poco.FeaturingType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
 
         }
 
@@ -63,9 +68,19 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
+
+            if (poco.FeatureOfType != null)
+            {
+                stringBuilder.Append(poco.FeatureOfType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
             stringBuilder.Append("by ");
-            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
+
+            if (poco.FeaturingType != null)
+            {
+                stringBuilder.Append(poco.FeaturingType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }

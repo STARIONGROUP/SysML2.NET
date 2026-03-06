@@ -42,7 +42,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMembershipImport(SysML2.NET.Core.POCO.Root.Namespaces.IMembershipImport poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
+
+            if (poco.ImportedMembership != null)
+            {
+                stringBuilder.Append(poco.ImportedMembership.qualifiedName);
+                stringBuilder.Append(' ');
+            }
 
             if (poco.IsRecursive)
             {

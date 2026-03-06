@@ -79,7 +79,12 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append("for ");
-            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
+
+            if (poco.MemberElement != null)
+            {
+                stringBuilder.Append(poco.MemberElement.qualifiedName);
+                stringBuilder.Append(' ');
+            }
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
         }
@@ -107,6 +112,7 @@ namespace SysML2.NET.TextualNotation
             if (poco.MemberElement != null)
             {
                 stringBuilder.Append(poco.qualifiedName);
+                stringBuilder.Append(' ');
 
             }
 
@@ -120,7 +126,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildElementReferenceMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
+
+            if (poco.MemberElement != null)
+            {
+                stringBuilder.Append(poco.MemberElement.qualifiedName);
+                stringBuilder.Append(' ');
+            }
 
         }
 

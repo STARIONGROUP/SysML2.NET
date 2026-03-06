@@ -28,6 +28,12 @@ namespace SysML2.NET.CodeGenerator.Grammar.Model
         /// <summary>
         /// Gets or sets the literal value
         /// </summary>
-        public string Value { get; set; }
+        public string Value { get; init; }
+        
+        /// <summary>
+        /// Asserts that this value literal is to 
+        /// </summary>
+        /// <returns></returns>
+        public bool QueryIsQualifiedName() => this.Value == "[QualifiedName]";
     }
 }

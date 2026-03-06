@@ -290,9 +290,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             }
                             else
                             {
+                                var targetPropertyName = targetProperty.QueryPropertyNameBasedOnUmlProperties();
+                                
                                 if (targetProperty.QueryIsString())
                                 {
-                                    writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()});");
+                                    writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName});");
                                 }
                                 else if (targetProperty.QueryIsBool())
                                 {
@@ -302,12 +304,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     }
                                     else
                                     {
-                                        writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.ToString().ToLower());");
+                                        writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.ToString().ToLower());");
                                     }
                                 }
                                 else if (targetProperty.QueryIsEnum())
                                 {
-                                    writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()}.ToString().ToLower());");
+                                    writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.ToString().ToLower());");
                                 }
                                 else if(targetProperty.QueryIsReferenceProperty())
                                 {
@@ -315,8 +317,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     {
                                         var previousCaller = ruleGenerationContext.CallerRule;
                                         ruleGenerationContext.CallerRule = nonTerminalElement;
-                                        ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}", ruleGenerationContext);
+                                        ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetPropertyName}", ruleGenerationContext);
                                         ruleGenerationContext.CallerRule = previousCaller;
+                                    }
+                                    else if (assignmentElement.Value is ValueLiteralElement valueLiteralElement && valueLiteralElement.QueryIsQualifiedName())
+                                    {
+                                        writer.WriteSafeString($"{Environment.NewLine}if (poco.{targetPropertyName} != null){Environment.NewLine}");
+                                        writer.WriteSafeString($"{{{Environment.NewLine}");
+                                        writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.qualifiedName);{Environment.NewLine}");
+                                        writer.WriteSafeString("stringBuilder.Append(' ');");
+                                        writer.WriteSafeString($"{Environment.NewLine}}}");
                                     }
                                     else
                                     {
@@ -340,7 +350,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"// NonParsing Assignment Element : {nonParsingAssignmentElement.PropertyName} {nonParsingAssignmentElement.Operator} {nonParsingAssignmentElement.Value} => Does not have to be process");
                     break;
                 case ValueLiteralElement valueLiteralElement:
-                    writer.WriteSafeString(valueLiteralElement.Value == "[QualifiedName]" ? "stringBuilder.Append(poco.qualifiedName);" : "throw new System.NotSupportedException(\"Value Literal different than QualifiedName not supported\");");
+                    if (valueLiteralElement.QueryIsQualifiedName())
+                    {
+                        writer.WriteSafeString($"stringBuilder.Append(poco.qualifiedName);{Environment.NewLine}");
+                        writer.WriteSafeString("stringBuilder.Append(' ');");
+                    }
+                    else
+                    {
+                        writer.WriteSafeString("throw new System.NotSupportedException(\"Value Literal different than QualifiedName not supported\");");
+                    }
 
                     break;
                 default:
