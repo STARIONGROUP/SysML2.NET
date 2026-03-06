@@ -42,7 +42,12 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedFeatureChaining(SysML2.NET.Core.POCO.Core.Features.IFeatureChaining poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Assigment of reference element not supported yet for this case");
+
+            if (poco.ChainingFeature != null)
+            {
+                stringBuilder.Append(poco.ChainingFeature.qualifiedName);
+                stringBuilder.Append(' ');
+            }
 
         }
     }
