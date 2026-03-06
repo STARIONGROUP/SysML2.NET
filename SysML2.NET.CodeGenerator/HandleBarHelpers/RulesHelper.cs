@@ -69,7 +69,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (namedElement is IClass umlClass)
                 {
-                    var ruleGenerationContext = new RuleGenerationContext();
+                    var ruleGenerationContext = new RuleGenerationContext(namedElement);
                     ruleGenerationContext.AllRules.AddRange(allRules);
                     ProcessAlternatives(writer, umlClass, textualRule.Alternatives, ruleGenerationContext);
                 }
@@ -93,7 +93,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var elements = alternative.Elements;
                 DeclareAllRequiredIterators(writer, umlClass, alternative, ruleGenerationContext);
                 
-                if (ruleGenerationContext.CallerContext?.CallerRule is { IsOptional: true, IsCollection: false })
+                if (ruleGenerationContext.CallerRule is { IsOptional: true, IsCollection: false })
                 {
                     var targetPropertiesName = elements.OfType<AssignmentElement>().Select(x => x.Property).Distinct().ToList();
                     var allProperties = umlClass.QueryAllProperties();
@@ -127,9 +127,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                         foreach (var textualRuleElement in elements)
                         {
-                            var previousCaller = ruleGenerationContext.CallerContext;
+                            var previousCaller = ruleGenerationContext.CallerRule;
                             ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext);
-                            ruleGenerationContext.CallerContext = previousCaller;
+                            ruleGenerationContext.CallerRule = previousCaller;
                         }
                     }
                     else
@@ -150,9 +150,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     foreach (var textualRuleElement in elements)
                     {
-                        var previousCaller = ruleGenerationContext.CallerContext;
+                        var previousCaller = ruleGenerationContext.CallerRule;
                         ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext);
-                        ruleGenerationContext.CallerContext = previousCaller;
+                        ruleGenerationContext.CallerRule = previousCaller;
                     }    
                 }
             }
@@ -215,18 +215,20 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString($"stringBuilder.Append(\"{valueToAdd}\");");
                     break;
                 case NonTerminalElement nonTerminalElement:
-                    if (ruleGenerationContext.CallerContext?.CallerRule is NonTerminalElement callerNonTerminalElement && callerNonTerminalElement.Container is AssignmentElement)
+                    if (ruleGenerationContext.CallerRule is NonTerminalElement { Container: AssignmentElement assignmentElementContainer })
                     {
-                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, "poco", ruleGenerationContext.CallerContext.CallerClassContext, ruleGenerationContext);
+                        var textualBuilderClass = ruleGenerationContext.NamedElementToGenerate as IClass;
+                        var assignedProperty = textualBuilderClass.QueryAllProperties().SingleOrDefault(x => x.Name == assignmentElementContainer.Property);
+                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, assignedProperty == null ? "poco" : $"poco.{assignedProperty.QueryPropertyNameBasedOnUmlProperties()}", ruleGenerationContext);
                     }
                     else
                     {
-                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, "poco", umlClass, ruleGenerationContext);
+                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, "poco", ruleGenerationContext);
                     }
 
                     break;
                 case GroupElement groupElement:
-                    ruleGenerationContext.CallerContext = new CallerContext(groupElement);
+                    ruleGenerationContext.CallerRule = groupElement ;
                     
                     if (groupElement.IsCollection)
                     {
@@ -270,7 +272,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     writer.WriteSafeString($"{iteratorToUse.IteratorVariableName}.MoveNext();{Environment.NewLine}");
                                 }
 
-                                ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, $"{iteratorToUse.IteratorVariableName}.Current", umlClass, ruleGenerationContext);
+                                ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, $"{iteratorToUse.IteratorVariableName}.Current", ruleGenerationContext);
                             }
                             else
                             {
@@ -311,10 +313,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 {
                                     if (assignmentElement.Value is NonTerminalElement nonTerminalElement)
                                     {
-                                        var previousCaller = ruleGenerationContext.CallerContext;
-                                        ruleGenerationContext.CallerContext = new CallerContext(nonTerminalElement);
-                                        ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}", umlClass, ruleGenerationContext);
-                                        ruleGenerationContext.CallerContext = previousCaller;
+                                        var previousCaller = ruleGenerationContext.CallerRule;
+                                        ruleGenerationContext.CallerRule = nonTerminalElement;
+                                        ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}", ruleGenerationContext);
+                                        ruleGenerationContext.CallerRule = previousCaller;
                                     }
                                     else
                                     {
@@ -355,9 +357,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="nonTerminalElement">The <see cref="NonTerminalElement"/> to process</param>
         /// <param name="variableName">The name of the variable that should be used to call the non-terminal method</param>
-        /// <param name="callerClass">Gets the <see cref="IClass"/> that initially calls this function</param>
         /// <param name="ruleGenerationContext"></param>
-        private static void ProcessNonTerminalElement(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, string variableName, IClass callerClass, RuleGenerationContext ruleGenerationContext)
+        private static void ProcessNonTerminalElement(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, string variableName, RuleGenerationContext ruleGenerationContext)
         {
             var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
 
@@ -380,7 +381,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 writer.WriteSafeString($"{{{Environment.NewLine}");
             }
                             
-            if (typeTarget != callerClass.Name)
+            if (typeTarget != ruleGenerationContext.NamedElementToGenerate.Name)
             {
                 var targetType = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget);
                                 
@@ -392,18 +393,18 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        var previousCaller = ruleGenerationContext.CallerContext;
-                        ruleGenerationContext.CallerContext = new CallerContext(nonTerminalElement, targetType as  IClass);
-                        ProcessAlternatives(writer, callerClass, referencedRule?.Alternatives, ruleGenerationContext);
-                        ruleGenerationContext.CallerContext = previousCaller;
+                        var previousCaller = ruleGenerationContext.CallerRule;
+                        ruleGenerationContext.CallerRule = nonTerminalElement;
+                        ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                        ruleGenerationContext.CallerRule = previousCaller;
                     }
                 }
                 else
                 {
-                    var previousCaller = ruleGenerationContext.CallerContext;
-                    ruleGenerationContext.CallerContext = new CallerContext(nonTerminalElement);
-                    ProcessAlternatives(writer, callerClass, referencedRule?.Alternatives, ruleGenerationContext);
-                    ruleGenerationContext.CallerContext = previousCaller;
+                    var previousCaller = ruleGenerationContext.CallerRule;
+                    ruleGenerationContext.CallerRule = nonTerminalElement;
+                    ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                    ruleGenerationContext.CallerRule = previousCaller;
                 }
             }
             else
@@ -560,29 +561,6 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         }
 
         /// <summary>
-        /// Provide context about the caller context 
-        /// </summary>
-        private class CallerContext
-        {
-            /// <summary>Initializes a new instance of the <see cref="CallerContext" /> class.</summary>
-            public CallerContext(RuleElement callerRule, IClass callerClassContext = null)
-            {
-                this.CallerRule = callerRule;
-                this.CallerClassContext = callerClassContext;
-            }
-
-            /// <summary>
-            /// Gets or sets the <see cref="RuleElement"/> that called other rule
-            /// </summary>
-            public RuleElement CallerRule { get; }
-
-            /// <summary>
-            /// Gets or sets the <see cref="IClass"/> used during the caller rule
-            /// </summary>
-            public IClass CallerClassContext { get; }
-        }
-
-        /// <summary>
         /// Provides context over the rule generation history
         /// </summary>
         private class RuleGenerationContext
@@ -598,9 +576,20 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             public List<TextualNotationRule> AllRules { get; } = [];
 
             /// <summary>
-            /// Gets or sets the <see cref="CallerContext"/>
+            /// Gets or sets the <see cref="RuleElement"/> that called other rule
             /// </summary>
-            public CallerContext CallerContext { get; set; }
+            public RuleElement CallerRule { get; set; }
+
+            /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
+            public RuleGenerationContext(INamedElement namedElementToGenerate)
+            {
+                this.NamedElementToGenerate = namedElementToGenerate;
+            }
+
+            /// <summary>
+            /// Gets the <see cref="INamedElement"/> that is used in the current generation
+            /// </summary>
+            public INamedElement NamedElementToGenerate { get; }
         }
     }
 }
