@@ -313,29 +313,31 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 }
                                 else if(targetProperty.QueryIsReferenceProperty())
                                 {
-                                    if (assignmentElement.Value is NonTerminalElement nonTerminalElement)
+                                    switch (assignmentElement.Value)
                                     {
-                                        var previousCaller = ruleGenerationContext.CallerRule;
-                                        ruleGenerationContext.CallerRule = nonTerminalElement;
-                                        ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetPropertyName}", ruleGenerationContext);
-                                        ruleGenerationContext.CallerRule = previousCaller;
-                                    }
-                                    else if (assignmentElement.Value is ValueLiteralElement valueLiteralElement && valueLiteralElement.QueryIsQualifiedName())
-                                    {
-                                        writer.WriteSafeString($"{Environment.NewLine}if (poco.{targetPropertyName} != null){Environment.NewLine}");
-                                        writer.WriteSafeString($"{{{Environment.NewLine}");
-                                        writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.qualifiedName);{Environment.NewLine}");
-                                        writer.WriteSafeString("stringBuilder.Append(' ');");
-                                        writer.WriteSafeString($"{Environment.NewLine}}}");
-                                    }
-                                    else
-                                    {
-                                        writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of reference element not supported yet for this case\");");
+                                        case NonTerminalElement nonTerminalElement:
+                                        {
+                                            var previousCaller = ruleGenerationContext.CallerRule;
+                                            ruleGenerationContext.CallerRule = nonTerminalElement;
+                                            ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetPropertyName}", ruleGenerationContext);
+                                            ruleGenerationContext.CallerRule = previousCaller;
+                                            break;
+                                        }
+                                        case ValueLiteralElement valueLiteralElement when valueLiteralElement.QueryIsQualifiedName():
+                                            writer.WriteSafeString($"{Environment.NewLine}if (poco.{targetPropertyName} != null){Environment.NewLine}");
+                                            writer.WriteSafeString($"{{{Environment.NewLine}");
+                                            writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.qualifiedName);{Environment.NewLine}");
+                                            writer.WriteSafeString("stringBuilder.Append(' ');");
+                                            writer.WriteSafeString($"{Environment.NewLine}}}");
+                                            break;
+                                        default:
+                                            writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of reference element not supported yet for this case\");");
+                                            break;
                                     }
                                 }
                                 else
                                 {
-                                    writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of non-string value not yet supported\");");
+                                    writer.WriteSafeString($"stringBuilder.Append(poco.{targetPropertyName}.ToString());");
                                 }
                             }
                         }
