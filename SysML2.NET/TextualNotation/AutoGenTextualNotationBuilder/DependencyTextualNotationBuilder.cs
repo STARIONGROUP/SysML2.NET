@@ -54,6 +54,8 @@ namespace SysML2.NET.TextualNotation
 
             }
             stringBuilder.Append("dependency ");
+            using var clientIterator = poco.Client.GetEnumerator();
+            using var supplierIterator = poco.Supplier.GetEnumerator();
 
             if (BuildGroupConditionForDependencyDeclaration(poco))
             {
@@ -62,17 +64,39 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
+            clientIterator.MoveNext();
+
+            if (clientIterator.Current != null)
+            {
+                stringBuilder.Append(clientIterator.Current.qualifiedName);
+            }
+
+            while (clientIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
+
+                if (clientIterator.Current != null)
+                {
+                    stringBuilder.Append(clientIterator.Current.qualifiedName);
+                }
 
             }
             stringBuilder.Append("to ");
-            throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
+            supplierIterator.MoveNext();
+
+            if (supplierIterator.Current != null)
+            {
+                stringBuilder.Append(supplierIterator.Current.qualifiedName);
+            }
+
+            while (supplierIterator.MoveNext())
             {
                 stringBuilder.Append(",");
-                throw new System.NotSupportedException("Assigment of enumerable with non NonTerminalElement not supported yet");
+
+                if (supplierIterator.Current != null)
+                {
+                    stringBuilder.Append(supplierIterator.Current.qualifiedName);
+                }
 
             }
 

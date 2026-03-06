@@ -175,10 +175,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             {
                 switch (ruleElement)
                 {
-                    case AssignmentElement { Value: NonTerminalElement } assignmentElement:
-                        DeclareIteratorIfRequired(writer, umlClass, assignmentElement, ruleGenerationContext);
-                        break;
-                    case AssignmentElement { Value: GroupElement } assignmentElement:
+                    case AssignmentElement assignmentElement:
                         DeclareIteratorIfRequired(writer, umlClass, assignmentElement, ruleGenerationContext);
                         break;
                     case GroupElement groupElement:
@@ -232,7 +229,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     
                     if (groupElement.IsCollection)
                     {
-                        var assignmentRule = groupElement.Alternatives.SelectMany(x => x.Elements).FirstOrDefault(x => x is AssignmentElement { Value: NonTerminalElement });
+                        var assignmentRule = groupElement.Alternatives.SelectMany(x => x.Elements).FirstOrDefault(x => x is AssignmentElement { Value: NonTerminalElement } || x is AssignmentElement {Value: ValueLiteralElement});
 
                         if (assignmentRule is AssignmentElement assignmentElement)
                         {
@@ -274,6 +271,27 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                                 ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, $"{iteratorToUse.IteratorVariableName}.Current", ruleGenerationContext);
                             }
+                            else if(assignmentElement.Value is GroupElement groupElement)
+                            {
+                                var previousCaller = ruleGenerationContext.CallerRule;
+                                ruleGenerationContext.CallerRule = assignmentElement;
+                                ProcessAlternatives(writer, umlClass, groupElement.Alternatives, ruleGenerationContext);
+                                ruleGenerationContext.CallerRule = previousCaller;
+                            }
+                            else if(assignmentElement.Value is ValueLiteralElement valueLiteralElement && valueLiteralElement.QueryIsQualifiedName())
+                            {
+                                var iteratorToUse = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+
+                                if (assignmentElement.Container is not GroupElement { IsCollection: true } && assignmentElement.Container is not GroupElement { IsOptional: true })
+                                {
+                                    writer.WriteSafeString($"{iteratorToUse.IteratorVariableName}.MoveNext();{Environment.NewLine}");
+                                }
+                                
+                                writer.WriteSafeString($"{Environment.NewLine}if({iteratorToUse.IteratorVariableName}.Current != null){Environment.NewLine}");
+                                writer.WriteSafeString($"{{{Environment.NewLine}");
+                                writer.WriteSafeString($"stringBuilder.Append({iteratorToUse.IteratorVariableName}.Current.qualifiedName);{Environment.NewLine}");
+                                writer.WriteSafeString("}");                                
+                            }
                             else
                             {
                                 writer.WriteSafeString("throw new System.NotSupportedException(\"Assigment of enumerable with non NonTerminalElement not supported yet\");");
@@ -286,7 +304,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 writer.WriteSafeString($"{Environment.NewLine}if({targetProperty.QueryIfStatementContentForNonEmpty("poco")}){Environment.NewLine}");
                                 writer.WriteSafeString($"{{{Environment.NewLine}");
                                 writer.WriteSafeString($"stringBuilder.Append(poco.{targetProperty.Name.CapitalizeFirstLetter()});{Environment.NewLine}");
-                                writer.WriteSafeString("}}");
+                                writer.WriteSafeString("}");
                             }
                             else
                             {
@@ -463,55 +481,75 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     DeclareIteratorIfRequired(writer, umlClass, assignment, ruleGenerationContext);
                 }
-            }
-
-            if (assignmentElement.Value is not NonTerminalElement nonTerminalElement)
-            {
+                
                 return;
             }
 
-            var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
-            
-            if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, referencedRule) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } alreadyDefinedIterator)
+            switch (assignmentElement.Value)
             {
-                alreadyDefinedIterator.ApplicableRuleElements.Add(assignmentElement);
-                return;
-            }
+                case NonTerminalElement nonTerminalElement:
+                    var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+                    
+                    if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, referencedRule) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } alreadyDefinedIterator)
+                    {
+                        alreadyDefinedIterator.ApplicableRuleElements.Add(assignmentElement);
+                        return;
+                    }
 
-            var iteratorToUse = new IteratorDefinition
-            {
-                DefinedForProperty = targetProperty
-            };
-            
-            iteratorToUse.ApplicableRuleElements.Add(assignmentElement);
+                    var iteratorToUse = new IteratorDefinition
+                    {
+                        DefinedForProperty = targetProperty
+                    };
+                    
+                    iteratorToUse.ApplicableRuleElements.Add(assignmentElement);
 
-            string typeTarget;
-            
-            if (referencedRule == null)
-            {
-                typeTarget = umlClass.Name;                    
-            }
-            else
-            {
-                typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
-            }
+                    string typeTarget;
+                    
+                    if (referencedRule == null)
+                    {
+                        typeTarget = umlClass.Name;                    
+                    }
+                    else
+                    {
+                        typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
+                    }
 
-            if (typeTarget != targetProperty.Type.Name)
-            {
-                var targetType = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget);
-                iteratorToUse.ConstrainedType = targetType;
+                    if (typeTarget != targetProperty.Type.Name)
+                    {
+                        var targetType = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget);
+                        iteratorToUse.ConstrainedType = targetType;
 
-                writer.WriteSafeString(targetType != null 
-                    ? $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.OfType<{targetType.QueryFullyQualifiedTypeName(targetInterface: false)}>().GetEnumerator();" 
-                    : $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
+                        writer.WriteSafeString(targetType != null 
+                            ? $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.OfType<{targetType.QueryFullyQualifiedTypeName(targetInterface: false)}>().GetEnumerator();" 
+                            : $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
+                    }
+                    else
+                    {
+                        writer.WriteSafeString($"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
+                    }
+                    
+                    writer.WriteSafeString(Environment.NewLine);
+                    ruleGenerationContext.DefinedIterators.Add(iteratorToUse);
+                break;
+                case ValueLiteralElement:
+                    if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, null) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } existingValueLiteralIterator)
+                    {
+                        existingValueLiteralIterator.ApplicableRuleElements.Add(assignmentElement);
+                        return;
+                    }
+
+                    var valueLiteralIterator = new IteratorDefinition
+                    {
+                        DefinedForProperty = targetProperty
+                    };
+
+                    valueLiteralIterator.ApplicableRuleElements.Add(assignmentElement);
+                    writer.WriteSafeString($"using var {valueLiteralIterator.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
+                    writer.WriteSafeString(Environment.NewLine);
+                    ruleGenerationContext.DefinedIterators.Add(valueLiteralIterator);
+                    
+                    break;
             }
-            else
-            {
-                writer.WriteSafeString($"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
-            }
-            
-            writer.WriteSafeString(Environment.NewLine);
-            ruleGenerationContext.DefinedIterators.Add(iteratorToUse);
         }
 
         /// <summary>
