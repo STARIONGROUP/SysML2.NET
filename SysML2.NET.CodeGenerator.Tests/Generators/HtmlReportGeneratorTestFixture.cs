@@ -81,7 +81,8 @@ namespace SysML2.NET.CodeGenerator.Tests.Generators
             this.outputFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "UML", "_SysML2.NET.Core.AutoGenHtmlDocs", "index.html"));
 
             var inheritanceDiagramRenderer = new InheritanceDiagramRenderer(loggerFactory.CreateLogger<InheritanceDiagramRenderer>());
-            this.htmlReportGenerator = new HtmlReportGenerator(inheritanceDiagramRenderer, this.loggerFactory);
+            var associationDiagramRenderer = new AssociationDiagramRenderer(loggerFactory.CreateLogger<AssociationDiagramRenderer>());
+            this.htmlReportGenerator = new HtmlReportGenerator(inheritanceDiagramRenderer, associationDiagramRenderer, this.loggerFactory);
         }
 
         [Test]
