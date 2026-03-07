@@ -1,0 +1,22 @@
+{{#if (Property.QueryIsEnumerable property)}}
+    if(poco.{{Property.WritePropertyName property}} != null)
+    {
+        foreach(var item in poco.{{Property.WritePropertyName property}})
+        {
+            {{#if property.IsComposite}}
+                await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "{{String.LowerCaseFirstLetter property.Name}}", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+            {{else}}
+                await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri);
+            {{/if}}
+        }
+    }
+{{else}}
+    if(poco.{{Property.WritePropertyName property}} != null)
+    {
+        {{#if property.IsComposite}}
+            await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+        {{else}}
+            await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri);
+        {{/if}}
+    }
+{{/if}}

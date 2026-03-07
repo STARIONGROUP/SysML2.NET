@@ -223,6 +223,12 @@
     <None Update="Templates\Uml\Partials\core-xmi-writer-partial-for-element-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Uml\Partials\core-xmi-writer-partial-for-attribute-async-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\Partials\core-xmi-writer-partial-for-element-async-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />

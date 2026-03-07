@@ -44,10 +44,17 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be part of the serialization
         /// </param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
-        void Serialize(INamespace @namespace, bool includeDerivedProperties, Stream stream);
+        void Serialize(INamespace @namespace, bool includeDerivedProperties, bool includesImplied, Stream stream);
 
         /// <summary>
         /// Serialize an <see cref="INamespace"/> as XMI to a target <see cref="Stream"/>,
@@ -59,6 +66,10 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be part of the serialization
         /// </param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag. <c>true</c>: serialize all implied relationships with isImpliedIncluded=true.
+        /// <c>false</c>: exclude all implied relationships with isImpliedIncluded=false. <c>null</c>: per-element control.
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
@@ -68,7 +79,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="currentFileUri">
         /// The optional <see cref="Uri"/> of the current output file for relative href computation
         /// </param>
-        void Serialize(INamespace @namespace, bool includeDerivedProperties, Stream stream, IXmiElementOriginMap elementOriginMap, Uri currentFileUri);
+        void Serialize(INamespace @namespace, bool includeDerivedProperties, bool includesImplied, Stream stream, IXmiElementOriginMap elementOriginMap, Uri currentFileUri);
 
         /// <summary>
         /// Asynchronously serialize an <see cref="INamespace"/> as XMI to a target <see cref="Stream"/>
@@ -82,10 +93,14 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be part of the serialization
         /// </param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag. <c>true</c>: serialize all implied relationships with isImpliedIncluded=true.
+        /// <c>false</c>: exclude all implied relationships with isImpliedIncluded=false. <c>null</c>: per-element control.
+        /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        Task SerializeAsync(INamespace @namespace, bool includeDerivedProperties, Stream stream, CancellationToken cancellationToken);
+        Task SerializeAsync(INamespace @namespace, bool includeDerivedProperties, bool includesImplied, Stream stream, CancellationToken cancellationToken);
 
         /// <summary>
         /// Serialize an <see cref="INamespace"/> to multiple XMI files based on the element origin map
@@ -93,7 +108,13 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="rootNamespace">The root <see cref="INamespace"/> containing all elements</param>
         /// <param name="elementOriginMap">The <see cref="IXmiElementOriginMap"/> tracking element-to-file associations</param>
         /// <param name="outputDirectory">The target directory for output files</param>
-        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
-        void Serialize(INamespace rootNamespace, IXmiElementOriginMap elementOriginMap, DirectoryInfo outputDirectory, bool includeDerivedProperties);
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag. <c>true</c>: serialize all implied relationships with isImpliedIncluded=true.
+        /// <c>false</c>: exclude all implied relationships with isImpliedIncluded=false. <c>null</c>: per-element control.
+        /// </param>
+        void Serialize(INamespace rootNamespace, IXmiElementOriginMap elementOriginMap, DirectoryInfo outputDirectory, bool includeDerivedProperties, bool includesImplied);
     }
 }

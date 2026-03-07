@@ -21,7 +21,6 @@
 namespace SysML2.NET.Serializer.Xmi
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -43,11 +42,15 @@ namespace SysML2.NET.Serializer.Xmi
     public class Serializer : ISerializer
     {
         private const string XmiNamespace = "http://www.omg.org/spec/XMI/20131001";
+        
         private const string XsiNamespace = "http://www.w3.org/2001/XMLSchema-instance";
+        
         private const string SysmlNamespace = "https://www.omg.org/spec/SysML/20240201";
 
         private readonly ILogger<Serializer> logger;
+        
         private readonly ILoggerFactory loggerFactory;
+        
         private readonly IXmiDataWriterFacade xmiWriterFacade;
 
         /// <summary>Initializes a new instance of the <see cref="Serializer"></see> class.</summary>
@@ -56,7 +59,7 @@ namespace SysML2.NET.Serializer.Xmi
         {
             this.loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             this.logger = this.loggerFactory.CreateLogger<Serializer>();
-            this.xmiWriterFacade = new XmiDataWriterFacade();
+            this.xmiWriterFacade = new XmiDataWriterFacade(this.loggerFactory);
         }
 
         /// <summary>
@@ -68,12 +71,19 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be part of the serialization
         /// </param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
-        public void Serialize(INamespace @namespace, bool includeDerivedProperties, Stream stream)
+        public void Serialize(INamespace @namespace, bool includeDerivedProperties, bool includesImplied, Stream stream)
         {
-            this.Serialize(@namespace, includeDerivedProperties, stream, null, null);
+            this.Serialize(@namespace, includeDerivedProperties,includesImplied, stream, null, null);
         }
 
         /// <summary>
@@ -86,6 +96,13 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be part of the serialization
         /// </param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
@@ -95,7 +112,7 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="currentFileUri">
         /// The optional <see cref="Uri"/> of the current output file for relative href computation
         /// </param>
-        public void Serialize(INamespace @namespace, bool includeDerivedProperties, Stream stream, IXmiElementOriginMap elementOriginMap, Uri currentFileUri)
+        public void Serialize(INamespace @namespace, bool includeDerivedProperties, bool includesImplied, Stream stream, IXmiElementOriginMap elementOriginMap, Uri currentFileUri)
         {
             if (@namespace == null)
             {
@@ -123,7 +140,7 @@ namespace SysML2.NET.Serializer.Xmi
 
             xmlWriter.WriteStartDocument();
 
-            this.WriteNamespaceElement(xmlWriter, @namespace, includeDerivedProperties, elementOriginMap, currentFileUri);
+            this.WriteNamespaceElement(xmlWriter, @namespace, includeDerivedProperties, elementOriginMap, currentFileUri, includesImplied);
 
             xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
@@ -143,12 +160,22 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="includeDerivedProperties">
         /// Asserts that derived properties should also be part of the serialization
         /// </param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        public Task SerializeAsync(INamespace @namespace, bool includeDerivedProperties, Stream stream, CancellationToken cancellationToken)
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag.
+        /// </param>
+        public Task SerializeAsync(INamespace @namespace, bool includeDerivedProperties, bool includesImplied, Stream stream, CancellationToken cancellationToken)
         {
-            return Task.Run(() => this.Serialize(@namespace, includeDerivedProperties, stream), cancellationToken);
+            return Task.Run(() => this.Serialize(@namespace, includeDerivedProperties, includesImplied, stream), cancellationToken);
         }
 
         /// <summary>
@@ -157,8 +184,17 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="rootNamespace">The root <see cref="INamespace"/> containing all elements</param>
         /// <param name="elementOriginMap">The <see cref="IXmiElementOriginMap"/> tracking element-to-file associations</param>
         /// <param name="outputDirectory">The target directory for output files</param>
-        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
-        public void Serialize(INamespace rootNamespace, IXmiElementOriginMap elementOriginMap, DirectoryInfo outputDirectory, bool includeDerivedProperties)
+        /// <param name="includeDerivedProperties">
+        /// Asserts that derived properties should also be part of the serialization
+        /// </param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>
+        public void Serialize(INamespace rootNamespace, IXmiElementOriginMap elementOriginMap, DirectoryInfo outputDirectory, bool includeDerivedProperties, bool includesImplied)
         {
             if (rootNamespace == null)
             {
@@ -211,13 +247,13 @@ namespace SysML2.NET.Serializer.Xmi
                 }
 
                 using var fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write);
-                this.Serialize(fileRootNamespace, includeDerivedProperties, fileStream, elementOriginMap, outputUri);
+                this.Serialize(fileRootNamespace, includeDerivedProperties, includesImplied, fileStream, elementOriginMap, outputUri);
             }
 
             this.logger.LogInformation("Multi-file XMI serialization completed");
         }
 
-        private void WriteNamespaceElement(XmlWriter xmlWriter, INamespace @namespace, bool includeDerivedProperties, IXmiElementOriginMap elementOriginMap, Uri currentFileUri)
+        private void WriteNamespaceElement(XmlWriter xmlWriter, INamespace @namespace, bool includeDerivedProperties, IXmiElementOriginMap elementOriginMap, Uri currentFileUri, bool includesImplied)
         {
             xmlWriter.WriteStartElement("sysml", "Namespace", SysmlNamespace);
             xmlWriter.WriteAttributeString("xmlns", "xmi", null, XmiNamespace);
@@ -245,7 +281,7 @@ namespace SysML2.NET.Serializer.Xmi
                 xmlWriter.WriteAttributeString("elementId", @namespace.ElementId);
             }
 
-            if (@namespace.IsImpliedIncluded)
+            if (includesImplied || @namespace.IsImpliedIncluded)
             {
                 xmlWriter.WriteAttributeString("isImpliedIncluded", "true");
             }
@@ -255,6 +291,11 @@ namespace SysML2.NET.Serializer.Xmi
             {
                 foreach (var relationship in @namespace.OwnedRelationship)
                 {
+                    if (!includesImplied && relationship is IRelationship { IsImplied: true })
+                    {
+                        continue;
+                    }
+
                     if (relationship is IData relationshipData)
                     {
                         if (elementOriginMap != null && currentFileUri != null)
@@ -273,7 +314,7 @@ namespace SysML2.NET.Serializer.Xmi
                             }
                         }
 
-                        this.xmiWriterFacade.Write(xmlWriter, relationshipData, "ownedRelationship", includeDerivedProperties, elementOriginMap, currentFileUri);
+                        this.xmiWriterFacade.Write(xmlWriter, relationshipData, "ownedRelationship", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
                     }
                 }
             }

@@ -26,32 +26,62 @@ namespace SysML2.NET.Serializer.Xmi.Writers
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Xml;
+
+    using Microsoft.Extensions.Logging;
 
     using SysML2.NET.Common;
     using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
     /// The purpose of the <see cref="XmiDataWriterFacade"/> is to dispatch writing of <see cref="IData"/> instances
-    /// to the appropriate per-type static writer class
+    /// to the appropriate per-type writer class
     /// </summary>
     public class XmiDataWriterFacade : IXmiDataWriterFacade
     {
         /// <summary>
+        /// The <see cref="ILoggerFactory"/> used to set up logging for writer instances
+        /// </summary>
+        private readonly ILoggerFactory loggerFactory;
+
+        /// <summary>
         /// A dictionary that contains actions that write <see cref="IData"/> based on a key that represents the POCO type name
         /// </summary>
-        private readonly Dictionary<string, Action<XmlWriter, IData, string, bool, IXmiDataWriterFacade, IXmiElementOriginMap, Uri>> writerCache;
+        private readonly Dictionary<string, Action<XmlWriter, IData, string, bool, bool, IXmiElementOriginMap, Uri>> writerCache;
+
+        /// <summary>
+        /// A dictionary that contains functions that asynchronously write <see cref="IData"/> based on a key that represents the POCO type name
+        /// </summary>
+        private readonly Dictionary<string, Func<XmlWriter, IData, string, bool, bool, IXmiElementOriginMap, Uri, Task>> writerAsyncCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmiDataWriterFacade"/>
         /// </summary>
-        public XmiDataWriterFacade()
+        /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> used to set up logging</param>
+        public XmiDataWriterFacade(ILoggerFactory loggerFactory)
         {
-            this.writerCache = new Dictionary<string, Action<XmlWriter, IData, string, bool, IXmiDataWriterFacade, IXmiElementOriginMap, Uri>>
+            this.loggerFactory = loggerFactory;
+
+            this.writerCache = new Dictionary<string, Action<XmlWriter, IData, string, bool, bool, IXmiElementOriginMap, Uri>>
             {
             {{ #each this as | class | }}
-                ["{{ class.Name }}"] = (xmlWriter, data, elementName, includeDerived, facade, originMap, uri) =>
-                    {{ class.Name }}Writer.Write(xmlWriter, (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.I{{ class.Name }})data, elementName, includeDerived, facade, originMap, uri),
+                ["{{ class.Name }}"] = (xmlWriter, data, elementName, includeDerived, includesImplied, originMap, uri) =>
+                {
+                    var writer = new {{ class.Name }}Writer(this, this.loggerFactory);
+                    writer.Write(xmlWriter, (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.I{{ class.Name }})data, elementName, includeDerived, includesImplied, originMap, uri);
+                },
+            {{/each}}
+            };
+
+            this.writerAsyncCache = new Dictionary<string, Func<XmlWriter, IData, string, bool, bool, IXmiElementOriginMap, Uri, Task>>
+            {
+            {{ #each this as | class | }}
+                ["{{ class.Name }}"] = async (xmlWriter, data, elementName, includeDerived, includesImplied, originMap, uri) =>
+                {
+                    var writer = new {{ class.Name }}Writer(this, this.loggerFactory);
+                    await writer.WriteAsync(xmlWriter, (Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace class }}.I{{ class.Name }})data, elementName, includeDerived, includesImplied, originMap, uri);
+                },
             {{/each}}
             };
         }
@@ -65,13 +95,13 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         /// <param name="includeDerivedProperties">Whether to include derived properties</param>
         /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
         /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
-        public void Write(XmlWriter xmlWriter, IData data, string elementName, bool includeDerivedProperties, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
+        public void Write(XmlWriter xmlWriter, IData data, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
         {
             var typeName = data.GetType().Name;
 
             if (this.writerCache.TryGetValue(typeName, out var writer))
             {
-                writer(xmlWriter, data, elementName, includeDerivedProperties, this, elementOriginMap, currentFileUri);
+                writer(xmlWriter, data, elementName, includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
             }
             else
             {
@@ -88,8 +118,13 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         /// <param name="includeDerivedProperties">Whether to include derived properties</param>
         /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
         /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
-        public void WriteContainedElement(XmlWriter xmlWriter, IData childData, string elementName, bool includeDerivedProperties, IXmiElementOriginMap elementOriginMap, Uri currentFileUri)
+        public void WriteContainedElement(XmlWriter xmlWriter, IData childData, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap, Uri currentFileUri)
         {
+            if (!includesImplied && childData is IRelationship rel && rel.IsImplied)
+            {
+                return;
+            }
+
             if (elementOriginMap != null && currentFileUri != null)
             {
                 var childSourceFile = elementOriginMap.GetSourceFile(childData.Id);
@@ -101,7 +136,7 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                 }
             }
 
-            this.Write(xmlWriter, childData, elementName, includeDerivedProperties, elementOriginMap, currentFileUri);
+            this.Write(xmlWriter, childData, elementName, includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
         }
 
         /// <summary>
@@ -131,6 +166,85 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         }
 
         /// <summary>
+        /// Asynchronously writes the specified <see cref="IData"/> as an XMI element by dispatching to the appropriate per-type writer
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter"/></param>
+        /// <param name="data">The <see cref="IData"/> to write</param>
+        /// <param name="elementName">The XML element name to use</param>
+        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
+        /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
+        public async Task WriteAsync(XmlWriter xmlWriter, IData data, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
+        {
+            var typeName = data.GetType().Name;
+
+            if (this.writerAsyncCache.TryGetValue(typeName, out var writer))
+            {
+                await writer(xmlWriter, data, elementName, includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+            }
+            else
+            {
+                throw new InvalidOperationException($"No writer found for type {typeName}");
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously writes a contained child element, checking origin map for cross-file href
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter"/></param>
+        /// <param name="childData">The child <see cref="IData"/> to write</param>
+        /// <param name="elementName">The XML element name to use</param>
+        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
+        /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
+        public async Task WriteContainedElementAsync(XmlWriter xmlWriter, IData childData, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap, Uri currentFileUri)
+        {
+            if (!includesImplied && childData is IRelationship rel && rel.IsImplied)
+            {
+                return;
+            }
+
+            if (elementOriginMap != null && currentFileUri != null)
+            {
+                var childSourceFile = elementOriginMap.GetSourceFile(childData.Id);
+
+                if (childSourceFile != null && childSourceFile != currentFileUri)
+                {
+                    await WriteHrefElementAsync(xmlWriter, childData, elementName, childSourceFile, currentFileUri);
+                    return;
+                }
+            }
+
+            await this.WriteAsync(xmlWriter, childData, elementName, includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+        }
+
+        /// <summary>
+        /// Asynchronously writes a reference child element, checking origin map for cross-file href
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter"/></param>
+        /// <param name="childData">The child <see cref="IData"/> to write</param>
+        /// <param name="elementName">The XML element name to use</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
+        /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
+        public async Task WriteReferenceElementAsync(XmlWriter xmlWriter, IData childData, string elementName, IXmiElementOriginMap elementOriginMap, Uri currentFileUri)
+        {
+            if (elementOriginMap != null && currentFileUri != null)
+            {
+                var childSourceFile = elementOriginMap.GetSourceFile(childData.Id);
+
+                if (childSourceFile != null && childSourceFile != currentFileUri)
+                {
+                    await WriteHrefElementAsync(xmlWriter, childData, elementName, childSourceFile, currentFileUri);
+                    return;
+                }
+            }
+
+            await xmlWriter.WriteStartElementAsync(null, elementName, null);
+            await xmlWriter.WriteAttributeStringAsync("xmi", "idref", null, childData.Id.ToString());
+            await xmlWriter.WriteEndElementAsync();
+        }
+
+        /// <summary>
         /// Writes an href element for cross-file references
         /// </summary>
         private static void WriteHrefElement(XmlWriter xmlWriter, IData childData, string elementName, Uri targetFile, Uri currentFile)
@@ -141,6 +255,19 @@ namespace SysML2.NET.Serializer.Xmi.Writers
             xmlWriter.WriteStartElement(elementName);
             xmlWriter.WriteAttributeString("href", href);
             xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Asynchronously writes an href element for cross-file references
+        /// </summary>
+        private static async Task WriteHrefElementAsync(XmlWriter xmlWriter, IData childData, string elementName, Uri targetFile, Uri currentFile)
+        {
+            var relativePath = currentFile.MakeRelativeUri(targetFile);
+            var href = $"{Uri.UnescapeDataString(relativePath.ToString())}#{childData.Id}";
+
+            await xmlWriter.WriteStartElementAsync(null, elementName, null);
+            await xmlWriter.WriteAttributeStringAsync(null, "href", null, href);
+            await xmlWriter.WriteEndElementAsync();
         }
     }
 }

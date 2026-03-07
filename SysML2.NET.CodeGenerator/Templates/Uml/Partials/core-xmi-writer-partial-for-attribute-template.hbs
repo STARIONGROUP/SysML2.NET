@@ -12,10 +12,17 @@
     {{/if}}
 {{else}}
     {{#if (Property.QueryIsBool property)}}
+        {{#if (Property.QueryIsImpliedIncluded property)}}
+        if(includesImplied || poco.IsImpliedIncluded)
+        {
+            xmlWriter.WriteAttributeString("isImpliedIncluded", "true");
+        }
+        {{else}}
         if(poco.{{Property.WritePropertyName property}})
         {
             xmlWriter.WriteAttributeString("{{String.LowerCaseFirstLetter property.Name}}", "true");
         }
+        {{/if}}
     {{else if (Property.QueryIsEnum property)}}
         xmlWriter.WriteAttributeString("{{String.LowerCaseFirstLetter property.Name}}", poco.{{Property.WritePropertyName property}}.ToString());
     {{else if (Property.QueryIsNumeric property)}}

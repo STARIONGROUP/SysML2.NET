@@ -1016,6 +1016,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return property.Type.Name == "Element";
             });
 
+            handlebars.RegisterHelper("Property.QueryIsImpliedIncluded", (_, arguments) =>
+            {
+                if (arguments.Single() is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.QueryIsImpliedIncluded argument supposed to be IProperty");
+                }
+
+                return property.Name == "isImpliedIncluded";
+            });
+
             handlebars.RegisterHelper("Property.WriteForNonDerivedCompositeAggregation", (writer, context, _) =>
             {
                 if (context.Value is not IProperty property)

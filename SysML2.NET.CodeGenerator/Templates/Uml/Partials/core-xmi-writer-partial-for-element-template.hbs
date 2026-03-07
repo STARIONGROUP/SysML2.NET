@@ -4,9 +4,9 @@
         foreach(var item in poco.{{Property.WritePropertyName property}})
         {
             {{#if property.IsComposite}}
-                xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "{{String.LowerCaseFirstLetter property.Name}}", includeDerivedProperties, elementOriginMap, currentFileUri);
+                this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "{{String.LowerCaseFirstLetter property.Name}}", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
             {{else}}
-                xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri);
+                this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri);
             {{/if}}
         }
     }
@@ -14,9 +14,9 @@
     if(poco.{{Property.WritePropertyName property}} != null)
     {
         {{#if property.IsComposite}}
-            xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", includeDerivedProperties, elementOriginMap, currentFileUri);
+            this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
         {{else}}
-            xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri);
+            this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri);
         {{/if}}
     }
 {{/if}}

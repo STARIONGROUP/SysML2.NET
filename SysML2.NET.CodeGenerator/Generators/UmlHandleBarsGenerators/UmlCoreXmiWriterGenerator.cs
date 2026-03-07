@@ -187,6 +187,8 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
             this.RegisterTemplate(XmiWriterFacadeTemplateName);
             this.RegisterPartialTemplate("core-xmi-writer-partial-for-attribute-template");
             this.RegisterPartialTemplate("core-xmi-writer-partial-for-element-template");
+            this.RegisterPartialTemplate("core-xmi-writer-partial-for-attribute-async-template");
+            this.RegisterPartialTemplate("core-xmi-writer-partial-for-element-async-template");
         }
     }
 }

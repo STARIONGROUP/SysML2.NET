@@ -21,6 +21,7 @@
 namespace SysML2.NET.Serializer.Xmi.Writers
 {
     using System;
+    using System.Threading.Tasks;
     using System.Xml;
 
     using SysML2.NET.Common;
@@ -38,9 +39,10 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         /// <param name="data">The <see cref="IData"/> to write</param>
         /// <param name="elementName">The XML element name to use</param>
         /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="includesImplied">Whether implied relationships and isImpliedIncluded attributes are serialized</param>
         /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
         /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
-        void Write(XmlWriter xmlWriter, IData data, string elementName, bool includeDerivedProperties, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null);
+        void Write(XmlWriter xmlWriter, IData data, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null);
 
         /// <summary>
         /// Writes a contained child element, checking origin map for cross-file href
@@ -49,9 +51,10 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         /// <param name="childData">The child <see cref="IData"/> to write</param>
         /// <param name="elementName">The XML element name to use</param>
         /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="includesImplied">Whether implied relationships and isImpliedIncluded attributes are serialized</param>
         /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
         /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
-        void WriteContainedElement(XmlWriter xmlWriter, IData childData, string elementName, bool includeDerivedProperties, IXmiElementOriginMap elementOriginMap, Uri currentFileUri);
+        void WriteContainedElement(XmlWriter xmlWriter, IData childData, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap, Uri currentFileUri);
 
         /// <summary>
         /// Writes a reference child element, checking origin map for cross-file href
@@ -62,5 +65,39 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
         /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
         void WriteReferenceElement(XmlWriter xmlWriter, IData childData, string elementName, IXmiElementOriginMap elementOriginMap, Uri currentFileUri);
+
+        /// <summary>
+        /// Asynchronously writes the specified <see cref="IData"/> as an XMI element by dispatching to the appropriate per-type writer
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter"/></param>
+        /// <param name="data">The <see cref="IData"/> to write</param>
+        /// <param name="elementName">The XML element name to use</param>
+        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="includesImplied">Whether implied relationships and isImpliedIncluded attributes are serialized</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
+        /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
+        Task WriteAsync(XmlWriter xmlWriter, IData data, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null);
+
+        /// <summary>
+        /// Asynchronously writes a contained child element, checking origin map for cross-file href
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter"/></param>
+        /// <param name="childData">The child <see cref="IData"/> to write</param>
+        /// <param name="elementName">The XML element name to use</param>
+        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="includesImplied">Whether implied relationships and isImpliedIncluded attributes are serialized</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
+        /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
+        Task WriteContainedElementAsync(XmlWriter xmlWriter, IData childData, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap, Uri currentFileUri);
+
+        /// <summary>
+        /// Asynchronously writes a reference child element, checking origin map for cross-file href
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter"/></param>
+        /// <param name="childData">The child <see cref="IData"/> to write</param>
+        /// <param name="elementName">The XML element name to use</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> for href reconstruction</param>
+        /// <param name="currentFileUri">The <see cref="Uri"/> of the current output file for relative href computation</param>
+        Task WriteReferenceElementAsync(XmlWriter xmlWriter, IData childData, string elementName, IXmiElementOriginMap elementOriginMap, Uri currentFileUri);
     }
 }

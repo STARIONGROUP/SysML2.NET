@@ -27,7 +27,11 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Threading.Tasks;
     using System.Xml;
+
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.Common;
     using SysML2.NET.Core.POCO.Core.Classifiers;
@@ -44,8 +48,25 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     /// The purpose of the <see cref="FunctionWriter" /> is to write an instance of <see cref="IFunction" />
     /// to the XMI document
     /// </summary>
-    public static class FunctionWriter
+    public class FunctionWriter : XmiDataWriter<IFunction>
     {
+        /// <summary>
+        /// The instantiated logger from the injected <see cref="ILoggerFactory" />
+        /// </summary>
+        private readonly ILogger<FunctionWriter> logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FunctionWriter" />
+        /// </summary>
+        /// <param name="xmiDataWriterFacade">
+        /// The injected <see cref="IXmiDataWriterFacade" /> that provides dispatch to per-type writers
+        /// </param>
+        /// <param name="loggerFactory">The injected <see cref="ILoggerFactory" /> used to set up logging</param>
+        public FunctionWriter(IXmiDataWriterFacade xmiDataWriterFacade, ILoggerFactory loggerFactory) : base(xmiDataWriterFacade, loggerFactory)
+        {
+            this.logger = loggerFactory == null ? NullLogger<FunctionWriter>.Instance : loggerFactory.CreateLogger<FunctionWriter>();
+        }
+
         /// <summary>
         /// Writes the <see cref="IFunction" /> object to its XML representation
         /// </summary>
@@ -53,341 +74,1048 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         /// <param name="poco">The <see cref="IFunction" /> to write</param>
         /// <param name="elementName">The XML element name</param>
         /// <param name="includeDerivedProperties">Whether to include derived properties</param>
-        /// <param name="xmiWriterFacade">The <see cref="IXmiDataWriterFacade" /> for writing child elements</param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>
         /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap" /> for href reconstruction</param>
         /// <param name="currentFileUri">The optional <see cref="Uri" /> of the current output file</param>
-        public static void Write(XmlWriter xmlWriter, IFunction poco, string elementName, bool includeDerivedProperties, IXmiDataWriterFacade xmiWriterFacade, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
+        public override void Write(XmlWriter xmlWriter, IFunction poco, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
         {
             xmlWriter.WriteStartElement(elementName);
             xmlWriter.WriteAttributeString("xsi", "type", null, "sysml:Function");
             xmlWriter.WriteAttributeString("xmi", "id", null, poco.Id.ToString());
 
-            // Scalar properties as XML attributes
+            // Scalar properties as XML attributes (sorted alphabetically)
             if (poco.AliasIds != null && poco.AliasIds.Count > 0)
             {
                 xmlWriter.WriteAttributeString("aliasIds", string.Join(" ", poco.AliasIds));
             }
+
             if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 xmlWriter.WriteAttributeString("declaredName", poco.DeclaredName);
             }
+
             if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName))
             {
                 xmlWriter.WriteAttributeString("declaredShortName", poco.DeclaredShortName);
             }
+
             if (!string.IsNullOrWhiteSpace(poco.ElementId))
             {
                 xmlWriter.WriteAttributeString("elementId", poco.ElementId);
             }
+
             if (poco.IsAbstract)
             {
                 xmlWriter.WriteAttributeString("isAbstract", "true");
             }
-            if (poco.IsImpliedIncluded)
-            {
-                xmlWriter.WriteAttributeString("isImpliedIncluded", "true");
-            }
-            if (poco.IsSufficient)
-            {
-                xmlWriter.WriteAttributeString("isSufficient", "true");
-            }
 
-            // Derived scalar properties
             if (includeDerivedProperties)
             {
                 if (poco.isConjugated)
                 {
                     xmlWriter.WriteAttributeString("isConjugated", "true");
                 }
+            }
+
+            if (includesImplied || poco.IsImpliedIncluded)
+            {
+                xmlWriter.WriteAttributeString("isImpliedIncluded", "true");
+            }
+
+            if (includeDerivedProperties)
+            {
                 if (poco.isLibraryElement)
                 {
                     xmlWriter.WriteAttributeString("isLibraryElement", "true");
                 }
+            }
+
+            if (includeDerivedProperties)
+            {
                 if (poco.isModelLevelEvaluable)
                 {
                     xmlWriter.WriteAttributeString("isModelLevelEvaluable", "true");
                 }
+            }
+
+            if (poco.IsSufficient)
+            {
+                xmlWriter.WriteAttributeString("isSufficient", "true");
+            }
+
+            if (includeDerivedProperties)
+            {
                 if (!string.IsNullOrWhiteSpace(poco.name))
                 {
                     xmlWriter.WriteAttributeString("name", poco.name);
                 }
+            }
+
+            if (includeDerivedProperties)
+            {
                 if (!string.IsNullOrWhiteSpace(poco.qualifiedName))
                 {
                     xmlWriter.WriteAttributeString("qualifiedName", poco.qualifiedName);
                 }
+            }
+
+            if (includeDerivedProperties)
+            {
                 if (!string.IsNullOrWhiteSpace(poco.shortName))
                 {
                     xmlWriter.WriteAttributeString("shortName", poco.shortName);
                 }
             }
 
-            // Reference/containment properties as child elements
-            if (poco.OwnedRelationship != null)
-            {
-                foreach (var item in poco.OwnedRelationship)
-                {
-                    xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedRelationship", includeDerivedProperties, elementOriginMap, currentFileUri);
-                }
-            }
-            if (poco.OwningRelationship != null)
-            {
-                xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.OwningRelationship, "owningRelationship", elementOriginMap, currentFileUri);
-            }
 
-            // Derived reference/containment properties as child elements
+            // Reference/containment properties as child elements (sorted alphabetically)
             if (includeDerivedProperties)
             {
                 if (poco.differencingType != null)
                 {
                     foreach (var item in poco.differencingType)
                     {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "differencingType", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.documentation != null)
-                {
-                    foreach (var item in poco.documentation)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "documentation", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.endFeature != null)
-                {
-                    foreach (var item in poco.endFeature)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "endFeature", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.expression != null)
-                {
-                    foreach (var item in poco.expression)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "expression", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.feature != null)
-                {
-                    foreach (var item in poco.feature)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "feature", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.featureMembership != null)
-                {
-                    foreach (var item in poco.featureMembership)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "featureMembership", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.importedMembership != null)
-                {
-                    foreach (var item in poco.importedMembership)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "importedMembership", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.inheritedFeature != null)
-                {
-                    foreach (var item in poco.inheritedFeature)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "inheritedFeature", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.inheritedMembership != null)
-                {
-                    foreach (var item in poco.inheritedMembership)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "inheritedMembership", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.input != null)
-                {
-                    foreach (var item in poco.input)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "input", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.intersectingType != null)
-                {
-                    foreach (var item in poco.intersectingType)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "intersectingType", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.member != null)
-                {
-                    foreach (var item in poco.member)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "member", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.membership != null)
-                {
-                    foreach (var item in poco.membership)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "membership", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.multiplicity != null)
-                {
-                    xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.multiplicity, "multiplicity", elementOriginMap, currentFileUri);
-                }
-                if (poco.output != null)
-                {
-                    foreach (var item in poco.output)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "output", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedAnnotation != null)
-                {
-                    foreach (var item in poco.ownedAnnotation)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedAnnotation", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedConjugator != null)
-                {
-                    xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)poco.ownedConjugator, "ownedConjugator", includeDerivedProperties, elementOriginMap, currentFileUri);
-                }
-                if (poco.ownedDifferencing != null)
-                {
-                    foreach (var item in poco.ownedDifferencing)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedDifferencing", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedDisjoining != null)
-                {
-                    foreach (var item in poco.ownedDisjoining)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedDisjoining", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedElement != null)
-                {
-                    foreach (var item in poco.ownedElement)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "ownedElement", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedEndFeature != null)
-                {
-                    foreach (var item in poco.ownedEndFeature)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "ownedEndFeature", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedFeature != null)
-                {
-                    foreach (var item in poco.ownedFeature)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "ownedFeature", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedFeatureMembership != null)
-                {
-                    foreach (var item in poco.ownedFeatureMembership)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedFeatureMembership", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedImport != null)
-                {
-                    foreach (var item in poco.ownedImport)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedImport", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedIntersecting != null)
-                {
-                    foreach (var item in poco.ownedIntersecting)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedIntersecting", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedMember != null)
-                {
-                    foreach (var item in poco.ownedMember)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "ownedMember", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedMembership != null)
-                {
-                    foreach (var item in poco.ownedMembership)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedMembership", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedSpecialization != null)
-                {
-                    foreach (var item in poco.ownedSpecialization)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedSpecialization", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedSubclassification != null)
-                {
-                    foreach (var item in poco.ownedSubclassification)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedSubclassification", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.ownedUnioning != null)
-                {
-                    foreach (var item in poco.ownedUnioning)
-                    {
-                        xmiWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedUnioning", includeDerivedProperties, elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.owner != null)
-                {
-                    xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.owner, "owner", elementOriginMap, currentFileUri);
-                }
-                if (poco.owningMembership != null)
-                {
-                    xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.owningMembership, "owningMembership", elementOriginMap, currentFileUri);
-                }
-                if (poco.owningNamespace != null)
-                {
-                    xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.owningNamespace, "owningNamespace", elementOriginMap, currentFileUri);
-                }
-                if (poco.parameter != null)
-                {
-                    foreach (var item in poco.parameter)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "parameter", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.result != null)
-                {
-                    xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.result, "result", elementOriginMap, currentFileUri);
-                }
-                if (poco.step != null)
-                {
-                    foreach (var item in poco.step)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "step", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.textualRepresentation != null)
-                {
-                    foreach (var item in poco.textualRepresentation)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "textualRepresentation", elementOriginMap, currentFileUri);
-                    }
-                }
-                if (poco.unioningType != null)
-                {
-                    foreach (var item in poco.unioningType)
-                    {
-                        xmiWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "unioningType", elementOriginMap, currentFileUri);
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "differencingType", elementOriginMap, currentFileUri);
                     }
                 }
             }
 
+            if (includeDerivedProperties)
+            {
+                if (poco.documentation != null)
+                {
+                    foreach (var item in poco.documentation)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "documentation", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.endFeature != null)
+                {
+                    foreach (var item in poco.endFeature)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "endFeature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.expression != null)
+                {
+                    foreach (var item in poco.expression)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "expression", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.feature != null)
+                {
+                    foreach (var item in poco.feature)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "feature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.featureMembership != null)
+                {
+                    foreach (var item in poco.featureMembership)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "featureMembership", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.importedMembership != null)
+                {
+                    foreach (var item in poco.importedMembership)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "importedMembership", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.inheritedFeature != null)
+                {
+                    foreach (var item in poco.inheritedFeature)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "inheritedFeature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.inheritedMembership != null)
+                {
+                    foreach (var item in poco.inheritedMembership)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "inheritedMembership", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.input != null)
+                {
+                    foreach (var item in poco.input)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "input", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.intersectingType != null)
+                {
+                    foreach (var item in poco.intersectingType)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "intersectingType", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.member != null)
+                {
+                    foreach (var item in poco.member)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "member", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.membership != null)
+                {
+                    foreach (var item in poco.membership)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "membership", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.multiplicity != null)
+                {
+                    this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.multiplicity, "multiplicity", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.output != null)
+                {
+                    foreach (var item in poco.output)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "output", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedAnnotation != null)
+                {
+                    foreach (var item in poco.ownedAnnotation)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedAnnotation", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedConjugator != null)
+                {
+                    this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)poco.ownedConjugator, "ownedConjugator", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedDifferencing != null)
+                {
+                    foreach (var item in poco.ownedDifferencing)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedDifferencing", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedDisjoining != null)
+                {
+                    foreach (var item in poco.ownedDisjoining)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedDisjoining", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedElement != null)
+                {
+                    foreach (var item in poco.ownedElement)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "ownedElement", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedEndFeature != null)
+                {
+                    foreach (var item in poco.ownedEndFeature)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "ownedEndFeature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedFeature != null)
+                {
+                    foreach (var item in poco.ownedFeature)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "ownedFeature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedFeatureMembership != null)
+                {
+                    foreach (var item in poco.ownedFeatureMembership)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedFeatureMembership", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedImport != null)
+                {
+                    foreach (var item in poco.ownedImport)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedImport", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedIntersecting != null)
+                {
+                    foreach (var item in poco.ownedIntersecting)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedIntersecting", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedMember != null)
+                {
+                    foreach (var item in poco.ownedMember)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "ownedMember", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedMembership != null)
+                {
+                    foreach (var item in poco.ownedMembership)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedMembership", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (poco.OwnedRelationship != null)
+            {
+                foreach (var item in poco.OwnedRelationship)
+                {
+                    this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedRelationship", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedSpecialization != null)
+                {
+                    foreach (var item in poco.ownedSpecialization)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedSpecialization", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedSubclassification != null)
+                {
+                    foreach (var item in poco.ownedSubclassification)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedSubclassification", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedUnioning != null)
+                {
+                    foreach (var item in poco.ownedUnioning)
+                    {
+                        this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "ownedUnioning", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.owner != null)
+                {
+                    this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.owner, "owner", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.owningMembership != null)
+                {
+                    this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.owningMembership, "owningMembership", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.owningNamespace != null)
+                {
+                    this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.owningNamespace, "owningNamespace", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (poco.OwningRelationship != null)
+            {
+                this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.OwningRelationship, "owningRelationship", elementOriginMap, currentFileUri);
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.parameter != null)
+                {
+                    foreach (var item in poco.parameter)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "parameter", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.result != null)
+                {
+                    this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.result, "result", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.step != null)
+                {
+                    foreach (var item in poco.step)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "step", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.textualRepresentation != null)
+                {
+                    foreach (var item in poco.textualRepresentation)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "textualRepresentation", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.unioningType != null)
+                {
+                    foreach (var item in poco.unioningType)
+                    {
+                        this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "unioningType", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+
             xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Asynchronously writes the <see cref="IFunction" /> object to its XML representation
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter" /></param>
+        /// <param name="poco">The <see cref="IFunction" /> to write</param>
+        /// <param name="elementName">The XML element name</param>
+        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>        
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap" /> for href reconstruction</param>
+        /// <param name="currentFileUri">The optional <see cref="Uri" /> of the current output file</param>
+        /// <returns>An awaitable <see cref="Task" /></returns>
+        public override async Task WriteAsync(XmlWriter xmlWriter, IFunction poco, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
+        {
+            await xmlWriter.WriteStartElementAsync(null, elementName, null);
+            await xmlWriter.WriteAttributeStringAsync("xsi", "type", null, "sysml:Function");
+            await xmlWriter.WriteAttributeStringAsync("xmi", "id", null, poco.Id.ToString());
+
+            // Scalar properties as XML attributes (sorted alphabetically)
+            if (poco.AliasIds != null && poco.AliasIds.Count > 0)
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "aliasIds", null, string.Join(" ", poco.AliasIds));
+            }
+
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "declaredName", null, poco.DeclaredName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(poco.DeclaredShortName))
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "declaredShortName", null, poco.DeclaredShortName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(poco.ElementId))
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "elementId", null, poco.ElementId);
+            }
+
+            if (poco.IsAbstract)
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "isAbstract", null, "true");
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.isConjugated)
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "isConjugated", null, "true");
+                }
+            }
+
+            if (includesImplied || poco.IsImpliedIncluded)
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "isImpliedIncluded", null, "true");
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.isLibraryElement)
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "isLibraryElement", null, "true");
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.isModelLevelEvaluable)
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "isModelLevelEvaluable", null, "true");
+                }
+            }
+
+            if (poco.IsSufficient)
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "isSufficient", null, "true");
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (!string.IsNullOrWhiteSpace(poco.name))
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "name", null, poco.name);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (!string.IsNullOrWhiteSpace(poco.qualifiedName))
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "qualifiedName", null, poco.qualifiedName);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (!string.IsNullOrWhiteSpace(poco.shortName))
+                {
+                    await xmlWriter.WriteAttributeStringAsync(null, "shortName", null, poco.shortName);
+                }
+            }
+
+
+            // Reference/containment properties as child elements (sorted alphabetically)
+            if (includeDerivedProperties)
+            {
+                if (poco.differencingType != null)
+                {
+                    foreach (var item in poco.differencingType)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "differencingType", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.documentation != null)
+                {
+                    foreach (var item in poco.documentation)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "documentation", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.endFeature != null)
+                {
+                    foreach (var item in poco.endFeature)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "endFeature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.expression != null)
+                {
+                    foreach (var item in poco.expression)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "expression", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.feature != null)
+                {
+                    foreach (var item in poco.feature)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "feature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.featureMembership != null)
+                {
+                    foreach (var item in poco.featureMembership)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "featureMembership", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.importedMembership != null)
+                {
+                    foreach (var item in poco.importedMembership)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "importedMembership", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.inheritedFeature != null)
+                {
+                    foreach (var item in poco.inheritedFeature)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "inheritedFeature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.inheritedMembership != null)
+                {
+                    foreach (var item in poco.inheritedMembership)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "inheritedMembership", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.input != null)
+                {
+                    foreach (var item in poco.input)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "input", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.intersectingType != null)
+                {
+                    foreach (var item in poco.intersectingType)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "intersectingType", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.member != null)
+                {
+                    foreach (var item in poco.member)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "member", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.membership != null)
+                {
+                    foreach (var item in poco.membership)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "membership", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.multiplicity != null)
+                {
+                    await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)poco.multiplicity, "multiplicity", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.output != null)
+                {
+                    foreach (var item in poco.output)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "output", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedAnnotation != null)
+                {
+                    foreach (var item in poco.ownedAnnotation)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedAnnotation", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedConjugator != null)
+                {
+                    await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)poco.ownedConjugator, "ownedConjugator", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedDifferencing != null)
+                {
+                    foreach (var item in poco.ownedDifferencing)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedDifferencing", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedDisjoining != null)
+                {
+                    foreach (var item in poco.ownedDisjoining)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedDisjoining", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedElement != null)
+                {
+                    foreach (var item in poco.ownedElement)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "ownedElement", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedEndFeature != null)
+                {
+                    foreach (var item in poco.ownedEndFeature)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "ownedEndFeature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedFeature != null)
+                {
+                    foreach (var item in poco.ownedFeature)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "ownedFeature", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedFeatureMembership != null)
+                {
+                    foreach (var item in poco.ownedFeatureMembership)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedFeatureMembership", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedImport != null)
+                {
+                    foreach (var item in poco.ownedImport)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedImport", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedIntersecting != null)
+                {
+                    foreach (var item in poco.ownedIntersecting)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedIntersecting", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedMember != null)
+                {
+                    foreach (var item in poco.ownedMember)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "ownedMember", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedMembership != null)
+                {
+                    foreach (var item in poco.ownedMembership)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedMembership", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (poco.OwnedRelationship != null)
+            {
+                foreach (var item in poco.OwnedRelationship)
+                {
+                    await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedRelationship", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedSpecialization != null)
+                {
+                    foreach (var item in poco.ownedSpecialization)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedSpecialization", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedSubclassification != null)
+                {
+                    foreach (var item in poco.ownedSubclassification)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedSubclassification", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.ownedUnioning != null)
+                {
+                    foreach (var item in poco.ownedUnioning)
+                    {
+                        await this.XmiDataWriterFacade.WriteContainedElementAsync(xmlWriter, (IData)item, "ownedUnioning", includeDerivedProperties, includesImplied, elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.owner != null)
+                {
+                    await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)poco.owner, "owner", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.owningMembership != null)
+                {
+                    await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)poco.owningMembership, "owningMembership", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.owningNamespace != null)
+                {
+                    await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)poco.owningNamespace, "owningNamespace", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (poco.OwningRelationship != null)
+            {
+                await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)poco.OwningRelationship, "owningRelationship", elementOriginMap, currentFileUri);
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.parameter != null)
+                {
+                    foreach (var item in poco.parameter)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "parameter", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.result != null)
+                {
+                    await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)poco.result, "result", elementOriginMap, currentFileUri);
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.step != null)
+                {
+                    foreach (var item in poco.step)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "step", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.textualRepresentation != null)
+                {
+                    foreach (var item in poco.textualRepresentation)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "textualRepresentation", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+            if (includeDerivedProperties)
+            {
+                if (poco.unioningType != null)
+                {
+                    foreach (var item in poco.unioningType)
+                    {
+                        await this.XmiDataWriterFacade.WriteReferenceElementAsync(xmlWriter, (IData)item, "unioningType", elementOriginMap, currentFileUri);
+                    }
+                }
+            }
+
+
+            await xmlWriter.WriteEndElementAsync();
         }
     }
 }

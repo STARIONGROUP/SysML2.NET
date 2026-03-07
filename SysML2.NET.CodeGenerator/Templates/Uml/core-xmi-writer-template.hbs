@@ -27,7 +27,11 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Threading.Tasks;
     using System.Xml;
+
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.Common;
     {{ #Class.WriteEnumerationNameSpaces this}}
@@ -39,8 +43,25 @@ namespace SysML2.NET.Serializer.Xmi.Writers
     /// The purpose of the <see cref="{{this.Name}}Writer" /> is to write an instance of <see cref="I{{this.Name}}" />
     /// to the XMI document
     /// </summary>
-    public static class {{this.Name}}Writer
+    public class {{this.Name}}Writer : XmiDataWriter<I{{this.Name}}>
     {
+        /// <summary>
+        /// The instantiated logger from the injected <see cref="ILoggerFactory" />
+        /// </summary>
+        private readonly ILogger<{{this.Name}}Writer> logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="{{this.Name}}Writer" />
+        /// </summary>
+        /// <param name="xmiDataWriterFacade">
+        /// The injected <see cref="IXmiDataWriterFacade" /> that provides dispatch to per-type writers
+        /// </param>
+        /// <param name="loggerFactory">The injected <see cref="ILoggerFactory" /> used to set up logging</param>
+        public {{this.Name}}Writer(IXmiDataWriterFacade xmiDataWriterFacade, ILoggerFactory loggerFactory) : base(xmiDataWriterFacade, loggerFactory)
+        {
+            this.logger = loggerFactory == null ? NullLogger<{{this.Name}}Writer>.Instance : loggerFactory.CreateLogger<{{this.Name}}Writer>();
+        }
+
         /// <summary>
         /// Writes the <see cref="I{{this.Name}}" /> object to its XML representation
         /// </summary>
@@ -48,82 +69,132 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         /// <param name="poco">The <see cref="I{{this.Name}}" /> to write</param>
         /// <param name="elementName">The XML element name</param>
         /// <param name="includeDerivedProperties">Whether to include derived properties</param>
-        /// <param name="xmiWriterFacade">The <see cref="IXmiDataWriterFacade" /> for writing child elements</param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>
         /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap" /> for href reconstruction</param>
         /// <param name="currentFileUri">The optional <see cref="Uri" /> of the current output file</param>
-        public static void Write(XmlWriter xmlWriter, I{{this.Name}} poco, string elementName, bool includeDerivedProperties, IXmiDataWriterFacade xmiWriterFacade, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
+        public override void Write(XmlWriter xmlWriter, I{{this.Name}} poco, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
         {
             xmlWriter.WriteStartElement(elementName);
             xmlWriter.WriteAttributeString("xsi", "type", null, "sysml:{{this.Name}}");
             xmlWriter.WriteAttributeString("xmi", "id", null, poco.Id.ToString());
 
-            // Scalar properties as XML attributes
+            // Scalar properties as XML attributes (sorted alphabetically)
             {{#with this as |class| }}
-                {{ #each (Class.QueryAllProperties this) as | property | }}
+                {{ #each (Class.QueryAllPropertiesSorted this) as | property | }}
                     {{#unless this.IsTransient}}
-                        {{#unless this.IsDerived}}
-                            {{#unless (Property.QueryIsReferenceProperty this)}}
-                                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                        {{#unless (Property.QueryIsReferenceProperty this)}}
+                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                {{#if this.IsDerived}}
+                                    if(includeDerivedProperties)
+                                    {
+                                        {{> core-xmi-writer-partial-for-attribute-template this}}
+                                    }
+                                {{else}}
                                     {{> core-xmi-writer-partial-for-attribute-template this}}
-                                {{/unless}}
+                                {{/if}}
+
                             {{/unless}}
                         {{/unless}}
                     {{/unless}}
                 {{/each}}
             {{/with}}
 
-            // Derived scalar properties
-            if(includeDerivedProperties)
-            {
-                {{#with this as |class| }}
-                    {{ #each (Class.QueryAllProperties this) as | property | }}
-                        {{#unless this.IsTransient}}
-                            {{#if this.IsDerived}}
-                                {{#unless (Property.QueryIsReferenceProperty this)}}
-                                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                                        {{> core-xmi-writer-partial-for-attribute-template this}}
-                                    {{/unless}}
-                                {{/unless}}
-                            {{/if}}
-                        {{/unless}}
-                    {{/each}}
-                {{/with}}
-            }
-
-            // Reference/containment properties as child elements
+            // Reference/containment properties as child elements (sorted alphabetically)
             {{#with this as |class| }}
-                {{ #each (Class.QueryAllProperties this) as | property | }}
+                {{ #each (Class.QueryAllPropertiesSorted this) as | property | }}
                     {{#unless this.IsTransient}}
-                        {{#unless this.IsDerived}}
-                            {{#if (Property.QueryIsReferenceProperty this)}}
-                                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                        {{#if (Property.QueryIsReferenceProperty this)}}
+                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                {{#if this.IsDerived}}
+                                    if(includeDerivedProperties)
+                                    {
+                                        {{> core-xmi-writer-partial-for-element-template this}}
+                                    }
+                                {{else}}
                                     {{> core-xmi-writer-partial-for-element-template this}}
-                                {{/unless}}
-                            {{/if}}
+                                {{/if}}
+                                
+                            {{/unless}}
+                        {{/if}}
+                    {{/unless}}
+                {{/each}}
+            {{/with}}
+
+            xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Asynchronously writes the <see cref="I{{this.Name}}" /> object to its XML representation
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter" /></param>
+        /// <param name="poco">The <see cref="I{{this.Name}}" /> to write</param>
+        /// <param name="elementName">The XML element name</param>
+        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="includesImplied">
+        /// The project-level includesImplied flag as defined in KerML Clause 10, Note 5.
+        /// When <c>true</c>, all implied relationships are serialized and every element's isImpliedIncluded
+        /// attribute is written as "true". When <c>false</c>, implied relationships (where
+        /// <see cref="SysML2.NET.Core.POCO.Root.Elements.IRelationship.IsImplied"/> is true) are excluded
+        /// and no element's isImpliedIncluded attribute is written.
+        /// </param>        
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap" /> for href reconstruction</param>
+        /// <param name="currentFileUri">The optional <see cref="Uri" /> of the current output file</param>
+        /// <returns>An awaitable <see cref="Task" /></returns>
+        public override async Task WriteAsync(XmlWriter xmlWriter, I{{this.Name}} poco, string elementName, bool includeDerivedProperties, bool includesImplied, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
+        {
+            await xmlWriter.WriteStartElementAsync(null, elementName, null);
+            await xmlWriter.WriteAttributeStringAsync("xsi", "type", null, "sysml:{{this.Name}}");
+            await xmlWriter.WriteAttributeStringAsync("xmi", "id", null, poco.Id.ToString());
+
+            // Scalar properties as XML attributes (sorted alphabetically)
+            {{#with this as |class| }}
+                {{ #each (Class.QueryAllPropertiesSorted this) as | property | }}
+                    {{#unless this.IsTransient}}
+                        {{#unless (Property.QueryIsReferenceProperty this)}}
+                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                {{#if this.IsDerived}}
+                                    if(includeDerivedProperties)
+                                    {
+                                        {{> core-xmi-writer-partial-for-attribute-async-template this}}
+                                    }
+                                {{else}}
+                                    {{> core-xmi-writer-partial-for-attribute-async-template this}}
+                                {{/if}}
+
+                            {{/unless}}
                         {{/unless}}
                     {{/unless}}
                 {{/each}}
             {{/with}}
 
-            // Derived reference/containment properties as child elements
-            if(includeDerivedProperties)
-            {
-                {{#with this as |class| }}
-                    {{ #each (Class.QueryAllProperties this) as | property | }}
-                        {{#unless this.IsTransient}}
-                            {{#if this.IsDerived}}
-                                {{#if (Property.QueryIsReferenceProperty this)}}
-                                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                                        {{> core-xmi-writer-partial-for-element-template this}}
-                                    {{/unless}}
+            // Reference/containment properties as child elements (sorted alphabetically)
+            {{#with this as |class| }}
+                {{ #each (Class.QueryAllPropertiesSorted this) as | property | }}
+                    {{#unless this.IsTransient}}
+                        {{#if (Property.QueryIsReferenceProperty this)}}
+                            {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                {{#if this.IsDerived}}
+                                    if(includeDerivedProperties)
+                                    {
+                                        {{> core-xmi-writer-partial-for-element-async-template this}}
+                                    }
+                                {{else}}
+                                    {{> core-xmi-writer-partial-for-element-async-template this}}
                                 {{/if}}
-                            {{/if}}
-                        {{/unless}}
-                    {{/each}}
-                {{/with}}
-            }
 
-            xmlWriter.WriteEndElement();
+                            {{/unless}}
+                        {{/if}}
+                    {{/unless}}
+                {{/each}}
+            {{/with}}
+
+            await xmlWriter.WriteEndElementAsync();
         }
     }
 }

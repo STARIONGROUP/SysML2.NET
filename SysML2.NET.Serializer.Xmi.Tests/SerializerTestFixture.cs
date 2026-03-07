@@ -22,9 +22,11 @@ namespace SysML2.NET.Serializer.Xmi.Tests
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Core.POCO.Root.Elements;
     using Core.POCO.Root.Namespaces;
 
     using Microsoft.Extensions.DependencyInjection;
@@ -63,7 +65,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
         {
             var targetStream = new MemoryStream();
 
-            Assert.That(() => this.serializer.Serialize(this.anonymouseNameSpace, false, targetStream), Throws.Nothing);
+            Assert.That(() => this.serializer.Serialize(this.anonymouseNameSpace, false, false, targetStream), Throws.Nothing);
 
             Assert.That(targetStream.Length, Is.GreaterThan(0));
         }
@@ -73,7 +75,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
         {
             var targetStream = new MemoryStream();
 
-            this.serializer.Serialize(this.anonymouseNameSpace, false, targetStream);
+            this.serializer.Serialize(this.anonymouseNameSpace, false, false, targetStream);
 
             targetStream.Seek(0, SeekOrigin.Begin);
             var reader = new StreamReader(targetStream);
@@ -90,9 +92,60 @@ namespace SysML2.NET.Serializer.Xmi.Tests
         {
             var targetStream = new MemoryStream();
 
-            await this.serializer.SerializeAsync(this.anonymouseNameSpace, false, targetStream, CancellationToken.None);
+            await this.serializer.SerializeAsync(this.anonymouseNameSpace, false, false, targetStream, CancellationToken.None);
 
             Assert.That(targetStream.Length, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void Verify_that_includesImplied_false_excludes_implied_relationships()
+        {
+            var impliedRelationship = this.anonymouseNameSpace.OwnedRelationship.FirstOrDefault();
+            Assert.That(impliedRelationship, Is.Not.Null, "Need at least one relationship to test");
+
+            impliedRelationship.IsImplied = true;
+            var impliedId = impliedRelationship.Id.ToString();
+
+            var targetStream = new MemoryStream();
+            this.serializer.Serialize(this.anonymouseNameSpace, false, false, targetStream);
+
+            targetStream.Seek(0, SeekOrigin.Begin);
+            var content = new StreamReader(targetStream).ReadToEnd();
+
+            Assert.That(content, Does.Not.Contain(impliedId), "Implied relationship should be excluded when includesImplied=false");
+            Assert.That(content, Does.Not.Contain("isImpliedIncluded=\"true\""), "No element should have isImpliedIncluded=true when includesImplied=false");
+        }
+
+        [Test]
+        public void Verify_that_includesImplied_true_includes_implied_and_sets_isImpliedIncluded()
+        {
+            var impliedRelationship = this.anonymouseNameSpace.OwnedRelationship.FirstOrDefault();
+            Assert.That(impliedRelationship, Is.Not.Null, "Need at least one relationship to test");
+
+            impliedRelationship.IsImplied = true;
+            impliedRelationship.IsImpliedIncluded = false;
+
+            var targetStream = new MemoryStream();
+            this.serializer.Serialize(this.anonymouseNameSpace, false, true, targetStream);
+
+            targetStream.Seek(0, SeekOrigin.Begin);
+            var content = new StreamReader(targetStream).ReadToEnd();
+
+            Assert.That(content, Does.Contain("isImpliedIncluded=\"true\""), "All elements should have isImpliedIncluded=true when includesImplied=true");
+        }
+
+        [Test]
+        public void Verify_that_includesImplied_false_uses_per_element_isImpliedIncluded()
+        {
+            this.anonymouseNameSpace.IsImpliedIncluded = true;
+
+            var targetStream = new MemoryStream();
+            this.serializer.Serialize(this.anonymouseNameSpace, false, false, targetStream);
+
+            targetStream.Seek(0, SeekOrigin.Begin);
+            var content = new StreamReader(targetStream).ReadToEnd();
+
+            Assert.That(content, Does.Contain("isImpliedIncluded=\"true\""), "Root namespace with IsImpliedIncluded=true should appear in output");
         }
 
         private void ReadAndAssemblePopulationFromXmiFile()

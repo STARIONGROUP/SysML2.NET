@@ -100,7 +100,7 @@ namespace SysML2.NET.Serializer.Xmi.Tests
             var serializer = new Serializer(this.loggerFactory);
             var memoryStream = new MemoryStream();
 
-            serializer.Serialize(originalNamespace, false, memoryStream);
+            serializer.Serialize(originalNamespace, false, false, memoryStream);
 
             Assert.That(memoryStream.Length, Is.GreaterThan(0));
 
