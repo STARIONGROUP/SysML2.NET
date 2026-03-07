@@ -69,8 +69,11 @@ namespace SysML2.NET.Serializer.Xmi
         /// </param>
         public void Serialize(INamespace @namespace, bool includeDerivedProperties, Stream stream)
         {
+            // if the namespace is not an anonymouse namespace, then first create that and make the
+            // provide namespace owned by the anonymouse
+            
             throw new System.NotImplementedException();
-        }
+        }   
 
         /// <summary>
         /// Asynchronously serialize an <see cref="INamespace"/> as XMI to a target <see cref="Stream"/>
@@ -89,6 +92,9 @@ namespace SysML2.NET.Serializer.Xmi
         /// </param>
         public Task SerializeAsync(INamespace @namespace, bool includeDerivedProperties, Stream stream, CancellationToken cancellationToken)
         {
+            // if the namespace is not an anonymouse namespace, then first create that and make the
+            // provide namespace owned by the anonymouse
+            
             throw new System.NotImplementedException();
         }
     }

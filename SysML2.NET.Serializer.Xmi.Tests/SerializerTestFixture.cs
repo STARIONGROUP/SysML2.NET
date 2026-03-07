@@ -24,18 +24,21 @@ namespace SysML2.NET.Serializer.Xmi.Tests
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
-
+    using Core.POCO.Root.Namespaces;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     using SysML2.NET.Serializer.Xmi.Extensions;
     using SysML2.NET.Serializer.Xmi.Readers;
-
+    
     [TestFixture]
     public class SerializerTestFixture
     {
         private Serializer serializer;
+        private DeSerializer deSerializer;
         private XmiDataCache xmiDataCache;
+        
+        private INamespace anonymouseNameSpace;
 
         [SetUp]
         public void Setup()
@@ -46,9 +49,26 @@ namespace SysML2.NET.Serializer.Xmi.Tests
 
             this.xmiDataCache = new XmiDataCache(new PocoReferenceResolveExtensionsFacade(),serviceProvider.GetRequiredService<ILogger<XmiDataCache>>());
 
+            this.deSerializer = new DeSerializer(new ExternalReferenceService(serviceProvider.GetRequiredService<ILogger<ExternalReferenceService>>()), new XmiDataReaderFacade(), this.xmiDataCache, serviceProvider.GetRequiredService<ILoggerFactory>());
+
+            this.ReadAndAssemblePopulationFromXmiFile();
+            
             this.serializer = new Serializer(serviceProvider.GetRequiredService<ILoggerFactory>());
         }
-        
-        
+
+        [Test]
+        public void Verify_that_the_name_space_can_be_serialized_to_xmi()
+        {
+            var targetStream = new MemoryStream();
+            
+            Assert.That(() => this.serializer.Serialize(this.anonymouseNameSpace, false,targetStream), Throws.Nothing);
+            
+        }
+
+        private void ReadAndAssemblePopulationFromXmiFile()
+        {
+            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "Domain Libraries", "Quantities and Units", "Quantities.sysmlx");
+            this.anonymouseNameSpace = this.deSerializer.DeSerialize(new Uri(filePath));
+        }
     }
 }
