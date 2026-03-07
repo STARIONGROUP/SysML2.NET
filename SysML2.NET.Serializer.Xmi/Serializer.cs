@@ -48,7 +48,7 @@ namespace SysML2.NET.Serializer.Xmi
 
         private readonly ILogger<Serializer> logger;
         private readonly ILoggerFactory loggerFactory;
-        private readonly IXmiWriter xmiWriter;
+        private readonly IXmiDataWriterFacade xmiWriterFacade;
 
         /// <summary>Initializes a new instance of the <see cref="Serializer"></see> class.</summary>
         /// <param name="loggerFactory">The injected <see cref="ILoggerFactory " /> used to set up logging</param>
@@ -56,7 +56,7 @@ namespace SysML2.NET.Serializer.Xmi
         {
             this.loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             this.logger = this.loggerFactory.CreateLogger<Serializer>();
-            this.xmiWriter = new XmiWriter(this.loggerFactory);
+            this.xmiWriterFacade = new XmiDataWriterFacade();
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace SysML2.NET.Serializer.Xmi
                             }
                         }
 
-                        this.xmiWriter.Write(xmlWriter, relationshipData, "ownedRelationship", includeDerivedProperties, elementOriginMap, currentFileUri);
+                        this.xmiWriterFacade.Write(xmlWriter, relationshipData, "ownedRelationship", includeDerivedProperties, elementOriginMap, currentFileUri);
                     }
                 }
             }

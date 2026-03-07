@@ -48,10 +48,10 @@ namespace SysML2.NET.Serializer.Xmi.Writers
         /// <param name="poco">The <see cref="I{{this.Name}}" /> to write</param>
         /// <param name="elementName">The XML element name</param>
         /// <param name="includeDerivedProperties">Whether to include derived properties</param>
-        /// <param name="xmiWriter">The <see cref="IXmiWriter" /> for writing child elements</param>
+        /// <param name="xmiWriterFacade">The <see cref="IXmiDataWriterFacade" /> for writing child elements</param>
         /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap" /> for href reconstruction</param>
         /// <param name="currentFileUri">The optional <see cref="Uri" /> of the current output file</param>
-        public static void Write(XmlWriter xmlWriter, I{{this.Name}} poco, string elementName, bool includeDerivedProperties, IXmiWriter xmiWriter, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
+        public static void Write(XmlWriter xmlWriter, I{{this.Name}} poco, string elementName, bool includeDerivedProperties, IXmiDataWriterFacade xmiWriterFacade, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
         {
             xmlWriter.WriteStartElement(elementName);
             xmlWriter.WriteAttributeString("xsi", "type", null, "sysml:{{this.Name}}");
@@ -97,13 +97,31 @@ namespace SysML2.NET.Serializer.Xmi.Writers
                         {{#unless this.IsDerived}}
                             {{#if (Property.QueryIsReferenceProperty this)}}
                                 {{#unless (Property.IsPropertyRedefinedInClass this class)}}
-                                    // {{Property.WritePropertyName this}} child elements handled by reflection-based XmiWriter
+                                    {{> core-xmi-writer-partial-for-element-template this}}
                                 {{/unless}}
                             {{/if}}
                         {{/unless}}
                     {{/unless}}
                 {{/each}}
             {{/with}}
+
+            // Derived reference/containment properties as child elements
+            if(includeDerivedProperties)
+            {
+                {{#with this as |class| }}
+                    {{ #each (Class.QueryAllProperties this) as | property | }}
+                        {{#unless this.IsTransient}}
+                            {{#if this.IsDerived}}
+                                {{#if (Property.QueryIsReferenceProperty this)}}
+                                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                        {{> core-xmi-writer-partial-for-element-template this}}
+                                    {{/unless}}
+                                {{/if}}
+                            {{/if}}
+                        {{/unless}}
+                    {{/each}}
+                {{/with}}
+            }
 
             xmlWriter.WriteEndElement();
         }

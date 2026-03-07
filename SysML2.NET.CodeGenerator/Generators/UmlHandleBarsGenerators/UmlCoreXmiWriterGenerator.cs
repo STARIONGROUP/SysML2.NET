@@ -43,6 +43,11 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         private const string XmiWriterTemplateName = "core-xmi-writer-template";
 
         /// <summary>
+        /// Gets the name of the Xmi Writer Facade template
+        /// </summary>
+        private const string XmiWriterFacadeTemplateName = "core-xmi-writer-facade-template";
+
+        /// <summary>
         /// Generates code specific to the concrete implementation
         /// </summary>
         /// <param name="xmiReaderResult">
@@ -57,6 +62,7 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         public override async Task GenerateAsync(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
         {
             await this.GenerateXmiWriters(xmiReaderResult, outputDirectory);
+            await this.GenerateXmiWriterFacade(xmiReaderResult, outputDirectory);
         }
 
         /// <summary>
@@ -112,6 +118,53 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         }
 
         /// <summary>
+        /// Generates XMI Writer facade class for all concrete <see cref="IClass" />
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo" />
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task" />
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// In case of null value for <paramref name="xmiReaderResult" /> or
+        /// <paramref name="outputDirectory" />
+        /// </exception>
+        private Task GenerateXmiWriterFacade(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        {
+            ArgumentNullException.ThrowIfNull(xmiReaderResult);
+            ArgumentNullException.ThrowIfNull(outputDirectory);
+
+            return this.GenerateXmiWriterFacadeInternal(xmiReaderResult, outputDirectory);
+        }
+
+        /// <summary>
+        /// Generates XMI Writer facade class for all concrete <see cref="IClass" />
+        /// </summary>
+        /// <param name="xmiReaderResult">the <see cref="XmiReaderResult" /> that contains the UML model to generate from</param>
+        /// <param name="outputDirectory">
+        /// The target <see cref="DirectoryInfo" />
+        /// </param>
+        /// <returns>
+        /// an awaitable <see cref="Task" />
+        /// </returns>
+        private async Task GenerateXmiWriterFacadeInternal(XmiReaderResult xmiReaderResult, DirectoryInfo outputDirectory)
+        {
+            var template = this.Templates[XmiWriterFacadeTemplateName];
+
+            var classes = xmiReaderResult.QueryContainedAndImported("SysML")
+                .SelectMany(x => x.PackagedElement.OfType<IClass>())
+                .Where(x => !x.IsAbstract)
+                .OrderBy(x => x.Name)
+                .ToList();
+
+            var generatedFacade = template(classes);
+            generatedFacade = this.CodeCleanup(generatedFacade);
+            await WriteAsync(generatedFacade, outputDirectory, "XmiDataWriterFacade.cs");
+        }
+
+        /// <summary>
         /// Register the custom helpers
         /// </summary>
         protected override void RegisterHelpers()
@@ -131,7 +184,9 @@ namespace SysML2.NET.CodeGenerator.Generators.UmlHandleBarsGenerators
         protected override void RegisterTemplates()
         {
             this.RegisterTemplate(XmiWriterTemplateName);
+            this.RegisterTemplate(XmiWriterFacadeTemplateName);
             this.RegisterPartialTemplate("core-xmi-writer-partial-for-attribute-template");
+            this.RegisterPartialTemplate("core-xmi-writer-partial-for-element-template");
         }
     }
 }

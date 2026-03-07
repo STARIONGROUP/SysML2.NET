@@ -31,6 +31,11 @@ Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attribu
 
 ## Architecture
 
+### Code Generation
+
+- favour duplicated code in codegeneration to have staticaly defined methods that provide performance over reflection based code.
+- code generation is done by processing the UML model and creating handlebars templates
+
 ### Code Generation Pipeline
 
 Most code in this repo is **auto-generated** — files marked `THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!` must not be edited directly.

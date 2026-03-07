@@ -211,6 +211,18 @@
     <None Update="Templates\Uml\core-poco-reference-resolve-extension-facade-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Uml\core-xmi-writer-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-xmi-writer-facade-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\Partials\core-xmi-writer-partial-for-attribute-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\Partials\core-xmi-writer-partial-for-element-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />
