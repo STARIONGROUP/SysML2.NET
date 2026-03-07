@@ -1,20 +1,20 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="DeSerializer.cs" company="Starion Group S.A.">
-// 
+//
 //   Copyright 2022-2026 Starion Group S.A.
-// 
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -66,6 +66,11 @@ namespace SysML2.NET.Serializer.Xmi
         /// </summary>
         private readonly IXmiDataReaderFacade xmiDataReaderFacade;
 
+        /// <summary>
+        /// The optional <see cref="IXmiElementOriginMap" /> used to track element-to-file associations during deserialization
+        /// </summary>
+        private IXmiElementOriginMap elementOriginMap;
+
         /// <summary>Initializes a new instance of the <see cref="DeSerializer"></see> class.</summary>
         /// <param name="externalReferenceService">The injected <see cref="IExternalReferenceService" /> providing external reference file resolve</param>
         /// <param name="xmiDataReaderFacade">
@@ -100,6 +105,31 @@ namespace SysML2.NET.Serializer.Xmi
         }
 
         /// <summary>
+        /// Deserializes the XMI file to a read <see cref="INamespace" />, tracking element origins
+        /// </summary>
+        /// <param name="fileLocation">
+        /// the <see cref="Uri" /> that locates the XMI file
+        /// </param>
+        /// <param name="elementOriginMap">
+        /// The <see cref="IXmiElementOriginMap" /> to populate with element-to-file associations
+        /// </param>
+        /// <exception cref="ArgumentNullException">If the <see cref="Uri" /> or <see cref="IXmiElementOriginMap" /> is null</exception>
+        /// <exception cref="FileNotFoundException">If the <see cref="Uri" /> does not locate an existing file</exception>
+        /// <returns>
+        /// The read <see cref="INamespace" />
+        /// </returns>
+        public INamespace DeSerialize(Uri fileLocation, IXmiElementOriginMap elementOriginMap)
+        {
+            if (elementOriginMap == null)
+            {
+                throw new ArgumentNullException(nameof(elementOriginMap));
+            }
+
+            this.elementOriginMap = elementOriginMap;
+            return this.DeSerialize(fileLocation, true);
+        }
+
+        /// <summary>
         /// Deserializes asynchronously the XMI file to a read <see cref="INamespace" />
         /// </summary>
         /// <param name="fileLocation">
@@ -113,6 +143,32 @@ namespace SysML2.NET.Serializer.Xmi
         /// </returns>
         public Task<INamespace> DeSerializeAsync(Uri fileLocation, CancellationToken cancellationToken = default)
         {
+            return this.DeSerializeAsync(fileLocation, true, cancellationToken);
+        }
+
+        /// <summary>
+        /// Deserializes asynchronously the XMI file to a read <see cref="INamespace" />, tracking element origins
+        /// </summary>
+        /// <param name="fileLocation">
+        /// the <see cref="Uri" /> that locates the XMI file
+        /// </param>
+        /// <param name="elementOriginMap">
+        /// The <see cref="IXmiElementOriginMap" /> to populate with element-to-file associations
+        /// </param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken" /> to cancel the read process</param>
+        /// <exception cref="ArgumentNullException">If the <see cref="Uri" /> or <see cref="IXmiElementOriginMap" /> is null</exception>
+        /// <exception cref="FileNotFoundException">If the <see cref="Uri" /> does not locate an existing file</exception>
+        /// <returns>
+        /// An awaitable <see cref="Task{TResult}" /> with the read <see cref="INamespace" />
+        /// </returns>
+        public Task<INamespace> DeSerializeAsync(Uri fileLocation, IXmiElementOriginMap elementOriginMap, CancellationToken cancellationToken = default)
+        {
+            if (elementOriginMap == null)
+            {
+                throw new ArgumentNullException(nameof(elementOriginMap));
+            }
+
+            this.elementOriginMap = elementOriginMap;
             return this.DeSerializeAsync(fileLocation, true, cancellationToken);
         }
 
@@ -195,7 +251,10 @@ namespace SysML2.NET.Serializer.Xmi
                 return existingNamespace;
             }
 
-            var readNamespace = (INamespace)await this.xmiDataReaderFacade.QueryXmiDataAsync(xmlReader, this.cache, fileLocation, this.externalReferenceService, this.loggerFactory, xmlReader.Name);
+            var readNamespace = (INamespace)await this.xmiDataReaderFacade.QueryXmiDataAsync(xmlReader, this.cache, fileLocation, this.externalReferenceService, this.loggerFactory, xmlReader.Name, this.elementOriginMap);
+
+            this.elementOriginMap?.RegisterRootNamespace(fileLocation, readNamespace.Id);
+
             stopWatch.Stop();
             this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
 
@@ -274,7 +333,10 @@ namespace SysML2.NET.Serializer.Xmi
                 return existingNamespace;
             }
 
-            var readNamespace = (INamespace)this.xmiDataReaderFacade.QueryXmiData(xmlReader, this.cache, fileLocation, this.externalReferenceService, this.loggerFactory, xmlReader.Name);
+            var readNamespace = (INamespace)this.xmiDataReaderFacade.QueryXmiData(xmlReader, this.cache, fileLocation, this.externalReferenceService, this.loggerFactory, xmlReader.Name, this.elementOriginMap);
+
+            this.elementOriginMap?.RegisterRootNamespace(fileLocation, readNamespace.Id);
+
             stopWatch.Stop();
             this.logger.LogTrace("finished to read xml {DocumentName} in {ElapsedMilliseconds}[ms]", fileInfo.Name, stopWatch.ElapsedMilliseconds);
 

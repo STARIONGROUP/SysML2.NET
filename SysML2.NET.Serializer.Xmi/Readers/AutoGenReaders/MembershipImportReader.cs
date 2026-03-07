@@ -61,7 +61,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// </param>
         /// <param name="externalReferenceService">The injected <see cref="IExternalReferenceService"/> used to register and process external references</param>
         /// <param name="loggerFactory">The injected <see cref="ILoggerFactory" /> used to set up logging</param>
-        public MembershipImportReader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory) : base(cache, xmiDataReaderFacade, externalReferenceService, loggerFactory)
+        public MembershipImportReader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, IXmiElementOriginMap elementOriginMap = null) : base(cache, xmiDataReaderFacade, externalReferenceService, loggerFactory, elementOriginMap)
         {
             this.logger = loggerFactory == null ? NullLogger<MembershipImportReader>.Instance : loggerFactory.CreateLogger<MembershipImportReader>();
         }
@@ -106,6 +106,8 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 {
                     this.logger.LogCritical("Failed to add element type [{Poco}] with id [{Id}] as it was already in the Cache. The XMI document seems to have duplicate xmi:id values", "MembershipImport", poco.Id);
                 }
+
+                this.ElementOriginMap?.Register(poco.Id, currentLocation);
 
                 var aliasIdsXmlAttribute = xmiReader.GetAttribute("aliasIds");
 
@@ -325,7 +327,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var importedMembershipValue = (IMembership)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var importedMembershipValue = (IMembership)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         poco.ImportedMembership = importedMembershipValue;
                                     }
@@ -394,7 +396,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var ownedRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var ownedRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedRelationship)poco).OwnedRelatedElement.Add(ownedRelatedElementValue);
                                     }
@@ -415,7 +417,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var ownedRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var ownedRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedElement)poco).OwnedRelationship.Add(ownedRelationshipValue);
                                     }
@@ -436,7 +438,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var owningRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var owningRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedRelationship)poco).OwningRelatedElement = owningRelatedElementValue;
                                     }
@@ -457,7 +459,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var owningRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var owningRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedElement)poco).OwningRelationship = owningRelationshipValue;
                                     }
@@ -525,6 +527,8 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 {
                     this.logger.LogCritical("Failed to add element type [{Poco}] with id [{Id}] as it was already in the Cache. The XMI document seems to have duplicate xmi:id values", "MembershipImport", poco.Id);
                 }
+
+                this.ElementOriginMap?.Register(poco.Id, currentLocation);
 
                 var aliasIdsXmlAttribute = xmiReader.GetAttribute("aliasIds");
 
@@ -744,7 +748,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var importedMembershipValue = (IMembership)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var importedMembershipValue = (IMembership)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         poco.ImportedMembership = importedMembershipValue;
                                     }
@@ -813,7 +817,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var ownedRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var ownedRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedRelationship)poco).OwnedRelatedElement.Add(ownedRelatedElementValue);
                                     }
@@ -834,7 +838,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var ownedRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var ownedRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedElement)poco).OwnedRelationship.Add(ownedRelationshipValue);
                                     }
@@ -855,7 +859,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var owningRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var owningRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedRelationship)poco).OwningRelatedElement = owningRelatedElementValue;
                                     }
@@ -876,7 +880,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     }
                                     else
                                     {
-                                        var owningRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var owningRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedElement)poco).OwningRelationship = owningRelationshipValue;
                                     }

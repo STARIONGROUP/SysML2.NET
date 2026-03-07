@@ -1,0 +1,29 @@
+{{#if (Property.QueryIsEnumerable property)}}
+    {{#if (Property.QueryIsBool property)}}
+        if(poco.{{Property.WritePropertyName property}} != null && poco.{{Property.WritePropertyName property}}.Count > 0)
+        {
+            xmlWriter.WriteAttributeString("{{String.LowerCaseFirstLetter property.Name}}", string.Join(" ", poco.{{Property.WritePropertyName property}}));
+        }
+    {{else}}
+        if(poco.{{Property.WritePropertyName property}} != null && poco.{{Property.WritePropertyName property}}.Count > 0)
+        {
+            xmlWriter.WriteAttributeString("{{String.LowerCaseFirstLetter property.Name}}", string.Join(" ", poco.{{Property.WritePropertyName property}}));
+        }
+    {{/if}}
+{{else}}
+    {{#if (Property.QueryIsBool property)}}
+        if(poco.{{Property.WritePropertyName property}})
+        {
+            xmlWriter.WriteAttributeString("{{String.LowerCaseFirstLetter property.Name}}", "true");
+        }
+    {{else if (Property.QueryIsEnum property)}}
+        xmlWriter.WriteAttributeString("{{String.LowerCaseFirstLetter property.Name}}", poco.{{Property.WritePropertyName property}}.ToString());
+    {{else if (Property.QueryIsNumeric property)}}
+        xmlWriter.WriteAttributeString("{{String.LowerCaseFirstLetter property.Name}}", poco.{{Property.WritePropertyName property}}.ToString(CultureInfo.InvariantCulture));
+    {{else}}
+        if(!string.IsNullOrWhiteSpace(poco.{{Property.WritePropertyName property}}))
+        {
+            xmlWriter.WriteAttributeString("{{String.LowerCaseFirstLetter property.Name}}", poco.{{Property.WritePropertyName property}});
+        }
+    {{/if}}
+{{/if}}

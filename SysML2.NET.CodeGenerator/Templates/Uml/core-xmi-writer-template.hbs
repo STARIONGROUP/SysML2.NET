@@ -1,0 +1,115 @@
+// -------------------------------------------------------------------------------------------------
+// <copyright file="{{this.Name}}Writer.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.Serializer.Xmi.Writers
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Xml;
+
+    using SysML2.NET.Common;
+    {{ #Class.WriteEnumerationNameSpaces this}}
+    {{ #Class.WriteNameSpaces this POCO}}
+    using SysML2.NET.Core.POCO.{{ #NamedElement.WriteFullyQualifiedNameSpace this }};
+    using SysML2.NET.Core.POCO.Root.Elements;
+
+    /// <summary>
+    /// The purpose of the <see cref="{{this.Name}}Writer" /> is to write an instance of <see cref="I{{this.Name}}" />
+    /// to the XMI document
+    /// </summary>
+    public static class {{this.Name}}Writer
+    {
+        /// <summary>
+        /// Writes the <see cref="I{{this.Name}}" /> object to its XML representation
+        /// </summary>
+        /// <param name="xmlWriter">The target <see cref="XmlWriter" /></param>
+        /// <param name="poco">The <see cref="I{{this.Name}}" /> to write</param>
+        /// <param name="elementName">The XML element name</param>
+        /// <param name="includeDerivedProperties">Whether to include derived properties</param>
+        /// <param name="xmiWriter">The <see cref="IXmiWriter" /> for writing child elements</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap" /> for href reconstruction</param>
+        /// <param name="currentFileUri">The optional <see cref="Uri" /> of the current output file</param>
+        public static void Write(XmlWriter xmlWriter, I{{this.Name}} poco, string elementName, bool includeDerivedProperties, IXmiWriter xmiWriter, IXmiElementOriginMap elementOriginMap = null, Uri currentFileUri = null)
+        {
+            xmlWriter.WriteStartElement(elementName);
+            xmlWriter.WriteAttributeString("xsi", "type", null, "sysml:{{this.Name}}");
+            xmlWriter.WriteAttributeString("xmi", "id", null, poco.Id.ToString());
+
+            // Scalar properties as XML attributes
+            {{#with this as |class| }}
+                {{ #each (Class.QueryAllProperties this) as | property | }}
+                    {{#unless this.IsTransient}}
+                        {{#unless this.IsDerived}}
+                            {{#unless (Property.QueryIsReferenceProperty this)}}
+                                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                    {{> core-xmi-writer-partial-for-attribute-template this}}
+                                {{/unless}}
+                            {{/unless}}
+                        {{/unless}}
+                    {{/unless}}
+                {{/each}}
+            {{/with}}
+
+            // Derived scalar properties
+            if(includeDerivedProperties)
+            {
+                {{#with this as |class| }}
+                    {{ #each (Class.QueryAllProperties this) as | property | }}
+                        {{#unless this.IsTransient}}
+                            {{#if this.IsDerived}}
+                                {{#unless (Property.QueryIsReferenceProperty this)}}
+                                    {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                        {{> core-xmi-writer-partial-for-attribute-template this}}
+                                    {{/unless}}
+                                {{/unless}}
+                            {{/if}}
+                        {{/unless}}
+                    {{/each}}
+                {{/with}}
+            }
+
+            // Reference/containment properties as child elements
+            {{#with this as |class| }}
+                {{ #each (Class.QueryAllProperties this) as | property | }}
+                    {{#unless this.IsTransient}}
+                        {{#unless this.IsDerived}}
+                            {{#if (Property.QueryIsReferenceProperty this)}}
+                                {{#unless (Property.IsPropertyRedefinedInClass this class)}}
+                                    // {{Property.WritePropertyName this}} child elements handled by reflection-based XmiWriter
+                                {{/unless}}
+                            {{/if}}
+                        {{/unless}}
+                    {{/unless}}
+                {{/each}}
+            {{/with}}
+
+            xmlWriter.WriteEndElement();
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

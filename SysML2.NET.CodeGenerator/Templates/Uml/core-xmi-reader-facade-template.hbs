@@ -44,38 +44,38 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// A dictionary that contains functions that return <see cref="IData"/> based a key that represents the xsi Type
         /// and a provided <see cref="IXmiDataCache"/>, <see cref="IExternalReferenceService" />, <see cref="ILoggerFactory"/> and <see cref="XmlReader"/>
         /// </summary>
-        private readonly Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, IData>> readerCache;
+        private readonly Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, IXmiElementOriginMap, IData>> readerCache;
 
         /// <summary>
         /// A dictionary that contains functions that return an awaitable <see cref="Task" /> with the <see cref="IData"/> based a key that represents the xsi Type
         /// and a provided <see cref="IXmiDataCache"/>, <see cref="IExternalReferenceService" />, <see cref="ILoggerFactory"/> and <see cref="XmlReader"/>
         /// </summary>
-        private readonly Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, Task<IData>>> readerAsyncCache;
+        private readonly Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, IXmiElementOriginMap, Task<IData>>> readerAsyncCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmiDataReaderFacade"/>
         /// </summary>
         public XmiDataReaderFacade()
         {
-            this.readerCache = new Dictionary<string, Func<IXmiDataCache, IExternalReferenceService,ILoggerFactory, XmlReader, Uri, IData>>
+            this.readerCache = new Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, IXmiElementOriginMap, IData>>
             {
             {{ #each this as | class | }}
-                ["sysml:{{ class.Name }}"] = (cache, externalReferenceService, loggerFactory, xmlReader, currentLocation) =>
+                ["sysml:{{ class.Name }}"] = (cache, externalReferenceService, loggerFactory, xmlReader, currentLocation, elementOriginMap) =>
                 {
                     using var subXmlReader = xmlReader.ReadSubtree();
-                    var {{ String.LowerCaseFirstLetter class.Name }}Reader = new {{ class.Name }}Reader(cache, this, externalReferenceService, loggerFactory);
+                    var {{ String.LowerCaseFirstLetter class.Name }}Reader = new {{ class.Name }}Reader(cache, this, externalReferenceService, loggerFactory, elementOriginMap);
                     return {{ String.LowerCaseFirstLetter class.Name }}Reader.Read(subXmlReader, currentLocation);
                 },
             {{/each}}
             };
 
-            this.readerAsyncCache = new Dictionary<string, Func<IXmiDataCache, IExternalReferenceService,ILoggerFactory, XmlReader, Uri, Task<IData>>>
+            this.readerAsyncCache = new Dictionary<string, Func<IXmiDataCache, IExternalReferenceService, ILoggerFactory, XmlReader, Uri, IXmiElementOriginMap, Task<IData>>>
             {
                 {{ #each this as | class | }}
-                    ["sysml:{{ class.Name }}"] = async (cache, externalReferenceService, loggerFactory, xmlReader, currentLocation) =>
+                    ["sysml:{{ class.Name }}"] = async (cache, externalReferenceService, loggerFactory, xmlReader, currentLocation, elementOriginMap) =>
                     {
                     using var subXmlReader = xmlReader.ReadSubtree();
-                    var {{ String.LowerCaseFirstLetter class.Name }}Reader = new {{ class.Name }}Reader(cache, this, externalReferenceService, loggerFactory);
+                    var {{ String.LowerCaseFirstLetter class.Name }}Reader = new {{ class.Name }}Reader(cache, this, externalReferenceService, loggerFactory, elementOriginMap);
                     return await {{ String.LowerCaseFirstLetter class.Name }}Reader.ReadAsync(subXmlReader, currentLocation);
                     },
                 {{/each}}
@@ -95,7 +95,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// <param name="explicitTypeName">The explicit type name to resolve, in case of un-specified xsi:type</param>
         /// <returns>An instance of the read <see cref="IData"/></returns>
         /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
-        public IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "")
+        public IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "", IXmiElementOriginMap elementOriginMap = null)
         {
             AssertValidQueryXmiDataParameters(xmiReader, xmiDataCache, currentLocation);
 
@@ -107,12 +107,12 @@ namespace SysML2.NET.Serializer.Xmi.Readers
             }
 
             xsiType ??= explicitTypeName;
-            
+
             if (this.readerCache.TryGetValue(xsiType, out var readerFactory))
             {
-                return readerFactory(xmiDataCache, externalReferenceService, loggerFactory, xmiReader, currentLocation);
+                return readerFactory(xmiDataCache, externalReferenceService, loggerFactory, xmiReader, currentLocation, elementOriginMap);
             }
-            
+
             throw new InvalidOperationException($"No reader found for xsi:type - {xsiType}");
         }
 
@@ -129,24 +129,24 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// <param name="explicitTypeName">The explicit type name to resolve, in case of un-specified xsi:type</param>
         /// <returns>An awaitable <see cref="Task" /> with the instance of the read <see cref="IData"/></returns>
         /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
-        public Task<IData> QueryXmiDataAsync(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "")
+        public Task<IData> QueryXmiDataAsync(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "", IXmiElementOriginMap elementOriginMap = null)
         {
             AssertValidQueryXmiDataParameters(xmiReader, xmiDataCache, currentLocation);
-        
+
             var xsiType = xmiReader.GetAttribute("xsi:type");
-        
+
             if (xsiType == null && string.IsNullOrEmpty(explicitTypeName))
             {
                 throw new InvalidOperationException($"The xsi:type is not specified");
             }
-    
+
             xsiType ??= explicitTypeName;
-        
+
             if (this.readerAsyncCache.TryGetValue(xsiType, out var readerFactory))
             {
-                return readerFactory(xmiDataCache, externalReferenceService, loggerFactory, xmiReader, currentLocation);
+                return readerFactory(xmiDataCache, externalReferenceService, loggerFactory, xmiReader, currentLocation, elementOriginMap);
             }
-        
+
             throw new InvalidOperationException($"No reader found for xsi:type - {xsiType}");
         }
 

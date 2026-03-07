@@ -49,6 +49,22 @@ namespace SysML2.NET.Serializer.Xmi
         INamespace DeSerialize(Uri fileLocation);
 
         /// <summary>
+        /// Deserializes the XMI file to a read <see cref="INamespace"/>, tracking element origins
+        /// </summary>
+        /// <param name="fileLocation">
+        /// the <see cref="Uri"/> that locates the XMI file
+        /// </param>
+        /// <param name="elementOriginMap">
+        /// The <see cref="IXmiElementOriginMap"/> to populate with element-to-file associations
+        /// </param>
+        /// <exception cref="ArgumentNullException">If the <see cref="Uri"/> or <see cref="IXmiElementOriginMap"/> is null</exception>
+        /// <exception cref="FileNotFoundException">If the <see cref="Uri"/> does not locate an existing file</exception>
+        /// <returns>
+        /// The read <see cref="INamespace"/>
+        /// </returns>
+        INamespace DeSerialize(Uri fileLocation, IXmiElementOriginMap elementOriginMap);
+
+        /// <summary>
         /// Deserializes asynchronously the XMI file to a read <see cref="INamespace"/>
         /// </summary>
         /// <param name="fileLocation">
@@ -61,5 +77,22 @@ namespace SysML2.NET.Serializer.Xmi
         /// An awaitable <see cref="Task{TResult}"/> with the read <see cref="INamespace"/>
         /// </returns>
         Task<INamespace> DeSerializeAsync(Uri fileLocation, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Deserializes asynchronously the XMI file to a read <see cref="INamespace"/>, tracking element origins
+        /// </summary>
+        /// <param name="fileLocation">
+        /// the <see cref="Uri"/> that locates the XMI file
+        /// </param>
+        /// <param name="elementOriginMap">
+        /// The <see cref="IXmiElementOriginMap"/> to populate with element-to-file associations
+        /// </param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the read process</param>
+        /// <exception cref="ArgumentNullException">If the <see cref="Uri"/> or <see cref="IXmiElementOriginMap"/> is null</exception>
+        /// <exception cref="FileNotFoundException">If the <see cref="Uri"/> does not locate an existing file</exception>
+        /// <returns>
+        /// An awaitable <see cref="Task{TResult}"/> with the read <see cref="INamespace"/>
+        /// </returns>
+        Task<INamespace> DeSerializeAsync(Uri fileLocation, IXmiElementOriginMap elementOriginMap, CancellationToken cancellationToken = default);
     }
 }

@@ -17,9 +17,9 @@ case"{{String.LowerCaseFirstLetter property.Name}}":
     else
     {
         {{#if asyncState}}
-            var {{String.LowerCaseFirstLetter property.Name}}Value = (I{{property.Type.Name}})await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+            var {{String.LowerCaseFirstLetter property.Name}}Value = (I{{property.Type.Name}})await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
         {{else}}
-            var {{String.LowerCaseFirstLetter property.Name}}Value = (I{{property.Type.Name}})this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+            var {{String.LowerCaseFirstLetter property.Name}}Value = (I{{property.Type.Name}})this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
         {{/if}}
 
         {{#if (Property.QueryIsEnumerable property)}}
