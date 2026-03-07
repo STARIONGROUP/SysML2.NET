@@ -355,3 +355,4 @@ MigrationBackup/
 # WinMerge bak files
 *.bak
 /switcher.json
+/.claude/settings.local.json

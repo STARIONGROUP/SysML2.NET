@@ -1,5 +1,5 @@
-// -------------------------------------------------------------------------------------------------
-// <copyright file="ISerializer.cs" company="Starion Group S.A.">
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="Serializer.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
 // 
@@ -24,7 +24,10 @@ namespace SysML2.NET.Serializer.Xmi
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
-
+    
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+    
     using SysML2.NET.Common;
     using SysML2.NET.Core.POCO.Root.Namespaces;
 
@@ -32,8 +35,26 @@ namespace SysML2.NET.Serializer.Xmi
     /// The purpose of the <see cref="ISerializer"/> is to write an <see cref="INamespace"/>
     /// as XMI to a <see cref="Stream"/>
     /// </summary>
-    public interface ISerializer
+    public class Serializer : ISerializer
     {
+        /// <summary>
+        /// The injected <see cref="ILogger{Serializer}" /> to produce logs statement
+        /// </summary>
+        private readonly ILogger<Serializer> logger;
+
+        /// <summary>
+        /// The injected <see cref="ILoggerFactory " /> used to set up logging
+        /// </summary>
+        private readonly ILoggerFactory loggerFactory;
+        
+        /// <summary>Initializes a new instance of the <see cref="Serializer"></see> class.</summary>
+        /// <param name="loggerFactory">The injected <see cref="ILoggerFactory " /> used to set up logging</param>
+        public Serializer(ILoggerFactory loggerFactory)
+        {
+            this.loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            this.logger = this.loggerFactory.CreateLogger<Serializer>();
+        }
+        
         /// <summary>
         /// Serialize an <see cref="INamespace"/> as XMI to a target <see cref="Stream"/>
         /// </summary>
@@ -46,7 +67,10 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="stream">
         /// The target <see cref="Stream"/>
         /// </param>
-        void Serialize(INamespace @namespace, bool includeDerivedProperties, Stream stream);
+        public void Serialize(INamespace @namespace, bool includeDerivedProperties, Stream stream)
+        {
+            throw new System.NotImplementedException();
+        }
 
         /// <summary>
         /// Asynchronously serialize an <see cref="INamespace"/> as XMI to a target <see cref="Stream"/>
@@ -63,6 +87,9 @@ namespace SysML2.NET.Serializer.Xmi
         /// <param name="cancellationToken">
         /// The <see cref="CancellationToken"/> used to cancel the operation
         /// </param>
-        Task SerializeAsync(INamespace @namespace, bool includeDerivedProperties, Stream stream, CancellationToken cancellationToken);
+        public Task SerializeAsync(INamespace @namespace, bool includeDerivedProperties, Stream stream, CancellationToken cancellationToken)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
