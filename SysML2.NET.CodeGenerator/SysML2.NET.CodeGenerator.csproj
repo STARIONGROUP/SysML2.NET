@@ -19,6 +19,7 @@
     <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="5.0.0" />
     <!--
          -->
@@ -211,6 +212,12 @@
     <None Update="Templates\Uml\core-poco-reference-resolve-extension-facade-template.hbs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Uml\core-textual-notation-builder-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Uml\core-textual-notation-builder-facade-template.hbs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\HtmlDocs\" />
@@ -228,5 +235,18 @@
       <Link>datamodel\KerML_only_xmi.uml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Resources\kebnf.g4">
+      <Link>datamodel\kebnf.g4</Link>
+    </Content>
+    <Content Include="..\Resources\KerML-textual-bnf.kebnf">
+      <Link>datamodel\KerML-textual-bnf.kebnf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\SysML-textual-bnf.kebnf">
+      <Link>datamodel\SysML-textual-bnf.kebnf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

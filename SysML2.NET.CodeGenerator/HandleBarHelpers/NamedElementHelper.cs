@@ -52,6 +52,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 writer.WriteSafeString(namedElement.QueryNamespace());
             });
+
+            handlebars.RegisterHelper("NamedElement.WriteFullyQualifiedTypeName", (writer, _, arguments) =>
+            {
+                if (arguments[0] is not INamedElement namedElement)
+                {
+                    throw new ArgumentException("supposed to be INamedElement");
+                }
+
+                writer.WriteSafeString(namedElement.QueryFullyQualifiedTypeName());
+            });
         }
     }
 }
