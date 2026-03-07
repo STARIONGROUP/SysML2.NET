@@ -74,6 +74,48 @@ namespace SysML2.NET.Extensions.Core
         }
 
         /// <summary>
+        /// Tries to parse the <see cref="ReadOnlySpan{Char}"/> to a <see cref="VisibilityKind"/>
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="ReadOnlySpan{Char}"/> that is to be parsed
+        /// </param>
+        /// <param name="result">
+        /// When this method returns, contains the <see cref="VisibilityKind"/> value equivalent
+        /// to the span, if the conversion succeeded, or <c>default</c> if the conversion failed.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if <paramref name="value"/> was converted successfully; otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// This method is suited for  string parsing
+        /// There are zero allocations, no boxing, Fast short-circuit evaluation
+        /// JIT friendly
+        /// </remarks>
+        public static bool TryParse(ReadOnlySpan<char> value, out VisibilityKind result)
+        {
+            if (value.Length == 7 && value.Equals("private".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = VisibilityKind.Private;
+                return true;
+            }
+
+            if (value.Length == 9 && value.Equals("protected".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = VisibilityKind.Protected;
+                return true;
+            }
+
+            if (value.Length == 6 && value.Equals("public".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = VisibilityKind.Public;
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
+
+        /// <summary>
         /// Parses the <see cref="ReadOnlySpan{Byte}"/> to a <see cref="VisibilityKind"/>
         /// </summary>
         /// <param name="value">

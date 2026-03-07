@@ -49,6 +49,29 @@ namespace SysML2.NET.Extensions.Tests.Core.EnumProvider
         }
 
         [Test]
+        [TestCase("Private", VisibilityKind.Private)]
+        [TestCase("Protected", VisibilityKind.Protected)]
+        [TestCase("Public", VisibilityKind.Public)]
+        [TestCase("private", VisibilityKind.Private)]
+        [TestCase("protected", VisibilityKind.Protected)]
+        [TestCase("public", VisibilityKind.Public)]
+        public void Verify_that_TryParse_returns_true_for_valid_value(string input, VisibilityKind expected)
+        {
+            Assert.That(VisibilityKindProvider.TryParse(input.AsSpan(), out var result), Is.True);
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
+        [Test]
+        [TestCase("Starion")]
+        [TestCase("")]
+        [TestCase("internal")]
+        public void Verify_that_TryParse_returns_false_for_invalid_value(string input)
+        {
+            Assert.That(VisibilityKindProvider.TryParse(input.AsSpan(), out var result), Is.False);
+            Assert.That(result, Is.EqualTo(default(VisibilityKind)));
+        }
+
+        [Test]
         [TestCase("private", VisibilityKind.Private)]
         [TestCase("protected", VisibilityKind.Protected)]
         [TestCase("public", VisibilityKind.Public)]

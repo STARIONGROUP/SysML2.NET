@@ -33,6 +33,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using Microsoft.Extensions.Logging.Abstractions;
 
     using SysML2.NET.Common;
+    using SysML2.NET.Extensions.Core;
     using SysML2.NET.Core.POCO.Core.Classifiers;
     using SysML2.NET.Core.POCO.Core.Features;
     using SysML2.NET.Core.POCO.Core.Types;
@@ -64,6 +65,7 @@ namespace SysML2.NET.Serializer.Xmi.Readers
     using SysML2.NET.Core.POCO.Systems.VerificationCases;
     using SysML2.NET.Core.POCO.Systems.Views;
     using SysML2.NET.Core.POCO.Systems.Flows;
+    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
     /// The purpose of the <see cref="{this.Name}}Reader" /> is to read an instance of <see cref="I{this.Name}}" />
@@ -88,7 +90,8 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// </param>
         /// <param name="externalReferenceService">The injected <see cref="IExternalReferenceService"/> used to register and process external references</param>
         /// <param name="loggerFactory">The injected <see cref="ILoggerFactory" /> used to set up logging</param>
-        public FlowDefinitionReader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory) : base(cache, xmiDataReaderFacade, externalReferenceService, loggerFactory)
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> used to track element-to-file associations</param>
+        public FlowDefinitionReader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, IXmiElementOriginMap elementOriginMap = null) : base(cache, xmiDataReaderFacade, externalReferenceService, loggerFactory, elementOriginMap)
         {
             this.logger = loggerFactory == null ? NullLogger<FlowDefinitionReader>.Instance : loggerFactory.CreateLogger<FlowDefinitionReader>();
         }
@@ -133,6 +136,8 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 {
                     this.logger.LogCritical("Failed to add element type [{Poco}] with id [{Id}] as it was already in the Cache. The XMI document seems to have duplicate xmi:id values", "FlowDefinition", poco.Id);
                 }
+
+                this.ElementOriginMap?.Register(poco.Id, currentLocation);
 
                 var aliasIdsXmlAttribute = xmiReader.GetAttribute("aliasIds");
 
@@ -237,6 +242,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                         {
                             ownedRelatedElementXmlAttributeReferences.Add(ownedRelatedElementXmlAttributeReference);
                         }
+                        else
+                        {
+                            this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property 'ownedRelatedElement' on element {ElementId}", ownedRelatedElementXmlAttributeValue, poco.Id);
+                        }
                     }
 
                     if (ownedRelatedElementXmlAttributeReferences.Count != 0)
@@ -257,6 +266,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                         {
                             ownedRelationshipXmlAttributeReferences.Add(ownedRelationshipXmlAttributeReference);
                         }
+                        else
+                        {
+                            this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property 'ownedRelationship' on element {ElementId}", ownedRelationshipXmlAttributeValue, poco.Id);
+                        }
                     }
 
                     if (ownedRelationshipXmlAttributeReferences.Count != 0)
@@ -273,6 +286,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                     {
                         this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelatedElement", owningRelatedElementXmlAttributeReference);
                     }
+                    else
+                    {
+                        this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property 'owningRelatedElement' on element {ElementId}", owningRelatedElementXmlAttribute, poco.Id);
+                    }
                 }
 
                 var owningRelationshipXmlAttribute = xmiReader.GetAttribute("owningRelationship");
@@ -282,6 +299,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                     if (Guid.TryParse(owningRelationshipXmlAttribute, out var owningRelationshipXmlAttributeReference))
                     {
                         this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelationship", owningRelationshipXmlAttributeReference);
+                    }
+                    else
+                    {
+                        this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property 'owningRelationship' on element {ElementId}", owningRelationshipXmlAttribute, poco.Id);
                     }
                 }
 
@@ -345,7 +366,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isAbstractValue))
                                     {
-                                        poco.IsAbstract = bool.Parse(isAbstractValue);
+                                        if (bool.TryParse(isAbstractValue, out var isAbstractValueAsBool))
+                                        {
+                                            poco.IsAbstract = isAbstractValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isAbstract' on element {ElementId}", isAbstractValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -357,7 +385,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isImpliedValue))
                                     {
-                                        poco.IsImplied = bool.Parse(isImpliedValue);
+                                        if (bool.TryParse(isImpliedValue, out var isImpliedValueAsBool))
+                                        {
+                                            poco.IsImplied = isImpliedValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isImplied' on element {ElementId}", isImpliedValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -369,7 +404,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isImpliedIncludedValue))
                                     {
-                                        poco.IsImpliedIncluded = bool.Parse(isImpliedIncludedValue);
+                                        if (bool.TryParse(isImpliedIncludedValue, out var isImpliedIncludedValueAsBool))
+                                        {
+                                            poco.IsImpliedIncluded = isImpliedIncludedValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isImpliedIncluded' on element {ElementId}", isImpliedIncludedValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -381,7 +423,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isIndividualValue))
                                     {
-                                        poco.IsIndividual = bool.Parse(isIndividualValue);
+                                        if (bool.TryParse(isIndividualValue, out var isIndividualValueAsBool))
+                                        {
+                                            poco.IsIndividual = isIndividualValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isIndividual' on element {ElementId}", isIndividualValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -393,7 +442,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isSufficientValue))
                                     {
-                                        poco.IsSufficient = bool.Parse(isSufficientValue);
+                                        if (bool.TryParse(isSufficientValue, out var isSufficientValueAsBool))
+                                        {
+                                            poco.IsSufficient = isSufficientValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isSufficient' on element {ElementId}", isSufficientValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -405,7 +461,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isVariationValue))
                                     {
-                                        poco.IsVariation = bool.Parse(isVariationValue);
+                                        if (bool.TryParse(isVariationValue, out var isVariationValueAsBool))
+                                        {
+                                            poco.IsVariation = isVariationValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isVariation' on element {ElementId}", isVariationValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -419,12 +482,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var hrefSplit = hrefAttribute.Split('#');
                                         this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
-                                        var ownedRelatedElementId = Guid.Parse(hrefSplit[1]);
-                                        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelatedElement", ownedRelatedElementId);
+                                        if (Guid.TryParse(hrefSplit[1], out var ownedRelatedElementId))
+                                        {
+                                            this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelatedElement", ownedRelatedElementId);
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse href GUID value '{HrefValue}' for property 'ownedRelatedElement' on element {ElementId}", hrefSplit[1], poco.Id);
+                                        }
                                     }
                                     else
                                     {
-                                        var ownedRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var ownedRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedRelationship)poco).OwnedRelatedElement.Add(ownedRelatedElementValue);
                                     }
@@ -440,12 +509,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var hrefSplit = hrefAttribute.Split('#');
                                         this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
-                                        var ownedRelationshipId = Guid.Parse(hrefSplit[1]);
-                                        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelationship", ownedRelationshipId);
+                                        if (Guid.TryParse(hrefSplit[1], out var ownedRelationshipId))
+                                        {
+                                            this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelationship", ownedRelationshipId);
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse href GUID value '{HrefValue}' for property 'ownedRelationship' on element {ElementId}", hrefSplit[1], poco.Id);
+                                        }
                                     }
                                     else
                                     {
-                                        var ownedRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var ownedRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedElement)poco).OwnedRelationship.Add(ownedRelationshipValue);
                                     }
@@ -461,12 +536,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var hrefSplit = hrefAttribute.Split('#');
                                         this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
-                                        var owningRelatedElementId = Guid.Parse(hrefSplit[1]);
-                                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelatedElement", owningRelatedElementId);
+                                        if (Guid.TryParse(hrefSplit[1], out var owningRelatedElementId))
+                                        {
+                                            this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelatedElement", owningRelatedElementId);
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse href GUID value '{HrefValue}' for property 'owningRelatedElement' on element {ElementId}", hrefSplit[1], poco.Id);
+                                        }
                                     }
                                     else
                                     {
-                                        var owningRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var owningRelatedElementValue = (IElement)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedRelationship)poco).OwningRelatedElement = owningRelatedElementValue;
                                     }
@@ -482,12 +563,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var hrefSplit = hrefAttribute.Split('#');
                                         this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
-                                        var owningRelationshipId = Guid.Parse(hrefSplit[1]);
-                                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelationship", owningRelationshipId);
+                                        if (Guid.TryParse(hrefSplit[1], out var owningRelationshipId))
+                                        {
+                                            this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelationship", owningRelationshipId);
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse href GUID value '{HrefValue}' for property 'owningRelationship' on element {ElementId}", hrefSplit[1], poco.Id);
+                                        }
                                     }
                                     else
                                     {
-                                        var owningRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var owningRelationshipValue = (IRelationship)this.XmiDataReaderFacade.QueryXmiData(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedElement)poco).OwningRelationship = owningRelationshipValue;
                                     }
@@ -495,6 +582,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            default:
+                                this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading FlowDefinition at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
+                                xmiReader.Skip();
+                                break;
                         }
                     }
                 }
@@ -543,6 +634,8 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                 {
                     this.logger.LogCritical("Failed to add element type [{Poco}] with id [{Id}] as it was already in the Cache. The XMI document seems to have duplicate xmi:id values", "FlowDefinition", poco.Id);
                 }
+
+                this.ElementOriginMap?.Register(poco.Id, currentLocation);
 
                 var aliasIdsXmlAttribute = xmiReader.GetAttribute("aliasIds");
 
@@ -647,6 +740,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                         {
                             ownedRelatedElementXmlAttributeReferences.Add(ownedRelatedElementXmlAttributeReference);
                         }
+                        else
+                        {
+                            this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property 'ownedRelatedElement' on element {ElementId}", ownedRelatedElementXmlAttributeValue, poco.Id);
+                        }
                     }
 
                     if (ownedRelatedElementXmlAttributeReferences.Count != 0)
@@ -667,6 +764,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                         {
                             ownedRelationshipXmlAttributeReferences.Add(ownedRelationshipXmlAttributeReference);
                         }
+                        else
+                        {
+                            this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property 'ownedRelationship' on element {ElementId}", ownedRelationshipXmlAttributeValue, poco.Id);
+                        }
                     }
 
                     if (ownedRelationshipXmlAttributeReferences.Count != 0)
@@ -683,6 +784,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                     {
                         this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelatedElement", owningRelatedElementXmlAttributeReference);
                     }
+                    else
+                    {
+                        this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property 'owningRelatedElement' on element {ElementId}", owningRelatedElementXmlAttribute, poco.Id);
+                    }
                 }
 
                 var owningRelationshipXmlAttribute = xmiReader.GetAttribute("owningRelationship");
@@ -692,6 +797,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                     if (Guid.TryParse(owningRelationshipXmlAttribute, out var owningRelationshipXmlAttributeReference))
                     {
                         this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelationship", owningRelationshipXmlAttributeReference);
+                    }
+                    else
+                    {
+                        this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property 'owningRelationship' on element {ElementId}", owningRelationshipXmlAttribute, poco.Id);
                     }
                 }
 
@@ -755,7 +864,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isAbstractValue))
                                     {
-                                        poco.IsAbstract = bool.Parse(isAbstractValue);
+                                        if (bool.TryParse(isAbstractValue, out var isAbstractValueAsBool))
+                                        {
+                                            poco.IsAbstract = isAbstractValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isAbstract' on element {ElementId}", isAbstractValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -767,7 +883,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isImpliedValue))
                                     {
-                                        poco.IsImplied = bool.Parse(isImpliedValue);
+                                        if (bool.TryParse(isImpliedValue, out var isImpliedValueAsBool))
+                                        {
+                                            poco.IsImplied = isImpliedValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isImplied' on element {ElementId}", isImpliedValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -779,7 +902,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isImpliedIncludedValue))
                                     {
-                                        poco.IsImpliedIncluded = bool.Parse(isImpliedIncludedValue);
+                                        if (bool.TryParse(isImpliedIncludedValue, out var isImpliedIncludedValueAsBool))
+                                        {
+                                            poco.IsImpliedIncluded = isImpliedIncludedValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isImpliedIncluded' on element {ElementId}", isImpliedIncludedValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -791,7 +921,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isIndividualValue))
                                     {
-                                        poco.IsIndividual = bool.Parse(isIndividualValue);
+                                        if (bool.TryParse(isIndividualValue, out var isIndividualValueAsBool))
+                                        {
+                                            poco.IsIndividual = isIndividualValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isIndividual' on element {ElementId}", isIndividualValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -803,7 +940,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isSufficientValue))
                                     {
-                                        poco.IsSufficient = bool.Parse(isSufficientValue);
+                                        if (bool.TryParse(isSufficientValue, out var isSufficientValueAsBool))
+                                        {
+                                            poco.IsSufficient = isSufficientValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isSufficient' on element {ElementId}", isSufficientValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -815,7 +959,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
 
                                     if (!string.IsNullOrWhiteSpace(isVariationValue))
                                     {
-                                        poco.IsVariation = bool.Parse(isVariationValue);
+                                        if (bool.TryParse(isVariationValue, out var isVariationValueAsBool))
+                                        {
+                                            poco.IsVariation = isVariationValueAsBool;
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse bool value '{Value}' for property 'isVariation' on element {ElementId}", isVariationValue, poco.Id);
+                                        }
                                     }
 
                                     break;
@@ -829,12 +980,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var hrefSplit = hrefAttribute.Split('#');
                                         this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
-                                        var ownedRelatedElementId = Guid.Parse(hrefSplit[1]);
-                                        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelatedElement", ownedRelatedElementId);
+                                        if (Guid.TryParse(hrefSplit[1], out var ownedRelatedElementId))
+                                        {
+                                            this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelatedElement", ownedRelatedElementId);
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse href GUID value '{HrefValue}' for property 'ownedRelatedElement' on element {ElementId}", hrefSplit[1], poco.Id);
+                                        }
                                     }
                                     else
                                     {
-                                        var ownedRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var ownedRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedRelationship)poco).OwnedRelatedElement.Add(ownedRelatedElementValue);
                                     }
@@ -850,12 +1007,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var hrefSplit = hrefAttribute.Split('#');
                                         this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
-                                        var ownedRelationshipId = Guid.Parse(hrefSplit[1]);
-                                        this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelationship", ownedRelationshipId);
+                                        if (Guid.TryParse(hrefSplit[1], out var ownedRelationshipId))
+                                        {
+                                            this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "ownedRelationship", ownedRelationshipId);
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse href GUID value '{HrefValue}' for property 'ownedRelationship' on element {ElementId}", hrefSplit[1], poco.Id);
+                                        }
                                     }
                                     else
                                     {
-                                        var ownedRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var ownedRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedElement)poco).OwnedRelationship.Add(ownedRelationshipValue);
                                     }
@@ -871,12 +1034,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var hrefSplit = hrefAttribute.Split('#');
                                         this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
-                                        var owningRelatedElementId = Guid.Parse(hrefSplit[1]);
-                                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelatedElement", owningRelatedElementId);
+                                        if (Guid.TryParse(hrefSplit[1], out var owningRelatedElementId))
+                                        {
+                                            this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelatedElement", owningRelatedElementId);
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse href GUID value '{HrefValue}' for property 'owningRelatedElement' on element {ElementId}", hrefSplit[1], poco.Id);
+                                        }
                                     }
                                     else
                                     {
-                                        var owningRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var owningRelatedElementValue = (IElement)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedRelationship)poco).OwningRelatedElement = owningRelatedElementValue;
                                     }
@@ -892,12 +1061,18 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     {
                                         var hrefSplit = hrefAttribute.Split('#');
                                         this.ExternalReferenceService.AddExternalReferenceToProcess(currentLocation, hrefSplit[0]);
-                                        var owningRelationshipId = Guid.Parse(hrefSplit[1]);
-                                        this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelationship", owningRelationshipId);
+                                        if (Guid.TryParse(hrefSplit[1], out var owningRelationshipId))
+                                        {
+                                            this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "owningRelationship", owningRelationshipId);
+                                        }
+                                        else
+                                        {
+                                            this.logger.LogWarning("Failed to parse href GUID value '{HrefValue}' for property 'owningRelationship' on element {ElementId}", hrefSplit[1], poco.Id);
+                                        }
                                     }
                                     else
                                     {
-                                        var owningRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory);
+                                        var owningRelationshipValue = (IRelationship)await this.XmiDataReaderFacade.QueryXmiDataAsync(xmiReader, this.Cache, currentLocation, this.ExternalReferenceService, this.LoggerFactory, elementOriginMap: this.ElementOriginMap);
 
                                         ((IContainedElement)poco).OwningRelationship = owningRelationshipValue;
                                     }
@@ -905,6 +1080,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
                                     break;
                                 }
 
+                            default:
+                                this.logger.LogWarning("Unexpected element '{LocalName}' encountered while reading FlowDefinition at line:position {LineNumber}:{LinePosition}", xmiReader.LocalName, xmlLineInfo?.LineNumber, xmlLineInfo?.LinePosition);
+                                await xmiReader.SkipAsync();
+                                break;
                         }
                     }
                 }

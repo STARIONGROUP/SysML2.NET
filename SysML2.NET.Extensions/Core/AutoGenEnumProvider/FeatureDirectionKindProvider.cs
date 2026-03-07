@@ -74,6 +74,48 @@ namespace SysML2.NET.Extensions.Core
         }
 
         /// <summary>
+        /// Tries to parse the <see cref="ReadOnlySpan{Char}"/> to a <see cref="FeatureDirectionKind"/>
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="ReadOnlySpan{Char}"/> that is to be parsed
+        /// </param>
+        /// <param name="result">
+        /// When this method returns, contains the <see cref="FeatureDirectionKind"/> value equivalent
+        /// to the span, if the conversion succeeded, or <c>default</c> if the conversion failed.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if <paramref name="value"/> was converted successfully; otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// This method is suited for  string parsing
+        /// There are zero allocations, no boxing, Fast short-circuit evaluation
+        /// JIT friendly
+        /// </remarks>
+        public static bool TryParse(ReadOnlySpan<char> value, out FeatureDirectionKind result)
+        {
+            if (value.Length == 2 && value.Equals("in".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = FeatureDirectionKind.In;
+                return true;
+            }
+
+            if (value.Length == 5 && value.Equals("inout".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = FeatureDirectionKind.Inout;
+                return true;
+            }
+
+            if (value.Length == 3 && value.Equals("out".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = FeatureDirectionKind.Out;
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
+
+        /// <summary>
         /// Parses the <see cref="ReadOnlySpan{Byte}"/> to a <see cref="FeatureDirectionKind"/>
         /// </summary>
         /// <param name="value">

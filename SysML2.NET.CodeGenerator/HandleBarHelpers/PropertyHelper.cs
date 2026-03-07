@@ -1016,6 +1016,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return property.Type.Name == "Element";
             });
 
+            handlebars.RegisterHelper("Property.QueryIsImpliedIncluded", (_, arguments) =>
+            {
+                if (arguments.Single() is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.QueryIsImpliedIncluded argument supposed to be IProperty");
+                }
+
+                return property.Name == "isImpliedIncluded";
+            });
+
             handlebars.RegisterHelper("Property.WriteForNonDerivedCompositeAggregation", (writer, context, _) =>
             {
                 if (context.Value is not IProperty property)
@@ -1037,7 +1047,80 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 stringBuilder.AppendLine($"{childVariableName} => {childVariableName}.{oppositePropertyName});");
                 writer.WriteSafeString(stringBuilder + Environment.NewLine);
             });
-    }
+            
+            handlebars.RegisterHelper("Property.QueryHasDefaultValueWithDifferentValueThanDefault", (_, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new ArgumentException("The #Property.QueryHasDefaultValueWithDifferentValueThanDefault supposed to have one argument");
+                }
+
+                if (arguments[0] is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.QueryHasDefaultValueWithDifferentValueThanDefault argument supposed to be an IProperty");
+                }
+
+                return property.QueryIsEnum() 
+                    ? property.QueryIsEnumPropertyWithDefaultValue() 
+                    : (property.QueryHasDefaultValue() && property.QueryIsDefaultValueDifferentThanDefault());
+            });
+
+            handlebars.RegisterHelper("Property.WriteDefaultValue", (writer, _, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new ArgumentException("The #Property.WriteDefaultValue supposed to have one argument");
+                }
+
+                if (arguments[0] is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.WriteDefaultValue argument supposed to be an IProperty");
+                }
+
+                if (property.QueryIsEnum())
+                {
+                    writer.WriteSafeString($"{property.Type.Name}.{property.QueryDefaultValueAsString().CapitalizeFirstLetter()}");
+                }
+                else if (property.QueryIsString())
+                {
+                    writer.WriteSafeString($"\"{property.QueryDefaultValueAsString()}\"");
+                }
+                else
+                {
+                    writer.WriteSafeString($"{property.QueryDefaultValueAsString()}");
+                }
+            });
+            
+            handlebars.RegisterHelper("Property.QueryIsEnumerableAndReferenceProperty", (_, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new ArgumentException("The #Property.QueryIsEnumerableAndReferenceProperty supposed to have one argument");
+                }
+
+                if (arguments[0] is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.QueryIsEnumerableAndReferenceProperty argument supposed to be an IProperty");
+                }
+                
+                return property.QueryIsEnumerable() && property.QueryIsReferenceProperty();
+            });
+
+            handlebars.RegisterHelper("Property.IsTypeAbstract", (_, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new ArgumentException("The #Property.IsTypeAbstract supposed to have one argument");
+                }
+
+                if (arguments[0] is not IProperty property)
+                {
+                    throw new ArgumentException("The #Property.IsTypeAbstract argument supposed to be an IProperty");
+                }
+
+                return property.Type is IClassifier { IsAbstract: true };
+            });
+        }
 
         /// <summary>
         /// Gets the getter implementation for an <see cref="IProperty"/> that has been redefined, for DTO generation

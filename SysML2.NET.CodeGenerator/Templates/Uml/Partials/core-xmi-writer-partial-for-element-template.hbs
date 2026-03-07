@@ -1,0 +1,25 @@
+{{#if (Property.QueryIsEnumerable property)}}
+    if(poco.{{Property.WritePropertyName property}} != null)
+    {
+        foreach(var item in poco.{{Property.WritePropertyName property}})
+        {
+            {{#if property.IsComposite}}
+                this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)item, "{{String.LowerCaseFirstLetter property.Name}}", writerOptions, elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
+            {{else}}
+                this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)item, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
+            {{/if}}
+        }
+    }
+{{else}}
+    if(poco.{{Property.WritePropertyName property}} != null)
+    {
+        {{#if property.IsComposite}}
+            this.XmiDataWriterFacade.WriteContainedElement(xmlWriter, (IData)poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", writerOptions, elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
+        {{else}}
+            if(!writerOptions.WriteIdRefAsAttribute || !poco.{{Property.WritePropertyName property}}.QueryIsValidIdRef(elementOriginMap, currentFileUri))
+            {
+                this.XmiDataWriterFacade.WriteReferenceElement(xmlWriter, (IData)poco.{{Property.WritePropertyName property}}, "{{String.LowerCaseFirstLetter property.Name}}", elementOriginMap, currentFileUri{{#if property.Type.IsAbstract}}, true{{/if}});
+            }
+        {{/if}}
+    }
+{{/if}}

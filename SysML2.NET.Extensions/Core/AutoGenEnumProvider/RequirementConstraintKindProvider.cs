@@ -69,6 +69,42 @@ namespace SysML2.NET.Extensions.Core
         }
 
         /// <summary>
+        /// Tries to parse the <see cref="ReadOnlySpan{Char}"/> to a <see cref="RequirementConstraintKind"/>
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="ReadOnlySpan{Char}"/> that is to be parsed
+        /// </param>
+        /// <param name="result">
+        /// When this method returns, contains the <see cref="RequirementConstraintKind"/> value equivalent
+        /// to the span, if the conversion succeeded, or <c>default</c> if the conversion failed.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if <paramref name="value"/> was converted successfully; otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// This method is suited for  string parsing
+        /// There are zero allocations, no boxing, Fast short-circuit evaluation
+        /// JIT friendly
+        /// </remarks>
+        public static bool TryParse(ReadOnlySpan<char> value, out RequirementConstraintKind result)
+        {
+            if (value.Length == 10 && value.Equals("assumption".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = RequirementConstraintKind.Assumption;
+                return true;
+            }
+
+            if (value.Length == 11 && value.Equals("requirement".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = RequirementConstraintKind.Requirement;
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
+
+        /// <summary>
         /// Parses the <see cref="ReadOnlySpan{Byte}"/> to a <see cref="RequirementConstraintKind"/>
         /// </summary>
         /// <param name="value">

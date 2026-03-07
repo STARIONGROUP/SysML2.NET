@@ -1,0 +1,70 @@
+{{#if (Property.QueryIsEnumerable property)}}
+    {{#unless (Property.QueryIsReferenceProperty property)}}
+        {{#if (Property.QueryIsBool property)}}
+            if(poco.{{Property.WritePropertyName property}} != null && poco.{{Property.WritePropertyName property}}.Count > 0)
+            {
+            await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, string.Join(" ", poco.{{Property.WritePropertyName property}}));
+            }
+        {{else}}
+            if(poco.{{Property.WritePropertyName property}} != null && poco.{{Property.WritePropertyName property}}.Count > 0)
+            {
+            await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, string.Join(" ", poco.{{Property.WritePropertyName property}}));
+            }
+        {{/if}}
+    {{/unless}}
+{{else}}
+    {{#if  (Property.QueryIsReferenceProperty property)}}
+        if(writerOptions.WriteIdRefAsAttribute && poco.{{Property.WritePropertyName property}} != null && poco.{{Property.WritePropertyName property}}.QueryIsValidIdRef(elementOriginMap, currentFileUri))
+        {
+            await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, poco.{{Property.WritePropertyName property}}.Id.ToString());
+        }
+    {{else}}
+        {{#if (Property.QueryHasDefaultValueWithDifferentValueThanDefault property)}}
+            {{#unless (Property.QueryIsBool property)}}
+            if(poco.{{Property.WritePropertyName property}} != {{Property.WriteDefaultValue property}})
+            {
+            {{/unless}}
+        {{/if}}
+        {{#if (Property.QueryIsBool property)}}
+            {{#if (Property.QueryIsImpliedIncluded property)}}
+            if(writerOptions.IncludeImplied || poco.IsImpliedIncluded)
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "isImpliedIncluded", null, "true");
+            }
+            {{else}}
+            {{#if (Property.QueryHasDefaultValueWithDifferentValueThanDefault property)}}
+                if(!poco.{{Property.WritePropertyName property}})
+                {
+                await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, "false");
+                }
+            {{else}}
+                if(poco.{{Property.WritePropertyName property}})
+                {
+                await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, "true");
+                }
+            {{/if}}
+            {{/if}}
+        {{else if (Property.QueryIsEnum property)}}
+            {{#if (Property.QueryIsNullable property)}}
+                if(poco.{{Property.WritePropertyName property}}.HasValue)
+                {
+                await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, poco.{{Property.WritePropertyName property}}.Value.ToString().ToLower());
+                }
+            {{else}}
+                await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, poco.{{Property.WritePropertyName property}}.ToString().ToLower());
+            {{/if}}
+        {{else if (Property.QueryIsNumeric property)}}
+            await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, poco.{{Property.WritePropertyName property}}.ToString(CultureInfo.InvariantCulture));
+        {{else}}
+            if(!string.IsNullOrWhiteSpace(poco.{{Property.WritePropertyName property}}))
+            {
+                await xmlWriter.WriteAttributeStringAsync(null, "{{String.LowerCaseFirstLetter property.Name}}", null, poco.{{Property.WritePropertyName property}});
+            }
+        {{/if}}
+        {{#if (Property.QueryHasDefaultValueWithDifferentValueThanDefault property)}}
+            {{#unless (Property.QueryIsBool property)}}
+                }
+            {{/unless}}
+        {{/if}}
+    {{/if}}
+{{/if}}

@@ -55,6 +55,11 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         protected readonly IExternalReferenceService ExternalReferenceService;
 
         /// <summary>
+        /// The optional <see cref="IXmiElementOriginMap"/> used to track element-to-file associations
+        /// </summary>
+        protected readonly IXmiElementOriginMap ElementOriginMap;
+
+        /// <summary>
         /// the character used to split the values (of xml attributes) using a white space as separator
         /// </summary>
         protected static readonly char[] SplitMultiReference = [' '];
@@ -69,12 +74,14 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// </param>
         /// <param name="externalReferenceService">The injected <see cref="IExternalReferenceService"/> used to register and process external references</param>
         /// <param name="loggerFactory">The injected <see cref="ILoggerFactory" /> used to set up logging</param>
-        protected XmiDataReader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory)
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> used to track element-to-file associations</param>
+        protected XmiDataReader(IXmiDataCache cache, IXmiDataReaderFacade xmiDataReaderFacade, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, IXmiElementOriginMap elementOriginMap = null)
         {
             this.LoggerFactory = loggerFactory;
             this.XmiDataReaderFacade = xmiDataReaderFacade;
             this.Cache = cache;
             this.ExternalReferenceService = externalReferenceService;
+            this.ElementOriginMap = elementOriginMap;
         }
 
         /// <summary>

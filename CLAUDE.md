@@ -31,6 +31,11 @@ Test framework: **NUnit**. Test classes use `[TestFixture]` and `[Test]` attribu
 
 ## Architecture
 
+### Code Generation
+
+- favour duplicated code in codegeneration to have staticaly defined methods that provide performance over reflection based code.
+- code generation is done by processing the UML model and creating handlebars templates
+
 ### Code Generation Pipeline
 
 Most code in this repo is **auto-generated** — files marked `THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!` must not be edited directly.
@@ -104,3 +109,8 @@ Auto-generated DTOs use structured namespaces reflecting the KerML/SysML package
 - CI: GitHub Actions (`CodeQuality.yml`) — builds, tests, and runs SonarQube analysis
 - License: Apache 2.0 (code), LGPL v3.0 (metamodel files)
 - To add a new metaclass: update the UML XMI source files, then run the code generators — do not manually create AutoGen files
+
+## Quality rules
+
+- Prefer comparing 'Count' to 0 rather than using 'Any()', both for clarity and for performance
+- Use 'StringBuilder.Append(char)' instead of 'StringBuilder.Append(string)' when the input is a constant unit string

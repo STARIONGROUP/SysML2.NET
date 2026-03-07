@@ -195,6 +195,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 var properties = umlClass.QueryAllProperties();
                 return properties.Where(x => x.IsComposite && !x.IsDerived);
             });
+
+            handlebars.RegisterHelper("Class.QueryAllPropertiesSorted", (context, _) =>
+            {
+                if (context.Value is not IClass umlClass)
+                {
+                    throw new ArgumentException("Class.QueryAllPropertiesSorted context supposed to be IClass");
+                }
+
+                return umlClass.QueryAllProperties().OrderBy(x => x.Name);
+            });
         }
     }
 }

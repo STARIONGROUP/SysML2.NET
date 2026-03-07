@@ -5,15 +5,19 @@ if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}XmlAt
 {{#if (Property.QueryIsReferenceProperty property)}}
     {{#if (Property.QueryIsEnumerable property)}}
     var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReferences = new List<Guid>();
-    
+
     foreach(var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue in {{String.LowerCaseFirstLetter property.Name}}XmlAttribute.Split(SplitMultiReference, StringSplitOptions.RemoveEmptyEntries))
     {
         if(Guid.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReference))
         {
             {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReferences.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeReference);
         }
+        else
+        {
+            this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property '{{String.LowerCaseFirstLetter property.Name}}' on element {ElementId}", {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, poco.Id);
+        }
     }
-    
+
     if({{String.LowerCaseFirstLetter property.Name}}XmlAttributeReferences.Count != 0)
     {
         this.Cache.AddMultipleValueReferencePropertyIdentifiers(poco.Id, "{{String.LowerCaseFirstLetter property.Name}}", {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReferences);
@@ -22,6 +26,10 @@ if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}XmlAt
     if(Guid.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReference))
     {
         this.Cache.AddSingleValueReferencePropertyIdentifier(poco.Id, "{{String.LowerCaseFirstLetter property.Name}}", {{String.LowerCaseFirstLetter property.Name}}XmlAttributeReference);
+    }
+    else
+    {
+        this.logger.LogWarning("Failed to parse GUID reference value '{Value}' for property '{{String.LowerCaseFirstLetter property.Name}}' on element {ElementId}", {{String.LowerCaseFirstLetter property.Name}}XmlAttribute, poco.Id);
     }
     {{/if}}
 {{else}}
@@ -34,7 +42,7 @@ if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}XmlAt
                     poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsBool);
                 }
         {{else if (Property.QueryIsEnum property )}}
-                if(Enum.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue, true, out {{property.Type.Name}} {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsEnum))
+                if({{property.Type.Name}}Provider.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValue.AsSpan(), out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsEnum))
                 {
                     poco.{{Property.WritePropertyName property}}.Add({{String.LowerCaseFirstLetter property.Name}}XmlAttributeValueAsEnum);
                 }
@@ -63,7 +71,7 @@ if(!string.IsNullOrWhiteSpace({{String.LowerCaseFirstLetter property.Name}}XmlAt
                 poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsBool;
             }
         {{else if (Property.QueryIsEnum property )}}
-                if(Enum.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute, true, out {{property.Type.Name}} {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsEnum))
+                if({{property.Type.Name}}Provider.TryParse({{String.LowerCaseFirstLetter property.Name}}XmlAttribute.AsSpan(), out var {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsEnum))
                 {
                 poco.{{Property.WritePropertyName property}} = {{String.LowerCaseFirstLetter property.Name}}XmlAttributeAsEnum;
                 }

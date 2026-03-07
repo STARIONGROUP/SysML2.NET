@@ -44,9 +44,10 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// <param name="externalReferenceService">The <see cref="IExternalReferenceService"/> used to register and process external references</param>
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> used to set up logging</param>
         /// <param name="explicitTypeName">The explicit type name to resolve, in case of un-specified xsi:type</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> used to track element-to-file associations</param>
         /// <returns>An instance of the read <see cref="IData"/></returns>
         /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
-        IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "");
+        IData QueryXmiData(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "", IXmiElementOriginMap elementOriginMap = null);
 
         /// <summary>
         /// Queries asynchronously an instance of an <see cref="IData" /> based on the position of the <see cref="XmlReader"/>.
@@ -59,8 +60,9 @@ namespace SysML2.NET.Serializer.Xmi.Readers
         /// <param name="externalReferenceService">The <see cref="IExternalReferenceService"/> used to register and process external references</param>
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> used to set up logging</param>
         /// <param name="explicitTypeName">The explicit type name to resolve, in case of un-specified xsi:type</param>
+        /// <param name="elementOriginMap">The optional <see cref="IXmiElementOriginMap"/> used to track element-to-file associations</param>
         /// <returns>An awaitable <see cref="Task" /> with the instance of the read <see cref="IData"/></returns>
         /// <exception cref="InvalidOperationException">If the xsi:type is not supported</exception>
-        Task<IData> QueryXmiDataAsync(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "");
+        Task<IData> QueryXmiDataAsync(XmlReader xmiReader, IXmiDataCache xmiDataCache, Uri currentLocation, IExternalReferenceService externalReferenceService, ILoggerFactory loggerFactory, string explicitTypeName = "", IXmiElementOriginMap elementOriginMap = null);
     }
 }

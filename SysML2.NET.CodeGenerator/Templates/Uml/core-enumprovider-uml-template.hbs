@@ -66,6 +66,38 @@ namespace SysML2.NET.Extensions.Core
         }
 
         /// <summary>
+        /// Tries to parse the <see cref="ReadOnlySpan{Char}"/> to a <see cref="{{ this.Name }}"/>
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="ReadOnlySpan{Char}"/> that is to be parsed
+        /// </param>
+        /// <param name="result">
+        /// When this method returns, contains the <see cref="{{ this.Name }}"/> value equivalent
+        /// to the span, if the conversion succeeded, or <c>default</c> if the conversion failed.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if <paramref name="value"/> was converted successfully; otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// This method is suited for  string parsing
+        /// There are zero allocations, no boxing, Fast short-circuit evaluation
+        /// JIT friendly
+        /// </remarks>
+        public static bool TryParse(ReadOnlySpan<char> value, out {{ this.Name }} result)
+        {
+            {{ #each this.OwnedLiteral as | enumerationLiteral | }}
+            if (value.Length == {{ String.Length enumerationLiteral.Name }} && value.Equals("{{ enumerationLiteral.Name }}".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                result = {{ ../Name }}.{{ #EnumerationLiteral.Write enumerationLiteral }};
+                return true;
+            }
+
+            {{/each}}
+            result = default;
+            return false;
+        }
+
+        /// <summary>
         /// Parses the <see cref="ReadOnlySpan{Byte}"/> to a <see cref="{{ this.Name }}"/>
         /// </summary>
         /// <param name="value">
