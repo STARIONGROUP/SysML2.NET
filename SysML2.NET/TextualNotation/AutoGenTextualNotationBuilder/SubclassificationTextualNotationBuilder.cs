@@ -74,7 +74,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(poco.Subclassifier.qualifiedName);
                 stringBuilder.Append(' ');
             }
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :> ");
 
             if (poco.Superclassifier != null)
             {

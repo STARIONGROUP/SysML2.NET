@@ -63,7 +63,7 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append("subset ");
             SpecializationTextualNotationBuilder.BuildSpecificType(poco, stringBuilder);
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :> ");
             SpecializationTextualNotationBuilder.BuildGeneralType(poco, stringBuilder);
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 

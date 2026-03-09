@@ -99,7 +99,7 @@ namespace SysML2.NET.TextualNotation
                 }
 
             }
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" @ ");
             stringBuilder.Append(' ');
             BuildMetadataFeatureDeclaration(poco, stringBuilder);
 

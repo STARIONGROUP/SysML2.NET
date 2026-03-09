@@ -154,7 +154,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildCalculationBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRequirementBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildCaseBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace SysML2.NET.TextualNotation
             }
 
             {
-                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
             }
             stringBuilder.Append(' ');
             BuildTypeRelationshipPart(poco, stringBuilder);
@@ -286,7 +286,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildSpecializationPart(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfSpecializationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.Specialization>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :> ");
             ownedRelationshipOfSpecializationIterator.MoveNext();
 
             if (ownedRelationshipOfSpecializationIterator.Current != null)
@@ -316,7 +316,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildConjugationPart(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfConjugationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Types.Conjugation>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" ~ ");
             ownedRelationshipOfConjugationIterator.MoveNext();
 
             if (ownedRelationshipOfConjugationIterator.Current != null)
@@ -334,7 +334,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeRelationshipPart(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
         }
 
         /// <summary>
@@ -477,7 +477,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeBodyElement(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
         }
 
         /// <summary>
@@ -504,7 +504,7 @@ namespace SysML2.NET.TextualNotation
 
             while (ownedRelationshipOfReturnParameterMembershipIterator.MoveNext())
             {
-                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
             }
 
             if (ownedRelationshipOfResultExpressionMembershipIterator.MoveNext())

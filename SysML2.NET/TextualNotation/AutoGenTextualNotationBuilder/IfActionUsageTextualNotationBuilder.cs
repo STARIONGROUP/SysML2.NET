@@ -61,7 +61,7 @@ namespace SysML2.NET.TextualNotation
             if (BuildGroupConditionForIfNode(poco))
             {
                 stringBuilder.Append("else ");
-                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
                 stringBuilder.Append(' ');
             }
 

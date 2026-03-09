@@ -43,7 +43,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildSubclassificationPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfSubclassificationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :> ");
             ownedRelationshipOfSubclassificationIterator.MoveNext();
 
             if (ownedRelationshipOfSubclassificationIterator.Current != null)
@@ -92,7 +92,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
             TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, stringBuilder);
 
         }
@@ -106,7 +106,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildSuperclassingPart(SysML2.NET.Core.POCO.Core.Classifiers.IClassifier poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfSubclassificationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Classifiers.Subclassification>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :> ");
             ownedRelationshipOfSubclassificationIterator.MoveNext();
 
             if (ownedRelationshipOfSubclassificationIterator.Current != null)

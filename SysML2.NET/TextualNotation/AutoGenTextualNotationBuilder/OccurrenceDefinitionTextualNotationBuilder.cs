@@ -43,7 +43,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildOccurrenceDefinitionPrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
 
             if (poco.IsIndividual && ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
@@ -69,7 +69,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildIndividualDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
             stringBuilder.Append("individual");
             DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, stringBuilder);
             stringBuilder.Append("def ");

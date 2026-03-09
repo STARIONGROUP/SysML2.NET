@@ -43,7 +43,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildExpose(SysML2.NET.Core.POCO.Systems.Views.IExpose poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("expose ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
             stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 

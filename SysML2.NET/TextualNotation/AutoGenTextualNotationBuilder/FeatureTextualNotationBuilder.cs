@@ -71,7 +71,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureSpecialization(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildSubsets(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Subsetting>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :> ");
             ownedRelationshipOfSubsettingIterator.MoveNext();
 
             if (ownedRelationshipOfSubsettingIterator.Current != null)
@@ -169,7 +169,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildReferences(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" ::> ");
             ownedRelationshipOfReferenceSubsettingIterator.MoveNext();
 
             if (ownedRelationshipOfReferenceSubsettingIterator.Current != null)
@@ -188,7 +188,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildCrosses(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfCrossSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.CrossSubsetting>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" => ");
             ownedRelationshipOfCrossSubsettingIterator.MoveNext();
 
             if (ownedRelationshipOfCrossSubsettingIterator.Current != null)
@@ -231,7 +231,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildRedefines(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :>> ");
             ownedRelationshipOfRedefinitionIterator.MoveNext();
 
             if (ownedRelationshipOfRedefinitionIterator.Current != null)
@@ -415,7 +415,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureElement(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
         }
 
         /// <summary>
@@ -467,7 +467,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
 
         }
@@ -512,7 +512,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureRelationshipPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
         }
 
         /// <summary>
@@ -525,7 +525,7 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureChainingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureChaining>().GetEnumerator();
             stringBuilder.Append("chains ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - AssignmentElement,NonTerminalElement");
             stringBuilder.Append(' ');
 
         }
@@ -754,7 +754,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildArgumentList(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("(");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
             stringBuilder.Append(")");
 
         }
@@ -853,7 +853,7 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
             stringBuilder.Append("feature ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :>> ");
             ownedRelationshipOfRedefinitionIterator.MoveNext();
 
             if (ownedRelationshipOfRedefinitionIterator.Current != null)

@@ -158,7 +158,38 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
             else
             {
-                writer.WriteSafeString("throw new System.NotSupportedException(\"Multiple alternatives not implemented yet\");");
+                if (alternatives.All(x => x.Elements.Count == 1))
+                {
+                    var types = alternatives.SelectMany(x => x.Elements).Select(x => x.GetType()).Distinct().ToList();
+                    
+                    if(types.Count == 1)
+                    {
+                        ProcessUnitypedAlternativesWithOneElement(writer, umlClass, alternatives, ruleGenerationContext);
+                    }
+                    else
+                    {
+                        writer.WriteSafeString($"throw new System.NotSupportedException(\"Multiple alternatives with only one of the different type not implemented yet - {string.Join(',', types.Select(x => x.Name))}\");");
+                    }
+                }
+                else
+                {
+                    writer.WriteSafeString("throw new System.NotSupportedException(\"Multiple alternatives not implemented yet\");");
+                }
+            }
+        }
+
+        private static void ProcessUnitypedAlternativesWithOneElement(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        {
+            var firstRuleElement = alternatives.ElementAt(0).Elements[0];
+
+            switch (firstRuleElement)
+            {
+                case TerminalElement terminalElement:
+                    writer.WriteSafeString($"stringBuilder.Append(\" {terminalElement.Value} \");");
+                    break;
+                default:
+                    writer.WriteSafeString($"throw new System.NotSupportedException(\"Multiple alternatives with only {firstRuleElement.GetType().Name} not implemented yet\");");
+                    break;
             }
         }
 
