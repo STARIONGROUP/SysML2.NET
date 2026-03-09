@@ -58,7 +58,7 @@ namespace SysML2.NET.TextualNotation
             {
                 BuildInvocationTypeMember(ownedRelationshipOfInvocationExpressionIterator.Current, stringBuilder);
             }
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - AssignmentElement,NonTerminalElement");
             stringBuilder.Append(' ');
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
 

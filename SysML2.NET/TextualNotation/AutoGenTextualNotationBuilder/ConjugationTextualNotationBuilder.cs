@@ -64,7 +64,7 @@ namespace SysML2.NET.TextualNotation
             stringBuilder.Append("conjugate ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" ~ ");
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
             stringBuilder.Append(' ');
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);

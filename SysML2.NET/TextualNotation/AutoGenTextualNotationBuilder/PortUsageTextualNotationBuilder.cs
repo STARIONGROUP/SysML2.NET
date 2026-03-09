@@ -72,7 +72,7 @@ namespace SysML2.NET.TextualNotation
             if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append(poco.DeclaredName);
-                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                stringBuilder.Append(" ::> ");
                 stringBuilder.Append(' ');
             }
 

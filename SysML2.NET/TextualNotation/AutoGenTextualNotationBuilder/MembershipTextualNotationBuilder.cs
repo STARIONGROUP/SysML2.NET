@@ -97,7 +97,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - AssignmentElement,NonTerminalElement");
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInstantiatedTypeMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - AssignmentElement,NonTerminalElement");
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataBodyElement(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
         }
     }
 }

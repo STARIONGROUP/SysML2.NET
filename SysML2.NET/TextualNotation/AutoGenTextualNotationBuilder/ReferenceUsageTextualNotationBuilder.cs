@@ -128,7 +128,7 @@ namespace SysML2.NET.TextualNotation
             if (!string.IsNullOrWhiteSpace(poco.DeclaredName))
             {
                 stringBuilder.Append(poco.DeclaredName);
-                throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+                stringBuilder.Append(" ::> ");
                 stringBuilder.Append(' ');
             }
 
@@ -288,7 +288,7 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfRedefinitionIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.Redefinition>().GetEnumerator();
             stringBuilder.Append("ref ");
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :>> ");
             ownedRelationshipOfRedefinitionIterator.MoveNext();
 
             if (ownedRelationshipOfRedefinitionIterator.Current != null)
@@ -309,7 +309,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildReferenceUsage(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IReferenceUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
             stringBuilder.Append(' ');
             stringBuilder.Append("ref ");
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);

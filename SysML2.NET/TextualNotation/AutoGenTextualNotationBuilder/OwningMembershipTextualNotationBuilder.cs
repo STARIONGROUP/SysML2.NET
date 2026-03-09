@@ -63,7 +63,7 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementIterator = poco.OwnedRelatedElement.GetEnumerator();
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
             stringBuilder.Append(' ');
 
         }
@@ -131,7 +131,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMultiplicityExpressionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
 
         }
 
@@ -252,7 +252,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamespaceMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
         }
 
         /// <summary>

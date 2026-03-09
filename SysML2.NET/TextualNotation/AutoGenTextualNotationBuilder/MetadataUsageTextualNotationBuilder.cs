@@ -89,7 +89,7 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
             UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" @ ");
             stringBuilder.Append(' ');
             BuildMetadataUsageDeclaration(poco, stringBuilder);
 

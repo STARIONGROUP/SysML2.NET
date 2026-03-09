@@ -86,7 +86,7 @@ namespace SysML2.NET.TextualNotation
 
             stringBuilder.Append("subtype ");
             BuildSpecificType(poco, stringBuilder);
-            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(" :> ");
             BuildGeneralType(poco, stringBuilder);
             RelationshipTextualNotationBuilder.BuildRelationshipBody(poco, stringBuilder);
 
