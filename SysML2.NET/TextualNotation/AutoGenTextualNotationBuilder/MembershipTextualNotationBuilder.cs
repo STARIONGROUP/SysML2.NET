@@ -154,7 +154,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMetadataBodyElement(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Core.Types.FeatureMembership pocoFeatureMembership:
+                    FeatureMembershipTextualNotationBuilder.BuildMetadataBodyFeatureMember(pocoFeatureMembership, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership pocoOwningMembership:
+                    OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(pocoOwningMembership, stringBuilder);
+                    break;
+                default:
+                    BuildAliasMember(poco, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.IImport pocoImport:
+                    ImportTextualNotationBuilder.BuildImport(pocoImport, stringBuilder);
+                    break;
+            }
+
         }
     }
 }

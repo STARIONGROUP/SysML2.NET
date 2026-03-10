@@ -55,7 +55,34 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildActionNode(SysML2.NET.Core.POCO.Systems.Actions.IActionUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Actions.IControlNode pocoControlNode:
+                    ControlNodeTextualNotationBuilder.BuildControlNode(pocoControlNode, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.SendActionUsage pocoSendActionUsage:
+                    SendActionUsageTextualNotationBuilder.BuildSendNode(pocoSendActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.AcceptActionUsage pocoAcceptActionUsage:
+                    AcceptActionUsageTextualNotationBuilder.BuildAcceptNode(pocoAcceptActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.AssignmentActionUsage pocoAssignmentActionUsage:
+                    AssignmentActionUsageTextualNotationBuilder.BuildAssignmentNode(pocoAssignmentActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.TerminateActionUsage pocoTerminateActionUsage:
+                    TerminateActionUsageTextualNotationBuilder.BuildTerminateNode(pocoTerminateActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.IfActionUsage pocoIfActionUsage:
+                    IfActionUsageTextualNotationBuilder.BuildIfNode(pocoIfActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.WhileLoopActionUsage pocoWhileLoopActionUsage:
+                    WhileLoopActionUsageTextualNotationBuilder.BuildWhileLoopNode(pocoWhileLoopActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.ForLoopActionUsage pocoForLoopActionUsage:
+                    ForLoopActionUsageTextualNotationBuilder.BuildForLoopNode(pocoForLoopActionUsage, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -176,7 +203,25 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildEffectBehaviorUsage(SysML2.NET.Core.POCO.Systems.Actions.IActionUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Actions.PerformActionUsage pocoPerformActionUsage:
+                    PerformActionUsageTextualNotationBuilder.BuildTransitionPerformActionUsage(pocoPerformActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.AcceptActionUsage pocoAcceptActionUsage:
+                    AcceptActionUsageTextualNotationBuilder.BuildTransitionAcceptActionUsage(pocoAcceptActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.SendActionUsage pocoSendActionUsage:
+                    SendActionUsageTextualNotationBuilder.BuildTransitionSendActionUsage(pocoSendActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.AssignmentActionUsage pocoAssignmentActionUsage:
+                    AssignmentActionUsageTextualNotationBuilder.BuildTransitionAssignmentActionUsage(pocoAssignmentActionUsage, stringBuilder);
+                    break;
+                default:
+                    BuildEmptyActionUsage(poco, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>

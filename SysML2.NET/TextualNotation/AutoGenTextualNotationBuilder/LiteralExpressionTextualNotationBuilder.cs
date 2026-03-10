@@ -42,7 +42,26 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildLiteralExpression(SysML2.NET.Core.POCO.Kernel.Expressions.ILiteralExpression poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Kernel.Expressions.LiteralBoolean pocoLiteralBoolean:
+                    LiteralBooleanTextualNotationBuilder.BuildLiteralBoolean(pocoLiteralBoolean, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Expressions.LiteralString pocoLiteralString:
+                    LiteralStringTextualNotationBuilder.BuildLiteralString(pocoLiteralString, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Expressions.LiteralInteger pocoLiteralInteger:
+                    LiteralIntegerTextualNotationBuilder.BuildLiteralInteger(pocoLiteralInteger, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Expressions.LiteralInfinity pocoLiteralInfinity:
+                    LiteralInfinityTextualNotationBuilder.BuildLiteralInfinity(pocoLiteralInfinity, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Elements.IElement pocoElement:
+                    BuildValue(poco, stringBuilder);
+
+                    break;
+            }
+
         }
     }
 }

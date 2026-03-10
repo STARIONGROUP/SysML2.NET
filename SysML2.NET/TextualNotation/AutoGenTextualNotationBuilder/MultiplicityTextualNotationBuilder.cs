@@ -68,7 +68,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMultiplicity(SysML2.NET.Core.POCO.Core.Types.IMultiplicity poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Kernel.Multiplicities.MultiplicityRange pocoMultiplicityRange:
+                    MultiplicityRangeTextualNotationBuilder.BuildMultiplicityRange(pocoMultiplicityRange, stringBuilder);
+                    break;
+                default:
+                    BuildMultiplicitySubset(poco, stringBuilder);
+                    break;
+            }
+
         }
     }
 }

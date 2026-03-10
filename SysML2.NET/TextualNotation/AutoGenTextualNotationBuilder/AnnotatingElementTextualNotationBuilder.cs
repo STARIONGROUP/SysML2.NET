@@ -42,7 +42,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildAnnotatingElement(SysML2.NET.Core.POCO.Root.Annotations.IAnnotatingElement poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Root.Annotations.Documentation pocoDocumentation:
+                    DocumentationTextualNotationBuilder.BuildDocumentation(pocoDocumentation, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Annotations.Comment pocoComment:
+                    CommentTextualNotationBuilder.BuildComment(pocoComment, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Annotations.TextualRepresentation pocoTextualRepresentation:
+                    TextualRepresentationTextualNotationBuilder.BuildTextualRepresentation(pocoTextualRepresentation, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Metadata.MetadataFeature pocoMetadataFeature:
+                    MetadataFeatureTextualNotationBuilder.BuildMetadataFeature(pocoMetadataFeature, stringBuilder);
+                    break;
+            }
+
         }
     }
 }

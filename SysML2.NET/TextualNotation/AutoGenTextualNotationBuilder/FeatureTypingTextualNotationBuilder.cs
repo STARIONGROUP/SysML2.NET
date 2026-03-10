@@ -70,7 +70,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureTyping(SysML2.NET.Core.POCO.Core.Features.IFeatureTyping poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Ports.ConjugatedPortTyping pocoConjugatedPortTyping:
+                    ConjugatedPortTypingTextualNotationBuilder.BuildConjugatedPortTyping(pocoConjugatedPortTyping, stringBuilder);
+                    break;
+                default:
+                    BuildOwnedFeatureTyping(poco, stringBuilder);
+                    break;
+            }
+
         }
     }
 }

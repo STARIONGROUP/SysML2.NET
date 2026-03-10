@@ -92,7 +92,16 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Core.Types.Type pocoType:
+                    TypeTextualNotationBuilder.BuildConjugationPart(pocoType, stringBuilder);
+                    break;
+                default:
+                    BuildSuperclassingPart(poco, stringBuilder);
+                    break;
+            }
+
             TypeTextualNotationBuilder.BuildTypeRelationshipPart(poco, stringBuilder);
 
         }

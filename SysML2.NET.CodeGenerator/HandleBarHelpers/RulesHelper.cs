@@ -29,6 +29,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
     using SysML2.NET.CodeGenerator.Extensions;
     using SysML2.NET.CodeGenerator.Grammar.Model;
 
+    using uml4net;
     using uml4net.Classification;
     using uml4net.CommonStructure;
     using uml4net.Extensions;
@@ -164,7 +165,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     
                     if(types.Count == 1)
                     {
-                        ProcessUnitypedAlternativesWithOneElement(writer, umlClass, alternatives, ruleGenerationContext);
+                        if (ruleGenerationContext.CallerRule is not AssignmentElement)
+                        {
+                            ProcessUnitypedAlternativesWithOneElement(writer, umlClass, alternatives, ruleGenerationContext);
+                        }
+                        else
+                        {
+                            writer.WriteSafeString($"throw new System.NotSupportedException(\"Multiple alternatives with only not implemented yet for caller as AssignmentElement\");");
+                        }
                     }
                     else
                     {
@@ -187,10 +195,78 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 case TerminalElement terminalElement:
                     writer.WriteSafeString($"stringBuilder.Append(\" {terminalElement.Value} \");");
                     break;
+                case NonTerminalElement:
+                    var nonTerminalElements = alternatives.SelectMany(x => x.Elements).OfType<NonTerminalElement>().ToList();
+                    var mappedNonTerminalElements = OrderElementsByInheritance(nonTerminalElements, umlClass.Cache, ruleGenerationContext);
+
+                    if (mappedNonTerminalElements.Select(x => x.UmlClass).Distinct().Count() != mappedNonTerminalElements.Count)
+                    {
+                        writer.WriteSafeString("throw new System.NotSupportedException(\"Multiple alternatives with same referenced rule type not implemented yet\");");
+                        break;
+                    }
+
+                    writer.WriteSafeString($"switch(poco){Environment.NewLine}");
+                    writer.WriteSafeString("{");
+
+                    foreach (var orderedNonTerminalElement in mappedNonTerminalElements)
+                    {
+                        if (orderedNonTerminalElement.UmlClass == ruleGenerationContext.NamedElementToGenerate)
+                        {
+                            writer.WriteSafeString($"default:{Environment.NewLine}");
+                            ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, "poco",ruleGenerationContext);
+                        }
+                        else
+                        {
+                            writer.WriteSafeString($"case {orderedNonTerminalElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface: orderedNonTerminalElement.UmlClass.IsAbstract)} poco{orderedNonTerminalElement.UmlClass.Name}:{Environment.NewLine}");
+                            ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, $"poco{orderedNonTerminalElement.UmlClass.Name}",ruleGenerationContext);
+                        }
+
+                        writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
+                    }
+                    
+                    writer.WriteSafeString($"}}{Environment.NewLine}");
+                    
+                    break;
                 default:
                     writer.WriteSafeString($"throw new System.NotSupportedException(\"Multiple alternatives with only {firstRuleElement.GetType().Name} not implemented yet\");");
                     break;
             }
+        }
+
+        private static List<(NonTerminalElement RuleElement, IClass UmlClass)> OrderElementsByInheritance(List<NonTerminalElement> nonTerminalElements, IXmiElementCache cache, RuleGenerationContext ruleGenerationContext)
+        {
+            var mapping = new List<(NonTerminalElement RuleElement, IClass UmlClass)>();
+            var elementClass = cache.Values.Single(x => x is IClass { Name: "Element" });
+            
+            foreach (var nonTerminalElement in nonTerminalElements)
+            {
+                var referencedRule = ruleGenerationContext.AllRules.Single(x => x.RuleName == nonTerminalElement.Name);
+                var referencedClassName = referencedRule.TargetElementName ?? referencedRule.RuleName;
+                var referencedClass =(IClass)(cache.Values.SingleOrDefault(x => x is IClass umlClass && umlClass.Name == referencedClassName)?? elementClass);
+                mapping.Add((nonTerminalElement, referencedClass));
+            }
+            
+            mapping.Sort((a, b) =>
+            {
+                if (a.UmlClass == ruleGenerationContext.NamedElementToGenerate)
+                {
+                    return 1;
+                }
+
+                if (a.UmlClass == b.UmlClass)
+                {
+                    return 0;
+                }
+
+                if (a.UmlClass.QueryIsSubclassOf(b.UmlClass))
+                {
+                    return -1;
+                }
+
+                return b.UmlClass.QueryIsSubclassOf(a.UmlClass) ? 1 : 0;
+            });
+
+            return mapping;
         }
 
         /// <summary>

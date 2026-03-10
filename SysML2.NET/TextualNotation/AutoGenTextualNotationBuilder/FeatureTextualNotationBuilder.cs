@@ -71,7 +71,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureSpecialization(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -415,7 +415,40 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureElement(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Kernel.Functions.Invariant pocoInvariant:
+                    InvariantTextualNotationBuilder.BuildInvariant(pocoInvariant, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Functions.BooleanExpression pocoBooleanExpression:
+                    BooleanExpressionTextualNotationBuilder.BuildBooleanExpression(pocoBooleanExpression, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Functions.Expression pocoExpression:
+                    ExpressionTextualNotationBuilder.BuildExpression(pocoExpression, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Behaviors.Step pocoStep:
+                    StepTextualNotationBuilder.BuildStep(pocoStep, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Connectors.BindingConnector pocoBindingConnector:
+                    BindingConnectorTextualNotationBuilder.BuildBindingConnector(pocoBindingConnector, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Interactions.SuccessionFlow pocoSuccessionFlow:
+                    SuccessionFlowTextualNotationBuilder.BuildSuccessionFlow(pocoSuccessionFlow, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Connectors.Succession pocoSuccession:
+                    SuccessionTextualNotationBuilder.BuildSuccession(pocoSuccession, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Interactions.Flow pocoFlow:
+                    FlowTextualNotationBuilder.BuildFlow(pocoFlow, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Connectors.Connector pocoConnector:
+                    ConnectorTextualNotationBuilder.BuildConnector(pocoConnector, stringBuilder);
+                    break;
+                default:
+                    BuildFeature(poco, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -512,7 +545,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureRelationshipPart(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -754,7 +787,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildArgumentList(SysML2.NET.Core.POCO.Core.Features.IFeature poco, StringBuilder stringBuilder)
         {
             stringBuilder.Append("(");
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
             stringBuilder.Append(")");
 
         }
