@@ -131,7 +131,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMultiplicityExpressionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with only not implemented yet for caller as AssignmentElement");
 
         }
 
@@ -252,7 +252,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamespaceMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -301,7 +301,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Core.Types.FeatureMembership pocoFeatureMembership:
+                    FeatureMembershipTextualNotationBuilder.BuildOwnedFeatureMember(pocoFeatureMembership, stringBuilder);
+                    break;
+                default:
+                    BuildTypeFeatureMember(poco, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>

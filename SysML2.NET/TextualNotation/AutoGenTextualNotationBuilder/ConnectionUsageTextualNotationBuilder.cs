@@ -42,7 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildConnectorPart(SysML2.NET.Core.POCO.Systems.Connections.IConnectionUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>

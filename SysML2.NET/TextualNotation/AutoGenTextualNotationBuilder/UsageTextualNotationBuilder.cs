@@ -42,7 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUnextendedUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNonOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildStructureUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -242,7 +242,58 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBehaviorUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Calculations.CalculationUsage pocoCalculationUsage:
+                    CalculationUsageTextualNotationBuilder.BuildCalculationUsage(pocoCalculationUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.States.StateUsage pocoStateUsage:
+                    StateUsageTextualNotationBuilder.BuildStateUsage(pocoStateUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.ActionUsage pocoActionUsage:
+                    ActionUsageTextualNotationBuilder.BuildActionUsage(pocoActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Requirements.ConcernUsage pocoConcernUsage:
+                    ConcernUsageTextualNotationBuilder.BuildConcernUsage(pocoConcernUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Requirements.RequirementUsage pocoRequirementUsage:
+                    RequirementUsageTextualNotationBuilder.BuildRequirementUsage(pocoRequirementUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Constraints.ConstraintUsage pocoConstraintUsage:
+                    ConstraintUsageTextualNotationBuilder.BuildConstraintUsage(pocoConstraintUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.AnalysisCases.AnalysisCaseUsage pocoAnalysisCaseUsage:
+                    AnalysisCaseUsageTextualNotationBuilder.BuildAnalysisCaseUsage(pocoAnalysisCaseUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.VerificationCases.VerificationCaseUsage pocoVerificationCaseUsage:
+                    VerificationCaseUsageTextualNotationBuilder.BuildVerificationCaseUsage(pocoVerificationCaseUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.UseCases.UseCaseUsage pocoUseCaseUsage:
+                    UseCaseUsageTextualNotationBuilder.BuildUseCaseUsage(pocoUseCaseUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Cases.CaseUsage pocoCaseUsage:
+                    CaseUsageTextualNotationBuilder.BuildCaseUsage(pocoCaseUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Views.ViewpointUsage pocoViewpointUsage:
+                    ViewpointUsageTextualNotationBuilder.BuildViewpointUsage(pocoViewpointUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.States.ExhibitStateUsage pocoExhibitStateUsage:
+                    ExhibitStateUsageTextualNotationBuilder.BuildExhibitStateUsage(pocoExhibitStateUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.UseCases.IncludeUseCaseUsage pocoIncludeUseCaseUsage:
+                    IncludeUseCaseUsageTextualNotationBuilder.BuildIncludeUseCaseUsage(pocoIncludeUseCaseUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.PerformActionUsage pocoPerformActionUsage:
+                    PerformActionUsageTextualNotationBuilder.BuildPerformActionUsage(pocoPerformActionUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Requirements.SatisfyRequirementUsage pocoSatisfyRequirementUsage:
+                    SatisfyRequirementUsageTextualNotationBuilder.BuildSatisfyRequirementUsage(pocoSatisfyRequirementUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Constraints.AssertConstraintUsage pocoAssertConstraintUsage:
+                    AssertConstraintUsageTextualNotationBuilder.BuildAssertConstraintUsage(pocoAssertConstraintUsage, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -253,7 +304,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildVariantUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -264,7 +315,25 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfaceNonOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.ReferenceUsage pocoReferenceUsage:
+                    ReferenceUsageTextualNotationBuilder.BuildReferenceUsage(pocoReferenceUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Enumerations.EnumerationUsage pocoEnumerationUsage:
+                    EnumerationUsageTextualNotationBuilder.BuildEnumerationUsage(pocoEnumerationUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Attributes.AttributeUsage pocoAttributeUsage:
+                    AttributeUsageTextualNotationBuilder.BuildAttributeUsage(pocoAttributeUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Connections.BindingConnectorAsUsage pocoBindingConnectorAsUsage:
+                    BindingConnectorAsUsageTextualNotationBuilder.BuildBindingConnectorAsUsage(pocoBindingConnectorAsUsage, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Connections.SuccessionAsUsage pocoSuccessionAsUsage:
+                    SuccessionAsUsageTextualNotationBuilder.BuildSuccessionAsUsage(pocoSuccessionAsUsage, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -275,7 +344,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInterfaceOccurrenceUsageElement(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -286,7 +355,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildActionTargetSuccession(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
             stringBuilder.Append(' ');
             BuildUsageBody(poco, stringBuilder);
 

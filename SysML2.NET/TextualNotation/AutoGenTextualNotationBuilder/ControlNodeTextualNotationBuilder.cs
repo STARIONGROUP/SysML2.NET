@@ -42,7 +42,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildControlNode(SysML2.NET.Core.POCO.Systems.Actions.IControlNode poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Systems.Actions.MergeNode pocoMergeNode:
+                    MergeNodeTextualNotationBuilder.BuildMergeNode(pocoMergeNode, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.DecisionNode pocoDecisionNode:
+                    DecisionNodeTextualNotationBuilder.BuildDecisionNode(pocoDecisionNode, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.JoinNode pocoJoinNode:
+                    JoinNodeTextualNotationBuilder.BuildJoinNode(pocoJoinNode, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Systems.Actions.ForkNode pocoForkNode:
+                    ForkNodeTextualNotationBuilder.BuildForkNode(pocoForkNode, stringBuilder);
+                    break;
+            }
+
         }
     }
 }

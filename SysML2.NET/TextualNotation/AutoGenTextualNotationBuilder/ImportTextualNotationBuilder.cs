@@ -42,7 +42,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildImportDeclaration(SysML2.NET.Core.POCO.Root.Namespaces.IImport poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Root.Namespaces.MembershipImport pocoMembershipImport:
+                    MembershipImportTextualNotationBuilder.BuildMembershipImport(pocoMembershipImport, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Root.Namespaces.NamespaceImport pocoNamespaceImport:
+                    NamespaceImportTextualNotationBuilder.BuildNamespaceImport(pocoNamespaceImport, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>

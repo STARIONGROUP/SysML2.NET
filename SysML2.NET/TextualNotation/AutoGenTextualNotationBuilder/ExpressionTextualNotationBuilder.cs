@@ -42,7 +42,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildOwnedExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -53,7 +53,16 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildPrimaryExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            switch (poco)
+            {
+                case SysML2.NET.Core.POCO.Kernel.Expressions.FeatureChainExpression pocoFeatureChainExpression:
+                    FeatureChainExpressionTextualNotationBuilder.BuildFeatureChainExpression(pocoFeatureChainExpression, stringBuilder);
+                    break;
+                default:
+                    BuildNonFeatureChainPrimaryExpression(poco, stringBuilder);
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -64,7 +73,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNonFeatureChainPrimaryExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
@@ -118,7 +127,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildBaseExpression(SysML2.NET.Core.POCO.Kernel.Functions.IExpression poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>

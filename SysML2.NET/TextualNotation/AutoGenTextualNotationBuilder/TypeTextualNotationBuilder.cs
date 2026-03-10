@@ -270,7 +270,7 @@ namespace SysML2.NET.TextualNotation
             }
 
             {
-                throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+                throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
             }
             stringBuilder.Append(' ');
             BuildTypeRelationshipPart(poco, stringBuilder);
@@ -334,7 +334,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeRelationshipPart(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only NonTerminalElement not implemented yet");
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
         }
 
         /// <summary>
