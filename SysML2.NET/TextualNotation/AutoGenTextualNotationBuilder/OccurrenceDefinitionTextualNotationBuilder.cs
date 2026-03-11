@@ -43,11 +43,19 @@ namespace SysML2.NET.TextualNotation
         public static void BuildOccurrenceDefinitionPrefix(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            if (poco.IsAbstract)
+            {
+                stringBuilder.Append(" abstract ");
+            }
+            else if (poco.IsVariation)
+            {
+                stringBuilder.Append(" variation ");
+            }
+
 
             if (poco.IsIndividual && ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {
-                stringBuilder.Append("individual");
+                stringBuilder.Append(" individual ");
 
                 if (ownedRelationshipOfOwningMembershipIterator.Current != null)
                 {
@@ -69,8 +77,19 @@ namespace SysML2.NET.TextualNotation
         public static void BuildIndividualDefinition(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceDefinition poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
-            stringBuilder.Append("individual");
+            if (poco.IsAbstract)
+            {
+                stringBuilder.Append(" abstract ");
+            }
+            else if (poco.IsVariation)
+            {
+                stringBuilder.Append(" variation ");
+            }
+
+            if (poco.IsIndividual)
+            {
+                stringBuilder.Append(" individual ");
+            }
             DefinitionTextualNotationBuilder.BuildDefinitionExtensionKeyword(poco, stringBuilder);
             stringBuilder.Append("def ");
             DefinitionTextualNotationBuilder.BuildDefinition(poco, stringBuilder);

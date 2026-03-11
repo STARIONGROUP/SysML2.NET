@@ -42,7 +42,10 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildDefaultInterfaceEnd(SysML2.NET.Core.POCO.Systems.Ports.IPortUsage poco, StringBuilder stringBuilder)
         {
-            stringBuilder.Append("end");
+            if (poco.IsEnd)
+            {
+                stringBuilder.Append(" end ");
+            }
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
         }

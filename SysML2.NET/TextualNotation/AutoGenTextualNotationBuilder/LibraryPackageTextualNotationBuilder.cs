@@ -43,7 +43,7 @@ namespace SysML2.NET.TextualNotation
         public static void BuildLibraryPackage(SysML2.NET.Core.POCO.Kernel.Packages.ILibraryPackage poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            stringBuilder.Append("standard");
+            stringBuilder.Append(" standard ");
 
             stringBuilder.Append(' ');
             stringBuilder.Append("library ");

@@ -76,7 +76,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsSufficient)
             {
-                stringBuilder.Append("all");
+                stringBuilder.Append(" all ");
                 stringBuilder.Append(' ');
             }
 

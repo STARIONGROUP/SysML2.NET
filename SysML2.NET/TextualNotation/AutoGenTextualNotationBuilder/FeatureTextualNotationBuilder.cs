@@ -462,12 +462,15 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsConstant)
             {
-                stringBuilder.Append("const");
+                stringBuilder.Append(" const ");
                 // NonParsing Assignment Element : isVariable = true => Does not have to be process
                 stringBuilder.Append(' ');
             }
 
-            stringBuilder.Append("end");
+            if (poco.IsEnd)
+            {
+                stringBuilder.Append(" end ");
+            }
 
         }
 
@@ -489,18 +492,26 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsDerived)
             {
-                stringBuilder.Append("derived");
+                stringBuilder.Append(" derived ");
                 stringBuilder.Append(' ');
             }
 
 
             if (poco.IsAbstract)
             {
-                stringBuilder.Append("abstract");
+                stringBuilder.Append(" abstract ");
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            if (poco.IsComposite)
+            {
+                stringBuilder.Append(" composite ");
+            }
+            else if (poco.IsPortion)
+            {
+                stringBuilder.Append(" portion ");
+            }
+
             throw new System.NotSupportedException("Multiple alternatives not implemented yet");
 
         }
@@ -516,7 +527,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsSufficient)
             {
-                stringBuilder.Append("all");
+                stringBuilder.Append(" all ");
                 stringBuilder.Append(' ');
             }
 

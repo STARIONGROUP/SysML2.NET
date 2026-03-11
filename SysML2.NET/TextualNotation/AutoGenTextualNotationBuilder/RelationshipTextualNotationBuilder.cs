@@ -53,7 +53,25 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRelationshipOwnedElement(SysML2.NET.Core.POCO.Root.Elements.IRelationship poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            using var ownedRelatedElementIterator = poco.OwnedRelatedElement.GetEnumerator();
+            using var ownedRelationshipOfAnnotationIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Annotations.Annotation>().GetEnumerator();
+            if (ownedRelatedElementIterator.MoveNext())
+            {
+
+                if (ownedRelatedElementIterator.Current != null)
+                {
+                    ElementTextualNotationBuilder.BuildOwnedRelatedElement(ownedRelatedElementIterator.Current, stringBuilder);
+                }
+            }
+            else if (ownedRelationshipOfAnnotationIterator.MoveNext())
+            {
+
+                if (ownedRelationshipOfAnnotationIterator.Current != null)
+                {
+                    AnnotationTextualNotationBuilder.BuildOwnedAnnotation(ownedRelationshipOfAnnotationIterator.Current, stringBuilder);
+                }
+            }
+
         }
     }
 }
