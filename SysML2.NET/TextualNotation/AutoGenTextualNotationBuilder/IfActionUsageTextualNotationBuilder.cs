@@ -58,10 +58,10 @@ namespace SysML2.NET.TextualNotation
                 ParameterMembershipTextualNotationBuilder.BuildActionBodyParameterMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
             }
 
-            if (BuildGroupConditionForIfNode(poco))
+            if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
             {
                 stringBuilder.Append("else ");
-                throw new System.NotSupportedException("Multiple alternatives with only not implemented yet for caller as AssignmentElement");
+                throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
                 stringBuilder.Append(' ');
             }
 

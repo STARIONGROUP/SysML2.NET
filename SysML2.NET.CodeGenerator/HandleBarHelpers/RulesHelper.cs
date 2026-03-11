@@ -165,14 +165,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     
                     if(types.Count == 1)
                     {
-                        if (ruleGenerationContext.CallerRule is not AssignmentElement)
-                        {
-                            ProcessUnitypedAlternativesWithOneElement(writer, umlClass, alternatives, ruleGenerationContext);
-                        }
-                        else
-                        {
-                            writer.WriteSafeString($"throw new System.NotSupportedException(\"Multiple alternatives with only not implemented yet for caller as AssignmentElement\");");
-                        }
+                        ProcessUnitypedAlternativesWithOneElement(writer, umlClass, alternatives, ruleGenerationContext);
                     }
                     else
                     {
@@ -186,6 +179,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
         }
 
+        /// <summary>
+        /// Process multiple <see cref="Alternatives"/> when all of them only have one <see cref="RuleElement"/>
+        /// </summary>
+        /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
+        /// <param name="umlClass">The related <see cref="IClass"/></param>
+        /// <param name="alternatives">The collection of alternatives to process</param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
         private static void ProcessUnitypedAlternativesWithOneElement(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
         {
             var firstRuleElement = alternatives.ElementAt(0).Elements[0];
@@ -205,7 +205,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         break;
                     }
 
-                    writer.WriteSafeString($"switch(poco){Environment.NewLine}");
+                    var variableName = "poco";
+
+                    if (ruleGenerationContext.CallerRule is AssignmentElement assignmentElement)
+                    {
+                        var iteratorToUse = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                        variableName = $"{iteratorToUse.IteratorVariableName}.Current";
+                        writer.WriteSafeString($"{iteratorToUse.IteratorVariableName}.MoveNext();{Environment.NewLine}{Environment.NewLine}");
+                    }
+
+                    writer.WriteSafeString($"switch({variableName}){Environment.NewLine}");
                     writer.WriteSafeString("{");
 
                     foreach (var orderedNonTerminalElement in mappedNonTerminalElements)
@@ -213,7 +222,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         if (orderedNonTerminalElement.UmlClass == ruleGenerationContext.NamedElementToGenerate)
                         {
                             writer.WriteSafeString($"default:{Environment.NewLine}");
-                            ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, "poco",ruleGenerationContext);
+                            ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, variableName,ruleGenerationContext);
                         }
                         else
                         {
@@ -233,6 +242,13 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             }
         }
 
+        /// <summary>
+        /// Orders a collection of <see cref="NonTerminalElement"/> based on the inheritance ordering, to build switch expression
+        /// </summary>
+        /// <param name="nonTerminalElements">The collection of <see cref="NonTerminalElement"/> to order</param>
+        /// <param name="cache">The <see cref="IXmiElementCache"/></param>
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        /// <returns>The collection of ordered <see cref="NonTerminalElement"/> with the associated <see cref="IClass"/></returns>
         private static List<(NonTerminalElement RuleElement, IClass UmlClass)> OrderElementsByInheritance(List<NonTerminalElement> nonTerminalElements, IXmiElementCache cache, RuleGenerationContext ruleGenerationContext)
         {
             var mapping = new List<(NonTerminalElement RuleElement, IClass UmlClass)>();
@@ -580,23 +596,12 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 return;
             }
 
-            if (assignmentElement.Value is GroupElement groupElement)
-            {
-                var groupedAssignment = groupElement.Alternatives.SelectMany(x => x.Elements).OfType<AssignmentElement>();
-
-                foreach (var assignment in groupedAssignment)
-                {
-                    DeclareIteratorIfRequired(writer, umlClass, assignment, ruleGenerationContext);
-                }
-                
-                return;
-            }
-
             switch (assignmentElement.Value)
             {
                 case NonTerminalElement nonTerminalElement:
+                {
                     var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
-                    
+
                     if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, referencedRule) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } alreadyDefinedIterator)
                     {
                         alreadyDefinedIterator.ApplicableRuleElements.Add(assignmentElement);
@@ -607,14 +612,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         DefinedForProperty = targetProperty
                     };
-                    
+
                     iteratorToUse.ApplicableRuleElements.Add(assignmentElement);
 
                     string typeTarget;
-                    
+
                     if (referencedRule == null)
                     {
-                        typeTarget = umlClass.Name;                    
+                        typeTarget = umlClass.Name;
                     }
                     else
                     {
@@ -626,18 +631,19 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                         var targetType = umlClass.Cache.Values.OfType<INamedElement>().SingleOrDefault(x => x.Name == typeTarget);
                         iteratorToUse.ConstrainedType = targetType;
 
-                        writer.WriteSafeString(targetType != null 
-                            ? $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.OfType<{targetType.QueryFullyQualifiedTypeName(targetInterface: false)}>().GetEnumerator();" 
+                        writer.WriteSafeString(targetType != null
+                            ? $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.OfType<{targetType.QueryFullyQualifiedTypeName(targetInterface: false)}>().GetEnumerator();"
                             : $"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
                     }
                     else
                     {
                         writer.WriteSafeString($"using var {iteratorToUse.IteratorVariableName} = poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}.GetEnumerator();");
                     }
-                    
+
                     writer.WriteSafeString(Environment.NewLine);
                     ruleGenerationContext.DefinedIterators.Add(iteratorToUse);
-                break;
+                    break;
+                }
                 case ValueLiteralElement:
                     if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, null) || x.ApplicableRuleElements.Contains(assignmentElement)) is { } existingValueLiteralIterator)
                     {
@@ -655,6 +661,54 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     writer.WriteSafeString(Environment.NewLine);
                     ruleGenerationContext.DefinedIterators.Add(valueLiteralIterator);
                     
+                    break;
+                case AssignmentElement containedAssignment:
+                    DeclareIteratorIfRequired(writer, umlClass, containedAssignment, ruleGenerationContext);
+                    break;
+                case GroupElement groupElement:
+                    var nonTerminalRules = groupElement.Alternatives.SelectMany(x => x.Elements).OfType<NonTerminalElement>().ToList();
+                    
+                    if (ruleGenerationContext.DefinedIterators.Any(x => x.ApplicableRuleElements.Contains(assignmentElement)))
+                    {
+                        return;
+                    }
+
+                    var referencedTypes = new HashSet<INamedElement>();
+
+                    foreach (var nonTerminalElement in nonTerminalRules)
+                    {
+                        var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
+
+                        if (ruleGenerationContext.DefinedIterators.SingleOrDefault(x => x.IsIteratorValidForProperty(targetProperty, referencedRule)) is { } alreadyDefined)
+                        {
+                            alreadyDefined.ApplicableRuleElements.Add(assignmentElement);
+                            return;
+                        }
+
+                        string typeTarget;
+
+                        if (referencedRule == null)
+                        {
+                            typeTarget = umlClass.Name;
+                        }
+                        else
+                        {
+                            typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
+                        }
+                        
+                        referencedTypes.Add(umlClass.Cache.Values.OfType<INamedElement>().Single(x => x.Name == typeTarget));
+                    }
+                    
+                    var iteratorToUseForGroup = new IteratorDefinition
+                    {
+                        DefinedForProperty = targetProperty
+                    };
+
+                    var typesFilter = string.Join(", ", referencedTypes.Select(x => $"typeof({x.QueryFullyQualifiedTypeName(targetInterface: false)})"));
+                    writer.WriteSafeString($"using var {iteratorToUseForGroup.IteratorVariableName} = SysML2.NET.Extensions.EnumerableExtensions.GetElementsOfType(poco.{targetProperty.QueryPropertyNameBasedOnUmlProperties()}, {typesFilter}).GetEnumerator();{Environment.NewLine}");
+                    
+                    iteratorToUseForGroup.ApplicableRuleElements.Add(assignmentElement);
+                    ruleGenerationContext.DefinedIterators.Add(iteratorToUseForGroup);
                     break;
             }
         }
