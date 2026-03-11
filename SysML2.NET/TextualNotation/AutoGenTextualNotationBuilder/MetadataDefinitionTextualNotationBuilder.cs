@@ -45,7 +45,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsAbstract)
             {
-                stringBuilder.Append("abstract");
+                stringBuilder.Append(" abstract ");
                 stringBuilder.Append(' ');
             }
 

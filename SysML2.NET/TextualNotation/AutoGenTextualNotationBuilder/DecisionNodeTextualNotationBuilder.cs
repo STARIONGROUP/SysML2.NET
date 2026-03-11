@@ -43,7 +43,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildDecisionNode(SysML2.NET.Core.POCO.Systems.Actions.IDecisionNode poco, StringBuilder stringBuilder)
         {
             OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, stringBuilder);
-            stringBuilder.Append("decide");
+            if (poco.IsComposite)
+            {
+                stringBuilder.Append(" decide ");
+            }
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 

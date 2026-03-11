@@ -224,7 +224,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsAbstract)
             {
-                stringBuilder.Append("abstract");
+                stringBuilder.Append(" abstract ");
                 stringBuilder.Append(' ');
             }
 
@@ -253,7 +253,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsSufficient)
             {
-                stringBuilder.Append("all");
+                stringBuilder.Append(" all ");
                 stringBuilder.Append(' ');
             }
 
@@ -477,7 +477,7 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeBodyElement(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            BuildTypeBodyElementAlternatives(poco, stringBuilder);
         }
 
         /// <summary>

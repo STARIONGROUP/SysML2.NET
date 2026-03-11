@@ -42,7 +42,21 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildUnioning(SysML2.NET.Core.POCO.Core.Types.IUnioning poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
+            if (poco.UnioningType != null)
+            {
+                stringBuilder.Append(poco.UnioningType.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+            else if (ownedRelatedElementOfFeatureIterator.MoveNext())
+            {
+
+                if (ownedRelatedElementOfFeatureIterator.Current != null)
+                {
+                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                }
+            }
+
         }
     }
 }

@@ -42,7 +42,25 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRootNamespace(SysML2.NET.Core.POCO.Root.Namespaces.INamespace poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            foreach (var elementInOwnedRelationship in poco.OwnedRelationship)
+            {
+                switch (elementInOwnedRelationship)
+                {
+                    case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
+                        ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership:
+                        OwningMembershipTextualNotationBuilder.BuildPackageMember(owningMembership, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Root.Namespaces.Membership membership:
+                        MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
+                        ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
+                        break;
+                }
+            }
+
 
         }
 
@@ -78,7 +96,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildNamespaceBodyElement(SysML2.NET.Core.POCO.Root.Namespaces.INamespace poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            foreach (var elementInOwnedRelationship in poco.OwnedRelationship)
+            {
+                switch (elementInOwnedRelationship)
+                {
+                    case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership:
+                        OwningMembershipTextualNotationBuilder.BuildNamespaceMember(owningMembership, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Root.Namespaces.Membership membership:
+                        MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
+                        ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
+                        break;
+                }
+            }
+
         }
 
         /// <summary>

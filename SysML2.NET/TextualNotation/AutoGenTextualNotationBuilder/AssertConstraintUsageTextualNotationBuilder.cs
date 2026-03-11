@@ -48,7 +48,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsNegated)
             {
-                stringBuilder.Append("not");
+                stringBuilder.Append(" not ");
                 stringBuilder.Append(' ');
             }
 

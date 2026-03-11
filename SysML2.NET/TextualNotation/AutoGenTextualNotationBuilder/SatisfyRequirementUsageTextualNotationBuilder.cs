@@ -46,7 +46,7 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelationshipOfSubjectMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership>().GetEnumerator();
             OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
             stringBuilder.Append("assert ");
-            stringBuilder.Append("not");
+            stringBuilder.Append(" not ");
 
             stringBuilder.Append(' ');
             stringBuilder.Append("satisfy ");

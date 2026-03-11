@@ -63,15 +63,23 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsDerived)
             {
-                stringBuilder.Append("derived");
+                stringBuilder.Append(" derived ");
                 stringBuilder.Append(' ');
             }
 
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            if (poco.IsAbstract)
+            {
+                stringBuilder.Append(" abstract ");
+            }
+            else if (poco.IsVariation)
+            {
+                stringBuilder.Append(" variation ");
+            }
+
 
             if (poco.IsConstant)
             {
-                stringBuilder.Append("constant");
+                stringBuilder.Append(" constant ");
                 stringBuilder.Append(' ');
             }
 
@@ -90,7 +98,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.isReference)
             {
-                stringBuilder.Append("ref");
+                stringBuilder.Append(" ref ");
                 stringBuilder.Append(' ');
             }
 
@@ -106,7 +114,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildEndUsagePrefix(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.IUsage poco, StringBuilder stringBuilder)
         {
             using var ownedRelationshipOfOwningMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership>().GetEnumerator();
-            stringBuilder.Append("end");
+            if (poco.IsEnd)
+            {
+                stringBuilder.Append(" end ");
+            }
 
             if (ownedRelationshipOfOwningMembershipIterator.MoveNext())
             {

@@ -63,7 +63,22 @@ namespace SysML2.NET.TextualNotation
             using var ownedRelatedElementIterator = poco.OwnedRelatedElement.GetEnumerator();
             using var ownedRelatedElementOfUsageIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage>().GetEnumerator();
             MembershipTextualNotationBuilder.BuildMemberPrefix(poco, stringBuilder);
-            throw new System.NotSupportedException("Multiple alternatives with only AssignmentElement not implemented yet");
+            using var iterator = SysML2.NET.Extensions.EnumerableExtensions.GetElementsOfType(poco.OwnedRelatedElement, typeof(SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage), typeof(SysML2.NET.Core.POCO.Root.Elements.IElement)).GetEnumerator();
+            iterator.MoveNext();
+
+            if (iterator.Current != null)
+            {
+                switch (iterator.Current)
+                {
+                    case SysML2.NET.Core.POCO.Systems.DefinitionAndUsage.Usage usage:
+                        UsageTextualNotationBuilder.BuildUsageElement(usage, stringBuilder);
+                        break;
+                    case { } element:
+                        ElementTextualNotationBuilder.BuildDefinitionElement(element, stringBuilder);
+                        break;
+                }
+            }
+
             stringBuilder.Append(' ');
 
         }

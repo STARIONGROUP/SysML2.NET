@@ -52,7 +52,7 @@ namespace SysML2.NET.TextualNotation
             if (poco.IsRecursive)
             {
                 stringBuilder.Append(":: ");
-                stringBuilder.Append("**");
+                stringBuilder.Append(" ** ");
                 stringBuilder.Append(' ');
             }
 

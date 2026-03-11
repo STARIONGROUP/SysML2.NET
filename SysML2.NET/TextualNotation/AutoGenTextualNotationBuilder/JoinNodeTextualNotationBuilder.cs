@@ -43,7 +43,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildJoinNode(SysML2.NET.Core.POCO.Systems.Actions.IJoinNode poco, StringBuilder stringBuilder)
         {
             OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, stringBuilder);
-            stringBuilder.Append("join");
+            if (poco.IsComposite)
+            {
+                stringBuilder.Append(" join ");
+            }
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 

@@ -43,7 +43,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildMergeNode(SysML2.NET.Core.POCO.Systems.Actions.IMergeNode poco, StringBuilder stringBuilder)
         {
             OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, stringBuilder);
-            stringBuilder.Append("merge");
+            if (poco.IsComposite)
+            {
+                stringBuilder.Append(" merge ");
+            }
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 

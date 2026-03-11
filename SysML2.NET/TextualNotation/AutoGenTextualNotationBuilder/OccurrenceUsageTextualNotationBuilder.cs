@@ -46,7 +46,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsIndividual)
             {
-                stringBuilder.Append("individual");
+                stringBuilder.Append(" individual ");
                 stringBuilder.Append(' ');
             }
 
@@ -71,7 +71,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildIndividualUsage(SysML2.NET.Core.POCO.Systems.Occurrences.IOccurrenceUsage poco, StringBuilder stringBuilder)
         {
             UsageTextualNotationBuilder.BuildBasicUsagePrefix(poco, stringBuilder);
-            stringBuilder.Append("individual");
+            if (poco.IsIndividual)
+            {
+                stringBuilder.Append(" individual ");
+            }
             UsageTextualNotationBuilder.BuildUsageExtensionKeyword(poco, stringBuilder);
             UsageTextualNotationBuilder.BuildUsage(poco, stringBuilder);
 
@@ -89,7 +92,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsIndividual)
             {
-                stringBuilder.Append("individual");
+                stringBuilder.Append(" individual ");
                 stringBuilder.Append(' ');
             }
 
@@ -112,7 +115,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.IsIndividual)
             {
-                stringBuilder.Append("individual");
+                stringBuilder.Append(" individual ");
                 stringBuilder.Append(' ');
             }
 

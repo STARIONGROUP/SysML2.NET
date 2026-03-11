@@ -43,7 +43,10 @@ namespace SysML2.NET.TextualNotation
         public static void BuildForkNode(SysML2.NET.Core.POCO.Systems.Actions.IForkNode poco, StringBuilder stringBuilder)
         {
             OccurrenceUsageTextualNotationBuilder.BuildControlNodePrefix(poco, stringBuilder);
-            stringBuilder.Append("fork");
+            if (poco.IsComposite)
+            {
+                stringBuilder.Append(" fork ");
+            }
             UsageTextualNotationBuilder.BuildUsageDeclaration(poco, stringBuilder);
             TypeTextualNotationBuilder.BuildActionBody(poco, stringBuilder);
 
