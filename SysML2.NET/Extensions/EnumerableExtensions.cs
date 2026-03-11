@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="IfActionUsageTextualNotationBuilder.cs" company="Starion Group S.A.">
+// <copyright file="EnumerableExtensions.cs" company="Starion Group S.A.">
 // 
 //   Copyright 2022-2026 Starion Group S.A.
 // 
@@ -18,26 +18,29 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace SysML2.NET.TextualNotation
+namespace SysML2.NET.Extensions
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
 
-    using SysML2.NET.Core.POCO.Kernel.Behaviors;
-    using SysML2.NET.Core.POCO.Systems.Actions;
+    using SysML2.NET.Core.POCO.Root.Elements;
 
     /// <summary>
-    /// Hand-coded part of the <see cref="IfActionUsageTextualNotationBuilder"/>
+    /// Extension methods for the <see cref="IEnumerable" /> interface
     /// </summary>
-    public static partial class IfActionUsageTextualNotationBuilder
+    internal static class EnumerableExtensions
     {
         /// <summary>
-        /// Builds the conditional part for the IfNode rule
+        /// Filters out all <see cref="IElement" /> where the type matches one of the requested
         /// </summary>
-        /// <param name="poco">The <see cref="IIfActionUsage"/></param>
-        /// <returns>The assertion of the condition</returns>
-        private static bool BuildGroupConditionForIfNode(IIfActionUsage poco)
+        /// <param name="collection">The collection to filters</param>
+        /// <param name="elementTypes">A collection of <see cref="Type" /> that should be used for filtering</param>
+        /// <returns>A collection of <see cref="IEnumerable{T}" /></returns>
+        internal static IEnumerable<IElement> GetElementsOfType(this IEnumerable collection, params Type[] elementTypes)
         {
-            return poco.OwnedRelationship.OfType<IParameterMembership>().Count() != 0;
+            return from object element in collection where elementTypes.Contains(element.GetType()) select element as IElement;
         }
     }
 }

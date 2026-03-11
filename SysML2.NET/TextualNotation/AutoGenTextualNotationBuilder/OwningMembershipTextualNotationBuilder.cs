@@ -131,7 +131,19 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildMultiplicityExpressionMember(SysML2.NET.Core.POCO.Root.Namespaces.IOwningMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only not implemented yet for caller as AssignmentElement");
+            using var ownedRelatedElementIterator = SysML2.NET.Extensions.EnumerableExtensions.GetElementsOfType(poco.OwnedRelatedElement, typeof(SysML2.NET.Core.POCO.Kernel.Expressions.LiteralExpression), typeof(SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression)).GetEnumerator();
+            ownedRelatedElementIterator.MoveNext();
+
+            switch (ownedRelatedElementIterator.Current)
+            {
+                case SysML2.NET.Core.POCO.Kernel.Expressions.LiteralExpression pocoLiteralExpression:
+                    LiteralExpressionTextualNotationBuilder.BuildLiteralExpression(pocoLiteralExpression, stringBuilder);
+                    break;
+                case SysML2.NET.Core.POCO.Kernel.Expressions.FeatureReferenceExpression pocoFeatureReferenceExpression:
+                    FeatureReferenceExpressionTextualNotationBuilder.BuildFeatureReferenceExpression(pocoFeatureReferenceExpression, stringBuilder);
+                    break;
+            }
+
 
         }
 
