@@ -97,7 +97,23 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildFeatureChainMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - AssignmentElement,NonTerminalElement");
+
+            if (poco.MemberElement != null)
+            {
+                stringBuilder.Append(poco.MemberElement.qualifiedName);
+                stringBuilder.Append(' ');
+            }
+            else
+            {
+                using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
+                ownedRelatedElementOfFeatureIterator.MoveNext();
+
+                if (ownedRelatedElementOfFeatureIterator.Current != null)
+                {
+                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                }
+
+            }
         }
 
         /// <summary>
@@ -111,7 +127,7 @@ namespace SysML2.NET.TextualNotation
 
             if (poco.MemberElement != null)
             {
-                stringBuilder.Append(poco.qualifiedName);
+                stringBuilder.Append(poco.MemberElement.qualifiedName);
                 stringBuilder.Append(' ');
 
             }
@@ -143,7 +159,24 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildInstantiatedTypeMember(SysML2.NET.Core.POCO.Root.Namespaces.IMembership poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - AssignmentElement,NonTerminalElement");
+
+            if (poco.MemberElement != null)
+            {
+                stringBuilder.Append(poco.MemberElement.qualifiedName);
+                stringBuilder.Append(' ');
+
+            }
+            else
+            {
+                using var ownedRelatedElementOfFeatureIterator = poco.OwnedRelatedElement.OfType<SysML2.NET.Core.POCO.Core.Features.Feature>().GetEnumerator();
+                ownedRelatedElementOfFeatureIterator.MoveNext();
+
+                if (ownedRelatedElementOfFeatureIterator.Current != null)
+                {
+                    FeatureTextualNotationBuilder.BuildOwnedFeatureChain(ownedRelatedElementOfFeatureIterator.Current, stringBuilder);
+                }
+
+            }
         }
 
         /// <summary>
