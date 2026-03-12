@@ -70,7 +70,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                 if (namedElement is IClass umlClass)
                 {
-                    var ruleGenerationContext = new RuleGenerationContext(namedElement);
+                    var ruleGenerationContext = new RuleGenerationContext(namedElement)
+                    {
+                        CurrentVariableName = "poco"
+                    };
+                    
                     ruleGenerationContext.AllRules.AddRange(allRules);
                     ProcessAlternatives(writer, umlClass, textualRule.Alternatives, ruleGenerationContext);
                 }
@@ -84,7 +88,8 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="alternatives">The collection of alternatives to process</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
-        private static void ProcessAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext)
+        /// <param name="isPartOfMultipleAlternative">Asserts that the current <see cref="AssignmentElement"/> is part of a multiple alternative process</param>
+        private static void ProcessAlternatives(EncodedTextWriter writer, IClass umlClass, IReadOnlyCollection<Alternatives> alternatives, RuleGenerationContext ruleGenerationContext, bool isPartOfMultipleAlternative = false)
         {
             ruleGenerationContext.DefinedIterators ??= [];
             
@@ -152,7 +157,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     foreach (var textualRuleElement in elements)
                     {
                         var previousCaller = ruleGenerationContext.CallerRule;
-                        ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext);
+                        ProcessRuleElement(writer, umlClass, textualRuleElement, ruleGenerationContext, isPartOfMultipleAlternative);
                         ruleGenerationContext.CallerRule = previousCaller;
                     }    
                 }
@@ -169,8 +174,38 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     }
                     else
                     {
-                        
-                        writer.WriteSafeString($"throw new System.NotSupportedException(\"Multiple alternatives with only one of the different type not implemented yet - {string.Join(',', types.Select(x => x.Name))}\");");
+                        if (alternatives.ElementAt(0).Elements[0] is AssignmentElement assignmentElement && alternatives.ElementAt(1).Elements[0] is NonTerminalElement nonTerminalElement)
+                        {
+                            var targetProperty = umlClass.QueryAllProperties().Single(x => string.Equals(x.Name, assignmentElement.Property));
+
+                            if (targetProperty.QueryIsEnumerable())
+                            {
+                                DeclareAllRequiredIterators(writer, umlClass, alternatives.ElementAt(0), ruleGenerationContext);
+
+                                var iterator = ruleGenerationContext.DefinedIterators.Single(x => x.ApplicableRuleElements.Contains(assignmentElement));
+                            
+                                writer.WriteSafeString($"{Environment.NewLine}if({targetProperty.QueryIfStatementContentForNonEmpty(iterator.IteratorVariableName)}){Environment.NewLine}");
+                                writer.WriteSafeString($"{{{Environment.NewLine}");
+                            }                             
+                            else
+                            {
+                                writer.WriteSafeString($"{Environment.NewLine}if({targetProperty.QueryIfStatementContentForNonEmpty("poco")}){Environment.NewLine}");
+                                writer.WriteSafeString($"{{{Environment.NewLine}");
+                            }
+                            
+                            ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement, true);
+                            
+                            writer.WriteSafeString($"{Environment.NewLine}}}");
+                            
+                            writer.WriteSafeString($"else{Environment.NewLine}");
+                            writer.WriteSafeString($"{{{Environment.NewLine}");
+                            ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, ruleGenerationContext);
+                            writer.WriteSafeString($"{Environment.NewLine}}}");
+                        }
+                        else
+                        {
+                            writer.WriteSafeString($"throw new System.NotSupportedException(\"Multiple alternatives with only one of the different type not implemented yet - {string.Join(',', types.Select(x => x.Name))}\");");
+                        }
                     }
                 }
                 else
@@ -221,17 +256,22 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     foreach (var orderedNonTerminalElement in mappedNonTerminalElements)
                     {
+                        var previousVariableName = ruleGenerationContext.CurrentVariableName;
+                        
                         if (orderedNonTerminalElement.UmlClass == ruleGenerationContext.NamedElementToGenerate)
                         {
                             writer.WriteSafeString($"default:{Environment.NewLine}");
-                            ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, variableName, ruleGenerationContext);
+                            ruleGenerationContext.CurrentVariableName = variableName;
+                            ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, ruleGenerationContext);
                         }
                         else
                         {
                             writer.WriteSafeString($"case {orderedNonTerminalElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface: orderedNonTerminalElement.UmlClass.IsAbstract)} poco{orderedNonTerminalElement.UmlClass.Name}:{Environment.NewLine}");
-                            ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement, $"poco{orderedNonTerminalElement.UmlClass.Name}", ruleGenerationContext);
+                            ruleGenerationContext.CurrentVariableName = $"poco{orderedNonTerminalElement.UmlClass.Name}";
+                            ProcessNonTerminalElement(writer, orderedNonTerminalElement.UmlClass, orderedNonTerminalElement.RuleElement,  ruleGenerationContext);
                         }
 
+                        ruleGenerationContext.CurrentVariableName = previousVariableName;
                         writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
                     }
 
@@ -265,7 +305,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 foreach (var orderedElement in orderElementsByInheritance)
                                 {
                                     writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface:orderedElement.UmlClass.IsAbstract)} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}:{Environment.NewLine}");
-                                    ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement, orderedElement.UmlClass.Name.LowerCaseFirstLetter(),  ruleGenerationContext);
+                                    var previousVariableName = ruleGenerationContext.CurrentVariableName;
+                                    ruleGenerationContext.CurrentVariableName = orderedElement.UmlClass.Name.LowerCaseFirstLetter();
+                                    ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement,  ruleGenerationContext);
+                                    ruleGenerationContext.CurrentVariableName = previousVariableName;
                                     writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
                                 }
                             
@@ -295,7 +338,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                     writer.WriteSafeString($"case {orderedElement.UmlClass.QueryFullyQualifiedTypeName(targetInterface:orderedElement.UmlClass.IsAbstract)} {orderedElement.UmlClass.Name.LowerCaseFirstLetter()}:{Environment.NewLine}");
                                 }
 
-                                ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement, orderedElement.UmlClass.Name.LowerCaseFirstLetter(),  ruleGenerationContext);
+                                var previousVariableName = ruleGenerationContext.CurrentVariableName;
+                                ruleGenerationContext.CurrentVariableName = orderedElement.UmlClass.Name.LowerCaseFirstLetter();
+                                ProcessNonTerminalElement(writer, orderedElement.UmlClass, orderedElement.RuleElement,   ruleGenerationContext);
+                                ruleGenerationContext.CurrentVariableName = previousVariableName;
                                 writer.WriteSafeString($"{Environment.NewLine}break;{Environment.NewLine}");
                             }
                             
@@ -414,8 +460,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="textualRuleElement">The <see cref="RuleElement"/> to process</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        /// <param name="isPartOfMultipleAlternative"></param>
         /// <exception cref="ArgumentException">If the type of the <see cref="RuleElement"/> is not supported</exception>
-        private static void ProcessRuleElement(EncodedTextWriter writer, IClass umlClass, RuleElement textualRuleElement, RuleGenerationContext ruleGenerationContext)
+        private static void ProcessRuleElement(EncodedTextWriter writer, IClass umlClass, RuleElement textualRuleElement, RuleGenerationContext ruleGenerationContext, bool isPartOfMultipleAlternative = false)
         {
             switch (textualRuleElement)
             {
@@ -434,12 +481,14 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                     {
                         var textualBuilderClass = ruleGenerationContext.NamedElementToGenerate as IClass;
                         var assignedProperty = textualBuilderClass.QueryAllProperties().SingleOrDefault(x => x.Name == assignmentElementContainer.Property);
-                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, assignedProperty == null ? "poco" : $"poco.{assignedProperty.QueryPropertyNameBasedOnUmlProperties()}", ruleGenerationContext);
+                        ruleGenerationContext.CurrentVariableName = assignedProperty == null ? "poco" : $"poco.{assignedProperty.QueryPropertyNameBasedOnUmlProperties()}";
                     }
                     else
                     {
-                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, "poco", ruleGenerationContext);
+                        ruleGenerationContext.CurrentVariableName = "poco";
                     }
+
+                    ProcessNonTerminalElement(writer, umlClass, nonTerminalElement,ruleGenerationContext, isPartOfMultipleAlternative);
 
                     break;
                 case GroupElement groupElement:
@@ -471,7 +520,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
 
                     break;
                 case AssignmentElement assignmentElement:
-                    ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement);
+                    ProcessAssignmentElement(writer, umlClass, ruleGenerationContext, assignmentElement, isPartOfMultipleAlternative);
                     break;
                 case NonParsingAssignmentElement nonParsingAssignmentElement:
                     writer.WriteSafeString($"// NonParsing Assignment Element : {nonParsingAssignmentElement.PropertyName} {nonParsingAssignmentElement.Operator} {nonParsingAssignmentElement.Value} => Does not have to be process");
@@ -479,7 +528,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 case ValueLiteralElement valueLiteralElement:
                     if (valueLiteralElement.QueryIsQualifiedName())
                     {
-                        writer.WriteSafeString($"stringBuilder.Append(poco.qualifiedName);{Environment.NewLine}");
+                        writer.WriteSafeString($"stringBuilder.Append({ruleGenerationContext.CurrentVariableName}.qualifiedName);{Environment.NewLine}");
                         writer.WriteSafeString("stringBuilder.Append(' ');");
                     }
                     else
@@ -502,7 +551,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="assignmentElement">The <see cref="AssignmentElement"/> to process</param>
         /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
-        /// <param name="isPartOfMultipleAlternative"></param>
+        /// <param name="isPartOfMultipleAlternative">Asserts that the current <see cref="AssignmentElement"/> is part of a multiple alternative process</param>
         private static void ProcessAssignmentElement(EncodedTextWriter writer, IClass umlClass, RuleGenerationContext ruleGenerationContext, AssignmentElement assignmentElement, bool isPartOfMultipleAlternative = false)
         {
             var properties = umlClass.QueryAllProperties();
@@ -521,7 +570,10 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                             writer.WriteSafeString($"{iteratorToUse.IteratorVariableName}.MoveNext();{Environment.NewLine}");
                         }
 
-                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, $"{iteratorToUse.IteratorVariableName}.Current", ruleGenerationContext);
+                        var previousVariableName = ruleGenerationContext.CurrentVariableName;
+                        ruleGenerationContext.CurrentVariableName = $"{iteratorToUse.IteratorVariableName}.Current";
+                        ProcessNonTerminalElement(writer, umlClass, nonTerminalElement, ruleGenerationContext);
+                        ruleGenerationContext.CurrentVariableName = previousVariableName;
                     }
                     else if(assignmentElement.Value is GroupElement groupElement)
                     {
@@ -599,7 +651,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 {
                                     var previousCaller = ruleGenerationContext.CallerRule;
                                     ruleGenerationContext.CallerRule = nonTerminalElement;
-                                    ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, $"poco.{targetPropertyName}", ruleGenerationContext);
+                                    ruleGenerationContext.CurrentVariableName = $"poco.{targetPropertyName}";
+                                    ProcessNonTerminalElement(writer, targetProperty.Type as IClass, nonTerminalElement, ruleGenerationContext, isPartOfMultipleAlternative);
+                                    ruleGenerationContext.CurrentVariableName = "poco";
                                     ruleGenerationContext.CallerRule = previousCaller;
                                     break;
                                 }
@@ -643,9 +697,9 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
         /// <param name="writer">The <see cref="EncodedTextWriter"/> used to write into output content</param>
         /// <param name="umlClass">The related <see cref="IClass"/></param>
         /// <param name="nonTerminalElement">The <see cref="NonTerminalElement"/> to process</param>
-        /// <param name="variableName">The name of the variable that should be used to call the non-terminal method</param>
-        /// <param name="ruleGenerationContext"></param>
-        private static void ProcessNonTerminalElement(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, string variableName, RuleGenerationContext ruleGenerationContext)
+        /// <param name="ruleGenerationContext">The current <see cref="RuleGenerationContext"/></param>
+        /// <param name="isPartOfMultipleAlternative">Asserts that the current <see cref="NonTerminalElement"/> is part of a multiple alternative process</param>
+        private static void ProcessNonTerminalElement(EncodedTextWriter writer, IClass umlClass, NonTerminalElement nonTerminalElement, RuleGenerationContext ruleGenerationContext, bool isPartOfMultipleAlternative = false)
         {
             var referencedRule = ruleGenerationContext.AllRules.SingleOrDefault(x => x.RuleName == nonTerminalElement.Name);
 
@@ -660,11 +714,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 typeTarget = referencedRule.TargetElementName ?? referencedRule.RuleName;
             }
 
-            var isForProperty = variableName.Contains('.');
+            var isForProperty = ruleGenerationContext.CurrentVariableName.Contains('.');
             
-            if (isForProperty)
+            if (isForProperty && !isPartOfMultipleAlternative)
             {
-                writer.WriteSafeString($"{Environment.NewLine}if ({variableName} != null){Environment.NewLine}");
+                writer.WriteSafeString($"{Environment.NewLine}if ({ruleGenerationContext.CurrentVariableName} != null){Environment.NewLine}");
                 writer.WriteSafeString($"{{{Environment.NewLine}");
             }
                             
@@ -674,15 +728,15 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                                 
                 if (targetType != null)
                 {
-                    if (targetType is IClass targetClass && (umlClass.QueryAllGeneralClassifiers().Contains(targetClass) || !variableName.Contains("poco")))
+                    if (targetType is IClass targetClass && (umlClass.QueryAllGeneralClassifiers().Contains(targetClass) || !ruleGenerationContext.CurrentVariableName.Contains("poco")))
                     {
-                        writer.WriteSafeString($"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({variableName}, stringBuilder);");
+                        writer.WriteSafeString($"{targetType.Name}TextualNotationBuilder.Build{nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, stringBuilder);");
                     }
                     else
                     {
                         var previousCaller = ruleGenerationContext.CallerRule;
                         ruleGenerationContext.CallerRule = nonTerminalElement;
-                        ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                        ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext, isPartOfMultipleAlternative);
                         ruleGenerationContext.CallerRule = previousCaller;
                     }
                 }
@@ -690,16 +744,16 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     var previousCaller = ruleGenerationContext.CallerRule;
                     ruleGenerationContext.CallerRule = nonTerminalElement;
-                    ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext);
+                    ProcessAlternatives(writer, umlClass, referencedRule?.Alternatives, ruleGenerationContext, isPartOfMultipleAlternative);
                     ruleGenerationContext.CallerRule = previousCaller;
                 }
             }
             else
             {
-                writer.WriteSafeString($"Build{ nonTerminalElement.Name}({variableName}, stringBuilder);");
+                writer.WriteSafeString($"Build{ nonTerminalElement.Name}({ruleGenerationContext.CurrentVariableName}, stringBuilder);");
             }
 
-            if (isForProperty)
+            if (isForProperty && !isPartOfMultipleAlternative)
             {
                 writer.WriteSafeString($"{Environment.NewLine}}}");
             }
@@ -935,6 +989,11 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
             /// Gets the <see cref="INamedElement"/> that is used in the current generation
             /// </summary>
             public INamedElement NamedElementToGenerate { get; }
+
+            /// <summary>
+            /// Gets or sets the current name of the variable to process
+            /// </summary>
+            public string CurrentVariableName { get; set; }
         }
     }
 }

@@ -569,7 +569,19 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureChainingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureChaining>().GetEnumerator();
             stringBuilder.Append("chains ");
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - AssignmentElement,NonTerminalElement");
+
+            if (ownedRelationshipOfFeatureChainingIterator.MoveNext())
+            {
+
+                if (ownedRelationshipOfFeatureChainingIterator.Current != null)
+                {
+                    FeatureChainingTextualNotationBuilder.BuildOwnedFeatureChaining(ownedRelationshipOfFeatureChainingIterator.Current, stringBuilder);
+                }
+            }
+            else
+            {
+                BuildFeatureChain(poco, stringBuilder);
+            }
             stringBuilder.Append(' ');
 
         }
