@@ -23,9 +23,16 @@ namespace SysML2.NET.Core.POCO.Core.Types
     using System.Linq;
 
     using SysML2.NET.Core.POCO.Root.Elements;
+    using SysML2.NET.Core.POCO.Systems.Allocations;
     using SysML2.NET.Core.POCO.Systems.Connections;
     using SysML2.NET.Core.POCO.Systems.DefinitionAndUsage;
+    using SysML2.NET.Core.POCO.Systems.Flows;
+    using SysML2.NET.Core.POCO.Systems.Interfaces;
+    using SysML2.NET.Core.POCO.Systems.Items;
     using SysML2.NET.Core.POCO.Systems.Occurrences;
+    using SysML2.NET.Core.POCO.Systems.Parts;
+    using SysML2.NET.Core.POCO.Systems.Ports;
+    using SysML2.NET.Core.POCO.Systems.Views;
 
     /// <summary>
     /// A FeatureMembership is an OwningMembership between an ownedMemberFeature and an owningType. If the
@@ -74,6 +81,27 @@ namespace SysML2.NET.Core.POCO.Core.Types
         private bool HasRelatedElementOfType<T>() where T : IElement
         {
             return this.OwnedRelatedElement.OfType<T>().Any();
+        }
+
+        /// <summary>
+        /// Asserts that the current <see cref="FeatureMembership"/> have valid <see cref="IElement" /> typeinto the
+        /// <see cref="OwnedRelatedElement" /> collection for the StructureUsageMember
+        /// </summary>
+        /// <returns>True if contains any of the required element type</returns>
+        internal bool IsValidForStructureUsageMember()
+        {
+            return this.HasRelatedElementOfType<OccurrenceUsage>() 
+                   || this.HasRelatedElementOfType<EventOccurrenceUsage>()
+                   || this.HasRelatedElementOfType<ItemUsage>()
+                   || this.HasRelatedElementOfType<PartUsage>()
+                   || this.HasRelatedElementOfType<ViewUsage>()
+                   || this.HasRelatedElementOfType<RenderingUsage>()
+                   || this.HasRelatedElementOfType<PortUsage>()
+                   || this.HasRelatedElementOfType<ConnectionUsage>()
+                   || this.HasRelatedElementOfType<InterfaceUsage>()
+                   || this.HasRelatedElementOfType<AllocationUsage>()
+                   || this.HasRelatedElementOfType<FlowUsage>()
+                   || this.HasRelatedElementOfType<SuccessionFlowUsage>();
         }
     }
 }
