@@ -1,0 +1,59 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="IncludeUseCaseUsageTextualNotationBuilder.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.TextualNotation
+{
+    using System.Linq;
+    using System.Text;
+
+    using SysML2.NET.Core.POCO.Root.Elements;
+
+    /// <summary>
+    /// The <see cref="IncludeUseCaseUsageTextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage" /> element
+    /// </summary>
+    public static partial class IncludeUseCaseUsageTextualNotationBuilder
+    {
+        /// <summary>
+        /// Builds the Textual Notation string for the rule IncludeUseCaseUsage
+        /// <para>IncludeUseCaseUsage=OccurrenceUsagePrefix'include'(ownedRelationship+=OwnedReferenceSubsettingFeatureSpecializationPart?|'use''case'UsageDeclaration)ValuePart?CaseBody</para>    
+        /// </summary>
+        /// <param name="poco">The <see cref="SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage" /> from which the rule should be build</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+        public static void BuildIncludeUseCaseUsage(SysML2.NET.Core.POCO.Systems.UseCases.IIncludeUseCaseUsage poco, StringBuilder stringBuilder)
+        {
+            using var ownedRelationshipOfReferenceSubsettingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.ReferenceSubsetting>().GetEnumerator();
+            OccurrenceUsageTextualNotationBuilder.BuildOccurrenceUsagePrefix(poco, stringBuilder);
+            stringBuilder.Append("include ");
+            throw new System.NotSupportedException("Multiple alternatives not implemented yet");
+            stringBuilder.Append(' ');
+            FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
+            TypeTextualNotationBuilder.BuildCaseBody(poco, stringBuilder);
+
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

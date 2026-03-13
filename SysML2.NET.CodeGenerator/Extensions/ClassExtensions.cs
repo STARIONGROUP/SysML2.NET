@@ -20,18 +20,15 @@
 
 namespace SysML2.NET.CodeGenerator.Extensions
 {
-    using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
 
     using uml4net.Classification;
     using uml4net.Extensions;
-    using uml4net.Packages;
     using uml4net.StructuredClassifiers;
 
     /// <summary>
-    /// Extension methods for <see cref="IClass"/> interface
+    /// Extension methods for <see cref="IClass" /> interface
     /// </summary>
     public static class ClassExtensions
     {
@@ -40,10 +37,10 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// or interface implementations EXCLUDING IsDerived
         /// </summary>
         /// <param name="class">
-        /// The <see cref="IClass"/> from which to query the properties
+        /// The <see cref="IClass" /> from which to query the properties
         /// </param>
         /// <returns>
-        /// A <see cref="ReadOnlyCollection{T}"/> of <see cref="IProperty"/>
+        /// A <see cref="ReadOnlyCollection{T}" /> of <see cref="IProperty" />
         /// </returns>
         public static ReadOnlyCollection<IProperty> QueryAllNonDerivedProperties(this IClass @class)
         {
@@ -59,10 +56,10 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// redefined in the context of the current class
         /// </summary>
         /// <param name="class">
-        /// The <see cref="IClass"/> from which to query the properties
+        /// The <see cref="IClass" /> from which to query the properties
         /// </param>
         /// <returns>
-        /// A <see cref="ReadOnlyCollection{T}"/> of <see cref="IProperty"/>
+        /// A <see cref="ReadOnlyCollection{T}" /> of <see cref="IProperty" />
         /// </returns>
         public static ReadOnlyCollection<IProperty> QueryAllNonDerivedNonRedefinedProperties(this IClass @class)
         {
@@ -78,7 +75,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// Counts and returns to amount of non derived properties
         /// </summary>
         /// <param name="class">
-        /// The subject <see cref="IClass"/>
+        /// The subject <see cref="IClass" />
         /// </param>
         /// <returns>
         /// the amount of non derived properties
@@ -92,7 +89,7 @@ namespace SysML2.NET.CodeGenerator.Extensions
         /// Counts and returns to amount of non derived properties
         /// </summary>
         /// <param name="class">
-        /// The subject <see cref="IClass"/>
+        /// The subject <see cref="IClass" />
         /// </param>
         /// <returns>
         /// the amount of non derived properties
@@ -103,20 +100,36 @@ namespace SysML2.NET.CodeGenerator.Extensions
         }
 
         /// <summary>
-        /// Query the name of the internal interface to implement for an <see cref="IClass"/>
+        /// Query the name of the internal interface to implement for an <see cref="IClass" />
         /// </summary>
-        /// <param name="umlClass">The <see cref="IClass"/></param>
+        /// <param name="umlClass">The <see cref="IClass" /></param>
         /// <returns>The name of the internal interface to implement, if any</returns>
         public static string QueryInternalInterfaceName(this IClass umlClass)
         {
             var classifiers = umlClass.QueryAllGeneralClassifiers();
-            
+
             if (classifiers.Any(x => x.Name == "Relationship"))
             {
                 return "IContainedRelationship";
             }
-            
+
             return classifiers.Any(x => x.Name == "Element") ? "IContainedElement" : string.Empty;
+        }
+
+        /// <summary>
+        /// Asserts that an <see cref="IClass" /> is a subclass of another
+        /// </summary>
+        /// <param name="umlClass">The <see cref="IClass" /> to check</param>
+        /// <param name="potentialSuperClass">
+        /// The <see cref="IClass" /> that is potentially a super class of
+        /// <paramref name="umlClass" />
+        /// </param>
+        /// <returns>
+        /// True if the <paramref name="potentialSuperClass" /> is a super class of the <paramref name="umlClass" />
+        /// </returns>
+        public static bool QueryIsSubclassOf(this IClass umlClass, IClass potentialSuperClass)
+        {
+            return umlClass.QueryAllGeneralClassifiers().Contains(potentialSuperClass);
         }
     }
 }
