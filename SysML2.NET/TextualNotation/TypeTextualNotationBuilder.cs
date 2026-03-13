@@ -118,6 +118,58 @@ namespace SysML2.NET.TextualNotation
         }
 
         /// <summary>
+        /// Build the logic for the NonBehaviorBodyItem =ownedRelationship+=Import|ownedRelationship+=AliasMember|ownedRelationship+=DefinitionMember|ownedRelationship+=VariantUsageMember|ownedRelationship+=NonOccurrenceUsageMember|(ownedRelationship+=SourceSuccessionMember)?ownedRelationship+=StructureUsageMember rule
+        /// </summary>
+        /// <param name="relationshipIndex">The index of the <see cref="IRelationship"/> inside the <paramref name="relationships"/> to process</param>
+        /// <param name="relationships">A collection of <see cref="IRelationship"/> to process</param>
+        /// <param name="stringBuilder">The <see cref="StringBuilder" /></param>
+        /// <returns>The current index that could have been modified during the process</returns>
+        private static int BuildNonBehaviorBodyItem(int relationshipIndex, List<IRelationship> relationships, StringBuilder stringBuilder)
+        {
+            var elementInOwnedRelationship = relationships[relationshipIndex];
+
+            switch (elementInOwnedRelationship)
+            {
+                case IImport import:
+                    ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
+                    break;
+                case Membership membership:
+                    MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
+                    break;
+                case OwningMembership owningMembership:
+                    OwningMembershipTextualNotationBuilder.BuildDefinitionMember(owningMembership, stringBuilder);
+                    break;
+                case VariantMembership variantMembership:
+                    VariantMembershipTextualNotationBuilder.BuildVariantUsageMember(variantMembership, stringBuilder);
+                    break;
+                
+                case FeatureMembership featureMembershipForSuccession when featureMembershipForSuccession.IsValidForSourceSuccessionMember():
+                {
+                    var nextElement = relationshipIndex + 1 < relationships.Count ? relationships[relationshipIndex + 1] : null;
+
+                    if (nextElement is FeatureMembership featureMembership && featureMembership.IsValidForStructureUsageMember())
+                    {
+                        FeatureMembershipTextualNotationBuilder.BuildSourceSuccessionMember(featureMembershipForSuccession, stringBuilder);
+                        FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembership, stringBuilder);
+                        return relationshipIndex + 1;
+                    }
+
+                    break;
+                }
+
+                case FeatureMembership featureMembershipForOccurenceUsageMember when featureMembershipForOccurenceUsageMember.IsValidForStructureUsageMember():
+                    FeatureMembershipTextualNotationBuilder.BuildStructureUsageMember(featureMembershipForOccurenceUsageMember, stringBuilder);
+                    break;
+
+                case FeatureMembership featureMembershipForNonOccurenceUsageMember when featureMembershipForNonOccurenceUsageMember.IsValidForNonOccurrenceUsageMember():
+                    FeatureMembershipTextualNotationBuilder.BuildNonOccurrenceUsageMember(featureMembershipForNonOccurenceUsageMember, stringBuilder);
+                    break;
+            }
+            
+            return relationshipIndex;
+        }
+
+        /// <summary>
         /// Build the logic for the ypeBodyElement:Type=ownedRelationship+=NonFeatureMember|ownedRelationship+=FeatureMember|ownedRelationship+=AliasMember|ownedRelationship+=Import rule
         /// <remarks>This implementation is a copy paste from the other one but required for Other rules</remarks>
         /// </summary>
