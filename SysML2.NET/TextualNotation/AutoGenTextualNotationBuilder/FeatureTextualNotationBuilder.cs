@@ -569,7 +569,6 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfFeatureChainingIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Core.Features.FeatureChaining>().GetEnumerator();
             stringBuilder.Append("chains ");
-
             if (ownedRelationshipOfFeatureChainingIterator.MoveNext())
             {
 
