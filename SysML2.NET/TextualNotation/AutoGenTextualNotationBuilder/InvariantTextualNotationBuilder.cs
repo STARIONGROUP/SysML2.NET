@@ -57,7 +57,15 @@ namespace SysML2.NET.TextualNotation
             }
 
             stringBuilder.Append("inv ");
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - TerminalElement,AssignmentElement");
+            if (!poco.IsNegated)
+            {
+                stringBuilder.Append("true ");
+
+            }
+            else
+            {
+                stringBuilder.Append(" false ");
+            }
             FeatureTextualNotationBuilder.BuildFeatureDeclaration(poco, stringBuilder);
             FeatureTextualNotationBuilder.BuildValuePart(poco, stringBuilder);
             TypeTextualNotationBuilder.BuildFunctionBody(poco, stringBuilder);

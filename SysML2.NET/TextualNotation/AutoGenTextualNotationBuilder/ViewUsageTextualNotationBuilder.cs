@@ -53,7 +53,26 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildViewBodyItem(SysML2.NET.Core.POCO.Systems.Views.IViewUsage poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
+            var ownedRelationship = poco.OwnedRelationship.ToList();
+
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            {
+                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+
+                switch (ownedRelationshipElement)
+                {
+                    case SysML2.NET.Core.POCO.Kernel.Packages.ElementFilterMembership elementFilterMembership:
+                        ElementFilterMembershipTextualNotationBuilder.BuildElementFilterMember(elementFilterMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.Views.ViewRenderingMembership viewRenderingMembership:
+                        ViewRenderingMembershipTextualNotationBuilder.BuildViewRenderingMember(viewRenderingMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.Views.IExpose expose:
+                        ExposeTextualNotationBuilder.BuildExpose(expose, stringBuilder); break;
+                    default:
+                        ownedRelationshipIndex = TypeTextualNotationBuilder.BuildDefinitionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
+                        break;
+
+                }
+            }
         }
 
         /// <summary>

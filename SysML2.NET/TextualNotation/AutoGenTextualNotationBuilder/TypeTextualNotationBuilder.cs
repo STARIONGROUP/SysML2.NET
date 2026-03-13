@@ -154,7 +154,22 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildCalculationBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
+            var ownedRelationship = poco.OwnedRelationship.ToList();
+
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            {
+                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+
+                switch (ownedRelationshipElement)
+                {
+                    case SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership returnParameterMembership:
+                        ReturnParameterMembershipTextualNotationBuilder.BuildReturnParameterMember(returnParameterMembership, stringBuilder); break;
+                    default:
+                        ownedRelationshipIndex = BuildActionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
+                        break;
+
+                }
+            }
         }
 
         /// <summary>
@@ -176,7 +191,32 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildRequirementBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
+            var ownedRelationship = poco.OwnedRelationship.ToList();
+
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            {
+                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+
+                switch (ownedRelationshipElement)
+                {
+                    case SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership subjectMembership:
+                        SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.Requirements.RequirementConstraintMembership requirementConstraintMembership:
+                        RequirementConstraintMembershipTextualNotationBuilder.BuildRequirementConstraintMember(requirementConstraintMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.Requirements.FramedConcernMembership framedConcernMembership:
+                        FramedConcernMembershipTextualNotationBuilder.BuildFramedConcernMember(framedConcernMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.VerificationCases.RequirementVerificationMembership requirementVerificationMembership:
+                        RequirementVerificationMembershipTextualNotationBuilder.BuildRequirementVerificationMember(requirementVerificationMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.Requirements.ActorMembership actorMembership:
+                        ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.Requirements.StakeholderMembership stakeholderMembership:
+                        StakeholderMembershipTextualNotationBuilder.BuildStakeholderMember(stakeholderMembership, stringBuilder); break;
+                    default:
+                        ownedRelationshipIndex = BuildDefinitionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
+                        break;
+
+                }
+            }
         }
 
         /// <summary>
@@ -198,7 +238,26 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildCaseBodyItem(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
+            var ownedRelationship = poco.OwnedRelationship.ToList();
+
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
+            {
+                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+
+                switch (ownedRelationshipElement)
+                {
+                    case SysML2.NET.Core.POCO.Systems.Requirements.SubjectMembership subjectMembership:
+                        SubjectMembershipTextualNotationBuilder.BuildSubjectMember(subjectMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.Requirements.ActorMembership actorMembership:
+                        ActorMembershipTextualNotationBuilder.BuildActorMember(actorMembership, stringBuilder); break;
+                    case SysML2.NET.Core.POCO.Systems.Cases.ObjectiveMembership objectiveMembership:
+                        ObjectiveMembershipTextualNotationBuilder.BuildObjectiveMember(objectiveMembership, stringBuilder); break;
+                    default:
+                        ownedRelationshipIndex = BuildActionBodyItem(ownedRelationshipIndex, ownedRelationship, stringBuilder);
+                        break;
+
+                }
+            }
         }
 
         /// <summary>
@@ -269,9 +328,7 @@ namespace SysML2.NET.TextualNotation
                 stringBuilder.Append(' ');
             }
 
-            {
-                throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
-            }
+            throw new System.NotSupportedException("Multiple alternatives with same referenced rule type not implemented yet");
             stringBuilder.Append(' ');
             BuildTypeRelationshipPart(poco, stringBuilder);
 
@@ -477,7 +534,25 @@ namespace SysML2.NET.TextualNotation
         /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
         public static void BuildTypeBodyElement(SysML2.NET.Core.POCO.Core.Types.IType poco, StringBuilder stringBuilder)
         {
-            BuildTypeBodyElementAlternatives(poco, stringBuilder);
+            foreach (var elementInOwnedRelationship in poco.OwnedRelationship)
+            {
+                switch (elementInOwnedRelationship)
+                {
+                    case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership when owningMembership.IsValidForNonFeatureMember():
+                        OwningMembershipTextualNotationBuilder.BuildNonFeatureMember(owningMembership, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Root.Namespaces.OwningMembership owningMembership when owningMembership.IsValidForFeatureMember():
+                        OwningMembershipTextualNotationBuilder.BuildFeatureMember(owningMembership, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Root.Namespaces.Membership membership:
+                        MembershipTextualNotationBuilder.BuildAliasMember(membership, stringBuilder);
+                        break;
+                    case SysML2.NET.Core.POCO.Root.Namespaces.IImport import:
+                        ImportTextualNotationBuilder.BuildImport(import, stringBuilder);
+                        break;
+                }
+            }
+
         }
 
         /// <summary>
@@ -501,10 +576,21 @@ namespace SysML2.NET.TextualNotation
         {
             using var ownedRelationshipOfReturnParameterMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership>().GetEnumerator();
             using var ownedRelationshipOfResultExpressionMembershipIterator = poco.OwnedRelationship.OfType<SysML2.NET.Core.POCO.Kernel.Functions.ResultExpressionMembership>().GetEnumerator();
+            var ownedRelationship = poco.OwnedRelationship.ToList();
 
-            while (ownedRelationshipOfReturnParameterMembershipIterator.MoveNext())
+            for (var ownedRelationshipIndex = 0; ownedRelationshipIndex < ownedRelationship.Count; ownedRelationshipIndex++)
             {
-                throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - NonTerminalElement,AssignmentElement");
+                var ownedRelationshipElement = ownedRelationship[ownedRelationshipIndex];
+
+                switch (ownedRelationshipElement)
+                {
+                    case SysML2.NET.Core.POCO.Kernel.Functions.ReturnParameterMembership returnParameterMembership:
+                        ReturnParameterMembershipTextualNotationBuilder.BuildReturnFeatureMember(returnParameterMembership, stringBuilder); break;
+                    default:
+                        ownedRelationshipIndex = BuildTypeBodyElement(ownedRelationshipIndex, ownedRelationship, stringBuilder);
+                        break;
+
+                }
             }
 
             if (ownedRelationshipOfResultExpressionMembershipIterator.MoveNext())

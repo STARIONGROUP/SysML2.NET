@@ -58,7 +58,26 @@ namespace SysML2.NET.TextualNotation
             {
                 BuildInvocationTypeMember(ownedRelationshipOfInvocationExpressionIterator.Current, stringBuilder);
             }
-            throw new System.NotSupportedException("Multiple alternatives with only one of the different type not implemented yet - AssignmentElement,NonTerminalElement");
+            if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
+            {
+
+                if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildBodyArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                }
+            }
+            else if (ownedRelationshipOfParameterMembershipIterator.MoveNext())
+            {
+
+                if (ownedRelationshipOfParameterMembershipIterator.Current != null)
+                {
+                    ParameterMembershipTextualNotationBuilder.BuildFunctionReferenceArgumentMember(ownedRelationshipOfParameterMembershipIterator.Current, stringBuilder);
+                }
+            }
+            else
+            {
+                FeatureTextualNotationBuilder.BuildArgumentList(poco, stringBuilder);
+            }
             stringBuilder.Append(' ');
             ownedRelationshipOfReturnParameterMembershipIterator.MoveNext();
 
