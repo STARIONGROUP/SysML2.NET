@@ -1,0 +1,93 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="{{ this.Context.Name }}TextualNotationBuilder.cs" company="Starion Group S.A.">
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.TextualNotation
+{
+{{#if (RulesHelper.ContainsAnyDispatcherRules this.Rules)}}
+    using System.Collections.Generic;
+{{~/if}}
+    using System.Linq;  
+    using System.Text;
+
+    using SysML2.NET.Core.POCO.Root.Elements;
+
+    /// <summary>
+    /// The <see cref="{{ this.Context.Name }}TextualNotationBuilder" /> provides Textual Notation Builder for the <see cref="{{ #NamedElement.WriteFullyQualifiedTypeName this.Context }}" /> element
+    /// </summary>
+    public static partial class {{this.Context.Name}}TextualNotationBuilder
+    {
+        {{#each this.Rules as | rule | }}
+            {{#if rule.IsDispatcherRule}}
+                {{#unless rule.IsMultiCollectionAssignment}}
+                    /// <summary>
+                    /// Builds the Textual Notation string for the rule {{Rule.RuleName}}
+                    /// <para>{{Rule.RawRule}}</para>
+                    /// </summary>
+                    /// <param name="poco">The <see cref="{{ #NamedElement.WriteFullyQualifiedTypeName ../this.Context }}" /> from which the rule should be build</param>
+                    /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside a specific collection</param>
+                    /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+                    /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+                    public static int Build{{rule.RuleName}}({{ #NamedElement.WriteFullyQualifiedTypeName ../this.Context }} poco, int elementIndex, StringBuilder stringBuilder)
+                    {
+                        {{RulesHelper.WriteRule rule ../this.Context ../this.AllRules}}
+                        return elementIndex;
+                    }
+                {{else}}
+                    /// <summary>
+                    /// Builds the Textual Notation string for the rule {{Rule.RuleName}}
+                    /// <para>{{Rule.RawRule}}</para>
+                    /// </summary>
+                    /// <param name="poco">The <see cref="{{ #NamedElement.WriteFullyQualifiedTypeName ../this.Context }}" /> from which the rule should be build</param>
+                    /// <param name="elements">The collection of <see cref="IElement" /> to process</param>
+                    /// <param name="elementIndex">The index of the <see cref="IElement" /> to process inside the collection defined </param>
+                    /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+                    /// <returns>The index of the next <see cref="IElement" /> to be processed inside the collection</returns>
+                    public static int Build{{rule.RuleName}}({{ #NamedElement.WriteFullyQualifiedTypeName ../this.Context }} poco, string propertyName, int elementIndex, StringBuilder stringBuilder)
+                    {
+                        {{RulesHelper.WriteRule rule ../this.Context ../this.AllRules}}
+                        return elementIndex;
+                    }
+                {{/unless}}
+            {{else}}
+                /// <summary>
+                /// Builds the Textual Notation string for the rule {{Rule.RuleName}}
+                /// <para>{{Rule.RawRule}}</para>
+                /// </summary>
+                /// <param name="poco">The <see cref="{{ #NamedElement.WriteFullyQualifiedTypeName ../this.Context }}" /> from which the rule should be build</param>
+                /// <param name="stringBuilder">The <see cref="StringBuilder" /> that contains the entire textual notation</param>
+                public static void Build{{rule.RuleName}}({{ #NamedElement.WriteFullyQualifiedTypeName ../this.Context }} poco, StringBuilder stringBuilder)
+            {{/if}}
+            {
+                {{RulesHelper.WriteRule rule ../this.Context ../this.AllRules}}
+            }
+            {{#unless @last}}
+                
+            {{/unless}}
+        {{/each}}
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+// --------THIS IS AN AUTOMATICALLY GENERATED FILE. ANY MANUAL CHANGES WILL BE OVERWRITTEN!--------
+// ------------------------------------------------------------------------------------------------

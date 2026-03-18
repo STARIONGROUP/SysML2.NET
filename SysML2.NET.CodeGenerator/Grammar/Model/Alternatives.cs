@@ -1,0 +1,59 @@
+﻿// -------------------------------------------------------------------------------------------------
+// <copyright file="Alternatives.cs" company="Starion Group S.A.">
+// 
+//   Copyright 2022-2026 Starion Group S.A.
+// 
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+// 
+//        http://www.apache.org/licenses/LICENSE-2.0
+// 
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+// 
+// </copyright>
+// ------------------------------------------------------------------------------------------------
+
+namespace SysML2.NET.CodeGenerator.Grammar.Model
+{
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <summary>
+    /// Provides mapping data class for the alternative grammar part
+    /// </summary>
+    public class Alternatives: IPartOfTextualRule
+    {
+        /// <summary>
+        /// Gets a collection of <see cref="RuleElement" /> that is part of the <see cref="Alternatives" />
+        /// </summary>
+        public List<RuleElement> Elements { get; } = [];
+
+        /// <summary>
+        /// Gets the <see cref="IPartOfTextualRule.TextualNotationRule" />
+        /// </summary>
+        public TextualNotationRule TextualNotationRule { get; init; }
+
+        /// <summary>
+        /// Asserts that the current <see cref="Alternatives"/> contains <see cref="AssignmentElement"/> that are part of a collection iteration that could be called from
+        /// another rule
+        /// </summary>
+        /// <returns>The computation of the assertion</returns>
+        internal bool ContainsAssignmentRequiringDispatch()
+        {
+            var assignments = this.Elements.OfType<AssignmentElement>().Where(x => x.Operator == "+=").ToList();
+            var groupElements = this.Elements.OfType<GroupElement>().Where(x => x.IsCollection).ToList();
+
+            if (assignments.Count == 0)
+            {
+                return false;
+            }
+
+            return groupElements.Count == 0;
+        }
+    }
+}

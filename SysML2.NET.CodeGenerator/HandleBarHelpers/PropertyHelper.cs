@@ -300,7 +300,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     if (property.QueryPropertyIsPartOfNonDerivedCompositeAggregation())
                     {
-                        sb.Append($"IReadOnlyCollection<{typeName}> ");
+                        sb.Append($"IReadOnlyList<{typeName}> ");
                     }
                     else
                     {
@@ -378,7 +378,7 @@ namespace SysML2.NET.CodeGenerator.HandleBarHelpers
                 {
                     if (property.QueryPropertyIsPartOfNonDerivedCompositeAggregation())
                     {
-                        sb.Append($"IReadOnlyCollection<{typeName}> ");
+                        sb.Append($"IReadOnlyList<{typeName}> ");
                     }
                     else
                     {
